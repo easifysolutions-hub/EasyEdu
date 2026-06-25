@@ -1,0 +1,104 @@
+@model EasyEdu.Models.Vehicle
+@{
+    ViewData["Title"] = "Register Institutional Asset";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Fleet Asset Induction</h1>
+        <p class="text-muted fw-600">Register new vehicular units into the institutional logistics inventory</p>
+    </div>
+    <div>
+        <a asp-action="Vehicles" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-bus me-2"></i> Active Fleet
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-xl-9 col-lg-11">
+        <div class="premium-card bg-white shadow-lg border-0 overflow-hidden animate-fade-in">
+            <div class="p-4 border-bottom bg-light">
+                <h5 class="fw-900 text-dark mb-0"><i class="fas fa-shuttle-van text-primary me-2"></i> Vehicular Hardware Specifications</h5>
+            </div>
+            <div class="p-5">
+                <form asp-action="CreateVehicle" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4 p-3 bg-danger-soft rounded-12"></div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label asp-for="VehicleNumber" class="form-label fw-800 text-muted small uppercase">Plate Number / Asset ID</label>
+                            <input asp-for="VehicleNumber" class="form-control form-control-lg border-2 fw-900" placeholder="AB-12-CD-3456" required />
+                            <span asp-validation-for="VehicleNumber" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="VehicleType" class="form-label fw-800 text-muted small uppercase">Asset Classification</label>
+                            <select asp-for="VehicleType" class="form-select border-2 fw-700">
+                                <option value="Bus">Institutional Bus</option>
+                                <option value="Van">Logistics Van</option>
+                                <option value="Minibus">Minibus</option>
+                                <option value="SUV">Executive SUV</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Model" class="form-label fw-800 text-muted small uppercase">Manufacturer & Model</label>
+                            <input asp-for="Model" class="form-control border-2" placeholder="e.g. Toyota Coaster 2024" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="Capacity" class="form-label fw-800 text-muted small uppercase">Passenger Capacity (Seats)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-2 text-primary"><i class="fas fa-users"></i></span>
+                                <input asp-for="Capacity" type="number" class="form-control border-2 fw-800" placeholder="0" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="RouteId" class="form-label fw-800 text-muted small uppercase">Initial Corridor Assignment</label>
+                            <select asp-for="RouteId" class="form-select border-2 fw-700" asp-items="@(new SelectList(ViewBag.Routes, "Id", "Name"))">
+                                <option value="">-- No Route Assigned --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DriverId" class="form-label fw-800 text-muted small uppercase">Assigned Navigator (Driver)</label>
+                            <select asp-for="DriverId" class="form-select border-2 fw-700" asp-items="@(new SelectList(ViewBag.Drivers, "Id", "Name"))">
+                                <option value="">-- No Driver Assigned --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 mt-5">
+                            <div class="p-4 bg-gray-50 rounded-24 border border-dashed">
+                                <h6 class="fw-900 text-dark mb-4">Regulatory & Compliance Timeline</h6>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <label asp-for="RegistrationNumber" class="form-label fw-700 text-muted small uppercase">Gov. Registration No.</label>
+                                        <input asp-for="RegistrationNumber" class="form-control border-2" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label asp-for="InsuranceExpiry" class="form-label fw-700 text-muted small uppercase">Insurance Expiration</label>
+                                        <input asp-for="InsuranceExpiry" type="date" class="form-control border-2 fw-700 text-danger" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label asp-for="FitnessExpiry" class="form-label fw-700 text-muted small uppercase">Fitness Certificate Due</label>
+                                        <input asp-for="FitnessExpiry" type="date" class="form-control border-2 fw-700 text-warning" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-5 d-flex justify-content-end gap-3">
+                            <button type="reset" class="btn btn-light px-5 py-3 rounded-12 fw-800">Discard Changes</button>
+                            <button type="submit" class="btn-premium btn-premium-primary px-5 py-3 shadow-lg fs-5">
+                                <i class="fas fa-save me-2"></i> Register Asset
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<EasyEdu.Models.Class>
+@{
+    ViewData["Title"] = "Classes Management";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">Classes & Sections</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index")" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Classes</li>
+            </ol>
+        </nav>
+    </div>
+    <button class="btn btn-primary shadow-sm border-0 px-4 py-2 fw-600 rounded-10" data-bs-toggle="modal" data-bs-target="#addClassModal">
+        <i class="fas fa-plus me-2"></i> Create New Class
+    </button>
+</div>
+
+<div class="card border-0 shadow-sm rounded-16">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light-soft">
+                    <tr>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small">CLASS NAME</th>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small">SECTION</th>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small">ACADEMIC YEAR</th>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small">CAPACITY</th>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small">STUDENTS</th>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small">STATUS</th>
+                        <th class="border-0 px-4 py-3 text-muted fw-600 small text-end">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4 py-3 fw-700 text-dark">@item.Name</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge bg-primary-soft text-primary px-3 rounded-pill">@item.Section</span>
+                                </td>
+                                <td class="px-4 py-3 text-secondary">@(item.AcademicYear?.Name ?? "N/A")</td>
+                                <td class="px-4 py-3">@item.Capacity</td>
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 6px; max-width: 100px;">
+                                            @{
+                                                var percentage = item.Capacity > 0 ? (item.Students.Count * 100 / item.Capacity.Value) : 0;
+                                                var colorClass = percentage > 90 ? "bg-danger" : percentage > 70 ? "bg-warning" : "bg-success";
+                                            }
+                                            <div class="progress-bar @colorClass" role="progressbar" style="width: @percentage%"></div>
+                                        </div>
+                                        <span class="small fw-600">@item.Students.Count/@item.Capacity</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge @(item.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") px-2 py-1 rounded-pill small">
+                                        @(item.IsActive ? "Active" : "Disabled")
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <button class="btn btn-icon btn-light-soft rounded-8 me-1"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-icon btn-light-soft rounded-8 me-1"><i class="fas fa-users"></i></button>
+                                    <a href="@Url.Action("DeleteClass", new { id = item.Id })" class="btn btn-icon btn-light-soft rounded-8 text-danger" onclick="return confirm('Delete this class?')"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="fas fa-chalkboard fa-3x text-light"></i>
+                                </div>
+                                <h5 class="text-secondary">No classes created yet</h5>
+                                <p class="text-muted small">Start by creating your first academic class and section.</p>
+                                <button class="btn btn-sm btn-primary px-4 py-2 rounded-8 mt-2" data-bs-toggle="modal" data-bs-target="#addClassModal">
+                                    Create Class
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background-color: #f8fafc; }
+    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.1); }
+    .bg-success-soft { background-color: rgba(16, 185, 129, 0.1); }
+    .bg-danger-soft { background-color: rgba(239, 68, 68, 0.1); }
+    .btn-light-soft { background-color: #f1f5f9; color: #64748b; border: none; }
+    .btn-icon { width: 34px; height: 34px; p-0; display: inline-flex; align-items: center; justify-content: center; }
+    .rounded-16 { border-radius: 16px; }
+    .rounded-8 { border-radius: 8px; }
+    .fw-600 { font-weight: 600; }
+    .fw-700 { font-weight: 700; }
+</style>
+
+<!-- Add Class Modal placeholder -->
+<div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-20 shadow">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h5 class="modal-title fw-700">Create New Class</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form asp-action="CreateClass" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Class Name</label>
+                        <input type="text" name="Name" class="form-control rounded-10 py-2" placeholder="e.g. Grade 10" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Section/Division</label>
+                        <input type="text" name="Section" class="form-control rounded-10 py-2" placeholder="e.g. A, B, Science" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Academic Year</label>
+                        <select name="AcademicYearId" class="form-select rounded-10 py-2" asp-items="@(new SelectList(ViewBag.AcademicYears, "Id", "Name"))">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Maximum Capacity</label>
+                        <input type="number" name="Capacity" class="form-control rounded-10 py-2" placeholder="e.g. 40">
+                    </div>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-light px-4 py-2 fw-600 rounded-10" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-600 rounded-10">Create Class</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>

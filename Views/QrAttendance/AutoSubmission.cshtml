@@ -1,0 +1,109 @@
+@model EasyEdu.Models.QrAttendanceSetting
+@{
+    ViewData["Title"] = "Auto-Submission Paradigms";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Auto-Submission Architect</h2>
+            <p class="text-muted small fw-600">Design automated attendance closure and status synchronization rituals</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-arrow-left me-2"></i>DASHBOARD
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm rounded-16 mb-4 animate-slide-up">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        </div>
+    }
+
+    <form asp-action="SaveAutoSubmission" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CompanyId" />
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-xl-8">
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <div class="d-flex align-items-center mb-5 border-bottom pb-4 justify-content-between">
+                         <div class="d-flex align-items-center">
+                            <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+                                <i class="fas fa-robot text-warning fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-900 text-dark mb-0">Ritual Synchronization</h4>
+                                <p class="smallest text-muted fw-700 uppercase opacity-50 italic">Execute automated database commits</p>
+                            </div>
+                         </div>
+                         <div class="form-check form-switch p-0 d-flex align-items-center">
+                            <label class="small fw-900 text-uppercase opacity-75 m-0 me-3">Autonomous Mode</label>
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="AutoSubmission" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Synchronicity Closure Time*</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light-soft border-0"><i class="fas fa-clock text-muted"></i></span>
+                                <input asp-for="AutoSubmissionTime" type="time" class="form-control form-control-premium" step="1">
+                            </div>
+                            <div class="smallest text-muted fw-700 mt-2 italic px-1">Daily time to finalize and commit attendance across all nodes.</div>
+                        </div>
+                        <div class="col-md-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Default Mark for Remaining Nodes</label>
+                             <select asp-for="DefaultStatus" class="form-select form-control-premium">
+                                 <option value="Present">Present (Graceful Exit)</option>
+                                 <option value="Absent">Absent (Strict Enforcement)</option>
+                                 <option value="Late">Late (Temporal Penalty)</option>
+                             </select>
+                             <div class="smallest text-muted fw-700 mt-2 italic px-1">Status assigned to students who did not scan the QR before closure.</div>
+                        </div>
+                    </div>
+
+                    <div class="premium-card bg-light-soft p-4 rounded-16 border dashed mb-0">
+                         <div class="d-flex align-items-center gap-3">
+                             <i class="fas fa-info-circle text-primary opacity-50"></i>
+                             <p class="small fw-600 text-muted m-0">Auto-submission ensures 100% database synchronization even if teachers forget to finalize the manual daily logs.</p>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center shadow-lg" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-microchip text-warning me-3 fa-lg shadow-sm"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">Ritual schedule is synchronized with institutional cron nodes.</p>
+                    </div>
+                    <button type="submit" class="btn btn-warning px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0 text-dark">
+                        <i class="fas fa-sync-alt me-2 text-dark opacity-50"></i>SYNCHRONIZE RITUALS
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-xl-4 no-print">
+                 <div class="stat-card p-5 rounded-24 bg-white shadow-lg text-center h-100">
+                    <i class="fas fa-project-diagram fa-3x text-info opacity-25 mb-4"></i>
+                    <h5 class="fw-900 text-dark">Pipeline Synchronization</h5>
+                    <p class="text-muted small fw-600 mb-0">Aggregate performance of QR nodes during peak academic windows.</p>
+                    <div class="mt-4 opacity-50 border p-4 rounded-16 bg-light text-muted fw-900 italic ls-1 smallest">PIPELINE: SYNCHRONIZED</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .dashed { border: 2px dashed #e2e8f0 !important; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

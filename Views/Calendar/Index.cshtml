@@ -1,0 +1,136 @@
+﻿@model IEnumerable<EasyEdu.Models.CalendarEvent>
+@{
+    ViewData["Title"] = "Calendar";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4">
+    <div class="card border-0 shadow-sm rounded-16 overflow-hidden">
+        <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+            <h4 class="fw-800 text-dark m-0">Calendar</h4>
+            <div class="d-flex align-items-center gap-2">
+                 <button class="btn btn-primary fw-800 px-4 rounded-8" data-bs-toggle="modal" data-bs-target="#addEventModal">+ ADD EVENT</button>
+            </div>
+        </div>
+        <div class="card-body p-4 bg-light-subtle">
+            <div id="calendar" class="bg-white p-3 rounded-12 shadow-sm"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Event Modal (Matches Image 2) -->
+<div class="modal fade" id="addEventModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-16 shadow-lg overflow-hidden">
+            <div class="modal-header text-white p-4" style="background: #7c3aed;">
+                <h5 class="modal-title fw-800">Add Event</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addEventForm">
+                <div class="modal-body p-5">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-700 text-muted small text-uppercase">EVENT TITLE *</label>
+                            <input type="text" name="EventTitle" class="form-control border-light-subtle p-3 bg-light-subtle" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-700 text-muted small text-uppercase">ROLE *</label>
+                            <select name="Role" class="form-select border-light-subtle p-3 bg-light-subtle" required>
+                                <option value="">Select</option>
+                                <option value="All">All</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-700 text-muted small text-uppercase">EVENT LOCATION *</label>
+                            <input type="text" name="EventLocation" class="form-control border-light-subtle p-3 bg-light-subtle" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-700 text-muted small text-uppercase">DESCRIPTION *</label>
+                            <textarea name="Description" rows="4" class="form-control border-light-subtle p-3 bg-light-subtle" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-700 text-muted small text-uppercase">URL</label>
+                            <textarea name="Url" rows="4" class="form-control border-light-subtle p-3 bg-light-subtle"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-700 text-muted small text-uppercase">EVENT DATE *</label>
+                            <input type="date" name="EventDate" class="form-control border-light-subtle p-3 bg-light-subtle" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-5 pt-0 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary fw-900 px-5 py-3 rounded-12 shadow-sm" style="background: #8b5cf6;">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fc { font-family: 'Outfit', sans-serif; --fc-border-color: #f1f5f9; --fc-daygrid-dot-event-bg-color: #7c3aed; }
+    .fc .fc-toolbar-title { font-weight: 800; color: #1e293b; font-size: 1.5rem; }
+    .fc .fc-button-primary { background-color: #fff; border-color: #e2e8f0; color: #64748b; font-weight: 700; text-transform: capitalize; padding: 0.5rem 1rem; }
+    .fc .fc-button-primary:hover { background-color: #f8fafc; color: #7c3aed; }
+    .fc .fc-button-active { background-color: #7c3aed !important; border-color: #7c3aed !important; color: #fff !important; }
+    .fc th { background: #f8fafc; padding: 1rem !important; color: #64748b; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; border: none !important; }
+    .fc-theme-standard td, .fc-theme-standard th { border: 1px solid #f1f5f9 !important; }
+    .fc-day-today { background: rgba(124, 58, 237, 0.03) !important; }
+    .fc-event { border: none; padding: 5px 8px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; margin-bottom: 2px; cursor: pointer; transition: transform 0.2s; }
+    .fc-event:hover { transform: scale(1.02); }
+    .bg-primary { background-color: #f5f3ff !important; color: #5b21b6 !important; border-left: 4px solid #7c3aed !important; }
+    
+    .rounded-16 { border-radius: 16px !important; }
+    .rounded-12 { border-radius: 12px !important; }
+    .bg-light-subtle { background: #f8fafc; }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                themeSystem: 'standard',
+                events: '/Calendar/GetEvents',
+                dateClick: function(info) {
+                    openAddEventModal(info.dateStr, info.date.toDateString());
+                },
+                eventClick: function(info) {
+                    alert('Event: ' + info.event.title + '\nLocation: ' + info.event.extendedProps.location);
+                },
+            });
+            calendar.render();
+
+            // Handle form submission
+            document.getElementById('addEventForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                fetch('/Calendar/Create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                })
+                .then(response => response.json())
+                .then(res => {
+                    if (res.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('addEventModal')).hide();
+                        calendar.refetchEvents();
+                        this.reset();
+                    } else {
+                        alert(res.message);
+                    }
+                });
+            });
+        });
+    </script>
+}

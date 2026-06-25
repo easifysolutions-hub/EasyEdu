@@ -1,0 +1,108 @@
+@model IEnumerable<EasyEdu.Models.SubjectWiseAttendance>
+@{
+    ViewData["Title"] = "Institutional Subject Attendance Report";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-book-reader me-2 text-primary"></i> Subject-Specific Attendance</h1>
+        <p class="text-muted fw-600">Granular analytics of student engagement across institutional academic subjects</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-print me-2"></i> EXPORT ANALYTICS
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted">ACADEMIC LEVEL</label>
+                <select name="classId" class="form-select rounded-12 border-0 bg-light fw-700" asp-items="ViewBag.Classes">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted">TARGET SUBJECT</label>
+                <select name="subjectId" class="form-select rounded-12 border-0 bg-light fw-700" asp-items="ViewBag.Subjects">
+                    <option value="">Select Subject</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted">DATE RANGE</label>
+                <input type="date" name="date" class="form-control rounded-12 border-0 bg-light fw-700">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-primary w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> GENERATE ANALYTICS
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">STUDENT IDENTITY</th>
+                        <th>SUBJECT REGISTERED</th>
+                        <th>SESSION TIMESTAMP</th>
+                        <th>ENGAGEMENT STATUS</th>
+                        <th class="text-end pe-4">METHOD</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTable">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                <div class="fw-800 text-dark">@item.Student.FirstName @item.Student.LastName</div>
+                                <div class="small text-muted fw-600">ID: @item.Student.AdmissionNumber</div>
+                            </td>
+                            <td>
+                                <div class="badge bg-primary-soft text-primary fw-800 px-3 py-2 rounded-pill">
+                                    @item.Subject.Name
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-700 text-dark">@item.Date.ToString("dd MMM yyyy")</div>
+                            </td>
+                            <td>
+                                @if (item.Status == "Present")
+                                {
+                                    <span class="badge bg-success-soft text-success fw-800 px-3 py-2 rounded-pill">PRESENT</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-soft text-danger fw-800 px-3 py-2 rounded-pill">@item.Status.ToUpper()</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <code class="small fw-700 text-primary">@(string.IsNullOrEmpty(item.MarkedBy) ? "SYSTEM" : item.MarkedBy.ToUpper())</code>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-book-open fa-3x text-muted opacity-25 mb-4 d-block"></i>
+                                <h5 class="fw-800 text-muted">No subject-specific attendance records identified.</h5>
+                                <p class="small text-muted fw-600">Select filters to view granular records.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.1); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+</style>

@@ -1,0 +1,83 @@
+﻿@model EasyEdu.Models.StudyMaterial
+@{
+    ViewData["Title"] = "Upload Content";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Upload Study Material</h3>
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="premium-card">
+                <div class="card-body p-4">
+                    <form asp-action="UploadContent" method="post" enctype="multipart/form-data">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Content Title*</label>
+                                <input type="text" name="Title" class="form-control-premium w-100" required placeholder="e.g. Chapter 1 Notes">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Content Type*</label>
+                                <select name="Type" class="form-select form-control-premium" required>
+                                    <option value="Assignment">Assignment</option>
+                                    <option value="Syllabus">Syllabus</option>
+                                    <option value="Other">Other Download</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Class</label>
+                                <select name="ClassId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                                    <option value="">Available for All</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Description</label>
+                                <textarea name="Description" rows="3" class="form-control-premium w-100"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Select File*</label>
+                                <div class="file-upload-wrapper border-dashed rounded-16 p-4 text-center bg-light-subtle cursor-pointer" onclick="document.getElementById('fileInput').click()">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-primary opacity-20 mb-3"></i>
+                                    <div class="fw-700 text-dark">Click to browse or drag & drop</div>
+                                    <div class="small text-muted">PDF, DOC, JPG (Max 10MB)</div>
+                                    <input type="file" id="fileInput" name="file" class="d-none" required onchange="updateFileName(this)">
+                                    <div id="fileNameDisplay" class="mt-3 fw-800 text-primary small"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-premium-primary w-100 py-3 shadow-premium">PUBLISH CONTENT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6">
+            <div class="premium-card bg-primary text-white p-4" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                <h5 class="fw-800 mb-3">Content Guidelines</h5>
+                <ul class="small opacity-90 ps-3">
+                    <li class="mb-2">Ensure files are in a readable format for all devices.</li>
+                    <li class="mb-2">Categorize correctly to help students find their syllabus vs assignments.</li>
+                    <li class="mb-2">Assignments uploaded here will be visible on the student dashboard.</li>
+                    <li>Syllabus content should be uploaded per session for clarity.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateFileName(input) {
+        const display = document.getElementById('fileNameDisplay');
+        if (input.files.length > 0) {
+            display.innerHTML = '<i class="fas fa-check-circle me-1"></i> Selected: ' + input.files[0].name;
+        }
+    }
+</script>

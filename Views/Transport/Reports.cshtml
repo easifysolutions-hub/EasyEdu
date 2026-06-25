@@ -1,0 +1,143 @@
+@model EasyEdu.Controllers.TransportReportsViewModel
+@{
+    ViewData["Title"] = "Institutional Mobility Analytics";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Mobility Intelligence Dashboard</h1>
+        <p class="text-muted fw-600">Enterprise analytics for fleet utilization and corridor enrollment density</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm" onclick="window.print()">
+            <i class="fas fa-print me-2"></i> Print Report
+        </button>
+        <a asp-action="Index" class="btn-premium btn-premium-primary shadow-lg">
+            <i class="fas fa-arrow-left me-2"></i> Mobility Hub
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-primary text-white p-4 shadow-lg border-0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="small fw-800 uppercase opacity-75">Corridor Logic</span>
+                <i class="fas fa-route h4 mb-0 opacity-50"></i>
+            </div>
+            <div class="h1 fw-900 mb-0">@Model.TotalRoutes</div>
+            <div class="small fw-700 opacity-75">Active Delivery Corridors</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-dark text-white p-4 shadow-lg border-0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="small fw-800 uppercase opacity-75">Fleet Inventory</span>
+                <i class="fas fa-bus h4 mb-0 opacity-50"></i>
+            </div>
+            <div class="h1 fw-900 mb-0">@Model.TotalVehicles</div>
+            <div class="small fw-700 opacity-75">Registered Vehicular Assets</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-success text-white p-4 shadow-lg border-0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="small fw-800 uppercase opacity-75">Passenger Total</span>
+                <i class="fas fa-users h4 mb-0 opacity-50"></i>
+            </div>
+            <div class="h1 fw-900 mb-0">@Model.TotalStudents</div>
+            <div class="small fw-700 opacity-75">Enrolled Subscriptions</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-purple text-white p-4 shadow-lg border-0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="small fw-800 uppercase opacity-75">Fleet Efficiency</span>
+                <i class="fas fa-percent h4 mb-0 opacity-50"></i>
+            </div>
+            <div class="h1 fw-900 mb-0">84%</div>
+            <div class="small fw-700 opacity-75">Utilization Index</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="premium-card bg-white shadow-lg border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-light">
+                <h5 class="fw-900 text-dark mb-0"><i class="fas fa-chart-bar text-primary me-2"></i> Corridor Enrollment Density</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">CORRIDOR NAME</th>
+                            <th class="text-center">PASSENGER COUNT</th>
+                            <th>SATURATION LEVEL</th>
+                            <th class="text-end pe-4">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rs in Model.RouteWiseStudents)
+                        {
+                            var perc = rs.StudentCount > 20 ? 95 : (rs.StudentCount * 5);
+                            <tr>
+                                <td class="ps-4 fw-800 text-dark">@rs.RouteName</td>
+                                <td class="text-center fw-900 text-primary">@rs.StudentCount</td>
+                                <td style="width: 30%;">
+                                    <div class="progress" style="height: 8px; border-radius: 10px;">
+                                        <div class="progress-bar @(perc > 80 ? "bg-danger" : (perc > 50 ? "bg-warning" : "bg-success"))" 
+                                             style="width: @perc%"></div>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-4">
+                                    @if(perc > 85){
+                                        <span class="badge bg-danger-soft text-danger fw-800">AT CAPACITY</span>
+                                    } else {
+                                        <span class="badge bg-success-soft text-success fw-800">READY</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-4">
+        <div class="premium-card bg-white shadow-lg border-0 p-4">
+            <h5 class="fw-900 text-dark mb-4">Mobility Insights</h5>
+            <div class="mb-5 text-center">
+                <div class="display-4 fw-900 text-primary">$@((Model.TotalStudents * 1500).ToString("N0"))</div>
+                <div class="small fw-800 text-muted uppercase">Estimated Monthly Revenue</div>
+            </div>
+            
+            <div class="d-grid gap-3">
+                <div class="p-3 bg-light rounded-24 d-flex align-items-center">
+                    <div class="avatar-sm bg-white rounded-circle shadow-sm me-3 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-bus text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="small fw-700 text-muted">Busiest Corridor</div>
+                        <div class="fw-900 text-dark">North Sector A</div>
+                    </div>
+                </div>
+                <div class="p-3 bg-light rounded-24 d-flex align-items-center">
+                    <div class="avatar-sm bg-white rounded-circle shadow-sm me-3 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-gas-pump text-warning"></i>
+                    </div>
+                    <div>
+                        <div class="small fw-700 text-muted">Next Maintenance</div>
+                        <div class="fw-900 text-dark">Unit #402 (3 Days)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-purple { background: #6f42c1; }
+</style>

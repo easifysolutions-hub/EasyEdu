@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "QR Attendance Scanner";
+}
+
+<div class="page-header text-center mb-5">
+    <h1 class="page-title fw-800">Attendance QR Scanner</h1>
+    <p class="text-muted">Place the student's ID card QR code in front of the camera</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="scanner-container p-4 bg-dark rounded-32 shadow-lg position-relative overflow-hidden">
+            <!-- Simulated Camera Feed -->
+            <div id="scanner-viewport" class="viewport position-relative rounded-24" style="height: 400px; background: #000;">
+                <div class="scan-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                    <div class="scan-frame"></div>
+                    <div class="scan-line"></div>
+                </div>
+                <div id="camera-loading" class="position-absolute top-50 start-50 translate-middle text-white text-center">
+                    <i class="fas fa-camera fa-3x mb-3 animate-pulse"></i>
+                    <div class="fw-600">Initializing Camera...</div>
+                </div>
+                <video id="video-stream" class="w-100 h-100 d-none" style="object-fit: cover;"></video>
+            </div>
+            
+            <!-- Controls -->
+            <div class="d-flex justify-content-between mt-4">
+                <button id="toggle-camera" class="btn btn-outline-light rounded-pill px-4">
+                    <i class="fas fa-sync me-2"></i> Switch Camera
+                </button>
+                <div id="scanner-status" class="badge bg-success-soft text-success px-4 py-2 d-flex align-items-center">
+                    <span class="status-dot me-2"></span> Active
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Log -->
+        <div class="card border-0 shadow-sm rounded-24 mt-4">
+            <div class="card-header bg-transparent border-0 p-4 pb-0">
+                <h6 class="fw-700 m-0">Recently Scanned</h6>
+            </div>
+            <div class="card-body p-4" id="scanned-log">
+                <div class="text-center text-muted py-3">No scans yet in this session</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-32 { border-radius: 32px; }
+    .rounded-24 { border-radius: 24px; }
+    .viewport { border: 2px solid #333; }
+    
+    .scan-frame {
+        width: 250px;
+        height: 250px;
+        border: 4px solid var(--primary);
+        border-radius: 20px;
+        position: relative;
+        box-shadow: 0 0 0 1000px rgba(0,0,0,0.5);
+    }
+    
+    .scan-line {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 250px;
+        height: 2px;
+        background: var(--primary);
+        box-shadow: 0 0 15px var(--primary);
+        animation: scanAnim 3s infinite ease-in-out;
+    }
+    
+    @@keyframes scanAnim {
+        0%, 100% { top: 25%; }
+        50% { top: 75%; }
+    }
+    
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        box-shadow: 0 0 5px #10b981;
+        animation: blink 1s infinite;
+    }
+    
+    @@keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    
+    .animate-pulse { animation: pulse 2s infinite; }
+    @@keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.7; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .bg-success-soft { background-color: rgba(16, 185, 129, 0.1); }
+</style>
+
+@section Scripts {
+    <!-- jsQR for real scanning -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script>
+        // Simulation/Implementation Logic
+        const video = document.getElementById('video-stream');
+        const canvasElement = document.createElement('canvas');
+        const canvas = canvasElement.getContext('2d');
+        const log = document.getElementById('scanned-log');
+
+        // Start Camera
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            video.srcObject = stream;
+            video.setAttribute("playsinline", true);
+            video.play();
+            document.getElementById('camera-loading').classList.add('d-none');
+            video.classList.remove('d-none');
+            requestAnimationFrame(tick);
+        });
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvasElement.height = video.videoHeight;
+                canvasElement.width = video.videoWidth;
+                canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "dontInvert",
+                });
+                
+                if (code) {
+                    markAttendance(code.data);
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        let lastScanned = null;
+        function markAttendance(token) {
+            if (lastScanned === token) return;
+            lastScanned = token;
+            
+            fetch('/Attendance/MarkByQR', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: token, geoLocation: "Simulated Location" })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    const row = `<div class="d-flex align-items-center mb-2 animate__animated animate__fadeInLeft">
+                        <div class="avatar-sm bg-success text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                            <i class="fas fa-check small"></i>
+                        </div>
+                        <div class="fw-600">${data.message}</div>
+                        <div class="ms-auto small text-muted">${new Date().toLocaleTimeString()}</div>
+                    </div>`;
+                    if(log.innerText === "No scans yet in this session") log.innerHTML = "";
+                    log.insertAdjacentHTML('afterbegin', row);
+                }
+                // Reset after 3 seconds to allow re-scan or scan someone else
+                setTimeout(() => { lastScanned = null; }, 3000);
+            });
+        }
+    </script>
+}

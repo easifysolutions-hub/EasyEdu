@@ -1,0 +1,66 @@
+@model dynamic
+@{
+    ViewData["Title"] = "SMS Result Gateway";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card premium-card border-0 shadow-xl overflow-hidden">
+                <div class="card-header bg-gradient-primary text-white py-4 text-center">
+                    <i class="fas fa-sms fa-3x mb-3 animate-bounce"></i>
+                    <h3 class="mb-0 fw-900">SMS Result Gateway</h3>
+                    <p class="mb-0 opacity-75 fw-600">Automated examination outcome broadcasting system</p>
+                </div>
+                <div class="card-body p-5">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success border-0 shadow-sm mb-4 animate-slide-in">
+                            <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                        </div>
+                    }
+
+                    <form asp-action="ProcessSms" method="post">
+                        <div class="mb-4">
+                            <label class="form-label fw-800 text-muted small uppercase">Select Examination Module</label>
+                            <select name="examId" class="form-select border-2 py-3 fw-800 fs-5 text-primary" asp-items="ViewBag.Exams" required>
+                                <option value="">Identify Targeted Exam...</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label fw-800 text-muted small uppercase">Target Audience (Class)</label>
+                            <select name="classId" class="form-select border-2 py-3 fw-800 fs-5" required>
+                                <option value="0">ALL CLASSES (SYSTEM WIDE)</option>
+                                @* Assuming dynamic load in real scenario *@
+                            </select>
+                        </div>
+
+                        <div class="bg-light p-4 rounded-12 mb-5">
+                            <h6 class="fw-800 text-dark mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Gateway Protocol</h6>
+                            <ul class="small fw-600 text-muted mb-0 ps-3">
+                                <li>Messages will be sent to primary guardian mobile numbers.</li>
+                                <li>Templates include: [Student Name], [Exam], [Total Marks], [Percentage], [Result].</li>
+                                <li>Estimated cost: 1 Credit per successful transmission.</li>
+                            </ul>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-900 fs-5 shadow-lg">
+                            <i class="fas fa-paper-plane me-2"></i> INITIATE BROADCAST
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .animate-bounce {
+        animation: bounce 2s infinite;
+    }
+    @@keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+</style>

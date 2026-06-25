@@ -1,0 +1,135 @@
+@model IEnumerable<EasyEdu.Models.HomeworkSubmission>
+@{
+    ViewData["Title"] = "Homework Evaluation Analytics";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-tasks me-2 text-primary"></i> Academic Submissions</h1>
+        <p class="text-muted fw-600">Tracking institutional workflow and student performance metrics</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-print me-2"></i> PRINT SUMMARY
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted uppercase">Academic Class</label>
+                <select name="classId" class="form-select rounded-12 border-0 bg-light fw-700" asp-items="ViewBag.Classes">
+                    <option value="">All Classes</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted uppercase">Subject</label>
+                <select name="subjectId" class="form-select rounded-12 border-0 bg-light fw-700" asp-items="ViewBag.Subjects">
+                    <option value="">All Subjects</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-primary w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> FILTER RECORD
+                </button>
+            </div>
+            <div class="col-md-3">
+                <div class="search-box position-relative">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" class="form-control rounded-12 border-0 bg-light ps-5" id="homeworkSearch" placeholder="Search students...">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <div class="p-4 border-bottom bg-light">
+            <h6 class="fw-800 text-dark mb-0 uppercase">Evaluation Registry</h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">ACADEMIC WORK</th>
+                        <th>STUDENT</th>
+                        <th>SUBMITTED AT</th>
+                        <th>PERFORMANCE (MARKS)</th>
+                        <th class="text-end pe-4">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="homeworkTable">
+                    @foreach (var sub in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                <div class="fw-800 text-dark">@sub.Homework.Title</div>
+                                <div class="small fw-700 text-primary">@sub.Homework.Subject?.Name</div>
+                            </td>
+                            <td>
+                                <div class="fw-700 text-dark">@sub.Student.FirstName @sub.Student.LastName</div>
+                                <div class="small text-muted fw-600">@sub.Student.AdmissionNumber</div>
+                            </td>
+                            <td>
+                                <div class="small fw-700 text-muted">@sub.SubmittedAt.ToString("dd MMM yyyy, HH:mm")</div>
+                            </td>
+                            <td>
+                                @if (sub.Marks.HasValue)
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <div class="fw-800 text-success me-2">@sub.Marks.Value</div>
+                                        <div class="progress flex-grow-1" style="height: 4px; max-width: 100px;">
+                                            <div class="progress-bar bg-success" style="width: @(sub.Marks.Value)%"></div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted italic fw-600">Pending Review</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                @if (!string.IsNullOrEmpty(sub.Evaluation))
+                                {
+                                    <span class="badge bg-success-soft text-success fw-800 px-3 py-2 rounded-pill">EVALUATED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning-soft text-warning fw-800 px-3 py-2 rounded-pill">PENDING</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-folder-open fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                <div class="fw-800 text-muted">No homework submissions found in the institutional records.</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#homeworkSearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $("#homeworkTable tr").filter(function() { $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1) });
+            });
+        });
+    </script>
+}

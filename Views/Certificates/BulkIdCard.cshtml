@@ -1,0 +1,67 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Bulk ID Card Print";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="card premium-card mb-4">
+        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>Bulk ID Card Print</h5>
+            <div class="d-flex gap-2">
+                <button onclick="window.print()" class="btn btn-light btn-sm"><i class="fas fa-print me-1"></i> Print All</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Select Class</label>
+                    <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes" onchange="this.form.submit()">
+                        <option value="">All Classes</option>
+                    </select>
+                </div>
+            </form>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 d-print-block">
+                @foreach (var student in Model)
+                {
+                    <div class="col">
+                        <div class="id-card-preview p-3 border rounded shadow-sm bg-white position-relative overflow-hidden" style="height: 250px; border-top: 5px solid var(--primary-color) !important;">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0">
+                                    <img src="~/images/easyedu_full_logo.png" style="height: 30px;" alt="Logo" />
+                                </div>
+                                <div class="flex-grow-1 text-end">
+                                    <span class="badge bg-primary">STUDENT ID</span>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="avatar-wrapper me-3">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border: 2px solid #eee;">
+                                        <i class="fas fa-user fa-3x text-muted"></i>
+                                    </div>
+                                </div>
+                                <div class="info-wrapper">
+                                    <h6 class="mb-1 fw-bold">@student.FirstName @student.LastName</h6>
+                                    <p class="mb-0 small text-muted">Adm No: @student.AdmissionNumber</p>
+                                    <p class="mb-0 small text-muted">Class: @student.Class?.Name</p>
+                                    <p class="mb-0 small text-muted">Roll: @student.RollNumber</p>
+                                </div>
+                            </div>
+                            <div class="qr-placeholder position-absolute bottom-0 end-0 m-3">
+                                <i class="fas fa-qrcode fa-3x opacity-25"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .card-header, .btn, .form-label, .form-select, .sidebar, .topbar, footer { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; }
+        .id-card-preview { break-inside: avoid; margin-bottom: 20px; box-shadow: none !important; border: 1px solid #ddd !important; }
+    }
+</style>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation / Sidebar -->
+  <data name="Dashboard" xml:space="preserve"><value>டாஷ்போர்டு</value></data>
+  <data name="Administration" xml:space="preserve"><value>நிர்வாகம்</value></data>
+  <data name="AdminSection" xml:space="preserve"><value>நிர்வாக பகுதி</value></data>
+  <data name="Students" xml:space="preserve"><value>மாணவர்கள்</value></data>
+  <data name="Teachers" xml:space="preserve"><value>ஆசிரியர்கள்</value></data>
+  <data name="Academics" xml:space="preserve"><value>கல்வி</value></data>
+  <data name="Finance" xml:space="preserve"><value>நிதி</value></data>
+  <data name="Accounts" xml:space="preserve"><value>கணக்குகள்</value></data>
+  <data name="HumanResource" xml:space="preserve"><value>மனித வளம்</value></data>
+  <data name="Library" xml:space="preserve"><value>நூலகம்</value></data>
+  <data name="Transport" xml:space="preserve"><value>போக்குவரத்து</value></data>
+  <data name="Reports" xml:space="preserve"><value>அறிக்கைகள்</value></data>
+  <data name="Settings" xml:space="preserve"><value>அமைப்புகள்</value></data>
+  <data name="Communicate" xml:space="preserve"><value>தகவல் தொடர்பு</value></data>
+  <data name="Attendance" xml:space="preserve"><value>வருகை</value></data>
+  <data name="Examinations" xml:space="preserve"><value>தேர்வுகள்</value></data>
+  <data name="Homework" xml:space="preserve"><value>வீட்டுப் பாடம்</value></data>
+  <data name="LessonPlan" xml:space="preserve"><value>பாட திட்டம்</value></data>
+  <data name="LeaveManagement" xml:space="preserve"><value>விடுப்பு மேலாண்மை</value></data>
+  <data name="Inventory" xml:space="preserve"><value>சரக்கு</value></data>
+  <data name="FeesCollection" xml:space="preserve"><value>கட்டண சேகரிப்பு</value></data>
+  <data name="OnlineExam" xml:space="preserve"><value>ஆன்லைன் தேர்வு</value></data>
+  <data name="VirtualClassroom" xml:space="preserve"><value>மெய்நிகர் வகுப்பறை</value></data>
+  <data name="DataManagement" xml:space="preserve"><value>தரவு மேலாண்மை</value></data>
+  <data name="SystemSettings" xml:space="preserve"><value>கணினி அமைப்புகள்</value></data>
+
+  <!-- Topbar -->
+  <data name="Back" xml:space="preserve"><value>திரும்பு</value></data>
+  <data name="SearchHere" xml:space="preserve"><value>இங்கே தேடுங்கள் ...</value></data>
+  <data name="FeesDashboard" xml:space="preserve"><value>கட்டண டாஷ்போர்டு</value></data>
+  <data name="AccountingDashboard" xml:space="preserve"><value>கணக்கியல் டாஷ்போர்டு</value></data>
+  <data name="Messages" xml:space="preserve"><value>செய்திகள்</value></data>
+  <data name="Notifications" xml:space="preserve"><value>அறிவிப்புகள்</value></data>
+  <data name="ViewAll" xml:space="preserve"><value>அனைத்தும் காண்</value></data>
+  <data name="MyProfile" xml:space="preserve"><value>என் சுயவிவரம்</value></data>
+  <data name="Logout" xml:space="preserve"><value>வெளியேறு</value></data>
+  <data name="VisitHomePage" xml:space="preserve"><value>முகப்பு பக்கம் பார்வையிடவும்</value></data>
+
+  <!-- Login Page -->
+  <data name="WelcomeBack" xml:space="preserve"><value>மீண்டும் வருக</value></data>
+  <data name="LoginSubtitle" xml:space="preserve"><value>டாஷ்போர்டை அணுக உங்கள் நற்சான்றிதழ்களை உள்ளிடவும்.</value></data>
+  <data name="EmailAddress" xml:space="preserve"><value>மின்னஞ்சல் முகவரி</value></data>
+  <data name="Password" xml:space="preserve"><value>கடவுச்சொல்</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>என்னை நினைவில் வை</value></data>
+  <data name="ForgotPassword" xml:space="preserve"><value>கடவுச்சொல் மறந்துவிட்டீர்களா?</value></data>
+  <data name="SignIn" xml:space="preserve"><value>உள்நுழை</value></data>
+  <data name="BackToHome" xml:space="preserve"><value>முகப்பிற்கு திரும்பு</value></data>
+  <data name="QuickAccess" xml:space="preserve"><value>விரைவு அணுகல்</value></data>
+  <data name="SelectRole" xml:space="preserve"><value>தானியங்கி நிரப்புக்கு பாத்திரத்தை தேர்ந்தெடுக்கவும்...</value></data>
+  <data name="ExcellenceInEducation" xml:space="preserve"><value>கல்வி மேலாண்மையில் சிறப்பு</value></data>
+
+  <!-- General -->
+  <data name="Save" xml:space="preserve"><value>சேமி</value></data>
+  <data name="Cancel" xml:space="preserve"><value>ரத்து செய்</value></data>
+  <data name="Edit" xml:space="preserve"><value>திருத்து</value></data>
+  <data name="Delete" xml:space="preserve"><value>நீக்கு</value></data>
+  <data name="Add" xml:space="preserve"><value>சேர்</value></data>
+  <data name="Search" xml:space="preserve"><value>தேடு</value></data>
+  <data name="Submit" xml:space="preserve"><value>சமர்ப்பி</value></data>
+  <data name="Reset" xml:space="preserve"><value>மீட்டமை</value></data>
+  <data name="Actions" xml:space="preserve"><value>செயல்கள்</value></data>
+  <data name="Status" xml:space="preserve"><value>நிலை</value></data>
+  <data name="Active" xml:space="preserve"><value>செயலில்</value></data>
+  <data name="Inactive" xml:space="preserve"><value>செயலற்று</value></data>
+  <data name="Name" xml:space="preserve"><value>பெயர்</value></data>
+  <data name="Date" xml:space="preserve"><value>தேதி</value></data>
+  <data name="NoRecordsFound" xml:space="preserve"><value>எந்த பதிவும் கிடைக்கவில்லை.</value></data>
+  <data name="Loading" xml:space="preserve"><value>ஏற்றுகிறது...</value></data>
+  <data name="SelectLanguage" xml:space="preserve"><value>மொழி</value></data>
+</root>

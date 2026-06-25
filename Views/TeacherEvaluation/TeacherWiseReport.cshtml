@@ -1,0 +1,106 @@
+@{
+    ViewData["Title"] = "Faculty Comparison Terminal";
+    Layout = "_Layout";
+    var reports = ViewBag.Reports as IEnumerable<EasyEdu.Models.TeacherEvaluation>;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Individual Appraisal Insights</h1>
+        <p class="text-muted fw-600">Analyze performance trajectory for specific staff members</p>
+    </div>
+</div>
+
+<div class="premium-card bg-white shadow-xl border-0 p-4 mb-4 animate-fade-in">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label small fw-800 text-uppercase opacity-50">Select Faculty Member</label>
+            <select name="teacherId" class="form-select form-control-premium" asp-items="ViewBag.Teachers" required>
+                <option value="">-- Choose Instructor --</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-premium-primary w-100 py-3 shadow-lg fs-6 fw-900">
+                <i class="fas fa-chart-line me-2"></i> FETCH_ANALYTICS
+            </button>
+        </div>
+    </form>
+</div>
+
+@if (reports != null)
+{
+    <div class="row g-4 animate-fade-in">
+        <div class="col-xl-8">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+                <div class="p-4 border-bottom bg-primary text-white">
+                    <h5 class="fw-900 mb-0"><i class="fas fa-history me-2"></i> EVALUATION_HISTORY</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">DATE</th>
+                                <th>RATING</th>
+                                <th>REMARKS</th>
+                                <th class="text-end pe-4">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in reports)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-700 text-dark">@r.EvaluationDate.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-light text-primary fw-900 me-2">@r.TotalRating.ToString("F1")</span>
+                                            <div class="stars text-warning small">
+                                                @for(int i=1; i<=5; i++) {
+                                                    <i class="fas fa-star @(i <= r.TotalRating ? "" : "opacity-25")"></i>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="small fw-600 text-muted">@r.Remarks</td>
+                                    <td class="text-end pe-4">
+                                        @if(r.Status == "Approved") {
+                                            <span class="badge badge-success-premium">VERIFIED</span>
+                                        } else {
+                                            <span class="badge badge-warning-premium">PENDING</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-4">
+            <div class="premium-card bg-white shadow-xl border-0 p-4 text-center">
+                <div class="card-title fw-900 text-primary mb-4 uppercase">Trait Distribution</div>
+                <div class="trait-chart-placeholder py-5 bg-light rounded-12 border border-dashed text-muted fw-600">
+                    <i class="fas fa-chart-pie fa-3x mb-3 opacity-25"></i>
+                    <div>Data Visualization Module Ready</div>
+                </div>
+                <div class="mt-4 text-start">
+                    <h6 class="fw-800 mb-3">Key Performance Points:</h6>
+                    <div class="d-flex justify-content-between mb-2 small fw-700">
+                        <span>Punctuality</span>
+                        <span class="text-success">92%</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 92%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 small fw-700">
+                        <span>Curriculum Delivery</span>
+                        <span class="text-info">85%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

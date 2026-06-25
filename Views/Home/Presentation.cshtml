@@ -1,0 +1,618 @@
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Executive Presentation - Institutional Ecosystem";
+}
+
+<div class="presentation-wrapper">
+    <!-- PROGRESS BAR -->
+    <div class="presentation-progress">
+        <div class="progress-bar" id="presentationProgress"></div>
+    </div>
+
+    <!-- Presentation Navigation -->
+    <div class="pres-nav pres-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></div>
+    <div class="pres-nav pres-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></div>
+    <div class="pres-controls">
+        <span id="slideCounter">1 / 7</span>
+        <button onclick="toggleFullScreen()" class="btn-pres-icon"><i class="fas fa-expand"></i></button>
+        <button id="downloadPresentation" class="btn-pres-icon" title="Export to PDF"><i class="fas fa-file-download"></i></button>
+    </div>
+
+    <!-- SLIDES CONTAINER -->
+    <div id="slides-container" class="slides-inner">
+        
+        <!-- SLIDE 1: COVER -->
+        <section class="slide active" id="slide-1">
+            <div class="slide-content text-center">
+                <div class="glow-sphere"></div>
+                <img src="/images/easyedu_full_logo.png" class="pres-logo mb-5" alt="EasyEdu Logo" data-aos="zoom-in">
+                <h1 class="display-2 fw-900 text-white mb-3" data-aos="fade-up" data-aos-delay="200">The Modern <span class="text-gradient">Institution</span></h1>
+                <p class="lead text-light-silver mb-5" data-aos="fade-up" data-aos-delay="400">Transforming educational operations through a unified, high-fidelity ERP ecosystem.</p>
+                <div class="pres-badge" data-aos="fade-up" data-aos-delay="600">EXECUTIVE PRESENTATION 2026</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: THE CHALLENGE -->
+        <section class="slide" id="slide-2">
+            <div class="container slide-content">
+                <div class="row align-items-center h-100">
+                    <div class="col-lg-6">
+                        <h2 class="display-4 fw-800 text-white mb-4">Why Digital <br><span class="text-primary">Transformation?</span></h2>
+                        <ul class="pres-list">
+                            <li><i class="fas fa-times-circle text-danger"></i> Fragmented data across multiple campuses.</li>
+                            <li><i class="fas fa-times-circle text-danger"></i> Manual fee collection & manual accounting errors.</li>
+                            <li><i class="fas fa-times-circle text-danger"></i> Communication gap between parents & institute.</li>
+                            <li><i class="fas fa-times-circle text-danger"></i> Lack of real-time operational transparency.</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="gradient-card p-5">
+                            <h3 class="text-white mb-4 text-center">The Solution</h3>
+                            <div class="solution-circle">
+                                <span>EasyEdu ERP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: CORE ERP ENGINE -->
+        <section class="slide" id="slide-3">
+            <div class="container slide-content">
+                <div class="text-center mb-5">
+                    <h2 class="display-4 fw-800 text-white">01. Core <span class="text-primary">ERP Engine</span></h2>
+                </div>
+                <div class="row g-4 mt-4">
+                    <div class="col-md-4">
+                        <div class="pres-card">
+                            <i class="fas fa-university fa-3x text-primary mb-4"></i>
+                            <h4>Multi-Campus</h4>
+                            <p>Global control with branch-wise autonomy and real-time data sync.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="pres-card">
+                            <i class="fas fa-shield-alt fa-3x text-success mb-4"></i>
+                            <h4>RBAC Security</h4>
+                            <p>Military-grade encryption and granular role-based permissions.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="pres-card">
+                            <i class="fas fa-fingerprint fa-3x text-info mb-4"></i>
+                            <h4>Native IoT</h4>
+                            <p>Direct integration with Biometric, RFID, and Facial hardware.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: ACADEMIC EXCELLENCE -->
+        <section class="slide" id="slide-4">
+            <div class="container slide-content">
+                <div class="row align-items-center">
+                    <div class="col-lg-5">
+                        <h2 class="display-4 fw-800 text-white mb-4">02. Academic <br><span class="text-warning">Excellence</span></h2>
+                        <p class="text-light-silver lead">Automating the curriculum lifecycle from scheduling to assessments.</p>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="academic-grid">
+                            <div class="grid-item">
+                                <span class="badge bg-warning text-dark mb-2">AI ENGINE</span>
+                                <h5>Scheduling</h5>
+                                <p>Automated timetable with conflict detection.</p>
+                            </div>
+                            <div class="grid-item">
+                                <span class="badge bg-danger text-white mb-2">LIVE</span>
+                                <h5>Hybrid LMS</h5>
+                                <p>Interactive digital classrooms & video library.</p>
+                            </div>
+                            <div class="grid-item">
+                                <span class="badge bg-purple text-white mb-2">DYNAMIC</span>
+                                <h5>Examination</h5>
+                                <p>Custom marksheets & online portal.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: FINANCE & LOGISTICS -->
+        <section class="slide" id="slide-5">
+            <div class="container slide-content">
+                <div class="text-center mb-5">
+                    <h2 class="display-4 fw-800 text-white">03. Finance & <span class="text-success">Operations</span></h2>
+                </div>
+                <div class="finance-viz">
+                    <div class="finance-bubble">
+                        <i class="fas fa-wallet"></i>
+                        <h5>Fee Pro</h5>
+                        <p>Automated Installments</p>
+                    </div>
+                    <div class="finance-bubble large">
+                        <i class="fas fa-calculator"></i>
+                        <h5>Accounts</h5>
+                        <p>Real-time P&L Statements</p>
+                    </div>
+                    <div class="finance-bubble">
+                        <i class="fas fa-bus"></i>
+                        <h5>Logistics</h5>
+                        <p>Live GPS Tracking</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: MOBILE ECOSYSTEM -->
+        <section class="slide" id="slide-6">
+            <div class="container slide-content">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="phone-mockup">
+                            <div class="screen">
+                                <div class="app-header">EasyEdu</div>
+                                <div class="app-content">
+                                    <div class="app-stat">Attendance: 98%</div>
+                                    <div class="app-stat">Next Class: Physics</div>
+                                    <div class="app-stat">Fees Case: Paid</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h2 class="display-4 fw-800 text-white mb-4">04. Mobile <br><span class="text-info">Ecosystem</span></h2>
+                        <p class="text-light-silver lead mb-4">Branded iOS & Android applications for a seamless stakeholder experience.</p>
+                        <ul class="pres-list no-icon">
+                            <li><span class="dot info"></span> Parent/Student Portal</li>
+                            <li><span class="dot success"></span> Teacher Management App</li>
+                            <li><span class="dot warning"></span> Driver Transit App</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: CALL TO ACTION -->
+        <section class="slide" id="slide-7">
+            <div class="slide-content text-center">
+                <h2 class="display-3 fw-900 text-white mb-4">Ready to <span class="text-primary">Accelerate?</span></h2>
+                <p class="lead text-light-silver mb-5">Join 500+ premium institutions that trust EasyEdu for their digital evolution.</p>
+                <div class="cta-actions mb-5">
+                    <a href="/Contact" class="btn-pres-primary">Book a Live Demo</a>
+                    <a href="/Pricing" class="btn-pres-outline">View Plans</a>
+                </div>
+                <div class="contact-strip text-light-silver">
+                    <span><i class="fas fa-phone me-2"></i> +91 9731615949</span>
+                    <span class="mx-4">|</span>
+                    <span><i class="fas fa-envelope me-2"></i> sales@@easify.com</span>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- HIDDEN TEMPLATE FOR PDF GENERATION (Optimized for Handout style) -->
+<div id="pdf-handout-wrapper" style="position: absolute; left:-9999px; top:0; width: 1000px; background: #0f172a; visibility: hidden;">
+    <div id="pdf-handout-content">
+        <!-- Slides will be cloned here during export -->
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('slideCounter');
+        const progressBar = id => document.getElementById(id);
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            counter.innerText = `${currentSlide + 1} / ${slides.length}`;
+            progressBar('presentationProgress').style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+            
+            // Re-trigger AOS for the active slide if needed
+            if (window.AOS) {
+                AOS.refresh();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // PDF Export for Handout
+        document.getElementById('downloadPresentation').addEventListener('click', function() {
+            const btn = this;
+            const handoutContent = document.getElementById('pdf-handout-content');
+            handoutContent.innerHTML = ''; // Clear previous
+
+            // Clone all slides for PDF
+            slides.forEach(slide => {
+                const clone = slide.cloneNode(true);
+                clone.style.display = 'flex';
+                clone.style.height = '1120px'; // Consistent A4 height
+                clone.style.width = '1000px';
+                clone.classList.add('active'); // Ensure visible
+                handoutContent.appendChild(clone);
+            });
+
+            if (window.Swal) {
+                Swal.fire({
+                    title: 'Preparing Digital Handout',
+                    text: 'Compiling high-fidelity slide deck...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+            }
+
+            const element = handoutContent;
+            const opt = {
+                margin: 0,
+                filename: 'EasyEdu_Executive_Presentation_2026.pdf',
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    windowWidth: 1200,
+                    onclone: (clonedDoc) => {
+                        const wrapper = clonedDoc.getElementById('pdf-handout-wrapper');
+                        if (wrapper) {
+                            wrapper.style.position = 'static';
+                            wrapper.style.visibility = 'visible';
+                            wrapper.style.height = 'auto';
+                            wrapper.style.display = 'block';
+                        }
+                    }
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                pagebreak: { mode: 'css' }
+            };
+
+            setTimeout(() => {
+                html2pdf().set(opt).from(element).save().then(() => {
+                    if (window.Swal) {
+                        Swal.close();
+                        Swal.fire({ icon: 'success', title: 'Export Complete', timer: 2000, showConfirmButton: false });
+                    }
+                });
+            }, 1000);
+        });
+    </script>
+}
+
+<style>
+    :root {
+        --pres-bg: #0f172a;
+        --pres-accent: #3b82f6;
+        --pres-silver: #cbd5e1;
+    }
+
+    .presentation-wrapper {
+        background: var(--pres-bg);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .presentation-progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: rgba(255,255,255,0.1);
+        z-index: 100;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: var(--pres-accent);
+        width: 14.28%;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 15px var(--pres-accent);
+    }
+
+    .slides-inner {
+        height: 100%;
+        position: relative;
+    }
+
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+        overflow: hidden;
+        background: var(--pres-bg);
+    }
+
+    .slide.active {
+        display: flex;
+        animation: fadeIn 0.8s ease forwards;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: scale(1.05); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .slide-content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+    }
+
+    /* Cover Slide Specifics */
+    .pres-logo { height: 120px; filter: brightness(0) invert(1); }
+    .glow-sphere {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+        filter: blur(50px);
+        z-index: -1;
+    }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .text-light-silver { color: #94a3b8; }
+
+    .pres-badge {
+        display: inline-block;
+        padding: 10px 25px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 50px;
+        color: var(--pres-accent);
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 14px;
+    }
+
+    /* Nav & Controls */
+    .pres-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 100;
+        background: rgba(255,255,255,0.05);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .pres-nav:hover { background: var(--pres-accent); border-color: var(--pres-accent); }
+    .pres-prev { left: 30px; }
+    .pres-next { right: 30px; }
+
+    .pres-controls {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        z-index: 100;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(10px);
+        padding: 10px 25px;
+        border-radius: 50px;
+        color: white;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-pres-icon {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+    }
+    .btn-pres-icon:hover { opacity: 1; color: var(--pres-accent); }
+
+    /* Component Styles */
+    .pres-list { list-style: none; padding: 0; }
+    .pres-list li {
+        font-size: 22px;
+        color: #cbd5e1;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .pres-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 40px;
+        border-radius: 30px;
+        text-align: center;
+        height: 100%;
+        transition: transform 0.3s;
+    }
+    .pres-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.05); }
+    .pres-card h4 { color: white; margin-bottom: 15px; }
+    .pres-card p { color: #64748b; font-size: 14px; margin: 0; }
+
+    .academic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-item {
+        background: rgba(255,255,255,0.04);
+        padding: 30px;
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .grid-item h5 { color: white; }
+    .grid-item p { color: #64748b; font-size: 13px; }
+
+    .finance-viz {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+    }
+    .finance-bubble {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.1);
+        border: 2px solid #10b981;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+    .finance-bubble.large { width: 250px; height: 250px; background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+    .finance-bubble i { font-size: 32px; margin-bottom: 10px; }
+
+    .phone-mockup {
+        width: 300px;
+        height: 600px;
+        background: #1e293b;
+        border: 10px solid #334155;
+        border-radius: 40px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+    }
+    .screen {
+        background: #0f172a;
+        height: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    .app-header { background: var(--pres-accent); padding: 15px; color: white; text-align: center; font-weight: 800; }
+    .app-content { padding: 20px; }
+    .app-stat { background: rgba(255,255,255,0.05); margin-bottom: 10px; padding: 15px; border-radius: 10px; color: #94a3b8; font-size: 12px; }
+
+    .btn-pres-primary {
+        background: var(--pres-accent);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        margin-right: 20px;
+        transition: all 0.3s;
+    }
+    .btn-pres-primary:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--pres-accent); color: white; }
+    .btn-pres-outline {
+        border: 2px solid rgba(255,255,255,0.2);
+        color: white;
+        padding: 13px 40px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    .btn-pres-outline:hover { background: white; color: black; }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 15px; }
+    .dot.info { background: #3b82f6; }
+    .dot.success { background: #10b981; }
+    .dot.warning { background: #f59e0b; }
+
+    .gradient-card {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 40px;
+        backdrop-filter: blur(20px);
+    }
+
+    .solution-circle {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: var(--pres-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        box-shadow: 0 0 50px rgba(59, 130, 246, 0.5);
+        position: relative;
+    }
+    .solution-circle::after {
+        content: '';
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+        border: 2px dashed rgba(255,255,255,0.2);
+        border-radius: 50%;
+        animation: rotate 10s linear infinite;
+    }
+    @@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .solution-circle span {
+        font-size: 28px;
+        font-weight: 900;
+        color: white;
+    }
+
+    /* PDF Print Helpers */
+    #pdf-handout-content .slide {
+        page-break-after: always;
+        position: relative;
+    }
+</style>

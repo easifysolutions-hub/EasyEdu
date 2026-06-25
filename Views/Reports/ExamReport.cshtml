@@ -1,0 +1,84 @@
+@model IEnumerable<EasyEdu.Models.Examination>
+@{
+    ViewData["Title"] = "Exam Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Exam Report</h3>
+            <p class="text-muted small fw-600">Overview of all examinations with their start dates and status</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft btn-sm rounded-8 px-3">
+                <i class="fas fa-print me-2"></i>PRINT REPORT
+            </button>
+            <button class="btn btn-premium-purple btn-sm rounded-8 px-3">
+                <i class="fas fa-file-excel me-2"></i>EXPORT EXCEL
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light-soft text-dark">
+                    <tr>
+                        <th class="ps-4 py-3 fw-800 small text-uppercase">Examination Name</th>
+                        <th class="py-3 fw-800 small text-uppercase">Start Date</th>
+                        <th class="py-3 fw-800 small text-uppercase">Status</th>
+                        <th class="py-3 fw-800 small text-uppercase">Total Students</th>
+                        <th class="pe-4 py-3 text-end fw-800 small text-uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">No examinations found.</td>
+                        </tr>
+                    }
+                    @foreach (var exam in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-800 text-dark">@exam.Name</td>
+                            <td class="fw-700 text-dark">@exam.StartDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                @if (exam.IsActive)
+                                {
+                                    <span class="badge bg-success-soft text-success px-3 rounded-pill fw-800">ACTIVE</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-soft text-danger px-3 rounded-pill fw-800">COMPLETED</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="fw-700 text-dark">@exam.Marks?.Select(m => m.StudentId).Distinct().Count() Students</div>
+                                <div class="small text-muted fw-600">Enrolled</div>
+                            </td>
+                            <td class="pe-4 text-end">
+                                <a href="@Url.Action("MeritList", "ExamReports", new { examId = exam.Id })" class="btn btn-light-soft btn-sm rounded-8" title="Merit List">
+                                    <i class="fas fa-list"></i>
+                                </a>
+                                <a href="@Url.Action("TabulationSheet", "ExamReports", new { examId = exam.Id })" class="btn btn-light-soft btn-sm rounded-8" title="Tabulation">
+                                    <i class="fas fa-table"></i>
+                                </a>
+                                <a href="@Url.Action("SubjectWiseMarksheet", "ExamReports", new { examId = exam.Id })" class="btn btn-light-soft btn-sm rounded-8" title="Subject Marks">
+                                    <i class="fas fa-book"></i>
+                                </a>
+                                <a href="@Url.Action("OnlineExamReport", "ExamReports")" class="btn btn-light-soft btn-sm rounded-8" title="Online Exam">
+                                    <i class="fas fa-globe"></i>
+                                </a>
+                                <a href="@Url.Action("ProgressCard", "ExamReports", new { examId = exam.Id })" class="btn btn-premium-purple btn-sm rounded-8" title="Cards">
+                                    <i class="fas fa-id-card"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

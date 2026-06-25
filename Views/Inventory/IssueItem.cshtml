@@ -1,0 +1,163 @@
+@model EasyEdu.Models.InventoryTransaction
+@{
+    ViewData["Title"] = "Asset Issuance - Inventory";
+    Layout = "_Layout";
+    var inventories = ViewBag.Inventories as IEnumerable<EasyEdu.Models.Inventory>;
+    var students = ViewBag.Students as IEnumerable<EasyEdu.Models.Student>;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-hand-holding-box me-2 text-primary"></i> Asset Distribution</h1>
+        <p class="text-muted fw-600">Provision institutional resources and assets to students and staff members</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Transactions" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-list me-2"></i> DISTRIBUTION LOGS
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 animate-fade-in">
+                <div class="row g-0">
+                    <!-- Left Sidebar (Info) -->
+                    <div class="col-lg-5 p-5 text-white d-flex flex-column justify-content-between" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
+                        <div>
+                            <div class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fw-800 small uppercase mb-4">Logistics Terminal</div>
+                            <h2 class="fw-900 mb-4 display-6">Fulfillment Center</h2>
+                            <p class="opacity-75 fw-600 mb-5 fs-5">Select a target asset from the global inventory and verify the recipient identity to authorize the issuance protocol.</p>
+                            
+                            <div class="premium-card bg-white-10 border-0 p-4 rounded-20 mb-4">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="icon-box-sm bg-info text-white rounded-circle shadow-sm">
+                                        <i class="fas fa-shield-check"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-900 text-white">Stock Integrity Scan</div>
+                                        <div class="small opacity-75">The system performs a real-time reservation check. Inventory counts will be automatically decremented upon authorization.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="premium-card bg-white-10 border-0 p-4 rounded-20">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="icon-box-sm bg-warning text-white rounded-circle shadow-sm">
+                                        <i class="fas fa-triangle-exclamation"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-900 text-white">Recipient Verification</div>
+                                        <div class="small opacity-75">Ensure the student has valid credentials. All transactions are digitally signed by @User.Identity?.Name.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-5 border-top border-white-10 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-box-sm bg-white-10 rounded-circle text-white">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="fw-700 opacity-75 small">Operator: @User.Identity?.Name</div>
+                            </div>
+                            <div class="small fw-800 text-uppercase opacity-25">ID: TERM-X82</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Content (Form) -->
+                    <div class="col-lg-7 p-5 bg-white">
+                        <form asp-action="IssueItem" method="post">
+                            @Html.AntiForgeryToken()
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger-soft border-0 rounded-12 small fw-700 mb-4"></div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-800 text-muted small text-uppercase">Target Inventory Asset</label>
+                                <select asp-for="InventoryId" class="form-control-premium w-100 select2" required>
+                                    <option value="">Select Asset for Issuance</option>
+                                    @if (inventories != null)
+                                    {
+                                        @foreach(var item in inventories)
+                                        {
+                                            <option value="@item.Id">@item.ItemName (Available: @item.Quantity @item.Unit)</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="InventoryId" class="text-danger small fw-700"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-800 text-muted small text-uppercase">Recipient Identification (Student)</label>
+                                <select asp-for="StudentId" class="form-control-premium w-100 select2" required>
+                                    <option value="">Search Student Admission / Name</option>
+                                    @if (students != null)
+                                    {
+                                        @foreach(var s in students)
+                                        {
+                                            <option value="@s.Id">@s.AdmissionNumber - @s.FirstName @s.LastName</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="StudentId" class="text-danger small fw-700"></span>
+                            </div>
+
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-6">
+                                    <label asp-for="Quantity" class="form-label fw-800 text-muted small text-uppercase">Dispense Quantity</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="fas fa-minus-circle text-danger"></i></span>
+                                        <input asp-for="Quantity" type="number" class="form-control-premium border-0 w-75" value="1" min="1" required />
+                                    </div>
+                                    <span asp-validation-for="Quantity" class="text-danger small fw-700"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-muted small text-uppercase">Distribution Date</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="fas fa-calendar-check text-primary"></i></span>
+                                        <input type="text" class="form-control-premium border-0 w-75 bg-light" value="@DateTime.Now.ToString("dd MMM yyyy")" disabled />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-5">
+                                <label asp-for="Remarks" class="form-label fw-800 text-muted small text-uppercase">Transaction Documentation (Remarks)</label>
+                                <textarea asp-for="Remarks" class="form-control-premium w-100" rows="3" placeholder="Condition notes, return expectations, or special instructions..."></textarea>
+                            </div>
+
+                            <div class="d-grid gap-3 pt-3">
+                                <button type="submit" class="btn btn-premium-primary py-3 shadow-lg fs-5 fw-800">
+                                    <i class="fas fa-hand-holding-box me-2"></i> AUTHORIZE ISSUANCE
+                                </button>
+                                <button type="reset" class="btn btn-light-soft py-2 rounded-12 fw-800 text-muted">RESET TERMINAL</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-white-10 { background: rgba(255, 255, 255, 0.1); }
+    .border-white-10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-20 { border-radius: 20px; }
+    .icon-box-sm { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent(),
+                    placeholder: $(this).data('placeholder') || "Search selection...",
+                    allowClear: true,
+                    width: '100%'
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<EasyEdu.Models.Certificate>
+@{
+    ViewData["Title"] = "Issued Certificates";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Document Archive</h1>
+        <p class="text-muted fw-600">Secure storage and issuance of official school credentials</p>
+    </div>
+    <a asp-action="Issue" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+        <i class="fas fa-certificate"></i> New Certificate
+    </a>
+</div>
+
+<div class="premium-card bg-white shadow-md animate-fade-in">
+    <div class="card-header border-0 bg-transparent py-4 px-4 d-flex justify-content-between align-items-center">
+        <h5 class="fw-800 m-0">Credential Register</h5>
+        <div class="search-bar" style="width: 300px;">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control form-control-premium" placeholder="Filter by number or student...">
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="px-5">REF #</th>
+                        <th>TYPE</th>
+                        <th>STUDENT</th>
+                        <th>ISSUE DATE</th>
+                        <th class="text-end px-5">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="px-5 fw-800 text-primary">@item.CertificateNumber</td>
+                            <td>
+                                <span class="badge-premium badge-info-premium">@item.CertificateType</span>
+                            </td>
+                            <td>
+                                <div class="fw-700 text-dark">@(item.Student?.FirstName + " " + item.Student?.LastName)</div>
+                                <div class="small text-muted fw-500">Reg: @item.Student?.AdmissionNumber</div>
+                            </td>
+                            <td class="fw-600 text-muted">@item.IssueDate.ToString("MMM dd, yyyy")</td>
+                            <td class="text-end px-5">
+                                <a asp-action="Print" asp-route-id="@item.Id" target="_blank" class="btn btn-light-soft rounded-8 p-2">
+                                    <i class="fas fa-print text-primary"></i>
+                                </a>
+                                <button class="btn btn-light-soft rounded-8 p-2 text-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="py-5">
+                                    <i class="fas fa-stamp fa-4x text-gray-200 mb-3"></i>
+                                    <h4 class="text-gray-400 fw-700">Audit Vault Empty</h4>
+                                    <p class="text-muted">Once certificates are issued, they will be archived here for verification.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

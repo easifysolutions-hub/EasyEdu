@@ -1,0 +1,71 @@
+@model IEnumerable<EasyEdu.Models.WalletTransaction>
+@{
+    ViewData["Title"] = "Rejected Deposits";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Denied Deposit Ledger</h1>
+        <p class="text-muted fw-600">Archived institutional wallet deposits that did not meet verification criteria</p>
+    </div>
+    <div>
+        <a asp-action="PendingDeposit" class="btn btn-premium-warning shadow-sm"><i class="fas fa-hourglass-half me-2"></i> PENDING_REQUESTS</a>
+    </div>
+</div>
+
+<div class="premium-card bg-white shadow-xl border-0 overflow-hidden animate-fade-in">
+    <div class="p-4 border-bottom bg-danger text-white">
+        <h5 class="fw-900 mb-0"><i class="fas fa-ban me-2"></i> REJECTED_DEPOSIT_ARCHIVE</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table premium-table mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">STUDENT_IDENTITY</th>
+                    <th>CAPITAL_INJECTION</th>
+                    <th>TRANS_DATE</th>
+                    <th>DENIAL_NOTE</th>
+                    <th class="text-end pe-4">STATUS_CODE</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm bg-danger-soft text-danger rounded-circle me-3 d-flex align-items-center justify-content-center fw-900" style="width: 40px; height: 40px;">
+                                    @item.Student?.FirstName[0]
+                                </div>
+                                <div>
+                                    <div class="fw-800 text-dark">@item.Student?.FirstName @item.Student?.LastName</div>
+                                    <div class="small text-muted fw-700">#@item.Student?.AdmissionNumber</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-danger-soft text-danger fw-900 px-3 py-2 rounded-8 fs-6">
+                                $ @item.Amount.ToString("N2")
+                            </span>
+                        </td>
+                        <td class="small fw-700 text-muted">@item.Date.ToString("MMM dd, HH:mm")</td>
+                        <td class="small fw-600 text-muted italic">@item.Note</td>
+                        <td class="text-end pe-4">
+                            <span class="badge badge-danger-premium px-3"><i class="fas fa-times-circle me-1"></i> DENIED</span>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted fw-600">No denied deposits detected in current repository.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-danger-soft { background: rgba(220, 53, 69, 0.1); }
+</style>

@@ -1,0 +1,263 @@
+@model List<EasyEdu.Models.Voucher>
+@{
+    ViewData["Title"] = "Voucher Register";
+    Layout = "_Layout";
+    var selectedType = ViewBag.SelectedType as string ?? "";
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Voucher Register</h3>
+            <p class="text-muted small fw-700 mb-0"><i class="fas fa-book me-2 text-primary"></i>All financial transactions in one place</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="@Url.Action("SalesVoucher")" class="btn btn-sm btn-success rounded-pill px-3 fw-800">
+                <i class="fas fa-shopping-cart me-1"></i> Sales Voucher
+            </a>
+            <a href="@Url.Action("PurchaseVoucher")" class="btn btn-sm btn-primary rounded-pill px-3 fw-800">
+                <i class="fas fa-shopping-bag me-1"></i> Purchase Voucher
+            </a>
+            <a href="@Url.Action("PaymentVoucher")" class="btn btn-sm btn-danger rounded-pill px-3 fw-800">
+                <i class="fas fa-money-bill-wave me-1"></i> Payment
+            </a>
+            <a href="@Url.Action("ReceiptVoucher")" class="btn btn-sm btn-warning rounded-pill px-3 fw-800">
+                <i class="fas fa-hand-holding-usd me-1"></i> Receipt
+            </a>
+        </div>
+    </div>
+
+    <!-- Type Filter Pills -->
+    <div class="vtype-pill-row mb-4">
+        <a href="@Url.Action("VoucherList", new { fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate })"
+           class="vtype-pill @(selectedType == "" ? "active" : "")">
+            <i class="fas fa-th-list me-1"></i> All
+        </a>
+        @foreach (var t in new[] { ("Payment","fas fa-minus-circle","pill-rose"), ("Receipt","fas fa-plus-circle","pill-emerald"), ("Journal","fas fa-exchange-alt","pill-indigo"), ("Contra","fas fa-university","pill-amber"), ("Sales","fas fa-shopping-cart","pill-teal"), ("Purchase","fas fa-shopping-bag","pill-purple") })
+        {
+            <a href="@Url.Action("VoucherList", new { type = t.Item1, fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate })"
+               class="vtype-pill @(t.Item3) @(selectedType == t.Item1 ? "active" : "")">
+                <i class="@t.Item2 me-1"></i> @t.Item1
+            </a>
+        }
+    </div>
+
+    <!-- Filters Row -->
+    <div class="premium-card-animated border-0 bg-white shadow-sm mb-4 p-3">
+        <form method="get" action="@Url.Action("VoucherList")" class="row g-3 align-items-end">
+            <input type="hidden" name="type" value="@selectedType" />
+            <div class="col-md-3">
+                <label class="form-label fw-700 small text-muted">From Date</label>
+                <input type="date" name="fromDate" class="form-control border-0 bg-light" value="@ViewBag.FromDate" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-700 small text-muted">To Date</label>
+                <input type="date" name="toDate" class="form-control border-0 bg-light" value="@ViewBag.ToDate" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-700 small text-muted">Search</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control border-0 bg-light" placeholder="Voucher# or narration..." value="@ViewBag.Search" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-800 w-100">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Summary Chips -->
+    @{
+        var summaryStats = ViewBag.SummaryStats as IEnumerable<dynamic>;
+    }
+    @if (summaryStats != null)
+    {
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            @foreach (var stat in summaryStats)
+            {
+                string sType = stat.Type.ToString();
+                string chipClass = sType switch {
+                    "Payment" => "chip-rose",
+                    "Receipt" => "chip-emerald",
+                    "Journal" => "chip-indigo",
+                    "Contra" => "chip-amber",
+                    "Sales" => "chip-teal",
+                    "Purchase" => "chip-purple",
+                    _ => "chip-slate"
+                };
+                <div class="vlist-chip @chipClass">
+                    <span class="chip-label">@sType</span>
+                    <span class="chip-count">@stat.Count</span>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Main Table -->
+    <div class="premium-card-animated border-0 bg-white shadow-sm overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 vlist-table">
+                <thead>
+                    <tr class="table-header-premium">
+                        <th class="ps-4">#</th>
+                        <th>Date</th>
+                        <th>Voucher No.</th>
+                        <th>Type</th>
+                        <th>Narration</th>
+                        <th>Particulars</th>
+                        <th class="text-end">Debit</th>
+                        <th class="text-end">Credit</th>
+                        <th class="text-center pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center py-5">
+                                <div class="empty-state-icon"><i class="fas fa-file-invoice text-muted" style="font-size:3rem;opacity:0.3;"></i></div>
+                                <p class="text-muted fw-700 mt-3">No vouchers found for selected criteria</p>
+                                <a href="@Url.Action("VoucherEntry")" class="btn btn-primary rounded-pill px-4">+ New Voucher</a>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var v in Model)
+                    {
+                        string typeClass = v.Type switch {
+                            EasyEdu.Models.VoucherType.Payment => "b-rose",
+                            EasyEdu.Models.VoucherType.Receipt => "b-emerald",
+                            EasyEdu.Models.VoucherType.Journal => "b-indigo",
+                            EasyEdu.Models.VoucherType.Contra => "b-amber",
+                            EasyEdu.Models.VoucherType.Sales => "b-teal",
+                            EasyEdu.Models.VoucherType.Purchase => "b-purple",
+                            _ => "b-slate"
+                        };
+                        decimal totalDr = v.Details?.Sum(d => d.DebitAmount) ?? 0;
+                        decimal totalCr = v.Details?.Sum(d => d.CreditAmount) ?? 0;
+                        string particulars = string.Join(", ", v.Details?.Select(d => d.Ledger?.Name ?? "-").Distinct().Take(3) ?? new List<string>());
+                        <tr class="voucher-row">
+                            <td class="ps-4 fw-700 text-muted small">@Model.IndexOf(v) + 1</td>
+                            <td class="fw-700 text-dark small">@v.Date.ToString("dd-MMM-yyyy")</td>
+                            <td>
+                                <a href="@Url.Action("VoucherDetails", new { id = v.Id })" class="voucher-num-link">#@v.VoucherNumber</a>
+                            </td>
+                            <td><span class="badge-custom @typeClass">@v.Type</span></td>
+                            <td class="small text-muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">@v.Narration</td>
+                            <td class="small text-dark fw-600" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="@particulars">@particulars</td>
+                            <td class="text-end fw-800 text-success">@totalDr.ToString("N2")</td>
+                            <td class="text-end fw-800 text-danger">@totalCr.ToString("N2")</td>
+                            <td class="text-center pe-4">
+                                <div class="btn-group shadow-sm rounded-pill overflow-hidden">
+                                    <a href="@Url.Action("VoucherDetails", new { id = v.Id, print = true })" class="btn btn-xs btn-white border-subtle border-end-0" title="Print">
+                                        <i class="fas fa-print text-muted"></i>
+                                    </a>
+                                    <a href="@Url.Action("VoucherDetails", new { id = v.Id })" class="btn btn-xs btn-white border-subtle border-end-0" title="View">
+                                        <i class="fas fa-eye text-primary"></i>
+                                    </a>
+                                    <form method="post" action="@Url.Action("DeleteVoucher", new { id = v.Id })" style="display:inline;" onsubmit="return confirm('Delete voucher #@v.VoucherNumber?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-xs btn-white border-subtle" title="Delete">
+                                            <i class="fas fa-trash-alt text-danger"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                @if (Model.Any())
+                {
+                    <tfoot>
+                        <tr class="table-footer-premium">
+                            <td colspan="6" class="ps-4 fw-800 text-dark">Total (@ViewBag.TotalCount records)</td>
+                            <td class="text-end fw-800 text-success fs-6">@Model.Sum(v => v.Details?.Sum(d => d.DebitAmount) ?? 0).ToString("N2")</td>
+                            <td class="text-end fw-800 text-danger fs-6">@Model.Sum(v => v.Details?.Sum(d => d.CreditAmount) ?? 0).ToString("N2")</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                }
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages > 1)
+        {
+            <div class="d-flex justify-content-between align-items-center p-3 border-top">
+                <span class="small text-muted fw-600">Page @currentPage of @totalPages</span>
+                <div class="d-flex gap-2">
+                    @if (currentPage > 1)
+                    {
+                        <a href="@Url.Action("VoucherList", new { type = selectedType, fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate, search = ViewBag.Search, page = currentPage - 1 })"
+                           class="btn btn-sm btn-light rounded-pill px-3 fw-700">
+                            <i class="fas fa-chevron-left me-1"></i> Prev
+                        </a>
+                    }
+                    @if (currentPage < totalPages)
+                    {
+                        <a href="@Url.Action("VoucherList", new { type = selectedType, fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate, search = ViewBag.Search, page = currentPage + 1 })"
+                           class="btn btn-sm btn-primary rounded-pill px-3 fw-700">
+                            Next <i class="fas fa-chevron-right ms-1"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Type Filter Pills */
+    .vtype-pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .vtype-pill { padding: 7px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 700; text-decoration: none; background: #f1f5f9; color: #64748b; transition: all 0.2s; border: 2px solid transparent; }
+    .vtype-pill:hover, .vtype-pill.active { transform: translateY(-1px); border-color: currentColor; }
+    .pill-rose.active, .pill-rose:hover { background: #fff1f2; color: #e11d48; border-color: #fecdd3; }
+    .pill-emerald.active, .pill-emerald:hover { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+    .pill-indigo.active, .pill-indigo:hover { background: #f5f3ff; color: #7c3aed; border-color: #ddd6fe; }
+    .pill-amber.active, .pill-amber:hover { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+    .pill-teal.active, .pill-teal:hover { background: #f0fdfa; color: #0d9488; border-color: #99f6e4; }
+    .pill-purple.active, .pill-purple:hover { background: #faf5ff; color: #9333ea; border-color: #e9d5ff; }
+
+    /* Chips */
+    .vlist-chip { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 50px; font-size: 0.78rem; }
+    .chip-label { font-weight: 700; }
+    .chip-count { font-weight: 800; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 10px; }
+    .chip-rose { background: #fff1f2; color: #e11d48; }
+    .chip-emerald { background: #f0fdf4; color: #16a34a; }
+    .chip-indigo { background: #f5f3ff; color: #7c3aed; }
+    .chip-amber { background: #fffbeb; color: #d97706; }
+    .chip-teal { background: #f0fdfa; color: #0d9488; }
+    .chip-purple { background: #faf5ff; color: #9333ea; }
+    .chip-slate { background: #f8fafc; color: #475569; }
+
+    /* Table */
+    .vlist-table thead th { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; padding: 14px 12px; background: #f8fafc; border-bottom: 2px solid #f1f5f9; }
+    .table-header-premium th { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; background: #f8fafc; color: #94a3b8; border-bottom: 2px solid #e2e8f0; }
+    .table-footer-premium td { background: #f0f9ff; border-top: 2px solid #e2e8f0; padding: 14px 12px; }
+    .voucher-row:hover { background: #f8fafc !important; }
+    .voucher-row td { padding: 14px 12px; border-color: #f1f5f9; }
+    .voucher-num-link { font-weight: 800; color: #3b82f6; text-decoration: none; font-size: 0.82rem; }
+    .voucher-num-link:hover { text-decoration: underline; color: #2563eb; }
+
+    /* Badge colors */
+    .badge-custom { padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
+    .b-rose { background: #fff1f2; color: #e11d48; }
+    .b-emerald { background: #f0fdf4; color: #16a34a; }
+    .b-indigo { background: #f5f3ff; color: #7c3aed; }
+    .b-amber { background: #fffbeb; color: #d97706; }
+    .b-teal { background: #f0fdfa; color: #0d9488; }
+    .b-purple { background: #faf5ff; color: #9333ea; }
+    .b-slate { background: #f8fafc; color: #475569; }
+
+    .btn-xs { padding: 5px 10px; font-size: 0.75rem; }
+    .border-subtle { border-color: #e2e8f0 !important; }
+
+    @@media print {
+        .d-flex.gap-2, form[method=post] { display: none !important; }
+    }
+</style>

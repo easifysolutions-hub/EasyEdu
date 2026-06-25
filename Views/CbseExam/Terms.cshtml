@@ -1,0 +1,64 @@
+@model IEnumerable<EasyEdu.Models.CbseTerm>
+@{
+    ViewData["Title"] = "Academic Term Logic";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Academic Term Logic Hub</h2>
+            <p class="text-muted small fw-600">Establish and coordinate institutional temporal divisions for standard evaluation</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#termModal">
+            <i class="fas fa-plus me-2"></i>ADD TERM NODE
+        </button>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var t in Model)
+        {
+            <div class="col-md-4">
+                <div class="premium-card p-4 border-0 shadow-lg text-center" style="border-radius: 20px;">
+                    <div class="bg-primary bg-opacity-10 p-4 rounded-circle d-inline-block mb-4">
+                        <i class="fas fa-calendar-alt text-primary fa-2x"></i>
+                    </div>
+                    <h5 class="fw-900 text-dark mb-2">@t.Name</h5>
+                    <span class="badge @(t.IsActive ? "bg-success" : "bg-light-soft text-muted") px-3 py-2 rounded-pill fw-900 mb-4">@(t.IsActive ? "OPERATIONAL" : "ARCHIVED")</span>
+                    <hr class="opacity-10 my-4">
+                    <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-light-soft rounded-12 px-4 fw-900 small"><i class="fas fa-edit me-2"></i>EDIT</button>
+                        <button class="btn btn-light-soft text-danger rounded-circle shadow-sm"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="termModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveTerm" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-calendar-check me-2 text-info"></i>DEFINE TERM NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-4 text-dark">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Academic Term Title*</label>
+                        <input name="Name" required class="form-control form-control-premium" placeholder="e.g. Term 1 (First Semester)">
+                    </div>
+                    <div class="form-check form-switch p-0 d-flex align-items-center text-dark">
+                        <label class="small fw-900 text-uppercase opacity-75 m-0 me-3">Operational Status</label>
+                        <input class="form-check-input ms-0" type="checkbox" name="IsActive" value="true" checked style="width: 45px; height: 22px;">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE TERM</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

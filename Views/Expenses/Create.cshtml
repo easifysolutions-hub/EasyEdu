@@ -1,0 +1,92 @@
+﻿@model EasyEdu.Models.Expense
+@{
+    ViewData["Title"] = "Record Expense";
+}
+
+<div class="page-header mb-4">
+    <h1 class="page-title animate-slide-in">Record New Expenditure</h1>
+    <p class="text-muted fw-600">Enter purchase or service details for automated ledger entry</p>
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="premium-card bg-white p-5 shadow-lg animate-fade-in">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+                
+                <div class="mb-4">
+                    <label asp-for="Title" class="form-label fw-800 text-uppercase small text-muted">Transaction Title</label>
+                    <input asp-for="Title" class="form-control form-control-premium" placeholder="e.g., Monthly Electricity Bill" required />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="Category" class="form-label fw-800 text-uppercase small text-muted">Category</label>
+                        <select asp-for="Category" class="form-select form-control-premium">
+                            <option value="General">General</option>
+                            <option value="Utilities">Utilities (Power/Water)</option>
+                            <option value="Rent">Rent / Lease</option>
+                            <option value="Maintenance">Infrastructure Maintenance</option>
+                            <option value="Supplies">Administrative Supplies</option>
+                            <option value="Marketing">Marketing & Ads</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Amount" class="form-label fw-800 text-uppercase small text-muted">Amount ($)</label>
+                        <input asp-for="Amount" type="number" step="0.01" class="form-control form-control-premium" placeholder="0.00" required />
+                        <span asp-validation-for="Amount" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-800 text-uppercase small text-muted">Detailed Description</label>
+                    <textarea asp-for="Description" class="form-control form-control-premium" rows="3" placeholder="Additional details about this transaction..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <label asp-for="PaymentMethod" class="form-label fw-800 text-uppercase small text-muted">Payment Method</label>
+                        <select asp-for="PaymentMethod" class="form-select form-control-premium">
+                            <option value="Cash">Cash</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Credit Card">Credit Card</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ReferenceNumber" class="form-label fw-800 text-uppercase small text-muted">Voucher / Ref #</label>
+                        <input asp-for="ReferenceNumber" class="form-control form-control-premium" placeholder="REF-001" />
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn-premium btn-premium-primary w-100 py-3 shadow-md">
+                        <i class="fas fa-save me-2"></i> Commit to Ledger
+                    </button>
+                    <a asp-action="Index" class="btn btn-light border-0 w-100 py-3 rounded-12 fw-700 text-dark">
+                        Discard
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-xl-6 d-none d-xl-block">
+        <div class="premium-card bg-primary bg-opacity-10 h-100 p-5 border-0">
+            <div class="d-flex flex-column justify-content-center h-100 text-center px-4">
+                <div class="mb-4 text-primary">
+                    <i class="fas fa-file-invoice-dollar fa-5x"></i>
+                </div>
+                <h3 class="fw-800 text-primary">Financial Compliance</h3>
+                <p class="text-muted fw-600">Every recorded expense is automatically calculated into the school's Trial Balance and Profit/Loss statements. Accurate logging ensures fiscal transparency.</p>
+                <div class="mt-4">
+                    <div class="badge-premium badge-info-premium p-3 px-4">
+                        <i class="fas fa-shield-alt me-2"></i> Secure Audit Trail Enabled
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

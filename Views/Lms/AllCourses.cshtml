@@ -1,0 +1,61 @@
+@model IEnumerable<EasyEdu.Models.LmsCourse>
+@{
+    ViewData["Title"] = "Digital Curriculum Registry";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Curriculum Registry</h2>
+            <p class="text-muted small fw-600">Architect and manage institutional digital course nodes</p>
+        </div>
+        <a href="@Url.Action("AddCourse")" class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900">
+            <i class="fas fa-plus me-2"></i>DEPLOY NEW NODE
+        </a>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var course in Model)
+        {
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-card overflow-hidden border-0 shadow-lg h-100" style="border-radius: 24px; transition: transform 0.3s ease-in-out;">
+                    <div class="position-relative">
+                        <img src="@(string.IsNullOrEmpty(course.Thumbnail) ? "/img/course-placeholder.jpg" : course.Thumbnail)" class="w-100" style="height: 200px; object-fit: cover;">
+                        <span class="position-absolute badge @(course.Status == "Published" ? "bg-success" : "bg-warning") px-3 py-2 rounded-pill fw-900 shadow-sm" style="top: 20px; right: 20px;">@course.Status.ToUpper()</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                             <span class="smallest text-primary fw-900 text-uppercase italic ls-1">@course.Category?.Title</span>
+                             <span class="badge bg-light text-muted border fw-800 rounded-pill">@course.Level?.Title</span>
+                        </div>
+                        <h5 class="fw-900 text-dark mb-3">@course.Title</h5>
+                        <p class="small text-muted mb-4 text-truncate-2">@course.ShortDescription</p>
+                        <hr class="opacity-10 mb-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="smallest text-muted fw-800 text-uppercase d-block">VALUATION</span>
+                                <span class="h5 fw-900 text-primary m-0">@(course.IsFree ? "FREE" : "$" + course.Price.ToString("N0"))</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-edit text-primary"></i></button>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .ls-1 { letter-spacing: 1px; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

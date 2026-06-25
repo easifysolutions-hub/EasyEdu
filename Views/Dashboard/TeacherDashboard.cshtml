@@ -1,0 +1,185 @@
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-up">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Academic Overview: @(User.FindFirst("FullName")?.Value ?? User.Identity?.Name)</h3>
+            <p class="text-muted small fw-600">Managing intelligence and inspiring excellence.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fw-800">DEPT: SCIENCE</span>
+            <span class="badge bg-purple-soft text-purple px-3 py-2 rounded-pill fw-800">SENIOR LECTURER</span>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="fw-800 m-0">124</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Total Students</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(244, 114, 182, 0.1); color: #f472b6;">
+                    <i class="fas fa-chalkboard"></i>
+                </div>
+                <h3 class="fw-800 m-0">18</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Weekly Lessons</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="fw-800 m-0">98%</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Avg. Attendance</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="fw-800 m-0">45h</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Working Hours</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <div class="premium-card mb-4">
+                <div class="p-4 border-bottom border-light d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 m-0">Upcoming Lectures</h5>
+                    <button class="btn btn-sm btn-light-soft rounded-pill px-3 fw-700">Full Schedule</button>
+                </div>
+                <div class="p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">TIME</th>
+                                    <th>CLASS</th>
+                                    <th>ROOM</th>
+                                    <th>TYPE</th>
+                                    <th class="text-end px-4">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 fw-800">10:30 AM</td>
+                                    <td>Class 10-A</td>
+                                    <td>Biology Lab 1</td>
+                                    <td>Lab Practical</td>
+                                    <td class="text-end px-4">
+                                        <button class="btn btn-sm btn-light-soft rounded-circle"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 fw-800">01:00 PM</td>
+                                    <td>Class 12-C</td>
+                                    <td>Theory Hall B</td>
+                                    <td>Advanced Bio</td>
+                                    <td class="text-end px-4">
+                                        <button class="btn btn-sm btn-light-soft rounded-circle"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="premium-card h-100">
+                        <div class="p-4 border-bottom border-light">
+                            <h5 class="fw-800 m-0">Leave Status</h5>
+                        </div>
+                        <div class="p-4 text-center">
+                            <div class="d-flex justify-content-around">
+                                <div>
+                                    <h4 class="fw-800 mb-0">12</h4>
+                                    <span class="small text-muted fw-600">Total Leaves</span>
+                                </div>
+                                <div class="vr"></div>
+                                <div>
+                                    <h4 class="fw-800 mb-0 text-success">8</h4>
+                                    <span class="small text-muted fw-600">Remaining</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-premium-purple w-100 mt-4 rounded-pill">Apply for Leave</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="premium-card h-100">
+                        <div class="p-4 border-bottom border-light">
+                            <h5 class="fw-800 m-0">Pending Attendance</h5>
+                        </div>
+                        <div class="p-4">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <span class="badge bg-danger-soft text-danger px-3 rounded-pill fw-800">NOT MARKED</span>
+                                <span class="fw-800">Class 9-B</span>
+                            </div>
+                            <button class="btn btn-outline-danger w-100 rounded-pill fw-800" style="border: 2px solid rgba(220, 38, 38, 0.2);">MARKK NOW</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="premium-card mb-4">
+                <div class="p-4 border-bottom border-light">
+                    <h5 class="fw-800 m-0">Staff Notices</h5>
+                </div>
+                <div class="p-4">
+                    <div class="p-3 rounded-16 bg-light-soft mb-3 border border-light-subtle">
+                        <span class="text-primary small fw-800">ADMINISTRATION</span>
+                        <p class="fw-700 mb-0 mt-1">Staff meeting regarding new semester curriculum.</p>
+                        <span class="text-muted smaller">Today at 04:00 PM</span>
+                    </div>
+                    <div class="p-3 rounded-16 bg-light-soft border border-light-subtle">
+                        <span class="text-success small fw-800">HR DEPARTMENT</span>
+                        <p class="fw-700 mb-0 mt-1">Payroll reconciliation for January completed.</p>
+                        <span class="text-muted smaller">Yesterday</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="p-4 border-bottom border-light">
+                    <h5 class="fw-800 m-0">Student Birthdays</h5>
+                </div>
+                <div class="p-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="user-avatar-modern" style="width: 35px; height: 35px; background: #8b5cf6;">M</div>
+                        <div>
+                            <h6 class="fw-800 mb-0">Mark Spencer</h6>
+                            <span class="text-muted smaller">Class 10-A</span>
+                        </div>
+                        <span class="ms-auto badge bg-primary-soft text-primary px-3 rounded-pill">TODAY</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="user-avatar-modern" style="width: 35px; height: 35px; background: #f472b6;">A</div>
+                        <div>
+                            <h6 class="fw-800 mb-0">Alicia Keys</h6>
+                            <span class="text-muted smaller">Class 12-C</span>
+                        </div>
+                        <span class="ms-auto badge bg-light-soft text-muted px-3 rounded-pill">TOMORROW</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

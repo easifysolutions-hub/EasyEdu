@@ -1,0 +1,133 @@
+﻿@model IEnumerable<EasyEdu.Models.Supplier>
+@{
+    ViewData["Title"] = "Suppliers - Strategic Sourcing";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-handshake me-2 text-primary"></i> Supplier Directory</h1>
+        <p class="text-muted fw-600">Managing global sourcing partnerships and institutional procurement channels</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="ItemReceive" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-truck-loading me-2"></i> PROCURE ITEMS
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="row g-4 animate-fade-in">
+        <!-- Add Supplier Form -->
+        <div class="col-xl-4">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20 h-100">
+                <div class="p-4 border-bottom text-white" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
+                    <h5 class="fw-800 mb-0"><i class="fas fa-plus-circle me-2"></i> Onboard Provider</h5>
+                    <p class="opacity-75 small mb-0 mt-1">Register a new logistical partner or vendor</p>
+                </div>
+                <div class="p-4">
+                    <form asp-action="CreateSupplier" method="post">
+                        <div class="mb-4">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Legal Entity Name</label>
+                            <input type="text" name="Name" class="form-control-premium w-100" placeholder="e.g. Acme Global Logistics" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Contact Liaison</label>
+                            <input type="text" name="ContactPerson" class="form-control-premium w-100" placeholder="e.g. Johnathan Smith" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Connectivity (Phone)</label>
+                            <input type="text" name="Phone" class="form-control-premium w-100" placeholder="+1 (555) 000-0000" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Nexus Headquarters (Address)</label>
+                            <textarea name="Address" class="form-control-premium w-100" rows="3" placeholder="Vendor corporate address..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100 py-3 shadow-sm fs-6 fw-800 mt-2" style="background: #1e293b; border-color: #1e293b;">
+                            <i class="fas fa-save me-2"></i> AUTHORIZE PARTNER
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suppliers List -->
+        <div class="col-xl-8">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20 h-100">
+                <div class="p-4 border-bottom d-flex align-items-center justify-content-between bg-light">
+                    <h5 class="fw-800 mb-0 text-dark"><i class="fas fa-address-book me-2 text-primary"></i> Partnership Roster</h5>
+                    <span class="badge bg-primary-soft text-primary rounded-pill px-3 py-2 fw-800">@Model.Count() ENTITIES</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">PARTNER IDENTITY</th>
+                                <th>LIAISON</th>
+                                <th>CONNECTIVITY</th>
+                                <th class="text-end pe-4">PROTOCOLS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var s in Model)
+                            {
+                                <tr class="align-middle">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="icon-box-sm bg-dark text-white rounded-12 me-3 shadow-sm">
+                                                <i class="fas fa-building small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-800 text-dark">@s.Name</div>
+                                                <div class="text-muted small fw-600 uppercase" style="font-size: 0.65rem;">UID: VENDOR-@s.Id.ToString("D4")</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-800 text-primary">@s.ContactPerson</div>
+                                        <div class="small fw-700 text-muted uppercase" style="font-size: 0.6rem;">OFFICIAL REP</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-800 text-dark small"><i class="fas fa-phone-alt me-2 text-muted"></i>@s.Phone</span>
+                                            <span class="text-muted small fw-600 truncate-text" style="max-width: 150px;"><i class="fas fa-map-marker-alt me-2"></i>@s.Address</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex gap-1 justify-content-end">
+                                            <button class="btn btn-sm btn-light-soft text-primary p-2 rounded-8" title="Edit Profile">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-light-soft text-warning p-2 rounded-8" title="Contact Vendor">
+                                                <i class="fas fa-envelope"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-light-soft text-danger p-2 rounded-8" title="Suspend Partner">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-5">
+                                        <i class="fas fa-user-slash fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                        <div class="fw-800 text-muted">No suppliers currently registered.</div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.1); color: #6366f1; }
+    .icon-box-sm { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+    .truncate-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-light-soft { background: rgba(0,0,0,0.03); color: #334155; border: none; }
+</style>

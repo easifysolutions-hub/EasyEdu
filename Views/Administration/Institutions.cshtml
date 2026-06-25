@@ -1,0 +1,154 @@
+﻿@model IEnumerable<EasyEdu.Models.Company>
+@{
+    ViewData["Title"] = "Institutions Management";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">Institution Management</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index")" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Institutions</li>
+            </ol>
+        </nav>
+    </div>
+    <button class="btn btn-primary shadow-sm border-0 px-4 py-2 fw-600 rounded-10" data-bs-toggle="modal" data-bs-target="#addInstitutionModal">
+        <i class="fas fa-plus me-2"></i> Add Institution
+    </button>
+</div>
+
+<div class="row">
+    @foreach (var institution in Model)
+    {
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm rounded-16 h-100 bg-white overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="institution-logo-container rounded-12 me-3 d-flex align-items-center justify-content-center bg-light">
+                            @if (!string.IsNullOrEmpty(institution.Logo))
+                            {
+                                <img src="@institution.Logo" alt="@institution.Name" class="img-fluid rounded-12" />
+                            }
+                            else
+                            {
+                                <i class="fas fa-university fa-2x text-primary"></i>
+                            }
+                        </div>
+                        <div>
+                            <h5 class="fw-700 m-0">@institution.Name</h5>
+                            <span class="badge @(institution.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") px-2 rounded-pill small">
+                                @(institution.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="institution-details mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-map-marker-alt text-muted me-3" style="width: 15px;"></i>
+                            <span class="small text-secondary">@institution.City, @institution.State</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-envelope text-muted me-3" style="width: 15px;"></i>
+                            <span class="small text-secondary">@institution.Email</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-phone text-muted me-3" style="width: 15px;"></i>
+                            <span class="small text-secondary">@institution.Phone</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-row d-flex border-top pt-3">
+                        <div class="flex-fill text-center border-end">
+                            <div class="fw-700 text-dark">@institution.Students.Count</div>
+                            <div class="small text-muted">Students</div>
+                        </div>
+                        <div class="flex-fill text-center border-end">
+                            <div class="fw-700 text-dark">@institution.Teachers.Count</div>
+                            <div class="small text-muted">Teachers</div>
+                        </div>
+                        <div class="flex-fill text-center">
+                            <div class="fw-700 text-dark">@institution.Classes.Count</div>
+                            <div class="small text-muted">Classes</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light border-0 p-0 d-flex">
+                    <button class="btn btn-link py-3 flex-fill text-decoration-none border-end rounded-0 text-secondary hover-primary">
+                        <i class="fas fa-edit me-2"></i> Edit
+                    </button>
+                    <button class="btn btn-link py-3 flex-fill text-decoration-none rounded-0 text-secondary hover-primary">
+                        <i class="fas fa-cog me-2"></i> Manage
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-university fa-5x text-light"></i>
+            </div>
+            <h3 class="fw-700 text-secondary">No institutions found</h3>
+            <p class="text-muted">Get started by adding your first school or college.</p>
+            <button class="btn btn-primary px-5 py-3 rounded-12 mt-3" data-bs-toggle="modal" data-bs-target="#addInstitutionModal">
+                Add Institution Now
+            </button>
+        </div>
+    }
+</div>
+
+<style>
+    .institution-logo-container { width: 60px; height: 60px; }
+    .bg-success-soft { background-color: rgba(16, 185, 129, 0.1); }
+    .bg-danger-soft { background-color: rgba(239, 68, 68, 0.1); }
+    .hover-primary:hover { color: var(--primary) !important; background-color: #f8fafc; }
+    .stats-row .text-dark { font-size: 1.1rem; }
+    .radius-10 { border-radius: 10px; }
+    .rounded-16 { border-radius: 16px; }
+    .rounded-12 { border-radius: 12px; }
+</style>
+
+<!-- Add Institution Modal Placeholder -->
+<div class="modal fade" id="addInstitutionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-20 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-700">Add New Institution</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0">
+                <form id="addInstitutionForm">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-600">Institution Name</label>
+                            <input type="text" class="form-control rounded-10 py-2" placeholder="e.g. St. Peters College" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-600">Email Address</label>
+                            <input type="email" class="form-control rounded-10 py-2" placeholder="info@example.com" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-600">Phone Number</label>
+                            <input type="tel" class="form-control rounded-10 py-2" placeholder="+1 234 567 890" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-600">City</label>
+                            <input type="text" class="form-control rounded-10 py-2" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-600">Country</label>
+                            <input type="text" class="form-control rounded-10 py-2" placeholder="USA">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-light px-4 py-2 fw-600 rounded-10" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4 py-2 fw-600 rounded-10">Save Institution</button>
+            </div>
+        </div>
+    </div>
+</div>

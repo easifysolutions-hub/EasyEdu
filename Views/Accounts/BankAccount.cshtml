@@ -1,0 +1,93 @@
+@model IEnumerable<EasyEdu.Models.BankAccount>
+@{
+    ViewData["Title"] = "Bank Accounts";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <h3 class="page-title m-0">Institutional Bank Accounts</h3>
+            <form asp-action="BankAccount" method="get" class="d-flex gap-2">
+                <input type="text" name="searchTerm" class="form-control-premium py-1 px-3" style="width: 250px;" placeholder="Search accounts..." value="@ViewBag.SearchTerm">
+                <button type="submit" class="btn btn-premium-primary btn-sm rounded-8 px-3">SEARCH</button>
+            </form>
+        </div>
+        <button class="btn btn-premium-purple btn-sm rounded-8" onclick="toggleForm()">
+            <i class="fas fa-plus me-2"></i>ADD ACCOUNT
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-4" id="formColumn">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Add Account</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateBankAccount" method="post">
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Bank Name*</label>
+                            <input type="text" name="BankName" class="form-control-premium w-100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Account Name*</label>
+                            <input type="text" name="AccountName" class="form-control-premium w-100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Account Number*</label>
+                            <input type="text" name="AccountNumber" class="form-control-premium w-100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Opening Balance</label>
+                            <input type="number" name="OpeningBalance" class="form-control-premium w-100" value="0">
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100">SAVE ACCOUNT</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8" id="listColumn">
+            <div class="row g-4">
+                @foreach (var b in Model)
+                {
+                    <div class="col-md-6">
+                        <div class="premium-card p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="fw-900 text-dark m-0">@b.BankName</h6>
+                                    <div class="small text-muted fw-700">@b.AccountNumber</div>
+                                </div>
+                                <div class="badge bg-primary-soft text-primary rounded-pill px-3">BANK</div>
+                            </div>
+                            <div class="text-muted small fw-800 text-uppercase opacity-50 mb-1">Current Balance</div>
+                            <h4 class="fw-900 text-primary">@b.CurrentBalance.ToString("C0")</h4>
+                            <div class="mt-4 d-flex gap-2 align-items-center">
+                                <a href="@Url.Action("EditBankAccount", new { id = b.Id })" class="btn btn-light-soft btn-sm flex-grow-1 rounded-8 text-center" style="line-height: 24px;">EDIT</a>
+                                <form asp-action="DeleteBankAccount" method="post" style="display: inline; margin: 0; padding: 0; flex-grow: 1;" onsubmit="return confirm('Are you sure you want to delete this bank account?')">
+                                    <input type="hidden" name="id" value="@b.Id" />
+                                    <button type="submit" class="btn btn-light-soft btn-sm w-100 rounded-8 text-danger" style="line-height: 24px;"><i class="fas fa-trash-alt me-1"></i> DELETE</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+</script>

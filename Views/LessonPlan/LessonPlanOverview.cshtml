@@ -1,0 +1,83 @@
+@model IEnumerable<EasyEdu.Models.LessonPlan>
+@{
+    ViewData["Title"] = "Lesson Plan Overview";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Lesson Plan Overview</h3>
+            <p class="text-muted small">View and audit active academic lesson plans across instructors.</p>
+        </div>
+    </div>
+
+    <!-- Filter Card -->
+    <div class="premium-card mb-4">
+        <div class="card-body p-4">
+            <form method="get" asp-action="LessonPlanOverview" class="row g-3 align-items-end">
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label small fw-700 text-uppercase">Filter by Teacher</label>
+                    <select name="teacherId" class="form-select form-control-premium" asp-items="ViewBag.Teachers" onchange="this.form.submit()">
+                        <option value="">-- All Teachers --</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <a href="@Url.Action("LessonPlanOverview", "LessonPlan")" class="btn btn-light-soft w-100">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Plan List -->
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">DATE</th>
+                            <th>TEACHER</th>
+                            <th>LESSON/TOPIC</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="fas fa-calendar-times fa-3x mb-3 text-secondary"></i>
+                                    <p class="mb-0 fw-600">No lesson plans found.</p>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="px-4 fw-800 text-primary">@item.ExecutionDate.ToString("dd MMM yyyy")</td>
+                                    <td class="fw-700 text-dark">@item.Teacher?.FullName</td>
+                                    <td>
+                                        <div class="fw-800">@item.Lesson?.LessonName</div>
+                                        <div class="small text-muted fw-600">@item.Topic?.TopicName</div>
+                                    </td>
+                                    <td>
+                                        @if(item.Status == "Completed"){
+                                            <span class="badge badge-success-premium">COMPLETED</span>
+                                        } else if(item.Status == "Ongoing"){
+                                            <span class="badge badge-warning-premium">ONGOING</span>
+                                        } else {
+                                            <span class="badge badge-danger-premium">PENDING</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

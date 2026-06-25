@@ -1,0 +1,126 @@
+﻿@model List<EasyEdu.Controllers.StudentOptionalSubjectViewModel>
+@{
+    ViewData["Title"] = "Optional Subject";
+    Layout = "_Layout";
+    var optionalSubjects = ViewBag.OptionalSubjects as List<EasyEdu.Models.Subject>;
+}
+
+<div class="container-fluid p-4">
+    <div class="card border-0 shadow-sm rounded-12 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="fw-800 text-primary m-0"><i class="fas fa-book-open me-2"></i> Optional Subject Assignment</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-700 text-muted small text-uppercase">Select Class</label>
+                    <select name="classId" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Classes" onchange="this.form.submit()">
+                        <option value="">Select Class</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary fw-700 w-100"><i class="fas fa-search me-1"></i> Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-12">
+            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-700 m-0 text-dark">Student List</h6>
+                <span class="badge bg-light text-primary">Total Students: @Model.Count</span>
+            </div>
+            <div class="card-body p-0">
+                <form asp-action="SaveAssignment" method="post">
+                    <input type="hidden" name="classId" value="@Context.Request.Query["classId"]" />
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="px-4 py-3 fw-700">Admission No</th>
+                                    <th class="py-3 fw-700">Student Name</th>
+                                    @if(optionalSubjects != null && optionalSubjects.Any()) {
+                                        <th class="py-3 fw-700">Optional Subject</th>
+                                    } else {
+                                        <th class="py-3 fw-700 text-danger">No Optional Subjects Found</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td class="px-4">
+                                            <span class="fw-600 text-muted">@Model[i].AdmissionNumber</span>
+                                            <input type="hidden" name="assignments[@i].StudentId" value="@Model[i].StudentId" />
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                @if (!string.IsNullOrEmpty(Model[i].ProfilePicture))
+                                                {
+                                                    <img src="@Model[i].ProfilePicture" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;" />
+                                                }
+                                                else
+                                                {
+                                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                                        <i class="fas fa-user text-muted small"></i>
+                                                    </div>
+                                                }
+                                                <span class="fw-700 text-dark">@Model[i].StudentName</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if(optionalSubjects != null && optionalSubjects.Any())
+                                            {
+                                                <div class="d-flex gap-2 flex-wrap">
+                                                    @foreach(var subject in optionalSubjects)
+                                                    {
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" 
+                                                                   name="assignments[@i].AssignedSubjectId" 
+                                                                   id="sub_@(i)_@subject.Id" 
+                                                                   value="@subject.Id"
+                                                                   @(Model[i].AssignedSubjectId == subject.Id ? "checked" : "")
+                                                                   style="cursor: pointer;">
+                                                            <label class="form-check-label fw-600 small" for="sub_@(i)_@subject.Id" style="cursor: pointer;">
+                                                                @subject.Name (@subject.Code)
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                    <div class="form-check form-check-inline ms-3">
+                                                        <input class="form-check-input" type="radio" name="assignments[@i].AssignedSubjectId" id="sub_@(i)_none" value="" @(Model[i].AssignedSubjectId == null ? "checked" : "")>
+                                                        <label class="form-check-label text-muted small" for="sub_@(i)_none">None</label>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small"><em>Please define optional subjects for this class first.</em></span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 border-top">
+                        <button type="submit" class="btn btn-success fw-700 px-4 py-2 shadow-sm">
+                            <i class="fas fa-save me-2"></i> Save Assignments
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    else if (Context.Request.Query.ContainsKey("classId"))
+    {
+         <div class="text-center py-5">
+            <i class="fas fa-user-graduate text-muted mb-3" style="font-size: 3rem; opacity: 0.2;"></i>
+            <h5 class="text-muted fw-600">No Students Found</h5>
+            <p class="small text-muted">Select a different class.</p>
+        </div>
+    }
+</div>

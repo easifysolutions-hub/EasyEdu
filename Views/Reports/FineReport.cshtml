@@ -1,0 +1,93 @@
+@model IEnumerable<EasyEdu.Models.FeesInvoiceDetail>
+@{
+    ViewData["Title"] = "Fine Audit Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 text-dark">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Fine Audit Report</h3>
+            <p class="text-muted small fw-600">Archival of all late payment penalties and individual user fines</p>
+        </div>
+        <div class="no-print">
+            <button class="btn btn-premium-danger btn-sm rounded-8 shadow-sm" onclick="window.print()">
+                <i class="fas fa-file-invoice-dollar me-2"></i>PRINT REPORT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print text-dark">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">From Date</label>
+                <input type="date" name="fromDate" class="form-control form-control-premium text-dark fw-700">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">To Date</label>
+                <input type="date" name="toDate" class="form-control form-control-premium text-dark fw-700">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100 shadow-sm border-0">SEARCH</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="premium-card p-4 bg-gradient-danger text-white border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="small fw-800 text-uppercase mb-2 opacity-75">Aggregate Late Collection</div>
+                <h2 class="fw-900 mb-0 h1">@Model.Sum(d => d.Fine).ToString("C")</h2>
+                <div class="mt-2 small fw-600 opacity-50">Calculated from @Model.Count() distinct penalties</div>
+            </div>
+        </div>
+        <div class="col-md-4 text-dark">
+            <div class="premium-card p-4 bg-white shadow-sm border-0 h-100" style="border-radius: 20px;">
+                <div class="small fw-800 text-uppercase mb-2 text-muted">Penalized Students</div>
+                <h2 class="fw-900 mb-0 text-danger opacity-75">@Model.Select(d => d.FeesInvoice.StudentId).Distinct().Count()</h2>
+                <div class="mt-2 small fw-600 text-muted opacity-50">Uniquely identified accounts</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0 align-middle">
+                    <thead class="bg-premium-dark text-white">
+                        <tr>
+                            <th class="px-4 py-3">INVOICE #</th>
+                            <th>STUDENT NAME</th>
+                            <th>FEE HEAD</th>
+                            <th class="text-center">DUE DATE</th>
+                            <th class="text-end px-4">FINE AMOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-900 text-dark">@d.FeesInvoice?.InvoiceNumber</td>
+                                <td class="text-dark fw-800">@d.FeesInvoice?.Student?.FullName</td>
+                                <td class="fw-700 text-muted small">@d.FeesType?.Name</td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger-soft text-danger px-3 rounded-pill fw-800">
+                                        @d.FeesInvoice?.DueDate.ToString("dd MMM yyyy")
+                                    </span>
+                                </td>
+                                <td class="text-end px-4 fw-900 text-danger h6 mb-0">@d.Fine.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-gradient-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); }
+    @@media print { .no-print { display: none !important; } }
+</style>

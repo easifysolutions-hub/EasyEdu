@@ -1,0 +1,55 @@
+﻿@model IEnumerable<EasyEdu.Models.Teacher>
+@{
+    ViewData["Title"] = "Faculty Directory";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Institutional Faculty</h1>
+        <p class="text-muted fw-600">Unified directory of teaching staff and academic personnel</p>
+    </div>
+    <a asp-action="Create" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+        <i class="fas fa-user-plus"></i> Onboard Personnel
+    </a>
+</div>
+
+<div class="row g-4 mb-5">
+    @foreach (var teacher in Model)
+    {
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card bg-white h-100 shadow-md animate-fade-in text-center">
+                <div class="p-4">
+                    <div class="avatar-lg bg-primary-soft text-primary fw-800 rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 2rem; border: 4px solid var(--white); box-shadow: var(--shadow);">
+                        @(teacher.FirstName.Substring(0, 1) + (teacher.LastName.Length > 0 ? teacher.LastName.Substring(0, 1) : ""))
+                    </div>
+                    <h4 class="fw-800 text-dark mb-1">@teacher.FirstName @teacher.LastName</h4>
+                    <p class="text-primary fw-700 small text-uppercase mb-3">@teacher.Specialization</p>
+                    <div class="badge-premium badge-info-premium mb-4">ID: @teacher.EmployeeNumber</div>
+                    
+                    <div class="d-flex justify-content-center gap-2 border-top pt-4">
+                        <a asp-action="Details" asp-route-id="@teacher.Id" class="btn-premium w-100 py-2 shadow-sm" style="background: var(--gray-100); color: var(--dark); text-transform: none;">
+                            <i class="fas fa-id-card me-2"></i> Dossier
+                        </a>
+                        <button class="btn-premium btn-premium-primary w-auto px-3 py-2 shadow-md">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <div class="premium-card p-5 bg-white">
+                <i class="fas fa-chalkboard-user fa-5x text-gray-100 mb-4"></i>
+                <h2 class="fw-800 text-dark">Faculty Roster Empty</h2>
+                <p class="text-muted fw-600">Register your academic staff to build the institution's teaching foundation.</p>
+                <a asp-action="Create" class="btn-premium btn-premium-primary px-5 py-3 mt-4">
+                    <i class="fas fa-plus-circle me-2"></i> Register First Teacher
+                </a>
+            </div>
+        </div>
+    }
+</div>

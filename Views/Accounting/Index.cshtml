@@ -1,0 +1,323 @@
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-2 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Financial Command Center</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider"><i class="fas fa-calendar-alt me-2"></i> Current Fiscal Overview</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("SeedDefaults")" class="btn btn-premium-purple btn-sm px-4 rounded-pill shadow-sm fw-800">
+                <i class="fas fa-database me-2"></i> SEED DATA
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Stats with Premium Gradients -->
+    <div class="row g-4 mb-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-emerald">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">+12%</span>
+                </div>
+                <div class="stat-label">Total Receipts</div>
+                <div class="stat-value">@(((decimal)ViewBag.TotalReceipts).ToString("C0"))</div>
+                <div class="stat-meta mt-2"><i class="fas fa-clock me-1"></i> Updated Just Now</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-rose">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-money-bill-wave"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">-5.2%</span>
+                </div>
+                <div class="stat-label">Total Payments</div>
+                <div class="stat-value">@(((decimal)ViewBag.TotalPayments).ToString("C0"))</div>
+                <div class="stat-meta mt-2"><i class="fas fa-history me-1"></i> Last 30 Days</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-indigo">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-wallet"></i></div>
+                    <div class="pulse-status-white"></div>
+                </div>
+                <div class="stat-label">Net Liquidity</div>
+                <div class="stat-value">@((((decimal)ViewBag.TotalReceipts) - ((decimal)ViewBag.TotalPayments)).ToString("C0"))</div>
+                <div class="stat-meta mt-2"><i class="fas fa-check-circle me-1"></i> Bank Reconciled</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-amber">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-file-alt"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">New</span>
+                </div>
+                <div class="stat-label">Total Vouchers</div>
+                <div class="stat-value">@((ViewBag.RecentVouchers as List<EasyEdu.Models.Voucher>)?.Count ?? 0)</div>
+                <div class="stat-meta mt-2"><i class="fas fa-list me-1"></i> Recorded This Month</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="row g-4 mb-4">
+        <!-- Graphs Section -->
+        <div class="col-lg-8">
+            <div class="premium-card-animated p-4 h-100 shadow-sm border-0 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-800 text-dark m-0"><i class="fas fa-chart-line text-primary me-2"></i> Financial Trends</h5>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-light active rounded-start-pill">Yearly</button>
+                        <button class="btn btn-sm btn-light rounded-end-pill">Monthly</button>
+                    </div>
+                </div>
+                <div style="height: 350px;">
+                    <canvas id="financeTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Operations Sidebar -->
+        <div class="col-lg-4">
+            <div class="premium-card-animated p-4 h-100 shadow-sm border-0 bg-white">
+                <h5 class="fw-800 text-dark mb-4 d-flex align-items-center">
+                    <span class="pulse-status-blue me-2"></span> Instant Accounting
+                </h5>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="@Url.Action("PaymentVoucher")" class="op-button-animated grad-rose-light">
+                            <div class="op-icon"><i class="fas fa-minus-circle"></i></div>
+                            <span class="op-label">Payment</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("ReceiptVoucher")" class="op-button-animated grad-emerald-light">
+                            <div class="op-icon"><i class="fas fa-plus-circle"></i></div>
+                            <span class="op-label">Receipt</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("JournalVoucher")" class="op-button-animated grad-indigo-light">
+                            <div class="op-icon"><i class="fas fa-exchange-alt"></i></div>
+                            <span class="op-label">Journal</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("ContraVoucher")" class="op-button-animated grad-amber-light">
+                            <div class="op-icon"><i class="fas fa-university"></i></div>
+                            <span class="op-label">Contra</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("SalesVoucher")" class="op-button-animated" style="background:#f0fdfa;color:#0d9488;">
+                            <div class="op-icon"><i class="fas fa-shopping-cart"></i></div>
+                            <span class="op-label">Sales</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("PurchaseVoucher")" class="op-button-animated" style="background:#faf5ff;color:#9333ea;">
+                            <div class="op-icon"><i class="fas fa-shopping-bag"></i></div>
+                            <span class="op-label">Purchase</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("ChartOfAccounts")" class="op-button-animated grad-blue-light">
+                            <div class="op-icon"><i class="fas fa-list-ul"></i></div>
+                            <span class="op-label">Accounts</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("VoucherList")" class="op-button-animated grad-slate-light">
+                            <div class="op-icon"><i class="fas fa-book-open"></i></div>
+                            <span class="op-label">Register</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="premium-card-animated shadow-sm border-0 bg-white overflow-hidden">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 text-dark m-0">Live Transaction Stream</h5>
+                    <button class="btn btn-sm btn-light-soft fw-800 rounded-pill px-3">VIEW ALL ANALYSIS</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="bg-light-subtle small fw-800 text-muted text-uppercase">
+                                <th class="ps-4">No.</th>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Narration</th>
+                                <th class="text-end pe-4">Control</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var v in (ViewBag.RecentVouchers as List<EasyEdu.Models.Voucher>)!)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="v-number-badge">#@v.VoucherNumber</div>
+                                        </div>
+                                    </td>
+                                    <td class="small fw-700 text-dark">@v.Date.ToShortDateString()</td>
+                                    <td>
+                                        <span class="badge-custom @(v.Type switch {
+                                            EasyEdu.Models.VoucherType.Payment => "b-rose",
+                                            EasyEdu.Models.VoucherType.Receipt => "b-emerald",
+                                            EasyEdu.Models.VoucherType.Contra => "b-amber",
+                                            _ => "b-indigo"
+                                        })">@v.Type</span>
+                                    </td>
+                                    <td class="small text-muted fw-600">@v.Narration</td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group shadow-sm rounded-pill overflow-hidden">
+                                            <a href="@Url.Action("VoucherDetails", new { id = v.Id, print = true })" class="btn btn-xs btn-white border-subtle border-end-0" title="Print"><i class="fas fa-print"></i></a>
+                                            <a href="@Url.Action("VoucherDetails", new { id = v.Id })" class="btn btn-xs btn-white border-subtle" title="View"><i class="fas fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Stats Cards Premium */
+    .stat-card-premium {
+        padding: 1.5rem;
+        border-radius: 20px;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+    .stat-card-premium:hover { transform: translateY(-7px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    
+    .grad-emerald { background: linear-gradient(135deg, #10b981, #059669); }
+    .grad-rose { background: linear-gradient(135deg, #f43f5e, #be123c); }
+    .grad-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+    .grad-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+    .bg-white-trans { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.1); }
+    .stat-icon-blob { width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .stat-label { font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.3rem; }
+    .stat-value { font-size: 1.75rem; font-weight: 800; letter-spacing: -1px; }
+    .stat-meta { font-size: 0.75rem; font-weight: 600; opacity: 0.7; }
+
+    /* Operation Buttons Animated */
+    .op-button-animated {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem 1rem;
+        border-radius: 18px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+        height: 100%;
+    }
+    .op-button-animated:hover { transform: scale(1.05); border-color: rgba(0,0,0,0.05); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+    
+    .grad-rose-light { background: #fff1f2; color: #e11d48; }
+    .grad-emerald-light { background: #f0fdf4; color: #16a34a; }
+    .grad-indigo-light { background: #f5f3ff; color: #7c3aed; }
+    .grad-amber-light { background: #fffbeb; color: #d97706; }
+    .grad-blue-light { background: #f0f9ff; color: #0284c7; }
+    .grad-slate-light { background: #f8fafc; color: #475569; }
+
+    .op-icon { font-size: 1.75rem; margin-bottom: 0.5rem; transition: all 0.3s; }
+    .op-button-animated:hover .op-icon { transform: rotate(15deg) scale(1.2); }
+    .op-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+
+    /* Badges & Tables */
+    .v-number-badge { background: #f1f5f9; color: #64748b; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.7rem; border: 1px solid #e2e8f0; }
+    .badge-custom { padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
+    .b-rose { background: #fff1f2; color: #e11d48; }
+    .b-emerald { background: #f0fdf4; color: #16a34a; }
+    .b-amber { background: #fffbeb; color: #d97706; }
+    .b-indigo { background: #f5f3ff; color: #7c3aed; }
+
+    .pulse-status-blue { width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; animation: blue-pulse 2s infinite; }
+    @@keyframes blue-pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+    
+    .pulse-status-white { width: 8px; height: 8px; border-radius: 50%; background: white; animation: white-pulse 2s infinite; }
+    @@keyframes white-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
+    /* Mobile Adjustments */
+    @@media (max-width: 768px) {
+        .stat-value { font-size: 1.4rem; }
+        .op-button-animated { padding: 1rem 0.5rem; }
+        .op-icon { font-size: 1.4rem; }
+        .op-label { font-size: 0.65rem; }
+        #financeTrendChart { height: 250px !important; }
+        .content-wrapper { padding-top: 1rem !important; }
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('financeTrendChart').getContext('2d');
+            
+            // Generate dummy trend data
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const income = [12, 19, 15, 25, 22, 30, 28, 35, 45, 40, 48, 55];
+            const expense = [10, 15, 12, 18, 15, 22, 20, 25, 30, 28, 32, 35];
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Income',
+                            data: income,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#fff'
+                        },
+                        {
+                            label: 'Expenses',
+                            data: expense,
+                            borderColor: '#f43f5e',
+                            backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#fff'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, border: { display: false } },
+                        x: { grid: { display: false }, border: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+}

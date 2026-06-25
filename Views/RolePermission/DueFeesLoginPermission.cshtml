@@ -1,0 +1,266 @@
+@using EasyEdu.Controllers
+@model IEnumerable<DueFeesStudentViewModel>
+@{
+    ViewData["Title"] = "Due Fees Login Permission";
+    Layout = "_Layout";
+    var totalDueAmount = Model.Sum(m => m.TotalDue);
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-file-invoice-dollar me-2 text-danger"></i> Due Fees Login Permission</h1>
+        <p class="text-muted fw-600">Review students with pending/overdue fees and control their login access accordingly</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-danger rounded-pill px-3 py-2 fs-7 fw-700">
+            <i class="fas fa-exclamation-triangle me-1"></i> @Model.Count() Students with Dues
+        </span>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-4 mb-4 animate-fade-in">
+    <div class="col-sm-6 col-lg-4">
+        <div class="premium-card p-4 border-0 shadow-sm bg-white rounded-20">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="icon-box-md rounded-16" style="background: rgba(239,68,68,0.1);">
+                    <i class="fas fa-users text-danger fa-lg"></i>
+                </div>
+                <span class="badge bg-danger-soft text-danger rounded-pill px-3 fw-700">Due</span>
+            </div>
+            <h3 class="fw-900 text-dark mb-0">@Model.Count()</h3>
+            <p class="small fw-700 text-muted mb-0">Students with Pending Fees</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <div class="premium-card p-4 border-0 shadow-sm bg-white rounded-20">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="icon-box-md rounded-16" style="background: rgba(245,158,11,0.1);">
+                    <i class="fas fa-rupee-sign text-warning fa-lg"></i>
+                </div>
+                <span class="badge bg-warning-soft text-warning rounded-pill px-3 fw-700">Amount</span>
+            </div>
+            <h3 class="fw-900 text-dark mb-0">₹@totalDueAmount.ToString("N2")</h3>
+            <p class="small fw-700 text-muted mb-0">Total Outstanding Balance</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <div class="premium-card p-4 border-0 shadow-sm bg-white rounded-20">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="icon-box-md rounded-16" style="background: rgba(34,197,94,0.1);">
+                    <i class="fas fa-check-circle text-success fa-lg"></i>
+                </div>
+                <span class="badge bg-success-soft text-success rounded-pill px-3 fw-700">Active</span>
+            </div>
+            <h3 class="fw-900 text-dark mb-0">@Model.Count(m => m.User.LockoutEnd == null)</h3>
+            <p class="small fw-700 text-muted mb-0">Currently Authorized</p>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Info -->
+<div class="alert border-0 rounded-16 p-4 mb-4 d-flex align-items-start gap-3 animate-fade-in"
+     style="background: rgba(239,68,68,0.06); border-left: 4px solid #ef4444 !important; border-left-style: solid !important;">
+    <i class="fas fa-exclamation-circle fa-lg text-danger mt-1"></i>
+    <div>
+        <h6 class="fw-800 mb-1 text-danger">Fiscal Compliance Notice</h6>
+        <p class="mb-0 small fw-600 text-muted">
+            Students listed below have pending or overdue fee balances. You can revoke their login access until fees are cleared.
+            Toggle the switch to authorize or restrict login for each student. Changes take effect immediately.
+        </p>
+    </div>
+</div>
+
+<!-- Main Table -->
+<div class="premium-card bg-white shadow-xl border-0 overflow-hidden animate-fade-in">
+    <div class="p-4 border-bottom d-flex align-items-center justify-content-between"
+         style="background: linear-gradient(135deg, #dc2626, #b91c1c);">
+        <h5 class="fw-800 mb-0 text-white"><i class="fas fa-exclamation-triangle me-2"></i> Students with Due Fees</h5>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-light fw-700" id="revokeAllBtn">
+                <i class="fas fa-ban me-1 text-danger"></i> Revoke All
+            </button>
+            <button class="btn btn-sm btn-white fw-700" id="authorizeAllBtn">
+                <i class="fas fa-check-circle me-1 text-success"></i> Authorize All
+            </button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table premium-table mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">#</th>
+                    <th>Student</th>
+                    <th>Admission No.</th>
+                    <th>Class</th>
+                    <th>Institution</th>
+                    <th>Outstanding Balance</th>
+                    <th>Due Invoices</th>
+                    <th class="text-end pe-4">Login Access</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int idx = 1; }
+                @foreach (var item in Model)
+                {
+                    bool isActive = item.User.LockoutEnd == null;
+                    var dueBadgeClass = item.TotalDue > 1000 ? "bg-danger text-white" : "bg-warning-soft text-warning";
+                    <tr>
+                        <td class="ps-4 fw-700 text-muted">@(idx++)</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(item.StudentName)&background=fee2e2&color=dc2626&size=40"
+                                     class="rounded-circle me-3" width="40" height="40" alt="Avatar" />
+                                <div>
+                                    <div class="fw-800 text-dark">@item.StudentName</div>
+                                    <div class="small text-muted fw-600">@item.User.Email</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <code class="small fw-700 text-muted">@item.AdmissionNumber</code>
+                        </td>
+                        <td class="fw-700">@item.ClassName</td>
+                        <td>
+                            <span class="badge bg-light text-muted border px-3 py-2 fw-700 rounded-pill small">
+                                <i class="fas fa-university me-1 opacity-50"></i>
+                                @(item.User.Company?.Name ?? "System")
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge @dueBadgeClass px-3 py-2 fw-800 rounded-8 fs-7">
+                                ₹@item.TotalDue.ToString("N2")
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-danger-soft text-danger fw-700 rounded-8 px-2 py-1">
+                                <i class="fas fa-file-invoice me-1"></i> @item.DueCount Invoice@(item.DueCount != 1 ? "s" : "")
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="d-flex align-items-center justify-content-end gap-3">
+                                <span class="status-label fw-800 small @(isActive ? "text-success" : "text-danger")">
+                                    <i class="fas @(isActive ? "fa-check-circle" : "fa-ban") me-1"></i>
+                                    @(isActive ? "Authorized" : "Revoked")
+                                </span>
+                                <div class="form-check form-switch m-0 p-0">
+                                    <input class="form-check-input permission-toggle custom-switch-premium"
+                                           type="checkbox"
+                                           data-user-id="@item.User.Id"
+                                           data-user-name="@item.StudentName"
+                                           @(isActive ? "checked" : "")
+                                           style="cursor:pointer;" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-5">
+                            <i class="fas fa-check-circle fa-3x text-success opacity-50 mb-3 d-block"></i>
+                            <div class="fw-700 text-success fs-6">All Clear! No students have pending fee dues.</div>
+                            <div class="small text-muted fw-600 mt-1">All fee invoices are settled.</div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Individual toggle
+    document.querySelectorAll('.permission-toggle').forEach(sw => {
+        sw.addEventListener('change', async function () {
+            await updatePermission(this, this.dataset.userId, this.dataset.userName, this.checked);
+        });
+    });
+
+    async function updatePermission(switchEl, userId, userName, isEnabled) {
+        const row = switchEl.closest('tr');
+        const label = row.querySelector('.status-label');
+
+        label.innerHTML = `<i class="fas ${isEnabled ? 'fa-check-circle' : 'fa-ban'} me-1"></i> ${isEnabled ? 'Authorized' : 'Revoked'}`;
+        label.className = `status-label fw-800 small ${isEnabled ? 'text-success' : 'text-danger'}`;
+
+        try {
+            const response = await fetch('/RolePermission/UpdateLoginPermission', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `userId=${encodeURIComponent(userId)}&isEnabled=${isEnabled}`
+            });
+            const data = await response.json();
+            if (data.success) {
+                Swal.fire({
+                    toast: true, position: 'top-end', icon: 'success',
+                    title: `${userName}'s login has been ${isEnabled ? 'authorized' : 'revoked'}.`,
+                    showConfirmButton: false, timer: 2500, timerProgressBar: true
+                });
+            } else {
+                switchEl.checked = !isEnabled;
+                Swal.fire('Error', 'Failed to update permission.', 'error');
+            }
+        } catch {
+            switchEl.checked = !isEnabled;
+            Swal.fire('Error', 'Network error. Please try again.', 'error');
+        }
+    }
+
+    // Revoke All
+    document.getElementById('revokeAllBtn')?.addEventListener('click', function () {
+        Swal.fire({
+            title: 'Revoke All Access?',
+            text: 'This will revoke login access for ALL listed students with due fees.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            confirmButtonText: '<i class="fas fa-ban me-1"></i> Yes, Revoke All'
+        }).then(async result => {
+            if (result.isConfirmed) {
+                for (const sw of document.querySelectorAll('.permission-toggle')) {
+                    if (sw.checked) {
+                        sw.checked = false;
+                        await updatePermission(sw, sw.dataset.userId, sw.dataset.userName, false);
+                    }
+                }
+            }
+        });
+    });
+
+    // Authorize All
+    document.getElementById('authorizeAllBtn')?.addEventListener('click', function () {
+        Swal.fire({
+            title: 'Authorize All Access?',
+            text: 'This will restore login access for all listed students.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#22c55e',
+            confirmButtonText: '<i class="fas fa-check-circle me-1"></i> Yes, Authorize All'
+        }).then(async result => {
+            if (result.isConfirmed) {
+                for (const sw of document.querySelectorAll('.permission-toggle')) {
+                    if (!sw.checked) {
+                        sw.checked = true;
+                        await updatePermission(sw, sw.dataset.userId, sw.dataset.userName, true);
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    .bg-danger-soft  { background: rgba(239,68,68,0.08); }
+    .bg-warning-soft { background: rgba(245,158,11,0.08); }
+    .bg-success-soft { background: rgba(34,197,94,0.08); }
+    .icon-box-md     { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
+    .custom-switch-premium { width: 3.2rem !important; height: 1.65rem !important; cursor: pointer; }
+    .custom-switch-premium:checked { background-color: #22c55e !important; border-color: #22c55e !important; }
+    .table td, .table th { vertical-align: middle; }
+    .rounded-20 { border-radius: 20px !important; }
+    .rounded-16 { border-radius: 16px !important; }
+    .rounded-8  { border-radius: 8px !important; }
+</style>

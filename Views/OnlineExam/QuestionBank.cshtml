@@ -1,0 +1,119 @@
+﻿@model IEnumerable<EasyEdu.Models.QuestionBank>
+@{
+    ViewData["Title"] = "Digital Question Repository";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Question Repository Vault</h2>
+            <p class="text-muted small fw-600">Architect High-fidelity evaluation logic and persistent question nodes</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#questionModal">
+            <i class="fas fa-plus me-2"></i>DEPOSIT QUESTION
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">QUESTION ARCHITECTURE</th>
+                    <th class="py-4 fw-900 small text-uppercase">DOMAIN NODE</th>
+                    <th class="py-4 fw-900 small text-uppercase">LOGIC TYPE</th>
+                    <th class="py-4 fw-900 small text-uppercase">VALUATION</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var q in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block text-truncate" style="max-width: 400px;">@q.Question</span>
+                            <span class="smallest text-success fw-700 uppercase italic">RESOLUTION: @q.CorrectAnswer</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 small italic">@q.QuestionGroup?.Title.ToUpper()</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge bg-light-soft text-muted border px-3 py-2 rounded-pill fw-800 smallest ls-1">@q.QuestionType.ToUpper()</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="h6 fw-900 text-primary mb-0">@q.Marks.ToString("0") U</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-edit text-primary"></i></button>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Question repository vault is currently empty.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="CreateQuestion" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-plus-circle me-2 text-warning"></i>DEPOSIT QUESTION NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-5 text-dark">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Parent Domain Node</label>
+                            <select name="QuestionGroupId" required class="form-select form-control-premium" asp-items="ViewBag.Groups"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Logic Architecture</label>
+                            <select name="QuestionType" id="qType" class="form-select form-control-premium" onchange="checkType()">
+                                <option value="MultipleChoice">Multiple Choice</option>
+                                <option value="TrueFalse">True / False</option>
+                                <option value="ShortAnswer">Short Answer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Question Statement*</label>
+                        <textarea name="Question" rows="3" required class="form-control form-control-premium" placeholder="Define the evaluation inquiry..."></textarea>
+                    </div>
+                    <div class="mb-4" id="optionsDiv">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Option Nodes (Comma Separated)</label>
+                        <input name="Options" class="form-control form-control-premium" placeholder="Option A, Option B, Option C, Option D">
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Correct Resolution Node</label>
+                            <input name="CorrectAnswer" required class="form-control form-control-premium" placeholder="e.g. Option A">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Valuation Unit (Marks)</label>
+                            <input name="Marks" type="number" required value="1" class="form-control form-control-premium">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">DEPOSIT TO REPOSITORY</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkType() {
+        const type = document.getElementById('qType').value;
+        const div = document.getElementById('optionsDiv');
+        div.style.display = (type === 'MultipleChoice') ? 'block' : 'none';
+    }
+</script>

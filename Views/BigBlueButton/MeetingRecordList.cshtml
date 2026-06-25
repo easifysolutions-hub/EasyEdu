@@ -1,0 +1,58 @@
+@model IEnumerable<EasyEdu.Models.BBBRecording>
+@{
+    ViewData["Title"] = "BBB Meeting Archives";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Institutional Summit Archivist</h2>
+            <p class="text-muted small fw-600">Access and manage recorded sessions of staff and institutional gatherings</p>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">SUMMIT IDENTIFIER</th>
+                    <th class="py-4 fw-900 small text-uppercase">AUDIENCE LOGS</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOGS</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rec in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@rec.Topic</span>
+                             <span class="smallest text-muted fw-700 font-monospace">SYNC ID: @rec.RecordingId</span>
+                        </td>
+                        <td class="py-4"><span class="badge bg-light text-info border px-3 py-2 rounded-pill fw-800 italic ls-1 small">GATHERING ARCHIVE</span></td>
+                        <td class="py-4">
+                            <div class="fw-700 text-dark small">@rec.CreatedAt.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 opacity-50 uppercase">AUTOMATED SYNC</div>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <a href="@rec.PlaybackUrl" target="_blank" class="btn btn-sm btn-cobalt rounded-8 px-4 fw-900 shadow-sm">PLAY SUMMIT</a>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                 @if(!Model.Any()){
+                    <tr><td colspan="4" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero meeting archives detected in warehouse.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+    .rounded-24 { border-radius: 24px; }
+    .btn-cobalt { background: #1e40af; color: white; border: none; }
+</style>

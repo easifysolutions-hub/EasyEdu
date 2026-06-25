@@ -1,0 +1,83 @@
+﻿@model IEnumerable<EasyEdu.Models.OnlineExam>
+@{
+    ViewData["Title"] = "Evaluation Node Registry";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Digital Evaluation Nexus</h2>
+            <p class="text-muted small fw-600">Coordinate and manage published online examination cycles across the institutional network</p>
+        </div>
+        <div class="d-flex gap-3">
+             <a href="@Url.Action("AddOnlineExam")" class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900">
+                <i class="fas fa-plus me-2"></i>INITIALIZE EVALUATION
+            </a>
+            <a href="@Url.Action("Settings")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-cogs me-2"></i>INFRASTRUCTURE
+            </a>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">EVALUATION IDENTITY</th>
+                    <th class="py-4 fw-900 small text-uppercase">CURRICULUM NODES</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOG</th>
+                    <th class="py-4 fw-900 small text-uppercase">DURATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">STATUS</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ex in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@ex.Title</span>
+                            <span class="smallest text-muted fw-700 uppercase italic">DIGITAL EVALUATION NODE</span>
+                        </td>
+                        <td class="py-4">
+                             <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 small italic">CLASS @ex.ClassId</span>
+                                <span class="badge bg-light-soft text-muted border px-3 py-2 rounded-pill fw-800 small italic">SUB @ex.SubjectId</span>
+                             </div>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@ex.StartDate.ToString("dd MMM") - @ex.EndDate.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 uppercase">SYNCHRONIZED WINDOW</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="fw-900 text-primary">@ex.DurationMinutes MIN</span>
+                        </td>
+                        <td class="py-4">
+                            @if(ex.IsPublished){
+                                <span class="badge bg-success px-3 rounded-pill fw-900 shadow-sm border small">PUBLISHED</span>
+                            } else {
+                                <span class="badge bg-warning text-dark px-3 rounded-pill fw-900 shadow-sm border small">DRAFT</span>
+                            }
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-eye text-info"></i></button>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="6" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero active digital evaluation nodes identified.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .bg-light-soft { background: #f8fafc; }
+</style>

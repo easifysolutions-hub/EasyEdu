@@ -1,0 +1,108 @@
+@model IEnumerable<EasyEdu.Models.WrittenExam>
+@{
+    ViewData["Title"] = "Traditional Examination Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Traditional Evaluation Registry</h2>
+            <p class="text-muted small fw-600">Coordinate and track offline written examinations within the digital nexus</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#writtenModal">
+            <i class="fas fa-plus me-2"></i>DEPLOY WRITTEN NODE
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">EXAMINATION IDENTITY</th>
+                    <th class="py-4 fw-900 small text-uppercase">CURRICULUM NODES</th>
+                    <th class="py-4 fw-900 small text-uppercase">CHRONOLOGY</th>
+                    <th class="py-4 fw-900 small text-uppercase">MAX MARKS</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ex in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@ex.Title</span>
+                            <span class="smallest text-muted fw-700 uppercase italic">PHYSICAL EVALUATION NODE</span>
+                        </td>
+                        <td class="py-4">
+                             <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 small italic">CLASS @ex.ClassId</span>
+                                <span class="badge bg-light-soft text-muted border px-3 py-2 rounded-pill fw-800 small italic">SUB ID: @ex.SubjectId</span>
+                             </div>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@ex.ExamDate.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="h6 fw-900 text-primary mb-0">@ex.MaxMarks.ToString("0") U</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-edit text-primary"></i></button>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero physical written evaluations identified in current nexus.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="writtenModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="CreateWrittenExam" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-pen-nib me-2 text-info"></i>DEPLOY WRITTEN NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Evaluation Title*</label>
+                        <input name="Title" required class="form-control form-control-premium" placeholder="e.g. History Final Written">
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Curriculum Class</label>
+                            <select name="ClassId" required class="form-select form-control-premium" asp-items="ViewBag.Classes"></select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Subject Node</label>
+                            <select name="SubjectId" required class="form-select form-control-premium" asp-items="ViewBag.Subjects"></select>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                         <div class="col-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Exam Date</label>
+                             <input name="ExamDate" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                         <div class="col-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Max Marks</label>
+                             <input name="MaxMarks" type="number" required value="100" class="form-control form-control-premium">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">INITIALIZE NODE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

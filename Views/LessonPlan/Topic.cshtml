@@ -1,0 +1,78 @@
+﻿@model IEnumerable<EasyEdu.Models.Topic>
+@{
+    ViewData["Title"] = "Topics";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="page-title">Lesson Topics</h3>
+        <button class="btn btn-premium-purple btn-sm rounded-8" onclick="toggleForm()">
+            <i class="fas fa-plus me-2"></i>ADD TOPIC
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-4" id="formColumn">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Add Topic</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateTopic" method="post">
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Lesson*</label>
+                            <select name="LessonId" class="form-select form-control-premium" asp-items="ViewBag.Lessons" required>
+                                <option value="">Select Lesson</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Topic Name*</label>
+                            <input type="text" name="TopicName" class="form-control-premium w-100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Description</label>
+                            <textarea name="Description" rows="3" class="form-control-premium w-100"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100">SAVE TOPIC</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8" id="listColumn">
+            <div class="premium-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">LESSON</th>
+                                    <th>SUBJECT</th>
+                                    <th>TOPIC NAME</th>
+                                    <th class="text-end px-4">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 fw-800">@item.Lesson?.LessonName</td>
+                                        <td><span class="badge bg-primary-soft text-primary fw-800">@item.Lesson?.Subject?.Name</span></td>
+                                        <td class="fw-700">@item.TopicName</td>
+                                        <td class="text-end px-4">
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2"><i class="fas fa-edit text-primary"></i></button>
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2"><i class="fas fa-trash text-danger"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

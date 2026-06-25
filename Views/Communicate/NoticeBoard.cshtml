@@ -1,0 +1,114 @@
+﻿@model IEnumerable<EasyEdu.Models.Notice>
+@{
+    ViewData["Title"] = "Institutional Notice Board";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-bullhorn me-2 text-primary"></i> Notice Board</h1>
+        <p class="text-muted fw-600">Centralized broadcast channel for official announcements</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800" data-bs-toggle="modal" data-bs-target="#createNoticeModal">
+            <i class="fas fa-plus me-2"></i> POST BROADCAST
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <div class="illustration-box mx-auto mb-4 opacity-25">
+                    <i class="fas fa-bullhorn fa-4x text-muted"></i>
+                </div>
+                <h4 class="fw-900 text-muted">Awaiting Broadcasts</h4>
+                <p class="text-muted fw-600">The notice board is currently clear of official transmissions.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var notice in Model)
+            {
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 animate-fade-in transition-all h-100 hover-lift">
+                        <div class="p-4 bg-light border-bottom d-flex justify-content-between align-items-center">
+                            <span class="badge rounded-pill @(notice.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") fw-800 px-3 py-2">
+                                <i class="fas @(notice.IsActive ? "fa-signal" : "fa-ban") me-1"></i> @(notice.IsActive ? "LIVE" : "ARCHIVED")
+                            </span>
+                            <span class="small fw-700 text-muted">Published: @notice.PublishOn.ToString("dd MMM yyyy")</span>
+                        </div>
+                        <div class="p-4 flex-grow-1">
+                            <h5 class="fw-900 text-dark mb-3">@notice.Title</h5>
+                            <div class="notice-desc text-muted fw-600 extra-small line-clamp-3 mb-4">
+                                @Html.Raw(notice.Description)
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mt-auto pt-3 border-top">
+                                <div class="icon-box-sm bg-primary-soft text-primary rounded-circle">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <span class="small fw-800 text-dark">Audience: @(notice.TargetAudience ?? "All Stakeholders")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createNoticeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-24 shadow-2xl">
+            <div class="modal-header bg-primary text-white p-4">
+                <h5 class="modal-title fw-800">New Institutional Broadcast</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="CreateNotice" method="post">
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small-caps">Broadcast Header</label>
+                        <input type="text" name="Title" class="form-control premium-input shadow-none" placeholder="Primary title for the notice..." required>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-dark small-caps">Activation Date</label>
+                            <input type="date" name="PublishOn" class="form-control premium-input shadow-none" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-dark small-caps">Target Audience</label>
+                            <select name="TargetAudience" class="form-select premium-input shadow-none">
+                                <option value="All">All Stakeholders</option>
+                                <option value="Student">Students Only</option>
+                                <option value="Teacher">Academic Staff</option>
+                                <option value="Parent">Guardians / Parents</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-800 text-dark small-caps">Broadcast Body (HTML Allowed)</label>
+                        <textarea name="Description" class="form-control premium-input shadow-none" rows="6" placeholder="Detailed content of the announcement..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 p-4">
+                    <button type="submit" class="btn btn-premium-primary w-100 py-3 rounded-16 shadow-lg fw-900 border-0">AUTHORIZE & BROADCAST</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); }
+    .bg-primary-soft { background: rgba(99,102,241,0.08); }
+    .premium-input { border: 2px solid #f3f4f6; border-radius: 12px; padding: 12px 16px; font-weight: 600; }
+    .premium-input:focus { border-color: #6366f1; background: rgba(99,102,241,0.02); }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .hover-lift:hover { transform: translateY(-5px); }
+    .small-caps { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .icon-box-sm { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+</style>

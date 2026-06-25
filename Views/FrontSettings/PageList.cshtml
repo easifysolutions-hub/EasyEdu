@@ -1,0 +1,81 @@
+@model IEnumerable<EasyEdu.Models.CustomPage>
+@{
+    ViewData["Title"] = "Institutional Digital Pages";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Frontend Digital Pages</h3>
+            <p class="text-muted small fw-600">Dynamic page creation and management for the institutional portal</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm" onclick="location.href='@Url.Action("CreatePage")'">
+            <i class="fas fa-file-plus me-2"></i>CREATE NEW PAGE
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0 align-middle">
+                <thead class="bg-premium-dark text-white">
+                    <tr>
+                        <th class="ps-5 py-4 fw-900 small text-uppercase">PAGE HEADING</th>
+                        <th class="py-4 fw-900 small text-uppercase">DIGITAL SLUG</th>
+                        <th class="py-4 fw-900 small text-uppercase text-center">NAVBAR</th>
+                        <th class="py-4 fw-900 small text-uppercase text-center">FOOTER</th>
+                        <th class="py-4 fw-900 small text-uppercase text-center">STATUS</th>
+                        <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td class="ps-5 py-3">
+                                <div class="fw-900 text-dark h6 mb-0">@p.Title</div>
+                                <div class="small text-muted fw-700">Modified: @DateTime.Now.ToString("dd MMM yyyy")</div>
+                            </td>
+                            <td class="py-3"><span class="badge bg-light text-muted border px-3 py-2 rounded-pill fw-800 italic">/@p.Slug</span></td>
+                            <td class="text-center py-3">
+                                <span class="badge @(p.ShowInNavbar ? "bg-success" : "bg-light text-muted") rounded-pill p-2">
+                                    <i class="fas @(p.ShowInNavbar ? "fa-check" : "fa-times")"></i>
+                                </span>
+                            </td>
+                            <td class="text-center py-3">
+                                <span class="badge @(p.ShowInFooter ? "bg-success" : "bg-light text-muted") rounded-pill p-2">
+                                    <i class="fas @(p.ShowInFooter ? "fa-check" : "fa-times")"></i>
+                                </span>
+                            </td>
+                            <td class="text-center py-3">
+                                <span class="badge @(p.IsPublished ? "bg-premium-success-gradient" : "bg-warning") px-3 rounded-pill fw-900">
+                                    @(p.IsPublished ? "PUBLISHED" : "DRAFT")
+                                </span>
+                            </td>
+                            <td class="pe-5 text-end py-3">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="Edit Content"><i class="fas fa-edit text-primary"></i></button>
+                                    <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="View Public"><i class="fas fa-external-link-alt text-info"></i></button>
+                                    <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="Delete Page"><i class="fas fa-trash text-danger"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if(!Model.Any()){
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="far fa-file-alt fa-3x text-muted opacity-20 mb-3"></i>
+                                <h5 class="fw-800 text-muted italic">No custom pages have been created yet.</h5>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-premium-success-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+</style>

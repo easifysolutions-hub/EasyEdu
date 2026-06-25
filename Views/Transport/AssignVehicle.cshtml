@@ -1,0 +1,112 @@
+@model IEnumerable<EasyEdu.Models.Vehicle>
+@{
+    ViewData["Title"] = "Fleet Network Nexus";
+    Layout = "_Layout";
+    var routes = ViewBag.Routes as List<EasyEdu.Models.Route>;
+    var drivers = ViewBag.Drivers as List<EasyEdu.Models.Driver>;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Fleet Network Nexus</h1>
+        <p class="text-muted fw-600">Cross-linking vehicular assets with corridors and navigators for optimal logistics</p>
+    </div>
+    <div>
+        <a asp-action="Vehicles" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-bus me-2"></i> Active Fleet
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12">
+        <div class="premium-card bg-white shadow-lg border-0 overflow-hidden animate-fade-in">
+            <div class="table-responsive">
+                <table class="table premium-table align-middle mb-0">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th class="ps-4 py-3 fw-800 uppercase small">Vehicle Identity</th>
+                            <th class="py-3 fw-800 uppercase small">Assigned Corridor</th>
+                            <th class="py-3 fw-800 uppercase small">Active Navigator</th>
+                            <th class="pe-4 py-3 fw-800 uppercase small text-end">Logistics Sync</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var v in Model)
+                        {
+                            <tr class="vehicle-nexus-row">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-primary-soft text-primary rounded-12 me-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                            <i class="fas fa-shuttle-van h4 mb-0"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-900 text-dark">@v.VehicleNumber</div>
+                                            <div class="small text-muted fw-700">@v.Model</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="form-select border-2 fw-800 rounded-12 route-select" data-id="@v.Id">
+                                        <option value="">-- Unassigned --</option>
+                                        @foreach (var r in routes ?? new List<EasyEdu.Models.Route>())
+                                        {
+                                            <option value="@r.Id" selected="@(v.RouteId == r.Id)">@r.Name</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-select border-2 fw-800 rounded-12 driver-select" data-id="@v.Id">
+                                        <option value="">-- No Driver --</option>
+                                        @foreach (var d in drivers ?? new List<EasyEdu.Models.Driver>())
+                                        {
+                                            <option value="@d.Id" selected="@(v.DriverId == d.Id)">@d.Name</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-premium-primary px-4 py-2 shadow-sm sync-btn" onclick="syncFleetNode(@v.Id, this)">
+                                        <i class="fas fa-sync-alt"></i> SYNC
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function syncFleetNode(vehicleId, btn) {
+            const row = $(btn).closest('tr');
+            const routeId = row.find('.route-select').val();
+            const driverId = row.find('.driver-select').val();
+
+            const originalHtml = $(btn).html();
+            $(btn).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+
+            $.post('/Transport/UpdateVehicleAssignment', { vehicleId, routeId, driverId }, function(res) {
+                $(btn).prop('disabled', false).html(originalHtml);
+                if(res.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Logistics Synced',
+                        toast: true,
+                        position: 'top-end',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Sync Failed',
+                        text: res.message
+                    });
+                }
+            });
+        }
+    </script>
+}

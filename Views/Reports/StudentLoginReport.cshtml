@@ -1,0 +1,117 @@
+@model IEnumerable<EasyEdu.Models.UserAuditLog>
+@{
+    ViewData["Title"] = "Student Security Analytics";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-shield-alt me-2 text-primary"></i> Access Intelligence</h1>
+        <p class="text-muted fw-600">Monitoring digital footprints and portal engagement of the student body</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-print me-2"></i> SECURITY AUDIT
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in text-dark">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-800 text-muted uppercase">Search Login Logs</label>
+                <input type="text" name="search" class="form-control rounded-12 border-0 bg-light fw-700" placeholder="Student Name, Email or IP Address...">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> SEARCH AUDIT
+                </button>
+            </div>
+            <div class="col-md-3">
+                <div class="search-box position-relative">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" class="form-control rounded-pill ps-5 border-0 bg-light" id="loginSearch" placeholder="Quick search dashboard...">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <div class="p-4 border-bottom bg-light">
+            <h6 class="fw-800 text-dark mb-0 uppercase">Chronological Login Registry</h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">STUDENT ACCOUNT</th>
+                        <th>TEMPORAL TIMESTAMP</th>
+                        <th>NETWORK SIGNATURE (IP)</th>
+                        <th>USER AGENT / DEVICE</th>
+                        <th class="text-end pe-4">SECORITY STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="loginTable">
+                    @foreach (var log in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-placeholder rounded-circle bg-primary-soft text-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: 800;">
+                                        @(log.User?.FullName?[0] ?? '?')
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-dark">@log.User?.FullName</div>
+                                        <div class="small text-muted fw-600">@log.User?.Email</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-700 text-dark">@log.Timestamp.ToString("dd MMM yyyy")</div>
+                                <div class="small text-muted fw-800">@log.Timestamp.ToString("HH:mm:ss")</div>
+                            </td>
+                            <td>
+                                <code class="fw-800 text-primary">@log.IpAddress</code>
+                            </td>
+                            <td style="max-width: 250px;">
+                                <div class="text-truncate fw-600 text-muted small" title="@log.UserAgent">@log.UserAgent</div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <span class="badge bg-success-soft text-success fw-800 px-3 py-2 rounded-pill">
+                                    <i class="fas fa-check-shield me-1"></i> VERIFIED LOGIN
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-user-shield fa-3x text-muted opacity-25 mb-4 d-block"></i>
+                                <h5 class="fw-800 text-muted">No student login footprints identified in the current period.</h5>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.1); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#loginSearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $("#loginTable tr").filter(function() { $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1) });
+            });
+        });
+    </script>
+}

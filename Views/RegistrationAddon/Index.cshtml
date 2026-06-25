@@ -1,0 +1,148 @@
+@model IEnumerable<EasyEdu.Models.RegistrationSubmission>
+@{
+    ViewData["Title"] = "Admission Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Online Admission Nexus</h2>
+            <p class="text-muted small fw-600">Architect student enrollment flow from public portal to institutional database</p>
+        </div>
+        <div class="d-flex gap-3">
+             <a href="@Url.Action("StudentList")" class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900">
+                <i class="fas fa-user-plus me-2"></i>VIEW ALL ADMISSIONS
+            </a>
+            <a href="@Url.Action("Settings")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-cog me-2"></i>PORTAL CONFIG
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Matrix -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-primary h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-light text-primary me-3">
+                        <i class="fas fa-file-import fa-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-uppercase smallest fw-900 text-muted m-0">Inbound Admissions</p>
+                        <h3 class="fw-900 m-0 text-dark">@ViewBag.TotalCount</h3>
+                    </div>
+                </div>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-primary" style="width: 70%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-warning h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-light text-warning me-3">
+                        <i class="fas fa-hourglass-half fa-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-uppercase smallest fw-900 text-muted m-0">Awaiting Validation</p>
+                        <h3 class="fw-900 m-0 text-dark">@ViewBag.PendingCount</h3>
+                    </div>
+                </div>
+                 <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-warning" style="width: 45%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+             <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-success h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-light text-success me-3">
+                        <i class="fas fa-check-double fa-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-uppercase smallest fw-900 text-muted m-0">Synchronized (Approved)</p>
+                        <h3 class="fw-900 m-0 text-dark">@ViewBag.ApprovedCount</h3>
+                    </div>
+                </div>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-success" style="width: 30%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Admissions -->
+        <div class="col-xl-9">
+            <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+                <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-900 text-dark m-0"><i class="fas fa-users-cog me-2 text-primary opacity-50"></i>Recent Inbound Applications</h5>
+                    <a href="@Url.Action("StudentList")" class="smallest fw-900 text-uppercase ls-1 text-primary">Full Admit List</a>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table premium-table mb-0 align-middle">
+                        <tbody class="bg-white">
+                            @foreach (var sub in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 py-4">
+                                        <div class="fw-900 text-dark">@sub.FirstName @sub.LastName</div>
+                                        <div class="smallest text-muted fw-700 font-monospace">SUBMITTED: @sub.SubmittedAt.ToString("dd MMM yyyy, HH:mm")</div>
+                                    </td>
+                                    <td>
+                                        <div class="small fw-800 text-dark">@sub.Class?.Name</div>
+                                        <div class="smallest text-muted fw-700">Academic Target</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(sub.Status == "Approved" ? "bg-success" : (sub.Status == "Rejected" ? "bg-danger" : "bg-warning")) px-3 rounded-pill fw-900 shadow-sm border">@sub.Status.ToUpper()</span>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <a href="@Url.Action("StudentList")" class="btn btn-sm btn-light rounded-pill px-3 fw-900">REVIEW FILE</a>
+                                    </td>
+                                </tr>
+                            }
+                            @if(!Model.Any()){
+                                <tr><td colspan="4" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero inbound admission attempts detected in current cycle.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Analytics Prototype -->
+        <div class="col-xl-3">
+             <div class="premium-card p-5 border-0 shadow-lg bg-light-soft text-center h-100" style="border-radius: 24px;">
+                 <i class="fas fa-project-diagram fa-3x text-primary opacity-25 mb-4"></i>
+                 <h5 class="fw-900 text-dark mb-4 ls-1">PIPELINE STAGE</h5>
+                 
+                 <div class="pipeline-flow text-start">
+                     <div class="flow-item d-flex gap-3 mb-4 opacity-100">
+                         <div class="flow-dot bg-primary shadow-sm"></div>
+                         <div class="small fw-800 text-dark">Submission Reception</div>
+                     </div>
+                      <div class="flow-item d-flex gap-3 mb-4 opacity-50">
+                         <div class="flow-dot bg-warning"></div>
+                         <div class="small fw-800 text-muted">Administrative Audit</div>
+                     </div>
+                      <div class="flow-item d-flex gap-3 opacity-25">
+                         <div class="flow-dot bg-success"></div>
+                         <div class="small fw-800 text-muted">Institutional Sync</div>
+                     </div>
+                 </div>
+                 <hr class="my-5 opacity-10">
+                 <p class="smallest text-muted fw-700 uppercase ls-1">Pipeline Health Optimal</p>
+             </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-24 { border-radius: 24px; }
+    .ls-1 { letter-spacing: 1px; }
+    .icon-box { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 14px; }
+    .bg-light-soft { background: #f8fafc; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .flow-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+</style>

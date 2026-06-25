@@ -1,0 +1,223 @@
+﻿
+03-09 23:10:56.179  1406  6427 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote 
+TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+03-09 23:10:56.961  1193 25831 D NetworkMonitor/108: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 
+Probe failed with exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@36eac20f
+03-09 23:10:57.467  1406  4631 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote 
+TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+03-09 23:11:27.479   590 25842 W resolv  : SSL_connect write error 0, mark 0xf006c: Try again
+03-09 23:11:27.495   590 25843 W resolv  : SSL_connect write error 0, mark 0xf006c: Try again
+03-09 23:11:58.859  1193 25885 D NetworkMonitor/108: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 
+Probe failed with exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@36eac20f
+03-09 23:11:59.044  1193 25884 D NetworkMonitor/108: PROBE_HTTPS https://www.google.com/generate_204 Probe failed with 
+exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@cc865545
+03-09 23:11:59.256  1193 25883 D NetworkMonitor/108: PROBE_FALLBACK http://www.google.com/gen_204 time=203ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) 
+Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], 
+Content-Security-Policy=[object-src 'none';base-uri 'self';script-src 'nonce-xjF5s-5SEk-Sh-RRBtnanQ' 'strict-dynamic' 
+'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other], 
+Content-Type=[text/html; charset=UTF-8], Date=[Mon, 09 Mar 2026 17:41:59 GMT], Permissions-Policy=[unload=()], Reportin
+g-Endpoints=[default="//www.google.com/httpservice/retry/jserror?ei=ZwavaaKRNKGYnesP04bF8Ac&cad=crash&error=Page%20Cras
+h&jsel=1&bver=2392&dpf=uC-0QtqtRei6mSPip__AAkfqNwBi2VeZA5WLEiuJOkU"], Server=[gws], 
+X-Android-Received-Millis=[1773078119244], X-Android-Response-Source=[NETWORK 204], 
+X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1773078119142], X-Frame-Options=[SAMEORIGIN], 
+X-XSS-Protection=[0]}
+03-09 23:11:59.417   824  1840 E AppOps  : java.lang.SecurityException: Specified package "com.android.phone" under 
+uid 10155 but it is not
+03-09 23:11:59.768  1406  1853 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote 
+TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+03-09 23:12:00.795  1193 25907 D NetworkMonitor/108: PROBE_HTTPS https://www.google.com/generate_204 Probe failed with 
+exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@cc865545
+03-09 23:12:00.984  1193 25906 D NetworkMonitor/108: PROBE_FALLBACK http://www.google.com/gen_204 time=184ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) 
+Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], 
+Content-Security-Policy=[object-src 'none';base-uri 'self';script-src 'nonce-OYo_HUf2V4sv9Xblr_M5uw' 'strict-dynamic' 
+'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other], 
+Content-Type=[text/html; charset=UTF-8], Date=[Mon, 09 Mar 2026 17:42:01 GMT], Permissions-Policy=[unload=()], Reportin
+g-Endpoints=[default="//www.google.com/httpservice/retry/jserror?ei=aQavaYDPI-qPseMPyd6ewAI&cad=crash&error=Page%20Cras
+h&jsel=1&bver=2392&dpf=uC-0QtqtRei6mSPip__AAkfqNwBi2VeZA5WLEiuJOkU"], Server=[gws], 
+X-Android-Received-Millis=[1773078120975], X-Android-Response-Source=[NETWORK 204], 
+X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1773078120867], X-Frame-Options=[SAMEORIGIN], 
+X-XSS-Protection=[0]}
+03-09 23:12:01.022  1406  4631 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote 
+TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+03-09 23:12:03.232  1193 25918 D NetworkMonitor/108: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 
+Probe failed with exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@36eac20f
+03-09 23:12:03.335  1193 25917 D NetworkMonitor/108: PROBE_HTTPS https://www.google.com/generate_204 Probe failed with 
+exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@cc865545
+03-09 23:12:03.511  1193 25916 D NetworkMonitor/108: PROBE_FALLBACK http://www.google.com/gen_204 time=168ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) 
+Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], 
+Content-Security-Policy=[object-src 'none';base-uri 'self';script-src 'nonce-RJyMwrwMxTPEwYPoLllh3w' 'strict-dynamic' 
+'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other], 
+Content-Type=[text/html; charset=UTF-8], Date=[Mon, 09 Mar 2026 17:42:04 GMT], Permissions-Policy=[unload=()], Reportin
+g-Endpoints=[default="//www.google.com/httpservice/retry/jserror?ei=bAavadPhBvKuseMP1t6piAk&cad=crash&error=Page%20Cras
+h&jsel=1&bver=2392&dpf=uC-0QtqtRei6mSPip__AAkfqNwBi2VeZA5WLEiuJOkU"], Server=[gws], 
+X-Android-Received-Millis=[1773078123504], X-Android-Response-Source=[NETWORK 204], 
+X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1773078123399], X-Frame-Options=[SAMEORIGIN], 
+X-XSS-Protection=[0]}
+03-09 23:12:03.536  1406  2700 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote 
+TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+03-09 23:12:07.837  1193 25933 D NetworkMonitor/108: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 
+Probe failed with exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@36eac20f
+03-09 23:12:08.980  1406  4631 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote 
+TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+03-09 23:12:39.044   590 25949 W resolv  : SSL_connect write error 0, mark 0xf006c: Try again
+03-09 23:12:39.077   590 25948 W resolv  : SSL_connect write error 0, mark 0xf006c: Try again
+03-09 23:13:08.728  1193 25976 D NetworkMonitor/108: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 
+Probe failed with exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@36eac20f
+03-09 23:13:49.128 18668 18668 W unknown:BridgelessReact: ReactHost{1}.raiseSoftException(onNewIntent(intent = "Intent 
+{ act=android.intent.action.VIEW dat=exp://172.20.10.7:8081/... }")): Tried to access onNewIntent while context is not 
+ready
+03-09 23:13:49.132 18668 18668 E unknown:ReactHost: Unhandled SoftException
+03-09 23:13:49.132 18668 18668 E unknown:ReactHost: com.facebook.react.bridge.ReactNoCrashSoftException: 
+raiseSoftException(onNewIntent(intent = "Intent { act=android.intent.action.VIEW dat=exp://172.20.10.7:8081/... }")): 
+Tried to access onNewIntent while context is not ready
+03-09 23:13:49.132 18668 18668 E unknown:ReactHost: 	at com.facebook.react.runtime.ReactHostImpl.raiseSoftException(r8-
+map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:50)
+03-09 23:13:49.132 18668 18668 E unknown:ReactHost: 	at com.facebook.react.runtime.ReactHostImpl.raiseSoftException$def
+ault(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:6)
+03-09 23:13:49.812   824   845 V WindowManager:     startWCT=WindowContainerTransaction { changes= {} hops= [] 
+errorCallbackToken=null taskFragmentOrganizer=null }
+03-09 23:13:51.107 18668 18668 D VRI[ErrorActivity]: visibilityChanged oldVisibility=true newVisibility=false
+03-09 23:13:51.788  1406 25904 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:13:51.910  1406 25826 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:13:52.021  1406 25904 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:13:52.193  1406 25826 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:13:52.650   824  1763 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+03-09 23:14:41.734   824   845 V WindowManager:     startWCT=WindowContainerTransaction { changes= {} hops= [] 
+errorCallbackToken=null taskFragmentOrganizer=null }
+03-09 23:14:41.742 18668 23869 E dev.expo.updates: {"timestamp":1773078281741,"message":"Failed to launch embedded or 
+launchable update","code":"UpdateFailedToLoad","level":"error","stacktrace":["expo.modules.updates.launcher.DatabaseLau
+ncher.launch(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:624)","expo.modules.updates.loa
+der.LoaderTask.launchFallbackUpdateFromDisk(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:
+305)","expo.modules.updates.loader.LoaderTask.start(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303
+a0b5033:144)","oi.g.B(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:34)","oi.g.k(r8-map-id
+-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","oi.g$d.invokeSuspend(r8-map-id-607d19e9ec95a38ef
+980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:45)","kotlin.coroutines.jvm.internal.a.resumeWith(r8-map-id-607d19e9ec9
+5a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:12)","Vk.c0.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91
+b1a36a6525fd481303a0b5033:129)","al.l$a.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:
+4)","cl.i.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:3)","cl.a.r0(r8-map-id-607d19e
+9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","cl.a$c.b(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed
+91b1a36a6525fd481303a0b5033:34)","cl.a$c.m(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:2
+9)","cl.a$c.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)"]}
+03-09 23:14:43.779 18668 18668 E o       : java.lang.NoSuchFieldException: No field numActivities in class 
+Landroid/app/ActivityManager$RecentTaskInfo; (declaration of 'android.app.ActivityManager$RecentTaskInfo' appears in 
+/system/framework/framework.jar)
+03-09 23:14:45.791   824  1763 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+03-09 23:14:46.039 18668 18668 W unknown:ReactNative: Packager connection already open, nooping.
+03-09 23:14:46.149 18668 18802 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+03-09 23:14:46.965 18668 18668 E g       : java.lang.RuntimeException: A TaskDescription's primary color should be 
+opaque
+03-09 23:14:48.389   824   866 E BluetoothPowerStatsCollector: java.util.concurrent.ExecutionException: 
+java.lang.RuntimeException: error: 11
+03-09 23:14:48.389   824   866 E BluetoothPowerStatsCollector: Caused by: java.lang.RuntimeException: error: 11
+03-09 23:14:48.389   824   866 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCo
+llector$1.onBluetoothActivityEnergyInfoError(BluetoothPowerStatsCollector.java:180)
+03-09 23:14:48.610 18668 18668 E g       : java.lang.RuntimeException: A TaskDescription's primary color should be 
+opaque
+03-09 23:14:48.903  1406 25860 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:14:49.187  1406 25904 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:14:49.314  1406 25904 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:14:49.455   824  1763 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+03-09 23:15:54.472 18668 26080 I okhttp.OkHttpClient: java.net.ProtocolException: Expected leading [0-9a-fA-F] 
+character but was 0xd
+03-09 23:16:23.049 10694 10725 E bsfv    : java.util.NoSuchElementException: No value present
+03-09 23:16:24.793 10694 10724 W brhm    : Caused by: java.lang.IllegalStateException: Used non-google account without 
+enabling API Key fallback
+03-09 23:16:52.738  1406 26175 I HeterodyneSyncer: (REDACTED) Sync completed. fetchReason: %s, fetchPackageName: %s, 
+syncErrorType: %s, individual sync errors: %s.
+03-09 23:16:54.793  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217810, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:54.795  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.googlequicksearchbox. Process: com.google.android.googlequicksearchbox:search|209135546. Error: 
+android.os.DeadObjectException. [CONTEXT service_id=51 ]
+03-09 23:16:54.799   824  1911 W ActivityManager: pid 1406 com.google.android.gms.persistent sent binder code 2 with 
+flags 1 and got error -32
+03-09 23:16:54.831  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217829, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:54.832  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:54.832  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.googlequicksearchbox. Process: com.google.android.googlequicksearchbox:googleapp|68587854. Error: 
+android.os.DeadObjectException. [CONTEXT service_id=51 ]
+03-09 23:16:54.911  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217838, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:54.932  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:54.946  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.googlequicksearchbox. Process: com.google.android.googlequicksearchbox:search|121376944. Error: 
+android.os.DeadObjectException. [CONTEXT service_id=51 ]
+03-09 23:16:54.996  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217852, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.008  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.011  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.apps.wellbeing. Process: com.google.android.apps.wellbeing|26395046. Error: 
+android.os.DeadObjectException. [CONTEXT service_id=51 ]
+03-09 23:16:55.048  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217862, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.048  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.049  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+host.exp.exponent. Process: host.exp.exponent|14921945. Error: android.os.DeadObjectException. [CONTEXT service_id=51 ]
+03-09 23:16:55.049  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217872, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.054  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.057  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+host.exp.exponent. Process: host.exp.exponent|199625421. Error: android.os.DeadObjectException. [CONTEXT service_id=51 
+]
+03-09 23:16:55.080  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217879, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.086  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.087  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.apps.safetyhub. Process: com.google.android.apps.safetyhub|169963336. Error: 
+android.os.DeadObjectException. [CONTEXT service_id=51 ]
+03-09 23:16:55.095  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217885, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.096  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.099  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|132813256. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.113  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217893, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.113  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.115  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms.unstable|57849076. Error: android.os.DeadObjectException. 
+[CONTEXT service_id=51 ]
+03-09 23:16:55.309  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217906, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.309  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.309  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|260943280. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.376  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217909, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.403  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.420  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|245253365. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.424  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217922, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.428  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.435  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|180393776. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.440  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217924, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.440  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.446  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|164933341. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.882   824  2161 W BinderNative: Uncaught exception from death notification
+03-09 23:16:55.882   824  2161 W BinderNative: java.lang.SecurityException: Specified package 
+"com.google.android.googlequicksearchbox" under uid 1000 but it is not
+03-09 23:16:56.224   824   906 W BinderNative: Uncaught exception from death notification
+03-09 23:16:56.224   824   906 W BinderNative: java.lang.SecurityException: Specified package 
+"com.google.android.googlequicksearchbox" under uid 1000 but it is not
+03-09 23:16:56.874  1406  7294 W PhBaseOp: Phenotype API error. Event: # imqs@b205879b, EventCode: COMMIT_CONFIG 
+[CONTEXT service_id=51 ]
+03-09 23:16:56.914  1406  7294 W AsyncOperation: OperationException[Status{statusCode=Stale snapshot for 
+com.google.android.gms.phenotype(committed configuration changed), resolution=null}]
+03-09 23:16:56.927  1406 26175 W PhenotypeFlagCommitter: java.util.concurrent.ExecutionException: bduu: 29501: Stale 
+snapshot token
+03-09 23:16:57.855  8248  8354 I BugleRcsJibe: RcsServiceConnectionException was raised while waiting to connect to 
+RcsEngineLifecycleServiceV2
+
+

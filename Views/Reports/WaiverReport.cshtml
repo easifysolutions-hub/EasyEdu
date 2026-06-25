@@ -1,0 +1,92 @@
+@model IEnumerable<EasyEdu.Models.FeesInvoiceDetail>
+@{
+    ViewData["Title"] = "Waiver & Discount Archive";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 text-dark">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Institutional Waiver Report</h3>
+            <p class="text-muted small fw-600">Archival of all scholarship distributions and institutional discounts</p>
+        </div>
+        <div class="no-print">
+            <button class="btn btn-premium-success btn-sm rounded-8" onclick="window.print()">
+                <i class="fas fa-hand-holding-dollar me-2"></i>PRINT ARCHIVE
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print text-dark">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-9">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Filter by Class</label>
+                <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                    <option value="">All Institutional Classes</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-purple w-100">AUDIT</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-7">
+            <div class="premium-card p-4 bg-gradient-success text-white border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="small fw-800 text-uppercase mb-2 opacity-75">Cumulative Scholarships</div>
+                <h2 class="fw-900 mb-0 h1">@Model.Sum(d => d.Waiver).ToString("C")</h2>
+                <div class="mt-2 small fw-600 opacity-50 italic">Total revenue waived for @Model.Count() fee entries</div>
+            </div>
+        </div>
+        <div class="col-md-5 text-dark">
+            <div class="premium-card p-4 bg-white border-0 shadow-sm h-100 d-flex flex-column justify-content-center" style="border-radius: 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="small fw-800 text-uppercase text-muted">Beneficiaries</span>
+                    <i class="fas fa-graduation-cap text-premium-purple opacity-25"></i>
+                </div>
+                <h2 class="fw-900 mb-0">@Model.Select(d => d.FeesInvoice.StudentId).Distinct().Count()</h2>
+                <div class="small fw-600 text-muted mt-1 opacity-50">Unique student accounts</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0 align-middle">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="px-4 py-3">STUDENT ACCOUNT</th>
+                            <th>FEE CATEGORY</th>
+                            <th class="text-center">ORIGINAL FEE</th>
+                            <th class="text-end px-4">WAIVED AMOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model)
+                        {
+                            <tr>
+                                <td class="px-4">
+                                    <div class="fw-900 text-dark">@d.FeesInvoice?.Student?.FullName</div>
+                                    <div class="small text-muted fw-700">Inv: #@d.FeesInvoice?.InvoiceNumber</div>
+                                </td>
+                                <td class="fw-800 text-muted">@d.FeesType?.Name</td>
+                                <td class="text-center fw-600 italic">@d.Amount.ToString("C")</td>
+                                <td class="text-end px-4">
+                                    <div class="fw-900 text-success h6 mb-0">@d.Waiver.ToString("C")</div>
+                                    <div class="small text-muted opacity-50 fw-600 italic">Institutional Discount</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    @@media print { .no-print { display: none !important; } }
+</style>

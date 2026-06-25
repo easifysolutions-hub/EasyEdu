@@ -1,0 +1,230 @@
+﻿@{
+    ViewData["Title"] = "Global Mobility Surveillance";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Fleet Command Center</h1>
+        <p class="text-muted fw-600">Real-time geospatial telemetry and logistical surveillance</p>
+    </div>
+    <div class="d-flex gap-3">
+        <div class="surveillance-status bg-white border rounded-24 px-4 py-2 d-flex align-items-center shadow-sm">
+            <div class="pulse-container me-3">
+                <div class="pulse-ring"></div>
+                <div class="pulse-dot bg-success"></div>
+            </div>
+            <div>
+                <div class="small fw-800 text-muted uppercase" style="font-size: 0.65rem;">System Status</div>
+                <div class="fw-900 text-success" style="font-size: 0.85rem;">SURVEILLANCE ACTIVE</div>
+            </div>
+        </div>
+        <a asp-action="Index" class="btn btn-premium-primary px-4 shadow-lg d-flex align-items-center gap-2">
+            <i class="fas fa-arrow-left"></i> Hub
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-9">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden position-relative" style="height: 700px;">
+            <!-- Map Interface Layer -->
+            <div id="map-interface" class="w-100 h-100 bg-dark position-relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2000" class="w-100 h-100 object-fit-cover opacity-50 grayscale-filter" />
+                
+                <!-- Radar Overlay -->
+                <div class="radar-scan"></div>
+                
+                <!-- Grid Overlay -->
+                <div class="map-grid"></div>
+
+                <!-- Strategic Markers (Simulated) -->
+                <div class="telemetry-marker" style="top: 35%; left: 45%;" data-id="BUS-101">
+                    <div class="marker-info shadow-lg">
+                        <div class="fw-900">BUS-101</div>
+                        <div class="small">Velo: 42 km/h</div>
+                    </div>
+                    <div class="marker-icon bg-primary">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                </div>
+
+                <div class="telemetry-marker" style="top: 65%; left: 72%;" data-id="BUS-402">
+                    <div class="marker-info shadow-lg">
+                        <div class="fw-900">BUS-402</div>
+                        <div class="small">STATIONARY</div>
+                    </div>
+                    <div class="marker-icon bg-danger">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                </div>
+
+                <!-- HUD Layer -->
+                <div class="hud-layer position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end pointer-events-none">
+                    <div class="hud-coordinates bg-dark-glass text-white p-3 rounded-12 border border-white-10">
+                        <div class="small fw-700 opacity-50 uppercase mb-1">Sector Coordinates</div>
+                        <div class="font-monospace fw-900">LAT: 28.6139° N | LON: 77.2090° E</div>
+                    </div>
+                    <div class="hud-telemetry bg-dark-glass text-white p-3 rounded-12 border border-white-10 text-end">
+                        <div class="small fw-700 opacity-50 uppercase mb-1">Signal Strength</div>
+                        <div class="d-flex align-items-center justify-content-end gap-1 text-success">
+                            <i class="fas fa-signal"></i>
+                            <i class="fas fa-signal"></i>
+                            <i class="fas fa-signal"></i>
+                            <i class="fas fa-signal opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3">
+        <div class="fleet-sidebar h-100 d-flex flex-column gap-4">
+            <!-- Unit Status List -->
+            <div class="premium-card bg-white shadow-lg border-0 flex-grow-1 overflow-hidden d-flex flex-column">
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="fw-900 text-dark mb-0">Active Units</h5>
+                    <span class="badge bg-primary-soft text-primary fw-800">12 TOTAL</span>
+                </div>
+                <div class="flex-grow-1 overflow-y-auto p-4 custom-scrollbar">
+                    <div class="unit-item active mb-3">
+                        <div class="unit-card p-3 rounded-20 border-2 transition-all">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="unit-avatar bg-primary-soft text-primary rounded-16 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-bus h4 mb-0"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-900 text-dark">BUS-101</div>
+                                    <div class="small text-muted fw-600">North Corridor Alpha</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-900 text-primary">MOVING</div>
+                                    <div class="small text-success fw-700">ONLINE</div>
+                                </div>
+                            </div>
+                            <div class="unit-stats mt-3 pt-3 border-top d-flex justify-content-between">
+                                <div class="small fw-700 text-muted"><i class="fas fa-tachometer-alt me-1"></i> 42 km/h</div>
+                                <div class="small fw-700 text-muted"><i class="fas fa-users me-1"></i> 24/30</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="unit-item mb-3">
+                        <div class="unit-card p-3 rounded-20 border-2 transition-all">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="unit-avatar bg-danger-soft text-danger rounded-16 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-bus h4 mb-0"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-900 text-dark">BUS-402</div>
+                                    <div class="small text-muted fw-600">East Sector Express</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-900 text-danger">HALTED</div>
+                                    <div class="small text-success fw-700">ONLINE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Actions -->
+            <div class="premium-card bg-dark text-white p-4 shadow-lg border-0">
+                <h6 class="fw-900 mb-3 opacity-75 uppercase" style="font-size: 0.7rem;">Emergency Protocols</h6>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-danger py-3 rounded-12 fw-900 shadow-sm">
+                        <i class="fas fa-broadcast-tower me-2"></i> BROADCAST ALERT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .grayscale-filter { filter: grayscale(1) contrast(1.2) brightness(0.8); }
+    .bg-dark-glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
+    .border-white-10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+    
+    .map-grid {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: 
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+    }
+
+    .radar-scan {
+        position: absolute;
+        width: 200%; height: 200%;
+        top: -50%; left: -50%;
+        background: conic-gradient(from 0deg, rgba(139, 92, 246, 0.15) 0deg, transparent 90deg);
+        animation: radar-rotate 10s linear infinite;
+        pointer-events: none;
+    }
+
+    @@keyframes radar-rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .telemetry-marker {
+        position: absolute;
+        z-index: 100;
+        cursor: pointer;
+    }
+
+    .marker-icon {
+        width: 40px; height: 40px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        color: white; border: 3px solid white;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .telemetry-marker:hover .marker-icon { transform: scale(1.2); }
+
+    .marker-info {
+        position: absolute;
+        bottom: 50px; left: 50%;
+        transform: translateX(-50%);
+        background: white; padding: 8px 15px;
+        border-radius: 10px; font-size: 0.75rem;
+        white-space: nowrap; opacity: 0;
+        transition: all 0.3s;
+        pointer-events: none;
+    }
+
+    .telemetry-marker:hover .marker-info { opacity: 1; bottom: 60px; }
+
+    .unit-card {
+        border-color: #f1f5f9;
+        cursor: pointer;
+    }
+    
+    .unit-item.active .unit-card {
+        background: #f8fafc;
+        border-color: var(--primary) !important;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .pulse-container { position: relative; width: 12px; height: 12px; }
+    .pulse-dot { width: 12px; height: 12px; border-radius: 50%; position: relative; z-index: 2; }
+    .pulse-ring { 
+        position: absolute; width: 100%; height: 100%; 
+        border: 4px solid var(--bs-success); border-radius: 50%; 
+        animation: ring-pulse 2s infinite; opacity: 0;
+    }
+
+    @@keyframes ring-pulse {
+        0% { transform: scale(0.5); opacity: 0.5; }
+        100% { transform: scale(3); opacity: 0; }
+    }
+
+    .pointer-events-none { pointer-events: none; }
+</style>

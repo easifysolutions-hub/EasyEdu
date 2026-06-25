@@ -1,0 +1,73 @@
+@model IEnumerable<EasyEdu.Models.LmsCourseLevel>
+@{
+    ViewData["Title"] = "Proficiency Architecture";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Proficiency Architecture</h2>
+            <p class="text-muted small fw-600">Coordinate depth of digital curriculum complexity</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#levelModal">
+            <i class="fas fa-plus me-2"></i>DEFINE DEPTH NODE
+        </button>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var lvl in Model)
+        {
+            <div class="col-md-3">
+                <div class="premium-card p-4 border-0 shadow-lg text-center h-100" style="border-radius: 20px;">
+                    <div class="bg-info bg-opacity-10 p-4 rounded-circle d-inline-block mb-3">
+                        <i class="fas fa-layer-group text-info fa-2x"></i>
+                    </div>
+                    <h5 class="fw-900 text-dark mb-2">@lvl.Title</h5>
+                    <p class="smallest text-muted fw-700 uppercase italic mb-4">Depth ID: @lvl.Id</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-light-soft rounded-circle shadow-sm border" onclick="editLevel(@lvl.Id, '@lvl.Title')"><i class="fas fa-edit text-primary"></i></button>
+                        <button class="btn btn-light-soft text-danger rounded-circle shadow-sm border"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="levelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveLevel" method="post">
+                <input type="hidden" name="Id" id="levelId" value="0" />
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-signal me-2 text-info"></i>DEFINE PROFICIENCY DEPTH</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-0">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Proficiency Title*</label>
+                        <input name="Title" id="levelTitle" required class="form-control form-control-premium" placeholder="e.g. Master Class Alpha">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE DEPTH</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editLevel(id, title) {
+        document.getElementById('levelId').value = id;
+        document.getElementById('levelTitle').value = title;
+        new bootstrap.Modal(document.getElementById('levelModal')).show();
+    }
+</script>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

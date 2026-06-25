@@ -1,0 +1,92 @@
+﻿@model IEnumerable<EasyEdu.Models.Examination>
+@{
+    ViewData["Title"] = "Assessment Management";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Examination Governance</h1>
+        <p class="text-muted fw-600">Standardized scholastic assessment registry and mark management</p>
+    </div>
+    <a asp-action="Create" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+        <i class="fas fa-calendar-plus"></i> Propose New Exam
+    </a>
+</div>
+
+<div class="premium-card bg-white animate-fade-in shadow-md">
+    <div class="card-header border-0 bg-transparent py-4 px-4 d-flex justify-content-between align-items-center">
+        <h5 class="fw-800 m-0">Institutional Calendars</h5>
+        <div class="d-flex gap-2">
+             <button class="btn btn-light-soft rounded-pill px-3 fw-700 small">Filter Academic Year</button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="px-5">EXAMINATION TITLE</th>
+                        <th>DURATION</th>
+                        <th>RECOGNITION</th>
+                        <th>STATUS</th>
+                        <th class="text-end px-5">OPERATIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-5">
+                                    <div class="fw-800 text-dark">@item.Name</div>
+                                    <div class="small text-muted fw-500">Global ID: EXM-@item.Id.ToString("D4")</div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="far fa-calendar-alt me-2 text-primary opacity-50"></i>
+                                        <span class="fw-600">@item.StartDate.ToString("MMM dd") - @item.EndDate.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                </td>
+                                <td class="fw-700 text-primary opacity-75">@item.AcademicYear?.Name</td>
+                                <td>
+                                    @{
+                                        var isPast = item.StartDate < DateTime.Today;
+                                    }
+                                    <span class="badge-premium @(isPast ? "badge-success-premium" : "badge-warning-premium")">
+                                        <i class="fas @(isPast ? "fa-circle-check" : "fa-clock") me-1"></i> @(isPast ? "Concluded" : "Scheduled")
+                                    </span>
+                                </td>
+                                <td class="text-end px-5">
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-light-soft rounded-8 p-2" data-bs-toggle="dropdown">
+                                            <i class="fas fa-layer-group text-primary"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg radius-lg p-2 animate-fade-in">
+                                            <li><a class="dropdown-item py-2 fw-600" href="#"><i class="fas fa-edit me-2 text-info"></i> Adjust Dates</a></li>
+                                            <li><a class="dropdown-item py-2 fw-800 text-primary" href="@Url.Action("EnterMarks", new { examId = item.Id })"><i class="fas fa-pen-nib me-2"></i> Register Scores (Draft)</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item py-2 text-danger fw-600" href="#"><i class="fas fa-trash-alt me-2"></i> Terminate Exam</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="py-5">
+                                    <i class="fas fa-file-signature fa-4x text-gray-100 mb-3"></i>
+                                    <h4 class="text-gray-400 fw-700">No Assessment Records Found</h4>
+                                    <p class="text-muted">Initiate the academic session by proposing an examination schedule.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

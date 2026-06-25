@@ -1,0 +1,122 @@
+@model IEnumerable<EasyEdu.Models.AccountGroup>
+@using EasyEdu.Models
+@{
+    ViewData["Title"] = "Balance Sheet";
+    Layout = "_Layout";
+    var balances = ViewBag.LedgerBalances as Dictionary<int, decimal>;
+    
+    decimal GetGroupBalance(AccountGroup group)
+    {
+        decimal total = 0;
+        if(group.Ledgers != null)
+        {
+            foreach(var ledger in group.Ledgers)
+            {
+               // finalBalances already includes opening balance - no double counting
+               if(balances != null && balances.ContainsKey(ledger.Id))
+               {
+                   total += balances[ledger.Id];
+               }
+            }
+        }
+        if(group.SubGroups != null)
+        {
+            foreach(var sub in group.SubGroups)
+            {
+                total += GetGroupBalance(sub);
+            }
+        }
+        return total;
+    }
+
+    var assets = Model.Where(g => g.Nature == AccountNature.Assets).ToList();
+    var liabilities = Model.Where(g => g.Nature == AccountNature.Liabilities).ToList();
+    
+    decimal totalAssets = assets.Sum(a => GetGroupBalance(a));
+    decimal totalLiabilities = liabilities.Sum(l => GetGroupBalance(l)); // Should be negative mostly if credit
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Institutional Balance Sheet</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider"><i class="fas fa-university me-2"></i> Financial Position as of @DateTime.Now.ToString("dd MMM yyyy")</p>
+        </div>
+        <div>
+            <button class="btn btn-premium-purple btn-sm px-4 rounded-pill shadow-sm fw-800" onclick="window.print()">
+                <i class="fas fa-print me-2"></i> EXPORT BALANCE SHEET
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="row g-0">
+                <!-- Liabilities Side -->
+                <div class="col-md-6 border-end">
+                    <div class="p-3 bg-light fw-800 text-center border-bottom text-uppercase">Liabilities</div>
+                    <div class="p-4">
+                        @foreach(var group in liabilities)
+                        {
+                            var balance = GetGroupBalance(group);
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-700">@group.Name</span>
+                                <span class="fw-700">@Math.Abs(balance).ToString("N2")</span>
+                            </div>
+                            @if(group.SubGroups != null)
+                            {
+                                foreach(var sub in group.SubGroups)
+                                {
+                                    var subBal = GetGroupBalance(sub);
+                                    if(subBal != 0) {
+                                        <div class="d-flex justify-content-between mb-1 ps-3 text-muted small">
+                                            <span>@sub.Name</span>
+                                            <span>@Math.Abs(subBal).ToString("N2")</span>
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Assets Side -->
+                <div class="col-md-6">
+                    <div class="p-3 bg-light fw-800 text-center border-bottom text-uppercase">Assets</div>
+                    <div class="p-4">
+                        @foreach(var group in assets)
+                        {
+                            var balance = GetGroupBalance(group);
+                             <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-700">@group.Name</span>
+                                <span class="fw-700">@Math.Abs(balance).ToString("N2")</span>
+                            </div>
+                            @if(group.SubGroups != null)
+                            {
+                                foreach(var sub in group.SubGroups)
+                                {
+                                    var subBal = GetGroupBalance(sub);
+                                    if(subBal != 0) {
+                                        <div class="d-flex justify-content-between mb-1 ps-3 text-muted small">
+                                            <span>@sub.Name</span>
+                                            <span>@Math.Abs(subBal).ToString("N2")</span>
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-0 bg-light border-top">
+                <div class="col-md-6 border-end text-end p-3 fw-900 border-bottom">
+                    Total Liabilities: @Math.Abs(totalLiabilities).ToString("N2")
+                </div>
+                <div class="col-md-6 text-end p-3 fw-900 border-bottom">
+                   Total Assets: @Math.Abs(totalAssets).ToString("N2")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

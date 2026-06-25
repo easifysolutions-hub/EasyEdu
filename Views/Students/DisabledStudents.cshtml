@@ -1,0 +1,64 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Disabled Students";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="card premium-card">
+        <div class="card-header bg-gradient-dark text-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0"><i class="fas fa-user-minus me-2"></i>Disabled Students (Inactive)</h5>
+            <span class="badge bg-danger">@Model.Count() Records</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Admission No</th>
+                            <th>Student Name</th>
+                            <th>Class (Section)</th>
+                            <th>Reason for Disabling</th>
+                            <th>Status Date</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold">@student.AdmissionNumber</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm me-3 border rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="fas fa-user text-muted"></i>
+                                        </div>
+                                        <div>@student.FirstName @student.LastName</div>
+                                    </div>
+                                </td>
+                                <td>@student.Class?.Name (@student.Section?.Name)</td>
+                                <td><span class="text-muted italic small">Administrative Action</span></td>
+                                <td>@DateTime.Now.ToShortDateString()</td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-success rounded-pill px-3 shadow-sm" onclick="Swal.fire('Restore?', 'Do you want to enable this student again?', 'question')">
+                                        <i class="fas fa-redo me-1"></i> Restore
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="opacity-25 mb-3">
+                                        <i class="fas fa-users-slash fa-4x"></i>
+                                    </div>
+                                    <p class="h6 text-muted">No disabled student records found.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,201 @@
+﻿@model EasyEdu.Models.Company
+@{
+    ViewData["Title"] = "General Settings";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Institutional Configuration</h3>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="premium-card">
+                <div class="card-body p-4">
+                    <form asp-action="UpdateGeneralSettings" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <label class="form-label small fw-800 text-uppercase">Institution Name*</label>
+                                <input asp-for="Name" class="form-control-premium w-100" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Official Email*</label>
+                                <input asp-for="Email" class="form-control-premium w-100" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Phone Number</label>
+                                <input asp-for="Phone" class="form-control-premium w-100">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Address</label>
+                                <textarea asp-for="Address" rows="3" class="form-control-premium w-100"></textarea>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-800 text-uppercase">Session Start</label>
+                                <input type="text" class="form-control-premium w-100" value="August" readonly>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-800 text-uppercase">Currency</label>
+                                <select class="form-select form-control-premium">
+                                    <option>USD ($)</option>
+                                    <option>INR (â‚¹)</option>
+                                    <option>GBP (Â£)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-800 text-uppercase">Time Zone</label>
+                                <select class="form-select form-control-premium">
+                                    <option>(GMT+05:30) Mumbai, Kolkata</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-premium-primary px-5 py-3 rounded-12 shadow-premium">SAVE CONFIGURATION</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="premium-card mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-800 text-dark mb-4">Appearance Settings</h5>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase">Theme Mode</label>
+                            <div class="d-flex gap-3">
+                                <button class="btn btn-outline-dark w-100 theme-toggle-btn active" data-theme="light">
+                                    <i class="fas fa-sun me-2"></i> Light
+                                </button>
+                                <button class="btn btn-outline-dark w-100 theme-toggle-btn" data-theme="dark">
+                                    <i class="fas fa-moon me-2"></i> Dark
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase">Sidebar Color</label>
+                            <div class="d-flex gap-2 theme-color-selector">
+                                <div class="color-option active" data-color="#12403E" style="background-color: #12403E;"></div>
+                                <div class="color-option" data-color="#0f172a" style="background-color: #0f172a;"></div>
+                                <div class="color-option" data-color="#3b0764" style="background-color: #3b0764;"></div>
+                                <div class="color-option" data-color="#831843" style="background-color: #831843;"></div>
+                                <div class="color-option" data-color="#0284c7" style="background-color: #0284c7;"></div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-end mt-4">
+                            <button id="saveAppearanceBtn" class="btn btn-premium-primary px-4 shadow-sm">Apply Appearance</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-4">
+            <div class="premium-card p-4 text-center mb-4">
+                <div class="mb-3">
+                    <img src="/images/logo.png" alt="Logo" class="img-fluid border p-2 rounded-16" style="max-height: 100px;" onerror="this.src='https://placehold.co/100x100?text=LOGO'">
+                </div>
+                <button class="btn btn-light-soft btn-sm rounded-8 w-100">CHANGE LOGO</button>
+            </div>
+            
+            <div class="premium-card p-4 bg-light-subtle">
+                <h6 class="fw-800 text-dark mb-3">System Information</h6>
+                <div class="small fw-700 text-muted mb-2">Version: 4.2.0-STABLE</div>
+                <div class="small fw-700 text-muted">Last Backup: 24 Jan 2026</div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<style>
+    .color-option {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.2s, border 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .color-option:hover {
+        transform: scale(1.1);
+    }
+    .color-option.active {
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 2px #333;
+        transform: scale(1.1);
+    }
+    .theme-toggle-btn.active {
+        background-color: #343a40;
+        color: white;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        // Load existing settings
+        let currentTheme = localStorage.getItem('themeMode') || 'light';
+        let currentColor = localStorage.getItem('sidebarColor') || '#12403E';
+
+        // Select correct theme button
+        $('.theme-toggle-btn').removeClass('active');
+        $(`.theme-toggle-btn[data-theme="${currentTheme}"]`).addClass('active');
+
+        // Select correct color option
+        $('.color-option').removeClass('active');
+        $(`.color-option[data-color="${currentColor}"]`).addClass('active');
+
+        // Handle Theme Click
+        $('.theme-toggle-btn').click(function(e) {
+            e.preventDefault();
+            $('.theme-toggle-btn').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // Handle Color Click
+        $('.color-option').click(function() {
+            $('.color-option').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // Save Settings
+        $('#saveAppearanceBtn').click(function(e) {
+            e.preventDefault();
+            let selectedTheme = $('.theme-toggle-btn.active').data('theme');
+            let selectedColor = $('.color-option.active').data('color');
+
+            // Save to localStorage
+            localStorage.setItem('themeMode', selectedTheme);
+            localStorage.setItem('sidebarColor', selectedColor);
+
+            // Apply immediately
+            document.body.setAttribute('data-theme', selectedTheme);
+            document.documentElement.style.setProperty('--sidebar-bg', selectedColor);
+
+            // Update sidebar right away
+            $('.sidebar, .sidebar-premium').attr('style', `background: ${selectedColor} !important`);
+
+            // Show Toast (if SweetAlert is available, otherwise alert)
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Appearance Updated',
+                    text: 'Your theme settings have been saved.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            } else {
+                alert('Appearance settings saved!');
+            }
+        });
+    });
+</script>
+}

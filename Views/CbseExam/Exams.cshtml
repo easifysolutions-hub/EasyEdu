@@ -1,0 +1,105 @@
+@model IEnumerable<EasyEdu.Models.CbseExam>
+@{
+    ViewData["Title"] = "CBSE Examination Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">CBSE Examination Architect</h2>
+            <p class="text-muted small fw-600">Initialize and manage standard evaluation cycles across institutional terms</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#examModal">
+            <i class="fas fa-plus me-2"></i>INITIALIZE EVALUATION
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">EXAMINATION IDENTITY</th>
+                    <th class="py-4 fw-900 small text-uppercase">ACADEMIC TERM</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOG</th>
+                    <th class="py-4 fw-900 small text-uppercase">STATUS</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ex in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@ex.Name</span>
+                            <span class="smallest text-muted fw-700 uppercase">SYNC ID: @ex.Id</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 ls-1 italic small">@ex.Term?.Name.ToUpper()</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@ex.StartDate.ToString("dd MMM") - @ex.EndDate.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge @(ex.Status == "Completed" ? "bg-success" : "bg-warning text-dark") px-3 rounded-pill fw-900 shadow-sm border small">@ex.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <a href="@Url.Action("ExamSchedule")" class="btn btn-sm btn-light-soft rounded-8 px-4 fw-900 shadow-sm border">SCHEDULE</a>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-edit text-primary"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero CBSE evaluation cycles detected.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="examModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveExam" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-scroll me-2 text-info"></i>INITIALIZE CYCLE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Evaluation Title*</label>
+                        <input name="Name" required class="form-control form-control-premium" placeholder="e.g. Annual Examination 2026">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Academic Term</label>
+                        <select name="TermId" required class="form-select form-control-premium">
+                            @foreach (var t in (List<EasyEdu.Models.CbseTerm>)ViewBag.Terms) { <option value="@t.Id">@t.Name</option> }
+                        </select>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Start Date</label>
+                             <input name="StartDate" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                         <div class="col-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">End Date</label>
+                             <input name="EndDate" type="date" required value="@DateTime.Now.AddDays(15).ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">ESTABLISH CYCLE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

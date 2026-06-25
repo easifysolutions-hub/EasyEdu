@@ -1,0 +1,98 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Student Promotion";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Student Promotion</h3>
+
+    <div class="premium-card p-4 mb-4">
+        <form method="get" class="row g-3 align-items-end">
+             <div class="col-md-3">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Current Academic Year</label>
+                <select name="currentYearId" class="form-select form-control-premium" asp-items="ViewBag.AcademicYears">
+                    <option value="">Select Academic Year</option>
+                </select>
+            </div>
+             <div class="col-md-3">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Current Class</label>
+                <select name="currentClassId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                 <button type="submit" class="btn btn-premium-purple w-100">SEARCH STUDENTS</button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="premium-card">
+            <div class="card-header bg-white border-0 p-4">
+                <h5 class="fw-800 text-dark m-0">Promote Students to Next Session</h5>
+            </div>
+            <div class="card-body p-4 pt-0">
+                <form asp-action="StudentPromote" method="post">
+                    <div class="row g-4 mb-4 p-3 bg-light-subtle rounded-16 border">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase">Promote to Academic Year*</label>
+                            <select name="promoteYearId" class="form-select form-control-premium" asp-items="ViewBag.AcademicYears" required></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase">Promote to Class*</label>
+                            <select name="promoteClassId" class="form-select form-control-premium" asp-items="ViewBag.Classes" required>
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table premium-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>Admission No</th>
+                                    <th>Name</th>
+                                    <th>Current Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var s in Model)
+                                {
+                                    <tr>
+                                        <td><input type="checkbox" name="studentIds" value="@s.Id" class="student-check"></td>
+                                        <td class="fw-800 text-primary">@s.AdmissionNumber</td>
+                                        <td class="fw-700">@s.FirstName @s.LastName</td>
+                                        <td>
+                                            <select name="result_@s.Id" class="form-select form-select-sm border-0 bg-light-subtle fw-800">
+                                                <option value="Pass">PASS</option>
+                                                <option value="Fail">FAIL</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-premium-primary px-5 py-3 rounded-12 shadow-premium">PROMOTE SELECTED STUDENTS</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    else if (Context.Request.Query.ContainsKey("currentClassId") && !string.IsNullOrEmpty(Context.Request.Query["currentClassId"]))
+    {
+        <div class="alert alert-info mt-4 rounded-12 border-0 shadow-sm fw-600">
+            <i class="fas fa-info-circle me-2"></i> No active students found in the selected class.
+        </div>
+    }
+</div>
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function() {
+        document.querySelectorAll('.student-check').forEach(cb => cb.checked = this.checked);
+    });
+</script>

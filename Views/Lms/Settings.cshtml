@@ -1,0 +1,90 @@
+@model EasyEdu.Models.LmsSettings
+@{
+    ViewData["Title"] = "LMS Infrastructure Protocol";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">LMS Infrastructure Architect</h2>
+            <p class="text-muted small fw-600">Configure global protocols and digital constraints for the learning management ecosystem</p>
+        </div>
+        <a href="@Url.Action("Index")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+            <i class="fas fa-arrow-left me-2"></i> INTELLIGENCE HUB
+        </a>
+    </div>
+
+    <form asp-action="SaveSettings" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="row g-4 justify-content-center">
+            <div class="col-xl-7">
+                <div class="premium-card p-5 border-0 shadow-lg mb-4" style="border-radius: 24px;">
+                    <h5 class="fw-900 text-dark mb-4 border-bottom pb-3"><i class="fas fa-sliders-h me-2 text-primary"></i>GENERAL PROTOCOLS</h5>
+                    
+                    <div class="protocol-node p-4 rounded-20 bg-light-soft mb-4 border d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="fw-900 text-dark mb-1">Ecosystem Registration</h6>
+                            <p class="smallest text-muted fw-700 m-0 text-uppercase ls-1">Allow students to independently enroll in curriculum nodes</p>
+                        </div>
+                        <div class="form-check form-switch p-0">
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="EnableRegistration" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+
+                    <div class="protocol-node p-4 rounded-20 bg-light-soft mb-4 border d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="fw-900 text-dark mb-1">Asset Valuation Disclosure</h6>
+                            <p class="smallest text-muted fw-700 m-0 text-uppercase ls-1">Display course pricing nodes on the public registry</p>
+                        </div>
+                        <div class="form-check form-switch p-0">
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="ShowCoursePrice" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                         <label class="form-label small fw-800 text-uppercase opacity-50 mb-3">Institutional Terms & Conditions</label>
+                         <textarea asp-for="TermsAndConditions" rows="4" class="form-control form-control-premium" placeholder="Define the legal constraints for the LMS ecosystem..."></textarea>
+                    </div>
+                </div>
+
+                <div class="premium-card p-5 border-0 shadow-lg" style="border-radius: 24px;">
+                    <h5 class="fw-900 text-dark mb-4 border-bottom pb-3"><i class="fab fa-vimeo-v me-2 text-info"></i>VIMEO CLOUD SYNCHRONIZATION</h5>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Vimeo Identity Client ID</label>
+                            <input asp-for="VimeoClientId" class="form-control form-control-premium" placeholder="Enter Vimeo Client ID">
+                        </div>
+                         <div class="col-12">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Vimeo Client Secret Node</label>
+                            <input asp-for="VimeoClientSecret" type="password" class="form-control form-control-premium" placeholder="Enter Vimeo Client Secret">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Authorized Access Token</label>
+                            <input asp-for="VimeoAccessToken" type="password" class="form-control form-control-premium" placeholder="Enter Vimeo Access Token">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-info bg-opacity-10 p-4 rounded-20 border border-info border-opacity-20">
+                         <div class="d-flex gap-3 align-items-center">
+                            <i class="fas fa-info-circle text-info fa-lg"></i>
+                            <p class="smallest text-info fw-800 text-uppercase ls-1 m-0">Synchronizing with Vimeo allows for secure narrative video hosting within course modules.</p>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-5">
+                    <button type="submit" class="btn btn-premium-purple py-3 rounded-16 fw-900 h6 mb-0 shadow-lg">SYNCHRONIZE INFRASTRUCTURE</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .rounded-20 { border-radius: 20px; }
+    .bg-light-soft { background: #f8fafc; }
+    .ls-1 { letter-spacing: 1px; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

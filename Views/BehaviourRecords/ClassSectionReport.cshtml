@@ -1,0 +1,78 @@
+@model IEnumerable<EasyEdu.Models.StudentIncident>
+@{
+    ViewData["Title"] = "Class Section Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Class-wise Behaviour Logs</h3>
+
+    <!-- Filter Card -->
+    <div class="card border-0 shadow-sm rounded-12 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="fw-800 text-primary m-0"><i class="fas fa-search me-2"></i> Filter Logs</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-700 text-muted small text-uppercase">Select Class</label>
+                    <select name="classId" id="ddlClass" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Classes" onchange="this.form.submit()">
+                        <option value="">All Classes</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-700 text-muted small text-uppercase">Select Section</label>
+                    <select name="sectionId" id="ddlSection" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Sections" onchange="this.form.submit()">
+                        <option value="">All Sections</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary fw-700 w-100 py-2"><i class="fas fa-search me-1"></i> Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Class (Section)</th>
+                            <th>Incident</th>
+                            <th>Points</th>
+                            <th>Date</th>
+                            <th class="text-end">Reported By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-800 text-dark">@item.Student.FirstName @item.Student.LastName</div>
+                                    <div class="small text-muted">Adm: @item.Student.AdmissionNumber</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light-subtle text-muted fw-800 border">
+                                        @(item.Student.Class?.Name) (@(item.Student.Section?.Name))
+                                    </span>
+                                </td>
+                                <td><div class="fw-700 text-primary">@item.Incident.Title</div></td>
+                                <td>
+                                    <span class="badge @(item.Incident.Point >= 0 ? "bg-success-soft" : "bg-danger-soft") fw-900">
+                                        @(item.Incident.Point > 0 ? "+" : "")@item.Incident.Point
+                                    </span>
+                                </td>
+                                <td><span class="small fw-600">@item.Date.ToString("dd MMM yyyy")</span></td>
+                                <td class="text-end px-4"><span class="small fw-800 text-muted">@item.ReportedBy</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

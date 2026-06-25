@@ -1,0 +1,208 @@
+@model IEnumerable<EasyEdu.Models.Mark>
+@{
+    ViewData["Title"] = "Premium Progress Card (100%)";
+    Layout = "_Layout";
+    var student = ViewBag.Student as EasyEdu.Models.Student;
+    var exam = ViewBag.Exam as EasyEdu.Models.Examination;
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    @if (student == null)
+    {
+        <div class="premium-card p-5 text-center mb-4 border-start border-4 border-success">
+             <h4 class="fw-800 text-dark mb-4">Institutional Professional Performance Report</h4>
+             <form method="get" class="row g-3 justify-content-center align-items-end">
+                <div class="col-md-5 text-start">
+                    <label class="form-label small fw-800 text-uppercase opacity-50">Select Student Register</label>
+                    <select name="studentId" class="form-select form-control-premium select2" asp-items="ViewBag.Students" required>
+                        <option value="">Search by Admission Number / Name</option>
+                    </select>
+                </div>
+                <div class="col-md-5 text-start">
+                    <label class="form-label small fw-800 text-uppercase opacity-50">Examination</label>
+                    <select name="examId" class="form-select form-control-premium" asp-items="ViewBag.Examinations" required>
+                        <option value="">Select Exam</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-premium-success w-100 py-3">FETCH 100% FORM</button>
+                </div>
+             </form>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+            <button class="btn btn-light-soft rounded-8" onclick="location.href='@Url.Action("ProgressCard100Percent")'">
+                <i class="fas fa-arrow-left me-2"></i>GO BACK
+            </button>
+            <button class="btn btn-premium-success rounded-8 px-4" onclick="window.print()">
+                <i class="fas fa-cloud-download-alt me-2"></i>EXPORT OFFICIAL PDF
+            </button>
+        </div>
+
+        <div class="premium-card-full p-0 position-relative border-0 shadow-lg" style="background: white; border-radius: 24px; overflow: hidden;">
+            <!-- Header Accent -->
+            <div class="header-accent p-5 text-center position-relative" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                <div class="position-absolute opacity-10" style="top: 0; right: 0;">
+                    <i class="fas fa-school fa-10x text-white"></i>
+                </div>
+                <img src="/images/logo.png" alt="School Logo" style="height: 120px; z-index: 10;" class="mb-3 grayscale-logo" onerror="this.src='https://placehold.co/120x120?text=LOGO'">
+                <h1 class="fw-900 text-white m-0 letter-spacing-wide">ACADEMIC PERFORMANCE REPORT</h1>
+                <p class="text-white-50 fw-700 tracking-widest text-uppercase small">Full Institutional Record • Session @DateTime.Now.Year</p>
+                
+                <div class="badge-status-premium mt-4">
+                    <span class="badge bg-premium-success-gradient px-4 py-2 h6 fw-800 mb-0">@exam?.Name.ToUpper()</span>
+                </div>
+            </div>
+
+            <!-- Student Profile Grid -->
+            <div class="p-5">
+                <div class="row g-5 align-items-center mb-5">
+                    <div class="col-md-3 text-center border-end">
+                        <img src="@(student.ProfilePicture ?? "https://placehold.co/150x150?text=PHOTO")" class="rounded-16 border shadow-sm mb-3 grayscale-hover" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #f8fafc;">
+                        <h4 class="fw-900 text-dark mb-1">@student.FirstName @student.LastName</h4>
+                        <div class="badge bg-light text-muted fw-800">ADM: @student.AdmissionNumber</div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="profile-item border-bottom pb-2">
+                                    <span class="small text-uppercase fw-800 opacity-50">Class Reference</span>
+                                    <div class="fw-900 text-dark h5 mb-0">@student.Class.Name (@(student.Section?.Name ?? "A"))</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-item border-bottom pb-2">
+                                    <span class="small text-uppercase fw-800 opacity-50">Registration ID</span>
+                                    <div class="fw-900 text-dark h5 mb-0">@student.AdmissionNumber</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-item border-bottom pb-2">
+                                    <span class="small text-uppercase fw-800 opacity-50">Assigned Roll No</span>
+                                    <div class="fw-900 text-dark h5 mb-0">#@student.RollNumber</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-item border-bottom pb-2">
+                                    <span class="small text-uppercase fw-800 opacity-50">Guardian Detail</span>
+                                    <div class="fw-900 text-dark h5 mb-0">@student.FatherName</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-item border-bottom pb-2">
+                                    <span class="small text-uppercase fw-800 opacity-50">Institutional Status</span>
+                                    <div class="fw-900 text-success h5 mb-0">ACTIVE MEMBER</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-item border-bottom pb-2">
+                                    <span class="small text-uppercase fw-800 opacity-50">Report ID</span>
+                                    <div class="fw-900 text-dark h5 mb-0">RP-@(DateTime.Now.Ticks / 100000)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Accomplishments -->
+                <div class="table-responsive rounded-16 border shadow-sm mb-5">
+                    <table class="table premium-table-100 mb-0">
+                        <thead class="bg-premium-dark text-white">
+                            <tr>
+                                <th class="py-4 ps-4">ACADEMIC SUBJECTS</th>
+                                <th class="text-center">MAXIMUM</th>
+                                <th class="text-center">PASSING</th>
+                                <th class="text-center">OBTAINED</th>
+                                <th class="text-center">GRADE</th>
+                                <th class="text-center pe-4">REMARKS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model)
+                            {
+                                <tr>
+                                    <td class="py-3 ps-4 fw-900 text-dark h6 mb-0">@m.Subject.Name</td>
+                                    <td class="text-center fw-700">@m.MaxMarks</td>
+                                    <td class="text-center fw-700 text-muted">@(m.MaxMarks * 0.33m)</td>
+                                    <td class="text-center">
+                                        @{
+                                            var markClass = (m.MarksObtained < (m.MaxMarks * 0.33m)) ? "text-danger" : "text-premium-purple";
+                                        }
+                                        <div class="fw-900 h5 mb-0 @markClass">@m.MarksObtained</div>
+                                    </td>
+                                    <td class="text-center fw-900">
+                                        <span class="grade-symbol">@m.Grade</span>
+                                    </td>
+                                    <td class="text-center pe-4 px-3 font-italic small fw-700 text-muted">@m.Remarks</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="bg-premium-dark text-white fw-900">
+                            <tr>
+                                <td class="py-4 ps-4 h5 mb-0">CONSOLIDATED ACADEMIC STANDING</td>
+                                <td class="text-center h5 mb-0">@Model.Sum(m => m.MaxMarks)</td>
+                                <td class="text-center h5 mb-0">@Model.Sum(m => m.MaxMarks * 0.33m)</td>
+                                <td class="text-center h5 mb-0 text-success-bright">@Model.Sum(m => m.MarksObtained)</td>
+                                <td colspan="2" class="text-center pe-4">
+                                    @{
+                                        var avg = Model.Any() ? Model.Average(m => (m.MarksObtained / (m.MaxMarks > 0 ? m.MaxMarks : 100)) * 100) : 0;
+                                    }
+                                    <div class="h5 mb-0 d-flex align-items-center justify-content-center gap-2">
+                                        PERC: @avg.ToString("F1")%
+                                        <span class="badge @(avg >= 33 ? "bg-success" : "bg-danger") rounded-pill px-4">
+                                            @(avg >= 33 ? "QUALIFIED" : "DISQUALIFIED")
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Footer Signatures -->
+                <div class="row pt-5 mt-5 align-items-end text-center no-print">
+                    <div class="col-3">
+                        <div class="border-top-2 pt-3 mx-4 h6 fw-900 text-muted">CLASS ADVISOR</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stamp-placeholder mb-4">
+                             <img src="https://placehold.co/120x120?text=STAMP" style="height: 100px; opacity: 0.1;" class="rounded-pill grayscale">
+                        </div>
+                        <div class="h6 fw-900 text-dark border-top-2 pt-3 d-inline-block px-5">INSTITUTIONAL AUTHORITY SEAL</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="border-top-2 pt-3 mx-4 h6 fw-900 text-muted">REGISTRAR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .rounded-16 { border-radius: 16px; }
+    .badge-status-premium { position: relative; }
+    .bg-premium-success-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .bg-premium-dark { background: #1e293b; }
+    .text-success-bright { color: #4ade80; }
+    .text-premium-purple { color: #8b5cf6; }
+    .tracking-widest { letter-spacing: 0.2em; }
+    .grayscale-logo { filter: grayscale(1) brightness(2) contrast(1.5); }
+    .grayscale-hover:hover { filter: none !important; }
+    .grade-symbol { 
+        padding: 5px 12px; border-radius: 8px; 
+        background: #f1f5f9; color: #1e293b; 
+        border: 1px solid #e2e8f0; font-size: 1.1rem;
+    }
+    .border-top-2 { border-top: 2px solid #e2e8f0; }
+    
+    @@media print {
+        .no-print { display: none !important; }
+        .sidebar, .topbar { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        .premium-card-full { border: none !important; border-radius: 0 !important; box-shadow: none !important; width: 100% !important; }
+        .badge { border: 1px solid #ddd !important; -webkit-print-color-adjust: exact; }
+    }
+</style>

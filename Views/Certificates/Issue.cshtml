@@ -1,0 +1,91 @@
+﻿@model EasyEdu.Models.Certificate
+@{
+    ViewData["Title"] = "Issue Document";
+}
+
+<div class="page-header mb-4">
+    <h1 class="page-title animate-slide-in">Issuance Console</h1>
+    <p class="text-muted fw-600">Generate authenticated institutional documents and credentials</p>
+</div>
+
+<div class="row">
+    <div class="col-xl-7">
+        <div class="premium-card bg-white p-5 shadow-lg animate-fade-in">
+            <form asp-action="Issue" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+                
+                <div class="mb-4">
+                    <label asp-for="StudentId" class="form-label fw-800 text-uppercase small text-muted">Select Student</label>
+                    <select asp-for="StudentId" class="form-select form-control-premium" asp-items="ViewBag.StudentId">
+                        <option value="">-- Search via Admission Number --</option>
+                    </select>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="CertificateType" class="form-label fw-800 text-uppercase small text-muted">Credential Type</label>
+                        <select asp-for="CertificateType" class="form-select form-control-premium">
+                            <option value="Bonafide Certificate">Bonafide Certificate</option>
+                            <option value="Transfer Certificate">Transfer Certificate (TC)</option>
+                            <option value="Course Completion">Course Completion</option>
+                            <option value="Character Certificate">Character & Conduct</option>
+                            <option value="Leaving Certificate">School Leaving Card</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ApprovedBy" class="form-label fw-800 text-uppercase small text-muted">Approving Authority</label>
+                        <input asp-for="ApprovedBy" class="form-control form-control-premium" placeholder="e.g., Principal" />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Purpose" class="form-label fw-800 text-uppercase small text-muted">Stated Purpose / Remarks</label>
+                    <textarea asp-for="Purpose" class="form-control form-control-premium" rows="3" placeholder="Why is this document being issued?"></textarea>
+                </div>
+
+                <div class="alert alert-info border-0 rounded-12 p-3 d-flex align-items-center mb-5">
+                    <i class="fas fa-info-circle me-3 h4 mb-0"></i>
+                    <div class="small fw-600">Generating this certificate will assign a permanent tracking reference (CERT-#) for official verification.</div>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button type="submit" class="btn-premium btn-premium-primary w-100 py-3">
+                        <i class="fas fa-file-signature me-2"></i> Authenticate & Issue
+                    </button>
+                    <a asp-action="Index" class="btn btn-light border-0 w-100 py-3 rounded-12 fw-700">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="premium-card bg-primary text-white p-5 border-0 h-100 shadow-xl" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+            <h3 class="fw-800 mb-4">Templated Dispatch</h3>
+            <p class="text-white text-opacity-75 fw-500 mb-4">You are about to issue a legally binding institutional document. Once issued, the system will apply:</p>
+            
+            <div class="d-flex gap-3 mb-4">
+                <div class="p-3 bg-white bg-opacity-20 rounded-12">
+                    <i class="fas fa-shield-halved h3 mb-0"></i>
+                </div>
+                <div>
+                    <h6 class="fw-800 mb-1">Audit Security</h6>
+                    <div class="small opacity-75">Hash-verified reference number generated per instance.</div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mb-4">
+                <div class="p-3 bg-white bg-opacity-20 rounded-12">
+                    <i class="fas fa-print h3 mb-0"></i>
+                </div>
+                <div>
+                    <h6 class="fw-800 mb-1">Print Optimized</h6>
+                    <div class="small opacity-75">Layouts are standardized for high-resolution letterhead printing.</div>
+                </div>
+            </div>
+
+            <div class="mt-auto border-top border-white border-opacity-25 pt-4">
+                <div class="small fw-700 opacity-50 text-uppercase">Status Check</div>
+                <div class="h5 m-0 fw-800">Secure Protocol Active</div>
+            </div>
+        </div>
+    </div>
+</div>

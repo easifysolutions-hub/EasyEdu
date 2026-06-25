@@ -1,0 +1,117 @@
+@model IEnumerable<EasyEdu.Models.Lesson>
+@{
+    ViewData["Title"] = "Lesson List";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="page-title">Academic Lessons</h3>
+        <button class="btn btn-premium-purple btn-sm rounded-8" onclick="toggleForm()">
+            <i class="fas fa-plus me-2"></i>ADD LESSON
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-4" id="formColumn">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Add Lesson</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateLesson" method="post">
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Class*</label>
+                            <select name="ClassId" class="form-select form-control-premium" asp-items="ViewBag.Classes" required>
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Subject*</label>
+                            <select name="SubjectId" id="subjectDropdown" class="form-select form-control-premium" required>
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Lesson Name*</label>
+                            <input type="text" name="LessonName" class="form-control-premium w-100" required>
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100">SAVE LESSON</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8" id="listColumn">
+            <div class="premium-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">CLASS</th>
+                                    <th>SUBJECT</th>
+                                    <th>LESSON NAME</th>
+                                    <th class="text-end px-4">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 fw-700">@item.Class?.Name</td>
+                                        <td class="fw-700 text-primary">@item.Subject?.Name</td>
+                                        <td class="fw-800">@item.LessonName</td>
+                                        <td class="text-end px-4">
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2"><i class="fas fa-edit text-primary"></i></button>
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2"><i class="fas fa-trash text-danger"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+
+    // Dynamic subject loading logic
+    document.querySelector('select[name="ClassId"]').addEventListener('change', function() {
+        const classId = this.value;
+        const subDropdown = document.getElementById('subjectDropdown');
+        if (!classId) {
+            subDropdown.innerHTML = '<option value="">Select Subject</option>';
+            return;
+        }
+        subDropdown.innerHTML = '<option value="">Loading...</option>';
+        
+        fetch(`/LessonPlan/GetSubjectsByClass?classId=${classId}`)
+            .then(res => res.json())
+            .then(data => {
+                subDropdown.innerHTML = '<option value="">Select Subject</option>';
+                data.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub.id;
+                    opt.textContent = sub.name;
+                    subDropdown.appendChild(opt);
+                });
+            });
+    });
+</script>

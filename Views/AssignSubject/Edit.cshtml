@@ -1,0 +1,110 @@
+@model EasyEdu.Models.AssignSubject
+@{
+    ViewData["Title"] = "Edit Subject Assignment";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-16">
+                <div class="card-header bg-white border-bottom border-light py-3 d-flex align-items-center gap-2">
+                    <a asp-action="Index" class="btn btn-sm btn-light rounded-12">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h5 class="fw-800 text-primary m-0">Edit Subject Assignment</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Class *</label>
+                            <select name="ClassId" id="ddlClass" class="form-select" asp-items="ViewBag.Classes" required>
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Section *</label>
+                            <select name="SectionId" id="ddlSection" class="form-select" required>
+                                <option value="">Loading...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Subject *</label>
+                            <select name="SubjectId" id="ddlSubject" class="form-select" required>
+                                <option value="">Loading...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Teacher *</label>
+                            <select name="TeacherId" class="form-select" asp-items="ViewBag.Teachers" required>
+                                <option value="">Select Teacher</option>
+                            </select>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mt-2 small"></div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary fw-700 py-2 px-4 shadow-sm">
+                                <i class="fas fa-save me-2"></i> Update Assignment
+                            </button>
+                            <a asp-action="Index" class="btn btn-light fw-600 py-2 px-4">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const currentSectionId = @Model.SectionId;
+    const currentSubjectId = @Model.SubjectId;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ddlClass = document.getElementById('ddlClass');
+        const ddlSection = document.getElementById('ddlSection');
+        const ddlSubject = document.getElementById('ddlSubject');
+
+        function loadSectionsAndSubjects(classId, preselectSection, preselectSubject) {
+            ddlSection.innerHTML = '<option value="">Loading...</option>';
+            ddlSubject.innerHTML = '<option value="">Loading...</option>';
+
+            if (!classId) return;
+
+            fetch('/AssignSubject/GetSectionsByClass?classId=' + classId)
+                .then(r => r.json())
+                .then(data => {
+                    ddlSection.innerHTML = '<option value="">Select Section</option>';
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.textContent = item.name;
+                        if (item.id == preselectSection) opt.selected = true;
+                        ddlSection.appendChild(opt);
+                    });
+                });
+
+            fetch('/AssignSubject/GetSubjectsByClass?classId=' + classId)
+                .then(r => r.json())
+                .then(data => {
+                    ddlSubject.innerHTML = '<option value="">Select Subject</option>';
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.textContent = item.name;
+                        if (item.id == preselectSubject) opt.selected = true;
+                        ddlSubject.appendChild(opt);
+                    });
+                });
+        }
+
+        // Load on page ready with current values
+        loadSectionsAndSubjects(ddlClass.value, currentSectionId, currentSubjectId);
+
+        // Reload on class change
+        ddlClass.addEventListener('change', function () {
+            loadSectionsAndSubjects(this.value, null, null);
+        });
+    });
+</script>
+}

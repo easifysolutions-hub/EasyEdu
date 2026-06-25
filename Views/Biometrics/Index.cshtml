@@ -1,0 +1,120 @@
+@model IEnumerable<EasyEdu.Models.Attendance>
+@{
+    ViewData["Title"] = "Biometrics Hub";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Biometrics Nexus</h2>
+            <p class="text-muted small fw-600">Coordinate high-fidelity physical attendance synchronization via biometric infrastructure</p>
+        </div>
+        <div class="d-flex gap-3">
+             <a href="@Url.Action("Settings")" class="btn btn-premium-dark px-4 py-2 rounded-12 shadow-sm fw-900 text-white">
+                <i class="fas fa-microchip me-2"></i>DEVICE CONFIG
+            </a>
+            <a href="@Url.Action("StaffReport")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-users-cog me-2"></i>STAFF LOGS
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Matrix -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-info">
+                <p class="text-uppercase smallest fw-900 text-muted mb-2">Student Sync Today</p>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h3 class="fw-900 m-0 text-dark">@ViewBag.StudentSyncToday</h3>
+                    <i class="fas fa-graduation-cap text-info opacity-25 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-success">
+                <p class="text-uppercase smallest fw-900 text-muted mb-2">Staff Sync Today</p>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h3 class="fw-900 m-0 text-dark">@ViewBag.StaffSyncToday</h3>
+                    <i class="fas fa-user-tie text-success opacity-25 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-warning">
+                <p class="text-uppercase smallest fw-900 text-muted mb-2">Active Hardware</p>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h3 class="fw-900 m-0 text-dark">@ViewBag.TotalDevices</h3>
+                    <i class="fas fa-network-wired text-warning opacity-25 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 bg-premium-purple text-white shadow-lg border-0 h-100" style="border-radius: 20px;">
+                <p class="text-uppercase smallest fw-900 opacity-75 mb-4">Infrastructure Status</p>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h4 class="fw-900 m-0">OPTIMAL</h4>
+                    <i class="fas fa-fingerprint fa-2x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+             <h5 class="fw-900 text-dark m-0"><i class="fas fa-history me-2 text-primary opacity-50"></i>Recent Physical Synchronizations</h5>
+             <button class="smallest fw-900 text-uppercase ls-1 text-primary border-0 bg-transparent">Nexus Trace</button>
+        </div>
+        <div class="card-body p-0">
+            <table class="table premium-table mb-0 align-middle text-dark">
+                <thead class="bg-light-soft">
+                    <tr class="text-muted smaller fw-900 uppercase ls-1">
+                        <th class="ps-5 py-3 border-0">IDENTIFIER</th>
+                        <th class="py-3 border-0">ACADEMIC LOCATION</th>
+                        <th class="py-3 border-0">TEMPORAL LOG</th>
+                        <th class="pe-5 text-end py-3 border-0">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td class="ps-5 py-4">
+                                <span class="fw-900 text-dark d-block">@log.Student?.FullName</span>
+                                <span class="smallest text-muted fw-700 font-monospace uppercase">DEVICE ID: @log.MarkedBy</span>
+                            </td>
+                            <td>
+                                <div class="small fw-800 text-dark">@log.Student?.Class?.Name</div>
+                                <div class="smallest text-muted fw-700 uppercase">BIOMETRIC NODE</div>
+                            </td>
+                             <td>
+                                <div class="fw-700 text-dark small">@log.CreatedAt.ToString("HH:mm:ss")</div>
+                                <div class="smallest text-muted fw-700 opacity-50">@log.Date.ToString("dd MMM yyyy")</div>
+                            </td>
+                            <td class="pe-5 text-end">
+                                <span class="badge bg-success-soft text-success px-3 rounded-pill fw-900 border-success small">@log.Status.ToUpper()</span>
+                            </td>
+                        </tr>
+                    }
+                    @if(!Model.Any()){
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                 <i class="fas fa-fingerprint fa-3x text-muted opacity-20 mb-3"></i>
+                                 <h5 class="fw-800 text-muted italic">Zero physical synchronization events detected in current audit window.</h5>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-24 { border-radius: 24px; }
+    .btn-premium-dark { background: #1e293b; border: none; }
+    .btn-premium-purple { background: #8b5cf6; border: none; }
+    .bg-premium-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+    .bg-success-soft { background: #f0fdf4; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

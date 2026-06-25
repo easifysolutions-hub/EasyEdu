@@ -1,0 +1,113 @@
+@model IEnumerable<EasyEdu.Models.Payroll>
+@{
+    ViewData["Title"] = "Institutional Payroll Audit";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Institutional Payroll Report</h3>
+            <p class="text-muted small fw-600">Financial distribution audit for faculty and personnel</p>
+        </div>
+        <div class="no-print">
+            <button class="btn btn-premium-success btn-sm rounded-8" onclick="window.print()">
+                <i class="fas fa-file-invoice-dollar me-2"></i>PRINT PAYROLL SUMMARY
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Academic Year</label>
+                <select name="year" class="form-select form-control-premium">
+                    <option value="">All Years</option>
+                    @for (int i = DateTime.Now.Year; i >= 2020; i--)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Month</label>
+                <select name="month" class="form-select form-control-premium">
+                    <option value="">All Months</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Department</label>
+                <select name="departmentId" class="form-select form-control-premium" asp-items="ViewBag.Departments">
+                    <option value="">All Departments</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100">AUDIT</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0 align-middle">
+                    <thead class="bg-premium-dark text-white">
+                        <tr>
+                            <th class="px-4 py-3">STAFF MEMBER</th>
+                            <th>PERIOD</th>
+                            <th class="text-center">BASIC SALARY</th>
+                            <th class="text-center">ALLOWANCES</th>
+                            <th class="text-center">DEDUCTIONS</th>
+                            <th class="text-center text-success-bright">NET PAYABLE</th>
+                            <th class="text-end px-4">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            <tr>
+                                <td class="px-4">
+                                    <div class="fw-900 text-dark">@p.Teacher.FullName</div>
+                                    <div class="small text-muted fw-700">@p.Teacher.Department?.Name</div>
+                                </td>
+                                <td class="fw-700">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(p.Month) @p.Year</td>
+                                <td class="text-center fw-600">@p.BasicSalary.ToString("C")</td>
+                                <td class="text-center fw-600 text-primary">@((p.GrossSalary - p.BasicSalary).ToString("C"))</td>
+                                <td class="text-center fw-600 text-danger">@(p.TotalDeductions.ToString("C"))</td>
+                                <td class="text-center fw-900 text-dark h6 mb-0">@p.NetSalary.ToString("C")</td>
+                                <td class="text-end px-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-2">
+                                        <span class="badge @(p.Status == "Paid" ? "bg-success" : "bg-warning") rounded-pill px-3">
+                                            @p.Status.ToUpper()
+                                        </span>
+                                        <a href="@Url.Action("Payslip", "Reports", new { id = p.Id })" class="btn btn-light-soft btn-sm rounded-circle" title="View Payslip">
+                                            <i class="fas fa-file-invoice-dollar text-primary"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-light fw-900 border-top border-dark border-3">
+                        <tr>
+                            <td colspan="5" class="text-end px-4 py-3">CUMULATIVE DISBURSEMENT</td>
+                            <td class="text-center h5 mb-0 text-success">@Model.Sum(p => p.NetSalary).ToString("C")</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .text-success-bright { color: #4ade80; }
+    .border-top-3 { border-top-width: 3px !important; }
+    @@media print { .no-print { display: none !important; } }
+</style>

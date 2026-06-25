@@ -1,0 +1,116 @@
+@model IEnumerable<EasyEdu.Models.FeeCollection>
+@{
+    ViewData["Title"] = "Fees Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Fees Collection Report</h3>
+            <p class="text-muted small fw-600">Breakdown of all received payments and collections</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft btn-sm rounded-8 px-3">
+                <i class="fas fa-print me-2"></i>PRINT REPORT
+            </button>
+            <button class="btn btn-premium-purple btn-sm rounded-8 px-3">
+                <i class="fas fa-file-excel me-2"></i>EXPORT EXCEL
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4">
+        <form method="get" asp-action="FeesReport" class="row g-3 align-items-end">
+            <div class="col-md-2">
+                <label class="form-label fw-800 small uppercase">From Date</label>
+                <input type="date" name="fromDate" class="form-control premium-input">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-800 small uppercase">To Date</label>
+                <input type="date" name="toDate" class="form-control premium-input">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-800 small uppercase">Class</label>
+                <select name="classId" class="form-select premium-input" asp-items="ViewBag.Classes">
+                    <option value="">All Classes</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-800 small uppercase">Target Student</label>
+                <select name="studentId" class="form-select premium-input" asp-items="ViewBag.Students">
+                    <option value="">All Students</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-8 py-2 fw-800">
+                    <i class="fas fa-search me-2"></i>GENERATE
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="premium-card p-3 bg-gradient-purple text-white">
+                <div class="small fw-700 uppercase opacity-75">Total Collection</div>
+                <h2 class="fw-900 mb-0">₹ @Model.Sum(f => f.AmountPaid).ToString("N2")</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="premium-card p-3 bg-gradient-blue text-white">
+                <div class="small fw-700 uppercase opacity-75">Total Dues</div>
+                <h2 class="fw-900 mb-0">₹ @Model.Sum(f => f.AmountPending).ToString("N2")</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="premium-card p-3 bg-light-soft text-dark">
+                <div class="small fw-700 uppercase opacity-75">Total Transactions</div>
+                <h2 class="fw-900 mb-0">@Model.Count()</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light-soft text-dark">
+                    <tr>
+                        <th class="ps-4 py-3 fw-800 small text-uppercase">Payment Date</th>
+                        <th class="py-3 fw-800 small text-uppercase">Admission No.</th>
+                        <th class="py-3 fw-800 small text-uppercase">Student Name</th>
+                        <th class="py-3 fw-800 small text-uppercase">Fee Type</th>
+                        <th class="py-3 fw-800 small text-uppercase">Amount Paid</th>
+                        <th class="pe-4 py-3 text-end fw-800 small text-uppercase">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">No fee collections found for the selected period.</td>
+                        </tr>
+                    }
+                    @foreach (var collection in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-700 text-dark">@(collection.PaidDate?.ToString("dd MMM yyyy") ?? "Pending")</td>
+                            <td class="fw-800 text-primary">#@collection.Student?.AdmissionNumber</td>
+                            <td>
+                                <div class="fw-800 text-dark">@(collection.Student?.FirstName + " " + collection.Student?.LastName)</div>
+                                <div class="small text-muted fw-600">ID: @collection.Id</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary-soft text-primary px-3 rounded-pill fw-800">@(collection.FeeStructure?.Name ?? "General")</span>
+                            </td>
+                            <td class="fw-900 text-success">₹ @collection.AmountPaid.ToString("N2")</td>
+                            <td class="pe-4 text-end">
+                                <button class="btn btn-light-soft btn-sm rounded-8"><i class="fas fa-file-invoice"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

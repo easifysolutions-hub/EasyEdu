@@ -1,0 +1,66 @@
+@model IEnumerable<EasyEdu.Models.CbseAssessment>
+@{
+    ViewData["Title"] = "Academic assessments Weighing";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Assessment Weighing Intelligence</h2>
+            <p class="text-muted small fw-600">Establish standard assessment nodes and their respective contribution weightage</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#assessmentModal">
+            <i class="fas fa-plus me-2"></i>ADD ASSESSMENT NODE
+        </button>
+    </div>
+
+    <div class="row g-4 mb-5">
+        @foreach (var a in Model)
+        {
+            <div class="col-md-4">
+                <div class="premium-card p-5 border-0 shadow-lg" style="border-radius: 20px;">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-12">
+                            <i class="fas fa-tasks text-success fa-lg"></i>
+                        </div>
+                        <h2 class="fw-900 text-dark m-0">@a.Weightage.ToString("0")<small class="text-muted smallest">%</small></h2>
+                    </div>
+                    <h5 class="fw-900 text-dark mb-2">@a.Name</h5>
+                    <p class="smallest text-muted fw-700 uppercase ls-1 italic mb-4">Weightage Allocation</p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-light-soft w-100 rounded-12 fw-900 small">CONFIGURE</button>
+                        <button class="btn btn-light-soft text-danger rounded-circle shadow-sm"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="assessmentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveAssessment" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-percentage me-2 text-warning"></i>DEFINE ASSESSMENT NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-4 text-dark">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Assessment Node Title*</label>
+                        <input name="Name" required class="form-control form-control-premium" placeholder="e.g. Periodic Test - I">
+                    </div>
+                    <div class="mb-0 text-dark">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Weightage Contribution (%)</label>
+                        <input name="Weightage" type="number" required value="10" step="0.01" class="form-control form-control-premium">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE WEIGHTAGE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

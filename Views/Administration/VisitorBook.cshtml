@@ -1,0 +1,159 @@
+﻿@model IEnumerable<EasyEdu.Models.VisitorBook>
+@{
+    ViewData["Title"] = "Institutional Vigilance";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Reception & Visitor Log</h1>
+        <p class="text-muted fw-600">Secure entry management and digital vigilance for institutional visitors</p>
+    </div>
+    <div class="d-flex gap-3">
+        <button class="btn-premium btn-premium-primary animate-fade-in shadow-lg" onclick="toggleForm()">
+            <i class="fas fa-id-card-clip"></i> Authenticate Entry
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Registration Sidebar -->
+    <div class="col-xl-4 d-none" id="formColumn">
+        <div class="premium-card bg-white shadow-lg animate-fade-in sticky-top" style="top: 20px;">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light">
+                <h5 class="fw-800 text-dark mb-0"><i class="fas fa-door-open text-primary me-2"></i> Entry Protocol</h5>
+                <button class="btn btn-sm btn-light rounded-circle" onclick="toggleForm()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreateVisitorRecord" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small uppercase">Visitor Full Name</label>
+                        <input type="text" name="Name" class="form-control border-2 fw-700" placeholder="e.g. Robert Smith" required />
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Mobile Contact</label>
+                            <input type="tel" name="Phone" class="form-control border-2" placeholder="Primary phone..." required />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Visitor ID #</label>
+                            <input type="text" name="VisitorId" class="form-control border-2" placeholder="Govt. ID or Ref" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small uppercase">Purpose of Visit</label>
+                        <select name="Purpose" class="form-select border-2 fw-700" asp-items="@(new SelectList(ViewBag.Purposes, "Name", "Name"))">
+                            <option value="">-- Choose Purpose --</option>
+                        </select>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Check-in Time</label>
+                            <input type="time" name="InTime" class="form-control border-2" value="@DateTime.Now.ToString("HH:mm")" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">No. of Persons</label>
+                            <input type="number" name="NumberOfPersons" class="form-control border-2 fw-800 text-primary" value="1" />
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-muted small uppercase">Observation / Notes</label>
+                        <textarea name="Note" class="form-control border-2" rows="2" placeholder="Relevant remarks..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-premium btn-premium-primary w-100 py-3 shadow-md">
+                        <i class="fas fa-fingerprint me-2"></i> Authorize Passage
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Traffic Table -->
+    <div class="col-xl-12" id="listColumn">
+        <div class="premium-card bg-white shadow-sm border-0 overflow-hidden animate-fade-in">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 fw-800 text-muted small uppercase">Visitor Identity</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Institutional Purpose</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Check-in Info</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Duration</th>
+                            <th class="pe-4 py-3 fw-800 text-muted small uppercase text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var v in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-primary-soft text-primary rounded-12 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: 900;">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-800 text-dark">@v.Name</div>
+                                            <div class="small text-muted fw-700 uppercase" style="font-size: 0.65rem;">ID: @(v.VisitorId ?? "AUTH-PENDING")</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-700 text-dark">@v.Purpose</div>
+                                    <div class="small text-primary fw-700" style="font-size: 0.65rem;">WITH @v.NumberOfPersons PERSON(S)</div>
+                                </td>
+                                <td>
+                                    <div class="fw-800 text-dark">@v.Date.ToString("MMM dd, yyyy")</div>
+                                    <div class="small text-muted fw-600">Time: @v.InTime</div>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(v.OutTime)) {
+                                        <span class="badge bg-light text-muted border fw-800 px-3 py-2 rounded-12">DEPARTED @v.OutTime</span>
+                                    } else {
+                                        <span class="badge bg-success-soft text-success border border-success-light fw-800 px-3 py-2 rounded-12 shadow-sm animate-pulse-soft">INSIDE CAMPUS</span>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        @if (string.IsNullOrEmpty(v.OutTime)) {
+                                            <button class="btn btn-premium btn-premium-primary btn-sm px-3 py-1" title="Mark Departure">
+                                                Checkout
+                                            </button>
+                                        }
+                                        <a asp-action="DeleteVisitorRecord" asp-route-id="@v.Id" class="btn btn-light btn-sm text-danger border-0 rounded-circle" style="width: 32px; height: 32px;" onclick="return confirm('Clear this record?')">
+                                            <i class="fas fa-trash small"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-door-closed fa-4x text-gray-100 mb-3"></i>
+                <h4 class="text-muted fw-700">No visitors logged in this cycle.</h4>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleForm() {
+            const formCol = document.getElementById('formColumn');
+            const listCol = document.getElementById('listColumn');
+            
+            if(formCol.classList.contains('d-none')) {
+                formCol.classList.remove('d-none');
+                listCol.classList.replace('col-xl-12', 'col-xl-8');
+            } else {
+                formCol.classList.add('d-none');
+                listCol.classList.replace('col-xl-8', 'col-xl-12');
+            }
+        }
+    </script>
+}

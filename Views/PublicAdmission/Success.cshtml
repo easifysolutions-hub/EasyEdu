@@ -1,0 +1,132 @@
+@{
+    Layout = null;
+    var name = ViewBag.Name as string;
+    var className = ViewBag.ClassName as string;
+    var refId = ViewBag.RefId as string;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inquiry Submitted Successfully</title>
+    
+    <!-- CSS Bundles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .success-container {
+            width: 100%;
+            max-width: 550px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #f0fdf4;
+            color: #15803d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 2rem auto;
+            border: 2px solid #bbf7d0;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.1);
+        }
+
+        .reference-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .btn-home {
+            background-color: #4f46e5;
+            color: #ffffff;
+            font-weight: 800;
+            padding: 0.85rem 2rem;
+            border-radius: 10px;
+            border: none;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-home:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="success-container">
+    <div class="premium-card">
+        <div class="success-icon">
+            <i class="fas fa-check-circle animate-bounce"></i>
+        </div>
+        
+        <h2 class="fw-900 text-dark">Submission Successful!</h2>
+        <p class="text-muted fw-600 mt-2">Thank you. Your inquiry application has been received and logged into our admissions registry.</p>
+        
+        <div class="reference-box">
+            <div class="small fw-800 text-muted uppercase mb-1">Applicant Name</div>
+            <div class="h5 fw-800 text-dark mb-3">@name</div>
+
+            <div class="small fw-800 text-muted uppercase mb-1">Target Grade Level</div>
+            <div class="h6 fw-800 text-primary mb-3">@className</div>
+
+            <div class="small fw-800 text-muted uppercase mb-1">Reference Tracking ID</div>
+            <div class="h5 fw-900 text-success uppercase m-0" style="letter-spacing: 0.05em;">@refId</div>
+        </div>
+
+        <p class="small text-muted fw-500 mb-4">Our school admissions officer will review your application and contact you shortly. Please save the Tracking ID above for any future reference.</p>
+        
+        <a href="javascript:window.location.reload();" class="btn-home text-uppercase">
+            <i class="fas fa-redo me-2"></i> Submit Another Form
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

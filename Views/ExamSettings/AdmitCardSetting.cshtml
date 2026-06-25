@@ -1,0 +1,98 @@
+@model EasyEdu.Models.AdmitCardSetting
+@{
+    ViewData["Title"] = "Admit Card Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Admit Card Configuration</h3>
+            <p class="text-muted small fw-600">Design the interface and legal instructions for official student exam permits</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("ExamSchedule", "Examinations")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-calendar-alt me-2"></i>EXAM SCHEDULE
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <form asp-action="SaveAdmitCardSetting" method="post">
+                 @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CompanyId" />
+
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Permit Layout Architect</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Institutional Header Brading</label>
+                        <textarea asp-for="InstitutionalHeader" class="form-control form-control-premium" rows="3" placeholder=" Institutional title, motto, and address..."></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Exam Instructions & Student Conduct</label>
+                        <textarea asp-for="ExamInstructions" class="form-control form-control-premium" rows="6" placeholder="Standard rules, discipline measures, and timing instructions..."></textarea>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between mb-3">
+                                <label class="small fw-800 text-uppercase opacity-75 m-0">Incorporate Exam Timetable</label>
+                                <input class="form-check-input ms-0" type="checkbox" asp-for="ShowExamSchedule" style="width: 45px; height: 22px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between">
+                                <label class="small fw-800 text-uppercase opacity-75 m-0">Display Examination Room</label>
+                                <input class="form-check-input ms-0" type="checkbox" asp-for="ShowClassRoom" style="width: 45px; height: 22px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-id-card text-info me-3 fa-lg"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">Official admit cards are synchronized with the exam schedule automatically.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-check-double me-2 text-info"></i>SYNCHRONIZE PERMIT ARCHITECTURE
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="premium-card p-0 border-0 shadow-lg overflow-hidden bg-light" style="border-radius: 24px;">
+                 <div class="bg-primary p-4 text-white text-center">
+                    <h5 class="fw-900 m-0">PERMIT PREVIEW</h5>
+                 </div>
+                 <div class="p-5">
+                    <div class="p-4 bg-white border border-2 border-dashed rounded-16 opacity-50 text-center">
+                        <div class="bg-light rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;"></div>
+                        <div class="dot bg-light w-100 mb-2" style="height: 10px;"></div>
+                        <div class="dot bg-light w-75 mx-auto mb-4" style="height: 10px;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-sm text-muted">
+                                <thead><tr><th class="smallest">SUBJECT</th><th class="smallest">DATE</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="smallest">MATH</td><td class="smallest">12 MAR</td></tr>
+                                    <tr><td class="smallest">ENG</td><td class="smallest">14 MAR</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .rounded-16 { border-radius: 16px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+</style>

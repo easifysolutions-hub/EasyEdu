@@ -1,0 +1,99 @@
+@model IEnumerable<EasyEdu.Models.Driver>
+@{
+    ViewData["Title"] = "Institutional Driver Log";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Mobility Navigators</h1>
+        <p class="text-muted fw-600">Certified personnel registry for fleet operations and logistical security</p>
+    </div>
+    <div class="d-flex gap-3">
+        <a asp-action="Vehicles" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-bus me-2"></i> Active Fleet
+        </a>
+        <a asp-action="CreateDriver" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+            <i class="fas fa-plus-circle me-2"></i> Register New Navigator
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    @if (Model.Any())
+    {
+        @foreach (var d in Model)
+        {
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-card bg-white h-100 shadow-md animate-fade-in">
+                    <div class="p-4 d-flex align-items-center border-bottom">
+                        <div class="avatar-lg rounded-circle overflow-hidden border-4 border-primary-soft me-3 shadow-sm" style="width: 70px; height: 70px;">
+                            @if (!string.IsNullOrEmpty(d.Photo))
+                            {
+                                <img src="@d.Photo" class="img-fluid" alt="Driver" />
+                            }
+                            else
+                            {
+                                <div class="bg-primary text-white h-100 d-flex align-items-center justify-content-center fw-900 fs-3">@d.Name.Substring(0, 1)</div>
+                            }
+                        </div>
+                        <div>
+                            <h5 class="fw-900 text-dark mb-0">@d.Name</h5>
+                            <div class="small text-muted fw-700">Experience: @(d.Experience ?? "N/A")</div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div class="small fw-700 text-muted uppercase">Phone</div>
+                                <div class="fw-800 text-dark">@(d.Phone ?? "---")</div>
+                            </div>
+                            <div class="col-6 border-start ps-3">
+                                <div class="small fw-700 text-muted uppercase">License Status</div>
+                                <div class="fw-800 text-success">VALID</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-light rounded-16 p-3 mb-4">
+                            <div class="small fw-800 text-primary uppercase mb-2">Assigned Strategy</div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-shuttle-van text-muted me-2"></i>
+                                <span class="fw-800 text-dark small">@(d.Vehicles.Any() ? string.Join(", ", d.Vehicles.Select(v => v.VehicleNumber)) : "Operational Reserve")</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a asp-action="EditDriver" asp-route-id="@d.Id" class="btn btn-light w-100 py-2 rounded-12 fw-800">
+                                <i class="fas fa-edit me-1"></i> Edit Profile
+                            </a>
+                            <form asp-action="DeleteDriver" asp-route-id="@d.Id" method="post" style="display:inline;" onsubmit="return confirm('Erase personnel record?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-hover-danger rounded-12 px-3 py-2 border-0">
+                                    <i class="fas fa-trash-alt text-danger"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center py-5">
+            <div class="premium-card p-5 bg-white shadow-sm border-2 border-dashed">
+                <i class="fas fa-user-shield fa-4x text-light mb-3"></i>
+                <h4 class="fw-800 text-dark">Navigator registry is empty.</h4>
+                <p class="text-muted fw-600 mb-4">Register your drivers and associates to manage institutional transit security.</p>
+                <a asp-action="CreateDriver" class="btn btn-premium-primary px-5 py-3 rounded-12">
+                    Register First Driver
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .btn-hover-danger:hover { background-color: #fee2e2; }
+</style>

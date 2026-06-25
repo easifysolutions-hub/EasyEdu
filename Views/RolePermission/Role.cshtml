@@ -1,0 +1,201 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+    ViewData["Title"] = "Role Management";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-user-shield me-2 text-primary"></i> Role Management</h1>
+        <p class="text-muted fw-600">Create and manage system access roles for users and staff</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-primary rounded-pill px-3 py-2 fs-7 fw-700">
+            <i class="fas fa-layer-group me-1"></i> @Model.Count() Roles Defined
+        </span>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success border-0 rounded-12 d-flex align-items-center gap-3 mb-4 shadow-sm animate-fade-in">
+        <i class="fas fa-check-circle fa-lg text-success"></i>
+        <span class="fw-700">@TempData["Success"]</span>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger border-0 rounded-12 d-flex align-items-center gap-3 mb-4 shadow-sm animate-fade-in">
+        <i class="fas fa-times-circle fa-lg text-danger"></i>
+        <span class="fw-700">@TempData["Error"]</span>
+    </div>
+}
+
+<div class="row g-4 animate-fade-in">
+    <!-- Create Role Card -->
+    <div class="col-xl-4">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden h-100">
+            <div class="p-4 border-bottom" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                <h5 class="fw-800 mb-0 text-white"><i class="fas fa-plus-circle me-2"></i> Create New Role</h5>
+                <p class="text-white opacity-75 small mb-0 mt-1">Define a new access role for the system</p>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreateRole" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-dark">Role Name <span class="text-danger">*</span></label>
+                        <input type="text" name="roleName" class="form-control-premium w-100" required
+                               placeholder="e.g. Teacher, Accountant, Librarian" />
+                        <div class="small text-muted mt-2 fw-600">
+                            <i class="fas fa-info-circle me-1 text-primary"></i>
+                            Role names must be unique. Common roles: <em>Admin, Teacher, Student, Parent, Accountant</em>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-premium-primary w-100 py-3 shadow-sm fs-6 fw-800 mt-2">
+                        <i class="fas fa-plus me-2"></i> Create Role
+                    </button>
+                </form>
+
+                <!-- Predefined Roles Guide -->
+                <div class="mt-4 pt-4 border-top">
+                    <p class="small fw-700 text-muted uppercase mb-3">
+                        <i class="fas fa-star me-1 text-warning"></i> Standard System Roles
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var badge in new[] { "SuperAdmin", "Admin", "Teacher", "Student", "Parent", "Accountant", "Librarian", "Receptionist" })
+                        {
+                            <span class="badge rounded-pill px-3 py-2 fw-700 small"
+                                  style="background: rgba(99,102,241,0.1); color: #4f46e5; border: 1px solid rgba(99,102,241,0.3);">
+                                @badge
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roles List -->
+    <div class="col-xl-8">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                <h5 class="fw-800 mb-0 text-white"><i class="fas fa-list-check me-2"></i> All System Roles</h5>
+                <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-700">@Model.Count() Total</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">#</th>
+                            <th>Role Name</th>
+                            <th>Role ID</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{int i = 1;}
+                        @foreach (var r in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-700 text-muted">@(i++)</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="role-avatar me-3 d-flex align-items-center justify-content-center fw-900"
+                                             style="width: 42px; height: 42px; border-radius: 12px; background: rgba(99,102,241,0.1); color: #4f46e5; font-size: 1.1rem;">
+                                            @r.Name![0].ToString().ToUpper()
+                                        </div>
+                                        <div>
+                                            <div class="fw-800 text-dark">@r.Name</div>
+                                            <div class="small text-muted fw-600">System Role</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <code class="small text-muted fw-700 bg-light px-2 py-1 rounded">#@r.Id[..8]...</code>
+                                </td>
+                                <td>
+                                    <span class="badge badge-success-premium px-3 py-2">
+                                        <i class="fas fa-check-circle me-1"></i> Active
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <a href="@Url.Action("LoginPermission", "RolePermission")?roleId=@r.Id"
+                                           class="btn btn-sm btn-outline-primary rounded-8 px-3" title="View Users in this Role">
+                                            <i class="fas fa-users me-1"></i> Users
+                                        </a>
+                                        <a href="@Url.Action("Manage", "Menu")?role=@r.Name" 
+                                           class="btn btn-sm btn-outline-info rounded-8 px-3" title="Customize Sidebar Menus for this Role">
+                                            <i class="fas fa-bars me-1"></i> Menus
+                                        </a>
+                                        @if (r.Name != "SuperAdmin")
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-danger rounded-8 px-3 delete-role-btn"
+                                                    data-role-id="@r.Id"
+                                                    data-role-name="@r.Name"
+                                                    title="Delete Role">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-8 px-3" disabled title="SuperAdmin cannot be deleted">
+                                                <i class="fas fa-lock"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <i class="fas fa-layer-group fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                    <div class="fw-700 text-muted">No roles defined yet. Create your first role.</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden delete form -->
+<form id="deleteRoleForm" asp-action="DeleteRole" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="roleId" id="deleteRoleId" />
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelectorAll('.delete-role-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const roleId = this.dataset.roleId;
+            const roleName = this.dataset.roleName;
+            Swal.fire({
+                title: `Delete Role: ${roleName}?`,
+                text: 'This action cannot be undone. Users assigned to this role will lose access.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="fas fa-trash me-1"></i> Yes, Delete',
+                cancelButtonText: 'Cancel'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteRoleId').value = roleId;
+                    document.getElementById('deleteRoleForm').submit();
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .table td, .table th { vertical-align: middle; }
+</style>

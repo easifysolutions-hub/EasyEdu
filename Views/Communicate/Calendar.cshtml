@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "Institutional Event Calendar";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-calendar-days me-2 text-primary"></i> Master Event Calendar</h1>
+        <p class="text-muted fw-600">Visual mapping of institutional milestones, academic cycles, and events</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="EventList" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-list me-2"></i> EVENT LIST
+        </a>
+        <button type="button" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800" data-bs-toggle="modal" data-bs-target="#eventModal">
+            <i class="fas fa-add me-2"></i> NEW EVENT
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 p-4 rounded-24 animate-fade-in">
+        <div id="calendar" style="min-height: 700px;"></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-24 shadow-2xl">
+            <div class="modal-header bg-primary text-white p-4">
+                <h5 class="modal-title fw-800">New Milestone Entry</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="SaveEvent" method="post">
+                <input type="hidden" name="Id" id="eventId" value="0">
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small-caps">Event Header</label>
+                        <input type="text" name="Title" id="eventTitle" class="form-control premium-input shadow-none" placeholder="Primary event title..." required>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-dark small-caps">Activation Start</label>
+                            <input type="datetime-local" name="StartDate" id="eventStart" class="form-control premium-input shadow-none" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-dark small-caps">Activation End</label>
+                            <input type="datetime-local" name="EndDate" id="eventEnd" class="form-control premium-input shadow-none" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                         <label class="form-label fw-800 text-dark small-caps">Operational Scope (Description)</label>
+                         <textarea name="Description" id="eventDesc" class="form-control premium-input shadow-none" rows="3" placeholder="Additional institutional details..."></textarea>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <label class="form-label fw-800 text-dark small-caps">Hex Signaling Color</label>
+                            <input type="color" name="Color" id="eventColor" class="form-control form-control-color border-0 w-100" value="#6366f1">
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check form-switch mt-3">
+                                <input class="form-check-input shadow-none" type="checkbox" name="IsAllDay" id="eventAllDay" value="true">
+                                <label class="form-check-label fw-800 text-dark ms-2 small-caps">Cycle Event (All Day)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 p-4">
+                    <button type="submit" class="btn btn-premium-primary w-100 py-3 rounded-16 shadow-lg fw-900 border-0">AUTHORIZE & MAP EVENT</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                themeSystem: 'bootstrap5',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: '/Communicate/GetCalendarData',
+                eventClick: function(info) {
+                    var ev = info.event;
+                    $("#eventId").val(ev.id);
+                    $("#eventTitle").val(ev.title);
+                    $("#eventStart").val(ev.start.toISOString().substring(0, 16));
+                    if (ev.end) $("#eventEnd").val(ev.end.toISOString().substring(0, 16));
+                    $("#eventDesc").val(ev.extendedProps.description || "");
+                    $("#eventColor").val(ev.backgroundColor);
+                    $("#eventAllDay").prop("checked", ev.allDay);
+                    $("#eventModal .modal-title").text("Modify Milestone Entry");
+                    $("#eventModal").modal("show");
+                }
+            });
+            calendar.render();
+        });
+    </script>
+}
+
+<style>
+    .premium-input { border: 2px solid #f3f4f6; border-radius: 12px; padding: 12px 16px; font-weight: 600; }
+    .premium-input:focus { border-color: #6366f1; background: rgba(99,102,241,0.02); }
+    .small-caps { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .fc { font-family: 'Outfit', sans-serif; --fc-border-color: #f3f4f6; --fc-today-bg-color: rgba(99,102,241,0.05); }
+    .fc .fc-toolbar-title { font-weight: 800; color: #1e293b; }
+    .fc .fc-button-primary { background: #6366f1; border-color: #6366f1; font-weight: 800; border-radius: 8px; text-transform: uppercase; font-size: 0.75rem; }
+    .fc .fc-button-primary:hover { background: #4f46e5; border-color: #4f46e5; }
+    .fc .fc-event { border-radius: 4px; padding: 2px 4px; cursor: pointer; border: none; font-weight: 700; transition: transform 0.2s; }
+    .fc .fc-event:hover { transform: scale(1.02); }
+</style>

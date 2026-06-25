@@ -1,0 +1,100 @@
+﻿@model EasyEdu.Models.FeeStructure
+@{
+    ViewData["Title"] = "Create Fee Structure";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Define New Structure</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider">
+                <i class="fas fa-plus-circle me-2 text-primary"></i> 
+                Set standard pricing for academic sessions
+            </p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-6">
+            <div class="premium-card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <form asp-action="CreateFeeStructure" method="post">
+                        <div class="mb-4">
+                            <label class="form-label-premium">Structure Identification Name*</label>
+                            <input type="text" asp-for="Name" class="form-control-premium w-100" placeholder="e.g. Class 1 Monthly Fee" required>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label-premium">Assign to Class*</label>
+                                <select asp-for="ClassId" class="form-select form-control-premium" asp-items="ViewBag.ClassId" required>
+                                    <option value="">Select Class</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-premium">Billing Frequency</label>
+                                <select asp-for="Frequency" class="form-select form-control-premium">
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Quarterly">Quarterly</option>
+                                    <option value="Yearly">Yearly</option>
+                                    <option value="One-time">One-time</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label-premium">Total Billing Amount*</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0 fw-800">$</span>
+                                <input type="number" asp-for="Amount" class="form-control form-control-premium-lg" placeholder="0.00" step="0.01" required>
+                            </div>
+                            <span asp-validation-for="Amount" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label-premium">Brief Description</label>
+                            <textarea asp-for="Description" rows="3" class="form-control-premium w-100" placeholder="Breakdown or notes..."></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch custom-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="IsMandatory" checked>
+                                <label class="form-check-label fw-700 text-dark ms-2">Marks as Mandatory Fee</label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 pt-3">
+                            <button type="submit" class="btn btn-premium-primary flex-grow-1 py-3 fw-900 fs-5">SAVE STRUCTURE</button>
+                            <a href="@Url.Action("FeeStructure")" class="btn btn-light-soft px-4 py-3 fw-700">CANCEL</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control-premium-lg {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 15px 20px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        transition: all 0.2s;
+        width: 100%;
+    }
+    .form-control-premium-lg:focus {
+        border-color: #6366f1;
+        background: #f8fafc;
+        outline: none;
+    }
+    .custom-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+        cursor: pointer;
+    }
+</style>

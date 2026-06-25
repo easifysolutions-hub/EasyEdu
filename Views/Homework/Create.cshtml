@@ -1,0 +1,77 @@
+﻿@model EasyEdu.Models.Homework
+@{
+    ViewData["Title"] = "Add Homework";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Assign New Homework</h3>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="premium-card">
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Homework Title*</label>
+                                <input asp-for="Title" class="form-control-premium w-100" required placeholder="e.g. Mathematics Exercise 1.2">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Class*</label>
+                                <select asp-for="ClassId" class="form-select form-control-premium" asp-items="ViewBag.Classes" required>
+                                    <option value="">Select Class</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Subject*</label>
+                                <select asp-for="SubjectId" class="form-select form-control-premium" asp-items="ViewBag.Subjects" required>
+                                    <option value="">Select Subject</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Assign Date*</label>
+                                <input asp-for="AssignDate" type="date" class="form-control-premium w-100" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-uppercase">Submission Date*</label>
+                                <input asp-for="SubmissionDate" type="date" class="form-control-premium w-100" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Description / Instructions</label>
+                                <textarea asp-for="Description" rows="5" class="form-control-premium w-100" placeholder="Enter detailed instructions..."></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase">Attachment (Optional)</label>
+                                <input type="file" name="file" class="form-control form-control-lg border-0 bg-light rounded-12">
+                                <div class="small text-muted mt-2">Upload any reference material or question paper (Max 5MB)</div>
+                            </div>
+
+                            <div class="col-12 mt-4 text-end">
+                                <button type="submit" class="btn btn-premium-primary px-5 py-3 rounded-12 shadow-premium">PUBLISH HOMEWORK</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-4">
+             <div class="premium-card p-4 bg-purple text-white mb-4" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);">
+                <h5 class="fw-800 mb-3"><i class="fas fa-lightbulb me-2"></i>Quick Note</h5>
+                <p class="small opacity-90">Homework published here will be instantly notified to students and parents via the mobile portal and email.</p>
+            </div>
+            
+            <div class="premium-card p-4">
+                <h6 class="fw-800 text-dark mb-3">Recent Assignments</h6>
+                <div class="small text-muted">No recent assignments found for this class.</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Unassigned Students";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="card premium-card">
+        <div class="card-header bg-gradient-danger text-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0"><i class="fas fa-user-slash me-2"></i>Unassigned Students Registry</h5>
+            <span class="badge bg-white text-danger">@Model.Count() Students Missing Class/Section</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning border-0 bg-light-warning mb-4 d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3 fa-2x text-warning"></i>
+                <div>
+                    <strong>Action Required:</strong> These students have been admitted but not yet assigned to a specific Class or Section. They will not appear in attendance or fee invoices until assigned.
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Admission No</th>
+                            <th>Student Name</th>
+                            <th>Gender</th>
+                            <th>Admission Date</th>
+                            <th>Missing Field</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold text-primary">@student.AdmissionNumber</td>
+                                <td>@student.FirstName @student.LastName</td>
+                                <td><span class="badge rounded-pill bg-light text-dark">@student.Gender</span></td>
+                                <td>@student.AdmissionDate.ToShortDateString()</td>
+                                <td>
+                                    @if (student.ClassId == 0) { <span class="badge bg-soft-danger text-danger">Class</span> }
+                                    @if (student.SectionId == 0) { <span class="badge bg-soft-warning text-warning">Section</span> }
+                                </td>
+                                <td class="text-end">
+                                    <a href="/Students/Edit/@student.Id" class="btn btn-sm btn-outline-primary rounded-circle" title="Assign Now">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                                    <p class="mb-0">Excellent! All students are currently assigned to classes.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+@model IEnumerable<EasyEdu.Models.GalleryItem>
+@{
+    ViewData["Title"] = "Institutional Media Archive";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Frontend Media Gallery</h3>
+            <p class="text-muted small fw-600">Archival of institutional photos, event highlights, and video productions</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm" onclick="toggleForm()">
+            <i class="fas fa-photo-video me-2"></i>UPLOAD MEDIA
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <!-- Add Column -->
+        <div class="col-xl-4" id="formColumn" style="display:none;">
+            <div class="premium-card p-4 border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-900 text-dark m-0">Library Upload</h5>
+                    <button class="btn btn-sm btn-light-soft rounded-circle" onclick="toggleForm()"><i class="fas fa-times"></i></button>
+                </div>
+                <form asp-action="AddGalleryItem" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Media Classification*</label>
+                        <select name="Type" class="form-select form-control-premium text-dark fw-700" required>
+                            <option value="Photo">Institutional Photograph</option>
+                            <option value="Video">Video Production / YouTube</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Media Heading*</label>
+                        <input type="text" name="Title" class="form-control form-control-premium" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Institutional Context</label>
+                        <textarea name="Description" rows="3" class="form-control form-control-premium"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Media File / Link*</label>
+                        <input type="file" name="file" class="form-control form-control-premium mb-2">
+                        <input type="text" name="MediaPath" class="form-control form-control-premium" placeholder="Or paste YouTube URL for Video">
+                        <p class="small text-muted mt-2 italic shadow-sm p-2 bg-light rounded">High resolution images (1920x1080) recommended for professional display.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 fw-900 shadow-lg">
+                        <i class="fas fa-upload me-2 text-white"></i>SYNC TO PUBLIC GALLERY
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- List Column -->
+        <div class="col-xl-12" id="listColumn">
+            <div class="row g-4 overflow-hidden" style="border-radius: 24px;">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6 col-lg-3">
+                        <div class="premium-card p-0 overflow-hidden border-0 shadow-sm transition-all hover-lift">
+                            <div class="media-preview position-relative" style="height: 180px;">
+                                @if(item.Type == "Photo") {
+                                    <img src="@item.MediaPath" class="w-100 h-100 object-fit-cover">
+                                } else {
+                                    <div class="w-100 h-100 bg-premium-dark d-flex align-items-center justify-content-center">
+                                         <i class="fab fa-youtube fa-4x text-danger"></i>
+                                         <div class="position-absolute bg-white px-2 py-1 rounded-pill small fw-900" style="bottom: 10px; right: 10px;">VIDEO</div>
+                                    </div>
+                                }
+                                <div class="badge-type position-absolute" style="top: 10px; left: 10px;">
+                                    <span class="badge @(item.Type == "Photo" ? "bg-success" : "bg-danger") px-3 rounded-pill">@item.Type.ToUpper()</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <h6 class="fw-900 text-dark mb-1 line-clamp-1">@item.Title</h6>
+                                <p class="small text-muted fw-600 mb-0 line-clamp-2">@item.Description</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                    <span class="small text-muted fw-700 opacity-50">@item.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                    <button class="btn btn-sm btn-light-soft text-danger rounded-8 shadow-sm"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if(!Model.Any()){
+                    <div class="col-12 text-center py-5">
+                        <div class="premium-card p-5 bg-light-soft border-dashed" style="border-radius: 20px;">
+                           <i class="fas fa-camera-retro fa-4x text-muted opacity-20 mb-3"></i>
+                           <h5 class="fw-800 text-muted">Empty Media Registry</h5>
+                           <p class="text-muted small">No visual assets have been uploaded to the public portal gallery yet.</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+</script>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .object-fit-cover { object-fit: cover; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .border-dashed { border: 2px dashed #e2e8f0; }
+</style>

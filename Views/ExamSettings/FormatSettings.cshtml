@@ -1,0 +1,123 @@
+@model EasyEdu.Models.ExamFormatSetting
+@{
+    ViewData["Title"] = "Exam Format Control";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Exam Format Architect</h3>
+            <p class="text-muted small fw-600">Configure global layout, branding, and PDF aesthetics for academic reports</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index", "Examinations")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-arrow-left me-2"></i>EXAM CENTER
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <form asp-action="SaveFormatSettings" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CompanyId" />
+
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Branding & Aesthetics</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Marksheet Professional Header</label>
+                        <textarea asp-for="MarksheetHeader" class="form-control form-control-premium" rows="3" placeholder="Institutional branding and address text for PDF reports..."></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Marksheet Disclaimer / Footer</label>
+                        <textarea asp-for="MarksheetFooter" class="form-control form-control-premium" rows="2" placeholder="Standard legal disclaimer or institutional note..."></textarea>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Result Publication Date</label>
+                            <input asp-for="ResultPublishDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Standard Paper Dimensions</label>
+                            <select asp-for="PaperSize" class="form-select form-control-premium">
+                                <option value="A4">Standard A4 (Portrait/Landscape)</option>
+                                <option value="Letter">Letter Size (8.5 x 11)</option>
+                                <option value="Legal">Legal Size (8.5 x 14)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between mb-3">
+                                <label class="small fw-800 text-uppercase opacity-75 m-0">Incorporate Student Photo</label>
+                                <input class="form-check-input ms-0" type="checkbox" asp-for="ShowStudentPhoto" style="width: 45px; height: 22px;">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between mb-3">
+                                <label class="small fw-800 text-uppercase opacity-75 m-0">Display Grading Legend</label>
+                                <input class="form-check-input ms-0" type="checkbox" asp-for="ShowGradeSystem" style="width: 45px; height: 22px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-magic text-info me-3 fa-lg"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">These format rules will sync across all Marks Sheets and Progress Cards.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-save me-2 text-info"></i>APPLY ARCHITECTURAL FORMAT
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="premium-card p-5 border-0 shadow-lg bg-light-soft h-100" style="border-radius: 24px;">
+                <div class="text-center">
+                    <div class="icon-circle-lg bg-white shadow-sm mb-4">
+                        <i class="fas fa-file-invoice fa-3x text-primary opacity-25"></i>
+                    </div>
+                    <h5 class="fw-900 text-dark mb-3">Live Page Architecture</h5>
+                    <p class="text-muted small fw-600 mb-4">A visualization of how your reports will appear during the PDF generation pipeline.</p>
+                </div>
+
+                <div class="mockup-page border p-4 bg-white shadow-sm rounded-16 opacity-75">
+                    <div class="d-flex gap-2 mb-3">
+                        <div class="dot bg-light w-25" style="height: 10px;"></div>
+                        <div class="dot bg-light w-50" style="height: 10px;"></div>
+                    </div>
+                    <div class="border-bottom border-2 mb-3"></div>
+                    <div class="row g-2 mb-4">
+                        <div class="col-8">
+                            <div class="dot bg-light w-100 mb-2" style="height: 12px;"></div>
+                            <div class="dot bg-light w-75" style="height: 12px;"></div>
+                        </div>
+                        <div class="col-4">
+                             <div class="bg-light rounded w-100" style="height: 60px;"></div>
+                        </div>
+                    </div>
+                    <div class="dot bg-light w-100 mb-1" style="height: 8px;"></div>
+                    <div class="dot bg-light w-100 mb-1" style="height: 8px;"></div>
+                    <div class="dot bg-light w-100" style="height: 8px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-16 { border-radius: 16px; }
+    .icon-circle-lg { width: 100px; height: 100px; line-height: 100px; border-radius: 50%; display: inline-block; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+</style>

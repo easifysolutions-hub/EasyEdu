@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyEdu - Executive Proposal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #042954;
+            --indigo: #4338ca;
+            --gold: #f59e0b;
+            --slate: #1e293b;
+            --bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #f1f5f9;
+            color: var(--slate);
+        }
+
+        .no-print {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--indigo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: var(--bg);
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            body {
+                background: #fff;
+            }
+        }
+
+        /* Cover Design */
+        .cover {
+            height: 100%;
+            background: linear-gradient(135deg, #042954 0%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: white;
+            text-align: center;
+        }
+
+        .cover img {
+            max-width: 380px;
+            margin-bottom: 40px;
+        }
+
+        .cover-tag {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .cover-title {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 60px;
+        }
+
+        .cover-info {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 40px;
+        }
+
+        .info-col {
+            text-align: left;
+        }
+
+        .info-col small {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info-col strong {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Content Layout */
+        .content {
+            padding: 50px 70px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2::after {
+            content: '';
+            height: 4px;
+            flex: 1;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        p {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .highlight-item {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-box {
+            background: #f8fafc;
+            color: var(--indigo);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .highlight-content h4 {
+            font-weight: 700;
+            color: var(--slate);
+            margin-bottom: 5px;
+        }
+
+        .highlight-content p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .stats-banner {
+            background: var(--navy);
+            color: white;
+            padding: 35px;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats-banner h3 {
+            font-size: 2.5rem;
+            color: var(--gold);
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stats-banner p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid #f1f5f9;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-card i {
+            font-size: 1.8rem;
+            color: var(--indigo);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h5 {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--slate);
+        }
+
+        .feature-card span {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        .roadmap {
+            margin-top: 30px;
+            border-left: 3px solid #f1f5f9;
+            padding-left: 30px;
+        }
+
+        .step {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: -39px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 3px solid white;
+        }
+
+        .step strong {
+            font-size: 1.1rem;
+            color: var(--navy);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .step span {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .footer {
+            margin-top: auto;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        .cta-box {
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="no-print" onclick="window.print()">
+        <i class="fas fa-file-pdf me-2"></i> EXPORT TO PDF
+    </button>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page">
+        <div class="cover">
+            <img src="../wwwroot/images/easyedu_full_logo_white.png" alt="EasyEdu Logo">
+            <div class="cover-tag">Scaling Future Excellence</div>
+            <h1 class="cover-title">Advanced Institutional <br> Planning Proposal</h1>
+
+            <div class="cover-info">
+                <div class="info-col">
+                    <small>Prepared for</small>
+                    <strong>Academic Board</strong>
+                </div>
+                <div class="info-col" style="text-align: right;">
+                    <small>Issue Date</small>
+                    <strong>March 2026</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: STRATEGY -->
+    <div class="page">
+        <div class="content">
+            <h2>The Vision</h2>
+            <p>Moving beyond basic management, EasyEdu provides a data-centric ecosystem that synchronizes academics,
+                finance, and administration into a single, high-performance portal.</p>
+
+            <div class="highlights">
+                <div class="highlight-item">
+                    <div class="icon-box"><i class="fas fa-layer-group"></i></div>
+                    <div class="highlight-content">
+                        <h4>Multi-Tenant Support</h4>
+                        <p>Manage multiple campuses or schools from a unified dashboard.</p>
+                    </div>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon-box"><i class="fas fa-lock"></i></div>
+                    <div class="highlight-content">
+                        <h4>Institutional Security</h4>
+                        <p>Encrypted data vaults with role-based accessibility protocols.</p>
+                    </div>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon-box"><i class="fas fa-users"></i></div>
+                    <div class="highlight-content">
+                        <h4>Unified Connectivity</h4>
+                        <p>Dedicated portals for Teachers, Parents, and Students.</p>
+                    </div>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon-box"><i class="fas fa-bolt"></i></div>
+                    <div class="highlight-content">
+                        <h4>Instant Automation</h4>
+                        <p>Zero-manual intervention for fee receipts and results.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-banner">
+                <h3>80% Faster</h3>
+                <p>Administrative processes automated and streamlined annually.</p>
+            </div>
+
+            <h2>Module Ecosystem</h2>
+            <div class="grid-3">
+                <div class="feature-card"><i class="fas fa-graduation-cap"></i>
+                    <h5>Admissions</h5><span>Digital enrollment & CRM</span>
+                </div>
+                <div class="feature-card"><i class="fas fa-money-check-alt"></i>
+                    <h5>Smart Fees</h5><span>Bulk billing & SMS alerts</span>
+                </div>
+                <div class="feature-card"><i class="fas fa-calendar-alt"></i>
+                    <h5>Academic</h5><span>Workload & Timetable ops</span>
+                </div>
+                <div class="feature-card"><i class="fas fa-star"></i>
+                    <h5>Exams</h5><span>Auto results & report cards</span>
+                </div>
+                <div class="feature-card"><i class="fas fa-clock"></i>
+                    <h5>Attendance</h5><span>Biometric HR & leave sync</span>
+                </div>
+                <div class="feature-card"><i class="fas fa-bus"></i>
+                    <h5>Transport</h5><span>GPS routing & fee modules</span>
+                </div>
+            </div>
+
+            <div class="footer">EasyEdu Solutions &copy; 2026 | Confidential</div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: ROADMAP -->
+    <div class="page">
+        <div class="content">
+            <h2>Deployment Roadmap</h2>
+
+            <div class="roadmap">
+                <div class="step">
+                    <strong>Phase 1: Foundation (Week 1)</strong>
+                    <span>System deployment, campus profiling, and master data setup.</span>
+                </div>
+                <div class="step">
+                    <strong>Phase 2: Academic Launch (Week 2-3)</strong>
+                    <span>Student enrollment, teacher account activation, and class setup.</span>
+                </div>
+                <div class="step">
+                    <strong>Phase 3: Financial Ops (Week 4-5)</strong>
+                    <span>Fee category definition, ledger setup, and payroll activation.</span>
+                </div>
+                <div class="step">
+                    <strong>Phase 4: Full Go-Live (Week 6)</strong>
+                    <span>Parent portal launch, mobile onboarding, and official rollout.</span>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h3 style="color: var(--navy); margin-bottom: 20px;">Ready to Transform?</h3>
+                <p style="margin-bottom: 30px;">Let us show you how EasyEdu can scale your institution to new heights.
+                </p>
+                <div style="font-weight: 800; color: var(--indigo); font-size: 1.2rem;">
+                    www.easyedu.tech | sales@easyedu.tech
+                </div>
+            </div>
+
+            <div class="footer" style="margin-top: auto;">EasyEdu Solutions &copy; 2026 | Page 3</div>
+        </div>
+    </div>
+
+</body>
+
+</html>

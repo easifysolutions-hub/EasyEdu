@@ -1,0 +1,153 @@
+@model EasyEdu.Controllers.InventoryReportsViewModel
+@{
+    ViewData["Title"] = "Reports - Inventory Intelligence";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-chart-line me-2 text-primary"></i> Asset Intelligence</h1>
+        <p class="text-muted fw-600">Enterprise analytics on inventory turnover, capital distribution, and sourcing health</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800" onclick="window.print()">
+            <i class="fas fa-file-pdf me-2"></i> EXPORT INTELLIGENCE
+        </button>
+        <a asp-action="Index" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800 ms-2">
+            <i class="fas fa-arrow-left me-2"></i> HUB
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4 mb-5 animate-fade-in">
+        <!-- Capital Valuation -->
+        <div class="col-xl-4">
+            <div class="premium-card text-white p-5 shadow-xl border-0 h-100 position-relative overflow-hidden" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                <div class="position-relative z-index-1">
+                    <div class="small fw-800 text-uppercase opacity-75 mb-1" style="letter-spacing: 1px;">Global Capital Value</div>
+                    <div class="display-5 fw-900 mb-4">$@Model.TotalValue.ToString("N0")</div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="badge bg-white-20 rounded-pill px-3 py-2 fw-800">@Model.TotalAssets ACTIVE SKUS</div>
+                        <div class="small fw-700 opacity-75"><i class="fas fa-shield-check me-1"></i> AUDITED RESIDUE</div>
+                    </div>
+                </div>
+                <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.1;">
+                    <i class="fas fa-vault fa-10x"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sourcing Health -->
+        <div class="col-xl-4">
+            <div class="premium-card bg-white p-5 shadow-xl border-0 h-100 border-start border-5 border-warning d-flex flex-column justify-content-between">
+                <div>
+                    <div class="small fw-800 text-muted text-uppercase mb-2" style="letter-spacing: 1px;">Sourcing Resilience</div>
+                    <div class="h2 fw-900 text-warning mb-3">@Model.LowStockItems Items at Risk</div>
+                    <p class="text-muted fw-600 small">Strategic reserve levels have fallen below safety thresholds. Immediate procurement cycles are recommended to maintain operational continuity.</p>
+                </div>
+                <div class="pt-4">
+                    <a asp-action="ItemReceive" class="btn btn-warning-soft text-warning w-100 fw-900 rounded-16 py-3 border-0">
+                        <i class="fas fa-truck-fast me-2"></i> REPLENISH RESERVES
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operations Card -->
+        <div class="col-xl-4">
+            <div class="premium-card bg-dark text-white p-5 shadow-xl border-0 h-100 position-relative overflow-hidden">
+                <div class="position-relative z-index-1">
+                    <div class="small fw-800 text-uppercase opacity-50 mb-1" style="letter-spacing: 1px;">Operational Velocity</div>
+                    <div class="display-6 fw-900 mb-4 text-info">94.2%</div>
+                    <div class="space-y-3">
+                        <div class="d-flex justify-content-between align-items-center pb-2 border-bottom border-white-10">
+                            <span class="small fw-600 opacity-75">Internal Issuance Rate</span>
+                            <span class="badge bg-info text-dark fw-900">HIGH</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pt-2">
+                            <span class="small fw-600 opacity-75">Sourcing Reliability</span>
+                            <span class="badge bg-success text-white fw-900">STABLE</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-absolute" style="bottom: -10px; right: -10px; opacity: 0.05;">
+                    <i class="fas fa-microchip fa-8x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Procurement Table -->
+    <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24">
+        <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+            <h5 class="fw-800 text-dark mb-0"><i class="fas fa-receipt text-primary me-2"></i> Global Procurement Cycles</h5>
+            <div class="badge bg-primary-soft text-primary fw-800 px-3 py-2 rounded-8">RECENT AUDITS</div>
+        </div>
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">PROCURED ASSET</th>
+                        <th>SOURCING PARTNER</th>
+                        <th class="text-center">QUANTITY</th>
+                        <th>CAPITAL OUTLAY</th>
+                        <th class="text-end pe-4">LEDGER STAMP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.RecentProcurements)
+                    {
+                        <tr class="align-middle transition-all">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box-sm bg-light-soft text-dark rounded-8 me-3">
+                                        <i class="fas fa-cube small"></i>
+                                    </div>
+                                    <div class="fw-800 text-dark">@(r.Inventory?.ItemName ?? "Unknown Asset")</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-800 text-primary">@(r.Supplier?.Name ?? "General Vendor")</div>
+                                <div class="small text-muted fw-700 uppercase" style="font-size: 0.6rem;">AUTHORIZED PARTNER</div>
+                            </td>
+                            <td class="text-center">
+                                <div class="badge bg-success-soft text-success fw-900 px-3 py-2 rounded-8">+@r.Quantity</div>
+                            </td>
+                            <td>
+                                <div class="fw-900 text-dark">$@r.TotalPrice.ToString("N0")</div>
+                                <div class="small text-muted fw-600" style="font-size: 0.6rem;">($@r.UnitPrice/unit)</div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="fw-800 text-muted">@r.ReceiveDate.ToString("dd MMM yyyy")</div>
+                                <div class="small text-success fw-800 uppercase" style="font-size: 0.55rem;"><i class="fas fa-check-circle me-1"></i> COMMITTED</div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.RecentProcurements.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-chart-pie fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                <div class="fw-800 text-muted">No procurement cycles audited yet.</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-white-10 { background: rgba(255, 255, 255, 0.1); }
+    .bg-white-20 { background: rgba(255, 255, 255, 0.2); }
+    .bg-primary-soft { background: rgba(99,102,241,0.1); color: #6366f1; }
+    .bg-success-soft { background: rgba(16,185,129,0.1); color: #10b981; }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+    .bg-light-soft { background: rgba(0,0,0,0.03); }
+    .border-white-10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .icon-box-sm { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+</style>

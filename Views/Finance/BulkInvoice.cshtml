@@ -1,0 +1,361 @@
+﻿@model EasyEdu.Models.FeesInvoice
+@{
+    ViewData["Title"] = "Bulk Invoice Generator";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <!-- Breadcrumb & Header -->
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Dashboard")" class="text-decoration-none">Finance</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Bulk Invoices</li>
+                </ol>
+            </nav>
+            <h3 class="fw-800 text-dark m-0">Bulk Student Invoicing</h3>
+            <p class="text-muted small fw-600 mb-0">Generate hundreds of invoices across classes and sections in one click.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="BulkInvoicePrintSettings" class="btn btn-light-soft rounded-pill px-4 fw-700">
+                <i class="fas fa-cog me-2"></i> Settings
+            </a>
+            <a asp-action="FeesInvoice" class="btn btn-outline-secondary rounded-pill px-4 fw-700">
+                <i class="fas fa-list me-2"></i> View All Invoices
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger rounded-16 border-0 shadow-sm mb-4 animate-slide-up">
+            <i class="fas fa-exclamation-circle me-2"></i> @TempData["Error"]
+        </div>
+    }
+
+    <form asp-action="BulkInvoice" method="post" id="bulkForm">
+        @Html.AntiForgeryToken()
+        <div class="row g-4">
+            <!-- Left Column: Selection Criteria -->
+            <div class="col-xl-7 col-lg-6">
+                <div class="card border-0 shadow-sm rounded-20 overflow-hidden mb-4">
+                    <div class="card-header bg-white border-bottom border-light p-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary p-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-users-cog fa-lg"></i>
+                            </div>
+                            <h5 class="fw-800 m-0">Target Audience</h5>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 p-xl-5">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label-premium">1. Academic Class</label>
+                                <select id="classSelect" name="classId" class="form-select border-light-subtle p-3 bg-light bg-opacity-50 select2-simple" asp-items="ViewBag.Classes" required>
+                                    <option value="">Select Academic Grade</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-premium">2. Specific Section (Optional)</label>
+                                <select id="sectionSelect" name="sectionId" class="form-select border-light-subtle p-3 bg-light bg-opacity-50 select2-simple" disabled>
+                                    <option value="">Apply to All Sections</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-12 mt-4 pt-3 border-top">
+                                <label class="form-label-premium">3. Billing Dates</label>
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-6">
+                                        <div class="input-group-premium">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <input type="date" name="invoiceDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly>
+                                            <div class="label-floating">Issue Date</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group-premium bg-white border">
+                                            <i class="far fa-calendar-check text-danger"></i>
+                                            <input type="date" name="dueDate" class="form-control" value="@DateTime.Now.AddDays(15).ToString("yyyy-MM-dd")" required>
+                                            <div class="label-floating">Payment Due Date</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="p-3 rounded-16 bg-info bg-opacity-10 border border-info border-opacity-25 mt-3">
+                                    <div class="d-flex gap-2 text-info small fw-800">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>BULK LOGIC</span>
+                                    </div>
+                                    <p class="x-small fw-600 m-0 mt-1 text-muted">Choosing a class will target every active student in that grade. If some students already have an invoice for this period, duplicates will still be created (Records are unique per student-ID).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-20 overflow-hidden">
+                    <div class="card-header bg-white border-bottom border-light p-4">
+                         <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-warning bg-opacity-10 text-warning p-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-tags fa-lg"></i>
+                            </div>
+                            <h5 class="fw-800 m-0">Select Fees Category</h5>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="feeLoader" class="text-center py-4 d-none">
+                            <div class="spinner-border text-primary spinner-border-sm"></div>
+                        </div>
+                        <div class="fee-selector-grid" id="feeItemsList">
+                             <div class="text-center py-5 text-muted opacity-50">
+                                 <i class="fas fa-list-check fa-3x mb-3"></i>
+                                 <p class="fw-700">Fee heads will appear here automatically</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Dashboard & Actions -->
+            <div class="col-xl-5 col-lg-6">
+                <div class="sticky-top" style="top: 100px; z-index: 10;">
+                    <div class="card border-0 shadow-lg rounded-24 bg-dark text-white overflow-hidden mb-4">
+                        <div class="card-body p-4 p-xl-5 position-relative">
+                            <i class="fas fa-layer-group position-absolute opacity-10" style="font-size: 15rem; bottom: -50px; right: -50px; pointer-events: none;"></i>
+                            
+                            <h6 class="text-uppercase small fw-800 text-primary mb-4 ls-2">Bulk Processing Engine</h6>
+                            
+                            <div class="mb-5">
+                                <h2 class="fw-800 mb-1" id="totalRateLabel">$0.00</h2>
+                                <p class="text-muted small fw-600 mb-0">Per-Student Billing Rate</p>
+                            </div>
+
+                            <div class="summary-details-list">
+                                <div class="d-flex justify-content-between mb-3 border-bottom border-secondary border-opacity-25 pb-3">
+                                    <span class="text-muted small">Transport Inclusion</span>
+                                    <div class="form-check form-switch m-0">
+                                        <input class="form-check-input" type="checkbox" name="includeTransport" id="includeTransport" value="true">
+                                        <label class="form-check-label small fw-700 ms-2" for="includeTransport">Auto-detect student routes</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="text-muted small">Accounting Status</span>
+                                    <span class="badge bg-success-soft text-success border-0 px-3 rounded-pill fw-800 small">Auto-Posting Enabled</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-white bg-opacity-5 rounded-16 mb-5 border border-white border-opacity-10">
+                                <p class="m-0 x-small fw-600 text-white text-opacity-75">
+                                    <i class="fas fa-shield-alt text-primary me-2"></i> 
+                                    Bulk generation runs as an atomic process. It will create ledger entries for every student selected based on the fee heads chosen above.
+                                </p>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-900 fs-5 shadow-lg shadow-primary-soft">
+                                <i class="fas fa-bolt me-2"></i> START BULK GENERATION
+                            </button>
+                            <a href="@Url.Action("FeesInvoice")" class="btn btn-link w-100 text-white text-opacity-50 text-decoration-none mt-3 fw-700 small hover-opacity-100">
+                                Manage Existing Invoices
+                            </a>
+                        </div>
+                    </div>
+
+                     <div class="alert bg-warning bg-opacity-10 border-warning border-opacity-25 rounded-20 p-4">
+                        <div class="d-flex gap-3">
+                            <i class="fas fa-exclamation-triangle text-warning h4 m-0"></i>
+                            <div>
+                                <h6 class="fw-800 text-dark mb-1">Execution Warning</h6>
+                                <p class="text-muted x-small fw-600 m-0">Bulk processing is intensive. Please do not refresh the page until you receive the completion notification.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .rounded-20 { border-radius: 20px; }
+    .rounded-24 { border-radius: 24px; }
+    .ls-2 { letter-spacing: 2px; }
+    .x-small { font-size: 11px; }
+
+    .form-label-premium {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 8px;
+        display: block;
+        letter-spacing: 0.5px;
+    }
+
+    .input-group-premium {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: #f1f5f9;
+        border-radius: 12px;
+        padding: 0 15px;
+    }
+    .input-group-premium i { color: #94a3b8; font-size: 18px; }
+    .input-group-premium .form-control {
+        background: transparent;
+        border: none;
+        padding: 24px 12px 8px;
+        font-weight: 700;
+        box-shadow: none;
+    }
+    .input-group-premium .label-floating {
+        position: absolute;
+        top: 6px;
+        left: 45px;
+        font-size: 10px;
+        font-weight: 800;
+        color: #64748b;
+        text-transform: uppercase;
+    }
+
+    .fee-selector-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 15px;
+    }
+
+    .fee-pill {
+        display: block;
+        cursor: pointer;
+        padding: 15px;
+        background: #f8fafc;
+        border: 2px solid transparent;
+        border-radius: 16px;
+        transition: all 0.2s;
+    }
+    .fee-pill:hover { background: #f1f5f9; border-color: #e2e8f0; }
+    .fee-pill.active {
+        background: #eff6ff;
+        border-color: #3b82f6;
+    }
+
+    .bg-success-soft { background: rgba(16, 185, 129, 0.15); }
+    .shadow-primary-soft { box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+
+    @@keyframes slideIn {
+        from { opacity:0; transform: translateY(10px); }
+        to { opacity:1; transform: translateY(0); }
+    }
+    .animate-slide-up { animation: slideIn 0.3s ease-out forwards; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Load Fees Types on load
+            loadFeeHeads();
+
+            $('#classSelect').on('change', function() {
+                const classId = $(this).val();
+                const $section = $('#sectionSelect');
+                
+                $section.prop('disabled', true).html('<option>Loading...</option>');
+
+                if (classId) {
+                    $.get('/Finance/GetSectionsByClass?classId=' + classId).done(function(data) {
+                        $section.empty().append('<option value="">Apply to All Sections</option>');
+                        data.forEach(s => {
+                            $section.append(`<option value="${s.id}">${s.name}</option>`);
+                        });
+                        $section.prop('disabled', false);
+                    });
+                }
+            });
+
+            function loadFeeHeads() {
+                $('#feeLoader').removeClass('d-none');
+                $.get('/Finance/GetFeesTypesJson').done(function(data) {
+                    $('#feeLoader').addClass('d-none');
+                    if(data.length > 0) {
+                        $('#feeItemsList').empty();
+                        data.forEach(f => {
+                            const html = `
+                                <div class="fee-pill animate-slide-up" data-amount="${f.amount}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-12 bg-white shadow-sm p-2 text-primary">
+                                                <i class="fas fa-check-circle check-icon opacity-10"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-800 text-dark small">${f.name}</div>
+                                                <div class="x-small text-muted fw-700">CODE: FE-${f.id}</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-800 text-primary">$${f.amount.toFixed(2)}</div>
+                                            <input type="checkbox" name="feeTypeIds" value="${f.id}" class="d-none fee-input">
+                                        </div>
+                                    </div>
+                                </div>`;
+                            $('#feeItemsList').append(html);
+                        });
+                    }
+                });
+            }
+
+            $(document).on('click', '.fee-pill', function() {
+                const $pill = $(this);
+                const $check = $pill.find('.fee-input');
+                const $icon = $pill.find('.check-icon');
+                
+                if($pill.hasClass('active')) {
+                    $pill.removeClass('active');
+                    $check.prop('checked', false);
+                    $icon.addClass('opacity-10');
+                } else {
+                    $pill.addClass('active');
+                    $check.prop('checked', true);
+                    $icon.removeClass('opacity-10');
+                }
+                updateTotalRate();
+            });
+
+            function updateTotalRate() {
+                let total = 0;
+                $('.fee-pill.active').each(function() {
+                    total += parseFloat($(this).data('amount'));
+                });
+                $('#totalRateLabel').text('$' + total.toFixed(2));
+            }
+
+            $('#bulkForm').on('submit', function(e) {
+                const classVal = $('#classSelect').val();
+                const activeFees = $('.fee-pill.active').length;
+                const transport = $('#includeTransport').is(':checked');
+
+                if(!classVal) {
+                    e.preventDefault();
+                    Swal.fire('Required', 'Please select a target class.', 'warning');
+                    return;
+                }
+                if(activeFees === 0 && !transport) {
+                    e.preventDefault();
+                    Swal.fire('No Billing Items', 'Please select at least one fee head or include transport.', 'warning');
+                    return;
+                }
+
+                // Show processing Swal
+                Swal.fire({
+                    title: 'Generating Invoices...',
+                    text: 'This might take a moment depending on the class size.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+        });
+    </script>
+}

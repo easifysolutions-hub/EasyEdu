@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Multi Class Student enrollment";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="card premium-card">
+        <div class="card-header bg-gradient-info text-white py-3">
+            <h5 class="mb-0"><i class="fas fa-network-wired me-2"></i>Multi-Class Student Enrollment</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-5">
+                    <h6 class="fw-bold mb-3">1. Select Student</h6>
+                    <div class="mb-3">
+                        <select class="form-select select2-enable" id="studentSearch">
+                            <option value="">Search Student by Name or Adm No...</option>
+                        </select>
+                    </div>
+                    <div id="studentDetailsPreview" class="d-none">
+                        <div class="p-3 bg-light rounded text-center mb-4">
+                            <div class="rounded-circle bg-white shadow-sm d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
+                                <i class="fas fa-user fa-3x text-muted"></i>
+                            </div>
+                            <h6 id="previewName" class="mb-1"></h6>
+                            <p id="previewInfo" class="small text-muted mb-0"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-arrow-right fa-3x text-light d-none d-md-block"></i>
+                    <i class="fas fa-arrow-down fa-3x text-light d-md-none my-3"></i>
+                </div>
+                <div class="col-md-5">
+                    <h6 class="fw-bold mb-3">2. Additional Class Enrollment</h6>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label small">Enroll in Class</label>
+                            <select class="form-select form-control-premium">
+                                <option value="">Select Class...</option>
+                                <!-- Potentially populate Classes -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Section</label>
+                            <select class="form-select form-control-premium">
+                                <option value="">Select Section...</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small">Note / Reason</label>
+                            <textarea class="form-control form-control-premium" rows="2" placeholder="e.g. Elective subject in different class"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary w-100 shadow-sm" onclick="Swal.fire('Success', 'Secondary enrollment recorded.', 'success')">
+                            Add Enrollment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <hr class="my-5">
+
+            <h6 class="fw-bold mb-3"><i class="fas fa-list me-2"></i>Current Multi-Class Students</h6>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Primary Class</th>
+                            <th>Secondary Class(es)</th>
+                            <th>Joined Date</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted small">No secondary enrollments found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

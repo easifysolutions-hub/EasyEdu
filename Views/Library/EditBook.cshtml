@@ -1,0 +1,98 @@
+@model EasyEdu.Models.Book
+@{
+    ViewData["Title"] = "Asset Modification | Update Metadata";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in text-gradient warning-gradient">Modify Asset Metadata</h1>
+        <p class="text-muted fw-800 uppercase tracking-widest small"><i class="fas fa-edit me-1"></i> Data Correction Phase</p>
+    </div>
+    <div>
+        <button type="button" onclick="history.back()" class="btn btn-premium-primary bg-white text-muted border border-muted px-4 shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i> Registry
+        </button>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-xl-9">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden animate-fade-in">
+            <div class="p-5 border-bottom bg-warning text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-wrench me-2"></i> Update Protocol for @Model.Title</h5>
+            </div>
+            <div class="p-5">
+                <form asp-action="EditBook" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CompanyId" />
+                    <input type="hidden" asp-for="CreatedAt" />
+                    <input type="hidden" asp-for="IsActive" />
+                    
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <label class="form-label fw-800 text-muted small uppercase">Full Resource Title</label>
+                            <input asp-for="Title" class="form-control border-2 fw-900 fs-5" placeholder="Enter the official book title..." required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-muted small uppercase">Originating Author</label>
+                            <input asp-for="Author" class="form-control border-2 fw-800 ps-4 py-2" placeholder="Primary Author Name" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-muted small uppercase">Indexing Code (ISBN)</label>
+                            <input asp-for="ISBN" class="form-control border-2 fw-800 ps-4 py-2" placeholder="International Standard Book Number" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-800 text-muted small uppercase">Academic Discipline</label>
+                            <select asp-for="CategoryId" class="form-select border-2 fw-800 py-2">
+                                <option value="">General Class</option>
+                                @foreach (var cat in ViewBag.Categories)
+                                {
+                                    <option value="@cat.Id">@cat.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-800 text-muted small uppercase">Publication Entity</label>
+                            <input asp-for="Publisher" class="form-control border-2 fw-800 ps-4 py-2" placeholder="Publisher Name" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-800 text-muted small uppercase">Intellectual Value ($)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-2">$</span>
+                                <input asp-for="Price" type="number" step="0.01" class="form-control border-2 fw-800 text-success py-2" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-muted small uppercase">Total Unit Count</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-2"><i class="fas fa-boxes-stacked"></i></span>
+                                <input asp-for="TotalCopies" type="number" class="form-control border-2 fw-900 py-2" min="1" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-muted small uppercase">Available Unit Count (Manual Sync)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-2"><i class="fas fa-check-double"></i></span>
+                                <input asp-for="AvailableCopies" type="number" class="form-control border-2 fw-900 py-2" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 d-flex gap-3">
+                        <button type="submit" class="btn btn-warning w-100 py-3 shadow-lg fs-5 fw-900 text-white">
+                            <i class="fas fa-save me-2"></i> Update Asset Metadata
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

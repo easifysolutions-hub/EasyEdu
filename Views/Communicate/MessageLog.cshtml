@@ -1,0 +1,146 @@
+@model IEnumerable<EasyEdu.Models.MessageLog>
+@{
+    ViewData["Title"] = "Communication Audit Log";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-history me-2 text-primary"></i> Transmission Audit</h1>
+        <p class="text-muted fw-600">Comprehensive ledger of all institutional Email and SMS outbound traffic</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="NoticeBoard" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-bullhorn me-2"></i> NOTICE BOARD
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 animate-fade-in">
+        <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+            <h5 class="fw-800 text-dark mb-0">Dispatched Communication Registry</h5>
+            <div class="input-group bg-white rounded-pill border px-3 py-1" style="max-width: 300px;">
+                <span class="input-group-text bg-transparent border-0 text-muted"><i class="fas fa-search"></i></span>
+                <input type="text" id="logSearch" class="form-control border-0 shadow-none ps-0 small fw-600" placeholder="Search recipients or status...">
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">PROTOCOL</th>
+                        <th>RECIPIENT NEXUS</th>
+                        <th>TRANS. HEADER (SUBJECT)</th>
+                        <th>DISPATCH DATE</th>
+                        <th>STATUS</th>
+                        <th class="text-end pe-4">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                @if (log.Type == "Email")
+                                {
+                                    <span class="badge rounded-pill bg-primary-soft text-primary fw-800 px-3 py-2">
+                                        <i class="fas fa-envelope me-1"></i> EMAIL
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-success-soft text-success fw-800 px-3 py-2">
+                                        <i class="fas fa-mobile-screen-button me-1"></i> SMS
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                <div class="fw-800 text-dark">@log.Recipient</div>
+                            </td>
+                            <td>
+                                <div class="small fw-700 text-muted text-truncate" style="max-width: 250px;">@log.Subject</div>
+                            </td>
+                            <td>
+                                <div class="small fw-800 text-dark">@log.SentAt.ToString("dd MMM yyyy, HH:mm")</div>
+                            </td>
+                            <td>
+                                @if (log.Status == "Sent")
+                                {
+                                    <span class="badge bg-success text-white rounded-pill fw-800 px-4">DELIVERED</span>
+                                }
+                                else if (log.Status == "Failed")
+                                {
+                                    <span class="badge bg-danger text-white rounded-pill fw-800 px-4">TERMINATED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark rounded-pill fw-800 px-4">PENDING</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-light rounded-circle shadow-sm px-3 border-0 view-body-btn" 
+                                        data-title="@log.Subject" 
+                                        data-body="@log.Body" 
+                                        data-type="@log.Type">
+                                    <i class="fas fa-eye text-primary"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-database fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                <div class="fw-800 text-muted">No transmission logs available in the registry.</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="bodyViewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-24 shadow-2xl">
+            <div class="modal-header bg-dark text-white p-4">
+                <h5 class="modal-title fw-800" id="modalHeaderTitle">Transmission Content</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-5">
+                <div id="modalBodyContent" class="text-muted fw-600 extra-small"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.08); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .extra-small { font-size: 0.85rem; line-height: 1.6; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $(".view-body-btn").click(function() {
+                var title = $(this).data("title");
+                var body = $(this).data("body");
+                $("#modalHeaderTitle").text(title || "Message Content");
+                $("#modalBodyContent").html(body);
+                $("#bodyViewModal").modal("show");
+            });
+
+            $("#logSearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $("tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1)
+                });
+            });
+        });
+    </script>
+}

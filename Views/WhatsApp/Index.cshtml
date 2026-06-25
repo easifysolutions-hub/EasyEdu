@@ -1,0 +1,107 @@
+@model IEnumerable<EasyEdu.Models.WhatsAppLog>
+@{
+    ViewData["Title"] = "WhatsApp Communication Hub";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1"><i class="fab fa-whatsapp text-success me-2"></i>WhatsApp Nexus</h2>
+            <p class="text-muted small fw-600">Omnichannel communication gateway for institutional support and automated notifications</p>
+        </div>
+        <div class="d-flex gap-3">
+             <a href="@Url.Action("Agents")" class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900">
+                <i class="fas fa-headset me-2"></i>SUPPORT AGENTS
+            </a>
+            <a href="@Url.Action("Analytics")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-chart-line me-2"></i>ANALYTICS
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="premium-card p-4 border-0 shadow-sm bg-success bg-opacity-10" style="border-radius: 20px;">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="bg-success p-3 rounded-16 shadow-sm"><i class="fas fa-paper-plane text-white"></i></div>
+                    <span class="smallest text-success fw-900 text-uppercase">Total Dispatched</span>
+                </div>
+                <h3 class="fw-900 text-dark m-0">@ViewBag.LogCount</h3>
+                <p class="smallest text-muted fw-700 m-0 mt-1 italic">Synchronization verified</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 border-0 shadow-sm bg-primary bg-opacity-10" style="border-radius: 20px;">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="bg-primary p-3 rounded-16 shadow-sm"><i class="fas fa-user-tie text-white"></i></div>
+                    <span class="smallest text-primary fw-900 text-uppercase">Active Agents</span>
+                </div>
+                <h3 class="fw-900 text-dark m-0">@ViewBag.AgentCount</h3>
+                <p class="smallest text-muted fw-700 m-0 mt-1 italic">Real-time presence</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 border-0 shadow-sm bg-info bg-opacity-10" style="border-radius: 20px;">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="bg-info p-3 rounded-16 shadow-sm"><i class="fas fa-check-double text-white"></i></div>
+                    <span class="smallest text-info fw-900 text-uppercase">Success Rate</span>
+                </div>
+                <h3 class="fw-900 text-dark m-0">@ViewBag.SuccessRate%</h3>
+                <p class="smallest text-muted fw-700 m-0 mt-1 italic">API performance metric</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 border-0 shadow-sm bg-warning bg-opacity-10" style="border-radius: 20px;">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="bg-warning p-3 rounded-16 shadow-sm"><i class="fas fa-cogs text-dark"></i></div>
+                    <span class="smallest text-warning fw-900 text-uppercase">System Health</span>
+                </div>
+                <h3 class="fw-900 text-dark m-0">OPTIMAL</h3>
+                <p class="smallest text-muted fw-700 m-0 mt-1 italic">Node status normal</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-premium-dark text-white p-4 d-flex justify-content-between align-items-center">
+            <h5 class="fw-900 m-0"><i class="fas fa-history me-2 text-info"></i>RECENT COMMUNICATION LOGS</h5>
+            <a href="@Url.Action("Analytics")" class="btn btn-sm btn-info px-4 rounded-pill fw-900">VIEW FULL LOGS</a>
+        </div>
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@log.Recipient</span>
+                            <span class="smallest text-muted fw-700 text-uppercase italic">RECIPIENT NODE</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="text-dark small fw-700 text-truncate" style="max-width: 300px;">@log.Message</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge @(log.Status == "Sent" ? "bg-success" : "bg-info") px-3 rounded-pill fw-900 small">@log.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                            <div class="fw-900 text-dark">@log.SentAt.ToString("HH:mm")</div>
+                            <div class="smallest text-muted fw-700">@log.SentAt.ToString("dd MMM")</div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="4" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero communication nodes identified in current temporal window.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .rounded-16 { border-radius: 16px; }
+    .bg-light-soft { background: #f8fafc; }
+</style>

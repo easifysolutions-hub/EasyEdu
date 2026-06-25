@@ -1,0 +1,120 @@
+@model IEnumerable<EasyEdu.Models.UserAuditLog>
+@{
+    ViewData["Title"] = "Institutional User Logs";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-history me-2 text-primary"></i> User Audit Logs</h1>
+        <p class="text-muted fw-600">Complete transparency trail of institutional user activities and operations</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-print me-2"></i> EXPORT AUDIT
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in text-dark">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">Search Activity</label>
+                <input type="text" name="search" class="form-control rounded-12 border-0 bg-light fw-700" placeholder="User Name or Action Details...">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted uppercase">Target Module</label>
+                <input type="text" name="module" class="form-control rounded-12 border-0 bg-light fw-700" placeholder="Module Name...">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-primary w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> SEARCH
+                </button>
+            </div>
+            <div class="col-md-2">
+                <div class="search-box position-relative">
+                    <i class="fas fa-filter position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" class="form-control rounded-pill ps-5 border-0 bg-light" id="logSearch" placeholder="Quick filter...">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <div class="p-4 border-bottom bg-light">
+            <h6 class="fw-800 text-dark mb-0 uppercase">Chronological Audit Trail</h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">TIMESTAMP</th>
+                        <th>USER</th>
+                        <th>ACTION</th>
+                        <th>MODULE</th>
+                        <th>DESCRIPTION</th>
+                        <th class="text-end pe-4">IP ADDRESS</th>
+                    </tr>
+                </thead>
+                <tbody id="logTable">
+                    @foreach (var log in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                <div class="fw-700 text-dark">@log.Timestamp.ToString("dd MMM yyyy")</div>
+                                <div class="small text-muted fw-600">@log.Timestamp.ToString("HH:mm:ss")</div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-placeholder rounded-circle bg-primary-soft text-primary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-weight: 800; font-size: 0.8rem;">
+                                        @(log.User?.FullName?[0] ?? '?')
+                                    </div>
+                                    <div class="fw-800 text-dark">@log.User?.FullName</div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge @(log.Action.Contains("Delete") ? "bg-danger-soft text-danger" : log.Action.Contains("Update") ? "bg-warning-soft text-warning" : "bg-success-soft text-success") fw-800 px-3 py-2 rounded-pill">
+                                    @log.Action.ToUpper()
+                                </span>
+                            </td>
+                            <td><span class="fw-700 text-muted">@log.Module</span></td>
+                            <td style="max-width: 300px;"><div class="text-truncate fw-600 text-dark">@log.Description</div></td>
+                            <td class="text-end pe-4"><code class="small fw-700 text-primary">@log.IpAddress</code></td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-clipboard-list fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                <div class="fw-800 text-muted">No audit logs found for the current period.</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.1); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); }
+    .table-responsive::-webkit-scrollbar { height: 6px; }
+    .table-responsive::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#logSearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $("#logTable tr").filter(function() { $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1) });
+            });
+        });
+    </script>
+}

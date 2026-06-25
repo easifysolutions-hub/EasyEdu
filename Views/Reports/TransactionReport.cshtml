@@ -1,0 +1,130 @@
+@{
+    ViewData["Title"] = "Transaction Report";
+    Layout = "_Layout";
+    var incomes = ViewBag.Incomes as List<EasyEdu.Models.Income> ?? new List<EasyEdu.Models.Income>();
+    var expenses = ViewBag.Expenses as List<EasyEdu.Models.Expense> ?? new List<EasyEdu.Models.Expense>();
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Transaction Report</h3>
+            <p class="text-muted small fw-600">Unified view of all institutional incomes and expenses</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft btn-sm rounded-8 px-3">
+                <i class="fas fa-print me-2"></i>PRINT REPORT
+            </button>
+            <button class="btn btn-premium-purple btn-sm rounded-8 px-3">
+                <i class="fas fa-file-excel me-2"></i>EXPORT EXCEL
+            </button>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print border-0 shadow-sm" style="border-radius: 20px;">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-800 small uppercase opacity-50">Operational Period (From)</label>
+                <input type="date" name="fromDate" class="form-control form-control-premium" value="@(ViewBag.FromDate?.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label fw-800 small uppercase opacity-50">Operational Period (To)</label>
+                <input type="date" name="toDate" class="form-control form-control-premium" value="@(ViewBag.ToDate?.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-8 py-2 fw-800 shadow-sm border-0">AUDIT</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="premium-card p-4 border-start border-success border-4 h-100">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="small fw-700 uppercase opacity-75 mb-1">Total Income</div>
+                        <h1 class="fw-900 mb-0 text-success">$ @incomes.Sum(i => i.Amount).ToString("N2")</h1>
+                    </div>
+                    <div class="user-avatar-small bg-success-soft text-success"><i class="fas fa-arrow-down"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="premium-card p-4 border-start border-danger border-4 h-100">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="small fw-700 uppercase opacity-75 mb-1">Total Expense</div>
+                        <h1 class="fw-900 mb-0 text-danger">$ @expenses.Sum(e => e.Amount).ToString("N2")</h1>
+                    </div>
+                    <div class="user-avatar-small bg-danger-soft text-danger"><i class="fas fa-arrow-up"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <ul class="nav nav-tabs nav-justified bg-light-soft" id="transactionTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active fw-800 py-3" data-bs-toggle="tab" data-bs-target="#incomeTab">INCOME TRANSACTIONS</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-800 py-3" data-bs-toggle="tab" data-bs-target="#expenseTab">EXPENSE TRANSACTIONS</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="incomeTab">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light-soft text-dark">
+                            <tr>
+                                <th class="ps-4 py-3 fw-800 small">DATE</th>
+                                <th class="py-3 fw-800 small">TITLE</th>
+                                <th class="py-3 fw-800 small">CATEGORY</th>
+                                <th class="py-3 fw-800 small">PAYMENT METHOD</th>
+                                <th class="pe-4 py-3 text-end fw-800 small">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var inc in incomes)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-700">@inc.Date.ToString("dd MMM yyyy")</td>
+                                    <td class="fw-800 text-dark">@inc.Title</td>
+                                    <td><span class="badge bg-success-soft text-success px-3 rounded-pill fw-800">INCOME</span></td>
+                                    <td class="fw-700">@inc.PaymentMethod</td>
+                                    <td class="pe-4 text-end fw-900 text-success">$ @inc.Amount.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="expenseTab">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light-soft text-dark">
+                            <tr>
+                                <th class="ps-4 py-3 fw-800 small">DATE</th>
+                                <th class="py-3 fw-800 small">TITLE</th>
+                                <th class="py-3 fw-800 small">CATEGORY</th>
+                                <th class="py-3 fw-800 small">PAYMENT METHOD</th>
+                                <th class="pe-4 py-3 text-end fw-800 small">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var exp in expenses)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-700">@exp.Date.ToString("dd MMM yyyy")</td>
+                                    <td class="fw-800 text-dark">@exp.Title</td>
+                                    <td><span class="badge bg-danger-soft text-danger px-3 rounded-pill fw-800">EXPENSE</span></td>
+                                    <td class="fw-700">@exp.PaymentMethod</td>
+                                    <td class="pe-4 text-end fw-900 text-danger">$ @exp.Amount.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

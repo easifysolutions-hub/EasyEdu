@@ -1,0 +1,90 @@
+﻿@model IEnumerable<EasyEdu.Models.LeaveType>
+@{
+    ViewData["Title"] = "Leave Category Ledger";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Absence Classification</h1>
+        <p class="text-muted fw-600">Establish and manage institutional leave categories and entitlements</p>
+    </div>
+</div>
+
+<div class="row g-4 animate-fade-in">
+    <div class="col-xl-4">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-primary text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-folder-plus me-2"></i> NEW_CATEGORY</h5>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreateLeaveType" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-800 text-muted small uppercase">Category Name</label>
+                        <input name="Name" class="form-control-premium w-100" required placeholder="Ex: Medical Leave, Privilege Leave" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-muted small uppercase">Max Days Annually</label>
+                        <input type="number" name="DaysPerYear" class="form-control-premium w-100" value="12" />
+                    </div>
+                    <button type="submit" class="btn btn-premium-primary w-100 py-2 fs-6 fw-800">
+                        <i class="fas fa-check-circle me-1"></i> COMMIT_CLASSIFICATION
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-info text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-list-check me-2"></i> GLOBAL_ENTITLEMENT_MATRIX</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">LEAVE_CLASSIFICATION</th>
+                            <th>ANNUAL_QUOTA</th>
+                            <th>SYSTEM_STATUS</th>
+                            <th class="text-end pe-4">MANAGEMENT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var type in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-900 text-dark">@type.Name</div>
+                                    <div class="small text-muted fw-700">Category_ID: #@type.Id</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary-soft text-primary fw-900 px-3 py-2 rounded-8">
+                                        @type.DaysPerYear DAYS
+                                    </span>
+                                </td>
+                                <td>
+                                    @if(type.IsActive) {
+                                        <span class="badge badge-success-premium"><i class="fas fa-signal me-1"></i> OPERATIONAL</span>
+                                    } else {
+                                        <span class="badge badge-danger-premium"><i class="fas fa-ban me-1"></i> ARCHIVED</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group shadow-sm rounded-8">
+                                        <button class="btn btn-sm btn-white border-end"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn btn-sm btn-white"><i class="fas fa-trash text-danger"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(13, 110, 253, 0.1); }
+</style>

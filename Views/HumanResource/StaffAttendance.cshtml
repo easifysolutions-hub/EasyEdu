@@ -1,0 +1,222 @@
+﻿@model IEnumerable<EasyEdu.Models.Teacher>
+@{
+    ViewData["Title"] = "Institutional Personnel Attendance";
+    Layout = "_Layout";
+    var currentAttendances = ViewBag.Attendances as List<EasyEdu.Models.TeacherAttendance> ?? new List<EasyEdu.Models.TeacherAttendance>();
+    var attendanceDate = (DateTime)ViewBag.Date;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 pb-2 animate-slide-in">
+    <div>
+        <h1 class="page-title"><i class="fas fa-clock-rotate-left me-2 text-primary"></i> Daily Personnel Attendance</h1>
+        <p class="text-muted fw-600">Archival registry for institutional staff and faculty presence management</p>
+    </div>
+    <div class="d-flex gap-2">
+        <div class="calendar-badge bg-white shadow-sm border rounded-16 p-3 d-flex align-items-center gap-3">
+            <div class="calendar-icon bg-primary-soft text-primary rounded-12 p-2">
+                <i class="fas fa-calendar-day fa-lg"></i>
+            </div>
+            <div>
+                <div class="small fw-800 text-muted uppercase">SESSION DATE</div>
+                <div class="fw-900 text-dark">@attendanceDate.ToString("dd MMMM, yyyy")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">ATTENDANCE DATE</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-calendar-alt text-primary"></i></span>
+                    <input type="date" name="date" class="form-control rounded-end-12 border-0 bg-light fw-700" value="@attendanceDate.ToString("yyyy-MM-dd")">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">DEPARTMENTAL FILTER</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-building text-primary"></i></span>
+                    <select name="departmentId" class="form-select rounded-end-12 border-0 bg-light fw-700" asp-items="ViewBag.Departments">
+                        <option value="">All Institutional Departments</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-primary w-100 rounded-12 fw-800">
+                    <i class="fas fa-sync me-2"></i> LOAD ROSTER
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <form asp-action="SaveAttendance" method="post" id="attendanceForm">
+        <input type="hidden" name="date" value="@attendanceDate.ToString("yyyy-MM-dd")" />
+        <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in" style="animation-delay: 0.1s">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0 align-middle">
+                    <thead class="bg-light-soft text-dark">
+                        <tr>
+                            <th class="ps-4">PERSONNEL IDENTITY</th>
+                            <th>STAFF ID</th>
+                            <th class="text-center">PRESENCE REGISTRY</th>
+                            <th class="pe-4 text-end">SESSION REMARKS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var staffList = Model.ToList();
+                            for (int i = 0; i < staffList.Count; i++)
+                            {
+                                var staff = staffList[i];
+                                var att = currentAttendances.FirstOrDefault(a => a.TeacherId == staff.Id);
+                                <tr class="hover-shadow-sm transition-all">
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="staff-initials bg-primary-soft text-primary fw-900 rounded-12 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                                @staff.FirstName[0]@staff.LastName[0]
+                                            </div>
+                                            <div>
+                                                <div class="fw-800 text-dark">@staff.FullName</div>
+                                                <div class="small text-muted fw-700">@staff.Department?.Name</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="fw-800 text-muted">#@staff.EmployeeNumber</td>
+                                    <td>
+                                        <input type="hidden" name="entries[@i].StaffId" value="@staff.Id" />
+                                        <div class="attendance-radio-group d-flex justify-content-center gap-2">
+                                            <label class="attendance-option p-present" title="Present">
+                                                <input type="radio" name="entries[@i].Status" value="Present" @(att?.Status == "Present" ? "checked" : "") required>
+                                                <span class="option-label">P</span>
+                                            </label>
+                                            <label class="attendance-option p-absent" title="Absent">
+                                                <input type="radio" name="entries[@i].Status" value="Absent" @(att?.Status == "Absent" ? "checked" : "")>
+                                                <span class="option-label">A</span>
+                                            </label>
+                                            <label class="attendance-option p-late" title="Late">
+                                                <input type="radio" name="entries[@i].Status" value="Late" @(att?.Status == "Late" ? "checked" : "")>
+                                                <span class="option-label">L</span>
+                                            </label>
+                                            <label class="attendance-option p-halfday" title="Half Day">
+                                                <input type="radio" name="entries[@i].Status" value="HalfDay" @(att?.Status == "HalfDay" ? "checked" : "")>
+                                                <span class="option-label">H</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <div class="remark-input-wrapper">
+                                            <input type="text" name="entries[@i].Note" value="@att?.Remarks" class="form-control remark-input text-end fw-600 small" placeholder="Archival notes...">
+                                            <i class="fas fa-pencil remark-icon"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        @if(!staffList.Any()){
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <i class="fas fa-users-slash fa-4x text-muted opacity-25 mb-4 d-block"></i>
+                                    <h5 class="fw-800 text-muted">No personnel identified in selected department.</h5>
+                                    <p class="small text-muted fw-700">Try adjusting your institutional filters.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 bg-light border-top d-flex justify-content-between align-items-center">
+                <div class="small text-muted fw-800"><i class="fas fa-info-circle me-1"></i> Ensure all presence records are validated before submission.</div>
+                <button type="submit" class="btn btn-premium-purple px-5 rounded-12 fw-800 shadow-purple animate-pulse-slow">
+                    <i class="fas fa-cloud-upload-alt me-2"></i> ARCHIVE ATTENDANCE DATA
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.1); }
+    .bg-light-soft { background: #f8fafc; }
+    
+    .attendance-radio-group { display: flex; align-items: center; }
+    
+    .attendance-option {
+        cursor: pointer;
+        position: relative;
+    }
+
+    .attendance-option input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .option-label {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        font-weight: 800;
+        font-size: 0.85rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        color: #64748b;
+    }
+
+    .p-present input:checked ~ .option-label { background: #10b981; border-color: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); transform: scale(1.1); }
+    .p-absent input:checked ~ .option-label { background: #ef4444; border-color: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); transform: scale(1.1); }
+    .p-late input:checked ~ .option-label { background: #f59e0b; border-color: #f59e0b; color: white; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); transform: scale(1.1); }
+    .p-halfday input:checked ~ .option-label { background: #6366f1; border-color: #6366f1; color: white; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); transform: scale(1.1); }
+
+    .attendance-option:hover .option-label {
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+    }
+
+    .remark-input-wrapper {
+        position: relative;
+        max-width: 250px;
+        margin-left: auto;
+    }
+
+    .remark-input {
+        background: #f1f5f9;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        padding-right: 35px;
+        transition: all 0.3s;
+    }
+
+    .remark-input:focus {
+        background: white;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .remark-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.8rem;
+    }
+
+    .hover-shadow-sm:hover {
+        background-color: #f8fafc;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .shadow-purple { box-shadow: 0 8px 20px -5px rgba(111, 66, 193, 0.5); }
+    
+    @@keyframes pulse-slow {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.95; transform: scale(0.98); }
+    }
+    .animate-pulse-slow { animation: pulse-slow 3s infinite; }
+</style>

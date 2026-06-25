@@ -1,0 +1,75 @@
+﻿@model IEnumerable<EasyEdu.Models.AdminSetupItem>
+@{
+    ViewData["Title"] = "Admin Setup";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Administration Configuration (Dropdown Master)</h3>
+
+    <div class="row g-4">
+        <div class="col-xl-4">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Add Setup Item</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateAdminSetupItem" method="post">
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Category*</label>
+                            <select name="Category" class="form-select form-control-premium" required>
+                                <option value="Source">Source</option>
+                                <option value="Purpose">Purpose</option>
+                                <option value="ComplaintType">Complaint Type</option>
+                                <option value="Reference">Reference</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Name*</label>
+                            <input type="text" name="Name" class="form-control-premium w-100" required placeholder="e.g. Website">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Description</label>
+                            <textarea name="Description" rows="2" class="form-control-premium w-100"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100">SAVE ITEM</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="premium-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">NAME</th>
+                                    <th>CATEGORY</th>
+                                    <th>DESCRIPTION</th>
+                                    <th class="text-end px-4">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var i in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 fw-800 text-dark">@i.Name</td>
+                                        <td><span class="badge bg-primary-soft text-primary fw-800 border-0">@i.Category</span></td>
+                                        <td class="small text-muted">@i.Description</td>
+                                        <td class="text-end px-4">
+                                            <a href="@Url.Action("DeleteAdminSetupItem", new { id = i.Id })" class="btn btn-sm btn-light-soft rounded-circle px-2 text-danger" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                                @if(!Model.Any()){
+                                     <tr><td colspan="4" class="text-center py-5 text-muted small fw-600">No setup items found.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

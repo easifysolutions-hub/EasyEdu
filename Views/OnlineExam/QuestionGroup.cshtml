@@ -1,0 +1,66 @@
+﻿@model IEnumerable<EasyEdu.Models.QuestionGroup>
+@{
+    ViewData["Title"] = "Question Domain Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Question Domain Architect</h2>
+            <p class="text-muted small fw-600">Establish and coordinate logical classification domains for the digital question bank</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#groupModal">
+            <i class="fas fa-plus me-2"></i>ADD DOMAIN NODE
+        </button>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var g in Model)
+        {
+            <div class="col-md-4">
+                <div class="premium-card p-4 border-0 shadow-lg text-center h-100" style="border-radius: 20px;">
+                    <div class="bg-primary bg-opacity-10 p-4 rounded-circle d-inline-block mb-4">
+                        <i class="fas fa-layer-group text-primary fa-2x"></i>
+                    </div>
+                    <h5 class="fw-900 text-dark mb-2">@g.Title</h5>
+                    <p class="smallest text-muted fw-700 uppercase ls-1 italic mb-4">Domain Sync ID: @g.Id</p>
+                    <hr class="opacity-10 my-4">
+                    <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-light-soft rounded-12 px-4 fw-900 small">CONFIGURE</button>
+                        <button class="btn btn-light-soft text-danger rounded-circle shadow-sm"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="groupModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="CreateQuestionGroup" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-folder-plus me-2 text-info"></i>DEFINE DOMAIN NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-0">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Domain Title (e.g. Science Midterm)*</label>
+                        <input name="Title" required class="form-control form-control-premium" placeholder="e.g. General Knowledge 2026">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE DOMAIN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

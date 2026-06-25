@@ -1,0 +1,185 @@
+﻿@model IEnumerable<EasyEdu.Models.Payroll>
+@{
+    ViewData["Title"] = "Institutional Payroll Ledger";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 pb-2">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-file-invoice-dollar me-2 text-primary"></i> Payroll Ledger</h1>
+        <p class="text-muted fw-600">Archival registry for institutional salary disbursement and financial compliance</p>
+    </div>
+    <div class="d-flex gap-2 animate-slide-in">
+        <button class="btn btn-premium-purple rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-coins me-2"></i> INITIATE PAYROLL
+        </button>
+        <button class="btn btn-premium-light rounded-12 px-4 border shadow-sm fw-800">
+            <i class="fas fa-print me-2"></i> EXPORT LEDGER
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4 mb-4 animate-fade-in">
+        <div class="col-md-3">
+            <div class="premium-card bg-primary-soft p-4 rounded-24 h-100 d-flex flex-column justify-content-between">
+                <div class="d-flex justify-content-between">
+                    <div class="icon-box bg-white text-primary rounded-16 p-3 shadow-sm"><i class="fas fa-money-bill-transfer fa-xl"></i></div>
+                    <div class="badge bg-white text-primary rounded-pill px-3 py-1 fw-800 small text-uppercase">TOTAL DISBURSED</div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="fw-900 text-dark mb-0 counter">@Model.Sum(p => p.NetSalary).ToString("C0")</h2>
+                    <p class="text-muted small fw-700 mb-0">Aggregate salary disbursement across personnel</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card bg-success-soft p-4 rounded-24 h-100 d-flex flex-column justify-content-between">
+                <div class="d-flex justify-content-between">
+                    <div class="icon-box bg-white text-success rounded-16 p-3 shadow-sm"><i class="fas fa-check-double fa-xl"></i></div>
+                    <div class="badge bg-white text-success rounded-pill px-3 py-1 fw-800 small text-uppercase">PAID BATCHES</div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="fw-900 text-dark mb-0 counter">@Model.Count(p => p.Status == "Paid")</h2>
+                    <p class="text-muted small fw-700 mb-0">Successfully finalized payroll cycles</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card bg-warning-soft p-4 rounded-24 h-100 d-flex flex-column justify-content-between">
+                <div class="d-flex justify-content-between">
+                    <div class="icon-box bg-white text-warning rounded-16 p-3 shadow-sm"><i class="fas fa-hourglass-half fa-xl"></i></div>
+                    <div class="badge bg-white text-warning rounded-pill px-3 py-1 fw-800 small text-uppercase">PENDING AUDIT</div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="fw-900 text-dark mb-0 counter">@Model.Count(p => p.Status != "Paid")</h2>
+                    <p class="text-muted small fw-700 mb-0">Cycles awaiting financial validation</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card bg-purple-soft p-4 rounded-24 h-100 d-flex flex-column justify-content-between">
+                <div class="d-flex justify-content-between">
+                    <div class="icon-box bg-white text-purple rounded-16 p-3 shadow-sm"><i class="fas fa-envelope-open-text fa-xl"></i></div>
+                    <div class="badge bg-white text-purple rounded-pill px-3 py-1 fw-800 small text-uppercase">PAYSLIPS SENT</div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="fw-900 text-dark mb-0 counter">@Model.Count()</h2>
+                    <p class="text-muted small fw-700 mb-0">Total digital payslips distributed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in" style="animation-delay: 0.1s">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th class="ps-4">PERSONNEL</th>
+                        <th>DISBURSEMENT PERIOD</th>
+                        <th>BASE RETAINER</th>
+                        <th>NET DISBURSED</th>
+                        <th>PAYMENT METHOD</th>
+                        <th>AUDIT STATUS</th>
+                        <th class="text-end pe-4">LEDGER ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr class="hover-shadow-sm transition-all">
+                            <td class="ps-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="staff-avatar-mini bg-light rounded-12 d-flex align-items-center justify-content-center p-2" style="width: 48px; height: 48px;">
+                                         <i class="fas fa-user-tie text-primary fa-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-900 text-dark">@p.Teacher?.FullName</div>
+                                        <div class="small text-muted fw-700 uppercase tracking-wider">ID: #@p.Teacher?.EmployeeNumber</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-900 text-primary">@System.Globalization.DateTimeFormatInfo.CurrentInfo.GetMonthName(p.Month) @p.Year</div>
+                                <div class="small text-muted fw-700">Financial Cycle: @p.Year</div>
+                            </td>
+                            <td class="fw-800 text-muted">@p.BasicSalary.ToString("C0")</td>
+                            <td class="fw-900 text-dark">@p.NetSalary.ToString("C0")</td>
+                            <td>
+                                <span class="badge bg-light text-dark border fw-800 px-3 py-2 rounded-12 shadow-xs">
+                                    <i class="fas fa-credit-card me-1 opacity-50"></i> @p.PaymentMethod
+                                </span>
+                            </td>
+                            <td>
+                                @if(p.Status == "Paid"){
+                                    <span class="badge bg-success-soft text-success fw-900 px-3 py-2 rounded-pill d-flex align-items-center gap-2" style="width: fit-content;">
+                                        <span class="status-dot-pulse bg-success"></span> ARCHIVED PAID
+                                    </span>
+                                } else {
+                                    <span class="badge bg-warning-soft text-warning fw-900 px-3 py-2 rounded-pill d-flex align-items-center gap-2" style="width: fit-content;">
+                                        <span class="status-dot-pulse bg-warning"></span> PENDING BATCH
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="batch-action-group d-flex justify-content-end gap-2">
+                                    <button class="btn btn-premium-light border rounded-12 px-3 py-2 fw-800 small" title="View Digital Payslip">
+                                        <i class="fas fa-receipt me-1"></i> PAYSLIP
+                                    </button>
+                                    <button class="btn btn-premium-purple rounded-12 p-2 shadow-purple" title="Institutional Print">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if(!Model.Any()){
+                         <tr>
+                             <td colspan="7" class="text-center py-5">
+                                 <div class="empty-state p-5">
+                                     <i class="fas fa-file-invoice-dollar fa-4x text-muted opacity-25 mb-4 d-block"></i>
+                                     <h5 class="fw-800 text-muted">No payroll cycles identified within the current ledger.</h5>
+                                     <p class="small text-muted fw-700">Initiate new disbursement cycles from the action menu.</p>
+                                 </div>
+                             </td>
+                         </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.08); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.08); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.08); }
+    .bg-purple-soft { background: rgba(168, 85, 247, 0.08); }
+    .text-purple { color: #a855f7 !important; }
+
+    .status-dot-pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        animation: pulse-status 2s infinite;
+    }
+
+    @@keyframes pulse-status {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0.5; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .hover-shadow-sm:hover {
+        background-color: #f8fafc;
+        transform: scale(1.002);
+    }
+    
+    .shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .shadow-purple { box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3); }
+    
+    .batch-action-group .btn { transition: all 0.2s; }
+    .batch-action-group .btn:hover { transform: translateY(-2px); }
+</style>

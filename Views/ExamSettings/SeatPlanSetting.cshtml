@@ -1,0 +1,113 @@
+@model EasyEdu.Models.SeatPlanSetting
+@{
+    ViewData["Title"] = "Exam Seat Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Seating Seating Arrangement</h3>
+            <p class="text-muted small fw-600">Architect the physical layout and seating plan for institutional examinations</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("ExamSchedule", "Examinations")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-search me-2"></i>VIEW ALLOCATION
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <form asp-action="SaveSeatPlanSetting" method="post">
+                 @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CompanyId" />
+
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Seating Logic Architect</h5>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Row Quantity per Room</label>
+                            <input type="number" asp-for="Rows" class="form-control form-control-premium text-primary fw-900 fs-4">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Column Quantity per Room</label>
+                            <input type="number" asp-for="Columns" class="form-control form-control-premium text-primary fw-900 fs-4">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Allocation Strategy Architecture</label>
+                        <select asp-for="LayoutStyle" class="form-select form-control-premium">
+                            <option value="Grid">Standard Industrial Grid</option>
+                            <option value="Snake">Dynamic Snake Pattern</option>
+                            <option value="OddEven">Odd/Even Capacity split</option>
+                        </select>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between mb-3">
+                                <label class="small fw-800 text-uppercase opacity-75 m-0">Incorporate Bench Identification</label>
+                                <input class="form-check-input ms-0" type="checkbox" asp-for="ShowBenchNumber" style="width: 45px; height: 22px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between">
+                                <label class="small fw-800 text-uppercase opacity-75 m-0">Identify Examination Name</label>
+                                <input class="form-check-input ms-0" type="checkbox" asp-for="ShowExamName" style="width: 45px; height: 22px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-chair text-info me-3 fa-lg"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">Seating plans are dynamically generated for every student permit automatically.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-object-group me-2 text-info"></i>APPLY SEATING ARCHITECTURE
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="premium-card p-5 border-0 shadow-lg bg-light-soft h-100 text-center" style="border-radius: 24px;">
+                <div class="icon-circle-lg bg-white shadow-sm mb-4">
+                    <i class="fas fa-th fa-3x text-primary opacity-25"></i>
+                </div>
+                <h5 class="fw-900 text-dark mb-4">Grid Simulator</h5>
+                <div class="p-3 bg-white border border-2 border-dashed rounded-20 shadow-sm opacity-50 mx-auto" style="width: 250px;">
+                    <div class="row g-2 mb-2">
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                        <div class="col-4"><div class="rounded bg-light" style="height: 30px;"></div></div>
+                    </div>
+                </div>
+                <p class="text-muted small fw-600 mt-4 m-0">Dynamic capacity allocation based on room size and student density.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-20 { border-radius: 20px; }
+    .icon-circle-lg { width: 100px; height: 100px; line-height: 100px; border-radius: 50%; display: inline-block; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+</style>

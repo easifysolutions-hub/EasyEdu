@@ -1,0 +1,85 @@
+@model IEnumerable<EasyEdu.Models.CbseObservationParameter>
+@{
+    ViewData["Title"] = "Behavioral Parameter Registry";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Behavioral Parameter Registry</h2>
+            <p class="text-muted small fw-600">Identify and define specific high-fidelity parameters within qualitative domains</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#paramModal">
+            <i class="fas fa-plus me-2"></i>ADD PARAMETER NODE
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">PARAMETER IDENTITY</th>
+                    <th class="py-4 fw-900 small text-uppercase">PARENT DOMAIN</th>
+                    <th class="py-4 fw-900 small text-uppercase">SYNC STATUS</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-0 d-block">@p.Name</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 italic small">@p.Observation?.Name.ToUpper()</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge bg-success-soft text-success px-3 rounded-pill fw-900 border-success small border">OPERATIONAL</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-edit text-primary"></i></button>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="paramModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveParameter" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-list-ul me-2 text-warning"></i>DEFINE PARAMETER NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Parent Observation Domain</label>
+                        <select name="ObservationId" required class="form-select form-control-premium">
+                            @foreach (var o in (List<EasyEdu.Models.CbseObservation>)ViewBag.Observations) { <option value="@o.Id">@o.Name</option> }
+                        </select>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Parameter Title*</label>
+                        <input name="Name" required class="form-control form-control-premium" placeholder="e.g. Regularity and Punctuality">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">ESTABLISH PARAMETER</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-success-soft { background: #f0fdf4; }
+</style>

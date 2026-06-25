@@ -1,0 +1,146 @@
+@model IEnumerable<EasyEdu.Models.FeesInvoice>
+@using Microsoft.EntityFrameworkCore
+@{
+    ViewData["Title"] = "Bulk Invoice Print";
+    var settings = ViewBag.Settings as EasyEdu.Models.BulkInvoiceSettings;
+    var company = await (Context.RequestServices.GetService(typeof(EasyEdu.Data.ApplicationDbContext)) as EasyEdu.Data.ApplicationDbContext).Companies.FirstOrDefaultAsync();
+}
+
+<div class="container-fluid animate-fade-in no-print">
+    <div class="card premium-card mb-4 border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-4 px-5">
+            <div>
+                 <h4 class="mb-0 fw-900 text-dark"><i class="fas fa-print me-3 text-primary opacity-50"></i>Bulk Dispatch Queue</h4>
+                 <p class="text-muted small fw-600 m-0">Review and print generated invoices for the current batch</p>
+            </div>
+            <div class="d-flex gap-3">
+                 <button onclick="window.print()" class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm">
+                    <i class="fas fa-print me-2"></i> PRINT ALL INVOICES
+                </button>
+                <a href="@Url.Action("BulkInvoicePrintSettings")" class="btn btn-light-soft px-4 py-2 rounded-12">
+                    <i class="fas fa-cog me-2"></i> CONFIGURE LAYOUT
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-5">
+            <form method="get" class="row g-3 mb-4 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label small fw-800 text-uppercase opacity-50">Filter Results by Class</label>
+                    <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes" onchange="this.form.submit()">
+                        <option value="">Display All Classes</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="d-print-block">
+    @foreach (var inv in Model)
+    {
+        <div class="invoice-container p-5 mb-5 border-0 bg-white" style="min-height: 1050px; position: relative;">
+            <!-- Header -->
+            <div class="row mb-5 pb-5 border-bottom align-items-center">
+                <div class="col-7">
+                    @if (settings?.ShowInstitutionalLogo == true)
+                    {
+                        <img src="@(company?.Logo ?? "/images/easyedu_full_logo.png")" style="height: 60px; filter: grayscale(1);" class="mb-4" />
+                    }
+                    <h2 class="fw-900 text-dark mb-1">@(company?.Name ?? "EASY EDU ACADEMY")</h2>
+                    <p class="mb-0 text-muted fw-600">@(company?.Address ?? "Institutional Main Campus")</p>
+                    <p class="mb-0 text-muted fw-600">Contact: @(company?.Phone ?? "+1 234 567 890") | Web: @(company?.Email ?? "easyedu.com")</p>
+                </div>
+                <div class="col-5 text-end">
+                    <h1 class="text-uppercase fw-900 text-primary opacity-10 display-4 mb-0">INVOICE</h1>
+                    <div class="invoice-id bg-light d-inline-block px-3 py-2 rounded-8 mt-2">
+                        <span class="fw-900 text-dark">#@inv.InvoiceNumber</span>
+                    </div>
+                    <p class="text-muted fw-700 mt-2">DATE: @inv.Date.ToString("dd MMM yyyy")</p>
+                </div>
+            </div>
+
+            <!-- Client Info -->
+            <div class="row mb-5 py-4 px-4 rounded-16 bg-light bg-opacity-50">
+                <div class="col-6">
+                    <p class="text-uppercase text-muted smallest fw-900 ls-2 mb-3">BILL TO INDIVIDUAL</p>
+                    <h4 class="fw-900 text-dark mb-1">@inv.Student?.FirstName @inv.Student?.LastName</h4>
+                    <p class="mb-1 text-muted fw-700">Admission No: @inv.Student?.AdmissionNumber</p>
+                    <p class="mb-0 text-muted fw-700">Class: @inv.Student?.Class?.Name - @inv.Student?.Section?.Name</p>
+                </div>
+                <div class="col-6 text-end">
+                    <p class="text-uppercase text-muted smallest fw-900 ls-2 mb-3">FINANCIAL SUMMARY</p>
+                    <p class="mb-1 fw-800 text-dark">PAYMENT DUE: <span class="text-danger">@inv.DueDate.ToString("dd MMM yyyy")</span></p>
+                    <p class="mb-0 fw-800 text-dark">STATUS: <span class="badge @(inv.Status == "Paid" ? "bg-success" : "bg-warning") px-3 rounded-pill">@inv.Status.ToUpper()</span></p>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table class="table table-borderless mb-5">
+                <thead class="border-bottom border-2">
+                    <tr>
+                        <th class="py-3 ps-0 text-uppercase smallest fw-900 text-muted">Service Description</th>
+                        <th class="py-3 text-end pe-0 text-uppercase smallest fw-900 text-muted">Total (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-4 ps-0">
+                            <h6 class="fw-900 text-dark mb-1">Standard Tuition & Academic Head</h6>
+                            <p class="small text-muted mb-0 fw-600">Unified billing for the specific academic period including all secondary fee modules.</p>
+                        </td>
+                        <td class="py-4 text-end pe-0 fw-900 text-dark h5">$@inv.TotalAmount.ToString("N2")</td>
+                    </tr>
+                </tbody>
+                <tfoot class="border-top border-2">
+                    <tr class="h4">
+                        <td class="pt-4 ps-0 fw-900 text-dark">Grand Total Balance</td>
+                        <td class="pt-4 text-end pe-0 fw-900 text-primary">$@inv.TotalAmount.ToString("N2")</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Bottom Content -->
+            <div class="footer-legal mt-auto" style="position: absolute; bottom: 50px; left: 50px; right: 50px;">
+                <div class="row align-items-end">
+                    <div class="col-7">
+                        <div class="p-4 rounded-16 bg-light border-0">
+                            <h6 class="fw-900 text-dark smallest text-uppercase mb-2">Legal Terms & Conditions</h6>
+                            <p class="x-small text-muted fw-600 mb-0">@(settings?.TermsAndConditions ?? "Please ensure all payments are made before the due date to avoid service interruption and late penalties.")</p>
+                        </div>
+                        <p class="small text-muted mt-3 fw-700 italic">@(settings?.FooterNote ?? "Digital identification: This is an electronically generated document.")</p>
+                    </div>
+                    <div class="col-5 text-center">
+                        @if (settings?.ShowAuthorizedSignature == true)
+                        {
+                            <div class="signature-box">
+                                @if (!string.IsNullOrEmpty(settings.SignaturePath))
+                                {
+                                    <img src="@settings.SignaturePath" style="height: 60px; filter: contrast(150%) grayscale(100%);" class="mb-2" />
+                                }
+                                <div class="border-bottom border-dark mx-auto" style="width: 200px;"></div>
+                                <p class="smallest fw-900 text-dark text-uppercase mt-2">Authorized Signatory</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-break" style="page-break-after: always; height: 1px;"></div>
+    }
+</div>
+
+<style>
+    .rounded-16 { border-radius: 16px; }
+    .ls-2 { letter-spacing: 2px; }
+    .smallest { font-size: 10px; font-weight: 800; }
+    .x-small { font-size: 11px; }
+    .bg-premium-purple { background: #8b5cf6; color: white; border: none; }
+    
+    @@media print {
+        .no-print, .sidebar, .topbar, footer, .card-header, .btn, form { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; }
+        .invoice-container { margin: 0 !important; padding: 60px !important; width: 100%; border: none !important; box-shadow: none !important; }
+        body { background: white !important; }
+        .page-break { display: block; break-after: page; }
+    }
+</style>

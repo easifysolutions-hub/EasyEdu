@@ -1,0 +1,137 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Subject Intelligence Registry";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 animate-slide-in">
+    <div>
+        <h1 class="page-title mb-1"><i class="fas fa-book-reader me-2 text-primary"></i> Subject Intelligence</h1>
+        <p class="text-muted fw-600">Granular attendance auditing for individual academic subjects</p>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted uppercase">CLASS ARCHIVE</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-university text-primary"></i></span>
+                    <select name="classId" class="form-select rounded-end-12 border-0 bg-light fw-700" asp-items="ViewBag.Classes" required>
+                        <option value="">Select Academic Class</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted uppercase">SUBJECT MODULE</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-book text-primary"></i></span>
+                    <select name="subjectId" class="form-select rounded-end-12 border-0 bg-light fw-700" asp-items="ViewBag.Subjects" required>
+                        <option value="">Select Subject Module</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-800 text-muted uppercase">AUDIT CYCLE</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-calendar-day text-primary"></i></span>
+                    <input type="date" name="date" class="form-control rounded-end-12 border-0 bg-light fw-700" value="@(((DateTime)ViewBag.Date).ToString("yyyy-MM-dd"))" required />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-12 py-2 fw-800">
+                    <i class="fas fa-search me-2"></i> FETCH ENTITIES
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in" style="animation-delay: 0.1s">
+            <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                <h6 class="fw-800 text-dark mb-0">MARK SUBJECT ENGAGEMENT</h6>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-success rounded-pill px-4 fw-800 shadow-sm border-0" onclick="markAll('Present')">
+                        <i class="fas fa-check-double me-1"></i> MASS PRESENT
+                    </button>
+                </div>
+            </div>
+            
+            <form asp-action="SaveSubjectAttendance" method="post">
+                <input type="hidden" name="classId" value="@Context.Request.Query["classId"]" />
+                <input type="hidden" name="subjectId" value="@Context.Request.Query["subjectId"]" />
+                <input type="hidden" name="date" value="@ViewBag.Date" />
+                
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">STUDENT IDENTITY</th>
+                                <th class="text-center">ENGAGEMENT MATRIX</th>
+                                <th class="pe-4 text-end">ARCHIVAL REMARKS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var s in Model)
+                            {
+                                var existingDict = ViewBag.ExistingAttendance as Dictionary<int, EasyEdu.Models.SubjectWiseAttendance>;
+                                EasyEdu.Models.SubjectWiseAttendance? existing = null;
+                                existingDict?.TryGetValue(s.Id, out existing);
+                                <tr class="align-middle">
+                                    <td class="ps-4">
+                                        <div class="fw-800 text-dark">@s.FirstName @s.LastName</div>
+                                        <div class="small text-muted fw-700 uppercase">#@s.AdmissionNumber</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-3">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input att-check d-none" type="radio" name="attendanceData[@s.Id]" value="Present" id="p_@s.Id" @(existing?.Status == "Present" || existing == null ? "checked" : "")>
+                                                <label class="btn btn-outline-success rounded-pill fw-800 px-3 smallest" for="p_@s.Id">PRESENT</label>
+                                            </div>
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input att-check d-none" type="radio" name="attendanceData[@s.Id]" value="Absent" id="a_@s.Id" @(existing?.Status == "Absent" ? "checked" : "")>
+                                                <label class="btn btn-outline-danger rounded-pill fw-800 px-3 smallest" for="a_@s.Id">ABSENT</label>
+                                            </div>
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input att-check d-none" type="radio" name="attendanceData[@s.Id]" value="Late" id="l_@s.Id" @(existing?.Status == "Late" ? "checked" : "")>
+                                                <label class="btn btn-outline-warning rounded-pill fw-800 px-3 smallest" for="l_@s.Id">LATE</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <input type="text" class="form-control form-control-sm border-0 bg-light rounded-pill px-3 fw-600" placeholder="Archive note...">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="p-5 border-top bg-light-soft text-center">
+                    <button type="submit" class="btn btn-premium-primary px-5 py-3 rounded-16 shadow-lg fw-900 border-0 transition-all hover-scale">
+                        <i class="fas fa-save me-2"></i> DEPLOY ENGAGEMENT DATA
+                    </button>
+                </div>
+            </form>
+        </div>
+    }
+</div>
+
+<style>
+    .bg-light-soft { background: #f8fafc; }
+    .smallest { font-size: 0.65rem; }
+    .hover-scale:hover { transform: scale(1.02); }
+    
+    .custom-radio label { min-width: 80px; transition: all 0.2s ease; }
+    .custom-radio input:checked + label.btn-outline-success { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+    .custom-radio input:checked + label.btn-outline-danger { background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
+    .custom-radio input:checked + label.btn-outline-warning { background: #f59e0b; color: white; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
+</style>
+
+<script>
+    function markAll(status) {
+        document.querySelectorAll('.att-check[value="' + status + '"]').forEach(radio => radio.checked = true);
+    }
+</script>

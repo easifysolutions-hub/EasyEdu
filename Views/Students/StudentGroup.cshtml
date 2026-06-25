@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EasyEdu.Models.StudentGroup>
+@{
+    ViewData["Title"] = "Student Group";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Student Groups</h3>
+
+    <div class="row g-4">
+        <div class="col-xl-4">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Add Group</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateGroup" method="post">
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Group Name*</label>
+                            <input type="text" name="Name" class="form-control-premium w-100" required placeholder="e.g. Science Club">
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100 mt-2">SAVE GROUP</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="premium-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">ID</th>
+                                    <th>Group Name</th>
+                                    <th class="text-end px-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var g in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 fw-800 text-muted">@g.Id</td>
+                                        <td class="fw-700 text-dark">@g.Name</td>
+                                        <td class="text-end px-4">
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2 text-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2 text-danger"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

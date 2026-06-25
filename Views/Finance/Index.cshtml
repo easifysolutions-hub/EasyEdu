@@ -1,0 +1,146 @@
+@model IEnumerable<EasyEdu.Models.FeeCollection>
+@{
+    ViewData["Title"] = "Fee Collections";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Fee Collection Central</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider">
+                <i class="fas fa-hand-holding-usd me-2 text-success"></i> 
+                Real-time tracking of student payments and receivables
+            </p>
+        </div>
+        <div class="d-flex gap-3">
+            <a href="@Url.Action("FeeStructure", "Finance")" class="btn btn-premium-white btn-sm px-4 rounded-pill shadow-sm fw-800">
+                <i class="fas fa-list-check me-2 text-primary"></i> BILLING SETUP
+            </a>
+            <a href="@Url.Action("CollectFee", "Finance")" class="btn btn-premium-blue btn-sm px-4 rounded-pill shadow-lg fw-800 animate-up">
+                <i class="fas fa-plus-circle me-2"></i> NEW COLLECTION
+            </a>
+        </div>
+    </div>
+
+<div class="row g-4 mb-5">
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card p-4 text-white animate-fade-in" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%) !important; border: none !important; animation-delay: 0.1s;">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar-sm bg-white bg-opacity-25 text-white rounded-12 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-wallet h4 mb-0"></i>
+                </div>
+                <div>
+                    <div class="small text-white opacity-75 fw-700 text-uppercase">Total Collected</div>
+                    <h3 class="fw-800 m-0 text-white">₹@Model.Sum(m => m.AmountPaid).ToString("N0")</h3>
+                </div>
+            </div>
+            <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-white" style="width: 85%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card p-4 text-white animate-fade-in" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%) !important; border: none !important; animation-delay: 0.2s;">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar-sm bg-white bg-opacity-25 text-white rounded-12 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-hand-holding-usd h4 mb-0"></i>
+                </div>
+                <div>
+                    <div class="small text-white opacity-75 fw-700 text-uppercase">Total Pending</div>
+                    <h3 class="fw-800 m-0 text-white">₹@Model.Sum(m => m.AmountPending).ToString("N0")</h3>
+                </div>
+            </div>
+            <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-white" style="width: 15%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="premium-card bg-white animate-fade-in shadow-md" style="animation-delay: 0.3s;">
+    <div class="card-header border-0 bg-transparent py-4 px-4 d-flex justify-content-between align-items-center">
+        <h5 class="fw-800 m-0">Recent Payment Transactions</h5>
+        <div class="search-bar" style="width: 300px;">
+            <i class="fas fa-filter"></i>
+            <input type="text" class="form-control form-control-premium" placeholder="Filter transactions...">
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th>RECEIPT #</th>
+                        <th>STUDENT NAME</th>
+                        <th>FEE SEGMENT</th>
+                        <th>AMOUNT</th>
+                        <th>METHOD</th>
+                        <th>STATUS</th>
+                        <th class="text-end">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class="align-middle">
+                                <td class="fw-800 text-primary">#@item.ReceiptNumber</td>
+                                <td>
+                                    <div class="fw-700 text-dark">@(item.Student?.FirstName + " " + item.Student?.LastName)</div>
+                                    <div class="small text-muted fw-500">Reg: @item.Student?.AdmissionNumber</div>
+                                </td>
+                                <td>
+                                    <span class="badge-premium badge-info-premium fw-700">@(item.FeeStructure?.Name ?? "Institutional")</span>
+                                </td>
+                                <td class="fw-800 text-dark">₹@item.AmountPaid.ToString("N2")</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-credit-card me-2 text-muted small"></i>
+                                        <span class="small fw-600">@item.PaymentMethod</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge-premium @(item.Status == "Paid" ? "badge-success-premium" : "badge-warning-premium")">
+                                        <i class="fas @(item.Status == "Paid" ? "fa-check-circle" : "fa-clock") me-1"></i> @item.Status
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-light-soft rounded-8 p-2" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-h text-muted"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg radius-10">
+                                            <li><a class="dropdown-item py-2" asp-action="ReceiptPrint" asp-route-id="@item.Id" target="_blank"><i class="fas fa-print me-2 text-primary"></i> Print Receipt</a></li>
+                                            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-envelope me-2 text-info"></i> Send SMS/Email</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item py-2 text-danger" href="#"><i class="fas fa-undo-alt me-2"></i> Refund Transaction</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="py-5">
+                                    <i class="fas fa-layer-group fa-4x text-gray-200 mb-3"></i>
+                                    <h4 class="text-gray-400 fw-700">No transactions recorded yet</h4>
+                                    <p class="text-muted">New payments will automatically synchronize here.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .grad-success { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%) !important; border: none !important; }
+    .grad-warning { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%) !important; border: none !important; }
+</style>

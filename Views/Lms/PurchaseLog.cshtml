@@ -1,0 +1,62 @@
+@model IEnumerable<EasyEdu.Models.LmsPurchaseLog>
+@{
+    ViewData["Title"] = "Digital Revenue Registry";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">E-Commerce Intelligence</h2>
+            <p class="text-muted small fw-600">Trace institutional revenue generation via the digital curriculum network</p>
+        </div>
+        <div class="badge bg-primary bg-opacity-10 text-primary px-4 py-3 rounded-12 fw-900 border">
+            TOTAL REVENUE NODE: $@Model.Sum(x => x.Amount).ToString("N2")
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">FISCAL TRACE ID</th>
+                    <th class="py-4 fw-900 small text-uppercase">RECIPIENT NODE</th>
+                    <th class="py-4 fw-900 small text-uppercase">ASSET ACQUIRED</th>
+                    <th class="py-4 fw-900 small text-uppercase">VALUATION</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">CHRONOLOGY</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">#@log.TransactionId.ToUpper()</span>
+                            <span class="smallest text-muted fw-700 uppercase italic">METHOD: @log.PaymentMethod</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@log.Student?.FirstName @log.Student?.LastName</div>
+                        </td>
+                        <td class="py-4">
+                            <div class="small fw-800 text-primary">@log.Course?.Title</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="h6 fw-900 text-success mb-0">$@log.Amount.ToString("N2")</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                            <div class="fw-900 text-dark">@log.PurchaseDate.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 uppercase">SYNCHRONIZED</div>
+                        </td>
+                    </tr>
+                }
+                 @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero fiscal nodes identified in current trace.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+</style>

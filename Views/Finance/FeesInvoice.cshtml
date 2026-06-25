@@ -1,0 +1,73 @@
+﻿@model IEnumerable<EasyEdu.Models.FeesInvoice>
+@{
+    ViewData["Title"] = "Fees Invoice";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Fees Invoices</h3>
+            <p class="text-muted small fw-600">Generated invoices for student fees</p>
+        </div>
+        <a asp-action="CreateInvoice" class="btn btn-premium-purple btn-sm rounded-8">
+            <i class="fas fa-file-invoice me-2"></i>GENERATE INVOICES
+        </a>
+    </div>
+
+    <div class="premium-card p-4 mb-4">
+        <!-- Search Form skipped for brevity in replacement, keep it if not targeting -->
+        <form method="get" class="row g-3 align-items-end">
+             <!-- ... -->
+        </form>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">INVOICE #</th>
+                            <th>STUDENT</th>
+                            <th>DATE</th>
+                            <th>AMOUNT</th>
+                            <th>PAID</th>
+                            <th>STATUS</th>
+                            <th class="text-end px-4">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-800 text-primary">@item.InvoiceNumber</td>
+                                <td>
+                                    <div class="fw-800 text-dark">@item.Student.FirstName @item.Student.LastName</div>
+                                    <div class="small text-muted">Adm: @item.Student.AdmissionNumber</div>
+                                </td>
+                                <td><span class="small fw-600">@item.Date.ToString("dd MMM yyyy")</span></td>
+                                <td class="fw-800 text-dark">@item.TotalAmount.ToString("C2")</td>
+                                <td class="fw-800 text-success">@item.PaidAmount.ToString("C2")</td>
+                                <td>
+                                    <span class="badge @(item.Status == "Paid" ? "badge-success-premium" : (item.Status == "Partial" ? "badge-warning-premium" : "badge-danger-premium"))">
+                                        @item.Status.ToUpper()
+                                    </span>
+                                </td>
+                                <td class="text-end px-4">
+                                    <div class="btn-group">
+                                        <a asp-action="InvoicePrint" asp-route-id="@item.Id" target="_blank" class="btn btn-sm btn-light-soft rounded-circle px-2" title="Print"><i class="fas fa-print"></i></a>
+                                        <a asp-action="CollectFee" asp-route-invoiceId="@item.Id" class="btn btn-sm btn-light-soft rounded-circle px-2" title="Collect"><i class="fas fa-money-bill-wave text-success"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @if(!Model.Any()){
+                            <tr><td colspan="7" class="text-center py-5 text-muted small fw-600">No invoices found.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

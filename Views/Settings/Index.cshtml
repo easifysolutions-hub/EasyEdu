@@ -1,0 +1,352 @@
+@model EasyEdu.Models.SystemSettings
+@{
+    ViewData["Title"] = "Global System Configuration";
+    Layout = "_Layout";
+    var company = ViewBag.Company as EasyEdu.Models.Company;
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">System Control Center</h3>
+            <p class="text-muted small fw-600">Global orchestration of @company?.Name infrastructure and preferences</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-light-soft btn-sm rounded-12 px-4 fw-800" onclick="location.reload()">
+                <i class="fas fa-sync-alt me-2"></i>REFRESH STATE
+            </button>
+            <button form="settingsForm" type="submit" class="btn btn-premium-purple btn-sm rounded-12 px-4 shadow-sm fw-900">
+                <i class="fas fa-save me-2"></i>SYNCHRONIZE ALL
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="premium-card p-0 border-0 shadow-sm sticky-top" style="top: 100px; border-radius: 20px;">
+                <div class="p-4 border-bottom bg-dark text-white rounded-top-20">
+                    <h6 class="mb-0 fw-800 uppercase ls-tight"><i class="fas fa-sliders-h me-2"></i> Configuration Matrix</h6>
+                </div>
+                <div class="list-group list-group-flush settings-nav">
+                    <a href="#tab-general" class="list-group-item list-group-item-action active fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-building me-3 opacity-50"></i>General & Identity
+                    </a>
+                    <a href="#tab-security" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-shield-alt me-3 opacity-50"></i>Security & Auth (2FA)
+                    </a>
+                    <a href="#tab-finance" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-wallet me-3 opacity-50"></i>Currency & Payments
+                    </a>
+                    <a href="#tab-comms" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-envelope-open-text me-3 opacity-50"></i>Email & SMS Gateways
+                    </a>
+                    <a href="#tab-chat" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-comments me-3 opacity-50"></i>Live Chat Integration
+                    </a>
+                    <a href="#tab-ux" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-desktop me-3 opacity-50"></i>Interface & Preloader
+                    </a>
+                    <a href="#tab-academic" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-calendar-alt me-3 opacity-50"></i>Weekend & Schedule
+                    </a>
+                    <a href="#tab-system" class="list-group-item list-group-item-action fw-700 p-3 border-0" data-bs-toggle="pill">
+                        <i class="fas fa-server me-3 opacity-50"></i>Cron & Background Jobs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <form asp-action="SaveSettings" method="post" id="settingsForm">
+                <input type="hidden" asp-for="Id" />
+                <div class="tab-content">
+                    <!-- General Tab -->
+                    <div class="tab-pane fade show active" id="tab-general">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-info-circle text-primary me-2"></i>Institutional Identity</h5>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-800 text-muted uppercase">Institutional Name</label>
+                                    <input type="text" class="form-control form-control-premium" value="@company?.Name" readonly disabled>
+                                    <div class="form-text small opacity-50 italic">Name is managed at the Root Institution Level.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">System Timezone</label>
+                                    <select class="form-select form-control-premium">
+                                        <option value="UTC">UTC (Universal Time)</option>
+                                        <option value="IST" selected>IST (India Standard Time)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Default Language</label>
+                                    <select class="form-select form-control-premium">
+                                        <option value="en">English (US)</option>
+                                        <option value="ar">Arabic</option>
+                                        <option value="hi">Hindi</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div class="tab-pane fade" id="tab-security">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-lock text-danger me-2"></i>Security Protocols</h5>
+                            <div class="form-check form-switch p-3 bg-light rounded-16 d-flex align-items-center justify-content-between mb-3 border border-dashed-2">
+                                <div>
+                                    <label class="form-check-label fw-800 text-dark mb-0 ms-0" for="twoFactor">TWO-FACTOR AUTHENTICATION (2FA)</label>
+                                    <div class="small text-muted fw-600">Enforce OTP verification for all administrative logins</div>
+                                </div>
+                                <input class="form-check-input ms-3 rounded-pill" type="checkbox" asp-for="EnableTwoFactor" id="twoFactor" style="width: 50px; height: 26px;">
+                            </div>
+                            <div class="alert alert-info border-0 rounded-12 p-3 mt-4">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-info-circle fa-2x me-3"></i>
+                                    <div class="small fw-600">2FA requires a working SMS or Email gateway to be configured in the Communications tab.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Finance Tab -->
+                    <div class="tab-pane fade" id="tab-finance">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-coins text-warning me-2"></i>Monetary Configuration</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Currency Code</label>
+                                    <input type="text" asp-for="CurrencyCode" class="form-control form-control-premium" placeholder="USD">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Currency Symbol</label>
+                                    <input type="text" asp-for="CurrencySymbol" class="form-control form-control-premium" placeholder="$">
+                                </div>
+                            </div>
+                            <h6 class="fw-800 text-muted mb-3 uppercase small">PAYMENT GATEWAY (STRIPE)</h6>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" asp-for="EnableOnlinePayment" id="onlinePay">
+                                        <label class="form-check-label fw-800 small text-dark ms-2" for="onlinePay">ENABLE ONLINE FEE COLLECTION</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Publishable Key</label>
+                                    <input type="text" asp-for="StripePublicKey" class="form-control form-control-premium">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Secret Key</label>
+                                    <input type="password" asp-for="StripeSecretKey" class="form-control form-control-premium" value="@Model.StripeSecretKey">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comms Tab -->
+                    <div class="tab-pane fade" id="tab-comms">
+                        <div class="premium-card p-4 border-0 shadow-sm mb-4" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-paper-plane text-info me-2"></i>Email Outbound (SMTP)</h5>
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <label class="form-label small fw-800 text-muted uppercase">SMTP Host</label>
+                                    <input type="text" asp-for="SmtpServer" class="form-control form-control-premium" placeholder="smtp.gmail.com">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-800 text-muted uppercase">Port</label>
+                                    <input type="number" asp-for="SmtpPort" class="form-control form-control-premium" placeholder="587">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Username</label>
+                                    <input type="text" asp-for="SmtpUser" class="form-control form-control-premium">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Password</label>
+                                    <input type="password" asp-for="SmtpPassword" class="form-control form-control-premium" value="@Model.SmtpPassword">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" asp-for="SmtpEnableSsl" id="mailSsl">
+                                        <label class="form-check-label fw-800 small text-dark ms-2" for="mailSsl">ENABLE SSL/TLS ENCRYPTION</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-sms text-success me-2"></i>SMS Gateway (API)</h5>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-800 text-muted uppercase">Gateway Endpoint URL</label>
+                                    <input type="text" asp-for="SmsGatewayUrl" class="form-control form-control-premium">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">API Key / Token</label>
+                                    <input type="text" asp-for="SmsApiKey" class="form-control form-control-premium">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Sender ID / Label</label>
+                                    <input type="text" asp-for="SmsSenderId" class="form-control form-control-premium">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Tab -->
+                    <div class="tab-pane fade" id="tab-chat">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-ghost text-purple me-2"></i>Live Assistance Hub</h5>
+                            <div class="row g-4">
+                                <div class="col-md-6 border-end p-4">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <img src="https://static.tawk.to/a/common/images/logo.png" style="height: 30px;">
+                                        <h6 class="fw-900 m-0">TAWK.TO CHAT</h6>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" asp-for="EnableTawkTo" id="tawkSwitch">
+                                        <label class="form-check-label fw-800 small text-dark ms-2" for="tawkSwitch">ACTIVE WIDGET</label>
+                                    </div>
+                                    <label class="form-label small fw-800 text-muted uppercase">Widget ID</label>
+                                    <input type="text" asp-for="TawkToWidgetId" class="form-control form-control-premium" placeholder="60f... / default">
+                                </div>
+                                <div class="col-md-6 p-4">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <i class="fab fa-facebook-messenger fa-2x text-primary"></i>
+                                        <h6 class="fw-900 m-0">MESSENGER CHAT</h6>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" asp-for="EnableMessenger" id="mSwitch">
+                                        <label class="form-check-label fw-800 small text-dark ms-2" for="mSwitch">ACTIVE PLUGIN</label>
+                                    </div>
+                                    <label class="form-label small fw-800 text-muted uppercase">Facebook App ID</label>
+                                    <input type="text" asp-for="MessengerAppId" class="form-control form-control-premium">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UX Tab -->
+                    <div class="tab-pane fade" id="tab-ux">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-spinner text-info me-2"></i>Interface & Aesthetics</h5>
+                            <div class="row g-4">
+                                <div class="col-md-12">
+                                    <div class="form-check form-switch p-3 bg-light rounded-16 d-flex align-items-center justify-content-between mb-3">
+                                        <div>
+                                            <label class="form-check-label fw-800 text-dark mb-0 ms-0">ENABLE SYSTEM PRELOADER</label>
+                                            <div class="small text-muted fw-600">Show animated splash screen during internal state switching</div>
+                                        </div>
+                                        <input class="form-check-input ms-3 rounded-pill" type="checkbox" asp-for="EnablePreloader" style="width: 50px; height: 26px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-muted uppercase">Preloader Theme Color</label>
+                                    <input type="color" asp-for="PreloaderBackgroundColor" class="form-control form-control-color w-100 rounded-12 p-1" style="height: 45px;">
+                                </div>
+                                <div class="col-md-6 text-center">
+                                     <div class="p-3 border border-dashed-2 rounded-20 bg-light">
+                                         <i class="fas fa-image fa-2x opacity-25 mb-2"></i>
+                                         <div class="smallest fw-800 uppercase text-muted">Preloader Logo</div>
+                                         <button type="button" class="btn btn-sm btn-light-soft fw-800 mt-2">CHOOSE LOGO</button>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Tab -->
+                    <div class="tab-pane fade" id="tab-academic">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-clock text-warning me-2"></i>Time & Schedule Logic</h5>
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label small fw-800 text-muted uppercase mb-3">Select Institutional Weekends (Non-Operational Days)</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var day in new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" })
+                                    {
+                                        <div class="day-selector">
+                                            <input type="checkbox" class="btn-check" id="day-@day" name="Weekends" value="@day" @(Model.WeekendDays?.Contains(day) == true ? "checked" : "")>
+                                            <label class="btn btn-outline-light-soft rounded-12 fw-800 px-3 py-2" for="day-@day">@day.ToUpper()</label>
+                                        </div>
+                                    }
+                                    <input type="hidden" asp-for="WeekendDays" id="weekendDaysInput" />
+                                </div>
+                            </div>
+                            <div class="alert alert-warning border-0 rounded-12 p-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                                    <div class="small fw-600">Weekend settings will impact automated attendance tracking and payroll calculations.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Tab -->
+                    <div class="tab-pane fade" id="tab-system">
+                        <div class="premium-card p-4 border-0 shadow-sm" style="border-radius: 20px;">
+                            <h5 class="fw-900 mb-4 text-dark border-bottom pb-3"><i class="fas fa-microchip text-success me-2"></i>Cron & Automation Engine</h5>
+                            <div class="bg-dark text-success p-4 rounded-16 font-monospace small position-relative mb-4 overflow-hidden">
+                                <i class="fas fa-terminal position-absolute opacity-10" style="right: 20px; top: 20px; font-size: 5rem;"></i>
+                                <div class="mb-3 text-white-50">// AUTOMATION WORKER ENDPOINT</div>
+                                <div class="text-success fw-bold">curl -X POST "http://yourdomain.com/Settings/BackgroundWorker?token=@Model.CronSecretToken"</div>
+                                <div class="mt-4 text-white-50 italic"># Use this endpoint in your server crontab for scheduled tasks.</div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded-16 bg-light">
+                                        <div class="smallest fw-800 uppercase text-muted mb-1">Last Deployment Run</div>
+                                        <div class="fw-900 text-dark">@(Model.LastCronRun?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NEVER EXECUTED")</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded-16 bg-light">
+                                        <div class="smallest fw-800 uppercase text-muted mb-1">Queue Status</div>
+                                        <div class="fw-900 text-success"><i class="fas fa-circle me-2 blink"></i> SYSTEM OPERATIONAL</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('input[name="Weekends"]');
+        const hiddenInput = document.getElementById('weekendDaysInput');
+        
+        function updateWeekends() {
+            const selected = Array.from(checkboxes)
+                .filter(c => c.checked)
+                .map(c => c.value);
+            hiddenInput.value = selected.join(',');
+        }
+        
+        checkboxes.forEach(c => c.addEventListener('change', updateWeekends));
+    });
+</script>
+
+<style>
+    .settings-nav .list-group-item {
+        background: transparent;
+        color: #64748b;
+        transition: all 0.3s ease;
+    }
+    .settings-nav .list-group-item.active {
+        background: rgba(124, 58, 237, 0.08) !important;
+        color: #7c3aed !important;
+        border-left: 4px solid #7c3aed !important;
+    }
+    .settings-nav .list-group-item:hover:not(.active) {
+        background: #f8fafc;
+        color: #1e293b;
+    }
+    .rounded-top-20 { border-top-left-radius: 20px; border-top-right-radius: 20px; }
+    .ls-tight { letter-spacing: -0.5px; }
+    .border-dashed-2 { border: 2px dashed #e2e8f0; }
+    .font-monospace { font-family: 'Fira Code', 'Courier New', monospace; }
+    
+    .blink { animation: blinker 1.5s linear infinite; }
+    @@keyframes blinker { 50% { opacity: 0; } }
+</style>

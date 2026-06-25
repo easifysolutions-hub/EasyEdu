@@ -1,0 +1,140 @@
+﻿@model IEnumerable<EasyEdu.Models.PostalLog>
+@{
+    var type = ViewBag.LogType as string ?? "Receive";
+    ViewData["Title"] = "Institutional Logistics";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Postal & Archive Log</h1>
+        <p class="text-muted fw-600">Managing institutional mail, dispatches, and documented shipments</p>
+    </div>
+    <div class="d-flex gap-3">
+        <div class="btn-group shadow-sm p-1 bg-white rounded-12">
+            <a asp-action="PostalLog" asp-route-type="Receive" class="btn btn-sm px-4 fw-700 @(type == "Receive" ? "btn-primary rounded-8 shadow-sm" : "btn-light border-0")">Received Entries</a>
+            <a asp-action="PostalLog" asp-route-type="Dispatch" class="btn btn-sm px-4 fw-700 @(type == "Dispatch" ? "btn-primary rounded-8 shadow-sm" : "btn-light border-0")">Dispatch Entries</a>
+        </div>
+        <button class="btn-premium btn-premium-primary animate-fade-in shadow-lg" onclick="toggleForm()">
+            <i class="fas fa-envelopes-bulk"></i> Log New @type
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-4 d-none" id="formColumn">
+        <div class="premium-card bg-white shadow-lg animate-fade-in">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light">
+                <h5 class="fw-800 text-dark mb-0">Record Shipment (@type)</h5>
+                <button class="btn btn-sm btn-light rounded-circle" onclick="toggleForm()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreatePostalLog" method="post">
+                    <input type="hidden" name="Type" value="@type" />
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small uppercase">Primary Sender / Origin</label>
+                        <input type="text" name="FromTitle" class="form-control border-2 fw-700" placeholder="@(type == "Receive" ? "Who sent it?" : "Institution Dept")" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small uppercase">Target Recipient</label>
+                        <input type="text" name="ToTitle" class="form-control border-2 fw-700" placeholder="@(type == "Receive" ? "Who is it for?" : "Mail Destination")" required />
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Ref / Docket #</label>
+                            <input type="text" name="ReferenceNumber" class="form-control border-2" placeholder="Tracking ID" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Log Date</label>
+                            <input type="date" name="Date" class="form-control border-2 fw-700 text-primary" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-muted small uppercase">Consignment Notes</label>
+                        <textarea name="Note" class="form-control border-2" rows="2" placeholder="Contents description..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-premium btn-premium-primary w-100 py-3 shadow-md">
+                        <i class="fas fa-barcode me-2"></i> Commit Dispatch Entry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-12" id="listColumn">
+        <div class="premium-card bg-white shadow-sm overflow-hidden animate-fade-in">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 fw-800 text-muted small uppercase">Shipment Flow</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Reference Info</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Consignment Details</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Verified By</th>
+                            <th class="pe-4 py-3 fw-800 text-muted small uppercase text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var l in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-light text-primary rounded-12 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="fas @(type == "Receive" ? "fa-inbox" : "fa-paper-plane")"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-800 text-dark">FROM: @l.FromTitle</div>
+                                            <div class="fw-700 text-primary small">TO: @l.ToTitle</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-800 text-dark">@(l.ReferenceNumber ?? "---")</div>
+                                    <div class="small text-muted fw-600">@l.Date.ToString("MMM dd, yyyy")</div>
+                                </td>
+                                <td>
+                                    <div class="small fw-600 text-muted line-clamp-2" style="max-width: 250px;">@(l.Note ?? "Standard Consignment")</div>
+                                </td>
+                                <td>
+                                    <div class="fw-700 text-dark">@(l.ConfirmedBy ?? "Archivist")</div>
+                                    <div class="small text-muted" style="font-size: 0.65rem;">System Logged</div>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <a asp-action="DeletePostalLog" asp-route-id="@l.Id" class="btn btn-light btn-sm text-danger border-0 rounded-circle" style="width: 32px; height: 32px;" onclick="return confirm('Clear this log entry?')">
+                                        <i class="fas fa-trash small"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-mail-reply fa-4x text-gray-100 mb-3"></i>
+                <h4 class="text-muted fw-700">No @type postal entries recorded.</h4>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleForm() {
+            const formCol = document.getElementById('formColumn');
+            const listCol = document.getElementById('listColumn');
+            
+            if(formCol.classList.contains('d-none')) {
+                formCol.classList.remove('d-none');
+                listCol.classList.replace('col-xl-12', 'col-xl-8');
+            } else {
+                formCol.classList.add('d-none');
+                listCol.classList.replace('col-xl-8', 'col-xl-12');
+            }
+        }
+    </script>
+}

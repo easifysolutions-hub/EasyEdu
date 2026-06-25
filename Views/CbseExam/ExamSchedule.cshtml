@@ -1,0 +1,117 @@
+@model IEnumerable<EasyEdu.Models.CbseExamSchedule>
+@{
+    ViewData["Title"] = "CBSE Schedule Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Temporal Schedule Architect</h2>
+            <p class="text-muted small fw-600">Map examination subjects and academic locations to specific temporal blocks</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#scheduleModal">
+            <i class="fas fa-calendar-alt me-2"></i>DEPLOY BLOCK
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">EXAM & SUBJECT</th>
+                    <th class="py-4 fw-900 small text-uppercase">ACADEMIC LOCATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">CHRONOLOGY</th>
+                    <th class="py-4 fw-900 small text-uppercase">ROOM PROTOCOL</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark d-block">@s.Subject?.Name</span>
+                            <span class="smallest text-muted fw-700 uppercase">CYCLE: @s.CbseExam?.Name</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 italic small">@s.Class?.Name.ToUpper()</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@s.ExamDate.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 uppercase">START: @s.StartTime (@s.DurationMinutes MIN)</div>
+                        </td>
+                         <td class="py-4">
+                            <span class="fw-800 text-muted">@s.RoomNumber</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-trash text-danger"></i></button>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero active temporal exam blocks identified.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="scheduleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveSchedule" method="post">
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-calendar-day me-2 text-warning"></i>ESTABLISH TEMPORAL BLOCK</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-5">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Evaluation Cycle</label>
+                            <select name="CbseExamId" required class="form-select form-control-premium">
+                                @foreach (var e in (List<EasyEdu.Models.CbseExam>)ViewBag.Exams) { <option value="@e.Id">@e.Name</option> }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Target Curriculum Class</label>
+                            <select name="ClassId" required class="form-select form-control-premium">
+                                @foreach (var c in (List<EasyEdu.Models.Class>)ViewBag.Classes) { <option value="@c.Id">@c.Name</option> }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Subject Node</label>
+                            <select name="SubjectId" required class="form-select form-control-premium">
+                                @foreach (var s in (List<EasyEdu.Models.Subject>)ViewBag.Subjects) { <option value="@s.Id">@s.Name</option> }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Specific Date</label>
+                             <input name="ExamDate" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Temporal Start</label>
+                            <input name="StartTime" type="time" required class="form-control form-control-premium">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Duration (Min)</label>
+                            <input name="DurationMinutes" type="number" value="180" required class="form-control form-control-premium">
+                        </div>
+                         <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Room Protocol ID</label>
+                            <input name="RoomNumber" required class="form-control form-control-premium" placeholder="e.g. HALL-A">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">ESTABLISH BLOCK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

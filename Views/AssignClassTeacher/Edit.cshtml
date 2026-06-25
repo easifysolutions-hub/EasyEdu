@@ -1,0 +1,102 @@
+@model EasyEdu.Models.AssignClassTeacher
+@{
+    ViewData["Title"] = "Edit Class Teacher Assignment";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Edit Class Teacher</h1>
+        <p class="text-muted fw-600">Modify the assigned teacher for the class and section</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-xl-6 col-lg-8">
+        <div class="premium-card bg-white shadow-lg border-0 overflow-hidden animate-fade-in rounded-16">
+            <div class="p-4 border-bottom bg-light">
+                <h5 class="fw-900 text-dark mb-0"><i class="fas fa-edit text-primary me-2"></i> Update Assignment</h5>
+            </div>
+            <div class="p-4">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreatedAt" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small text-uppercase">Class *</label>
+                        <select asp-for="ClassId" id="ddlClass" class="form-select" asp-items="ViewBag.Classes" required>
+                            <option value="">Select Class</option>
+                        </select>
+                        <span asp-validation-for="ClassId" class="text-danger small"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small text-uppercase">Section *</label>
+                        <select asp-for="SectionId" id="ddlSection" class="form-select" asp-items="ViewBag.Sections" required>
+                            <option value="">Select Section</option>
+                        </select>
+                        <span asp-validation-for="SectionId" class="text-danger small"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small text-uppercase">Teacher *</label>
+                        <select asp-for="TeacherId" class="form-select" asp-items="ViewBag.Teachers" required>
+                            <option value="">Select Teacher</option>
+                        </select>
+                        <span asp-validation-for="TeacherId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check form-switch mb-4 p-0">
+                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-12 border border-light">
+                            <div>
+                                <h6 class="fw-700 text-dark mb-0">Active Status</h6>
+                                <p class="small text-muted mb-0">Check to keep this assignment active</p>
+                            </div>
+                            <input asp-for="IsActive" class="form-check-input ms-0" type="checkbox" style="width: 45px; height: 24px;" />
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary fw-700 py-2 shadow-sm rounded-8">
+                            <i class="fas fa-check me-2"></i> Save Changes
+                        </button>
+                    </div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger mt-2 small"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ddlClass = document.getElementById('ddlClass');
+        const ddlSection = document.getElementById('ddlSection');
+
+        ddlClass.addEventListener('change', function() {
+            const classId = this.value;
+            ddlSection.innerHTML = '<option value="">Loading...</option>';
+            
+            if(classId) {
+                fetch('/AssignClassTeacher/GetSectionsByClass?classId=' + classId)
+                    .then(response => response.json())
+                    .then(data => {
+                        ddlSection.innerHTML = '<option value="">Select Section</option>';
+                        data.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.id;
+                            option.textContent = item.name;
+                            ddlSection.appendChild(option);
+                        });
+                    });
+            } else {
+                ddlSection.innerHTML = '<option value="">Select Class First</option>';
+            }
+        });
+    });
+</script>

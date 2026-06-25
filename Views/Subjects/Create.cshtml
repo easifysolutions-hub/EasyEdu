@@ -1,0 +1,65 @@
+﻿@model EasyEdu.Models.Subject
+@{
+    ViewData["Title"] = "Create Subject";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4">
+    <div class="card border-0 shadow-sm rounded-12 p-3" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-header bg-white border-0">
+            <h4 class="fw-800 text-primary">Add New Subject</h4>
+            <p class="text-muted small">Define a new subject for the academic curriculum</p>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label asp-for="Name" class="form-label fw-700 small text-uppercase text-muted">Subject Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="e.g. Mathematics" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Code" class="form-label fw-700 small text-uppercase text-muted">Subject Code</label>
+                        <input asp-for="Code" class="form-control" placeholder="e.g. MATH101" />
+                        <span asp-validation-for="Code" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ClassId" class="form-label fw-700 small text-uppercase text-muted">Class</label>
+                        <select asp-for="ClassId" class="form-select" asp-items="ViewBag.ClassId">
+                            <option value="">Select Class</option>
+                        </select>
+                        <span asp-validation-for="ClassId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Type" class="form-label fw-700 small text-uppercase text-muted">Subject Type</label>
+                        <select asp-for="Type" class="form-select">
+                            <option value="Theory">Theory</option>
+                            <option value="Practical">Practical</option>
+                        </select>
+                        <span asp-validation-for="Type" class="text-danger small"></span>
+                    </div>
+                     <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-check form-switch mt-4">
+                            <input class="form-check-input" type="checkbox" asp-for="IsOptional" id="isOptionalSwitch">
+                            <label class="form-check-label fw-700 text-dark" for="isOptionalSwitch">Is Optional Subject?</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label fw-700 small text-uppercase text-muted">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12 pt-3 border-top mt-3 text-end">
+                        <a asp-action="Index" class="btn btn-light fw-700 me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary fw-700 px-4">Save Subject</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

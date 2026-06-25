@@ -1,0 +1,118 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Institutional Accommodation Report";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-bed me-2 text-primary"></i> Dormitory Analytics</h1>
+        <p class="text-muted fw-600">Residential overview of institutional accommodations and student housing status</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-print me-2"></i> OCCUPANCY SUMMARY
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-800 text-muted uppercase">Select Dormitory</label>
+                <select name="dormitoryId" class="form-select rounded-12 border-0 bg-light fw-700" asp-items="ViewBag.Dormitories">
+                    <option value="">All Residents</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-primary w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> FETCH RESIDENTS
+                </button>
+            </div>
+            <div class="col-md-3">
+                <div class="search-box position-relative">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" class="form-control rounded-pill ps-5 border-0 bg-light" id="dormSearch" placeholder="Search residents...">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <div class="p-4 border-bottom bg-light">
+            <h6 class="fw-800 text-dark mb-0 uppercase">Residential Housing Manifest</h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">STUDENT RESIDENT</th>
+                        <th>ACADEMIC LEVEL</th>
+                        <th>ASSIGNED DORMITORY</th>
+                        <th>ROOM ALLOCATION</th>
+                        <th class="text-end pe-4">HOUSING STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="dormTable">
+                    @foreach (var student in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                <div class="fw-800 text-dark">@student.FirstName @student.LastName</div>
+                                <div class="small text-muted fw-600">SID: @student.AdmissionNumber</div>
+                            </td>
+                            <td>
+                                <div class="small fw-800 text-muted">@student.Class?.Name</div>
+                            </td>
+                            <td>
+                                <div class="fw-800 text-dark">@(student.Dormitory?.Name ?? "UNASSIGNED")</div>
+                                <div class="small text-muted fw-600">@student.Dormitory?.Type</div>
+                            </td>
+                            <td>
+                                <div class="fw-700 text-dark">@(student.DormitoryRoom?.RoomNumber ?? "PENDING")</div>
+                                <div class="small text-muted fw-600">@student.DormitoryRoom?.RoomType</div>
+                            </td>
+                            <td class="text-end pe-4">
+                                @if (student.DormitoryId != null)
+                                {
+                                    <span class="badge bg-success-soft text-success fw-800 px-3 py-2 rounded-pill">
+                                        RESIDENT
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-muted fw-800 px-3 py-2 rounded-pill">
+                                        NON-RESIDENT
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-hotel fa-3x text-muted opacity-25 mb-4 d-block"></i>
+                                <h5 class="fw-800 text-muted">No students identified in the institutional housing manifest.</h5>
+                                <p class="small text-muted fw-600">Verification of residential data required.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#dormSearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $("#dormTable tr").filter(function() { $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1) });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,54 @@
+@model IEnumerable<EasyEdu.Models.LmsCourse>
+@{
+    ViewData["Title"] = "Pending Curriculum Assets";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Pending Curriculum Assets</h2>
+            <p class="text-muted small fw-600">Verification queue for digital curriculum nodes awaiting institutional activation</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var course in Model)
+        {
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-card overflow-hidden border-0 shadow-lg h-100" style="border-radius: 24px;">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                             <span class="smallest text-warning fw-900 text-uppercase italic ls-1">AWAITING VERIFICATION</span>
+                             <span class="badge bg-light text-muted border fw-800 rounded-pill">@course.Level?.Title</span>
+                        </div>
+                        <h5 class="fw-900 text-dark mb-3">@course.Title</h5>
+                        <div class="bg-light-soft p-3 rounded-12 mb-4 border">
+                            <span class="smallest text-muted fw-800 text-uppercase d-block mb-1">DOMAIN</span>
+                            <span class="small fw-900 text-dark">@course.Category?.Title</span>
+                        </div>
+                        <div class="d-grid gap-2">
+                             <button class="btn btn-success rounded-12 fw-900 py-2"><i class="fas fa-check-circle me-2"></i>AUTHORIZE MODULE</button>
+                             <button class="btn btn-light-soft text-danger rounded-12 fw-900 py-2"><i class="fas fa-times-circle me-2"></i>REJECT NODE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if(!Model.Any()){
+             <div class="col-12 text-center py-5">
+                <div class="bg-success bg-opacity-10 p-5 rounded-24 d-inline-block">
+                    <i class="fas fa-check-double text-success fa-3x mb-3"></i>
+                    <h5 class="fw-900 text-dark">Zero Pending Nodes</h5>
+                    <p class="text-muted small fw-600 mb-0">The verification registry is currently synchronized with the curriculum registry.</p>
+                </div>
+             </div>
+        }
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background: #f8fafc; }
+    .ls-1 { letter-spacing: 1px; }
+    .rounded-24 { border-radius: 24px; }
+</style>

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EasyEdu.Models.StudentIncident>
+@{
+    ViewData["Title"] = "Incident Wise Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Incident Distribution Report</h3>
+
+    <div class="premium-card p-4 mb-4">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Filter by Incident Type</label>
+                <select name="incidentId" class="form-select form-control-premium" asp-items="ViewBag.Incidents">
+                    <option value="">All Incidents</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                 <button type="submit" class="btn btn-premium-purple w-100">FILTER REPORT</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Incident</th>
+                            <th>Points</th>
+                            <th>Student</th>
+                            <th>Date</th>
+                            <th class="text-end">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-800 text-primary">@item.Incident.Title</td>
+                                <td>
+                                    <span class="badge @(item.Incident.Point >= 0 ? "bg-success-soft" : "bg-danger-soft") fw-900">
+                                        @(item.Incident.Point > 0 ? "+" : "")@item.Incident.Point
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="fw-700 text-dark">@item.Student.FirstName @item.Student.LastName</div>
+                                    <div class="small text-muted">Adm: @item.Student.AdmissionNumber</div>
+                                </td>
+                                <td><span class="small fw-600">@item.Date.ToString("dd MMM yyyy")</span></td>
+                                <td class="text-end px-4"><span class="small font-italic text-muted">@item.Remarks</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

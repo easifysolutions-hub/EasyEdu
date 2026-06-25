@@ -1,0 +1,172 @@
+@model IEnumerable<EasyEdu.Models.Payroll>
+@{
+    ViewData["Title"] = "Institutional Bulk Payroll Roster";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 pb-2 animate-slide-in no-print">
+    <div>
+        <h1 class="page-title"><i class="fas fa-print me-2 text-primary"></i> Bulk Payroll Registry</h1>
+        <p class="text-muted fw-600">Batch processing and institutional archival of personnel disbursement records</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-print me-2"></i> EXECUTE BATCH PRINT
+        </button>
+        <button class="btn btn-premium-light border rounded-12 px-4 shadow-xs fw-800">
+            <i class="fas fa-file-pdf me-2"></i> EXPORT DIGITAL BATCH
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5 animate-fade-in">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 no-print">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">FISCAL BATCH MONTH</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-calendar-alt text-primary"></i></span>
+                    <select name="month" class="form-select rounded-end-12 border-0 bg-light fw-700">
+                        <option value="">Select Month</option>
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            <option value="@i">@System.Globalization.DateTimeFormatInfo.CurrentInfo.GetMonthName(i)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">ACADEMIC YEAR</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-history text-primary"></i></span>
+                    <select name="year" class="form-select rounded-end-12 border-0 bg-light fw-700">
+                        <option value="">Select Year</option>
+                        @for (int y = DateTime.Now.Year; y >= DateTime.Now.Year - 5; y--)
+                        {
+                            <option value="@y">@y</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> LOAD BATCH
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Printable Area -->
+    <div class="printable-ledger">
+        @foreach (var p in Model)
+        {
+            <div class="payroll-receipt-archival bg-white border p-5 mb-4 rounded-24 shadow-sm">
+                <div class="header-nexus d-flex justify-content-between align-items-start mb-5 border-bottom pb-4">
+                    <div class="institutional-identity">
+                        <h2 class="fw-900 text-dark mb-1">EasyEdu Institutional Receipt</h2>
+                        <p class="text-muted fw-700 small tracking-wider mb-0 text-uppercase">Financial Compliance Document #ARCH-@p.Id.ToString("D5")</p>
+                    </div>
+                    <div class="receipt-audit text-end">
+                        <div class="badge bg-primary text-white px-4 py-2 rounded-bill shadow-sm fw-900 mb-2">@p.Status.ToUpper()</div>
+                        <div class="small fw-800 text-muted uppercase">Audit Date: @DateTime.Now.ToString("dd MMM yyyy")</div>
+                    </div>
+                </div>
+
+                <div class="row g-5 mb-5">
+                    <div class="col-md-6 border-end">
+                        <h6 class="small fw-800 text-muted uppercase tracking-widest mb-3">Personnel Profile</h6>
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="avatar-mini bg-light-soft rounded-16 p-3">
+                                <i class="fas fa-user-tie fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-900 text-dark mb-1">@p.Teacher?.FullName</h4>
+                                <p class="text-muted fw-800 mb-0 small">@p.Teacher?.Designation?.Title</p>
+                                <p class="text-primary fw-900 mb-0 small uppercase">ID: #@p.Teacher?.EmployeeNumber</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="small fw-800 text-muted uppercase tracking-widest mb-3">Disbursement Metrics</h6>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="small fw-800 text-muted">PAYMENT PERIOD</div>
+                                <div class="fw-900 text-dark">@System.Globalization.DateTimeFormatInfo.CurrentInfo.GetMonthName(p.Month), @p.Year</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="small fw-800 text-muted">METHOD</div>
+                                <div class="fw-900 text-dark">@p.PaymentMethod</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="financial-breakdown mb-5">
+                    <table class="table table-borderless align-middle ledger-table">
+                        <thead>
+                            <tr class="bg-light-soft">
+                                <th class="ps-4 py-3 fw-900 text-dark uppercase tracking-wider">Financial Component</th>
+                                <th class="text-end pe-4 py-3 fw-900 text-dark uppercase tracking-wider">Archival Valuation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-4 fw-800 text-muted">Base Institutional Retainer</td>
+                                <td class="text-end pe-4 fw-900 text-dark">@p.BasicSalary.ToString("C2")</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4 fw-800 text-muted">Other Archival Compensations</td>
+                                <td class="text-end pe-4 fw-900 text-dark">$0.00</td>
+                            </tr>
+                            <tr class="border-top-thick">
+                                <td class="ps-4 fw-900 text-dark h5 mb-0">TOTAL INSTITUTIONAL DISBURSEMENT</td>
+                                <td class="text-end pe-4 fw-900 text-primary h4 mb-0">@p.NetSalary.ToString("C2")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer-signatory d-flex justify-content-between mt-5 pt-5 opacity-75">
+                    <div class="sign-box text-center">
+                        <div class="line mb-2 mx-auto" style="width: 150px; height: 1px; background: #64748b;"></div>
+                        <p class="small fw-800 text-muted uppercase tracking-widest mb-0">Facilitator Signature</p>
+                    </div>
+                    <div class="sign-box text-center">
+                        <div class="line mb-2 mx-auto" style="width: 150px; height: 1px; background: #64748b;"></div>
+                        <p class="small fw-800 text-muted uppercase tracking-widest mb-0">Personnel Verification</p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <div class="premium-card p-5 text-center bg-white border-0 shadow-lg rounded-24">
+                <i class="fas fa-file-invoice-dollar fa-4x text-muted opacity-25 mb-4 d-block"></i>
+                <h4 class="fw-800 text-muted">No Batch Records Identified</h4>
+                <p class="text-muted fw-600">Select institutional parameters to load a payroll batch.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background: #f8fafc; }
+    .border-top-thick { border-top: 3px solid #f1f5f9; }
+    
+    .ledger-table td { padding: 1.25rem 0.75rem; }
+    .rounded-bill { border-radius: 50px; }
+    .shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    
+    .payroll-receipt-archival {
+        transition: all 0.3s;
+        page-break-inside: avoid;
+    }
+
+    @@media print {
+        .no-print { display: none !important; }
+        .container-fluid { width: 100% !important; padding: 0 !important; }
+        .payroll-receipt-archival { border: none !important; box-shadow: none !important; margin-bottom: 50px !important; }
+        body { background: white !important; }
+        .bg-primary-soft, .bg-light-soft { -webkit-print-color-adjust: exact; background-color: #f8fafc !important; }
+    }
+</style>

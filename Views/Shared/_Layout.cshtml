@@ -1,0 +1,1999 @@
+@using Microsoft.Extensions.Localization
+@using EasyEdu.Resources
+@inject IStringLocalizer<SharedResource> L
+@using Microsoft.AspNetCore.Localization
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.UICulture.TwoLetterISOLanguageName ?? "en";
+    var langMap = new Dictionary<string, string> { {"en","en"},{"hi","hi"},{"kn","kn"},{"ta","ta"},{"te","te"} };
+    var htmlLang = langMap.ContainsKey(currentCulture) ? langMap[currentCulture] : "en";
+}
+<!DOCTYPE html>
+<html lang="@htmlLang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EasyEdu Premium</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Indian Language Fonts for multilingual support -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script>
+        // Init appearance early to avoid FOUC
+        (function() {
+            var theme = localStorage.getItem('themeMode') || 'light';
+            var sidebarColor = localStorage.getItem('sidebarColor');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            if (sidebarColor) {
+                document.documentElement.style.setProperty('--sidebar-bg', sidebarColor);
+            }
+        })();
+    </script>
+</head>
+<body class="animate-fade-in">
+    <!-- Global Education Background -->
+    <div class="fixed-global-bg">
+        <div class="bg-overlay"></div>
+        <!-- Animated Education Tools -->
+        <div class="edu-background">
+            <div class="floating-tool" style="top: 15%; left: 5%; animation-duration: 25s;"><i class="fas fa-graduation-cap"></i></div>
+            <div class="floating-tool" style="top: 25%; left: 95%; animation-duration: 30s;"><i class="fas fa-book"></i></div>
+            <div class="floating-tool" style="top: 50%; left: 8%; animation-duration: 20s;"><i class="fas fa-pencil-alt"></i></div>
+            <div class="floating-tool" style="top: 80%; left: 92%; animation-duration: 35s;"><i class="fas fa-flask"></i></div>
+            <div class="floating-tool" style="top: 40%; left: 88%; animation-duration: 28s;"><i class="fas fa-calculator"></i></div>
+            <div class="floating-tool" style="top: 70%; left: 15%; animation-duration: 32s;"><i class="fas fa-atom"></i></div>
+            <div class="floating-tool" style="top: 10%; left: 80%; animation-duration: 22s;"><i class="fas fa-globe"></i></div>
+            <div class="floating-tool" style="top: 20%; left: 50%; animation-duration: 40s;"><i class="fas fa-microscope"></i></div>
+        </div>
+    </div>
+
+    <style>
+        /* --- Fixed Animated Background --- */
+        .fixed-global-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: url('https://images.unsplash.com/photo-1523050853064-85a19f042717?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(204, 251, 241, 0.9) 100%);
+            z-index: -1;
+        }
+
+        .edu-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-tool {
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(139, 92, 246, 0.12); /* Light Purple */
+            animation: moveAround 25s infinite linear;
+        }
+
+        @@keyframes moveAround {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(100px, -100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+    <div class="sidebar sidebar-premium" id="mainSidebar">
+        <div class="sidebar-brand d-flex align-items-center justify-content-between">
+            <a href="/" class="brand-link-hub">
+                <div class="brand-brand-easyedu">
+                    <img src="~/images/easyedu_full_logo.png" alt="EasyEdu Logo" class="brand-logo-img" asp-append-version="true" />
+                </div>
+            </a>
+            <div class="sidebar-hide-btn d-none d-xl-flex" id="sidebarHideBtn">
+                <i class="fas fa-bars-staggered"></i>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+    <div class="menu-category">MAIN</div>
+    <a href="@Url.Action("Index", "Dashboard")" class="nav-link-premium @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" data-label="Dashboard">
+        <span><i class="fas fa-th-large main-icon"></i> <span class="sidebar-label">Dashboard</span></span>
+    </a>
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Receptionist"))
+    {
+        <div class="menu-category">ADMINISTRATION</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium @(ViewContext.RouteData.Values["controller"]?.ToString() == "Administration" ? "active" : "")" data-bs-toggle="collapse" href="#adminSectionMenu" role="button" aria-expanded="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Administration" ? "true" : "false")" data-label="Admin Section">
+                <span><i class="fas fa-shield-halved main-icon"></i> <span class="sidebar-label">Admin Section</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Administration" ? "show" : "")" id="adminSectionMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("AdmissionQuery", "Administration")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "AdmissionQuery" ? "active" : "")">Admission Query</a></li>
+                    <li><a href="@Url.Action("VisitorBook", "Administration")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "VisitorBook" ? "active" : "")">Visitor Book</a></li>
+                    <li><a href="@Url.Action("Complaint", "Administration")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Complaint" ? "active" : "")">Complaint</a></li>
+                    <li><a href="@Url.Action("PostalLog", "Administration", new { type = "Receive" })" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "PostalLog" && Context.Request.Query["type"] == "Receive" ? "active" : "")">Postal Receive</a></li>
+                    <li><a href="@Url.Action("PostalLog", "Administration", new { type = "Dispatch" })" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "PostalLog" && Context.Request.Query["type"] == "Dispatch" ? "active" : "")">Postal Dispatch</a></li>
+                    <li><a href="@Url.Action("PhoneCallLog", "Administration")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "PhoneCallLog" ? "active" : "")">Phone Call Log</a></li>
+                    <li><a href="@Url.Action("AdminSetup", "Administration")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "AdminSetup" ? "active" : "")">Admin Setup</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#utilitiesModule" role="button" data-label="Utilities">
+                <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="utilitiesModule">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("UserLog", "Reports")" class="sub-nav-link">User Log</a></li>
+                    <li><a href="@Url.Action("Directory", "Chat")" class="sub-nav-link">Chat</a></li>
+                    <li><a href="@Url.Action("Index", "Chat")" class="sub-nav-link">Chat Box</a></li>
+                    <li><a href="@Url.Action("Invitations", "Chat")" class="sub-nav-link">Invitation</a></li>
+                    <li><a href="@Url.Action("BlockedUsers", "Chat")" class="sub-nav-link">Blocked User</a></li>
+                    <li><a href="@Url.Action("Settings", "Chat")" class="sub-nav-link">Chat Settings</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#communicateModule" role="button" data-label="Communicate">
+                <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Communicate</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="communicateModule">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("NoticeBoard", "Communicate")" class="sub-nav-link">Notice Board</a></li>
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher"))
+                    {
+                        <li><a href="@Url.Action("SendEmail", "Communicate")" class="sub-nav-link">Send Email / Sms</a></li>
+                    }
+                    <li><a href="@Url.Action("MessageLog", "Communicate")" class="sub-nav-link">Email / Sms Log</a></li>
+                    <li><a href="@Url.Action("EventList", "Communicate")" class="sub-nav-link">Event</a></li>
+                    <li><a href="@Url.Action("Calendar", "Communicate")" class="sub-nav-link">Calendar</a></li>
+                    <li><a href="@Url.Action("EmailTemplates", "Communicate")" class="sub-nav-link">Email Template</a></li>
+                    <li><a href="@Url.Action("SmsTemplates", "Communicate")" class="sub-nav-link">Sms Template</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher"))
+    {
+        <div class="menu-category">ACADEMICS</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#academicsMenu" role="button" data-label="Academics">
+                <span><i class="fas fa-graduation-cap main-icon"></i> <span class="sidebar-label">Academics</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="academicsMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("Index", "Classes")" class="sub-nav-link">Class</a></li>
+                    <li><a href="@Url.Action("Index", "Section")" class="sub-nav-link">Section</a></li>
+                    <li><a href="@Url.Action("Index", "Subjects")" class="sub-nav-link">Subjects</a></li>
+                    <li><a href="@Url.Action("Index", "AssignClassTeacher")" class="sub-nav-link">Assign Class Teacher</a></li>
+                    <li><a href="@Url.Action("Index", "AssignSubject")" class="sub-nav-link">Assign Subject</a></li>
+                    <li><a href="@Url.Action("Index", "ClassRoom")" class="sub-nav-link">Class Room</a></li>
+                    <li><a href="@Url.Action("Index", "ClassRoutine")" class="sub-nav-link">Class Routine</a></li>
+                    <li><a href="@Url.Action("Assign", "OptionalSubject")" class="sub-nav-link">Optional Subject</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#lessonPlanMenu" role="button" data-label="Lesson Plan">
+                <span><i class="fas fa-chalkboard-teacher main-icon"></i> <span class="sidebar-label">Lesson Plan</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="lessonPlanMenu">
+                <ul class="sub-menu">
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher"))
+                    {
+                        <li><a href="@Url.Action("Lesson", "LessonPlan")" class="sub-nav-link">Lesson</a></li>
+                        <li><a href="@Url.Action("Topic", "LessonPlan")" class="sub-nav-link">Topic</a></li>
+                        <li><a href="@Url.Action("Index", "LessonPlan")" class="sub-nav-link">Lesson Plan</a></li>
+                    }
+                    <li><a href="@Url.Action("LessonPlanOverview", "LessonPlan")" class="sub-nav-link">Lesson Plan Overview</a></li>
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                    {
+                        <li><a href="@Url.Action("Settings", "LessonPlan")" class="sub-nav-link">Settings</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#homeworkMenu" role="button" data-label="Homework">
+                <span><i class="fas fa-pen-fancy main-icon"></i> <span class="sidebar-label">Homework</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="homeworkMenu">
+                <ul class="sub-menu">
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher"))
+                    {
+                        <li><a href="@Url.Action("Create", "Homework")" class="sub-nav-link">Add Homework</a></li>
+                    }
+                    <li><a href="@Url.Action("Index", "Homework")" class="sub-nav-link">Homework List</a></li>
+                    <li><a href="@Url.Action("HomeworkReport", "Homework")" class="sub-nav-link">Homework Report</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#examSuiteMenu" role="button" data-label="Examination">
+                <span><i class="fas fa-file-signature main-icon"></i> <span class="sidebar-label">Examination</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="examSuiteMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("ExamType", "Examinations")" class="sub-nav-link text-info">Exam Type</a></li>
+                    <li><a href="@Url.Action("Index", "Examinations")" class="sub-nav-link text-success fw-bold">Exam Setup</a></li>
+                    <li><a href="@Url.Action("ExamSchedule", "Examinations")" class="sub-nav-link text-primary">Exam Schedule</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("ExamAttendance", "Examinations")" class="sub-nav-link">Exam Attendance</a></li>
+                    <li><a href="@Url.Action("MarksRegister", "Examinations")" class="sub-nav-link">Marks Register</a></li>
+                    <li><a href="@Url.Action("MarksGrade", "Examinations")" class="sub-nav-link">Marks Grade</a></li>
+                    <li class="border-top my-2 opacity-50"></li>
+                    <li>
+                        <a class="sub-nav-link text-warning fw-bold" data-bs-toggle="collapse" href="#examSettingsSub">
+                            <i class="fas fa-cog me-2"></i>Exam Settings <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse" id="examSettingsSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("FormatSettings", "ExamSettings")" class="sub-nav-link-inner small">Format Settings</a></li>
+                                <li><a href="@Url.Action("SetupExamRule", "ExamSettings")" class="sub-nav-link-inner small">Exam Rules</a></li>
+                                <li><a href="@Url.Action("Position", "ExamSettings")" class="sub-nav-link-inner small">Merit Positions</a></li>
+                                <li><a href="@Url.Action("SignatureSettings", "ExamSettings")" class="sub-nav-link-inner small">Signatures</a></li>
+                                <li><a href="@Url.Action("AdmitCardSetting", "ExamSettings")" class="sub-nav-link-inner small">Admit Card</a></li>
+                                <li><a href="@Url.Action("SeatPlanSetting", "ExamSettings")" class="sub-nav-link-inner small">Seat Plan</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="@Url.Action("SendMarksBySms", "Examinations")" class="sub-nav-link"><i class="fas fa-sms me-1"></i> Send Marks By Sms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#onlineExamMenu" role="button" data-label="Online Exam">
+                <span><i class="fas fa-laptop-code main-icon"></i> <span class="sidebar-label">Online Exam</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="onlineExamMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("QuestionGroup", "OnlineExam")" class="sub-nav-link text-info">Question Group</a></li>
+                    <li><a href="@Url.Action("QuestionBank", "OnlineExam")" class="sub-nav-link">Question Bank</a></li>
+                    <li><a href="@Url.Action("OnlineExam", "OnlineExam")" class="sub-nav-link text-success fw-bold">Online Exam</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#evaluationMenu" role="button" data-label="Teacher Evaluation">
+                <span><i class="fas fa-star-half-stroke main-icon"></i> <span class="sidebar-label">Teacher Evaluation</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="evaluationMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("ApprovedReport", "TeacherEvaluation")" class="sub-nav-link text-success">Approved Report</a></li>
+                    <li><a href="@Url.Action("PendingReport", "TeacherEvaluation")" class="sub-nav-link text-warning">Pending Report</a></li>
+                    <li><a href="@Url.Action("TeacherWiseReport", "TeacherEvaluation")" class="sub-nav-link">Teacher Wise Report</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("Settings", "TeacherEvaluation")" class="sub-nav-link">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher"))
+    {
+        <div class="menu-category">STUDENT MANAGEMENT</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#studentMenu" role="button" data-label="Student Info">
+                <span><i class="fas fa-user-graduate main-icon"></i> <span class="sidebar-label">Student Info</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="studentMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("Index", "StudentCategory")" class="sub-nav-link text-info fw-bold">Student Category</a></li>
+                    <li><a href="@Url.Action("Create", "Students")" class="sub-nav-link text-success fw-bold">Add Student</a></li>
+                    <li><a href="@Url.Action("Index", "Students")" class="sub-nav-link">Student List</a></li>
+                    <li><a href="@Url.Action("MultiClassStudent", "Students")" class="sub-nav-link">Multi Class Student</a></li>
+                    <li><a href="@Url.Action("Index", "Students")" class="sub-nav-link text-danger">Delete Student Record</a></li>
+                    <li><a href="@Url.Action("UnassignedStudent", "Students")" class="sub-nav-link">Unassigned Student</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("Index", "Attendance")" class="sub-nav-link">Student Attendance</a></li>
+                    <li><a href="@Url.Action("StudentGroup", "Students")" class="sub-nav-link">Student Group</a></li>
+                    <li><a href="@Url.Action("StudentPromote", "Students")" class="sub-nav-link">Student Promote</a></li>
+                    <li><a href="@Url.Action("DisabledStudents", "Students")" class="sub-nav-link">Disabled Students</a></li>
+                    <li><a href="@Url.Action("SubjectWiseAttendance", "Attendance")" class="sub-nav-link">Subject Wise Attendance</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("StudentExport", "Students")" class="sub-nav-link">Student Export</a></li>
+                    <li><a href="@Url.Action("SmsSendingTime", "Students")" class="sub-nav-link">SMS Sending Time</a></li>
+                    <li><a href="@Url.Action("StudentSettings", "Students")" class="sub-nav-link">Student Settings</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#behaviourMenu" role="button" data-label="Behaviour">
+                <span><i class="fas fa-hand-sparkles main-icon"></i> <span class="sidebar-label">Behaviour Records</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="behaviourMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("Incidents", "BehaviourRecords")" class="sub-nav-link text-info fw-bold">Incidents</a></li>
+                    <li><a href="@Url.Action("AssignIncident", "BehaviourRecords")" class="sub-nav-link text-success fw-bold">Assign Incident</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("StudentIncidentReport", "BehaviourRecords")" class="sub-nav-link">Student Incident Report</a></li>
+                    <li><a href="@Url.Action("BehaviourReport", "BehaviourRecords")" class="sub-nav-link">Behaviour Report</a></li>
+                    <li><a href="@Url.Action("ClassSectionReport", "BehaviourRecords")" class="sub-nav-link">Class Section Report</a></li>
+                    <li><a href="@Url.Action("IncidentWiseReport", "BehaviourRecords")" class="sub-nav-link">Incident Wise Report</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("Settings", "BehaviourRecords")" class="sub-nav-link">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher") || User.IsInRole("Accountant"))
+    {
+        <div class="menu-category">HUMAN RESOURCE</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#hrSubMenu" role="button" data-label="Human Resource">
+                <span><i class="fas fa-users-gear main-icon"></i> <span class="sidebar-label">Human Resource</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="hrSubMenu">
+                <ul class="sub-menu">
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                    {
+                        <li><a href="@Url.Action("Designation", "HumanResource")" class="sub-nav-link text-info">Designation</a></li>
+                        <li><a href="@Url.Action("Department", "HumanResource")" class="sub-nav-link text-info">Department</a></li>
+                        <li class="border-top my-1 opacity-25"></li>
+                        <li><a href="@Url.Action("AddStaff", "HumanResource")" class="sub-nav-link text-success fw-bold">Add Staff</a></li>
+                        <li><a href="@Url.Action("StaffDirectory", "HumanResource")" class="sub-nav-link">Staff Directory</a></li>
+                        <li><a href="@Url.Action("StaffAttendance", "HumanResource")" class="sub-nav-link">Staff Attendance</a></li>
+                        <li><a href="@Url.Action("Payroll", "HumanResource")" class="sub-nav-link">Payroll</a></li>
+                        <li class="border-top my-1 opacity-25"></li>
+                        <li><a href="@Url.Action("StaffSettings", "HumanResource")" class="sub-nav-link">Staff Settings</a></li>
+                        <li class="border-top my-1 opacity-25"></li>
+                        <li><a href="@Url.Action("BulkPayrollPrint", "HumanResource")" class="sub-nav-link text-info small"><i class="fas fa-print me-1"></i> Bulk Payroll Print</a></li>
+                    }
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("ApplyLeave", "Leave")" class="sub-nav-link text-success fw-bold">Apply Leave</a></li>
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                    {
+                        <li class="border-top my-1 opacity-25"></li>
+                        <li><a href="@Url.Action("PendingLeaveRequest", "Leave")" class="sub-nav-link text-warning">Pending Leave Request</a></li>
+                        <li><a href="@Url.Action("ApproveLeaveRequest", "Leave")" class="sub-nav-link text-info">Approve Leave Request</a></li>
+                        <li class="border-top my-1 opacity-25"></li>
+                        <li><a href="@Url.Action("LeaveDefine", "Leave")" class="sub-nav-link">Leave Define</a></li>
+                        <li><a href="@Url.Action("LeaveType", "Leave")" class="sub-nav-link">Leave Type</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#staffReportsMenu" role="button" data-label="Staff Reports">
+                <span><i class="fas fa-users-rectangle main-icon"></i> <span class="sidebar-label">Staff Reports</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="staffReportsMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("StaffReport", "Reports")" class="sub-nav-link text-premium-purple fw-700">Staff Report</a></li>
+                    <li><a href="@Url.Action("StaffAttendanceReport", "Reports")" class="sub-nav-link">Staff Attendance Report</a></li>
+                    <li><a href="@Url.Action("PayrollReport", "Reports")" class="sub-nav-link">Payroll Report</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("StaffDirectory", "HumanResource")" class="sub-nav-link small"><i class="fas fa-address-book me-1"></i> Staff Directory</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Accountant"))
+    {
+        <div class="menu-category">FINANCE & ACCOUNTS</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#feesMenu" role="button" data-label="Fees Received">
+                <span><i class="fas fa-file-invoice-dollar main-icon"></i> <span class="sidebar-label">Fees Received</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="feesMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("FeesGroup", "Finance")" class="sub-nav-link">Fees Group</a></li>
+                    <li><a href="@Url.Action("FeesType", "Finance")" class="sub-nav-link">Fees Head</a></li>
+                    <li><a href="@Url.Action("BulkInvoice", "Finance")" class="sub-nav-link">Bulk Invoice</a></li>
+                    <li><a href="@Url.Action("BulkInvoicePrint", "Finance")" class="sub-nav-link text-warning fw-bold"><i class="fas fa-print me-1"></i> Bulk Invoice Print</a></li>
+                    <li><a href="@Url.Action("FeesInvoice", "Finance")" class="sub-nav-link">Fees Invoice</a></li>
+                    <li><a href="@Url.Action("CollectFee", "Finance")" class="sub-nav-link text-success fw-800">Collect Fees</a></li>
+                    <li><a href="@Url.Action("BankPayment", "Finance")" class="sub-nav-link">Bank Payment</a></li>
+                    <li><a href="#" class="sub-nav-link">Fees Due Report</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium @(ViewContext.RouteData.Values["controller"]?.ToString() == "Accounting" ? "active" : "")" data-bs-toggle="collapse" href="#accountsMenu" role="button" aria-expanded="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Accounting" ? "true" : "false")" data-label="Accounts">
+                <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Accounting" ? "show" : "")" id="accountsMenu">
+                <ul class="sub-menu">
+                    <li class="menu-sub-category px-3 small fw-700 text-muted mt-2">VOUCHERS</li>
+                    <li><a href="@Url.Action("PaymentVoucher", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "PaymentVoucher" ? "active" : "")">Payment Voucher</a></li>
+                    <li><a href="@Url.Action("ReceiptVoucher", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ReceiptVoucher" ? "active" : "")">Receipt Voucher</a></li>
+                    <li><a href="@Url.Action("JournalVoucher", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "JournalVoucher" ? "active" : "")">Journal Voucher</a></li>
+                    <li><a href="@Url.Action("ContraVoucher", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ContraVoucher" ? "active" : "")">Contra Entry</a></li>
+
+                    <li class="menu-sub-category px-3 small fw-700 text-muted mt-2">STOCK VOUCHERS</li>
+                    <li><a href="@Url.Action("SalesVoucher", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "SalesVoucher" ? "active" : "")">Sales Voucher</a></li>
+                    <li><a href="@Url.Action("PurchaseVoucher", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "PurchaseVoucher" ? "active" : "")">Purchase Voucher</a></li>
+
+                    <li class="menu-sub-category px-3 small fw-700 text-muted mt-2">MASTERS</li>
+                    <li><a href="@Url.Action("ChartOfAccounts", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ChartOfAccounts" ? "active" : "")">Account Master</a></li> 
+                    <li><a href="@Url.Action("ItemAccountMaster", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ItemAccountMaster" ? "active" : "")">Item Account Master</a></li> 
+
+                    <li class="menu-sub-category px-3 small fw-700 text-muted mt-2">REPORTS</li>
+                    <li><a href="@Url.Action("VoucherList", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "VoucherList" ? "active" : "")">Voucher Register</a></li>
+                    <li><a href="@Url.Action("AccountLedger", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "AccountLedger" ? "active" : "")">Account Ledger</a></li>
+                    <li><a href="@Url.Action("TrialBalance", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "TrialBalance" ? "active" : "")">Trial Balance</a></li>
+                    <li><a href="@Url.Action("ReceiptPayment", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ReceiptPayment" ? "active" : "")">Receipt & Payment</a></li>
+                    <li><a href="@Url.Action("IncomeExpenditure", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "IncomeExpenditure" ? "active" : "")">Income & Expenditure</a></li>
+                    <li><a href="@Url.Action("BalanceSheet", "Accounting")" class="sub-nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "BalanceSheet" ? "active" : "")">Balance Sheet</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("Parent") || User.IsInRole("Student"))
+    {
+        <div class="menu-category">FINANCE</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" href="#">
+                <span><i class="fas fa-file-invoice-dollar main-icon"></i> My Fees</span>
+            </a>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher"))
+    {
+        <div class="menu-category">OPERATIONS & INVENTORY</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#inventoryMenu" role="button" data-label="Inventory">
+                <span><i class="fas fa-boxes-stacked main-icon"></i> <span class="sidebar-label">Inventory</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="inventoryMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("Index", "Inventory")" class="sub-nav-link">Asset Registry</a></li>
+                    <li><a href="@Url.Action("ItemCategory", "Inventory")" class="sub-nav-link">Category Logic</a></li>
+                    <li><a href="@Url.Action("Supplier", "Inventory")" class="sub-nav-link">Supplier Nexus</a></li>
+                    <li><a href="@Url.Action("ItemReceive", "Inventory")" class="sub-nav-link">Procurement Log</a></li>
+                    <li><a href="@Url.Action("IssueItem", "Inventory")" class="sub-nav-link">Asset Issuance</a></li>
+                    <li><a href="@Url.Action("Transactions", "Inventory")" class="sub-nav-link">Audit Trail</a></li>
+                    <li><a href="@Url.Action("Reports", "Inventory")" class="sub-nav-link">Strategy Reports</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Librarian") || User.IsInRole("Teacher") || User.IsInRole("Student") || User.IsInRole("Parent"))
+    {
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#transportMenu" role="button" data-label="Transport">
+                <span><i class="fas fa-bus main-icon"></i> <span class="sidebar-label">Transport</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="transportMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("Index", "Transport")" class="sub-nav-link">Routes</a></li>
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                    {
+                        <li><a href="@Url.Action("Vehicles", "Transport")" class="sub-nav-link">Vehicles</a></li>
+                        <li><a href="@Url.Action("AssignVehicle", "Transport")" class="sub-nav-link">Assign Vehicle</a></li>
+                        <li><a href="@Url.Action("AssignStudents", "Transport")" class="sub-nav-link">Student Allocation</a></li>
+                    }
+                    <li><a href="@Url.Action("Reports", "Transport")" class="sub-nav-link">Transport Report</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#libraryMenu" role="button" data-label="Library">
+                <span><i class="fas fa-book-reader main-icon"></i> <span class="sidebar-label">Library</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="libraryMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("CreateBook", "Library")" class="sub-nav-link text-success fw-bold">Add Book</a></li>
+                    <li><a href="@Url.Action("Index", "Library")" class="sub-nav-link">Book List</a></li>
+                    <li><a href="@Url.Action("BookCategory", "Library")" class="sub-nav-link">Book Categories</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("AddMember", "Library")" class="sub-nav-link">Add Member</a></li>
+                    <li><a href="@Url.Action("IssueBook", "Library")" class="sub-nav-link text-info">Issue/Return Book</a></li>
+                    <li><a href="@Url.Action("IssuedBooks", "Library")" class="sub-nav-link">All Issued Books</a></li>
+                    <li><a href="@Url.Action("Reports", "Library")" class="sub-nav-link">Library Reports</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher") || User.IsInRole("Student"))
+    {
+        <div class="menu-category">DATA & CMS</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#downloadCenterMenu" role="button" data-label="Download Center">
+                <span><i class="fas fa-download main-icon"></i> <span class="sidebar-label">Download Center</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="downloadCenterMenu">
+                <ul class="sub-menu">
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                    {
+                        <li><a href="@Url.Action("ContentType", "DownloadCenter")" class="sub-nav-link">Content Type</a></li>
+                        <li><a href="@Url.Action("UploadContent", "DownloadCenter")" class="sub-nav-link">Upload Content</a></li>
+                    }
+                    <li><a href="@Url.Action("ContentList", "DownloadCenter")" class="sub-nav-link">Content List</a></li>
+                    <li><a href="@Url.Action("SharedContent", "DownloadCenter")" class="sub-nav-link">Shared Content List</a></li>
+                    <li><a href="@Url.Action("VideoList", "DownloadCenter")" class="sub-nav-link">Video List</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+    {
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#dataManagementMenu" role="button"
+               data-label="Data Management"
+               aria-expanded="@(ViewContext.RouteData.Values["controller"]?.ToString() == "ImportExport" ? "true" : "false")">
+                <span>
+                    <i class="fas fa-database main-icon"></i>
+                    <span class="sidebar-label">Data Management</span>
+                </span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "ImportExport" ? "show" : "")" id="dataManagementMenu">
+                <ul class="sub-menu">
+                    <li>
+                        <a href="@Url.Action("Index", "ImportExport")"
+                           class="sub-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ImportExport" ? "active" : "")">
+                            <i class="fas fa-arrows-rotate me-2"></i>Import &amp; Export Center
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="students"})" class="sub-nav-link">
+                            <i class="fas fa-user-graduate me-2"></i>Students Template
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="staff"})" class="sub-nav-link">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Staff Template
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="fees"})" class="sub-nav-link">
+                            <i class="fas fa-money-bill me-2"></i>Fee Template
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="vouchers"})" class="sub-nav-link">
+                            <i class="fas fa-receipt me-2"></i>Vouchers Template
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#frontendCmsMenu" role="button" data-label="Frontend CMS">
+                <span><i class="fas fa-desktop main-icon"></i> <span class="sidebar-label">Frontend CMS</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="frontendCmsMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("ManageTheme", "FrontSettings")" class="sub-nav-link text-premium-purple fw-bold"><i class="fas fa-magic me-2"></i>Global Website Theme</a></li>
+                    <li><a href="@Url.Action("Slider", "FrontSettings")" class="sub-nav-link">Home Header Slider</a></li>
+                    <li><a href="@Url.Action("PageList", "FrontSettings")" class="sub-nav-link">Dynamic CMS Pages</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("ExpertTeachers", "FrontSettings")" class="sub-nav-link">Expert Faculty List</a></li>
+                    <li><a href="@Url.Action("Gallery", "FrontSettings")" class="sub-nav-link text-success">Institutional Gallery</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("NewsList", "FrontSettings")" class="sub-nav-link">News & Press Feed</a></li>
+                    <li><a href="@Url.Action("Testimonials", "FrontSettings")" class="sub-nav-link">Public Testimonials</a></li>
+                    <li><a href="@Url.Action("FormDownloads", "FrontSettings")" class="sub-nav-link">Resource Downloads</a></li>
+                    <li class="border-top my-2 opacity-50"></li>
+                    <li><a href="@Url.Action("ContactMessages", "FrontSettings")" class="sub-nav-link text-warning"><i class="fas fa-envelope-open-text me-2"></i>Public Inquiries</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" href="@Url.Action("Index", "Style")" data-label="Style Architect">
+                <span><i class="fas fa-palette main-icon"></i> <span class="sidebar-label">Style Architect</span></span>
+            </a>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Accountant"))
+    {
+        <div class="menu-category">REPORTS</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#reportsModule" role="button" data-label="Reports">
+                <span><i class="fas fa-chart-pie main-icon"></i> <span class="sidebar-label">Reports</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="reportsModule">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("StudentReport", "Reports")" class="sub-nav-link">Students Report</a></li>
+                    <li><a href="@Url.Action("StudentAttendanceReport", "Reports")" class="sub-nav-link">Student Attendance Report</a></li>
+                    <li><a href="@Url.Action("SubjectAttendanceReport", "Reports")" class="sub-nav-link">Subject Attendance Report</a></li>
+                    <li><a href="@Url.Action("HomeworkEvaluationReport", "Reports")" class="sub-nav-link">Homework Evaluation Report</a></li>
+                    <li><a href="@Url.Action("GuardianReport", "Reports")" class="sub-nav-link">Guardian Reports</a></li>
+                    <li><a href="@Url.Action("StudentHistory", "Reports")" class="sub-nav-link">Student History</a></li>
+                    <li><a href="@Url.Action("StudentLoginReport", "Reports")" class="sub-nav-link">Student Login Report</a></li>
+                    <li><a href="@Url.Action("ClassReport", "Reports")" class="sub-nav-link">Class Report</a></li>
+                    <li><a href="@Url.Action("ClassRoutineReport", "Reports")" class="sub-nav-link">Class Routine</a></li>
+                    <li><a href="@Url.Action("PreviousRecord", "Reports")" class="sub-nav-link">Previous Record</a></li>
+                    <li><a href="@Url.Action("StudentTransportReport", "Reports")" class="sub-nav-link">Student Transport Report</a></li>
+                    <li><a href="@Url.Action("StudentDormitoryReport", "Reports")" class="sub-nav-link">Student Dormitory Report</a></li>
+                    <li><a href="@Url.Action("FeesReport", "Reports")" class="sub-nav-link text-success fw-bold">Payment Report</a></li>
+                    <li><a href="@Url.Action("FeesDueReport", "Reports")" class="sub-nav-link text-danger fw-bold">Fees Due Report</a></li>
+                    <li><a href="@Url.Action("FineReport", "Reports")" class="sub-nav-link">Fine Report</a></li>
+                    <li><a href="@Url.Action("BalanceReport", "Reports")" class="sub-nav-link">Balance Report</a></li>
+                    <li><a href="@Url.Action("WaiverReport", "Reports")" class="sub-nav-link">Waiver Report</a></li>
+                    <li><a href="@Url.Action("WalletReport", "Reports")" class="sub-nav-link text-info">Wallet Report</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("PayrollReport", "Reports")" class="sub-nav-link">Payroll Report</a></li>
+                    <li><a href="@Url.Action("TransactionReport", "Reports")" class="sub-nav-link">Transaction Report</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#examReportsMenu" role="button" data-label="Exam Reports">
+                <span><i class="fas fa-file-invoice main-icon"></i> <span class="sidebar-label">Exam Reports</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="examReportsMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("ExamRoutine", "ExamReports")" class="sub-nav-link text-info">Exam Routine</a></li>
+                    <li><a href="@Url.Action("MeritList", "ExamReports")" class="sub-nav-link text-success">Merit List Report</a></li>
+                    <li><a href="@Url.Action("OnlineExamReport", "ExamReports")" class="sub-nav-link">Online Exam Report</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("SubjectWiseMarksheet", "ExamReports")" class="sub-nav-link">Subject Wise Marksheet</a></li>
+                    <li><a href="@Url.Action("TabulationSheet", "ExamReports")" class="sub-nav-link">Tabulation Sheet</a></li>
+                    <li><a href="@Url.Action("ProgressCard", "ExamReports")" class="sub-nav-link text-warning">Progress Card Report</a></li>
+                    <li><a href="@Url.Action("MarkSheetReport", "ExamReports")" class="sub-nav-link">Mark Sheet Report</a></li>
+                    <li><a href="@Url.Action("ProgressCard100Percent", "ExamReports")" class="sub-nav-link text-primary"><i class="fas fa-star me-1 small"></i> Progress Card 100%</a></li>
+                    <li class="border-top my-1 opacity-25"></li>
+                    <li><a href="@Url.Action("PreviousResult", "ExamReports")" class="sub-nav-link">Previous Result</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+    {
+        <div class="menu-category">SYSTEM & SETTINGS</div>
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#systemSettingsMenu" role="button" data-label="System Settings">
+                <span><i class="fas fa-cogs main-icon"></i> <span class="sidebar-label">System Settings</span></span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="systemSettingsMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("Index", "Settings")" class="sub-nav-link text-premium-purple fw-bold"><i class="fas fa-terminal me-2"></i>Global Control Center</a></li>
+                    <li><a href="@Url.Action("Index", "GeneralSettings")" class="sub-nav-link">Institutional Identity</a></li>
+                    <li><a href="@Url.Action("AcademicYear", "GeneralSettings")" class="sub-nav-link">Academic Year Cycle</a></li>
+                    <li><a href="@Url.Action("Assign", "OptionalSubject")" class="sub-nav-link">Optional Subject Assignment</a></li>
+                    <li><a href="@Url.Action("Holiday", "Settings")" class="sub-nav-link">Holiday Master</a></li>
+                    <li><a href="@Url.Action("BaseSetup", "GeneralSettings")" class="sub-nav-link">Environmental Setup</a></li>
+                    <li><a href="@Url.Action("Role", "RolePermission")" class="sub-nav-link text-info">Role Jurisdiction</a></li>
+                     <li><a href="@Url.Action("Users", "Administration")" class="sub-nav-link text-warning"><i class="fas fa-users-gear me-2"></i>User Management Matrix</a></li>
+                    <li><a href="@Url.Action("ApiPermission", "RolePermission")" class="sub-nav-link text-success">API Access Nexus</a></li>
+                    <li><a href="@Url.Action("Index", "CustomFields")" class="sub-nav-link"><i class="fas fa-edit me-1"></i> Field Customization</a></li>
+                    <li><a href="@Url.Action("Backup", "GeneralSettings")" class="sub-nav-link">Data Archive (Backup)</a></li>
+                    <li><a href="@Url.Action("Updates", "Administration")" class="sub-nav-link border-top mt-2 pt-2 smallest fw-800">SYSTEM ARCHIVE & UPDATE</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium d-flex align-items-center justify-content-between" href="@Url.Action("ModuleManager", "System")">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-cubes-stacked main-icon"></i>
+                    <span>Module Manager</span>
+                </div>
+                <span class="badge rounded-pill bg-info ms-2" style="font-size: 0.6rem; padding: 4px 8px;">CORE</span>
+            </a>
+        </div>
+
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#feesSettingsMenu" role="button">
+                <span><i class="fas fa-cog main-icon"></i> Fees Settings</span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse" id="feesSettingsMenu">
+                <ul class="sub-menu">
+                    <li><a href="@Url.Action("BulkInvoicePrintSettings", "Finance")" class="sub-nav-link">Fees Invoice Settings</a></li>
+                    <li><a href="@Url.Action("BulkInvoicePrint", "Finance")" class="sub-nav-link">Bulk Print Queue</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium" data-bs-toggle="collapse" href="#examSettingsMenu" role="button">
+                <span><i class="fas fa-cog main-icon"></i> Exam Settings</span>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("Teacher") || User.IsInRole("Student") || User.IsInRole("Parent"))
+    {
+        <!-- MODULE Category -->
+        <div class="menu-category">PLATFORM ADDONS</div>
+
+        <!-- Virtual Classrooms -->
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium d-flex align-items-center justify-content-between @(new[]{"Zoom", "Gmeet", "Jitsi", "BigBlueButton", "InAppLive"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "active" : "")" data-bs-toggle="collapse" href="#virtualClassMenu" role="button">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-video main-icon"></i>
+                    <span>Virtual Classrooms</span>
+                </div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(new[]{"Zoom", "Gmeet", "Jitsi", "BigBlueButton", "InAppLive"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "show" : "")" id="virtualClassMenu">
+                <ul class="sub-menu">
+                    <li>
+                        <a class="sub-nav-link text-primary fw-bold" data-bs-toggle="collapse" href="#zoomSub">
+                            <i class="fas fa-video me-1"></i> Zoom Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Zoom" ? "show" : "")" id="zoomSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "Zoom")" class="sub-nav-link-inner small"><i class="fas fa-th-large me-2 opacity-50"></i>Dashboard</a></li>
+                                <li><a href="@Url.Action("VirtualClass", "Zoom")" class="sub-nav-link-inner small"><i class="fas fa-graduation-cap me-2 opacity-50"></i>Virtual Class</a></li>
+                                <li><a href="@Url.Action("VirtualMeeting", "Zoom")" class="sub-nav-link-inner small"><i class="fas fa-users me-2 opacity-50"></i>Virtual Meeting</a></li>
+                                <li><a href="@Url.Action("ClassReports", "Zoom")" class="sub-nav-link-inner small"><i class="fas fa-file-invoice me-2 opacity-50"></i>Class Reports</a></li>
+                                <li><a href="@Url.Action("MeetingReports", "Zoom")" class="sub-nav-link-inner small"><i class="fas fa-chart-bar me-2 opacity-50"></i>Meeting Reports</a></li>
+                                <li><a href="@Url.Action("Settings", "Zoom")" class="sub-nav-link-inner small"><i class="fas fa-cog me-2 opacity-50"></i>Settings</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="sub-nav-link text-success fw-bold" data-bs-toggle="collapse" href="#gmeetSub">
+                            <i class="fab fa-google me-1"></i> Gmeet Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Gmeet" ? "show" : "")" id="gmeetSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "Gmeet")" class="sub-nav-link-inner small">Dashboard</a></li>
+                                <li><a href="@Url.Action("VirtualClass", "Gmeet")" class="sub-nav-link-inner small">Virtual Class</a></li>
+                                <li><a href="@Url.Action("VirtualMeeting", "Gmeet")" class="sub-nav-link-inner small">Virtual Meeting</a></li>
+                                <li><a href="@Url.Action("ClassReports", "Gmeet")" class="sub-nav-link-inner small">Class Reports</a></li>
+                                <li><a href="@Url.Action("MeetingReports", "Gmeet")" class="sub-nav-link-inner small">Meeting Reports</a></li>
+                                <li><a href="@Url.Action("Settings", "Gmeet")" class="sub-nav-link-inner small">Settings</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="@Url.Action("Index", "Jitsi")" class="sub-nav-link"><i class="fas fa-headset me-1"></i> Jitsi Addon</a></li>
+                    <li>
+                        <a class="sub-nav-link text-info fw-bold" data-bs-toggle="collapse" href="#bbbSub">
+                            <i class="fas fa-chalkboard-teacher me-1"></i> BBB Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "BigBlueButton" ? "show" : "")" id="bbbSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "BigBlueButton")" class="sub-nav-link-inner small">Dashboard</a></li>
+                                <li><a href="@Url.Action("VirtualClass", "BigBlueButton")" class="sub-nav-link-inner small">Virtual Class</a></li>
+                                <li><a href="@Url.Action("VirtualMeeting", "BigBlueButton")" class="sub-nav-link-inner small">Virtual Meeting</a></li>
+                                <li><a href="@Url.Action("ClassReports", "BigBlueButton")" class="sub-nav-link-inner small">Class Reports</a></li>
+                                <li><a href="@Url.Action("MeetingReports", "BigBlueButton")" class="sub-nav-link-inner small">Meeting Reports</a></li>
+                                <li><a href="@Url.Action("ClassRecordList", "BigBlueButton")" class="sub-nav-link-inner small">Class Recordings</a></li>
+                                <li><a href="@Url.Action("MeetingRecordList", "BigBlueButton")" class="sub-nav-link-inner small">Meeting Recordings</a></li>
+                                <li><a href="@Url.Action("Settings", "BigBlueButton")" class="sub-nav-link-inner small">Settings</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="@Url.Action("Index", "InAppLive")" class="sub-nav-link"><i class="fas fa-tower-broadcast me-1"></i> In App Live</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Smart Attendance -->
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium d-flex align-items-center justify-content-between @(new[]{"Biometrics", "QrAttendance"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "active" : "")" data-bs-toggle="collapse" href="#smartAttendanceMenu" role="button">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-fingerprint main-icon"></i>
+                    <span>Smart Attendance</span>
+                </div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(new[]{"Biometrics", "QrAttendance"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "show" : "")" id="smartAttendanceMenu">
+                <ul class="sub-menu">
+                    <li>
+                        <a class="sub-nav-link text-warning fw-bold" data-bs-toggle="collapse" href="#bioSub">
+                            <i class="fas fa-fingerprint me-1"></i> Biometric Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Biometrics" ? "show" : "")" id="bioSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "Biometrics")" class="sub-nav-link-inner small">Nexus Dashboard</a></li>
+                                <li><a href="@Url.Action("StudentReport", "Biometrics")" class="sub-nav-link-inner small">Student Reports</a></li>
+                                <li><a href="@Url.Action("StaffReport", "Biometrics")" class="sub-nav-link-inner small">Staff Reports</a></li>
+                                <li><a href="@Url.Action("Settings", "Biometrics")" class="sub-nav-link-inner small">Infrastructure</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="sub-nav-link text-info fw-bold" data-bs-toggle="collapse" href="#qrSub">
+                            <i class="fas fa-qrcode me-1"></i> QR Attendance <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "QrAttendance" ? "show" : "")" id="qrSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "QrAttendance")" class="sub-nav-link-inner small">Nexus Dashboard</a></li>
+                                <li><a href="@Url.Action("Settings", "QrAttendance")" class="sub-nav-link-inner small">Infrastructure</a></li>
+                                <li><a href="@Url.Action("AutoSubmission", "QrAttendance")" class="sub-nav-link-inner small">Auto-Submission</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Advanced Academics -->
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium d-flex align-items-center justify-content-between @(new[]{"OnlineExam", "CbseExam", "Lms", "AiContent"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "active" : "")" data-bs-toggle="collapse" href="#advancedAcademicMenu" role="button">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-graduation-cap main-icon"></i>
+                    <span>Advanced Academics</span>
+                </div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(new[]{"OnlineExam", "CbseExam", "Lms", "AiContent"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "show" : "")" id="advancedAcademicMenu">
+                <ul class="sub-menu">
+                    <li>
+                        <a class="sub-nav-link text-primary fw-bold" data-bs-toggle="collapse" href="#onlineExamSub">
+                            <i class="fas fa-desktop me-1"></i> Online Exam Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "OnlineExam" ? "show" : "")" id="onlineExamSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("OnlineExam", "OnlineExam")" class="sub-nav-link-inner small">Evaluation Hub</a></li>
+                                <li><a href="@Url.Action("AddOnlineExam", "OnlineExam")" class="sub-nav-link-inner small">Initialize Evaluation</a></li>
+                                <li><a href="@Url.Action("QuestionGroup", "OnlineExam")" class="sub-nav-link-inner small">Question Domain</a></li>
+                                <li><a href="@Url.Action("QuestionBank", "OnlineExam")" class="sub-nav-link-inner small">Question Vault</a></li>
+                                <li><a href="@Url.Action("WrittenExam", "OnlineExam")" class="sub-nav-link-inner small">Written Node</a></li>
+                                <li><a href="@Url.Action("Settings", "OnlineExam")" class="sub-nav-link-inner small">Infrastructure</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="sub-nav-link text-success fw-bold" data-bs-toggle="collapse" href="#cbseSub">
+                            <i class="fas fa-scroll me-1"></i> CBSE Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "CbseExam" ? "show" : "")" id="cbseSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "CbseExam")" class="sub-nav-link-inner small">Nexus Dashboard</a></li>
+                                <li><a href="@Url.Action("Terms", "CbseExam")" class="sub-nav-link-inner small">Academic Terms</a></li>
+                                <li><a href="@Url.Action("Exams", "CbseExam")" class="sub-nav-link-inner small">Exams</a></li>
+                                <li><a href="@Url.Action("ExamSchedule", "CbseExam")" class="sub-nav-link-inner small">Exam Schedule</a></li>
+                                <li><a href="@Url.Action("ExamGrade", "CbseExam")" class="sub-nav-link-inner small">Exam Grade</a></li>
+                                <li><a href="@Url.Action("Assessments", "CbseExam")" class="sub-nav-link-inner small">Assessments</a></li>
+                                <li><a href="@Url.Action("Observations", "CbseExam")" class="sub-nav-link-inner small">Observations</a></li>
+                                <li><a href="@Url.Action("ObservationParameters", "CbseExam")" class="sub-nav-link-inner small">Observation Parameters</a></li>
+                                <li><a href="@Url.Action("AssignObservations", "CbseExam")" class="sub-nav-link-inner small">Assign Observations</a></li>
+                                <li><a href="@Url.Action("Templates", "CbseExam")" class="sub-nav-link-inner small">Cert. Templates</a></li>
+                                <li><a href="@Url.Action("PrintMarksheet", "CbseExam")" class="sub-nav-link-inner small">Print Marksheet</a></li>
+                                <li><a href="@Url.Action("Reports", "CbseExam")" class="sub-nav-link-inner small">Reports</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="sub-nav-link text-info fw-bold" data-bs-toggle="collapse" href="#lmsSub">
+                            <i class="fas fa-graduation-cap me-1"></i> LMS Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Lms" ? "show" : "")" id="lmsSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "Lms")" class="sub-nav-link-inner small">Intelligence Hub</a></li>
+                                <li><a href="@Url.Action("AllCourses", "Lms")" class="sub-nav-link-inner small">Course Registry</a></li>
+                                <li><a href="@Url.Action("AddCourse", "Lms")" class="sub-nav-link-inner small">Deploy Course</a></li>
+                                <li><a href="@Url.Action("PendingCourse", "Lms")" class="sub-nav-link-inner small">Verification Queue</a></li>
+                                <li><a href="@Url.Action("CategoryList", "Lms")" class="sub-nav-link-inner small">Domain Classification</a></li>
+                                <li><a href="@Url.Action("CourseLevel", "Lms")" class="sub-nav-link-inner small">Proficiency Depth</a></li>
+                                <li><a href="@Url.Action("EnrollmentHistory", "Lms")" class="sub-nav-link-inner small">Progression Log</a></li>
+                                <li><a href="@Url.Action("PurchaseLog", "Lms")" class="sub-nav-link-inner small">E-Commerce Intel</a></li>
+                                <li><a href="@Url.Action("FeesInvoice", "Lms")" class="sub-nav-link-inner small">Fiscal Invoices</a></li>
+                                <li><a href="@Url.Action("Settings", "Lms")" class="sub-nav-link-inner small">Infrastructure</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="sub-nav-link text-warning fw-bold" data-bs-toggle="collapse" href="#jitsiSub">
+                            <i class="fas fa-satellite-dish me-1"></i> Jitsi Relays <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Jitsi" ? "show" : "")" id="jitsiSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("VirtualClass", "Jitsi")" class="sub-nav-link-inner small">Virtual Classroom</a></li>
+                                <li><a href="@Url.Action("VirtualMeeting", "Jitsi")" class="sub-nav-link-inner small">Assembly Nodes</a></li>
+                                <li><a href="@Url.Action("Settings", "Jitsi")" class="sub-nav-link-inner small">Infrastructure</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="@Url.Action("Index", "AiContent")" class="sub-nav-link text-premium-purple fw-800"><i class="fas fa-sparkles me-1"></i> Ai Content Addon</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Enrollment & Communication -->
+        <div class="nav-item-wrapper">
+            <a class="nav-link-premium d-flex align-items-center justify-content-between @(new[]{"RegistrationAddon", "WhatsApp", "Certificates"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "active" : "")" data-bs-toggle="collapse" href="#commSubMenu" role="button">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-comments main-icon"></i>
+                    <span>Growth & Comms</span>
+                </div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+            </a>
+            <div class="collapse @(new[]{"RegistrationAddon", "WhatsApp", "Certificates"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "show" : "")" id="commSubMenu">
+                <ul class="sub-menu">
+                    <li>
+                        <a class="sub-nav-link text-warning fw-bold" data-bs-toggle="collapse" href="#regSub">
+                            <i class="fas fa-user-plus me-1"></i> Admission Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "RegistrationAddon" ? "show" : "")" id="regSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "RegistrationAddon")" class="sub-nav-link-inner small">Dashboard</a></li>
+                                <li><a href="@Url.Action("StudentList", "RegistrationAddon")" class="sub-nav-link-inner small">Student List</a></li>
+                                <li><a href="@Url.Action("Settings", "RegistrationAddon")" class="sub-nav-link-inner small">Portal Settings</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="sub-nav-link text-success fw-bold" data-bs-toggle="collapse" href="#whatsAppSub">
+                            <i class="fab fa-whatsapp me-1"></i> WhatsApp Suite <i class="fas fa-chevron-down arrow-inner ms-auto"></i>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "WhatsApp" ? "show" : "")" id="whatsAppSub">
+                            <ul class="sub-menu-inner list-unstyled ps-4">
+                                <li><a href="@Url.Action("Index", "WhatsApp")" class="sub-nav-link-inner small">WhatsApp Hub</a></li>
+                                <li><a href="@Url.Action("Settings", "WhatsApp")" class="sub-nav-link-inner small">API Infrastructure</a></li>
+                                <li><a href="@Url.Action("Agents", "WhatsApp")" class="sub-nav-link-inner small">Support Agents</a></li>
+                                <li><a href="@Url.Action("Analytics", "WhatsApp")" class="sub-nav-link-inner small">Communication Intel</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="/Certificates/Index" class="sub-nav-link">Certificate Addon</a></li>
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+        <!-- Sidebar Bottom Collapse Button -->
+        <div class="sidebar-footer-collapse" id="sidebarCollapseFooter">
+            <button class="sidebar-hide-btn" id="sidebarHideBtnBottom" title="Hide Sidebar">
+                <i class="fas fa-angles-left"></i>
+                <span class="sidebar-hide-label">Collapse</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Show Sidebar Tab -->
+    <div class="sidebar-show-tab" id="sidebarShowTab" title="Show Sidebar">
+        <i class="fas fa-angles-right"></i>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="topbar">
+        <div class="d-flex align-items-center">
+            <div class="toggle-btn" id="sidebarToggle"><i class="fas fa-bars"></i></div>
+            <button onclick="history.length > 1 ? history.back() : window.location.href='/Dashboard'" class="btn-back-premium ms-3 me-2" title="Go Back">
+                <i class="fas fa-arrow-left-long"></i>
+                <span class="d-none d-sm-inline ms-2">Back</span>
+            </button>
+            <form action="/Students/Index" method="get" class="search-bar-modern d-none d-md-block">
+                <input type="text" name="searchString" placeholder="Search Here ..." />
+            </form>
+        </div>
+        <div class="d-flex align-items-center gap-4">
+            <div class="d-none d-xl-flex align-items-center gap-2 me-3 social-topbar">
+                <a href="#" class="social-icon-btn fb"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon-btn tw"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon-btn ln"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon-btn gp"><i class="fab fa-google-plus-g"></i></a>
+                <div class="vr mx-3 text-muted opacity-25" style="height: 20px;"></div>
+                <a href="/Finance/Dashboard" class="btn btn-premium-purple btn-sm rounded-pill px-3 shadow-sm d-flex align-items-center gap-2 fw-800" style="height: 34px; font-size: 0.75rem;">
+                    <i class="fas fa-file-invoice-dollar"></i> <span>Fees Dashboard</span>
+                </a>
+                <a href="/Accounting/Index" class="btn btn-premium-blue btn-sm rounded-pill px-3 shadow-sm d-flex align-items-center gap-2 fw-800" style="height: 34px; font-size: 0.75rem;">
+                    <i class="fas fa-chart-pie"></i> <span>Accounting Dashboard</span>
+                </a>
+            </div>
+            <!-- Language Switcher -->
+            <div class="d-none d-md-flex align-items-center text-muted fw-600" style="font-size: 0.85rem;">
+                <div class="dropdown" id="langSwitcher">
+                    <span style="cursor:pointer;" data-bs-toggle="dropdown" class="hover-primary transition-all" id="langLabel">
+                        <i class="fas fa-globe me-1"></i>
+                        <span id="langCurrentName">English</span>
+                        <i class="fas fa-chevron-down ms-1 small"></i>
+                    </span>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-16 mt-2 p-2" style="min-width:160px;">
+                        <li><a class="dropdown-item fw-600 lang-opt rounded-8 mb-1" data-culture="en" href="/Language/Set?culture=en&returnUrl=CURRENT_URL"><img src="https://flagcdn.com/w20/us.png" class="me-2 rounded-1" alt="EN"> English</a></li>
+                        <li><a class="dropdown-item fw-600 lang-opt rounded-8 mb-1" data-culture="hi" href="/Language/Set?culture=hi&returnUrl=CURRENT_URL"><img src="https://flagcdn.com/w20/in.png" class="me-2 rounded-1" alt="HI"> &#2361;&#2367;&#2306;&#2342;&#2368;</a></li>
+                        <li><a class="dropdown-item fw-600 lang-opt rounded-8 mb-1" data-culture="kn" href="/Language/Set?culture=kn&returnUrl=CURRENT_URL"><img src="https://flagcdn.com/w20/in.png" class="me-2 rounded-1" alt="KN"> &#3221;&#3240;&#3149;&#3240;&#3233;</a></li>
+                        <li><a class="dropdown-item fw-600 lang-opt rounded-8 mb-1" data-culture="ta" href="/Language/Set?culture=ta&returnUrl=CURRENT_URL"><img src="https://flagcdn.com/w20/in.png" class="me-2 rounded-1" alt="TA"> &#2980;&#2990;&#3007;&#2996;&#3021;</a></li>
+                        <li><a class="dropdown-item fw-600 lang-opt rounded-8" data-culture="te" href="/Language/Set?culture=te&returnUrl=CURRENT_URL"><img src="https://flagcdn.com/w20/in.png" class="me-2 rounded-1" alt="TE"> &#3108;&#3142;&#3122;&#3137;&#3095;&#3137;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="topbar-icons d-flex align-items-center gap-3">
+                <a href="/" class="topbar-icon" title="Visit Home Page"><i class="fas fa-home"></i></a>
+                <div class="icon-wrapper" data-bs-toggle="dropdown" style="cursor:pointer;">
+                    <i class="far fa-envelope"></i><span class="notification-badge">3</span>
+                </div>
+                <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-0" style="width:320px;border-radius:12px;overflow:hidden;">
+                    <div class="p-3 bg-primary text-white d-flex justify-content-between align-items-center">
+                        <span class="fw-800">MESSAGES</span>
+                        <a href="/Chat" class="text-white small fw-700 text-decoration-none opacity-75">View All</a>
+                    </div>
+                    <div class="p-0 max-h-300 overflow-auto">
+                        <a href="/Chat/Index" class="dropdown-item p-3 border-bottom d-flex align-items-center">
+                            <div class="avatar-sm bg-light-soft rounded-circle me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px;"><i class="fas fa-user text-primary"></i></div>
+                            <div><div class="fw-800 text-dark small">Communication Hub</div><div class="text-muted extra-small fw-600">Access your secure terminal</div></div>
+                        </a>
+                    </div>
+                    <div class="p-2 text-center bg-light"><a href="/Chat" class="fw-800 text-primary small text-decoration-none">OPEN CHAT TERMINAL</a></div>
+                </div>
+                <div class="icon-wrapper" data-bs-toggle="dropdown"><i class="far fa-bell"></i><span class="notification-badge" style="background:#ffa000;">8</span></div>
+                <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-0" style="width:300px;border-radius:4px;">
+                    <div class="p-3 bg-dark text-white fw-bold">Notifications</div>
+                    <div class="p-4 text-center text-muted small">No new notifications</div>
+                </div>
+            </div>
+            <div class="dropdown">
+                <div class="d-flex align-items-center gap-2" data-bs-toggle="dropdown" style="cursor:pointer;">
+                    <div class="user-avatar-modern" style="width:40px;height:40px;">
+                        <img src="https://ui-avatars.com/api/?name=@(Uri.EscapeDataString(User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "User"))&background=f0f1f3&color=333" class="rounded-circle w-100" />
+                    </div>
+                    <div class="d-none d-lg-block text-end">
+                        <div class="fw-bold text-dark" style="font-size:0.9rem;">@(User.FindFirst("FullName")?.Value ?? User.Identity?.Name)</div>
+                        <div class="text-muted small" style="font-size:0.75rem;">@(User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value?.ToUpper() ?? "USER")</div>
+                    </div>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-xl mt-3 p-2" style="border-radius:4px;min-width:200px;">
+                    <li><a class="dropdown-item py-2" href="#"><i class="far fa-user me-2"></i> My Profile</a></li>
+                    <li><a class="dropdown-item py-2" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form action="/Account/Logout" method="post" class="m-0">
+                            <button type="submit" class="dropdown-item py-2 text-danger"><i class="fas fa-sign-out-alt me-2"></i> Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Content Modal -->
+    <div class="modal fade" id="aiContentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-16 shadow-lg overflow-hidden">
+                <div class="modal-header text-white p-4" style="background: #7c3aed;">
+                    <h5 class="modal-title fw-800">AI Text Generation</h5>
+                    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="aiGenerationForm">
+                    <div class="modal-body p-5">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-700 text-muted small text-uppercase">LANGUAGE *</label>
+                                <select name="Language" class="form-select border-light-subtle p-3 bg-light-subtle" required>
+                                    <option value="English">English</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="French">French</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-700 text-muted small text-uppercase">TEMPLATE *</label>
+                                <select name="Template" class="form-select border-light-subtle p-3 bg-light-subtle" required>
+                                    <option value="">Select Template</option>
+                                    <option value="ExamQuest">Exam Questions</option>
+                                    <option value="StudyMaterial">Study Notes</option>
+                                    <option value="Notice">Notice Template</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-700 text-muted small text-uppercase">KEYWORD *</label>
+                                <input type="text" name="Keyword" class="form-control border-light-subtle p-3 bg-light-subtle" placeholder="Keyword" required>
+                                <div class="small text-muted mt-1 fw-600">You can add multiple keywords use comma(,) to separate keyword</div>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="button" class="btn btn-link text-decoration-none text-muted fw-800 p-0" id="showAdvancedToggle">
+                                    Show Advanced Options <i class="fas fa-chevron-down ms-1" style="background: #7c3aed; color: white; border-radius: 4px; padding: 2px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-5 pt-0 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary fw-900 px-5 py-3 rounded-12 shadow-sm d-flex align-items-center gap-2" style="background: #7c3aed;">
+                            <i class="fas fa-robot"></i> GENERATE
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-12 mb-4 mx-3" role="alert">
+                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-12 mb-4 mx-3" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i> @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @RenderBody()
+    </div>
+
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --topbar-height: 50px;
+        }
+
+        .sidebar,
+        .sidebar-premium,
+        .sidebar.sidebar-premium { 
+            width: var(--sidebar-width); 
+            height: 100vh; 
+            height: 100dvh; 
+            position: fixed; 
+            left: 0; 
+            top: 0;
+            bottom: 0;
+            z-index: 1000; 
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--sidebar-bg, #12403E) !important; 
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.15) transparent;
+            padding-bottom: 56px;
+            border-right: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+
+
+        /* ===== Sidebar Fully Hidden State ===== */
+        .sidebar.sidebar-hidden {
+            transform: translateX(-100%);
+            box-shadow: none;
+        }
+
+        /* When sidebar hidden, topbar + content go full width */
+        body.sidebar-hidden-body .topbar {
+            left: 0 !important;
+        }
+        body.sidebar-hidden-body .main-content {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Sidebar footer collapse button - fixed at bottom of sidebar */
+        .sidebar-footer-collapse {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            background: rgba(0,0,0,0.25);
+            backdrop-filter: blur(6px);
+            border-top: 1px solid rgba(255,255,255,0.12);
+            z-index: 1001;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Footer hides when sidebar is hidden */
+        body.sidebar-hidden-body .sidebar-footer-collapse {
+            transform: translateX(-100%);
+        }
+        .sidebar-hide-btn {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+        }
+        .sidebar-hide-btn:hover {
+            background: rgba(124,58,237,0.25);
+            color: #fff;
+        }
+        .sidebar-hide-btn i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .sidebar-hide-btn:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* Floating show-sidebar tab */
+        .sidebar-show-tab {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%) translateX(-100%);
+            width: 28px;
+            height: 64px;
+            background: var(--sidebar-bg, #12403E);
+            color: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1050;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 4px 0 16px rgba(0,0,0,0.25);
+            font-size: 0.85rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .sidebar-show-tab.visible {
+            transform: translateY(-50%) translateX(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+        .sidebar-show-tab:hover {
+            background: #7c3aed;
+            width: 36px;
+            box-shadow: 4px 0 20px rgba(124,58,237,0.45);
+        }
+
+
+
+        .sub-menu {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            position: relative;
+        }
+
+        .sub-menu::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sub-nav-link {
+            display: block;
+            padding: 8px 15px 8px 45px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sub-nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            padding-left: 50px;
+        }
+
+        .brand-logo-img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 5px;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .easyedu-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .easyedu-subtext {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .topbar { 
+            height: var(--topbar-height); 
+            position: fixed; 
+            top: 0; 
+            left: var(--sidebar-width); 
+            right: 0; 
+            z-index: 999; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 20px; 
+            justify-content: space-between; 
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .topbar-welcome {
+            flex-shrink: 0;
+            min-width: 0;
+            max-width: 200px;
+        }
+
+        .topbar-welcome h6 {
+            font-size: 0.85rem;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-welcome p {
+            line-height: 1;
+            margin: 0;
+            font-size: 0.65rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .search-bar-modern {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 8px 14px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 250px;
+            transition: all 0.3s ease;
+            height: 36px;
+        }
+
+        .search-bar-modern:focus-within {
+            background: white;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.15);
+            border: 1px solid #8b5cf6;
+        }
+
+        .search-bar-modern i {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .search-bar-modern input {
+            background: transparent;
+            font-size: 0.85rem;
+            outline: none;
+            border: none;
+            width: 100%;
+        }
+
+        .search-bar-modern input::placeholder {
+            color: #94a3b8;
+        }
+
+        .topbar-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .topbar-icon {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topbar-icon:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-2px);
+        }
+
+        .topbar-icon:hover i {
+            color: white;
+        }
+
+        .topbar-icon i {
+            font-size: 1.1rem;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 2px solid white;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @@keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .btn-premium-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white !important;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-premium-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+        
+        .user-profile-compact {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px 6px 6px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile-compact:hover {
+            background: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .user-avatar-modern {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #f472b6 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-premium-purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+            color: white !important;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-premium-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .user-role {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        
+        .main-content { 
+            margin-left: var(--sidebar-width); 
+            padding-top: calc(var(--topbar-height) + 5px); 
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-bottom: 30px;
+            background: transparent !important;
+            min-height: calc(100vh - var(--topbar-height));
+            width: calc(100% - var(--sidebar-width));
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Main content shifts when sidebar is collapsed */
+        body.sidebar-collapsed-body .main-content {
+            margin-left: var(--sidebar-collapsed-width);
+            width: calc(100% - var(--sidebar-collapsed-width));
+        }
+        body.sidebar-collapsed-body .topbar {
+            left: var(--sidebar-collapsed-width);
+        }
+
+        .card, .table-responsive {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.05) !important;
+        }
+
+        /* Comprehensive Mobile Responsiveness */
+        @@media (max-width: 1200px) {
+            :root { --sidebar-width: 0px; }
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .sidebar.show { transform: translateX(0); width: 280px; box-shadow: 20px 0 50px rgba(0,0,0,0.1); }
+            .topbar { left: 0; width: 100%; padding: 0 15px; }
+            .main-content { margin-left: 0; width: 100%; padding: 15px; }
+            .social-topbar { display: none !important; }
+            .sidebar-minimize-btn { display: none; }
+        }
+
+        @@media (max-width: 768px) {
+            .topbar { height: 60px !important; padding: 0 15px !important; flex-wrap: nowrap !important; }
+            .topbar .d-flex.align-items-center.gap-4 { width: auto !important; margin-top: 0 !important; }
+            .search-bar-modern { display: none; }
+            .user-info { display: none !important; }
+            .toggle-btn { margin-right: 10px !important; width: 35px !important; height: 35px !important; }
+            .btn-premium-blue { font-size: 0.65rem !important; padding: 5px 8px !important; }
+        }
+
+        @@media (max-width: 480px) {
+            .btn-premium-blue span { display: none; }
+            .btn-premium-blue::after { content: 'Finance'; }
+        }
+
+        /* Restore Premium Social Icons */
+        .social-icon-btn {
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: #f1f5f9; color: #64748b; text-decoration: none;
+            font-size: 0.85rem; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .social-icon-btn:hover { transform: translateY(-3px) rotate(8deg); color: white; }
+        .social-icon-btn.fb:hover { background: #1877f2; box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4); }
+        .social-icon-btn.tw:hover { background: #1da1f2; box-shadow: 0 4px 12px rgba(29, 161, 242, 0.4); }
+        .social-icon-btn.ln:hover { background: #0a66c2; box-shadow: 0 4px 12px rgba(10, 102, 194, 0.4); }
+        .social-icon-btn.gp:hover { background: #ea4335; box-shadow: 0 4px 12px rgba(234, 67, 53, 0.4); }
+        .social-icon-btn.accounting-link:hover { background: #8b5cf6; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); }
+
+        /* Restore Animated Professional Cards */
+        .premium-card-animated {
+            background: white; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.4s ease; position: relative; overflow: hidden; z-index: 1;
+        }
+        .premium-card-animated::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+            z-index: -1; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .premium-card-animated:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-color: rgba(124, 58, 237, 0.2); }
+        .premium-card-animated:hover::before { opacity: 1; }
+
+        .hover-primary:hover { color: #7c3aed !important; }
+        
+        /* Entrance Animations */
+        @@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-up { animation: fadeInUp 0.6s ease forwards; }
+
+        .hover-bg-light:hover {
+            background-color: #f8fafc;
+            border-color: #e2e8f0 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .transition-all {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-hide-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+            margin-right: -5px;
+        }
+
+        .sidebar-hide-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-back-premium {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .btn-back-premium:hover {
+            color: #7c3aed;
+            border-color: #8b5cf6;
+            background: #f5f3ff;
+            transform: translateX(-4px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.1);
+        }
+
+        .btn-back-premium i {
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-back-premium:hover i {
+            transform: scale(1.1);
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        // Clear any stale sidebar state from old versions
+        localStorage.removeItem('sidebarCollapsed');
+
+        // ===== Sidebar Full Hide/Show Toggle =====
+        (function() {
+            var sidebar = document.getElementById('mainSidebar');
+            var hideBtn = document.getElementById('sidebarHideBtn');
+            var showTab = document.getElementById('sidebarShowTab');
+            var footer = document.getElementById('sidebarCollapseFooter');
+            var body = document.body;
+
+            function applySidebarVisibility(hidden, animate) {
+                if (!animate) {
+                    sidebar.style.transition = 'none';
+                    if (footer) footer.style.transition = 'none';
+                    var mc = document.querySelector('.main-content');
+                    var tb = document.querySelector('.topbar');
+                    if (mc) mc.style.transition = 'none';
+                    if (tb) tb.style.transition = 'none';
+                }
+
+                if (hidden) {
+                    sidebar.classList.add('sidebar-hidden');
+                    body.classList.add('sidebar-hidden-body');
+                    if (footer) footer.style.transform = 'translateX(-110%)';
+                    showTab.classList.add('visible');
+                } else {
+                    sidebar.classList.remove('sidebar-hidden');
+                    body.classList.remove('sidebar-hidden-body');
+                    if (footer) footer.style.transform = '';
+                    showTab.classList.remove('visible');
+                }
+
+                if (!animate) {
+                    requestAnimationFrame(function() {
+                        sidebar.style.transition = '';
+                        if (footer) footer.style.transition = '';
+                        var mc = document.querySelector('.main-content');
+                        var tb = document.querySelector('.topbar');
+                        if (mc) mc.style.transition = '';
+                        if (tb) tb.style.transition = '';
+                    });
+                }
+            }
+
+            // Load saved state
+            var hiddenState = localStorage.getItem('sidebarHidden') === 'true';
+            applySidebarVisibility(hiddenState, false);
+
+            // Hide button click
+            hideBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var isHidden = sidebar.classList.contains('sidebar-hidden');
+                applySidebarVisibility(!isHidden, true);
+                localStorage.setItem('sidebarHidden', !isHidden);
+            });
+
+            // Topbar Toggle (3-line menu)
+            var toggleBtn = document.getElementById('sidebarToggle');
+            var overlay = document.getElementById('sidebarOverlay');
+            
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (window.innerWidth < 1200) {
+                        sidebar.classList.toggle('show');
+                        if (overlay) overlay.classList.toggle('active');
+                    } else {
+                        var isHidden = sidebar.classList.contains('sidebar-hidden');
+                        applySidebarVisibility(!isHidden, true);
+                        localStorage.setItem('sidebarHidden', !isHidden);
+                    }
+                });
+            }
+
+            // Overlay click (close sidebar on mobile)
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    sidebar.classList.remove('show');
+                    overlay.classList.remove('active');
+                });
+            }
+
+            // Show tab click
+            showTab.addEventListener('click', function() {
+                applySidebarVisibility(false, true);
+                localStorage.setItem('sidebarHidden', false);
+            });
+        })();
+
+            // Existing script continuation
+            $(document).ready(function() {
+
+            // Highlight active menu item, expand parent collapses, and preserve scroll position
+            (function() {
+                var currentPath = window.location.pathname.toLowerCase();
+                var currentQuery = window.location.search.toLowerCase();
+                var fullCurrentUrl = currentPath + currentQuery;
+
+                var matchedLink = null;
+
+                // 1. Exact match including query parameters (like ?type=Receive)
+                $('.sidebar-menu a').each(function() {
+                    var href = $(this).attr('href');
+                    if (!href) return;
+                    href = href.toLowerCase();
+                    
+                    if (href === fullCurrentUrl) {
+                        matchedLink = $(this);
+                        return false; // Break
+                    }
+                });
+
+                // 2. Exact match with just pathname (ignoring query parameters)
+                if (!matchedLink) {
+                    $('.sidebar-menu a').each(function() {
+                        var href = $(this).attr('href');
+                        if (!href) return;
+                        href = href.split('?')[0].toLowerCase();
+                        if (href === currentPath) {
+                            matchedLink = $(this);
+                            return false; // Break
+                        }
+                    });
+                }
+
+                // 3. Prefix match for sub-routes (like /Students/Create matching /Students)
+                if (!matchedLink) {
+                    var longestMatchLen = 0;
+                    $('.sidebar-menu a').each(function() {
+                        var href = $(this).attr('href');
+                        if (!href) return;
+                        href = href.split('?')[0].toLowerCase();
+                        
+                        // Ignore home/dashboard link for prefix match to prevent matching everything
+                        if (href === '/' || href === '/dashboard' || href === '/dashboard/index' || href.indexOf('/dashboard/') === 0) return;
+
+                        if (currentPath.indexOf(href) === 0 && href.length > longestMatchLen) {
+                            matchedLink = $(this);
+                            longestMatchLen = href.length;
+                        }
+                    });
+                }
+
+                // Apply active class and expand collapse
+                if (matchedLink) {
+                    $('.sidebar-menu a').removeClass('active');
+                    matchedLink.addClass('active');
+
+                    // If it's a sub-menu link, expand the parent collapse and highlight parent toggle link
+                    var collapseParent = matchedLink.closest('.collapse');
+                    if (collapseParent.length) {
+                        collapseParent.addClass('show');
+                        
+                        // Find the toggle button
+                        var collapseId = collapseParent.attr('id');
+                        var triggerBtn = $('a[href="#' + collapseId + '"], a[data-bs-target="#' + collapseId + '"]');
+                        if (triggerBtn.length) {
+                            triggerBtn.addClass('active');
+                            triggerBtn.attr('aria-expanded', 'true');
+                        }
+                    }
+                }
+
+                // --- Preserve Sidebar Scroll Position ---
+                var sidebar = document.getElementById('mainSidebar');
+                if (sidebar) {
+                    // Restore scroll position
+                    var savedScroll = localStorage.getItem('sidebarScroll');
+                    if (savedScroll !== null) {
+                        sidebar.scrollTop = parseInt(savedScroll, 10);
+                    } else if (matchedLink && matchedLink.length) {
+                        // Fallback: scroll active link into view
+                        matchedLink[0].scrollIntoView({ block: 'nearest' });
+                    }
+
+                    // Save scroll position on scroll events
+                    sidebar.addEventListener('scroll', function() {
+                        localStorage.setItem('sidebarScroll', sidebar.scrollTop);
+                    });
+                }
+            })();
+
+            $('#showAdvancedToggle').on('click', function() {
+                var icon = $(this).find('i');
+                if (icon.hasClass('fa-chevron-down')) {
+                    icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                } else {
+                    icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                }
+            });
+
+            // --- Global Keyboard Shortcuts ---
+            $(document).on('keydown', function(e) {
+                // ESC: Close Modals, Select2, Dropdowns
+                if (e.key === 'Escape') {
+                    $('.modal.show').modal('hide');
+                    if ($.fn.select2) $('.select2-hidden-accessible').select2('close');
+                    $('.dropdown-menu.show').removeClass('show');
+                    document.activeElement.blur();
+                }
+
+                // ENTER: Submit or Focus Next
+                if (e.key === 'Enter') {
+                    // Ignore textareas and Select2 searches
+                    if (e.target.tagName === 'TEXTAREA' || $(e.target).closest('.select2-search').length) return;
+                    
+                    // Specific case: Search Inputs should just submit normally
+                    if (e.target.tagName === 'INPUT' && (e.target.name === 'searchString' || e.target.name === 'searchTerm')) return;
+
+                    // If in a form, check if we should focus next element to assist data entry
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+                        // In Voucher Entry, specific handling is inside its own view, so we check for it
+                        if ($(e.target).closest('#voucherTable').length) return;
+
+                        const form = $(e.target).closest('form');
+                        if (form.length) {
+                            // If it's a small form (like login or search head), Enter should probably submit
+                            // If it's a large entry form, maybe focus next. 
+                            // Let's implement focus next for all tracked forms to avoid accidental submission
+                            const focusable = form.find('input, select, button').filter(':visible:enabled:not([readonly])');
+                            const index = focusable.index(e.target);
+                            if (index > -1 && index < focusable.length - 1) {
+                                e.preventDefault();
+                                focusable.eq(index + 1).focus();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+            // --- Language Switcher: Fix CURRENT_URL and mark active language ---
+            (function() {
+                var returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+                // Replace CURRENT_URL in all language links
+                document.querySelectorAll('.lang-opt').forEach(function(a) {
+                    a.href = a.href.replace('CURRENT_URL', returnUrl);
+                });
+
+                // Read the .AspNetCore.Culture cookie to detect current language
+                var cultureCookie = document.cookie.split('; ').find(function(r) {
+                    return r.startsWith('c=') || r.indexOf('|uic=') > -1 || r.startsWith('.AspNetCore.Culture=');
+                });
+                var currentLang = 'en';
+                if (cultureCookie) {
+                    var match = cultureCookie.match(/c=([a-z]{2})/);
+                    if (match) currentLang = match[1];
+                }
+
+                // Mark active item in dropdown
+                var langNames = { en: 'English', hi: '\u0939\u093f\u0902\u0926\u0940', kn: '\u0c95\u0ca8\u0ccd\u0ca8\u0ca1', ta: '\u0ba4\u0bae\u0bbf\u0bb4\u0bcd', te: '\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41' };
+                document.querySelectorAll('.lang-opt').forEach(function(a) {
+                    a.classList.remove('active');
+                    if (a.getAttribute('data-culture') === currentLang) {
+                        a.classList.add('active');
+                    }
+                });
+
+                // Update label text
+                var labelEl = document.getElementById('langCurrentName');
+                if (labelEl && langNames[currentLang]) {
+                    labelEl.textContent = langNames[currentLang];
+                }
+            })();
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+

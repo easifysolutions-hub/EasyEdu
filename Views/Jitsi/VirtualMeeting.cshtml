@@ -1,0 +1,147 @@
+@model IEnumerable<EasyEdu.Models.JitsiVirtualMeeting>
+@{
+    ViewData["Title"] = "Virtual Meeting Hub";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Jitsi Communication Nexus</h2>
+            <p class="text-muted small fw-600">Coordinate secure video assemblies for staff and global participants</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-3 rounded-12 shadow-lg fw-900" data-bs-toggle="modal" data-bs-target="#addMeetingModal">
+            <i class="fas fa-users-cog me-2"></i>DEPLOY ASSEMBLY NODE
+        </button>
+    </div>
+
+    <!-- Active Grid -->
+    <div class="row g-4 mb-5">
+        @foreach (var meeting in Model.Where(m => m.Status == "Pending" || m.Status == "Live"))
+        {
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-card bg-secondary bg-opacity-10 overflow-hidden border-0 shadow-lg h-100 position-relative" style="border-radius: 24px;">
+                    <div class="bg-secondary bg-opacity-25 p-4 border-bottom border-light border-opacity-50 d-flex justify-content-between align-items-start">
+                         <div class="d-flex align-items-center gap-3">
+                             <div class="bg-info bg-opacity-25 p-3 rounded-circle shadow-sm border border-info border-opacity-50">
+                                 <i class="fas fa-handshake text-info fa-lg"></i>
+                             </div>
+                             <div>
+                                 <p class="smallest text-muted m-0 fw-800 uppercase ls-1 text-info"><i class="fas fa-tag me-1 text-opacity-50"></i>@meeting.ParticipationType</p>
+                             </div>
+                         </div>
+                         <span class="badge @(meeting.Status == "Live" ? "bg-success" : "bg-warning text-dark") rounded-pill px-3 py-2 fw-900 shadow-sm border border-opacity-50 pulse-animation">
+                              <i class="fas fa-circle smallest me-1 text-white opacity-75"></i> @meeting.Status.ToUpper()
+                         </span>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-bottom" style="border-bottom-left-radius: 24px; border-bottom-right-radius: 24px;">
+                        <h5 class="fw-900 text-dark mb-1">@meeting.Topic</h5>
+                        <p class="smallest text-muted fw-700 mb-3">
+                            Room ID: @meeting.MeetingId 
+                            | <a href="@Url.Action("JoinRoom", new { meetingId = meeting.MeetingId })" target="_blank" class="text-info fw-800 text-decoration-underline">Direct Join Link</a>
+                        </p>
+                        
+                        <div class="bg-light-soft p-3 rounded-16 flex-fill border shadow-sm mb-3 text-center">
+                            <i class="far fa-calendar-check text-success mb-2 fa-2x"></i>
+                            <h5 class="fw-900 text-dark m-0">@meeting.Date.ToString("dd MMM yyyy")</h5>
+                        </div>
+
+                        <div class="d-flex gap-3 mb-4">
+                             <div class="bg-light-soft p-3 rounded-12 flex-fill border shadow-sm text-center">
+                                  <p class="smallest text-muted fw-800 m-0 uppercase flex-fill mb-1">Time Sync</p>
+                                  <h6 class="fw-900 text-dark m-0">@meeting.StartTime</h6>
+                             </div>
+                             <div class="bg-light-soft p-3 rounded-12 flex-fill border shadow-sm text-center">
+                                  <p class="smallest text-muted fw-800 m-0 uppercase flex-fill mb-1">Duration</p>
+                                  <h6 class="fw-900 text-dark m-0">@meeting.DurationMinutes Min</h6>
+                             </div>
+                        </div>
+                        
+                        <div class="d-grid mt-auto">
+                            <a href="@Url.Action("HostRoom", new { meetingId = @meeting.MeetingId })" target="_blank" class="btn btn-info text-white py-3 rounded-16 fw-900 h6 mb-0 shadow-lg">
+                                <i class="fas fa-video me-2"></i> INITIALIZE ASSEMBLY
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if(!Model.Any(m => m.Status == "Pending" || m.Status == "Live")) {
+             <div class="col-12 py-5 text-center text-muted fw-700 italic opacity-50">
+                 <i class="fas fa-video-slash fa-3x mb-3 text-secondary"></i>
+                 <p>Zero active virtual meeting nodes configured.</p>
+             </div>
+        }
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal fade animate-slide-up" id="addMeetingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+                <form asp-action="SaveVirtualMeeting" method="post">
+                    <input type="hidden" name="Id" value="0" />
+                    <div class="modal-header border-0 bg-info bg-opacity-10 p-4 border-bottom border-info border-opacity-25">
+                        <div class="d-flex align-items-center gap-3">
+                             <div class="bg-white p-2 rounded-circle shadow-sm border border-info border-opacity-50">
+                                 <i class="fas fa-handshake fa-lg text-info"></i>
+                             </div>
+                             <h4 class="fw-900 m-0 text-dark">Deploy Meeting</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    
+                    <div class="modal-body p-4 pt-4 text-dark bg-white">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase opacity-75 d-flex gap-2 align-items-center"><i class="fas fa-heading text-primary"></i> Meeting Focus</label>
+                                <input name="Topic" required class="form-control form-control-premium shadow-sm py-3 fw-900" placeholder="e.g. Annual Staff Sync">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase opacity-75 d-flex gap-2 align-items-center"><i class="fas fa-users text-info"></i> Participation Clearance</label>
+                                <select name="ParticipationType" class="form-select form-control-premium shadow-sm py-3" required>
+                                    <option value="Staff Node">Staff Internal</option>
+                                    <option value="Parent Node">Parent Body</option>
+                                    <option value="Global Node">Global Ecosystem</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="d-flex gap-3">
+                                    <div class="flex-fill">
+                                        <label class="form-label small fw-800 text-uppercase opacity-75 d-flex gap-2 align-items-center"><i class="far fa-calendar text-danger"></i> Date</label>
+                                        <input name="Date" type="date" required class="form-control form-control-premium shadow-sm py-3 text-dark fw-900">
+                                    </div>
+                                    <div class="flex-fill">
+                                        <label class="form-label small fw-800 text-uppercase opacity-75 d-flex gap-2 align-items-center"><i class="far fa-clock text-danger"></i> Time</label>
+                                        <input name="StartTime" type="time" required class="form-control form-control-premium shadow-sm py-3 text-dark fw-900">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label small fw-800 text-uppercase opacity-75 d-flex gap-2 align-items-center"><i class="fas fa-hourglass text-warning"></i> Duration (Mins)</label>
+                                <input name="DurationMinutes" type="number" required class="form-control form-control-premium shadow-sm py-3 fw-900" placeholder="45">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 p-4 pt-3 bg-white" style="border-bottom-left-radius: 24px; border-bottom-right-radius: 24px;">
+                        <button type="submit" class="btn btn-info text-white w-100 py-3 rounded-12 shadow-lg fw-900 h5 mb-0 ls-1">
+                            <i class="fas fa-space-shuttle me-2"></i> INITIALIZE ASSEMBLY
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background: #f8fafc; }
+    .ls-1 { letter-spacing: 1px; }
+    .uppercase { text-transform: uppercase; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .rounded-16 { border-radius: 16px; }
+</style>

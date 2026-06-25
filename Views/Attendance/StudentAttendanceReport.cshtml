@@ -1,0 +1,211 @@
+﻿@model EasyEdu.ViewModels.StudentAttendanceReportViewModel
+@{
+    ViewData["Title"] = "Student Attendance Report";
+}
+
+<div class="row mb-4 animate-fade-in-up">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-900 text-dark mb-1">Attendance Report</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/Attendance" class="text-decoration-none text-muted">Attendance</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Report</li>
+                    </ol>
+                </nav>
+            </div>
+            <a href="/Attendance/MarkStudentAttendance?classId=@Model.ClassId" class="btn btn-primary fw-600 shadow-sm">
+                <i class="fas fa-plus me-2"></i>Mark Attendance
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Section -->
+<div class="row mb-4 animate-fade-in-up" style="animation-delay: 0.1s;">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label fw-600 text-muted small text-uppercase">Select Class</label>
+                        <select name="classId" class="form-select" asp-items="ViewBag.Classes">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-600 text-muted small text-uppercase">Month</label>
+                        <select name="month" class="form-select">
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <!option value="@i" @(ViewBag.Month == i ? "selected" : "")>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</!option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-600 text-muted small text-uppercase">Year</label>
+                        <select name="year" class="form-select">
+                            @for (int i = DateTime.Now.Year - 1; i <= DateTime.Now.Year + 1; i++)
+                            {
+                                <!option value="@i" @(ViewBag.Year == i ? "selected" : "")>@i</!option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 fw-600">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.ClassId > 0 && Model.Students.Any())
+{
+    <div class="row animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="fw-700 m-0 text-primary">Attendance Matrix: @Model.ClassName - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Month) @Model.Year</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0 table-hover align-middle" style="font-size: 0.85rem;">
+                            <thead class="bg-light text-center">
+                                <tr>
+                                    <th class="fw-700 text-muted text-uppercase py-3" style="min-width: 200px; position: sticky; left: 0; z-index: 10; background: #f8f9fa;">Student Name</th>
+                                    <th class="fw-700 text-muted text-uppercase py-3">Adm. No</th>
+                                    @foreach (var day in Model.Days)
+                                    {
+                                        <th class="py-2 px-1" style="min-width: 35px;">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <span class="small text-muted">@day.Day</span>
+                                                <span class="badgex text-muted font-monospace" style="font-size: 0.7rem;">@day.ToString("ddd").Substring(0, 1)</span>
+                                            </div>
+                                        </th>
+                                    }
+                                    <th class="fw-700 text-success bg-white py-3">P</th>
+                                    <th class="fw-700 text-danger bg-white py-3">L</th>
+                                    <th class="fw-700 text-warning bg-white py-3">A</th>
+                                    <th class="fw-700 text-info bg-white py-3" title="Half Day">F</th>
+                                    <th class="fw-700 text-secondary bg-white py-3" title="On Leave">S</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var student in Model.Students)
+                                {
+                                    <tr>
+                                        <td class="fw-600" style="position: sticky; left: 0; z-index: 10; background: #fff;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm me-2 rounded-circle bg-light d-flex align-items-center justify-content-center text-primary fw-bold">
+                                                    @if (!string.IsNullOrEmpty(student.ProfilePicture))
+                                                    {
+                                                        <img src="@student.ProfilePicture" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@student.StudentName.Substring(0, 1)</span>
+                                                    }
+                                                </div>
+                                                <span class="text-dark">@student.StudentName</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center text-muted">@student.AdmissionNumber</td>
+                                        @foreach (var day in Model.Days)
+                                        {
+                                            string statusKey = "";
+                                            string bgClass = "";
+                                            string textClass = "";
+                                            string displayChar = "";
+
+                                            if (student.DailyStatuses.ContainsKey(day.Day))
+                                            {
+                                                statusKey = student.DailyStatuses[day.Day];
+                                                switch (statusKey)
+                                                {
+                                                    case "Present":
+                                                        bgClass = "bg-success-subtle";
+                                                        textClass = "text-success";
+                                                        displayChar = "P";
+                                                        break;
+                                                    case "Absent":
+                                                        bgClass = "bg-danger-subtle";
+                                                        textClass = "text-danger";
+                                                        displayChar = "A";
+                                                        break;
+                                                    case "Late":
+                                                        bgClass = "bg-warning-subtle";
+                                                        textClass = "text-warning";
+                                                        displayChar = "L";
+                                                        break;
+                                                    case "Half Day":
+                                                        bgClass = "bg-info-subtle";
+                                                        textClass = "text-info";
+                                                        displayChar = "H";
+                                                        break;
+                                                    case "Holiday":
+                                                        bgClass = "bg-secondary-subtle";
+                                                        textClass = "text-secondary";
+                                                        displayChar = "H";
+                                                        break;
+                                                    case "On Leave":
+                                                        bgClass = "bg-info-subtle";
+                                                        textClass = "text-info";
+                                                        displayChar = "S";
+                                                        break;
+                                                    default:
+                                                        displayChar = "-";
+                                                        break;
+                                                }
+                                            }
+
+                                            <td class="text-center p-1 @bgClass">
+                                                <span class="@textClass fw-bold">@displayChar</span>
+                                            </td>
+                                        }
+                                        <td class="text-center fw-bold text-success bg-light">@student.PresentCount</td>
+                                        <td class="text-center fw-bold text-warning bg-light">@student.LateCount</td>
+                                        <td class="text-center fw-bold text-danger bg-light">@student.AbsentCount</td>
+                                        <td class="text-center fw-bold text-info bg-light">@student.HalfDayCount</td>
+                                        <td class="text-center fw-bold text-secondary bg-light">@student.OnLeaveCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (Model.ClassId > 0 && !Model.Students.Any())
+{
+    <div class="row animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="col-12">
+            <div class="alert alert-info shadow-sm border-0 d-flex align-items-center">
+                <i class="fas fa-info-circle fa-2x me-3"></i>
+                <div>
+                    <h5 class="alert-heading fw-bold mb-1">No Students Found</h5>
+                    <p class="mb-0">No students are enrolled in the selected class.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="col-12">
+            <div class="alert alert-light shadow-sm border-0 d-flex align-items-center justify-content-center py-5">
+                <div class="text-center">
+                    <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+                    <h5 class="fw-bold text-muted">Please select a class to view the attendance report.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+}

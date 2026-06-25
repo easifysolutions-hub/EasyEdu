@@ -1,0 +1,89 @@
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Staff Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-up">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Administrative Terminal: @(User.FindFirst("FullName")?.Value ?? User.Identity?.Name)</h3>
+            <p class="text-muted small fw-600">Managing operational workflows and institutional resources.</p>
+        </div>
+        <div class="badge bg-dark-soft text-dark px-3 py-2 rounded-pill fw-800">ROLE: OPERATIONAL STAFF</div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h3 class="fw-800 m-0">ACTIVE</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">System Status</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(244, 114, 182, 0.1); color: #f472b6;">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <h3 class="fw-800 m-0">12</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Open Requests</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3 class="fw-800 m-0">Jan 25</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Work Date</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="premium-card p-4 text-center">
+                <div class="card-icon-box mx-auto mb-3" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <h3 class="fw-800 m-0">100%</h3>
+                <p class="text-muted small fw-700 text-uppercase mb-0">Task Completion</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-12">
+            <div class="premium-card">
+                <div class="p-4 border-bottom border-light">
+                    <h5 class="fw-800 m-0">Assigned Responsibilities</h5>
+                </div>
+                <div class="p-4">
+                    <div class="row g-4 text-center">
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-24 bg-light-soft hover-up transition-all cursor-pointer">
+                                <i class="fas fa-file-invoice mb-3 fs-3 text-primary"></i>
+                                <h6 class="fw-800">Inventory Sync</h6>
+                                <button class="btn btn-sm btn-link text-primary fw-800 text-decoration-none">LAUNCH MODULE</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-24 bg-light-soft hover-up transition-all cursor-pointer">
+                                <i class="fas fa-book-open mb-3 fs-3 text-purple"></i>
+                                <h6 class="fw-800">Library Audit</h6>
+                                <button class="btn btn-sm btn-link text-purple fw-800 text-decoration-none">LAUNCH MODULE</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-24 bg-light-soft hover-up transition-all cursor-pointer">
+                                <i class="fas fa-user-check mb-3 fs-3 text-success"></i>
+                                <h6 class="fw-800">Visitor Verification</h6>
+                                <button class="btn btn-sm btn-link text-success fw-800 text-decoration-none">LAUNCH MODULE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+@model EasyEdu.Models.Driver
+@{
+    ViewData["Title"] = "Onboard Navigator";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Navigator Onboarding</h1>
+        <p class="text-muted fw-600">Integrating new mobility personnel into the institutional transit network</p>
+    </div>
+    <div>
+        <a asp-action="Drivers" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i> Navigator Registry
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-xl-9 col-lg-11">
+        <div class="premium-card bg-white shadow-lg border-0 overflow-hidden animate-fade-in">
+            <div class="p-4 border-bottom bg-light">
+                <h5 class="fw-900 text-dark mb-0"><i class="fas fa-user-plus text-primary me-2"></i> Profile & Credential Initialization</h5>
+            </div>
+            <div class="p-5">
+                <form asp-action="CreateDriver" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4 p-3 bg-danger-soft rounded-12"></div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-7">
+                            <div class="mb-4">
+                                <label asp-for="Name" class="form-label fw-800 text-muted small uppercase">Full Legal Name</label>
+                                <input asp-for="Name" class="form-control form-control-lg border-2 fw-900" placeholder="e.g. Johnathan Miller" required />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label asp-for="Phone" class="form-label fw-800 text-muted small uppercase">Direct Contact</label>
+                                    <input asp-for="Phone" class="form-control border-2 fw-700" placeholder="+1-XXX-XXX-XXXX" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Experience" class="form-label fw-800 text-muted small uppercase">Experience Summary</label>
+                                    <input asp-for="Experience" class="form-control border-2" placeholder="e.g. 12 Years Transit Exp" />
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Address" class="form-label fw-800 text-muted small uppercase">Residential Address</label>
+                                <textarea asp-for="Address" class="form-control border-2" rows="3" placeholder="Primary residence details..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="premium-card p-4 border bg-gray-50 mb-4 text-center">
+                                <div class="avatar-xl rounded-circle overflow-hidden border-4 border-white shadow-md mx-auto mb-3" style="width: 120px; height: 120px; background: #f0f0f0;">
+                                    <i class="fas fa-user-circle text-muted" style="font-size: 80px; margin-top: 20px;"></i>
+                                </div>
+                                <label class="btn btn-sm btn-premium-primary px-3 shadow-sm">
+                                    Upload Identity Photo
+                                    <input type="file" name="PhotoFile" class="d-none" />
+                                </label>
+                                <p class="small text-muted mt-2 fw-600">PNG, JPG up to 2MB</p>
+                            </div>
+
+                            <div class="p-4 bg-white border-2 border-dashed rounded-24">
+                                <h6 class="fw-900 text-dark mb-3">Licensing Protocol</h6>
+                                <div class="mb-3">
+                                    <label asp-for="LicenseNumber" class="form-label fw-700 text-muted small uppercase">License #</label>
+                                    <input asp-for="LicenseNumber" class="form-control border-2 fw-800 text-primary" placeholder="State-Issued ID" required />
+                                </div>
+                                <div class="mb-0">
+                                    <label asp-for="LicenseExpiry" class="form-label fw-700 text-muted small uppercase">Expiry Date</label>
+                                    <input asp-for="LicenseExpiry" type="date" class="form-control border-2 fw-800 text-danger" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-5 d-flex justify-content-end gap-3 border-top pt-4">
+                            <button type="reset" class="btn btn-light px-4 py-2 rounded-12 fw-800 text-muted">Reset Parameters</button>
+                            <button type="submit" class="btn-premium btn-premium-primary px-5 py-3 shadow-lg fs-5">
+                                <i class="fas fa-user-check me-2"></i> Confirm Integration
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

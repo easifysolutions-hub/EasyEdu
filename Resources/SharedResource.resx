@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation / Sidebar -->
+  <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="Administration" xml:space="preserve"><value>Administration</value></data>
+  <data name="AdminSection" xml:space="preserve"><value>Admin Section</value></data>
+  <data name="Students" xml:space="preserve"><value>Students</value></data>
+  <data name="Teachers" xml:space="preserve"><value>Teachers</value></data>
+  <data name="Academics" xml:space="preserve"><value>Academics</value></data>
+  <data name="Finance" xml:space="preserve"><value>Finance</value></data>
+  <data name="Accounts" xml:space="preserve"><value>Accounts</value></data>
+  <data name="HumanResource" xml:space="preserve"><value>Human Resource</value></data>
+  <data name="Library" xml:space="preserve"><value>Library</value></data>
+  <data name="Transport" xml:space="preserve"><value>Transport</value></data>
+  <data name="Reports" xml:space="preserve"><value>Reports</value></data>
+  <data name="Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Communicate" xml:space="preserve"><value>Communicate</value></data>
+  <data name="Attendance" xml:space="preserve"><value>Attendance</value></data>
+  <data name="Examinations" xml:space="preserve"><value>Examinations</value></data>
+  <data name="Homework" xml:space="preserve"><value>Homework</value></data>
+  <data name="LessonPlan" xml:space="preserve"><value>Lesson Plan</value></data>
+  <data name="LeaveManagement" xml:space="preserve"><value>Leave Management</value></data>
+  <data name="Inventory" xml:space="preserve"><value>Inventory</value></data>
+  <data name="FeesCollection" xml:space="preserve"><value>Fees Collection</value></data>
+  <data name="OnlineExam" xml:space="preserve"><value>Online Exam</value></data>
+  <data name="VirtualClassroom" xml:space="preserve"><value>Virtual Classroom</value></data>
+  <data name="DataManagement" xml:space="preserve"><value>Data Management</value></data>
+  <data name="SystemSettings" xml:space="preserve"><value>System Settings</value></data>
+
+  <!-- Topbar -->
+  <data name="Back" xml:space="preserve"><value>Back</value></data>
+  <data name="SearchHere" xml:space="preserve"><value>Search Here ...</value></data>
+  <data name="FeesDashboard" xml:space="preserve"><value>Fees Dashboard</value></data>
+  <data name="AccountingDashboard" xml:space="preserve"><value>Accounting Dashboard</value></data>
+  <data name="Messages" xml:space="preserve"><value>Messages</value></data>
+  <data name="Notifications" xml:space="preserve"><value>Notifications</value></data>
+  <data name="ViewAll" xml:space="preserve"><value>View All</value></data>
+  <data name="MyProfile" xml:space="preserve"><value>My Profile</value></data>
+  <data name="Logout" xml:space="preserve"><value>Logout</value></data>
+  <data name="VisitHomePage" xml:space="preserve"><value>Visit Home Page</value></data>
+
+  <!-- Login Page -->
+  <data name="WelcomeBack" xml:space="preserve"><value>Welcome Back</value></data>
+  <data name="LoginSubtitle" xml:space="preserve"><value>Please enter your credentials to access the dashboard.</value></data>
+  <data name="EmailAddress" xml:space="preserve"><value>Email Address</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>Remember me</value></data>
+  <data name="ForgotPassword" xml:space="preserve"><value>Forgot password?</value></data>
+  <data name="SignIn" xml:space="preserve"><value>Sign In</value></data>
+  <data name="BackToHome" xml:space="preserve"><value>Back to Home</value></data>
+  <data name="QuickAccess" xml:space="preserve"><value>Quick Access</value></data>
+  <data name="SelectRole" xml:space="preserve"><value>Select a Role to Auto-Fill...</value></data>
+  <data name="ExcellenceInEducation" xml:space="preserve"><value>Excellence in Education Management</value></data>
+
+  <!-- General -->
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Submit" xml:space="preserve"><value>Submit</value></data>
+  <data name="Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Active" xml:space="preserve"><value>Active</value></data>
+  <data name="Inactive" xml:space="preserve"><value>Inactive</value></data>
+  <data name="Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Date" xml:space="preserve"><value>Date</value></data>
+  <data name="NoRecordsFound" xml:space="preserve"><value>No records found.</value></data>
+  <data name="Loading" xml:space="preserve"><value>Loading...</value></data>
+  <data name="SelectLanguage" xml:space="preserve"><value>Language</value></data>
+</root>

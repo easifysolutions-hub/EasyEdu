@@ -1,0 +1,82 @@
+﻿@model EasyEdu.Models.TimeTable
+@{
+    var currentClass = ViewBag.Class as EasyEdu.Models.Class;
+    ViewData["Title"] = "Add Schedule Slot";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Add Schedule Slot</h1>
+        <p class="text-muted fw-500">Creating schedule for <span class="text-primary fw-700">@currentClass?.Name</span></p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-24">
+            <div class="card-body p-5">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="ClassId" />
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="DayOfWeek" class="form-label fw-600">Day of the Week</label>
+                            <select asp-for="DayOfWeek" class="form-select rounded-12 py-2" asp-items="ViewBag.Days" required>
+                                <option value="">-- Select Day --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="SubjectId" class="form-label fw-600">Subject</label>
+                            <select asp-for="SubjectId" class="form-select rounded-12 py-2" asp-items="ViewBag.Subjects" required>
+                                <option value="">-- Choose Subject --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="TeacherId" class="form-label fw-600">Teacher</label>
+                            <select asp-for="TeacherId" class="form-select rounded-12 py-2" asp-items="ViewBag.Teachers" required>
+                                <option value="">-- Assign Teacher --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="StartTime" class="form-label fw-600">Start Time</label>
+                            <input asp-for="StartTime" type="time" class="form-control rounded-12 py-2" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="EndTime" class="form-label fw-600">End Time</label>
+                            <input asp-for="EndTime" type="time" class="form-control rounded-12 py-2" required />
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="ClassRoomId" class="form-label fw-600">Class Room</label>
+                            <select asp-for="ClassRoomId" class="form-select rounded-12 py-2" asp-items="ViewBag.ClassRoomId" required>
+                                <option value="">-- Select Room --</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary w-100 rounded-12 py-3 fw-700 shadow">
+                                <i class="fas fa-save me-2"></i> Save Schedule Slot
+                            </button>
+                            <a asp-action="Index" asp-route-classId="@Model.ClassId" class="btn btn-light w-100 rounded-12 py-3 mt-2 fw-600 text-muted border-0">
+                                Cancel & Return
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-24 { border-radius: 24px; }
+    .rounded-12 { border-radius: 12px; }
+    .fw-600 { font-weight: 600; }
+    .fw-700 { font-weight: 700; }
+</style>

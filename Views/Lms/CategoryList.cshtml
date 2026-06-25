@@ -1,0 +1,115 @@
+@model IEnumerable<EasyEdu.Models.LmsCategory>
+@{
+    ViewData["Title"] = "Domain Classification Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Domain Classification</h2>
+            <p class="text-muted small fw-600">Establish and coordinate logical classification domains for the digital curriculum</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#categoryModal">
+            <i class="fas fa-plus me-2"></i>ADD DOMAIN NODE
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">DOMAIN IDENTITY</th>
+                    <th class="py-4 fw-900 small text-uppercase">ICONOGRAPHY</th>
+                    <th class="py-4 fw-900 small text-uppercase">STATUS NODE</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cat in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@cat.Title</span>
+                            <p class="smallest text-muted fw-700 uppercase italic m-0">@cat.Description</p>
+                        </td>
+                        <td class="py-4">
+                            <div class="bg-light-soft p-3 rounded-circle d-inline-block border shadow-sm">
+                                <i class="@(string.IsNullOrEmpty(cat.Icon) ? "fas fa-tag" : cat.Icon) text-primary"></i>
+                            </div>
+                        </td>
+                        <td class="py-4">
+                            @if(cat.IsActive){
+                                <span class="badge bg-success px-3 rounded-pill fw-900 shadow-sm border small">SYNCHRONIZED</span>
+                            } else {
+                                <span class="badge bg-danger px-3 rounded-pill fw-900 shadow-sm border small">DEACTIVATED</span>
+                            }
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border" onclick="editCat(@cat.Id, '@cat.Title', '@cat.Description', '@cat.Icon', @cat.IsActive.ToString().ToLower())"><i class="fas fa-edit text-primary"></i></button>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm border"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="4" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero domain classifications identified in current nexus.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="categoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveCategory" method="post">
+                <input type="hidden" name="Id" id="catId" value="0" />
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-tag me-2 text-info"></i>DEFINE DOMAIN NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Domain Title*</label>
+                        <input name="Title" id="catTitle" required class="form-control form-control-premium" placeholder="e.g. Theoretical Physics">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Iconography Class</label>
+                        <input name="Icon" id="catIcon" class="form-control form-control-premium" placeholder="fas fa-atom">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Narrative Description</label>
+                        <textarea name="Description" id="catDesc" rows="3" class="form-control form-control-premium" placeholder="Domain constraints..."></textarea>
+                    </div>
+                    <div class="form-check form-switch p-0 mt-4 d-flex justify-content-between align-items-center bg-light-soft p-3 rounded-12 border">
+                         <label class="form-label small fw-800 text-uppercase opacity-50 m-0">Synchronized State</label>
+                         <input class="form-check-input ms-0" type="checkbox" name="IsActive" id="catActive" value="true" checked style="width: 45px; height: 22px;">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE DOMAIN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editCat(id, title, desc, icon, active) {
+        document.getElementById('catId').value = id;
+        document.getElementById('catTitle').value = title;
+        document.getElementById('catDesc').value = desc;
+        document.getElementById('catIcon').value = icon;
+        document.getElementById('catActive').checked = active;
+        new bootstrap.Modal(document.getElementById('categoryModal')).show();
+    }
+</script>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .bg-light-soft { background: #f8fafc; }
+</style>

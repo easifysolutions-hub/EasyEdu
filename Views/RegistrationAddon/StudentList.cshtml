@@ -1,0 +1,101 @@
+@model IEnumerable<EasyEdu.Models.RegistrationSubmission>
+@{
+    ViewData["Title"] = "Registered Student Audit";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Inbound Admissions Audit</h2>
+            <p class="text-muted small fw-600">Review and qualify prospective student applications arriving from the institutional portal</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-file-export me-2"></i>BATCH AUDIT REPOR
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">PROSPECT IDENTIFIER</th>
+                    <th class="py-4 fw-900 small text-uppercase">ACADEMIC LEVEL</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOGS</th>
+                    <th class="py-4 fw-900 small text-uppercase">FINANCIAL STATUS</th>
+                    <th class="py-4 fw-900 small text-uppercase">AUTH STATUS</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sub in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <div class="fw-900 text-dark h6 mb-1">@sub.FirstName @sub.LastName</div>
+                            <div class="smallest text-muted fw-700 uppercase">CONTACT: @sub.Phone</div>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-800 text-primary small">@sub.Class?.Name</div>
+                            <div class="smallest text-muted fw-700">Admission Year: @sub.AcademicYear?.Name</div>
+                        </td>
+                         <td class="py-4">
+                            <div class="fw-700 text-dark small">@sub.SubmittedAt.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 opacity-50 uppercase">INBOUND CHANNEL: ONLINE</div>
+                        </td>
+                        <td class="py-4">
+                           <span class="badge @(sub.IsPaid ? "bg-success" : "bg-light-soft text-muted border") px-3 py-2 rounded-pill fw-900 shadow-sm border small">@(sub.IsPaid ? "FEE SETTLED" : "UNPAID")</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge @(sub.Status == "Approved" ? "bg-success" : (sub.Status == "Rejected" ? "bg-danger" : "bg-warning")) px-3 rounded-pill fw-900 shadow-sm border">@sub.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="dropdown">
+                                <button class="btn btn-premium-purple btn-sm px-3 rounded-pill fw-900 dropdown-toggle" data-bs-toggle="dropdown">
+                                    MANAGE FILE
+                                </button>
+                                <ul class="dropdown-menu border-0 shadow-lg rounded-16 p-2 dropdown-menu-end">
+                                    <li>
+                                        <form asp-action="ChangeStatus" method="post">
+                                            <input type="hidden" name="id" value="@sub.Id" />
+                                            <input type="hidden" name="status" value="Approved" />
+                                            <button type="submit" class="dropdown-item rounded-8 py-2"><i class="fas fa-check-circle text-success me-2"></i>QUALIFY/APPROVE</button>
+                                        </form>
+                                    </li>
+                                     <li>
+                                        <form asp-action="ChangeStatus" method="post">
+                                            <input type="hidden" name="id" value="@sub.Id" />
+                                            <input type="hidden" name="status" value="Rejected" />
+                                            <button type="submit" class="dropdown-item rounded-8 py-2"><i class="fas fa-times-circle text-danger me-2"></i>DISMISS/REJECT</button>
+                                        </form>
+                                    </li>
+                                    <li><hr class="dropdown-divider opacity-10"></li>
+                                    <li><a class="dropdown-item rounded-8 py-2" href="#"><i class="fas fa-eye text-primary me-2"></i>AUDIT FULL FILE</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="fas fa-user-slash fa-3x text-muted opacity-20 mb-3"></i>
+                            <h5 class="fw-800 text-muted italic">Zero prospective students detected in current institutional pipeline.</h5>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f1f5f9; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .rounded-8 { border-radius: 8px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+</style>

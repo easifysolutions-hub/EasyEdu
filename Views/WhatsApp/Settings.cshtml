@@ -1,0 +1,73 @@
+@model EasyEdu.Models.WhatsAppSetting
+@{
+    ViewData["Title"] = "WhatsApp Protocol Infrastructure";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">WhatsApp API Infrastructure</h2>
+            <p class="text-muted small fw-600">Architect the synchronization parameters for the WhatsApp Business API nodes</p>
+        </div>
+        <a href="@Url.Action("Index")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+            <i class="fas fa-arrow-left me-2"></i> COMMUNICATION HUB
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-8">
+            <div class="premium-card p-5 border-0 shadow-lg" style="border-radius: 24px;">
+                <form asp-action="SaveSettings" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">API Provider Architecture</label>
+                        <select asp-for="Provider" class="form-select form-control-premium">
+                            <option value="Meta">Meta Cloud API (Official)</option>
+                            <option value="Twilio">Twilio WhatsApp Gateway</option>
+                            <option value="MessageBird">MessageBird Integration</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">API Authentication Key*</label>
+                        <input type="password" asp-for="ApiKey" required class="form-control form-control-premium" placeholder="Enter your provider's access token">
+                        <span class="smallest text-muted fw-700 mt-2 d-block italic">Secured via institutional encryption</span>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Account Architecture SID</label>
+                            <input asp-for="AccountSid" class="form-control form-control-premium" placeholder="ACxxxxxxxxxxxxxxxxxx">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Dispatched Phone Number</label>
+                            <input asp-for="FromNumber" class="form-control form-control-premium" placeholder="+1234567890">
+                        </div>
+                    </div>
+
+                    <div class="protocol-node p-4 rounded-20 bg-light-soft mb-5 border d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="fw-900 text-dark mb-1">Infrastructure Activation</h6>
+                            <p class="smallest text-muted fw-700 m-0 text-uppercase ls-1">Enable or disable global WhatsApp communication nodes</p>
+                        </div>
+                        <div class="form-check form-switch p-0">
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="IsEnabled" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-premium-purple py-3 rounded-16 fw-900 h6 mb-0 shadow-lg">SYNCHRONIZE INFRASTRUCTURE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-20 { border-radius: 20px; }
+    .bg-light-soft { background: #f8fafc; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

@@ -1,0 +1,105 @@
+﻿@model IEnumerable<EasyEdu.Models.Student>
+@{
+    var currentClass = ViewBag.Class as EasyEdu.Models.Class;
+    var date = (DateTime)ViewBag.Date;
+    var existingAttendance = ViewBag.ExistingAttendance as Dictionary<int, EasyEdu.Models.Attendance>;
+    ViewData["Title"] = $"Mark Attendance: {currentClass?.Name}";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 animate-slide-in">
+    <div>
+        <h1 class="page-title mb-1"><i class="fas fa-calendar-check me-2 text-primary"></i> Attendance Registry</h1>
+        <p class="text-muted fw-600">Daily presence auditing for <span class="text-primary fw-800">@currentClass?.Name</span> | Cycle: <span class="text-dark fw-800">@date.ToString("dd MMMM yyyy")</span></p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-times me-2"></i> ABORT OPERATION
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <form asp-action="SaveAttendance" method="post">
+            <input type="hidden" name="classId" value="@currentClass?.Id" />
+            <input type="hidden" name="date" value="@date.ToString("yyyy-MM-dd")" />
+
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">STUDENT IDENTITY</th>
+                            <th>ADMISSION ARCHIVE</th>
+                            <th class="text-center">ENGAGEMENT STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            var status = existingAttendance?.ContainsKey(student.Id) == true ? existingAttendance[student.Id].Status : "Present";
+                            <tr class="align-middle">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-wrapper me-3">
+                                            <img src="https://ui-avatars.com/api/?name=@(student.FirstName)+@(student.LastName)&background=6366f1&color=fff&size=80" 
+                                                 class="rounded-circle shadow-sm" style="width: 44px; height: 44px;" alt="">
+                                        </div>
+                                        <div>
+                                            <div class="fw-800 text-dark">@student.FirstName @student.LastName</div>
+                                            <div class="small text-muted fw-600 opacity-75">@(student.Gender ?? "Archival Entity")</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-muted border fw-800 rounded-pill px-3 py-2">
+                                        #@student.AdmissionNumber
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="attendance-matrix d-flex justify-content-center gap-2">
+                                        <input type="radio" class="btn-check" name="attendanceData[@student.Id]" id="present-@student.Id" value="Present" @(status == "Present" ? "checked" : "")>
+                                        <label class="btn btn-outline-success rounded-pill fw-900 border-2 px-4 shadow-hover" for="present-@student.Id">P</label>
+
+                                        <input type="radio" class="btn-check" name="attendanceData[@student.Id]" id="absent-@student.Id" value="Absent" @(status == "Absent" ? "checked" : "")>
+                                        <label class="btn btn-outline-danger rounded-pill fw-900 border-2 px-4 shadow-hover" for="absent-@student.Id">A</label>
+
+                                        <input type="radio" class="btn-check" name="attendanceData[@student.Id]" id="late-@student.Id" value="Late" @(status == "Late" ? "checked" : "")>
+                                        <label class="btn btn-outline-warning rounded-pill fw-900 border-2 px-4 shadow-hover" for="late-@student.Id">L</label>
+                                        
+                                        <input type="radio" class="btn-check" name="attendanceData[@student.Id]" id="leave-@student.Id" value="On Leave" @(status == "On Leave" ? "checked" : "")>
+                                        <label class="btn btn-outline-info rounded-pill fw-900 border-2 px-4 shadow-hover" for="leave-@student.Id">S</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-5 border-top bg-light-soft text-center">
+                <button type="submit" class="btn btn-premium-primary btn-lg rounded-16 px-5 py-3 fw-900 shadow-lg border-0 transition-all hover-scale">
+                    <i class="fas fa-save me-2"></i> DEPLOY ATTENDANCE DATA
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background: #f8fafc; }
+    .shadow-hover:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .hover-scale:hover { transform: scale(1.02); }
+    
+    .btn-outline-success.rounded-pill { border-color: #10b981; color: #10b981; }
+    .btn-outline-danger.rounded-pill { border-color: #ef4444; color: #ef4444; }
+    .btn-outline-warning.rounded-pill { border-color: #f59e0b; color: #f59e0b; }
+    .btn-outline-info.rounded-pill { border-color: #0ea5e9; color: #0ea5e9; }
+    
+    .btn-check:checked + .btn-outline-success { background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+    .btn-check:checked + .btn-outline-danger { background: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+    .btn-check:checked + .btn-outline-warning { background: #f59e0b; color: white; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+    .btn-check:checked + .btn-outline-info { background: #0ea5e9; color: white; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
+
+    .attendance-matrix .btn { min-width: 60px; height: 45px; display: flex; align-items: center; justify-content: center; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+</style>

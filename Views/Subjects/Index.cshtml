@@ -1,0 +1,259 @@
+@model IEnumerable<EasyEdu.Models.Subject>
+@{
+    ViewData["Title"] = "Subject";
+    Layout = "_Layout";
+}
+
+<style>
+    /* Select2 Multi-Select Premium Theme Integration */
+    .select2-container--default .select2-selection--multiple {
+        min-height: 38px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        background-color: #f8fafc !important;
+        padding: 2px 8px !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        transition: all 0.2s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+    }
+    .select2-container--default.select2-container--focus .select2-selection--multiple,
+    .select2-container--default .select2-selection--multiple:hover {
+        border-color: #cbd5e1 !important;
+        background-color: #fff !important;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #eff6ff !important;
+        border: 1px solid #bfdbfe !important;
+        color: #1e3a8a !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        border-radius: 6px !important;
+        padding: 2px 8px !important;
+        margin: 2px 4px 2px 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: #ef4444 !important;
+        margin-right: 6px !important;
+        border: none !important;
+        background: transparent !important;
+        font-weight: 800 !important;
+        font-size: 0.9rem !important;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        color: #b91c1c !important;
+        background: transparent !important;
+    }
+    .select2-container--default .select2-search--inline .select2-search__field {
+        margin-top: 0 !important;
+        height: 30px !important;
+        font-family: inherit !important;
+        font-size: 0.875rem !important;
+        color: #1e293b !important;
+    }
+    .select2-dropdown {
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        overflow: hidden !important;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #3b82f6 !important;
+    }
+    .select2-container--default .select2-results__option {
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        padding: 8px 12px !important;
+    }
+</style>
+
+<div class="content-wrapper p-4">
+    <div class="row g-4 d-flex align-items-stretch">
+        <!-- Add Subject Form -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-12 h-100">
+                <div class="card-header bg-white border-bottom border-light py-3">
+                    <h5 class="fw-800 text-primary m-0">Add Subject</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Subject Name *</label>
+                            <input type="text" name="Name" class="form-control" placeholder="e.g. Mathematics" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Subject Code</label>
+                            <input type="text" name="Code" class="form-control" placeholder="e.g. MATH101">
+                        </div>
+                        <div class="mb-3">
+                             <label class="form-label fw-700 text-muted small text-uppercase">Subject Type</label>
+                             <select name="Type" class="form-select">
+                                <option value="Theory">Theory</option>
+                                <option value="Practical">Practical</option>
+                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-700 text-muted small text-uppercase">Classes *</label>
+                            <select name="classIds" id="classSelect" class="form-select select2-multiple" multiple asp-items="ViewBag.ClassId" required>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                             <div class="form-check form-switch mt-2">
+                                <input class="form-check-input" type="checkbox" name="IsOptional" id="isOptionalSwitch" value="true">
+                                <label class="form-check-label fw-700 text-dark" for="isOptionalSwitch">Is Optional Subject?</label>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary fw-700 py-2 shadow-sm">
+                                <i class="fas fa-check me-2"></i> Save Subject
+                            </button>
+                        </div>
+                        <div asp-validation-summary="All" class="text-danger mt-2 small"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject List -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-12 h-100">
+                <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 text-dark m-0">Subject List</h5>
+                    <div class="search-box">
+                        <input type="text" class="form-control form-control-sm border-0 bg-light" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="px-4 py-3 fw-700">Subject</th>
+                                    <th class="py-3 fw-700">Type</th>
+                                    <th class="py-3 fw-700">Class</th> 
+                                    <th class="py-3 fw-700">Code</th> 
+                                    <th class="text-end px-4 py-3 fw-700">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Any())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="px-4">
+                                                <span class="fw-700 text-dark">@item.Name</span>
+                                                @if(item.IsOptional) { <span class="badge bg-warning text-dark ms-1" style="font-size: 0.65rem;">Optional</span> }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-primary border fw-600">@item.Type</span>
+                                            </td>
+                                            <td>
+                                                <span class="fw-600 text-muted">@(item.Class?.Name ?? "N/A")</span>
+                                            </td>
+                                            <td>
+                                                <span class="fw-700 text-muted small">@item.Code</span>
+                                            </td>
+                                            <td class="text-end px-4">
+                                                <button class="btn btn-sm btn-light text-primary me-2" onclick="editSubject(@item.Id, '@item.Name', '@item.Code', '@item.Type', @item.ClassId, @item.IsOptional.ToString().ToLower())">
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
+                                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this subject?');">
+                                                    <button type="submit" class="btn btn-sm btn-light text-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5">
+                                            <div class="py-4">
+                                                <i class="fas fa-book-open text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                                                <p class="text-muted small">No subjects found.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Subject Modal -->
+<div class="modal fade" id="editSubjectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-700">Edit Subject</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Edit" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit_id">
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small text-uppercase">Subject Name</label>
+                        <input type="text" name="name" id="edit_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small text-uppercase">Subject Code</label>
+                        <input type="text" name="code" id="edit_code" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small text-uppercase">Type</label>
+                        <select name="type" id="edit_type" class="form-select">
+                            <option value="Theory">Theory</option>
+                            <option value="Practical">Practical</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small text-uppercase">Class</label>
+                        <select name="classId" id="edit_classId" class="form-select" asp-items="ViewBag.ClassId" required></select>
+                    </div>
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" name="isOptional" id="edit_isOptional" value="true">
+                        <label class="form-check-label fw-600" for="edit_isOptional">Is Optional?</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-700">Update Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if($.fn.select2) {
+                $('#classSelect').select2({
+                    placeholder: "Select Class(es)",
+                    allowClear: true,
+                    width: '100%'
+                });
+            }
+        });
+
+        function editSubject(id, name, code, type, classId, isOptional) {
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_code').value = code;
+            document.getElementById('edit_type').value = type;
+            document.getElementById('edit_classId').value = classId;
+            document.getElementById('edit_isOptional').checked = isOptional;
+            new bootstrap.Modal(document.getElementById('editSubjectModal')).show();
+        }
+    </script>
+}

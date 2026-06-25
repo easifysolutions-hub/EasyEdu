@@ -1,0 +1,167 @@
+﻿@model IEnumerable<EasyEdu.Models.ItemReceive>
+@{
+    ViewData["Title"] = "Item Procurement - Stock Entry";
+    Layout = "_Layout";
+    var inventories = ViewBag.Inventories as IEnumerable<EasyEdu.Models.Inventory>;
+    var suppliers = ViewBag.Suppliers as IEnumerable<EasyEdu.Models.Supplier>;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-truck-loading me-2 text-primary"></i> Procurement Ledger</h1>
+        <p class="text-muted fw-600">Register new stock arrivals and track institutional resource growth</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-list me-2"></i> MASTER INVENTORY
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="row g-4 animate-fade-in">
+        <!-- Procurement Form -->
+        <div class="col-xl-4">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20 h-100">
+                <div class="p-4 border-bottom text-white" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                    <h5 class="fw-800 mb-0"><i class="fas fa-file-invoice me-2"></i> Log Entry (Receive)</h5>
+                    <p class="opacity-75 small mb-0 mt-1">Official arrival verification of new assets</p>
+                </div>
+                <div class="p-4">
+                    <form asp-action="CreateReceive" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Target Asset (SKU)</label>
+                            <select name="InventoryId" class="form-control-premium w-100 select2" required>
+                                <option value="">Select Asset to Receive</option>
+                                @if (inventories != null)
+                                {
+                                    @foreach (var item in inventories)
+                                    {
+                                        <option value="@item.Id">@item.ItemName (SKU: @(item.SKU ?? "N/A"))</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Logistics Provider (Supplier)</label>
+                            <select name="SupplierId" class="form-control-premium w-100 select2" required>
+                                <option value="">Select Originating Supplier</option>
+                                @if (suppliers != null)
+                                {
+                                    @foreach (var sup in suppliers)
+                                    {
+                                        <option value="@sup.Id">@sup.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-800 small text-uppercase text-muted">Inbound Quantity</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-plus text-success"></i></span>
+                                    <input name="Quantity" type="number" class="form-control-premium border-0 w-75" placeholder="0" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-800 small text-uppercase text-muted">Landing Cost</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-dollar-sign text-primary"></i></span>
+                                    <input name="UnitPrice" type="number" step="0.01" class="form-control-premium border-0 w-75" placeholder="0.00" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label fw-800 small text-uppercase text-muted">Verification Date</label>
+                            <input name="ReceiveDate" type="date" class="form-control-premium w-100" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-premium-primary w-100 py-3 shadow-sm fs-6 fw-800 mt-2">
+                            <i class="fas fa-check-double me-2"></i> CONFIRM PROCUREMENT
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Procurement History -->
+        <div class="col-xl-8">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20 h-100">
+                <div class="p-4 border-bottom d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                    <h5 class="fw-800 mb-0 text-white"><i class="fas fa-history me-2"></i> Procurement Chronology</h5>
+                    <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-800">AUDITED FEED</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">PROCURED ASSET</th>
+                                <th>SOURCE PARTNER</th>
+                                <th class="text-center">QUANTITY</th>
+                                <th>TOTAL COST</th>
+                                <th class="text-end pe-4">VERIFICATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in Model)
+                            {
+                                <tr class="align-middle transition-all">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="icon-box-sm bg-primary-soft text-primary rounded-12 me-3">
+                                                <i class="fas fa-file-invoice small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-800 text-dark">@(r.Inventory?.ItemName ?? "Unknown SKU")</div>
+                                                <div class="text-muted small fw-600 uppercase" style="font-size: 0.6rem;">ENTRY #@r.Id.ToString("D5")</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-800 text-primary">@(r.Supplier?.Name ?? "N/A")</div>
+                                        <div class="small text-muted fw-700 uppercase" style="font-size: 0.6rem;">VETTED PROVIDER</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success-soft text-success fw-900 px-3 py-2 rounded-8">
+                                            +@r.Quantity
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-900 text-dark">$@r.TotalPrice.ToString("N2")</div>
+                                        <div class="small text-muted fw-600" style="font-size: 0.65rem;">($@r.UnitPrice/unit)</div>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="fw-800 text-muted small">@r.ReceiveDate.ToString("dd MMM yyyy")</div>
+                                        <div class="small text-success fw-800 uppercase" style="font-size: 0.6rem;">
+                                            <i class="fas fa-shield-check me-1"></i> COMMITTED
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-5">
+                                        <i class="fas fa-truck fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                        <div class="fw-800 text-muted">No procurement records found.</div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.1); color: #6366f1; }
+    .bg-success-soft { background: rgba(16,185,129,0.1); color: #10b981; }
+    .icon-box-sm { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+</style>

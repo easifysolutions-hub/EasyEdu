@@ -1,0 +1,93 @@
+@model EasyEdu.Models.LmsCourse
+@{
+    ViewData["Title"] = "Establish Curriculum Node";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Establish Curriculum Node</h2>
+            <p class="text-muted small fw-600">Architect a new digital learning experience with specific domain and valuation parameters</p>
+        </div>
+        <a href="@Url.Action("AllCourses")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+            <i class="fas fa-arrow-left me-2"></i>CURRICULUM REGISTRY
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+            <div class="premium-card p-5 border-0 shadow-lg" style="border-radius: 24px;">
+                <form asp-action="CreateCourse" method="post">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Course Identity Title*</label>
+                            <input name="Title" required class="form-control form-control-premium h-60" placeholder="e.g. Advanced Quantum Mechanics Alpha">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Domain Classification</label>
+                            <select name="CategoryId" required class="form-select form-control-premium" asp-items="ViewBag.Categories"></select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Brief Synchronization Summary</label>
+                        <input name="ShortDescription" class="form-control form-control-premium" placeholder="A one-line executive summary of the course node">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Detailed Narrative Description</label>
+                        <textarea name="Description" rows="5" class="form-control form-control-premium" placeholder="Establish the pedagogical narrative for this course..."></textarea>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Proficiency Level</label>
+                            <select name="LevelId" required class="form-select form-control-premium" asp-items="ViewBag.Levels"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Valuation Strategy</label>
+                            <select name="IsFree" id="priceType" onchange="togglePrice()" class="form-select form-control-premium">
+                                <option value="false">Premium Asset</option>
+                                <option value="true">Open Access (Free)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" id="priceDiv">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Asset Valuation (USD)</label>
+                            <input name="Price" type="number" step="0.01" class="form-control form-control-premium" value="49.99">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                         <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Identity Thumbnail URL</label>
+                            <input name="Thumbnail" class="form-control form-control-premium" placeholder="https://cloud.cdn/nodes/thumb.jpg">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Narrative Trailer URL (Vimeo/YouTube)</label>
+                            <input name="TrailerUrl" class="form-control form-control-premium" placeholder="https://vimeo.com/intel/node-trailer">
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        <button type="submit" class="btn btn-premium-purple py-3 rounded-16 fw-900 h6 mb-0 shadow-lg">INITIALIZE CURRICULUM NODE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePrice() {
+        const isFree = document.getElementById('priceType').value === 'true';
+        document.getElementById('priceDiv').style.opacity = isFree ? '0.3' : '1';
+        document.getElementById('priceDiv').style.pointerEvents = isFree ? 'none' : 'auto';
+    }
+</script>
+
+<style>
+    .h-60 { height: 60px; }
+    .rounded-16 { border-radius: 16px; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

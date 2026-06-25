@@ -1,0 +1,668 @@
+@model EasyEdu.Controllers.DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Quick Actions Section -->
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="premium-card-animated p-4 shadow-sm border-0">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-800 text-dark m-0 d-flex align-items-center">
+                        <span class="pulse-status-green me-2"></span> Instant Operations
+                    </h5>
+                <div class="dashboard-controls">
+                        <span class="badge bg-soft-primary text-primary fw-700 px-3 py-2 rounded-pill">14 Ready Actions</span>
+                    </div>
+                </div>
+                <div class="professional-grid">
+                    <!-- High Priority Accounting Vouchers -->
+                    <div class="grid-item">
+                         <a href="@Url.Action("ReceiptVoucher", "Accounting")" class="action-btn">
+                            <div class="icon-circle receipt">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <span class="btn-label">Receipt</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("PaymentVoucher", "Accounting")" class="action-btn">
+                            <div class="icon-circle payment">
+                                <i class="fas fa-minus-circle"></i>
+                            </div>
+                            <span class="btn-label">Payment</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("JournalVoucher", "Accounting")" class="action-btn">
+                            <div class="icon-circle journal">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <span class="btn-label">Journal</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("ContraVoucher", "Accounting")" class="action-btn">
+                            <div class="icon-circle contra">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <span class="btn-label">Contra</span>
+                        </a>
+                    </div>
+
+                    <!-- Core School Management -->
+                     <div class="grid-item">
+                         <a href="@Url.Action("Create", "Students")" class="action-btn">
+                            <div class="icon-circle student">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <span class="btn-label">Student</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("Index", "Attendance")" class="action-btn">
+                            <div class="icon-circle attendance">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <span class="btn-label">Attendance</span>
+                        </a>
+                    </div>
+                     <div class="grid-item">
+                         <a href="@Url.Action("FeesInvoice", "Finance")" class="action-btn">
+                            <div class="icon-circle fees">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <span class="btn-label">Fees</span>
+                        </a>
+                    </div>
+                     <div class="grid-item">
+                         <a href="@Url.Action("ChartOfAccounts", "Accounting")" class="action-btn">
+                            <div class="icon-circle accounts">
+                                <i class="fas fa-list-ul"></i>
+                            </div>
+                            <span class="btn-label">A/c Master</span>
+                        </a>
+                    </div>
+                     <div class="grid-item">
+                         <a href="@Url.Action("VisitorBook", "Administration")" class="action-btn">
+                            <div class="icon-circle visitor">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <span class="btn-label">Visitors</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("Create", "Homework")" class="action-btn">
+                            <div class="icon-circle homework">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                            <span class="btn-label">Homework</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("Index", "Transport")" class="action-btn">
+                            <div class="icon-circle transport">
+                                <i class="fas fa-shuttle-van"></i>
+                            </div>
+                            <span class="btn-label">Transport</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("Create", "Teachers")" class="action-btn">
+                            <div class="icon-circle staff">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <span class="btn-label">Add Staff</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("SendSms", "Communicate")" class="action-btn">
+                            <div class="icon-circle sms">
+                                <i class="fas fa-sms"></i>
+                            </div>
+                            <span class="btn-label">Send SMS</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("Users", "Administration")" class="action-btn">
+                            <div class="icon-circle settings">
+                                <i class="fas fa-users-gear"></i>
+                            </div>
+                            <span class="btn-label">Users</span>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                         <a href="@Url.Action("Settings", "Administration")" class="action-btn">
+                            <div class="icon-circle settings">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <span class="btn-label">Settings</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Statistics Overview -->
+    <div class="row g-3 mb-3">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-premium-card stat-blue">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stat-label">Total Students</div>
+                        <div class="stat-value">@Model.TotalStudents.ToString("N0")</div>
+                    </div>
+                    <div class="stat-icon-bg"><i class="fas fa-user-graduate"></i></div>
+                </div>
+                <div class="stat-footer mt-3"><i class="fas fa-arrow-up me-1"></i> 4.5% Since last month</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+             <div class="stat-premium-card stat-indigo">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stat-label">Total Teachers</div>
+                        <div class="stat-value">@Model.TotalTeachers.ToString("N0")</div>
+                    </div>
+                    <div class="stat-icon-bg"><i class="fas fa-chalkboard-teacher"></i></div>
+                </div>
+                <div class="stat-footer mt-3"><i class="fas fa-check-circle me-1"></i> Active Status Verified</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+             <div class="stat-premium-card stat-emerald">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stat-label">Total Parents</div>
+                        <div class="stat-value">@Model.TotalParents.ToString("N0")</div>
+                    </div>
+                    <div class="stat-icon-bg"><i class="fas fa-users"></i></div>
+                </div>
+                <div class="stat-footer mt-3"><i class="fas fa-link me-1"></i> 92% Portal Active</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+             <div class="stat-premium-card stat-rose">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-value">@Model.TotalRevenue.ToString("C0")</div>
+                    </div>
+                    <div class="stat-icon-bg"><i class="fas fa-money-bill-trend-up"></i></div>
+                </div>
+                <div class="stat-footer mt-3"><i class="fas fa-chart-line me-1"></i> @((Model.TotalRevenue / 1000).ToString("N1"))K Target Achieved</div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Survey & Admissions Row -->
+    <div class="row g-4 mb-4">
+        <!-- Survey Chart -->
+        <div class="col-lg-8">
+            <div class="premium-card h-100">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-800 text-dark m-0">Finance Survey</h5>
+                        <p class="text-muted small fw-600 m-0">Income vs Expenses Overview (2025)</p>
+                    </div>
+                    <div class="btn-group cal-view-group">
+                        <button class="btn btn-sm active" onclick="updateSurvey('year')">This Year</button>
+                        <button class="btn btn-sm" onclick="updateSurvey('month')">This Month</button>
+                    </div>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div class="row text-center mb-4">
+                        <div class="col">
+                            <div class="text-muted small fw-700">INCOME</div>
+                            <div class="fw-800 text-success">@Model.TotalRevenue.ToString("C0")</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-muted small fw-700">EXPENSES</div>
+                            <div class="fw-800 text-danger">@Model.TotalExpenses.ToString("C0")</div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="text-muted small fw-700">PROFIT</div>
+                            <div class="fw-800">@((Model.TotalRevenue - Model.TotalExpenses).ToString("C0"))</div>
+                        </div>
+                    </div>
+                    <div style="height: 320px;">
+                        <canvas id="surveyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Admissions Pie Chart -->
+        <div class="col-lg-4">
+            <div class="premium-card h-100">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Student Admissions</h5>
+                    <p class="text-muted small fw-600 m-0">Current Session (2025-26)</p>
+                </div>
+                <div class="card-body p-4 pt-0 d-flex flex-column align-items-center justify-content-center">
+                    <div style="height: 250px; width: 100%;" class="mb-4">
+                        <canvas id="admissionsChart"></canvas>
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small fw-700 text-muted"><i class="fas fa-circle me-2" style="color: #7c3aed;"></i> Primary</span>
+                            <span class="small fw-800">45%</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small fw-700 text-muted"><i class="fas fa-circle me-2" style="color: #3b82f6;"></i> Secondary</span>
+                            <span class="small fw-800">35%</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="small fw-700 text-muted"><i class="fas fa-circle me-2" style="color: #ec4899;"></i> Higher Secondary</span>
+                            <span class="small fw-800">20%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Side-by-Side: Notice Board & Calendar & ToDo -->
+    <div class="row g-4 mb-4">
+        <!-- Notice Board -->
+        <div class="col-lg-5">
+            <div class="premium-card h-100">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 text-dark m-0">Notice Board</h5>
+                    <a href="@Url.Action("CreateNotice", "Administration")" class="btn btn-premium-purple btn-sm fw-800 px-3 py-2 rounded-8 shadow-sm">VIEW ALL</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="notice-list px-4 pb-4">
+                        @foreach (var notice in Model.Notices.Take(5))
+                        {
+                            <div class="notice-item d-flex gap-3 mb-3 p-3 rounded-12 border-start border-4 border-primary bg-light-subtle">
+                                <div class="notice-date text-center" style="min-width: 50px;">
+                                    <h5 class="fw-900 m-0 text-primary">@notice.NoticeDate.Day</h5>
+                                    <div class="small fw-800 text-muted uppercase">@notice.NoticeDate.ToString("MMM")</div>
+                                </div>
+                                <div class="notice-content">
+                                    <h6 class="fw-700 text-dark mb-1">@notice.Title</h6>
+                                    <p class="small text-muted m-0 text-truncate-2">@notice.Description</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="col-lg-7">
+            <div class="premium-card h-100 overflow-hidden">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 text-dark m-0">Event Calendar</h5>
+                    <div class="d-flex align-items-center gap-2">
+                         <button class="btn btn-sm btn-light-soft rounded-8"><i class="fas fa-chevron-left"></i></button>
+                         <button class="btn btn-sm btn-light-soft rounded-8"><i class="fas fa-chevron-right"></i></button>
+                         <h6 class="fw-800 m-0 px-2 small">November 2025</h6>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Month View Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered calendar-table-sm mb-0 border-light-subtle">
+                            <thead class="bg-light-subtle text-muted small fw-800">
+                                <tr>
+                                    <th class="text-center py-2">S</th>
+                                    <th class="text-center py-2">M</th>
+                                    <th class="text-center py-2">T</th>
+                                    <th class="text-center py-2">W</th>
+                                    <th class="text-center py-2">T</th>
+                                    <th class="text-center py-2">F</th>
+                                    <th class="text-center py-2">S</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    DateTime calStart = new DateTime(2025, 11, 1);
+                                    int calStartDay = (int)calStart.DayOfWeek;
+                                    int calDaysInMonth = DateTime.DaysInMonth(2025, 11);
+                                    int calDayCount = 1;
+
+                                    for (int i = 0; i < 5; i++)
+                                    {
+                                        <tr>
+                                            @for (int j = 0; j < 7; j++)
+                                            {
+                                                int index = i * 7 + j;
+                                                if (index >= calStartDay && calDayCount <= calDaysInMonth)
+                                                {
+                                                    bool isToday = calDayCount == DateTime.Now.Day && DateTime.Now.Month == 11;
+                                                    <td class="calendar-day-sm p-2 text-center" onclick="openAddEventModal('2025-11-@calDayCount', 'Nov @calDayCount, 2025')">
+                                                        <span class="@(isToday ? "today-circle-sm" : "text-muted fw-700") small">@calDayCount</span>
+                                                        <div class="event-dots d-flex justify-content-center gap-1 mt-1">
+                                                            @foreach (var evt in Model.CalendarEvents.Where(e => e.StartDate.Day == calDayCount && e.StartDate.Month == 11).Take(2))
+                                                            {
+                                                                <div class="dot-indigo"></div>
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                    calDayCount++;
+                                                }
+                                                else
+                                                {
+                                                    <td class="bg-light-subtle opacity-5"></td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3 text-center">
+                    <button class="btn btn-link btn-sm fw-800 text-decoration-none text-primary" onclick="showAddTodo()"><i class="fas fa-plus me-2"></i>ADD NEW EVENT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Row: ToDo & Quick Reports -->
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 text-dark m-0">Tasks & To-Do</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light-soft rounded-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">Filter</button>
+                        <ul class="dropdown-menu border-0 shadow-lg rounded-12">
+                            <li><a class="dropdown-item fw-600 small" href="?todoFilter=incomplete">Incomplete</a></li>
+                            <li><a class="dropdown-item fw-600 small" href="?todoFilter=completed">Completed</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div id="todo_list">
+                        @foreach (var todo in Model.ToDos.Take(4))
+                        {
+                            <div class="todo-item-modern d-flex align-items-center justify-content-between p-3 rounded-12 mb-2 bg-light-subtle border-start border-3 @(todo.IsCompleted ? "border-success opacity-75" : "border-warning")">
+                                <div class="d-flex align-items-center gap-3">
+                                    <form asp-action="ToggleToDo" method="post" id="form_todo_@todo.Id">
+                                        <input type="hidden" name="id" value="@todo.Id" />
+                                        <input class="form-check-input custom-check-sm" type="checkbox" @(todo.IsCompleted ? "checked" : "") onchange="this.form.submit()">
+                                    </form>
+                                    <span class="fw-600 small @(todo.IsCompleted ? "text-decoration-line-through text-muted" : "text-dark")">@todo.Title</span>
+                                </div>
+                                <button class="btn btn-sm text-danger opacity-50 hover-opacity-100"><i class="fas fa-times"></i></button>
+                            </div>
+                        }
+                        <button class="btn btn-light-soft w-100 mt-3 fw-800 py-2" onclick="showAddTodo()">+ ADD NEW TASK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals and Styles (Same logic as before, but updated IDs/classes) -->
+<!-- Omitting redundant styles already in site.css or moved here -->
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function showAddTodo() {
+            new bootstrap.Modal(document.getElementById('addTodoModal')).show();
+        }
+
+        function openAddEventModal(date, formattedDate) {
+            document.getElementById('eventDateInput').value = date;
+            document.getElementById('addEventModalLabel').textContent = 'Add Event (' + formattedDate + ')';
+            new bootstrap.Modal(document.getElementById('addEventModal')).show();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Survey Chart (Line)
+            const surveyCtx = document.getElementById('surveyChart').getContext('2d');
+            const surveyChart = new Chart(surveyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Income',
+                            data: [12000, 15000, 18000, 22000, 25000, 30000, 28000, 35000, 40000, 38000, 42000, 45000],
+                            borderColor: '#7c3aed',
+                            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#fff',
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Expenses',
+                            data: [8000, 10000, 9000, 12000, 15000, 18000, 16000, 20000, 22000, 21000, 23000, 24000],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#fff',
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { color: '#94a3b8', font: { size: 11, weight: '600' } } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11, weight: '600' } } }
+                    }
+                }
+            });
+
+            // Admissions Chart (Pie)
+            const admissionsCtx = document.getElementById('admissionsChart').getContext('2d');
+            new Chart(admissionsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Primary', 'Secondary', 'Higher Secondary'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#7c3aed', '#3b82f6', '#ec4899'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+
+        function updateSurvey(type) {
+             // Logic to update chart data based on filter
+             console.log('Update chart to:', type);
+             const btns = document.querySelectorAll('.cal-view-group .btn');
+             btns.forEach(b => b.classList.remove('active'));
+             event.target.classList.add('active');
+        }
+    </script>
+}
+
+<style>
+    .professional-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 1rem;
+        text-align: center;
+    }
+    .action-btn {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+    .action-btn:hover { transform: translateY(-5px); }
+    
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto;
+        background: #f8fafc;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .action-btn:hover .icon-circle {
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        scale: 1.1;
+    }
+    
+    .btn-label { font-size: 0.75rem; font-weight: 700; color: #475569; margin-top: 0.5rem; display: block; }
+    
+    /* Icon Colors */
+    .receipt { background: #ecfdf5; color: #059669; }
+    .payment { background: #fef2f2; color: #dc2626; }
+    .journal { background: #eff6ff; color: #2563eb; }
+    .contra { background: #fffbeb; color: #d97706; }
+    .student { background: #f5f3ff; color: #7c3aed; }
+    .attendance { background: #fff7ed; color: #ea580c; }
+    .fees { background: #f0fdf4; color: #16a34a; }
+    .accounts { background: #f0f9ff; color: #0284c7; }
+    .visitor { background: #fff1f2; color: #e11d48; }
+    .homework { background: #faf5ff; color: #9333ea; }
+    .transport { background: #f8fafc; color: #475569; }
+    .staff { background: #f0fdfa; color: #0d9488; }
+    .sms { background: #ecfeff; color: #0891b2; }
+    .settings { background: #f1f5f9; color: #64748b; }
+
+    .pulse-status-green {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+        animation: status-pulse 1.5s infinite;
+    }
+    @@keyframes status-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* Professional Stat Cards */
+    .stat-premium-card {
+        padding: 1.25rem;
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        color: white;
+        transition: all 0.4s ease;
+        border: none;
+    }
+    .stat-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .stat-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+    .stat-emerald { background: linear-gradient(135deg, #10b981, #047857); }
+    .stat-rose { background: linear-gradient(135deg, #f43f5e, #be123c); }
+
+    .stat-label { font-size: 0.85rem; font-weight: 700; opacity: 0.8; margin-bottom: 0.25rem; }
+    .stat-value { font-size: 1.6rem; font-weight: 800; letter-spacing: -1px; }
+    .stat-icon-bg {
+        position: absolute;
+        right: -10px;
+        top: 20px;
+        font-size: 3.5rem;
+        opacity: 0.12;
+        transform: rotate(-15deg);
+    }
+    .stat-footer { font-size: 0.75rem; font-weight: 600; padding: 0.4rem 0.6rem; background: rgba(0,0,0,0.1); border-radius: 8px; display: inline-block; }
+
+    /* Utilities */
+    .text-truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .calendar-table-sm td { height: 50px; border-color: #f1f5f9; cursor: pointer; transition: all 0.2s; font-size: 0.8rem; }
+    .calendar-table-sm td:hover { background: #f8fafc; }
+    .today-circle-sm { 
+        background: #7c3aed; color: white; width: 20px; height: 20px; 
+        display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
+    }
+    .event-dots { height: 3px; }
+    .dot-indigo { width: 3px; height: 3px; border-radius: 50%; background: #7c3aed; }
+
+    /* Mobile Adjustments */
+    @@media (max-width: 768px) {
+        .professional-grid { grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 0.5rem; }
+        .icon-circle { width: 45px; height: 45px; font-size: 1.1rem; }
+        .btn-label { font-size: 0.6rem; }
+        .stat-value { font-size: 1.3rem; }
+        .calendar-table-sm td { height: 40px; font-size: 0.7rem; }
+        .content-wrapper { padding-top: 1rem !important; }
+    }
+</style>
+
+<!-- Necessary Modals (Moved from previous but kept for functionality) -->
+<div class="modal fade" id="addTodoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-16">
+            <div class="modal-header bg-primary text-white p-4">
+                <h5 class="modal-title fw-800">Assign New Task</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="AddToDo" method="post">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-700 small text-uppercase">Task Title</label>
+                        <input type="text" name="title" class="form-control form-control-premium" required placeholder="e.g. Schedule meeting">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-primary w-100">SAVE TASK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addEventModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-16 overflow-hidden">
+            <div class="modal-header text-white p-4" style="background: #7c3aed;">
+                <h5 class="modal-title fw-800" id="addEventModalLabel">Add Event</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="AddCalendarEvent" method="post">
+                <div class="modal-body p-4">
+                    <input type="hidden" id="eventDateInput" name="EventDate" />
+                    <div class="row g-3">
+                        <div class="col-md-6"><input type="text" name="EventTitle" class="form-control-premium w-100" placeholder="Event Title*" required></div>
+                        <div class="col-md-6">
+                            <select name="Role" class="form-select form-control-premium" required>
+                                <option value="">Select Role*</option>
+                                <option value="All">All</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                        <div class="col-12"><textarea name="Description" rows="3" class="form-control-premium w-100" placeholder="Description*"></textarea></div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-primary w-100">SAVE EVENT</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,185 @@
+@model IEnumerable<EasyEdu.Models.LessonPlan>
+@{
+    ViewData["Title"] = "Lesson Plan";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="page-title">Executive Lesson Plans</h3>
+        <button class="btn btn-premium-purple btn-sm rounded-8" onclick="toggleForm()">
+            <i class="fas fa-plus me-2"></i>ADD PLAN
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-4" id="formColumn">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0" id="formTitle">Create Plan</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form id="planForm" asp-action="CreateLessonPlan" method="post">
+                        <input type="hidden" name="Id" id="planId" value="0" />
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Teacher*</label>
+                            <select name="TeacherId" id="planTeacherId" class="form-select form-control-premium" asp-items="ViewBag.Teachers" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Lesson*</label>
+                            <select name="LessonId" id="planLessonId" class="form-select form-control-premium" asp-items="ViewBag.Lessons" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Topic*</label>
+                            <select name="TopicId" id="planTopicId" class="form-select form-control-premium" asp-items="ViewBag.Topics" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Execution Date*</label>
+                            <input type="date" name="ExecutionDate" id="planExecutionDate" class="form-control-premium w-100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Status</label>
+                            <select name="Status" id="planStatus" class="form-select form-control-premium">
+                                <option value="Pending">Pending</option>
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-premium-primary flex-grow-1" id="submitBtn">SAVE PLAN</button>
+                            <button type="button" class="btn btn-light-soft text-dark" id="cancelEditBtn" style="display: none;" onclick="resetForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8" id="listColumn">
+            <div class="premium-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">DATE</th>
+                                    <th>TEACHER</th>
+                                    <th>LESSON/TOPIC</th>
+                                    <th>STATUS</th>
+                                    <th class="text-end px-4">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 fw-800 text-primary">@item.ExecutionDate.ToString("dd MMM yyyy")</td>
+                                        <td class="fw-700 text-dark">@item.Teacher?.FullName</td>
+                                        <td>
+                                            <div class="fw-800">@item.Lesson?.LessonName</div>
+                                            <div class="small text-muted fw-600">@item.Topic?.TopicName</div>
+                                        </td>
+                                        <td>
+                                            @if(item.Status == "Completed"){
+                                                <span class="badge badge-success-premium">COMPLETED</span>
+                                            } else if(item.Status == "Ongoing"){
+                                                <span class="badge badge-warning-premium">ONGOING</span>
+                                            } else {
+                                                <span class="badge badge-danger-premium">PENDING</span>
+                                            }
+                                        </td>
+                                        <td class="text-end px-4">
+                                            <div class="btn-group gap-1">
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2 btn-edit"
+                                                        data-id="@item.Id"
+                                                        data-teacher-id="@item.TeacherId"
+                                                        data-lesson-id="@item.LessonId"
+                                                        data-topic-id="@item.TopicId"
+                                                        data-date="@item.ExecutionDate.ToString("yyyy-MM-dd")"
+                                                        data-status="@item.Status">
+                                                    <i class="fas fa-edit text-primary"></i>
+                                                </button>
+                                                <form asp-action="DeleteLessonPlan" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this lesson plan?');" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm btn-light-soft rounded-circle px-2 text-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+
+    function editPlan(id, teacherId, lessonId, topicId, date, status) {
+        const formCol = document.getElementById('formColumn');
+        if (formCol.style.display === 'none') {
+            toggleForm();
+        }
+        
+        const form = document.getElementById('planForm');
+        form.action = '/LessonPlan/EditLessonPlan';
+        
+        document.getElementById('planId').value = id;
+        document.getElementById('formTitle').innerText = 'Edit Plan';
+        document.getElementById('planTeacherId').value = teacherId;
+        document.getElementById('planLessonId').value = lessonId;
+        document.getElementById('planTopicId').value = topicId;
+        document.getElementById('planExecutionDate').value = date;
+        document.getElementById('planStatus').value = status;
+        
+        document.getElementById('submitBtn').innerText = 'UPDATE PLAN';
+        document.getElementById('cancelEditBtn').style.display = 'inline-block';
+        
+        formCol.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        const form = document.getElementById('planForm');
+        form.action = '/LessonPlan/CreateLessonPlan';
+        
+        document.getElementById('planId').value = '0';
+        document.getElementById('formTitle').innerText = 'Create Plan';
+        document.getElementById('planTeacherId').selectedIndex = 0;
+        document.getElementById('planLessonId').selectedIndex = 0;
+        document.getElementById('planTopicId').selectedIndex = 0;
+        document.getElementById('planExecutionDate').value = '';
+        document.getElementById('planStatus').value = 'Pending';
+        
+        document.getElementById('submitBtn').innerText = 'SAVE PLAN';
+        document.getElementById('cancelEditBtn').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const teacherId = this.getAttribute('data-teacher-id');
+                const lessonId = this.getAttribute('data-lesson-id');
+                const topicId = this.getAttribute('data-topic-id');
+                const date = this.getAttribute('data-date');
+                const status = this.getAttribute('data-status');
+                
+                editPlan(id, teacherId, lessonId, topicId, date, status);
+            });
+        });
+    });
+</script>

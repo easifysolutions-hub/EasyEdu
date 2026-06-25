@@ -1,0 +1,782 @@
+@{
+    ViewData["Title"] = "Import & Export Center";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-database me-2 text-primary"></i>Data Management Center</h1>
+        <p class="text-muted fw-500">Bulk import from Excel/CSV — Export everything to Excel, CSV or PDF</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-success-soft px-3 py-2 rounded-12 fw-600">
+            <i class="fas fa-file-excel me-1"></i>Excel Ready
+        </span>
+        <span class="badge bg-info-soft px-3 py-2 rounded-12 fw-600">
+            <i class="fas fa-file-csv me-1"></i>CSV Ready
+        </span>
+    </div>
+</div>
+
+<!-- Alert area -->
+<div id="importAlert" class="d-none mb-4"></div>
+
+<!-- ─── IMPORT SECTION ────────────────────────────────────────────── -->
+<div class="row g-0 mb-2">
+    <div class="col-12">
+        <div class="section-header-bar bg-primary text-white rounded-12 px-4 py-2 d-flex align-items-center gap-3 mb-3">
+            <i class="fas fa-upload fa-lg"></i>
+            <div>
+                <div class="fw-700 fs-5">Bulk Import</div>
+                <div class="small opacity-75">Upload Excel (.xlsx) or CSV files to add records in bulk</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5" id="importSection">
+
+    <!-- Students Import -->
+    <div class="col-xl-4 col-md-6">
+        <div class="import-card card border-0 shadow-sm h-100 rounded-16 overflow-hidden">
+            <div class="card-header-band bg-primary text-white d-flex align-items-center gap-3 p-3">
+                <div class="entity-icon rounded-12 bg-white bg-opacity-25 p-2">
+                    <i class="fas fa-user-graduate fa-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-700">Students</div>
+                    <div class="small opacity-75">Admission, class, parent info</div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="students"})"
+                   class="btn btn-outline-primary btn-sm w-100 mb-3" id="btnStudentTemplate">
+                    <i class="fas fa-cloud-download-alt me-1"></i>Download Template
+                </a>
+                <form id="formStudents" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="upload-drop-zone mb-3" onclick="document.getElementById('fileStudents').click()" id="dropStudents">
+                        <i class="fas fa-file-excel fa-2x text-success mb-2"></i>
+                        <div class="fw-600 text-muted small">Click to select or drag & drop</div>
+                        <div class="text-muted" style="font-size:.75rem;">.xlsx or .csv</div>
+                        <div id="fileNameStudents" class="mt-1 text-primary small fw-600"></div>
+                    </div>
+                    <input type="file" id="fileStudents" name="file" class="d-none" accept=".xlsx,.csv"
+                           onchange="showFileName('fileStudents','fileNameStudents','dropStudents')">
+                    <button type="button" class="btn btn-primary w-100" onclick="doImport('Students','formStudents','fileStudents')">
+                        <i class="fas fa-upload me-2"></i>Import Students
+                    </button>
+                </form>
+                <div id="resultStudents" class="mt-3 d-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Import -->
+    <div class="col-xl-4 col-md-6">
+        <div class="import-card card border-0 shadow-sm h-100 rounded-16 overflow-hidden">
+            <div class="card-header-band bg-success text-white d-flex align-items-center gap-3 p-3">
+                <div class="entity-icon rounded-12 bg-white bg-opacity-25 p-2">
+                    <i class="fas fa-chalkboard-teacher fa-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-700">Staff / Teachers</div>
+                    <div class="small opacity-75">Employee details, designation, dept</div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="staff"})"
+                   class="btn btn-outline-success btn-sm w-100 mb-3">
+                    <i class="fas fa-cloud-download-alt me-1"></i>Download Template
+                </a>
+                <form id="formStaff" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="upload-drop-zone mb-3" onclick="document.getElementById('fileStaff').click()" id="dropStaff">
+                        <i class="fas fa-file-excel fa-2x text-success mb-2"></i>
+                        <div class="fw-600 text-muted small">Click to select or drag & drop</div>
+                        <div class="text-muted" style="font-size:.75rem;">.xlsx or .csv</div>
+                        <div id="fileNameStaff" class="mt-1 text-primary small fw-600"></div>
+                    </div>
+                    <input type="file" id="fileStaff" name="file" class="d-none" accept=".xlsx,.csv"
+                           onchange="showFileName('fileStaff','fileNameStaff','dropStaff')">
+                    <button type="button" class="btn btn-success w-100" onclick="doImport('Staff','formStaff','fileStaff')">
+                        <i class="fas fa-upload me-2"></i>Import Staff
+                    </button>
+                </form>
+                <div id="resultStaff" class="mt-3 d-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fee Payments Import -->
+    <div class="col-xl-4 col-md-6">
+        <div class="import-card card border-0 shadow-sm h-100 rounded-16 overflow-hidden">
+            <div class="card-header-band text-white d-flex align-items-center gap-3 p-3" style="background:#f97316;">
+                <div class="entity-icon rounded-12 bg-white bg-opacity-25 p-2">
+                    <i class="fas fa-money-bill-wave fa-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-700">Fee Payments</div>
+                    <div class="small opacity-75">Collection & receipt records</div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="fees"})"
+                   class="btn btn-outline-warning btn-sm w-100 mb-3">
+                    <i class="fas fa-cloud-download-alt me-1"></i>Download Template
+                </a>
+                <form id="formFees" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="upload-drop-zone mb-3" onclick="document.getElementById('fileFees').click()" id="dropFees">
+                        <i class="fas fa-file-excel fa-2x text-success mb-2"></i>
+                        <div class="fw-600 text-muted small">Click to select or drag & drop</div>
+                        <div class="text-muted" style="font-size:.75rem;">.xlsx or .csv</div>
+                        <div id="fileNameFees" class="mt-1 text-primary small fw-600"></div>
+                    </div>
+                    <input type="file" id="fileFees" name="file" class="d-none" accept=".xlsx,.csv"
+                           onchange="showFileName('fileFees','fileNameFees','dropFees')">
+                    <button type="button" class="btn btn-warning w-100" onclick="doImport('FeePayments','formFees','fileFees')">
+                        <i class="fas fa-upload me-2"></i>Import Payments
+                    </button>
+                </form>
+                <div id="resultFees" class="mt-3 d-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vouchers Import -->
+    <div class="col-xl-4 col-md-6">
+        <div class="import-card card border-0 shadow-sm h-100 rounded-16 overflow-hidden">
+            <div class="card-header-band text-white d-flex align-items-center gap-3 p-3" style="background:#8b5cf6;">
+                <div class="entity-icon rounded-12 bg-white bg-opacity-25 p-2">
+                    <i class="fas fa-receipt fa-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-700">Vouchers / Transactions</div>
+                    <div class="small opacity-75">Double-entry voucher uploading</div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="vouchers"})"
+                   class="btn btn-outline-purple btn-sm w-100 mb-3" style="color:#8b5cf6; border-color:#8b5cf6;">
+                    <i class="fas fa-cloud-download-alt me-1"></i>Download Template
+                </a>
+                <form id="formVouchers" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="upload-drop-zone mb-3" onclick="document.getElementById('fileVouchers').click()" id="dropVouchers">
+                        <i class="fas fa-file-excel fa-2x text-success mb-2"></i>
+                        <div class="fw-600 text-muted small">Click to select or drag & drop</div>
+                        <div class="text-muted" style="font-size:.75rem;">.xlsx or .csv</div>
+                        <div id="fileNameVouchers" class="mt-1 text-primary small fw-600"></div>
+                    </div>
+                    <input type="file" id="fileVouchers" name="file" class="d-none" accept=".xlsx,.csv"
+                           onchange="showFileName('fileVouchers','fileNameVouchers','dropVouchers')">
+                    <button type="button" class="btn text-white w-100" style="background:#8b5cf6;" onclick="doImport('Vouchers','formVouchers','fileVouchers')">
+                        <i class="fas fa-upload me-2"></i>Import Vouchers
+                    </button>
+                </form>
+                <div id="resultVouchers" class="mt-3 d-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart of Accounts Import -->
+    <div class="col-xl-4 col-md-6">
+        <div class="import-card card border-0 shadow-sm h-100 rounded-16 overflow-hidden">
+            <div class="card-header-band text-white d-flex align-items-center gap-3 p-3" style="background:#06b6d4;">
+                <div class="entity-icon rounded-12 bg-white bg-opacity-25 p-2">
+                    <i class="fas fa-book fa-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-700">Chart of Accounts</div>
+                    <div class="small opacity-75">Ledger accounts & opening balances</div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="ledgers"})"
+                   class="btn btn-outline-info btn-sm w-100 mb-3" style="color:#06b6d4; border-color:#06b6d4;">
+                    <i class="fas fa-cloud-download-alt me-1"></i>Download Template
+                </a>
+                <form id="formLedgers" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="upload-drop-zone mb-3" onclick="document.getElementById('fileLedgers').click()" id="dropLedgers">
+                        <i class="fas fa-file-excel fa-2x text-success mb-2"></i>
+                        <div class="fw-600 text-muted small">Click to select or drag & drop</div>
+                        <div class="text-muted" style="font-size:.75rem;">.xlsx or .csv</div>
+                        <div id="fileNameLedgers" class="mt-1 text-primary small fw-600"></div>
+                    </div>
+                    <input type="file" id="fileLedgers" name="file" class="d-none" accept=".xlsx,.csv"
+                           onchange="showFileName('fileLedgers','fileNameLedgers','dropLedgers')">
+                    <button type="button" class="btn text-white w-100" style="background:#06b6d4;" onclick="doImport('Ledgers','formLedgers','fileLedgers')">
+                        <i class="fas fa-upload me-2"></i>Import Ledgers
+                    </button>
+                </form>
+                <div id="resultLedgers" class="mt-3 d-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setup & Master Tables Import -->
+    <div class="col-xl-4 col-md-6">
+        <div class="import-card card border-0 shadow-sm h-100 rounded-16 overflow-hidden">
+            <div class="card-header-band bg-dark text-white d-flex align-items-center gap-3 p-3">
+                <div class="entity-icon rounded-12 bg-white bg-opacity-25 p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-cogs fa-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-700">Setup &amp; Master Tables</div>
+                    <div class="small opacity-75">Classes, sections, designations, etc.</div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <label class="form-label small fw-700 text-muted">Select Table</label>
+                    <select id="importMasterTypeSelect" class="form-select form-select-sm rounded-8" onchange="updateMasterTemplateBtn()">
+                        <optgroup label="Academics">
+                            <option value="Classes" selected>Classes</option>
+                            <option value="Sections">Sections</option>
+                            <option value="Subjects">Subjects</option>
+                            <option value="ClassRooms">Class Rooms</option>
+                        </optgroup>
+                        <optgroup label="Human Resource">
+                            <option value="Departments">Departments</option>
+                            <option value="Designations">Designations</option>
+                            <option value="LeaveTypes">Leave Types</option>
+                        </optgroup>
+                        <optgroup label="Finance &amp; Others">
+                            <option value="FeesGroups">Fees Groups</option>
+                            <option value="FeesTypes">Fees Types</option>
+                            <option value="StudentCategories">Student Categories</option>
+                            <option value="StudentGroups">Student Groups</option>
+                            <option value="BookCategories">Book Categories</option>
+                            <option value="ItemCategories">Item Categories</option>
+                        </optgroup>
+                        <optgroup label="Logistics">
+                            <option value="Routes">Transport Routes</option>
+                            <option value="Vehicles">Vehicles</option>
+                            <option value="Dormitories">Hostels/Dormitories</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <a id="btnMasterTemplate" href="/ImportExport/DownloadMasterTemplate?type=Classes"
+                   class="btn btn-outline-secondary btn-sm w-100 mb-3">
+                    <i class="fas fa-cloud-download-alt me-1"></i>Download Template
+                </a>
+                <form id="formMaster" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="upload-drop-zone mb-3" onclick="document.getElementById('fileMaster').click()" id="dropMaster">
+                        <i class="fas fa-file-excel fa-2x text-success mb-2"></i>
+                        <div class="fw-600 text-muted small">Click to select or drag &amp; drop</div>
+                        <div class="text-muted" style="font-size:.75rem;">.xlsx or .xls</div>
+                        <div id="fileNameMaster" class="mt-1 text-primary small fw-600"></div>
+                    </div>
+                    <input type="file" id="fileMaster" name="file" class="d-none" accept=".xlsx,.xls"
+                           onchange="showFileName('fileMaster','fileNameMaster','dropMaster')">
+                    <button type="button" class="btn text-white w-100" style="background:#4b5563;" onclick="doMasterImport()">
+                        <i class="fas fa-upload me-2"></i>Import Master Data
+                    </button>
+                </form>
+                <div id="resultMaster" class="mt-3 d-none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── EXPORT SECTION ────────────────────────────────────────────── -->
+<div class="row g-0 mb-2">
+    <div class="col-12">
+        <div class="section-header-bar bg-info text-white rounded-12 px-4 py-2 d-flex align-items-center gap-3 mb-3">
+            <i class="fas fa-download fa-lg"></i>
+            <div>
+                <div class="fw-700 fs-5">Bulk Export</div>
+                <div class="small opacity-75">Download records as Excel or CSV with optional date filters</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <!-- Export Students -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box-md bg-primary-soft rounded-12">
+                        <i class="fas fa-user-graduate text-primary fa-lg"></i>
+                    </div>
+                    <div>
+                        <div class="fw-700 fs-6">Students</div>
+                        <div class="text-muted small">All active student records</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="@Url.Action("ExportStudents","ImportExport",new{format="excel"})"
+                       class="btn btn-primary flex-fill">
+                        <i class="fas fa-file-excel me-1"></i>Excel
+                    </a>
+                    <a href="@Url.Action("ExportStudents","ImportExport",new{format="csv"})"
+                       class="btn btn-outline-primary flex-fill">
+                        <i class="fas fa-file-csv me-1"></i>CSV
+                    </a>
+                    <a href="javascript:printExport('Students')" class="btn btn-outline-secondary">
+                        <i class="fas fa-print"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Staff -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box-md bg-success-soft rounded-12">
+                        <i class="fas fa-chalkboard-teacher text-success fa-lg"></i>
+                    </div>
+                    <div>
+                        <div class="fw-700 fs-6">Staff / Teachers</div>
+                        <div class="text-muted small">All active staff records</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="@Url.Action("ExportStaff","ImportExport",new{format="excel"})"
+                       class="btn btn-success flex-fill">
+                        <i class="fas fa-file-excel me-1"></i>Excel
+                    </a>
+                    <a href="@Url.Action("ExportStaff","ImportExport",new{format="csv"})"
+                       class="btn btn-outline-success flex-fill">
+                        <i class="fas fa-file-csv me-1"></i>CSV
+                    </a>
+                    <a href="javascript:printExport('Staff')" class="btn btn-outline-secondary">
+                        <i class="fas fa-print"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Fee Payments (with date range) -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box-md rounded-12" style="background:rgba(249,115,22,.12);">
+                        <i class="fas fa-money-bill-wave fa-lg" style="color:#f97316;"></i>
+                    </div>
+                    <div>
+                        <div class="fw-700 fs-6">Fee Payments</div>
+                        <div class="text-muted small">Receipts & collection records</div>
+                    </div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-600 mb-1">From Date</label>
+                        <input type="date" id="feeFrom" class="form-control form-control-sm"
+                               value="@DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-600 mb-1">To Date</label>
+                        <input type="date" id="feeTo" class="form-control form-control-sm"
+                               value="@DateTime.Today.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-warning flex-fill" onclick="exportWithDates('FeePayments','excel','feeFrom','feeTo')">
+                        <i class="fas fa-file-excel me-1"></i>Excel
+                    </button>
+                    <button class="btn btn-outline-warning flex-fill" onclick="exportWithDates('FeePayments','csv','feeFrom','feeTo')">
+                        <i class="fas fa-file-csv me-1"></i>CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Vouchers / Transactions -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box-md bg-primary-soft rounded-12">
+                        <i class="fas fa-receipt text-primary fa-lg"></i>
+                    </div>
+                    <div>
+                        <div class="fw-700 fs-6">Vouchers / Transactions</div>
+                        <div class="text-muted small">Payment, receipt, journal entries</div>
+                    </div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-600 mb-1">From Date</label>
+                        <input type="date" id="voucherFrom" class="form-control form-control-sm"
+                               value="@DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-600 mb-1">To Date</label>
+                        <input type="date" id="voucherTo" class="form-control form-control-sm"
+                               value="@DateTime.Today.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary flex-fill" onclick="exportWithDates('Vouchers','excel','voucherFrom','voucherTo')">
+                        <i class="fas fa-file-excel me-1"></i>Excel
+                    </button>
+                    <button class="btn btn-outline-primary flex-fill" onclick="exportWithDates('Vouchers','csv','voucherFrom','voucherTo')">
+                        <i class="fas fa-file-csv me-1"></i>CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Ledgers -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box-md bg-info-soft rounded-12">
+                        <i class="fas fa-book text-info fa-lg"></i>
+                    </div>
+                    <div>
+                        <div class="fw-700 fs-6">Chart of Accounts</div>
+                        <div class="text-muted small">All ledger accounts</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <a href="@Url.Action("ExportLedgers","ImportExport",new{format="excel"})"
+                       class="btn btn-info flex-fill">
+                        <i class="fas fa-file-excel me-1"></i>Excel
+                    </a>
+                    <a href="@Url.Action("ExportLedgers","ImportExport",new{format="csv"})"
+                       class="btn btn-outline-info flex-fill">
+                        <i class="fas fa-file-csv me-1"></i>CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Setup & Master Tables -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16">
+            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="icon-box-md rounded-12 d-flex align-items-center justify-content-center" style="width:40px;height:40px;background:rgba(75,85,99,0.12);">
+                            <i class="fas fa-cogs fa-lg text-secondary"></i>
+                        </div>
+                        <div>
+                            <div class="fw-700 fs-6">Setup &amp; Master Tables</div>
+                            <div class="text-muted small">Export system metadata registry</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700 text-muted mb-1">Select Table</label>
+                        <select id="exportMasterTypeSelect" class="form-select form-select-sm rounded-8">
+                            <optgroup label="Academics">
+                                <option value="Classes" selected>Classes</option>
+                                <option value="Sections">Sections</option>
+                                <option value="Subjects">Subjects</option>
+                                <option value="ClassRooms">Class Rooms</option>
+                            </optgroup>
+                            <optgroup label="Human Resource">
+                                <option value="Departments">Departments</option>
+                                <option value="Designations">Designations</option>
+                                <option value="LeaveTypes">Leave Types</option>
+                            </optgroup>
+                            <optgroup label="Finance &amp; Others">
+                                <option value="FeesGroups">Fees Groups</option>
+                                <option value="FeesTypes">Fees Types</option>
+                                <option value="StudentCategories">Student Categories</option>
+                                <option value="StudentGroups">Student Groups</option>
+                                <option value="BookCategories">Book Categories</option>
+                                <option value="ItemCategories">Item Categories</option>
+                            </optgroup>
+                            <optgroup label="Logistics">
+                                <option value="Routes">Transport Routes</option>
+                                <option value="Vehicles">Vehicles</option>
+                                <option value="Dormitories">Hostels/Dormitories</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-secondary flex-fill" style="background:#4b5563; border-color:#4b5563;" onclick="exportMasterTable('excel')">
+                            <i class="fas fa-file-excel me-1"></i>Excel
+                        </button>
+                        <button class="btn btn-outline-secondary flex-fill" onclick="exportMasterTable('csv')">
+                            <i class="fas fa-file-csv me-1"></i>CSV
+                        </button>
+                    </div>
+                    <a href="/ImportExport/ExportAllMasters" class="btn btn-premium-soft w-100 fw-700 mt-1">
+                        <i class="fas fa-file-zipper me-1 text-primary"></i>Bulk Export All (Multi-Sheet)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download All Templates -->
+    <div class="col-xl-4 col-md-6">
+        <div class="export-card card border-0 shadow-sm h-100 rounded-16 bg-dark text-white">
+            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="icon-box-md rounded-12 bg-white bg-opacity-10">
+                            <i class="fas fa-folder-open fa-lg text-white"></i>
+                        </div>
+                        <div>
+                            <div class="fw-700 fs-6">All Templates</div>
+                            <div class="small opacity-75">Download blank import templates</div>
+                        </div>
+                    </div>
+                    <p class="small opacity-75 mb-3">
+                        Download the pre-formatted Excel templates for each entity. Fill in your data and upload.
+                    </p>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="students"})" class="btn btn-light btn-sm">
+                        <i class="fas fa-user-graduate me-1 text-primary"></i>Students Template
+                    </a>
+                    <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="staff"})" class="btn btn-light btn-sm">
+                        <i class="fas fa-chalkboard-teacher me-1 text-success"></i>Staff Template
+                    </a>
+                    <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="fees"})" class="btn btn-light btn-sm">
+                        <i class="fas fa-money-bill me-1" style="color:#f97316;"></i>Fee Payments Template
+                    </a>
+                    <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="vouchers"})" class="btn btn-light btn-sm">
+                        <i class="fas fa-receipt me-1 text-primary"></i>Vouchers Template
+                    </a>
+                    <a href="@Url.Action("DownloadTemplate","ImportExport",new{type="ledgers"})" class="btn btn-light btn-sm">
+                        <i class="fas fa-book me-1 text-info"></i>Ledgers Template
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .section-header-bar { letter-spacing: .3px; }
+
+    .upload-drop-zone {
+        border: 2px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color .2s, background .2s;
+        background: #f8fafc;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .upload-drop-zone:hover,
+    .upload-drop-zone.drag-over {
+        border-color: #6366f1;
+        background: #f0f0ff;
+    }
+
+    .card-header-band {
+        min-height: 72px;
+    }
+    .entity-icon { width: 40px; height: 40px; display:flex; align-items:center; justify-content:center; }
+
+    .import-result-box {
+        border-radius: 10px;
+        padding: 14px;
+        font-size: .82rem;
+    }
+    .import-result-box .error-list {
+        max-height: 120px;
+        overflow-y: auto;
+        margin-top: 8px;
+        font-size: .78rem;
+    }
+
+    .progress-spinner {
+        display: inline-block;
+        width: 16px; height: 16px;
+        border: 2px solid rgba(255,255,255,.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin .7s linear infinite;
+        margin-right: 6px;
+    }
+    @@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+@section Scripts {
+<script>
+    // Show selected filename
+    function showFileName(inputId, nameId, dropId) {
+        const file = document.getElementById(inputId).files[0];
+        if (file) {
+            document.getElementById(nameId).textContent = file.name;
+            document.getElementById(dropId).style.borderColor = '#6366f1';
+            document.getElementById(dropId).style.background = '#f0f0ff';
+        }
+    }
+
+    // Drag & Drop support
+    document.querySelectorAll('.upload-drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const input = zone.parentElement.querySelector('input[type=file]');
+            if (input && e.dataTransfer.files[0]) {
+                const dt  = new DataTransfer();
+                dt.items.add(e.dataTransfer.files[0]);
+                input.files = dt.files;
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    // Perform import via AJAX
+    async function doImport(action, formId, fileId) {
+        const fileInput = document.getElementById(fileId);
+        if (!fileInput.files[0]) {
+            showAlert('warning', 'Please select a file first.');
+            return;
+        }
+
+        const btn      = event.currentTarget;
+        const origHTML = btn.innerHTML;
+        btn.innerHTML  = '<span class="progress-spinner"></span>Uploading…';
+        btn.disabled   = true;
+
+        const form     = document.getElementById(formId);
+        const formData = new FormData(form);
+
+        try {
+            const res = await fetch(`/ImportExport/Import${action}`, {
+                method: 'POST',
+                body: formData
+            });
+            const json = await res.json();
+            showImportResult(action, json);
+        } catch (err) {
+            showAlert('danger', 'Upload failed: ' + err.message);
+        } finally {
+            btn.innerHTML = origHTML;
+            btn.disabled  = false;
+        }
+    }
+
+    // Show per-card result
+    function showImportResult(action, result) {
+        const map = { Students: 'resultStudents', Staff: 'resultStaff', FeePayments: 'resultFees', Vouchers: 'resultVouchers', Ledgers: 'resultLedgers' };
+        const divId = map[action];
+        if (!divId) return;
+
+        const div = document.getElementById(divId);
+        div.classList.remove('d-none');
+
+        const hasErrors = result.errorCount > 0;
+        div.innerHTML = `
+            <div class="import-result-box ${result.successCount > 0 ? 'bg-success-soft' : 'bg-danger-soft'}">
+                <div class="fw-700 mb-1">
+                    <i class="fas fa-${result.successCount > 0 ? 'check-circle text-success' : 'exclamation-circle text-danger'} me-1"></i>
+                    Import Complete — ${result.entityName}
+                </div>
+                <div>Total rows: <strong>${result.totalRows}</strong> &nbsp;|&nbsp;
+                     Imported: <strong class="text-success">${result.successCount}</strong> &nbsp;|&nbsp;
+                     Errors: <strong class="${hasErrors ? 'text-danger' : ''}">${result.errorCount}</strong>
+                </div>
+                ${hasErrors ? `<div class="error-list mt-2">
+                    ${result.errors.map(e => `<div class="text-danger">⚠ ${e}</div>`).join('')}
+                </div>` : ''}
+            </div>`;
+    }
+
+    // Export with date range
+    function exportWithDates(action, format, fromId, toId) {
+        const from = document.getElementById(fromId).value;
+        const to   = document.getElementById(toId).value;
+        if (!from || !to) { showAlert('warning', 'Select both dates.'); return; }
+        window.location.href = `/ImportExport/Export${action}?format=${format}&from=${from}&to=${to}`;
+    }
+
+    // Print export (opens print window — works with any browser)
+    function printExport(type) {
+        window.open(`/ImportExport/Export${type}?format=csv`, '_blank');
+    }
+
+    function showAlert(type, msg) {
+        const el = document.getElementById('importAlert');
+        el.className = `alert alert-${type} rounded-12 mb-4`;
+        el.textContent = msg;
+        el.classList.remove('d-none');
+        setTimeout(() => el.classList.add('d-none'), 5000);
+    }
+
+    function updateMasterTemplateBtn() {
+        const type = document.getElementById('importMasterTypeSelect').value;
+        document.getElementById('btnMasterTemplate').href = `/ImportExport/DownloadMasterTemplate?type=${type}`;
+    }
+
+    async function doMasterImport() {
+        const fileInput = document.getElementById('fileMaster');
+        if (!fileInput.files[0]) {
+            showAlert('warning', 'Please select a master data file first.');
+            return;
+        }
+
+        const type = document.getElementById('importMasterTypeSelect').value;
+        const btn  = event.currentTarget;
+        const origHTML = btn.innerHTML;
+        btn.innerHTML  = '<span class="progress-spinner"></span>Uploading…';
+        btn.disabled   = true;
+
+        const form     = document.getElementById('formMaster');
+        const formData = new FormData(form);
+        formData.append('type', type);
+
+        try {
+            const res = await fetch('/ImportExport/ImportMaster', {
+                method: 'POST',
+                body: formData
+            });
+            const json = await res.json();
+            
+            const div = document.getElementById('resultMaster');
+            div.classList.remove('d-none');
+            const hasErrors = json.errorCount > 0;
+            div.innerHTML = `
+                <div class="import-result-box ${json.successCount > 0 ? 'bg-success-soft' : 'bg-danger-soft'}">
+                    <div class="fw-700 mb-1">
+                        <i class="fas fa-${json.successCount > 0 ? 'check-circle text-success' : 'exclamation-circle text-danger'} me-1"></i>
+                        Import Complete — Master: ${json.entityName}
+                    </div>
+                    <div>Total rows: <strong>${json.totalRows}</strong> &nbsp;|&nbsp;
+                         Imported: <strong class="text-success">${json.successCount}</strong> &nbsp;|&nbsp;
+                         Errors: <strong class="${hasErrors ? 'text-danger' : ''}">${json.errorCount}</strong>
+                    </div>
+                    ${hasErrors ? `<div class="error-list mt-2">
+                        ${json.errors.map(e => `<div class="text-danger">⚠ ${e}</div>`).join('')}
+                    </div>` : ''}
+                </div>`;
+        } catch (err) {
+            showAlert('danger', 'Upload failed: ' + err.message);
+        } finally {
+            btn.innerHTML = origHTML;
+            btn.disabled  = false;
+        }
+    }
+
+    function exportMasterTable(format) {
+        const table = document.getElementById('exportMasterTypeSelect').value;
+        window.location.href = `/ImportExport/ExportMaster?table=${table}&format=${format}`;
+    }
+</script>
+}

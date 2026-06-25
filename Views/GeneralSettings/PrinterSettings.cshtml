@@ -1,0 +1,436 @@
+﻿@{
+    ViewData["Title"] = "Printer Settings";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="page-title mb-1">Printer Configuration</h3>
+            <p class="text-muted small fw-600 mb-0">Manage and configure OS printers registered on this device</p>
+        </div>
+        <button class="btn btn-premium-primary px-4 py-2 rounded-12" onclick="detectPrinters()">
+            <i class="fas fa-sync-alt me-2"></i> Refresh Printers
+        </button>
+    </div>
+
+    <div id="detectionBanner" class="alert d-flex align-items-center gap-3 rounded-16 mb-4" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:white;border:none;">
+        <i class="fas fa-spinner fa-spin fs-4"></i>
+        <div>
+            <div class="fw-800">Detecting Installed Printers...</div>
+            <div class="small opacity-75">Reading from OS registry and installed devices</div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h5 class="fw-800 text-dark m-0">Installed Printers</h5>
+                        <small class="text-muted fw-600">Printers detected from OS / Registry</small>
+                    </div>
+                    <span id="printerCountBadge" class="badge rounded-pill px-3 py-2 fw-700" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:white;font-size:0.85rem;">Detecting...</span>
+                </div>
+                <div class="card-body p-0">
+                    <div id="printerListContainer" class="p-4">
+                        <div class="d-flex align-items-center gap-3 p-3 mb-2 rounded-14" style="background:#f8fafc;border:1px solid #e2e8f0;">
+                            <div style="width:48px;height:48px;background:#e2e8f0;border-radius:12px;"></div>
+                            <div class="flex-grow-1">
+                                <div style="height:14px;width:60%;background:#e2e8f0;border-radius:4px;" class="mb-2"></div>
+                                <div style="height:12px;width:40%;background:#e2e8f0;border-radius:4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card mt-4">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0"><i class="fas fa-print me-2 text-primary"></i>Test Print</h5>
+                    <small class="text-muted fw-600">Send a test print to verify your printer is working</small>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label small fw-700 text-uppercase">Select Printer</label>
+                            <select id="testPrinterSelect" class="form-select form-control-premium">
+                                <option value="">-- Select a Printer --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-700 text-uppercase">Test Type</label>
+                            <select class="form-select form-control-premium" id="testPrintType">
+                                <option value="receipt">Fee Receipt Sample</option>
+                                <option value="invoice">Invoice Sample</option>
+                                <option value="plain">Plain Text</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-premium-primary w-100 py-3 rounded-12" onclick="testPrint()">
+                                <i class="fas fa-print me-2"></i> Test Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="premium-card mb-4">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Default Printer Assignment</h5>
+                    <small class="text-muted fw-600">Assign printers to specific print tasks</small>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div class="mb-4">
+                        <label class="form-label small fw-700 text-uppercase">Fee Receipt Printer</label>
+                        <select id="defaultReceiptPrinter" class="form-select form-control-premium" onchange="savePrinterPref('receipt', this.value)">
+                            <option value="">-- Use System Default --</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-700 text-uppercase">Invoice Printer</label>
+                        <select id="defaultInvoicePrinter" class="form-select form-control-premium" onchange="savePrinterPref('invoice', this.value)">
+                            <option value="">-- Use System Default --</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-700 text-uppercase">ID Card Printer</label>
+                        <select id="defaultIdPrinter" class="form-select form-control-premium" onchange="savePrinterPref('idcard', this.value)">
+                            <option value="">-- Use System Default --</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-700 text-uppercase">Report Printer</label>
+                        <select id="defaultReportPrinter" class="form-select form-control-premium" onchange="savePrinterPref('report', this.value)">
+                            <option value="">-- Use System Default --</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success w-100 py-3 rounded-12 fw-700" onclick="saveAllPreferences()">
+                        <i class="fas fa-save me-2"></i> Save Preferences
+                    </button>
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Print Options</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div class="mb-4">
+                        <label class="d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light-subtle" style="cursor:pointer;">
+                            <div>
+                                <div class="fw-700 text-dark">Auto-Open Print Dialog</div>
+                                <div class="small text-muted">Automatically open print dialog</div>
+                            </div>
+                            <div class="form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="autoPrint" checked onchange="savePrintOption('autoPrint', this.checked)">
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-700 text-uppercase">Paper Size</label>
+                        <select class="form-select form-control-premium" id="paperSize" onchange="savePrintOption('paperSize', this.value)">
+                            <option value="A4">A4 (210 x 297 mm)</option>
+                            <option value="A5">A5 (148 x 210 mm)</option>
+                            <option value="letter">Letter</option>
+                            <option value="thermal80">Thermal 80mm</option>
+                            <option value="thermal57">Thermal 57mm</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700 text-uppercase">Orientation</label>
+                        <select class="form-select form-control-premium" id="orientation" onchange="savePrintOption('orientation', this.value)">
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<iframe id="testPrintFrame" style="display:none;"></iframe>
+
+<style>
+    @@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .printer-item { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px 18px; margin-bottom:12px; transition:all 0.2s ease; }
+    .printer-item:hover { border-color:#0ea5e9; box-shadow:0 4px 20px rgba(14,165,233,0.12); transform:translateY(-1px); }
+    .printer-item.default-printer { border-color:#10b981; background:linear-gradient(135deg,#f0fdf4,#ecfdf5); }
+    .printer-status-online { color:#10b981; }
+    .printer-status-offline { color:#ef4444; }
+    .printer-icon-wrap { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .no-printers-msg { text-align:center; padding:60px 20px; }
+</style>
+
+@section Scripts {
+<script type="text/javascript">
+    var PREF_KEY = 'easyEduPrinterPrefs';
+    var detectedPrinters = [];
+
+    function loadPreferences() {
+        try { return JSON.parse(localStorage.getItem(PREF_KEY)) || {}; } catch(e) { return {}; }
+    }
+    function savePreferences(prefs) {
+        localStorage.setItem(PREF_KEY, JSON.stringify(prefs));
+    }
+
+    function detectPrinters() {
+        document.getElementById('detectionBanner').innerHTML =
+            '<i class="fas fa-spinner fa-spin fs-4"></i><div><div class="fw-800">Detecting Installed Printers...</div>' +
+            '<div class="small opacity-75">Reading from OS registry and installed devices</div></div>';
+        document.getElementById('printerCountBadge').textContent = 'Detecting...';
+
+        var c = document.getElementById('printerListContainer');
+        var sk = '';
+        for (var i = 0; i < 3; i++) {
+            sk += '<div class="d-flex align-items-center gap-3 p-3 mb-2 rounded-12" style="background:#f8fafc;border:1px solid #e2e8f0;">' +
+                '<div style="width:48px;height:48px;background:#e2e8f0;border-radius:12px;"></div>' +
+                '<div class="flex-grow-1">' +
+                '<div style="height:14px;width:60%;background:#e2e8f0;border-radius:4px;" class="mb-2"></div>' +
+                '<div style="height:12px;width:40%;background:#e2e8f0;border-radius:4px;"></div>' +
+                '</div></div>';
+        }
+        c.innerHTML = sk;
+        setTimeout(function() { fetchAndDisplayPrinters(); }, 1200);
+    }
+
+    function fetchAndDisplayPrinters() {
+        fetch('/GeneralSettings/GetInstalledPrinters')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var prefs = loadPreferences();
+                var manual = prefs.manualPrinters || [];
+                var combined = data.concat(manual.filter(function(mp) {
+                    return !data.some(function(dp) { return dp.name === mp.name; });
+                }));
+                if (combined.length === 0) {
+                    combined = [{ name: 'System Default Printer', type: 'OS Default', status: 'online', isDefault: true, description: 'Default printer set in your OS' }];
+                }
+                detectedPrinters = combined;
+                renderPrinters(detectedPrinters);
+            })
+            .catch(function() {
+                var prefs = loadPreferences();
+                detectedPrinters = prefs.manualPrinters && prefs.manualPrinters.length > 0 ? prefs.manualPrinters :
+                    [{ name: 'System Default Printer', type: 'OS Default', status: 'online', isDefault: true, description: 'Default printer set in your OS' }];
+                renderPrinters(detectedPrinters);
+            });
+    }
+
+    function renderPrinters(printers) {
+        var container = document.getElementById('printerListContainer');
+        if (!printers || printers.length === 0) {
+            container.innerHTML = '<div class="no-printers-msg">' +
+                '<i class="fas fa-print fa-3x text-muted mb-3"></i><h5 class="fw-800 text-dark">No Printers Found</h5>' +
+                '<p class="text-muted small">Please install a printer driver and refresh.</p>' +
+                '<button class="btn btn-premium-primary rounded-12 px-4" onclick="addManualPrinter()"><i class="fas fa-plus me-2"></i> Add Printer Manually</button></div>';
+            updateBanner(0);
+            return;
+        }
+        updatePrinterDropdowns(printers);
+
+        var html = '';
+        printers.forEach(function(p) {
+            var isDefault = p.isDefault || false;
+            var sCls = p.status === 'online' ? 'printer-status-online' : 'printer-status-offline';
+            var sTxt = p.status === 'online' ? 'Ready' : 'Offline';
+            var iconBg = isDefault ? 'background:linear-gradient(135deg,#10b981,#059669)' : 'background:linear-gradient(135deg,#0ea5e9,#38bdf8)';
+            var pname = p.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+            html += '<div class="printer-item d-flex align-items-center gap-3' + (isDefault ? ' default-printer' : '') + '">';
+            html += '<div class="printer-icon-wrap text-white" style="' + iconBg + '"><i class="fas fa-print"></i></div>';
+            html += '<div class="flex-grow-1"><div class="d-flex align-items-center gap-2 mb-1"><span class="fw-800 text-dark">' + p.name + '</span>';
+            if (isDefault) html += '<span class="badge rounded-pill fw-700" style="background:#d1fae5;color:#065f46;font-size:0.7rem;">DEFAULT</span>';
+            html += '</div><div class="d-flex align-items-center gap-3"><span class="small fw-600 text-muted">' + (p.type || 'Local Printer') + '</span>';
+            html += '<span class="small fw-700 ' + sCls + '"><i class="fas fa-circle me-1" style="font-size:0.4rem;vertical-align:middle;"></i>' + sTxt + '</span>';
+            if (p.description) html += '<span class="small text-muted">' + p.description + '</span>';
+            html += '</div></div><div class="d-flex gap-2">';
+            if (!isDefault) {
+                html += '<button class="btn btn-sm btn-light-soft rounded-8 fw-700" onclick="setAsDefault(\'' + pname + '\')"><i class="fas fa-star me-1"></i>Set Default</button>';
+            } else {
+                html += '<span class="badge rounded-pill fw-700 px-3" style="background:#d1fae5;color:#065f46;"><i class="fas fa-check me-1"></i>Default</span>';
+            }
+            html += '<button class="btn btn-sm btn-light-soft rounded-8 fw-700" onclick="testSpecificPrinter(\'' + pname + '\')"><i class="fas fa-print"></i></button>';
+            html += '</div></div>';
+        });
+
+        html += '<div class="mt-3 pt-3 border-top"><button class="btn btn-light-soft rounded-12 w-100 fw-700 text-primary" onclick="addManualPrinter()"><i class="fas fa-plus me-2"></i> Add / Register Printer Manually</button></div>';
+        container.innerHTML = html;
+        updateBanner(printers.length);
+        loadSavedPreferences();
+    }
+
+    function updatePrinterDropdowns(printers) {
+        var ids = ['testPrinterSelect','defaultReceiptPrinter','defaultInvoicePrinter','defaultIdPrinter','defaultReportPrinter'];
+        ids.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = id === 'testPrinterSelect' ? '<option value="">-- Select a Printer --</option>' : '<option value="">-- Use System Default --</option>';
+            printers.forEach(function(p) {
+                var opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = p.name + (p.isDefault ? ' (Default)' : '');
+                el.appendChild(opt);
+            });
+        });
+    }
+
+    function updateBanner(count) {
+        var banner = document.getElementById('detectionBanner');
+        var badge = document.getElementById('printerCountBadge');
+        badge.textContent = count + ' Printer(s) Found';
+        if (count > 0) {
+            banner.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+            banner.innerHTML = '<i class="fas fa-check-circle fs-4"></i><div><div class="fw-800">' + count + ' Printer(s) Detected from OS Registry</div><div class="small opacity-75">All installed printers loaded successfully</div></div>';
+        } else {
+            banner.style.background = 'linear-gradient(135deg,#f59e0b,#d97706)';
+            banner.innerHTML = '<i class="fas fa-exclamation-triangle fs-4"></i><div><div class="fw-800">No Printers Detected</div><div class="small opacity-75">Please ensure printer drivers are installed on this device.</div></div>';
+        }
+    }
+
+    function setAsDefault(printerName) {
+        detectedPrinters.forEach(function(p) { p.isDefault = (p.name === printerName); });
+        var prefs = loadPreferences();
+        prefs.defaultPrinter = printerName;
+        savePreferences(prefs);
+        Swal.fire({ icon:'success', title:'Default Set', text:'"'+printerName+'" is now your default printer.', timer:2000, showConfirmButton:false, position:'top-end', toast:true });
+        renderPrinters(detectedPrinters);
+    }
+
+    function testSpecificPrinter(printerName) {
+        document.getElementById('testPrinterSelect').value = printerName;
+        testPrint();
+    }
+
+    function testPrint() {
+        var printerName = document.getElementById('testPrinterSelect').value;
+        var testType = document.getElementById('testPrintType').value;
+        var now = new Date().toLocaleString();
+        var pLabel = printerName || 'System Default';
+        var pmq = '\x40media print{body{margin:0;}}';
+        var content = '';
+
+        if (testType === 'receipt') {
+            content = '<!DOCTYPE html><html><head><style>body{font-family:monospace;font-size:12px;margin:0;padding:10px;width:260px;}.center{text-align:center}.divider{border-top:1px dashed #000;margin:5px 0}.bold{font-weight:bold}.row{display:flex;justify-content:space-between;}' + pmq + '</style></head><body>' +
+                '<div class="center bold" style="font-size:16px;">EasyEdu Academy</div>' +
+                '<div class="center">Fee Receipt (TEST PRINT)</div><div class="divider"></div>' +
+                '<div class="row"><span>Receipt No:</span><span>TEST-001</span></div>' +
+                '<div class="row"><span>Date:</span><span>' + now + '</span></div>' +
+                '<div class="row"><span>Student:</span><span>Test Student</span></div>' +
+                '<div class="divider"></div>' +
+                '<div class="row"><span>Tuition Fee</span><span>Rs.5,000</span></div>' +
+                '<div class="row"><span>Library Fee</span><span>Rs.500</span></div>' +
+                '<div class="divider"></div>' +
+                '<div class="row bold"><span>TOTAL PAID</span><span>Rs.5,500</span></div>' +
+                '<div class="center">Printer: ' + pLabel + '</div>' +
+                '<div class="center">Thank you!</div></body></html>';
+        } else if (testType === 'plain') {
+            content = '<!DOCTYPE html><html><head><style>body{font-family:Arial;padding:30px;}' + pmq + '</style></head><body>' +
+                '<h2>EasyEdu - Test Print</h2>' +
+                '<p><strong>Printer:</strong> ' + pLabel + '</p>' +
+                '<p><strong>Date/Time:</strong> ' + now + '</p>' +
+                '<p>If you can see this clearly, your printer is configured correctly.</p>' +
+                '<p>ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789</p>' +
+                '</body></html>';
+        } else {
+            content = '<!DOCTYPE html><html><head><style>body{font-family:Arial;padding:30px;}h1{color:#0ea5e9;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:8px;}th{background:#f0f9ff;}' + pmq + '</style></head><body>' +
+                '<h1>EasyEdu - Test Invoice</h1>' +
+                '<p><strong>Printer:</strong> ' + pLabel + ' | <strong>Date:</strong> ' + now + '</p>' +
+                '<table><tr><th>Description</th><th>Amount</th></tr>' +
+                '<tr><td>Tuition Fee</td><td>Rs.5,000</td></tr>' +
+                '<tr><td>Library Fee</td><td>Rs.500</td></tr>' +
+                '<tr><td><strong>TOTAL</strong></td><td><strong>Rs.5,500</strong></td></tr></table>' +
+                '<p style="color:#888;margin-top:20px;">Test print. Powered by EasyEdu.</p>' +
+                '</body></html>';
+        }
+
+        var iframe = document.getElementById('testPrintFrame');
+        var iDoc = iframe.contentWindow.document;
+        iDoc.open(); iDoc.write(content); iDoc.close();
+        setTimeout(function() {
+            try {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                Swal.fire({ icon:'info', title:'Print Dialog Opened', text: printerName ? 'Select "' + printerName + '" in the dialog.' : 'Select your printer in the dialog.', timer:3000, showConfirmButton:false, position:'top-end', toast:true });
+            } catch(e) { window.print(); }
+        }, 500);
+    }
+
+    function savePrinterPref(task, value) {
+        var prefs = loadPreferences();
+        prefs[task + 'Printer'] = value;
+        savePreferences(prefs);
+    }
+
+    function savePrintOption(option, value) {
+        var prefs = loadPreferences();
+        prefs[option] = value;
+        savePreferences(prefs);
+    }
+
+    function saveAllPreferences() {
+        var prefs = loadPreferences();
+        prefs.receiptPrinter = document.getElementById('defaultReceiptPrinter').value;
+        prefs.invoicePrinter = document.getElementById('defaultInvoicePrinter').value;
+        prefs.idcardPrinter  = document.getElementById('defaultIdPrinter').value;
+        prefs.reportPrinter  = document.getElementById('defaultReportPrinter').value;
+        prefs.autoPrint      = document.getElementById('autoPrint').checked;
+        prefs.paperSize      = document.getElementById('paperSize').value;
+        prefs.orientation    = document.getElementById('orientation').value;
+        savePreferences(prefs);
+        Swal.fire({ icon:'success', title:'Preferences Saved!', text:'Printer settings saved to this device.', timer:2500, showConfirmButton:false, position:'top-end', toast:true });
+    }
+
+    function loadSavedPreferences() {
+        var prefs = loadPreferences();
+        if (prefs.receiptPrinter) document.getElementById('defaultReceiptPrinter').value = prefs.receiptPrinter;
+        if (prefs.invoicePrinter) document.getElementById('defaultInvoicePrinter').value = prefs.invoicePrinter;
+        if (prefs.idcardPrinter)  document.getElementById('defaultIdPrinter').value = prefs.idcardPrinter;
+        if (prefs.reportPrinter)  document.getElementById('defaultReportPrinter').value = prefs.reportPrinter;
+        if (prefs.autoPrint !== undefined) document.getElementById('autoPrint').checked = prefs.autoPrint;
+        if (prefs.paperSize) document.getElementById('paperSize').value = prefs.paperSize;
+        if (prefs.orientation) document.getElementById('orientation').value = prefs.orientation;
+    }
+
+    function addManualPrinter() {
+        Swal.fire({
+            title: 'Add Printer Manually',
+            html: '<div class="text-start">' +
+                '<div class="mb-3"><label class="form-label fw-700 small">PRINTER NAME</label>' +
+                '<input type="text" id="manualPrinterName" class="form-control" placeholder="e.g., HP LaserJet Pro" /></div>' +
+                '<div class="mb-3"><label class="form-label fw-700 small">PRINTER TYPE</label>' +
+                '<select id="manualPrinterType" class="form-select">' +
+                '<option value="Local Printer">Local Printer</option>' +
+                '<option value="Network Printer">Network Printer</option>' +
+                '<option value="Thermal Printer">Thermal Printer (80mm)</option>' +
+                '<option value="Barcode Printer">Barcode/Label Printer</option>' +
+                '</select></div></div>',
+            showCancelButton: true,
+            confirmButtonText: 'Add Printer',
+            confirmButtonColor: '#0ea5e9',
+            preConfirm: function() {
+                var name = document.getElementById('manualPrinterName').value.trim();
+                var type = document.getElementById('manualPrinterType').value;
+                if (!name) { Swal.showValidationMessage('Please enter a printer name'); return false; }
+                return { name: name, type: type };
+            }
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                var np = { name: result.value.name, type: result.value.type, status: 'online', isDefault: detectedPrinters.length === 0 };
+                detectedPrinters.push(np);
+                var prefs = loadPreferences();
+                prefs.manualPrinters = prefs.manualPrinters || [];
+                prefs.manualPrinters.push(np);
+                savePreferences(prefs);
+                renderPrinters(detectedPrinters);
+                Swal.fire({ icon:'success', title:'Printer Added', text:'"'+result.value.name+'" added.', timer:2000, showConfirmButton:false, position:'top-end', toast:true });
+            }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', function() { detectPrinters(); });
+</script>
+}

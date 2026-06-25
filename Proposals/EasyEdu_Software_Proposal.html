@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyEdu - Executive Software Proposal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #021a36;
+            /* Extra Premium Deep Navy */
+            --indigo: #4f46e5;
+            --gold: #f59e0b;
+            --slate: #1e293b;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #f8fafc;
+            color: var(--slate);
+        }
+
+        /* Fixed Print Preview to A4 Dimensions */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: var(--white);
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: #fff;
+                margin: 0;
+                padding: 0;
+                overflow: visible;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+                position: relative;
+                width: 100%;
+                height: 296.8mm;
+                /* Precise height to avoid overflow */
+            }
+        }
+
+        .no-print {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--indigo);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: 0.3s transform;
+        }
+
+        .no-print:hover {
+            transform: scale(1.05);
+        }
+
+        /* COVER PAGE STYLING */
+        .cover {
+            height: 100%;
+            background: linear-gradient(135deg, var(--navy) 0%, #0c4a6e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px;
+            color: white;
+            position: relative;
+        }
+
+        .logo-box {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-box img {
+            max-width: 300px;
+        }
+
+        .cover-tagline {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .cover-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 60px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-info {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 40px;
+        }
+
+        .info-col p {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            margin-bottom: 5px;
+        }
+
+        .info-col h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* CONTENT PAGE STYLING */
+        .content-area {
+            padding: 60px 80px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        h2::after {
+            content: '';
+            height: 5px;
+            flex: 1;
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .lead-text {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 20px;
+        }
+
+        .feature-icon {
+            background: #f0f7ff;
+            color: var(--indigo);
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--slate);
+            margin-bottom: 8px;
+        }
+
+        .feature-text p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #64748b;
+        }
+
+        .banner-box {
+            background: linear-gradient(to right, var(--navy), #1e293b);
+            color: #fff;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .banner-box h3 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .module-tile {
+            background: #fff;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid #f1f5f9;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .module-tile i {
+            font-size: 2rem;
+            color: var(--indigo);
+            margin-bottom: 15px;
+        }
+
+        .module-tile h5 {
+            font-weight: 800;
+            color: var(--slate);
+            margin-bottom: 5px;
+        }
+
+        .module-tile span {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* TIMELINE STYLING */
+        .roadmap-list {
+            margin-top: 40px;
+        }
+
+        .roadmap-step {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 40px;
+            border-left: 4px solid #f1f5f9;
+        }
+
+        .roadmap-step::before {
+            content: '';
+            position: absolute;
+            left: -14px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 5px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .roadmap-step h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .roadmap-step p {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .cta-footer {
+            margin-top: auto;
+            background: #f8fafc;
+            border: 3px solid #f1f5f9;
+            padding: 50px;
+            border-radius: 40px;
+            text-align: center;
+        }
+
+        .pg-footer {
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            padding-top: 20px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="no-print" onclick="window.print()">
+        <i class="fas fa-file-pdf me-2"></i> GENERATE FINAL PDF
+    </button>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page">
+        <div class="cover">
+            <div class="logo-box">
+                <img src="../wwwroot/images/easyedu_full_logo.png" alt="EasyEdu Professional Logo">
+            </div>
+            <div class="cover-tagline">Excellence Through Intelligence</div>
+            <h1 class="cover-title">Advanced Institutional <br> Resource Ecosystem</h1>
+
+            <div class="footer-info">
+                <div class="info-col">
+                    <p>PRESENTED TO</p>
+                    <h4>Institution Leadership</h4>
+                </div>
+                <div class="info-col" style="text-align: right;">
+                    <p>ISSUE DATE</p>
+                    <h4>March 01, 2026</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: CORE VALUE -->
+    <div class="page">
+        <div class="content-area">
+            <h2>The Vision</h2>
+            <p class="lead-text">EasyEdu provides a hyper-automated ecosystem that transforms complex institutional data
+                into actionable intelligence, reducing admin overhead by 80% while enhancing student outcomes.</p>
+
+            <div class="grid-2">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-building"></i></div>
+                    <div class="feature-text">
+                        <h4>Multi-Branch Support</h4>
+                        <p>Centralized control for multi-campus institutions.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-user-shield"></i></div>
+                    <div class="feature-text">
+                        <h4>Institutional Privacy</h4>
+                        <p>Military-level encryption for academic & financial data.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-cloud"></i></div>
+                    <div class="feature-text">
+                        <h4>Real-Time Sync</h4>
+                        <p>Instant ledger updates across all financial nodes.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="feature-text">
+                        <h4>AI Automation</h4>
+                        <p>Smart invoicing and automated result generation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="banner-box">
+                <h3>80% Automation</h3>
+                <p>Administrative processes completely streamlined annually.</p>
+            </div>
+
+            <h2>Comprehensive Modules</h2>
+            <div class="ecosystem-grid">
+                <div class="module-tile"><i class="fas fa-user-plus"></i>
+                    <h5>Admissions</h5><span>Lead Tracking & CRM</span>
+                </div>
+                <div class="module-tile"><i class="fas fa-receipt"></i>
+                    <h5>Financials</h5><span>Bulk Billing & Fees</span>
+                </div>
+                <div class="module-tile"><i class="fas fa-calendar-check"></i>
+                    <h5>Academics</h5><span>Load & Planner Sync</span>
+                </div>
+                <div class="module-tile"><i class="fas fa-medal"></i>
+                    <h5>Examinations</h5><span>Auto Grade Ranking</span>
+                </div>
+                <div class="module-tile"><i class="fas fa-clock"></i>
+                    <h5>Attendance</h5><span>HR & Leave Sync</span>
+                </div>
+                <div class="module-tile"><i class="fas fa-shuttle-van"></i>
+                    <h5>Transport</h5><span>GPS Route Control</span>
+                </div>
+            </div>
+
+            <div class="pg-footer">EasyEdu Solutions &copy; 2026 | Page 2</div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: INTEGRATION -->
+    <div class="page">
+        <div class="content-area">
+            <h2>Integration Roadmap</h2>
+
+            <div class="roadmap-list">
+                <div class="roadmap-step">
+                    <h4>Launch Phase (Week 1)</h4>
+                    <p>Cloud deployment, institution profile setup, and hierarchy definition.</p>
+                </div>
+                <div class="roadmap-step">
+                    <h4>Data Ingestion (Week 2-3)</h4>
+                    <p>Student record migration, fee structure definition, and teacher setup.</p>
+                </div>
+                <div class="roadmap-step">
+                    <h4>Operational Onboarding (Week 4-5)</h4>
+                    <p>Intensive staff training and activation of departmental portals.</p>
+                </div>
+                <div class="roadmap-step">
+                    <h4>Global Rollout (Week 6)</h4>
+                    <p>Live launch with parent and student portal accessibility.</p>
+                </div>
+            </div>
+
+            <div class="cta-footer">
+                <h3 style="color: var(--navy); margin-bottom: 20px; font-size: 1.8rem;">Ready for the Future?</h3>
+                <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 35px;">Partner with EasyEdu to scale your
+                    institution beyond legacy limitations.</p>
+                <div style="font-weight: 800; font-size: 1.3rem; color: var(--indigo); letter-spacing: 1px;">
+                    www.easifysolutions.com | easifysolution.info@gmail.com
+                </div>
+                <div style="margin-top: 15px; font-weight: 600; color: var(--navy);">
+                    Contact: +91 9731615949
+                </div>
+            </div>
+
+            <div class="pg-footer">Powered by Easify Solution | &copy; 2026 | Confidential Final</div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,189 @@
+@model IEnumerable<EasyEdu.Models.VoucherDetail>
+@{
+    ViewData["Title"] = "Account Ledger";
+    Layout = "_Layout";
+    var opening = ViewBag.OpeningBalance as decimal? ?? 0;
+    decimal runningBalance = opening;
+    bool isCredit = runningBalance < 0;
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Account Ledger</h3>
+            <p class="text-muted small fw-600">Detailed transaction history</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft btn-sm rounded-8 px-3">
+                <i class="fas fa-print me-2 text-primary"></i> Print
+            </button>
+            <button onclick="exportToPdf()" class="btn btn-light-soft btn-sm rounded-8 px-3">
+                <i class="fas fa-file-pdf me-2 text-danger"></i> PDF Export
+            </button>
+            <a href="@Url.Action("VoucherEntry")" class="btn btn-premium-purple btn-sm rounded-8 px-3">
+                <i class="fas fa-plus me-2"></i> New Voucher
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="premium-card mb-4">
+        <div class="card-body p-4">
+            <form method="get" class="row align-items-end g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-700 text-uppercase">Select Account</label>
+                    <select name="ledgerId" class="form-select form-control-premium" asp-items="@ViewBag.Ledgers" onchange="this.form.submit()">
+                        <option value="">-- Select Ledger --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-700 text-uppercase">From</label>
+                    <input type="date" name="fromDate" class="form-control-premium" value="@(ViewBag.FromDate?.ToString("yyyy-MM-dd"))">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-700 text-uppercase">To</label>
+                    <input type="date" name="toDate" class="form-control-premium" value="@(ViewBag.ToDate?.ToString("yyyy-MM-dd"))">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100 fw-700">FILTER</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && ViewBag.SelectedLedger != null)
+    {
+        <div class="premium-card" id="ledgerPrintArea">
+            <div class="d-none d-print-block text-center p-4">
+                 <h2 class="fw-900 mb-1">ACCOUNT LEDGER</h2>
+                 <h4 class="text-primary fw-800 mb-2">@(((SelectList)ViewBag.Ledgers).FirstOrDefault(x => x.Value == ViewBag.SelectedLedger.ToString())?.Text)</h4>
+                 <p class="text-muted fw-600">Period: @(((DateTime?)ViewBag.FromDate)?.ToString("dd MMM yyyy")) — @(((DateTime?)ViewBag.ToDate)?.ToString("dd MMM yyyy"))</p>
+                 <hr>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light fw-700 small text-muted">
+                            <tr>
+                                <th class="ps-4">Date</th>
+                                <th>Voucher No</th>
+                                <th>Type</th>
+                                <th>Narration</th>
+                                <th class="text-end">Debit</th>
+                                <th class="text-end">Credit</th>
+                                <th class="text-end pe-4">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Opening Balance Row -->
+                            <tr class="bg-light-soft">
+                                <td class="ps-4 fw-600">@(((DateTime?)ViewBag.FromDate)?.ToString("dd MMM yyyy"))</td>
+                                <td></td>
+                                <td class="small text-uppercase fw-700">B/F</td>
+                                <td class="text-muted fst-italic">Opening Balance</td>
+                                <td class="text-end">@(opening > 0 ? opening.ToString("N2") : "")</td>
+                                <td class="text-end">@(opening < 0 ? Math.Abs(opening).ToString("N2") : "")</td>
+                                <td class="text-end pe-4 fw-800">
+                                    @Math.Abs(opening).ToString("N2") @(opening >= 0 ? "Dr" : "Cr")
+                                </td>
+                            </tr>
+                            
+                            @foreach (var item in Model)
+                            {
+                                runningBalance += item.DebitAmount - item.CreditAmount;
+                                <tr>
+                                    <td class="ps-4 small fw-600">@item.Voucher.Date.ToString("dd MMM yyyy")</td>
+                                    <td class="small"><a href="@Url.Action("VoucherDetails", new { id = item.Voucher.Id })" class="text-decoration-none fw-700">@item.Voucher.VoucherNumber</a></td>
+                                    <td><span class="badge bg-light text-dark border">@item.Voucher.Type</span></td>
+                                    <td>
+                                        <div class="small fw-600">@item.Note</div>
+                                        <div class="small text-muted" style="font-size: 0.75rem;">@item.Voucher.Narration</div>
+                                    </td>
+                                    <td class="text-end @(item.DebitAmount > 0 ? "fw-700 text-dark" : "")">@(item.DebitAmount > 0 ? item.DebitAmount.ToString("N2") : "-")</td>
+                                    <td class="text-end @(item.CreditAmount > 0 ? "fw-700 text-dark" : "")">@(item.CreditAmount > 0 ? item.CreditAmount.ToString("N2") : "-")</td>
+                                    <td class="text-end pe-4 fw-800 text-primary">
+                                        @Math.Abs(runningBalance).ToString("N2") @(runningBalance >= 0 ? "Dr" : "Cr")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="bg-light fw-600">
+                            <tr>
+                                <td colspan="4" class="text-end ps-4">TOTAL</td>
+                                <td class="text-end">@Model.Sum(x => x.DebitAmount).ToString("N2")</td>
+                                <td class="text-end">@Model.Sum(x => x.CreditAmount).ToString("N2")</td>
+                                <td class="text-end pe-4">
+                                     @Math.Abs(runningBalance).ToString("N2") @(runningBalance >= 0 ? "Dr" : "Cr")
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function exportToPdf() {
+            const element = document.getElementById('ledgerPrintArea');
+            const ledgerName = $("select[name='ledgerId'] option:selected").text();
+            
+            const opt = {
+                margin: 10,
+                filename: `Ledger_${ledgerName.replace(/\s+/g, '_')}_${new Date().toLocaleDateString()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            // Show printing title temporarily if hidden
+            html2pdf().from(element).set(opt).save();
+        }
+    </script>
+}
+
+<style>
+    @@media print {
+        .sidebar, .topbar, .premium-card form, .btn, .sidebar-premium, #sidebarHideBtn, .brand-link-hub, .menu-category {
+            display: none !important;
+        }
+        .main-content, .content-wrapper {
+            margin-left: 0 !important;
+            padding: 0 !important;
+        }
+        .premium-card {
+            box-shadow: none !important;
+            border: none !important;
+        }
+        .table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd !important;
+            padding: 8px !important;
+        }
+        body {
+            background: white !important;
+        }
+        .page-title {
+            font-size: 24pt !important;
+            text-align: center;
+            margin-bottom: 20px !important;
+        }
+    }
+</style>
+
+@if (ViewBag.SelectedLedger != null)
+{
+    <div id="ledgerPrintArea" class="d-none d-print-block">
+        <div class="text-center mb-4">
+            <h2 class="fw-900">@ViewData["Title"]</h2>
+            <h4 class="text-primary fw-800">@(ViewBag.Ledgers != null && ViewBag.SelectedLedger != null ? ((SelectList)ViewBag.Ledgers).FirstOrDefault(x => x.Value == ViewBag.SelectedLedger.ToString())?.Text : "")</h4>
+            <p class="text-muted">Period: @(((DateTime?)ViewBag.FromDate)?.ToString("dd MMM yyyy")) to @(((DateTime?)ViewBag.ToDate)?.ToString("dd MMM yyyy"))</p>
+        </div>
+    </div>
+}

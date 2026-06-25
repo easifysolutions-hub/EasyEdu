@@ -1,0 +1,79 @@
+@model EasyEdu.Models.ThemeSettings
+@{
+    ViewData["Title"] = "Style Architect";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 animate-slide-in">
+    <div>
+        <h1 class="page-title"><i class="fas fa-palette me-2 text-primary"></i> Style Architect</h1>
+        <p class="text-muted fw-600">Configure institutional brand identity and visual appearance settings</p>
+    </div>
+    <div>
+        <form asp-action="ResetTheme" method="post" class="d-inline">
+            <button type="submit" class="btn btn-outline-secondary rounded-12 px-4 fw-700 border"
+                    onclick="return confirm('Reset all visual settings to defaults?')">
+                <i class="fas fa-undo me-2"></i> Reset to Default
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 p-5 animate-fade-in">
+        <form asp-action="UpdateTheme" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Primary Color</label>
+                    <div class="d-flex gap-3 align-items-center">
+                        <input type="color" asp-for="PrimaryColor" class="form-control form-control-color rounded-12 border-0" style="width:55px;height:50px;">
+                        <input type="text" class="form-control rounded-12 border-0 bg-light fw-700 py-3" value="@Model.PrimaryColor" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Secondary Color</label>
+                    <div class="d-flex gap-3 align-items-center">
+                        <input type="color" asp-for="SecondaryColor" class="form-control form-control-color rounded-12 border-0" style="width:55px;height:50px;">
+                        <input type="text" class="form-control rounded-12 border-0 bg-light fw-700 py-3" value="@Model.SecondaryColor" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Sidebar Background</label>
+                    <div class="d-flex gap-3 align-items-center">
+                        <input type="color" asp-for="SidebarBackground" class="form-control form-control-color rounded-12 border-0" style="width:55px;height:50px;">
+                        <input type="text" class="form-control rounded-12 border-0 bg-light fw-700 py-3" value="@Model.SidebarBackground" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Sidebar Text & Icons</label>
+                    <div class="d-flex gap-3 align-items-center">
+                        <input type="color" asp-for="SidebarText" class="form-control form-control-color rounded-12 border-0" style="width:55px;height:50px;">
+                        <input type="text" class="form-control rounded-12 border-0 bg-light fw-700 py-3" value="@Model.SidebarText" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Body Background</label>
+                    <div class="d-flex gap-3 align-items-center">
+                        <input type="color" asp-for="BodyBackground" class="form-control form-control-color rounded-12 border-0" style="width:55px;height:50px;">
+                        <input type="text" class="form-control rounded-12 border-0 bg-light fw-700 py-3" value="@Model.BodyBackground" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Background Image URL</label>
+                    <input type="text" asp-for="BackgroundImageUrl" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="https://...">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-800 text-muted small uppercase">Theme Name</label>
+                    <input type="text" asp-for="ThemeName" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="Default">
+                </div>
+                <div class="col-12 pt-2">
+                    <button type="submit" class="btn btn-premium-primary rounded-12 px-5 py-3 fw-800 shadow">
+                        <i class="fas fa-save me-2"></i> Save Settings
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

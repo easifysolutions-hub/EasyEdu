@@ -1,0 +1,387 @@
+@model IEnumerable<EasyEdu.Models.AdmissionQuery>
+@{
+    ViewData["Title"] = "Admission Intelligence";
+    Layout = "_Layout";
+    var settings = ViewBag.Settings as EasyEdu.Models.AdmissionQuerySetting;
+    var publicLink = $"{Context.Request.Scheme}://{Context.Request.Host}/PublicAdmission/Apply?companyId={settings?.CompanyId}";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Enquiry & Lead Center</h1>
+        <p class="text-muted fw-600">Nurture prospective students and track admission conversion funnel</p>
+    </div>
+    <div class="d-flex gap-3">
+        <button class="btn btn-premium-purple animate-fade-in shadow-md px-3" data-bs-toggle="modal" data-bs-target="#settingsModal">
+            <i class="fas fa-cog me-2"></i> Public Form Settings
+        </button>
+        <button class="btn-premium btn-premium-primary animate-fade-in shadow-lg" onclick="toggleForm()">
+            <i class="fas fa-plus"></i> New Potential Enrollment
+        </button>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-white p-4 shadow-sm border-start border-4 border-primary">
+            <div class="small fw-800 text-muted uppercase mb-1">Total Enquiries</div>
+            <div class="h3 fw-900 text-dark mb-0">@Model.Count()</div>
+            <div class="small text-primary fw-700 mt-2"><i class="fas fa-arrow-up me-1"></i> Global Pool</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-white p-4 shadow-sm border-start border-4 border-success">
+            <div class="small fw-800 text-muted uppercase mb-1">Converted (Won)</div>
+            <div class="h3 fw-900 text-success mb-0">@Model.Count(q => q.Status == "Won")</div>
+            <div class="small text-muted fw-600 mt-2">Successful Admissions</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-white p-4 shadow-sm border-start border-4 border-warning">
+            <div class="small fw-800 text-muted uppercase mb-1">Pending Follow-ups</div>
+            <div class="h3 fw-900 text-warning mb-0">@Model.Count(q => q.Status == "Pending" || string.IsNullOrEmpty(q.Status))</div>
+            <div class="small text-muted fw-600 mt-2">Awaiting decision</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-white p-4 shadow-sm border-start border-4 border-danger">
+            <div class="small fw-800 text-muted uppercase mb-1">Lead Drop-out</div>
+            <div class="h3 fw-900 text-danger mb-0">@Model.Count(q => q.Status == "Lost")</div>
+            <div class="small text-muted fw-600 mt-2">Conversion unsuccessful</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Sliding Form Sidebar -->
+    <div class="col-xl-4 d-none" id="formColumn">
+        <div class="premium-card bg-white shadow-lg animate-fade-in sticky-top" style="top: 20px;">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light">
+                <h5 class="fw-800 text-dark mb-0"><i class="fas fa-user-plus text-primary me-2"></i> Register Enquiry</h5>
+                <button class="btn btn-sm btn-light rounded-circle" onclick="toggleForm()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreateAdmissionQuery" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small uppercase">Full Name / Student Name</label>
+                        <input type="text" name="Name" class="form-control border-2 fw-700" placeholder="e.g. Johnathan Doe" required />
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Primary Phone</label>
+                            <input type="tel" name="Phone" class="form-control border-2" placeholder="+1..." required />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Current Email</label>
+                            <input type="email" name="Email" class="form-control border-2" placeholder="personal@email.com" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Target Class</label>
+                            <select name="ClassId" class="form-select border-2 fw-700" asp-items="@(new SelectList(ViewBag.Classes, "Id", "Name"))">
+                                <option value="">Select Grade</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Lead Source</label>
+                            <select name="Source" class="form-select border-2" asp-items="@(new SelectList(ViewBag.Sources, "Name", "Name"))">
+                                <option value="">Direct / Web</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-muted small uppercase">Follow-up Schedule</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2"><i class="fas fa-calendar-day"></i></span>
+                            <input type="date" name="NextFollowUpDate" class="form-control border-2 fw-700 text-primary" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-premium btn-premium-primary w-100 py-3 shadow-md">
+                        <i class="fas fa-paper-plane me-2"></i> Log & Dispatch Enquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enquiry Table -->
+    <div class="col-xl-12" id="listColumn">
+        <div class="premium-card bg-white shadow-sm overflow-hidden animate-fade-in">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 fw-800 text-muted small uppercase">Prospective Member</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Origin & Channel</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Interest Level</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Status</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Next Step</th>
+                            <th class="pe-4 py-3 fw-800 text-muted small uppercase text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var q in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-primary-soft text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: 900;">
+                                            @q.Name.Substring(0, 1)
+                                        </div>
+                                        <div>
+                                            <div class="fw-800 text-dark">@q.Name</div>
+                                            <div class="small text-muted fw-600">@q.Phone</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-700 text-dark">@(q.Source ?? "Direct")</div>
+                                    <div class="small text-primary fw-700 uppercase" style="font-size: 0.65rem;">Ref: @(q.Reference ?? "N/A")</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-primary border border-primary-light fw-800 px-3 py-2 rounded-12">
+                                        @(q.Class?.Name ?? "Pending Info")
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (q.Status == "Won") {
+                                        <span class="badge badge-success-premium px-3 py-2"><i class="fas fa-check-circle me-1"></i> ENROLLED</span>
+                                    } else if (q.Status == "Lost") {
+                                        <span class="badge badge-danger-premium px-3 py-2">DROPPED</span>
+                                    } else {
+                                        <span class="badge badge-warning-premium px-3 py-2"><i class="fas fa-hourglass-half me-1"></i> NURTURING</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (q.NextFollowUpDate.HasValue) {
+                                        <div class="fw-800 text-primary">@q.NextFollowUpDate.Value.ToString("dd MMM")</div>
+                                        <div class="small text-muted fw-600">Scheduler</div>
+                                    } else {
+                                        <span class="text-muted italic small">No date set</span>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <button class="btn btn-light btn-sm text-primary border-0 rounded-circle" style="width: 32px; height: 32px;" title="Review Note">
+                                            <i class="fas fa-comment-dots small"></i>
+                                        </button>
+                                        <a asp-action="DeleteAdmissionQuery" asp-route-id="@q.Id" class="btn btn-light btn-sm text-danger border-0 rounded-circle" style="width: 32px; height: 32px;" onclick="return confirm('Archive this enquiry?')">
+                                            <i class="fas fa-archive small"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-magnifying-glass-plus fa-4x text-gray-100 mb-3"></i>
+                <h4 class="text-muted fw-700">No active enquiries in the funnel.</h4>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleForm() {
+            const formCol = document.getElementById('formColumn');
+            const listCol = document.getElementById('listColumn');
+            
+            if(formCol.classList.contains('d-none')) {
+                formCol.classList.remove('d-none');
+                listCol.classList.replace('col-xl-12', 'col-xl-8');
+            } else {
+                formCol.classList.add('d-none');
+                listCol.classList.replace('col-xl-8', 'col-xl-12');
+            }
+        }
+
+        function copyPublicLink() {
+            var copyText = document.getElementById("publicLinkInput");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            
+            var successMsg = document.getElementById("copySuccessMsg");
+            successMsg.classList.remove("d-none");
+            setTimeout(function() {
+                successMsg.classList.add("d-none");
+            }, 3000);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const colorPicker = document.querySelector('input[name="AccentColor"]');
+            const hexInput = document.getElementById('accentColorHex');
+            if (colorPicker && hexInput) {
+                colorPicker.addEventListener('input', function() {
+                    hexInput.value = this.value;
+                });
+            }
+        });
+    </script>
+}
+
+<!-- Settings Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-16">
+            <div class="modal-header border-0 bg-premium-purple text-white p-4 rounded-top-16">
+                <h5 class="modal-title fw-800" id="settingsModalLabel">
+                    <i class="fas fa-sliders-h me-2"></i>Public Application Form Customizer
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Public Link Generation Card -->
+                <div class="premium-card bg-light-soft border-2 border-primary-light p-4 mb-4 rounded-12">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label fw-800 text-dark small uppercase m-0"><i class="fas fa-link me-1 text-primary"></i> Generated Public Application Form Link</label>
+                        <span class="badge bg-primary text-white fw-700 uppercase" style="font-size: 0.65rem;">Active</span>
+                    </div>
+                    <p class="small text-muted fw-600 mb-3">Distribute this URL publicly in newsletters, social channels, or your website. Inquiries will immediately register in the list below.</p>
+                    <div class="input-group">
+                        <input type="text" id="publicLinkInput" class="form-control border-2 fw-700 bg-white" value="@publicLink" readonly />
+                        <button class="btn btn-premium-primary px-4" type="button" onclick="copyPublicLink()">
+                            <i class="fas fa-copy me-2"></i> COPY
+                        </button>
+                    </div>
+                    <div class="small text-success fw-700 mt-2 d-none" id="copySuccessMsg">
+                        <i class="fas fa-check-circle me-1"></i> Copied to clipboard!
+                    </div>
+                </div>
+
+                <!-- Customization Form -->
+                <form asp-action="SaveAdmissionQuerySettings" method="post">
+                    <input type="hidden" name="Id" value="@settings?.Id" />
+                    <input type="hidden" name="CompanyId" value="@settings?.CompanyId" />
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-8">
+                            <label class="form-label fw-700 text-muted small uppercase">Form Title*</label>
+                            <input type="text" name="FormTitle" class="form-control border-2 fw-700" value="@settings?.FormTitle" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-700 text-muted small uppercase">Form Theme Color (Accent)*</label>
+                            <div class="d-flex gap-2">
+                                <input type="color" name="AccentColor" class="form-control form-control-color border-2" style="width: 60px; height: 38px; padding: 3px;" value="@settings?.AccentColor" required />
+                                <input type="text" id="accentColorHex" class="form-control border-2 fw-700 text-center uppercase" style="font-size: 0.85rem;" value="@settings?.AccentColor" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-muted small uppercase">Form Welcome/Instructions Description</label>
+                        <textarea name="FormDescription" class="form-control border-2" rows="2">@settings?.FormDescription</textarea>
+                    </div>
+
+                    <h6 class="fw-800 text-dark uppercase mb-3"><i class="fas fa-tasks text-premium-purple me-2"></i> Form Field Configurations</h6>
+                    <div class="table-responsive rounded-8 border mb-4">
+                        <table class="table table-hover align-middle mb-0 text-center">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="text-start ps-4 fw-800 text-muted small uppercase">Field Name</th>
+                                    <th class="fw-800 text-muted small uppercase">Show Field</th>
+                                    <th class="fw-800 text-muted small uppercase">Required</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-start ps-4 fw-700">Primary Phone Number</td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="ShowPhone" value="true" @(settings?.ShowPhone == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="RequirePhone" value="true" @(settings?.RequirePhone == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start ps-4 fw-700">Email Address</td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="ShowEmail" value="true" @(settings?.ShowEmail == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="RequireEmail" value="true" @(settings?.RequireEmail == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start ps-4 fw-700">Residential Address</td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="ShowAddress" value="true" @(settings?.ShowAddress == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="RequireAddress" value="true" @(settings?.RequireAddress == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start ps-4 fw-700">Target Grade / Class</td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="ShowClass" value="true" @(settings?.ShowClass == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="RequireClass" value="true" @(settings?.RequireClass == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start ps-4 fw-700">Number of Children</td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="ShowNumberOfChildren" value="true" @(settings?.ShowNumberOfChildren == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="RequireNumberOfChildren" value="true" @(settings?.RequireNumberOfChildren == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start ps-4 fw-700">Description / Note</td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="ShowDescription" value="true" @(settings?.ShowDescription == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" name="RequireDescription" value="true" @(settings?.RequireDescription == true ? "checked" : "") />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 border-top pt-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-premium-purple px-4 shadow-sm">
+                            <i class="fas fa-save me-2"></i> Save Customizations
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,179 @@
+@model EasyEdu.Models.FrontSettings
+@{
+    ViewData["Title"] = "Institutional Design Studio";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Frontend CMS Center</h3>
+            <p class="text-muted small fw-600">Architectural control over the institution's public-facing digital identity</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3">
+            <div class="premium-card p-0 overflow-hidden sticky-top" style="top: 100px;">
+                <div class="nav flex-column nav-pills p-3" id="v-pills-tab" role="tablist">
+                    <button class="nav-link active fw-800 text-start py-3 px-4 border-0 rounded-12 mb-2" data-bs-toggle="pill" data-bs-target="#tab-general">
+                        <i class="fas fa-th-large me-3 opacity-50"></i>GLOBAL THEME
+                    </button>
+                    <button class="nav-link fw-800 text-start py-3 px-4 border-0 rounded-12 mb-2" data-bs-toggle="pill" data-bs-target="#tab-header">
+                        <i class="fas fa-heading me-3 opacity-50"></i>HEADER CONTENT
+                    </button>
+                    <button class="nav-link fw-800 text-start py-3 px-4 border-0 rounded-12 mb-2" data-bs-toggle="pill" data-bs-target="#tab-about">
+                        <i class="fas fa-info-circle me-3 opacity-50"></i>HOME ABOUT US
+                    </button>
+                    <button class="nav-link fw-800 text-start py-3 px-4 border-0 rounded-12 mb-2" data-bs-toggle="pill" data-bs-target="#tab-footer">
+                        <i class="fas fa-shoe-prints me-3 opacity-50"></i>FOOTER CONTENT
+                    </button>
+                    <button class="nav-link fw-800 text-start py-3 px-4 border-0 rounded-12 mb-2" data-bs-toggle="pill" data-bs-target="#tab-social">
+                        <i class="fas fa-share-alt me-3 opacity-50"></i>SOCIAL CONNECT
+                    </button>
+                    <button class="nav-link fw-800 text-start py-3 px-4 border-0 rounded-12" data-bs-toggle="pill" data-bs-target="#tab-speech">
+                        <i class="fas fa-microphone me-3 opacity-50"></i>SPEECH SLIDER
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-9">
+            <form asp-action="SaveTheme" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <div class="tab-content" id="v-pills-tabContent">
+                    
+                    <!-- Global/General -->
+                    <div class="tab-pane fade show active" id="tab-general">
+                        <div class="premium-card p-5">
+                            <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Global Visual Identity</h5>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Primary Logo*</label>
+                                    <div class="logo-upload-preview mb-3 p-4 border-dashed rounded-16 text-center bg-light">
+                                        @if(!string.IsNullOrEmpty(Model.HeaderLogo)) {
+                                            <img src="@Model.HeaderLogo" style="height: 80px;" class="mb-3 d-block mx-auto">
+                                        } else {
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-muted opacity-25 mb-3"></i>
+                                        }
+                                        <input type="file" name="logo" class="form-control form-control-premium bg-white">
+                                        <p class="small text-muted mt-2">Transparent PNG recommended (Max 2MB)</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Announcement Bar Text</label>
+                                    <textarea asp-for="AnnouncementText" rows="4" class="form-control form-control-premium" placeholder="Latest updates running on header..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Header -->
+                    <div class="tab-pane fade" id="tab-header">
+                        <div class="premium-card p-5 text-dark">
+                            <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Dynamic Header Information</h5>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Inquiry Phone</label>
+                                    <input asp-for="HeaderPhone" class="form-control form-control-premium" placeholder="+1 (234) 567 890">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Official Email</label>
+                                    <input asp-for="HeaderEmail" class="form-control form-control-premium" placeholder="admin@easyedu.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="tab-pane fade" id="tab-footer">
+                        <div class="premium-card p-5 text-dark">
+                            <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Footer Architecture</h5>
+                            <div class="mb-4">
+                                <label class="form-label small fw-800 text-uppercase opacity-50">About Institutional Summary</label>
+                                <textarea asp-for="FooterAboutText" rows="4" class="form-control form-control-premium"></textarea>
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Copyright Statement</label>
+                                    <input asp-for="FooterCopyrightText" class="form-control form-control-premium">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Main Office Address</label>
+                                    <input asp-for="Address" class="form-control form-control-premium">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social -->
+                    <div class="tab-pane fade" id="tab-social">
+                        <div class="premium-card p-5 text-dark">
+                            <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Digital Connectivity Networks</h5>
+                            <div class="row g-4">
+                                @foreach (var platform in new[] { "Facebook", "Twitter", "Instagram", "Youtube" }) {
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-800 text-uppercase opacity-50">@platform URL</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="fab fa-@platform.ToLower() text-primary"></i></span>
+                                            <input name="@(platform)Url" value="@Model.GetType().GetProperty(platform + "Url")?.GetValue(Model)" class="form-control form-control-premium border-0 bg-light">
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Speech Slider -->
+                    <div class="tab-pane fade" id="tab-speech">
+                        <div class="premium-card p-5 text-dark">
+                            <h5 class="fw-900 text-dark mb-4 border-bottom pb-3">Leadership Perspective Sliders</h5>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Authority Full Name</label>
+                                    <input asp-for="PrincipalName" class="form-control form-control-premium" placeholder="Dr. John Doe">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Professional Title</label>
+                                    <input asp-for="PrincipalDesignation" class="form-control form-control-premium" placeholder="Executive Principal">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-800 text-uppercase opacity-50">Official Statement / Speech</label>
+                                    <textarea asp-for="PrincipalSpeech" rows="5" class="form-control form-control-premium"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="premium-card p-4 mt-4 bg-premium-dark d-flex justify-content-between align-items-center">
+                    <p class="text-white opacity-50 m-0 small fw-600">Sync all frontend configurations to public portal</p>
+                    <button type="submit" class="btn btn-premium-success px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-sync-alt me-2"></i>DEPLOY DESIGN CHANGES
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-pills .nav-link { 
+        color: #64748b; 
+        transition: 0.3s; 
+        background: transparent;
+    }
+    .nav-pills .nav-link.active { 
+        background: #1e293b !important; 
+        color: white !important; 
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    .nav-pills .nav-link:hover:not(.active) { 
+        background: rgba(241, 245, 249, 1); 
+        color: #1e293b; 
+    }
+    .border-dashed { border: 2px dashed #e2e8f0; }
+    .rounded-16 { border-radius: 16px; }
+    .bg-premium-dark { background: #1e293b; }
+</style>

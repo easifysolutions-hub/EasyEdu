@@ -1,0 +1,443 @@
+@model LoginViewModel
+@using EasyEdu.Controllers
+@{
+    Layout = null;
+    ViewData["Title"] = "Login - EasyEdu";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <style>
+        :root {
+            --bg-color: #0f172a;      /* Slate 900 */
+            --card-bg: rgba(30, 41, 59, 0.75); /* Slate 800 + Glass */
+            --primary: #3b82f6;       /* Blue 500 */
+            --primary-dark: #2563eb;  /* Blue 600 */
+            --accent: #f59e0b;        /* Amber 500 */
+            --text-main: #f8fafc;     /* Slate 50 */
+            --text-muted: #94a3b8;    /* Slate 400 */
+            --border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(15, 23, 42, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Subtle Geometric Background matches Home */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.05) 0%, transparent 25%);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 80vh;
+            display: flex;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* --- Left Side: Branding & Visual --- */
+        .brand-side {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(15, 23, 42, 0.9));
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border-right: 1px solid var(--border);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .brand-logo img {
+            height: 70px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-quote {
+            z-index: 2;
+        }
+
+        .brand-quote h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-quote p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .brand-footer {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* --- Right Side: Login Form --- */
+        .form-side {
+            flex: 1;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        .form-header {
+            margin-bottom: 40px;
+        }
+
+        .form-header h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-control:focus + i {
+            color: var(--primary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .extra-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .extra-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .extra-links a:hover {
+            color: var(--primary);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .demo-selector {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
+            color: var(--primary) !important;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .demo-selector option {
+            background-color: #0f172a;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .login-container { flex-direction: column; height: auto; max-width: 500px; }
+            .brand-side { display: none; } /* Hide Brand side on mobile/tablet for focus */
+            .form-side { padding: 40px; }
+            .form-side { padding: 40px; }
+        }
+
+        /* Support Badge Animation */
+        .support-badge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .support-icon-pulse {
+            width: 50px;
+            height: 50px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            position: relative;
+            animation: pulse-border 2s infinite;
+        }
+        .support-icon-pulse::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            animation: pulse-ring 2s infinite;
+        }
+        .support-text span {
+            display: block;
+            font-weight: 700;
+            color: white;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        .support-text small {
+            display: block;
+            color: var(--secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        @@keyframes pulse-border {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        @@keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <div class="login-container" data-aos="zoom-in" data-aos-duration="800">
+        <!-- Brand Side -->
+        <div class="brand-side">
+            <div class="brand-logo">
+                <img src="/images/easyedu_full_logo_white.png" alt="EasyEdu" />
+            </div>
+            <div class="brand-quote">
+                <h2>Excellence in <br> Education Management</h2>
+                <div class="support-badge mt-4">
+                    <div class="support-icon-pulse">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="support-text">
+                        <span>24/7 SUPPORT</span>
+                        <small>Always here to help</small>
+                    </div>
+                </div>
+                <p class="mt-4">Secure, efficient, and comprehensive control over your entire institutional ecosystem.</p>
+            </div>
+            <div class="brand-footer">
+                &copy; @DateTime.Now.Year EasyEdu Solutions
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side">
+            <div class="form-header">
+                <h3>Welcome Back</h3>
+                <p>Please enter your credentials to access the dashboard.</p>
+            </div>
+
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div asp-validation-summary="All" class="text-danger" style="margin-bottom: 20px; font-size: 0.9rem; color: #ef4444;"></div>
+                
+                
+                <div class="form-group">
+                    <label class="form-label" style="color: var(--primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;"><i class="fas fa-bolt"></i> Quick Access</label>
+                    <select id="userRoleSelect" class="form-control demo-selector" onchange="fillDemoCredentials(this)">
+                        <option value="">Select a Role to Auto-Fill...</option>
+                        <option value="admin">🛡️ Super Admin</option>
+                        <option value="teacher">👨‍🏫 Teacher</option>
+                        <option value="student">🎓 Student</option>
+                        <option value="parent">👨‍👩‍👧‍👦 Parent</option>
+                        <option value="accountant">💰 Accountant</option>
+                        <option value="librarian">📚 Librarian</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Email" class="form-control" placeholder="name@institution.com" />
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="extra-links">
+                    <label class="checkbox-wrapper">
+                        <input asp-for="RememberMe" />
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Sign In</button>
+            </form>
+            
+            <div style="margin-top: 30px; text-align: center;">
+                 <a href="/" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function fillDemoCredentials(select) {
+            const role = select.value;
+            const emailInput = document.querySelector('input[name="Email"]');
+            const passwordInput = document.querySelector('input[name="Password"]');
+            
+            let email = "";
+            let password = "";
+
+            switch(role) {
+                case 'admin': email = "admin@easyedu.com"; password = "Admin@123"; break;
+                case 'teacher': email = "teacher@easyedu.com"; password = "Teacher@123"; break;
+                case 'student': email = "student@easyedu.com"; password = "Student@123"; break;
+                case 'parent': email = "parent@easyedu.com"; password = "Parent@123"; break;
+                case 'accountant': email = "accountant@easyedu.com"; password = "Accountant@123"; break;
+                case 'librarian': email = "librarian@easyedu.com"; password = "Librarian@123"; break;
+            }
+
+            if(email) {
+                emailInput.value = email;
+                passwordInput.value = password;
+                
+                // Visual feedback
+                emailInput.style.borderColor = "#3b82f6";
+                emailInput.style.backgroundColor = "rgba(59, 130, 246, 0.1)";
+                passwordInput.style.backgroundColor = "rgba(59, 130, 246, 0.1)";
+                
+                setTimeout(() => {
+                    emailInput.style.borderColor = "var(--border)";
+                    emailInput.style.backgroundColor = "var(--input-bg)";
+                    passwordInput.style.backgroundColor = "var(--input-bg)";
+                }, 800);
+            }
+        }
+    </script>
+</body>
+</html>

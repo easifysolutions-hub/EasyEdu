@@ -1,0 +1,197 @@
+﻿@model IEnumerable<EasyEdu.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Login Permission Management";
+    Layout = "_Layout";
+    string? selectedRole = Context.Request.Query["roleId"];
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-key me-2 text-info"></i> Login Permission Management</h1>
+        <p class="text-muted fw-600">Enable or disable login access for users by role. Revoked users cannot sign in.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-success rounded-pill px-3 py-2 fs-7 fw-700">
+            <i class="fas fa-check-circle me-1"></i> @Model.Count(u => u.LockoutEnd == null) Active
+        </span>
+        <span class="badge bg-danger rounded-pill px-3 py-2 fs-7 fw-700">
+            <i class="fas fa-ban me-1"></i> @Model.Count(u => u.LockoutEnd != null) Revoked
+        </span>
+    </div>
+</div>
+
+<div class="row g-4 animate-fade-in">
+    <!-- Filter Panel -->
+    <div class="col-xl-3">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                <h5 class="fw-800 mb-0 text-white"><i class="fas fa-filter me-2"></i> Filter Users</h5>
+            </div>
+            <div class="p-4">
+                <form method="get" id="filterForm">
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-dark small">Filter by Role</label>
+                        <select name="roleId" class="form-select form-control-premium" asp-items="ViewBag.Roles"
+                                onchange="document.getElementById('filterForm').submit()">
+                            <option value="">-- All Users --</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-premium-primary w-100 py-3 fw-800 shadow-sm">
+                        <i class="fas fa-search me-2"></i> Filter
+                    </button>
+                    @if (!string.IsNullOrEmpty(selectedRole))
+                    {
+                        <a href="@Url.Action("LoginPermission", "RolePermission")" class="btn btn-light w-100 mt-2 py-2 fw-700">
+                            <i class="fas fa-times me-1"></i> Clear Filter
+                        </a>
+                    }
+                </form>
+
+                <hr class="my-4">
+
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center justify-content-between p-3 rounded-12 bg-success-soft">
+                        <div class="small fw-700 text-success"><i class="fas fa-check-circle me-1"></i> Authorized Users</div>
+                        <span class="badge bg-success rounded-pill fw-800">@Model.Count(u => u.LockoutEnd == null)</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between p-3 rounded-12 bg-danger-soft">
+                        <div class="small fw-700 text-danger"><i class="fas fa-ban me-1"></i> Revoked Users</div>
+                        <span class="badge bg-danger rounded-pill fw-800">@Model.Count(u => u.LockoutEnd != null)</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between p-3 rounded-12" style="background: rgba(99,102,241,0.08);">
+                        <div class="small fw-700 text-primary"><i class="fas fa-users me-1"></i> Total Users</div>
+                        <span class="badge bg-primary rounded-pill fw-800">@Model.Count()</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="col-xl-9">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                <h5 class="fw-800 mb-0 text-white"><i class="fas fa-users me-2"></i> User Login Permissions</h5>
+                <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-700">@Model.Count() Users</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">#</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Institution</th>
+                            <th class="text-end pe-4">Login Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int idx = 1; }
+                        @foreach (var u in Model)
+                        {
+                            bool isActive = u.LockoutEnd == null;
+                            <tr>
+                                <td class="ps-4 fw-700 text-muted">@(idx++)</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(u.FullName ?? u.UserName ?? "U")&background=ede9fe&color=6d28d9&size=40"
+                                             class="rounded-circle me-3" width="40" height="40" alt="Avatar" />
+                                        <div>
+                                            <div class="fw-800 text-dark">@(u.FullName ?? u.UserName)</div>
+                                            <div class="small text-muted fw-600">@u.UserName</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="small fw-600 text-muted">@u.Email</td>
+                                <td>
+                                    <span class="badge bg-light text-muted border px-3 py-2 fw-700 rounded-pill small">
+                                        <i class="fas fa-university me-1 opacity-50"></i>
+                                        @(u.Company?.Name ?? "System")
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
+                                        <span class="status-label fw-800 small @(isActive ? "text-success" : "text-danger")">
+                                            <i class="fas @(isActive ? "fa-check-circle" : "fa-ban") me-1"></i>
+                                            @(isActive ? "Authorized" : "Revoked")
+                                        </span>
+                                        <div class="form-check form-switch m-0 p-0">
+                                            <input class="form-check-input permission-toggle custom-switch-premium"
+                                                   type="checkbox"
+                                                   data-user-id="@u.Id"
+                                                   data-user-name="@(u.FullName ?? u.UserName)"
+                                                   @(isActive ? "checked" : "")
+                                                   style="cursor:pointer;" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <i class="fas fa-users fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                    <div class="fw-700 text-muted">No users found for the selected criteria.</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelectorAll('.permission-toggle').forEach(sw => {
+        sw.addEventListener('change', async function () {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+            const isEnabled = this.checked;
+            const row = this.closest('tr');
+            const label = row.querySelector('.status-label');
+
+            // Optimistic update
+            label.innerHTML = `<i class="fas ${isEnabled ? 'fa-check-circle' : 'fa-ban'} me-1"></i> ${isEnabled ? 'Authorized' : 'Revoked'}`;
+            label.className = `status-label fw-800 small ${isEnabled ? 'text-success' : 'text-danger'}`;
+
+            try {
+                const response = await fetch('/RolePermission/UpdateLoginPermission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `userId=${encodeURIComponent(userId)}&isEnabled=${isEnabled}`
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: `${userName}'s login has been ${isEnabled ? 'authorized' : 'revoked'}.`,
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true
+                    });
+                } else {
+                    // Revert
+                    this.checked = !isEnabled;
+                    Swal.fire('Error', 'Failed to update permission.', 'error');
+                }
+            } catch {
+                this.checked = !isEnabled;
+                Swal.fire('Error', 'Network error. Please try again.', 'error');
+            }
+        });
+    });
+</script>
+
+<style>
+    .bg-success-soft { background: rgba(34,197,94,0.08); }
+    .bg-danger-soft  { background: rgba(239,68,68,0.08); }
+    .custom-switch-premium { width: 3.2rem !important; height: 1.65rem !important; cursor: pointer; }
+    .custom-switch-premium:checked { background-color: #22c55e !important; border-color: #22c55e !important; }
+    .table td, .table th { vertical-align: middle; }
+</style>

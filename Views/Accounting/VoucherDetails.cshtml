@@ -1,0 +1,152 @@
+@model EasyEdu.Models.Voucher
+@{
+    ViewData["Title"] = "Voucher Details";
+    Layout = "_Layout";
+    decimal totalDebit = Model.Details.Sum(d => d.DebitAmount);
+    decimal totalCredit = Model.Details.Sum(d => d.CreditAmount);
+}
+
+<div class="content-wrapper p-4 animate-fade-in" id="voucherPrintArea">
+    <div class="d-flex justify-content-between align-items-center mb-4 d-print-none">
+        <div>
+            <h3 class="page-title mb-1">Voucher Details</h3>
+            <p class="text-muted small fw-600">Overview of Voucher #@Model.VoucherNumber</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-premium-primary btn-sm rounded-8">
+                <i class="fas fa-print me-2"></i> Print Voucher
+            </button>
+            <form asp-action="DeleteVoucher" method="post" onsubmit="return confirm('Are you sure you want to delete this voucher? All ledger effects will be reversed.');" style="display:inline;">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-outline-danger btn-sm rounded-8">
+                    <i class="fas fa-trash-alt me-2"></i> Delete Voucher
+                </button>
+            </form>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-sm rounded-8 fw-700">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Printable Area -->
+    <div class="premium-card p-5 bg-white border shadow-sm">
+        <div class="row mb-4">
+            <div class="col-6">
+                <h4 class="fw-900 text-dark m-0">EASYEDU PREMIUM</h4>
+                <p class="text-muted small">School Management System</p>
+            </div>
+            <div class="col-6 text-end">
+                <h3 class="fw-900 text-primary mb-1">@Model.Type.ToString().ToUpper() VOUCHER</h3>
+                <div class="v-number-badge d-inline-block">#@Model.VoucherNumber</div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="small text-muted fw-700 text-uppercase mb-1">Transaction Particulars</div>
+                <table class="table table-sm table-borderless mb-0">
+                    <tr>
+                        <td class="text-muted ps-0 fw-600" width="30%">Voucher Date:</td>
+                        <td class="fw-700">@Model.Date.ToString("dd MMM yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted ps-0 fw-600">Voucher Type:</td>
+                        <td class="fw-700"><span class="badge bg-light text-dark border">@Model.Type</span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="small text-muted fw-700 text-uppercase mb-1">Audit Details</div>
+                <table class="table table-sm table-borderless mb-0 d-inline-block" style="width: auto;">
+                    <tr>
+                        <td class="text-muted text-md-end ps-0 fw-600" width="60%">Created By:</td>
+                        <td class="fw-700 text-md-start">@(Model.CreatedBy ?? "System")</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted text-md-end ps-0 fw-600">Created At:</td>
+                        <td class="fw-700 text-md-start">@Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy hh:mm tt")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h5 class="fw-800 text-dark mb-3"><i class="fas fa-list-ul text-primary me-2"></i> Journal Records</h5>
+        <div class="table-responsive mb-4">
+            <table class="table align-middle">
+                <thead class="bg-light fw-800 small text-muted text-uppercase">
+                    <tr>
+                        <th class="ps-3" width="40%">Ledger Account</th>
+                        <th width="30%">Note</th>
+                        <th class="text-end" width="15%">Debit ($)</th>
+                        <th class="text-end pe-3" width="15%">Credit ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detail in Model.Details)
+                    {
+                        <tr>
+                            <td class="ps-3">
+                                <div class="fw-700 text-dark">@detail.Ledger.Name</div>
+                                <div class="small text-muted">Ledger ID: @detail.LedgerId</div>
+                            </td>
+                            <td class="small fw-600 text-secondary">@(detail.Note ?? "-")</td>
+                            <td class="text-end fw-700 text-dark">@(detail.DebitAmount > 0 ? detail.DebitAmount.ToString("N2") : "-")</td>
+                            <td class="text-end pe-3 fw-700 text-dark">@(detail.CreditAmount > 0 ? detail.CreditAmount.ToString("N2") : "-")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="bg-light fw-800 border-top-2">
+                    <tr>
+                        <td colspan="2" class="text-end ps-3">Total</td>
+                        <td class="text-end text-primary">@totalDebit.ToString("N2")</td>
+                        <td class="text-end pe-3 text-primary">@totalCredit.ToString("N2")</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Narration))
+        {
+            <div class="p-3 bg-light rounded-12 border">
+                <div class="small text-muted fw-700 text-uppercase mb-1">Narration</div>
+                <p class="mb-0 small fw-600 text-dark">@Model.Narration</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('print') === 'true') {
+                setTimeout(function() {
+                    window.print();
+                }, 500);
+            }
+        });
+    </script>
+}
+
+<style>
+    @@media print {
+        .sidebar, .topbar, .btn, .d-print-none, form {
+            display: none !important;
+        }
+        .main-content, .content-wrapper {
+            margin-left: 0 !important;
+            padding: 0 !important;
+        }
+        #voucherPrintArea {
+            padding: 0 !important;
+        }
+        .premium-card {
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+        body {
+            background: white !important;
+        }
+    }
+</style>

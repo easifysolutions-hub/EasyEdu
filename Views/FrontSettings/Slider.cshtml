@@ -1,0 +1,81 @@
+﻿@model IEnumerable<EasyEdu.Models.HomeSlider>
+@{
+    ViewData["Title"] = "Home Slider";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="page-title">Website Home Slider</h3>
+        <button class="btn btn-premium-purple btn-sm rounded-8" onclick="toggleForm()">
+            <i class="fas fa-plus me-2"></i>ADD SLIDE
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-4" id="formColumn" style="display:none;">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Add New Slide</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateSlider" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Slide Title*</label>
+                            <input type="text" name="Title" class="form-control-premium w-100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Description</label>
+                            <textarea name="Description" rows="2" class="form-control-premium w-100"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Slide Image*</label>
+                            <input type="file" name="file" class="form-control-premium" required>
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100">UPLOAD SLIDE</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12" id="listColumn">
+            <div class="row g-4">
+                @foreach (var s in Model)
+                {
+                    <div class="col-md-6">
+                        <div class="premium-card overflow-hidden">
+                            <div class="slider-img-preview bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                <i class="fas fa-image fa-4x text-muted opacity-20"></i>
+                            </div>
+                            <div class="p-4 bg-white border-top">
+                                <h6 class="fw-900 text-dark mb-1">@s.Title</h6>
+                                <p class="small text-muted text-truncate mb-3">@s.Description</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge @(s.IsActive ? "badge-success-premium" : "badge-danger-premium")">@(s.IsActive ? "ACTIVE" : "INACTIVE")</span>
+                                    <button class="btn btn-sm btn-light-soft text-danger"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if(!Model.Any()){
+                     <div class="col-12 text-center py-5 text-muted small fw-600">No slides added.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+</script>

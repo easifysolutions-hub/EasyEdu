@@ -1,0 +1,65 @@
+﻿@model IEnumerable<EasyEdu.Models.Homework>
+@{
+    ViewData["Title"] = "Homework Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="page-title">Homework Evaluation Report</h3>
+        <div class="d-flex gap-2">
+            <button class="btn btn-premium-success btn-sm rounded-8" onclick="exportExcel()">
+                <i class="fas fa-file-excel me-2"></i>EXPORT REPORT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Filter by Class</label>
+                <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                    <option value="">All Classes</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100">FILTER</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">HOMEWORK</th>
+                            <th>CLASS</th>
+                            <th>SUBJECT</th>
+                            <th>TOTAL SUBMISSIONS</th>
+                            <th class="text-end px-4">AVG SCORE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var h in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-800 text-dark">@h.Title</td>
+                                <td>@h.Class?.Name</td>
+                                <td class="fw-700 text-primary">@h.Subject?.Name</td>
+                                <td class="fw-800">
+                                    <span class="badge bg-light-subtle text-muted border">0 Submissions</span>
+                                </td>
+                                <td class="text-end px-4 fw-900 text-muted">N/A</td>
+                            </tr>
+                        }
+                        @if(!Model.Any()){
+                             <tr><td colspan="5" class="text-center py-5 text-muted">No homework data found.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

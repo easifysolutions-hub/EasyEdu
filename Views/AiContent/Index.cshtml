@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "AI Content Laboratory";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 animate-slide-in">
+    <div>
+        <h1 class="page-title mb-1"><i class="fas fa-robot me-2 text-premium-purple"></i> AI Content Lab</h1>
+        <p class="text-muted fw-600 small uppercase">Intelligent content synthesis & academic automation</p>
+    </div>
+    <div class="d-flex gap-3">
+        <button class="btn btn-premium-purple rounded-12 px-4 shadow-lg fw-800">
+            <i class="fas fa-sparkles me-2"></i> NEW GENERATION
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="premium-card p-4 bg-white shadow-xl border-0 rounded-24 text-center transition-all hover-lift">
+                <div class="icon-box bg-primary-soft p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-pen-nib fa-2x text-primary"></i>
+                </div>
+                <h6 class="fw-900 text-dark">Exam Questions</h6>
+                <p class="text-muted small fw-600 mb-0">Generate questions from topics</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 bg-white shadow-xl border-0 rounded-24 text-center transition-all hover-lift">
+                <div class="icon-box bg-success-soft p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-book-open-reader fa-2x text-success"></i>
+                </div>
+                <h6 class="fw-900 text-dark">Lesson Plans</h6>
+                <p class="text-muted small fw-600 mb-0">Create detailed lesson structures</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 bg-white shadow-xl border-0 rounded-24 text-center transition-all hover-lift">
+                <div class="icon-box bg-warning-soft p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-envelopes-bulk fa-2x text-warning"></i>
+                </div>
+                <h6 class="fw-900 text-dark">Parent Notifications</h6>
+                <p class="text-muted small fw-600 mb-0">Synthesize emotive newsletters</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="premium-card p-4 bg-white shadow-xl border-0 rounded-24 text-center transition-all hover-lift">
+                <div class="icon-box bg-danger-soft p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-brain fa-2x text-danger"></i>
+                </div>
+                <h6 class="fw-900 text-dark">Custom AI Bot</h6>
+                <p class="text-muted small fw-600 mb-0">Configure your school tutor</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 p-5 text-center animate-fade-in">
+        <div class="py-5">
+            <i class="fas fa-wand-magic-sparkles fa-4x text-premium-purple opacity-25 mb-4"></i>
+            <h3 class="fw-900 text-dark mb-3">Initialize AI Workspace</h3>
+            <p class="text-muted fw-600 mx-auto" style="max-width: 600px;">Connect your institutional AI API key (OpenAI or Anthropic) in settings to begin generating high-fidelity academic content automatically.</p>
+            <button class="btn btn-premium-purple rounded-pill px-5 py-3 mt-4 fw-800 shadow-lg">CONFIGURE API GATEWAY</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-premium-purple { color: #8b5cf6; }
+    .bg-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+    .hover-lift:hover { transform: translateY(-10px); }
+</style>

@@ -1,0 +1,279 @@
+@model EasyEdu.Models.AdmissionQuerySetting
+@{
+    Layout = null;
+    var company = ViewBag.Company as EasyEdu.Models.Company;
+    var classes = ViewBag.Classes as IEnumerable<EasyEdu.Models.Class>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.FormTitle - @(company?.Name ?? "EasyEdu")</title>
+    
+    <!-- CSS Bundles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --premium-accent: @Model.AccentColor;
+            --premium-accent-soft: @(Model.AccentColor)15;
+            --premium-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--premium-bg);
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .apply-container {
+            width: 100%;
+            max-width: 650px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .card-header-accent {
+            background-color: var(--premium-accent);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .card-header-accent::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .school-badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .form-control-premium {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            color: #334155;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-premium:focus {
+            border-color: var(--premium-accent);
+            box-shadow: 0 0 0 4px var(--premium-accent-soft);
+            outline: none;
+        }
+
+        .form-label-premium {
+            font-weight: 700;
+            color: #475569;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit-premium {
+            background-color: var(--premium-accent);
+            color: #ffffff;
+            font-weight: 800;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px var(--premium-accent-soft);
+        }
+
+        .btn-submit-premium:hover {
+            opacity: 0.92;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--premium-accent-soft);
+        }
+
+        .btn-submit-premium:active {
+            transform: translateY(0);
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="apply-container">
+    <div class="premium-card">
+        <div class="card-header-accent">
+            <span class="school-badge">
+                <i class="fas fa-graduation-cap me-2"></i>@(company?.Name ?? "EasyEdu Academy")
+            </span>
+            <h2 class="fw-800 m-0">@Model.FormTitle</h2>
+            @if (!string.IsNullOrEmpty(Model.FormDescription))
+            {
+                <p class="mt-3 mb-0 text-white-50 small fw-500">@Model.FormDescription</p>
+            }
+        </div>
+        
+        <div class="p-4 p-md-5">
+            <form asp-action="Apply" method="post">
+                <input type="hidden" name="CompanyId" value="@Model.CompanyId" />
+
+                <!-- Validation Summary -->
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger border-0 rounded-12 p-3 mb-4 small fw-600">
+                        <i class="fas fa-exclamation-triangle me-2"></i> Please correct the highlighted errors before submitting.
+                    </div>
+                }
+
+                <!-- Full Name -->
+                <div class="mb-4">
+                    <label class="form-label-premium">Candidate's / Student's Full Name*</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 10px 0 0 10px;"><i class="fas fa-user text-muted"></i></span>
+                        <input type="text" name="Name" class="form-control form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" placeholder="e.g. Liam Johnson" required />
+                    </div>
+                    @Html.ValidationMessage("Name", "", new { @class = "text-danger small mt-1 fw-600" })
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <!-- Phone Number -->
+                    @if (Model.ShowPhone)
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label-premium">Primary Contact Phone@(Model.RequirePhone ? "*" : "")</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 10px 0 0 10px;"><i class="fas fa-phone text-muted"></i></span>
+                                <input type="tel" name="Phone" class="form-control form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" placeholder="e.g. +1..." @(Model.RequirePhone ? "required" : "") />
+                            </div>
+                            @Html.ValidationMessage("Phone", "", new { @class = "text-danger small mt-1 fw-600" })
+                        </div>
+                    }
+
+                    <!-- Email Address -->
+                    @if (Model.ShowEmail)
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label-premium">Contact Email@(Model.RequireEmail ? "*" : "")</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 10px 0 0 10px;"><i class="fas fa-envelope text-muted"></i></span>
+                                <input type="email" name="Email" class="form-control form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" placeholder="e.g. parent@email.com" @(Model.RequireEmail ? "required" : "") />
+                            </div>
+                            @Html.ValidationMessage("Email", "", new { @class = "text-danger small mt-1 fw-600" })
+                        </div>
+                    }
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <!-- Target Class -->
+                    @if (Model.ShowClass)
+                    {
+                        <div class="@(Model.ShowNumberOfChildren ? "col-md-6" : "col-12")">
+                            <label class="form-label-premium">Target Grade / Class@(Model.RequireClass ? "*" : "")</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 10px 0 0 10px;"><i class="fas fa-layer-group text-muted"></i></span>
+                                <select name="ClassId" class="form-select form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" @(Model.RequireClass ? "required" : "")>
+                                    <option value="">Select Grade Level</option>
+                                    @if (classes != null)
+                                    {
+                                        @foreach (var cls in classes)
+                                        {
+                                            <option value="@cls.Id">@cls.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            @Html.ValidationMessage("ClassId", "", new { @class = "text-danger small mt-1 fw-600" })
+                        </div>
+                    }
+
+                    <!-- Number of Children -->
+                    @if (Model.ShowNumberOfChildren)
+                    {
+                        <div class="@(Model.ShowClass ? "col-md-6" : "col-12")">
+                            <label class="form-label-premium">Number of Siblings@(Model.RequireNumberOfChildren ? "*" : "")</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 10px 0 0 10px;"><i class="fas fa-child text-muted"></i></span>
+                                <input type="number" name="NumberOfChildren" class="form-control form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" min="0" value="0" @(Model.RequireNumberOfChildren ? "required" : "") />
+                            </div>
+                            @Html.ValidationMessage("NumberOfChildren", "", new { @class = "text-danger small mt-1 fw-600" })
+                        </div>
+                    }
+                </div>
+
+                <!-- Residential Address -->
+                @if (Model.ShowAddress)
+                {
+                    <div class="mb-4">
+                        <label class="form-label-premium">Residential Address@(Model.RequireAddress ? "*" : "")</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-2 border-end-0 align-items-start pt-3" style="border-radius: 10px 0 0 10px;"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                            <textarea name="Address" class="form-control form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" rows="2" placeholder="e.g. 123 Main St, Springfield" @(Model.RequireAddress ? "required" : "")></textarea>
+                        </div>
+                        @Html.ValidationMessage("Address", "", new { @class = "text-danger small mt-1 fw-600" })
+                    </div>
+                }
+
+                <!-- Description / Note -->
+                @if (Model.ShowDescription)
+                {
+                    <div class="mb-4">
+                        <label class="form-label-premium">Remarks or Inquiry Message@(Model.RequireDescription ? "*" : "")</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-2 border-end-0 align-items-start pt-3" style="border-radius: 10px 0 0 10px;"><i class="fas fa-align-left text-muted"></i></span>
+                            <textarea name="Description" class="form-control form-control-premium border-start-0 ps-1" style="border-radius: 0 10px 10px 0;" rows="3" placeholder="Briefly describe your enquiry or any special requirements..." @(Model.RequireDescription ? "required" : "")></textarea>
+                        </div>
+                        @Html.ValidationMessage("Description", "", new { @class = "text-danger small mt-1 fw-600" })
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-submit-premium w-100 mt-3 text-uppercase">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Inquiry Application
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

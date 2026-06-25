@@ -1,0 +1,144 @@
+@{
+    ViewData["Title"] = "Institutional Personnel Configuration";
+    Layout = "_Layout";
+}
+
+<div class="page-header mb-4 px-4 animate-slide-in">
+    <h1 class="page-title"><i class="fas fa-users-gear me-2 text-primary"></i> Personnel Configuration Nexus</h1>
+    <p class="text-muted fw-600">Global institutional settings for faculty management and personnel oversight</p>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        <!-- Settings Column -->
+        <div class="col-xl-4 animate-fade-in">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden p-4 mb-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-box bg-primary-soft text-primary rounded-16 p-3 shadow-sm"><i class="fas fa-sliders fa-lg"></i></div>
+                    <h5 class="fw-900 text-dark m-0">GLOBAL PREFERENCES</h5>
+                </div>
+                
+                <div class="settings-stack d-flex flex-column gap-3">
+                    <div class="setting-item p-3 bg-light rounded-20 d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="fw-800 text-dark small mb-0">AUTO-ONBOARDING</div>
+                            <div class="smallest text-muted fw-600">Verification required before archival</div>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" checked>
+                        </div>
+                    </div>
+
+                    <div class="setting-item p-3 bg-light rounded-20 d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="fw-800 text-dark small mb-0">PORTAL LOGIN SYNC</div>
+                            <div class="smallest text-muted fw-600">Sync with institutional credentials</div>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" checked>
+                        </div>
+                    </div>
+
+                    <div class="setting-item p-3 bg-light rounded-20 d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="fw-800 text-dark small mb-0">BIOMETRIC INTEGRATION</div>
+                            <div class="smallest text-muted fw-600">Sync with attendance hardware</div>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="biometricEnable">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden p-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-box bg-purple-soft text-purple rounded-16 p-3 shadow-sm"><i class="fas fa-shield-halved fa-lg"></i></div>
+                    <h5 class="fw-900 text-dark m-0">ACCESS CONTROL</h5>
+                </div>
+                
+                <div class="p-3 bg-light-soft rounded-20 mb-4">
+                    <div class="small fw-700 text-muted mb-2">DEFAULT ARCHIVAL PERMISSION</div>
+                    <select class="form-select border-0 bg-white rounded-12 fw-800 small py-2">
+                        <option>Read/Write Faculty Archive</option>
+                        <option>Read Only Archive</option>
+                        <option>Restricted Access</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-premium-purple w-100 rounded-16 py-3 fw-900 shadow-purple">
+                    <i class="fas fa-check-circle me-2"></i> UPDATE ARCHIVAL POLICY
+                </button>
+            </div>
+        </div>
+
+        <!-- Documentation/Resources Column -->
+        <div class="col-xl-8 animate-fade-in" style="animation-delay: 0.1s">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden h-100 p-5">
+                <div class="text-center mb-5">
+                    <i class="fas fa-book-sparkles fa-4x text-primary opacity-25 mb-4 d-block"></i>
+                    <h3 class="fw-900 text-dark">Institutional Configuration Standards</h3>
+                    <p class="text-muted fw-600">Guidance for maintaining high-fidelity personnel records and institutional compliance</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="resource-card p-4 border rounded-24 h-100 transition-all hover-shadow-sm">
+                            <h5 class="fw-900 text-primary mb-3"><i class="fas fa-file-contract me-2"></i> Employment Policy</h5>
+                            <p class="small text-muted fw-600 mb-4">Protocols for archival onboarding and professional qualification verification in the nexus.</p>
+                            <a href="#" class="btn btn-light-soft btn-sm rounded-12 fw-800 px-3">VIEW RESOURCE</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="resource-card p-4 border rounded-24 h-100 transition-all hover-shadow-sm">
+                            <h5 class="fw-900 text-success mb-3"><i class="fas fa-coins me-2"></i> Financial Compliance</h5>
+                            <p class="small text-muted fw-600 mb-4">Standards for institutional payroll ledger management and salary disbursement compliance.</p>
+                            <a href="#" class="btn btn-light-soft btn-sm rounded-12 fw-800 px-3">VIEW RESOURCE</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="resource-card p-4 border rounded-24 h-100 transition-all hover-shadow-sm">
+                            <h5 class="fw-900 text-warning mb-3"><i class="fas fa-clock-rotate-left me-2"></i> Retention Cycles</h5>
+                            <p class="small text-muted fw-600 mb-4">Archival retention periods for institutional personnel records and digital footprints.</p>
+                            <a href="#" class="btn btn-light-soft btn-sm rounded-12 fw-800 px-3">VIEW RESOURCE</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="resource-card p-4 border rounded-24 h-100 transition-all hover-shadow-sm">
+                            <h5 class="fw-900 text-purple mb-3"><i class="fas fa-database me-2"></i> Nexus Integrity</h5>
+                            <p class="small text-muted fw-600 mb-4">Maintenance protocols for the central institutional data nexus and faculty hierarchy.</p>
+                            <a href="#" class="btn btn-light-soft btn-sm rounded-12 fw-800 px-3">VIEW RESOURCE</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="archive-footer mt-5 pt-4 text-center opacity-50 border-top">
+                    <p class="smallest fw-900 text-muted uppercase tracking-widest mb-0"><i class="fas fa-shield me-1"></i> EasyEdu Institutional Security Standard v4.2.1</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.08); }
+    .bg-purple-soft { background: rgba(168, 85, 247, 0.08); }
+    .bg-light-soft { background: #f8fafc; }
+    .text-purple { color: #a855f7 !important; }
+    .smallest { font-size: 0.7rem; }
+    
+    .shadow-purple { box-shadow: 0 8px 15px -5px rgba(168, 85, 247, 0.5); }
+    
+    .resource-card {
+        cursor: pointer;
+        border: 1px solid #f1f5f9;
+    }
+    .resource-card:hover {
+        border-color: #6366f1;
+        transform: translateY(-5px);
+        background: #fcfdfe;
+    }
+
+    .form-check-input { width: 45px; height: 22px; cursor: pointer; }
+    .form-check-input:checked { background-color: #6366f1; border-color: #6366f1; }
+</style>

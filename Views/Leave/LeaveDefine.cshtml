@@ -1,0 +1,95 @@
+﻿@model IEnumerable<EasyEdu.Models.LeaveDefine>
+@{
+    ViewData["Title"] = "Absence Assignment Ledger";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Absence Assignment Logic</h1>
+        <p class="text-muted fw-600">Assign specific leave quotas to institutional roles and staff categories</p>
+    </div>
+</div>
+
+<div class="row g-4 animate-fade-in">
+    <div class="col-xl-4">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-info text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-plus-circle me-2"></i> NEW_ASSIGNMENT</h5>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreateLeaveDefine" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-800 text-muted small uppercase">Institutional Role</label>
+                        <select name="RoleId" class="form-select form-control-premium" required>
+                            <option value="Admin">Administration</option>
+                            <option value="Teacher">Teaching Faculty</option>
+                            <option value="Staff">Operational Staff</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-800 text-muted small uppercase">Leave Category</label>
+                        <select name="LeaveTypeId" class="form-select form-control-premium" asp-items="ViewBag.LeaveTypes" required>
+                            <option value="">-- Choose Category --</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-muted small uppercase">Assigned Quota (Days)</label>
+                        <input type="number" name="TotalDays" class="form-control-premium w-100" value="10" />
+                    </div>
+                    <button type="submit" class="btn btn-premium-info w-100 py-2 fs-6 fw-800 text-white shadow-md">
+                        <i class="fas fa-check-double me-1"></i> AUTHORIZE_ASSIGNMENT
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-primary text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-table-list me-2"></i> ENTITLEMENT_DISTRIBUTION_CHART</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">INSTITUTIONAL_ROLE</th>
+                            <th>LEAVE_CLASSIFICATION</th>
+                            <th>DAYS_DISTRIBUTED</th>
+                            <th class="text-end pe-4">AUTHORIZATION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var define in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-900 text-dark">@define.RoleId</div>
+                                </td>
+                                <td>
+                                    <div class="fw-700 text-muted">@define.LeaveType?.Name</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary-soft text-primary fw-900 px-3 py-2 rounded-8 fs-6">
+                                        @define.TotalDays DAYS
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group shadow-sm">
+                                        <button class="btn btn-sm btn-white border-end"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn btn-sm btn-white"><i class="fas fa-trash text-danger"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(13, 110, 253, 0.1); }
+</style>

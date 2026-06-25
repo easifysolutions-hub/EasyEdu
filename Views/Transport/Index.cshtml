@@ -1,0 +1,118 @@
+﻿@model IEnumerable<EasyEdu.Models.Route>
+@{
+    ViewData["Title"] = "Institutional Mobility Hub";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Mobility Hub & Logistics</h1>
+        <p class="text-muted fw-600">Enterprise-grade transport network and fleet orchestration</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Reports" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+            <i class="fas fa-chart-line me-2"></i> Mobility Intel
+        </a>
+        <a asp-action="AssignVehicle" class="btn-premium animate-fade-in shadow-md bg-purple text-white">
+            <i class="fas fa-link me-2"></i> Assign Fleet
+        </a>
+        <a asp-action="CreateRoute" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+            <i class="fas fa-plus-circle me-2"></i> New Corridor
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-white p-4 shadow-sm border-start border-4 border-primary">
+            <div class="small fw-800 text-muted uppercase">Active Routes</div>
+            <div class="h2 fw-900 text-dark mb-0">@Model.Count()</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="premium-card bg-white p-4 shadow-sm border-start border-4 border-success">
+            <div class="small fw-800 text-muted uppercase">Fleet Utilization</div>
+            <div class="h2 fw-900 text-success mb-0">@Model.Sum(r => r.Vehicles.Count) Units</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    @if (Model.Any())
+    {
+        @foreach (var r in Model)
+        {
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-card bg-white h-100 shadow-md animate-fade-in hover-scale">
+                    <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-primary-soft text-primary rounded-12 me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <i class="fas fa-route h4 mb-0"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-800 text-dark mb-0">@r.Name</h5>
+                                <div class="small text-muted fw-700">Ref: RT-@r.Id.ToString("D3")</div>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch custom-switch">
+                            <input class="form-check-input" type="checkbox" @(r.IsActive ? "checked" : "") disabled>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="row g-2 mb-4">
+                            <div class="col-6">
+                                <div class="bg-light rounded-12 p-3 text-center">
+                                    <div class="small fw-700 text-muted uppercase">Vehicles</div>
+                                    <div class="h5 fw-900 text-dark mb-0">@r.Vehicles.Count</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-light rounded-12 p-3 text-center">
+                                    <div class="small fw-700 text-muted uppercase">Students</div>
+                                    <div class="h5 fw-900 text-primary mb-0">@r.Students.Count</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between small fw-800 text-muted mb-1">
+                                <span>Subscription Fee</span>
+                                <span class="text-success">$@r.RouteFee?.ToString("N2")</span>
+                            </div>
+                            <div class="small fw-600 text-muted italic">@r.Description</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a asp-action="AssignStudents" asp-route-routeId="@r.Id" class="btn-premium btn-premium-primary w-100 py-2 shadow-md">
+                                <i class="fas fa-user-plus me-1"></i> Students
+                            </a>
+                            <a asp-action="EditRoute" asp-route-id="@r.Id" class="btn btn-light rounded-12 px-3">
+                                <i class="fas fa-cog"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center py-5">
+            <div class="premium-card p-5 bg-white shadow-sm border-2 border-dashed">
+                <i class="fas fa-map-marked-alt fa-4x text-light mb-3"></i>
+                <h4 class="fw-800 text-dark">No mobility routes initialized.</h4>
+                <p class="text-muted fw-600 mb-4">Start by defining institutional corridors and subscription fees.</p>
+                <a asp-action="CreateRoute" class="btn btn-premium-primary px-5 py-3 rounded-12">
+                    Initialize First Route
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .bg-purple { background: #6f42c1; }
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: translateY(-5px); }
+</style>

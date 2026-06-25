@@ -1,0 +1,91 @@
+@model IEnumerable<EasyEdu.Models.WhatsAppLog>
+@{
+    ViewData["Title"] = "Communication Intelligence Analytics";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Communication Intelligence</h2>
+            <p class="text-muted small fw-600">Visual analytics and deep-trace logs for the WhatsApp communication ecosystem</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light-soft px-4 py-2 rounded-12 fw-700"><i class="fas fa-file-export me-2"></i>EXPORT INTELLIGENCE</button>
+        </div>
+    </div>
+
+    <!-- Analytic Metrics -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="premium-card p-5 text-center border-0 shadow-lg" style="border-radius: 24px;">
+                <div class="h6 smallest text-muted fw-900 text-uppercase ls-1 mb-4 italic">TOTAL DISPATCHED NODES</div>
+                <h1 class="fw-900 text-primary display-4 mb-0">@ViewBag.TotalSent</h1>
+                <div class="mt-4 badge bg-primary bg-opacity-10 text-primary rounded-pill px-4 py-2 fw-900">SYSTEM AGGREGATE</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="premium-card p-5 text-center border-0 shadow-lg" style="border-radius: 24px;">
+                <div class="h6 smallest text-muted fw-900 text-uppercase ls-1 mb-4 italic">DELIVERY VERIFICATION</div>
+                <h1 class="fw-900 text-success display-4 mb-0">@ViewBag.TotalDelivered</h1>
+                <div class="mt-4 badge bg-success bg-opacity-10 text-success rounded-pill px-4 py-2 fw-900">VERIFIED NODES</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="premium-card p-5 text-center border-0 shadow-lg" style="border-radius: 24px;">
+                <div class="h6 smallest text-muted fw-900 text-uppercase ls-1 mb-4 italic">READ RECIPIENT RATIO</div>
+                <h1 class="fw-900 text-info display-4 mb-0">@ViewBag.TotalRead</h1>
+                <div class="mt-4 badge bg-info bg-opacity-10 text-info rounded-pill px-4 py-2 fw-900">ACTIVE ENGAGEMENT</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deep Trace Logs -->
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <div class="p-4 bg-premium-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="fw-900 m-0 text-uppercase smallest ls-1">COMMUNICATION DEEP-TRACE LOGS</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table premium-table mb-0 align-middle text-dark">
+                <thead>
+                    <tr class="bg-light">
+                        <th class="ps-5 py-3 smallest fw-900 text-uppercase opacity-50 text-dark">IDENTITY NODE</th>
+                        <th class="py-3 smallest fw-900 text-uppercase opacity-50 text-dark">DATA PAYLOAD</th>
+                        <th class="py-3 smallest fw-900 text-uppercase opacity-50 text-dark">STATUS NODE</th>
+                        <th class="pe-5 text-end py-3 smallest fw-900 text-uppercase opacity-50 text-dark">TEMPORAL LOG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td class="ps-5 py-4 fw-900 text-dark h6">@log.Recipient</td>
+                            <td class="py-4">
+                                <div class="small fw-700 text-muted" style="max-width: 400px;">@log.Message</div>
+                            </td>
+                            <td class="py-4">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge @(log.Status == "Sent" ? "bg-primary" : (log.Status == "Delivered" ? "bg-success" : "bg-info")) px-3 py-2 rounded-pill fw-900 smallest">@log.Status.ToUpper()</span>
+                                </div>
+                            </td>
+                            <td class="pe-5 text-end py-4">
+                                <div class="fw-900 text-dark">@log.SentAt.ToString("HH:mm:ss")</div>
+                                <div class="smallest text-muted fw-700 uppercase">@log.SentAt.ToString("dd MMM yyyy")</div>
+                            </td>
+                        </tr>
+                    }
+                    @if(!Model.Any()){
+                        <tr><td colspan="4" class="text-center py-5 text-muted fw-700 italic opacity-50">Deep-trace registry is currently empty.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+    .bg-light-soft { background: #f1f5f9; }
+    .ls-1 { letter-spacing: 1px; }
+    .rounded-24 { border-radius: 24px; }
+</style>

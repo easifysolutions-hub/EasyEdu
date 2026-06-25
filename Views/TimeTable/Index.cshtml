@@ -1,0 +1,129 @@
+﻿@model IEnumerable<EasyEdu.Models.TimeTable>
+@{
+    var currentClass = ViewBag.Class as EasyEdu.Models.Class;
+    var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    ViewData["Title"] = "Academic Timetable";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Weekly Schedule</h1>
+        <p class="text-muted fw-600">Institutional timetable and slot allocation matrix</p>
+    </div>
+    <div class="d-flex gap-3">
+        <form asp-action="Index" method="get" class="d-flex gap-2">
+            <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes" onchange="this.form.submit()" style="min-width: 200px;">
+                <option value="">-- Jump to Class --</option>
+            </select>
+        </form>
+        @if (currentClass != null)
+        {
+            <a asp-action="Create" asp-route-classId="@currentClass.Id" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+                <i class="fas fa-plus me-2"></i> Allocate Slot
+            </a>
+        }
+    </div>
+</div>
+
+@if (currentClass != null)
+{
+    <div class="premium-card bg-white shadow-xl animate-fade-in border-0">
+        <div class="card-header bg-transparent border-0 p-4">
+            <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-primary text-white rounded-12 me-3 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-calendar-days"></i>
+                </div>
+                <h5 class="fw-800 m-0">@currentClass.Name Master Schedule</h5>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0 timetable-grid">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="border-0 p-4 text-muted fw-800 text-center small text-uppercase" style="width: 120px; letter-spacing: 1px;">Period</th>
+                            @foreach (var day in days)
+                            {
+                                <th class="border-0 p-4 text-dark fw-800 text-center text-uppercase small" style="letter-spacing: 1px;">@day</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var slots = Model.OrderBy(s => s.StartTime).Select(s => s.StartTime + " - " + s.EndTime).Distinct().ToList();
+                        }
+                        
+                        @if (slots.Any())
+                        {
+                            foreach (var slot in slots)
+                            {
+                                <tr>
+                                    <td class="bg-gray-50 text-center align-middle p-3 border-end">
+                                        <div class="badge-premium badge-info-premium fw-700" style="font-size: 0.75rem;">@slot</div>
+                                    </td>
+                                    @foreach (var day in days)
+                                    {
+                                        var item = Model.FirstOrDefault(m => m.DayOfWeek == day && (m.StartTime + " - " + m.EndTime) == slot);
+                                        <td class="p-2 align-middle text-center" style="height: 140px; min-width: 180px; position: relative;">
+                                            @if (item != null)
+                                            {
+                                                <div class="premium-card bg-primary-soft h-100 p-3 d-flex flex-column justify-content-center hover-lift border-start border-4 border-primary" style="border-radius: 12px; box-shadow: none;">
+                                                    <div class="fw-800 text-primary mb-1 h6">@item.Subject?.Name</div>
+                                                    <div class="small fw-700 text-dark mb-2 opacity-75">
+                                                        <i class="fas fa-chalkboard-user me-1"></i> @item.Teacher?.FullName
+                                                    </div>
+                                                    <div class="badge bg-white text-muted border px-2 py-1 rounded-pill small align-self-center">
+                                                        Room @item.ClassRoom?.RoomNo
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="h-100 rounded-12 border-dashed d-flex align-items-center justify-content-center opacity-0 hover-opacity-100 transition-all">
+                                                    <a asp-action="Create" asp-route-classId="@currentClass.Id" class="btn btn-sm btn-light rounded-pill px-3 shadow-sm">
+                                                        <i class="fas fa-plus small me-1"></i> Add
+                                                    </a>
+                                                </div>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="py-5">
+                                        <i class="fas fa-calendar-xmark fa-4x text-gray-200 mb-4"></i>
+                                        <h4 class="text-gray-400 fw-700">Schedule Grid Empty</h4>
+                                        <p class="text-muted fw-600">Initialize the timetable by adding the first lecture slot.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-12 text-center py-5">
+        <div class="premium-card p-5 bg-white mx-auto" style="max-width: 600px;">
+            <i class="fas fa-chalkboard fa-5x text-gray-100 mb-4"></i>
+            <h2 class="fw-800 text-dark">Select Academic Class</h2>
+            <p class="text-muted fw-600">Please choose a target class from the dropdown above to render the weekly matrix.</p>
+        </div>
+    </div>
+}
+
+<style>
+    .hover-lift { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.15) !important; background: #fff !important; }
+    .hover-opacity-100:hover { opacity: 1 !important; background: rgba(0,0,0,0.02); }
+    .transition-all { transition: all 0.2s ease; }
+    .timetable-grid td, .timetable-grid th { border-color: #f1f5f9 !important; }
+    .border-dashed { border: 2px dashed #cbd5e1; }
+</style>

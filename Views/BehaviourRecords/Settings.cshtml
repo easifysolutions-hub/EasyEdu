@@ -1,0 +1,61 @@
+﻿@model EasyEdu.Models.BehaviourSettings
+@{
+    ViewData["Title"] = "Behaviour Settings";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Behaviour Module Settings</h3>
+
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Points System Configuration</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="UpdateSettings" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CompanyId" />
+
+                        <div class="mb-4">
+                            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light-subtle cursor-pointer">
+                                <div>
+                                    <div class="fw-800 text-dark">Enable Point System</div>
+                                    <div class="small text-muted">Ascribe weights to specific incidents</div>
+                                </div>
+                                <div class="form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" asp-for="EnablePointSystem">
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-700 text-uppercase">Minimum Satisfactory Points</label>
+                            <input type="number" asp-for="DefaultPassingPoint" class="form-control-premium w-100" required>
+                            <small class="text-muted">Threshold for 'Satisfactory' behaviour status.</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="ShowPointInReportCard">
+                                <label class="form-check-label fw-600">Include behaviour points in Report Cards</label>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <button type="submit" class="btn btn-premium-primary w-100">SAVE CONFIGURATION</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6">
+            <div class="premium-card p-4 bg-primary text-white" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                <i class="fas fa-info-circle fa-2x mb-3 opacity-50"></i>
+                <h5 class="fw-800 mb-2">How it works</h5>
+                <p class="small opacity-75 mb-0">The behaviour module allows you to reward positive actions and log disciplinary incidents. Students accrue points based on these records, which can be shared with parents and printed on official transcripts.</p>
+            </div>
+        </div>
+    </div>
+</div>

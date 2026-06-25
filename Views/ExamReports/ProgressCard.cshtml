@@ -1,0 +1,178 @@
+﻿@model IEnumerable<EasyEdu.Models.Mark>
+@{
+    ViewData["Title"] = "Progress Card";
+    Layout = "_Layout";
+    var student = ViewBag.Student as EasyEdu.Models.Student;
+    var exam = ViewBag.Exam as EasyEdu.Models.Examination;
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    @if (student == null)
+    {
+        <div class="premium-card p-5 text-center mb-4">
+             <h4 class="fw-800 text-dark mb-4">Generate Progress Card</h4>
+             <form method="get" class="row g-3 justify-content-center align-items-end">
+                <div class="col-md-4 text-start">
+                    <label class="form-label small fw-800 text-uppercase opacity-50">Select Student</label>
+                    <select name="studentId" class="form-select form-control-premium" asp-items="ViewBag.Students" required>
+                        <option value="">Search by ID</option>
+                    </select>
+                </div>
+                <div class="col-md-4 text-start">
+                    <label class="form-label small fw-800 text-uppercase opacity-50">Examination</label>
+                    <select name="examId" class="form-select form-control-premium" asp-items="ViewBag.Examinations" required>
+                        <option value="">Select Exam</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3">VIEW CARD</button>
+                </div>
+             </form>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+            <button class="btn btn-light-soft rounded-8" onclick="location.href='@Url.Action("ProgressCard")'">
+                <i class="fas fa-arrow-left me-2"></i>GO BACK
+            </button>
+            <button class="btn btn-premium-primary rounded-8 px-4" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>PRINT MARK SHEET
+            </button>
+        </div>
+
+        <div class="premium-card p-5 position-relative overflow-hidden" style="border: 2px solid #eee;">
+            <!-- Decorative Background -->
+            <div class="position-absolute top-0 start-0 w-100" style="height: 10px; background: linear-gradient(90deg, #6366f1, #a855f7);"></div>
+            <div class="position-absolute opacity-05" style="top: 20%; right: -50px; transform: rotate(45deg);">
+                 <i class="fas fa-certificate fa-20x text-primary"></i>
+            </div>
+
+            <!-- Report Header -->
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-2 text-center">
+                    <img src="/images/logo.png" alt="School Logo" style="height: 100px;" onerror="this.src='https://placehold.co/100x100?text=LOGO'">
+                </div>
+                <div class="col-md-8 text-center">
+                    <h2 class="fw-900 text-dark mb-1">EasyEdu ACADEMY</h2>
+                    <p class="text-muted fw-700 m-0">Institutional Academic Record & Progress Report</p>
+                    <h5 class="badge bg-primary-soft text-primary mt-3 px-4 py-2 fw-800 rounded-pill">@exam?.Name.ToUpper() - @DateTime.Now.Year</h5>
+                </div>
+                <div class="col-md-2 text-end">
+                    <div class="qr-placeholder border p-2 d-inline-block rounded-8 bg-light">
+                        <i class="fas fa-qrcode fa-4x text-muted"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Profile Info -->
+            <div class="row mb-5 g-0 border rounded-16 overflow-hidden">
+                <div class="col-md-3 border-end p-4 bg-light-subtle text-center">
+                    <img src="@(student.ProfilePicture ?? "https://placehold.co/150x150?text=PHOTO")" class="rounded-pill border shadow-sm mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    <div class="fw-900 text-dark">@student.FirstName.ToUpper() @student.LastName.ToUpper()</div>
+                    <div class="small fw-700 text-muted">REG NO: @student.AdmissionNumber</div>
+                </div>
+                <div class="col-md-9 p-4">
+                    <div class="row g-4">
+                        <div class="col-sm-4">
+                            <div class="small text-muted fw-800 text-uppercase mb-1 opacity-50">Class & Section</div>
+                            <div class="fw-800 text-dark">@student.Class.Name (@(student.Section?.Name ?? "A"))</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="small text-muted fw-800 text-uppercase mb-1 opacity-50">Roll Number</div>
+                            <div class="fw-800 text-dark">@student.RollNumber</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="small text-muted fw-800 text-uppercase mb-1 opacity-50">Date of Birth</div>
+                            <div class="fw-800 text-dark">@student.DateOfBirth.ToString("dd MMM yyyy")</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="small text-muted fw-800 text-uppercase mb-1 opacity-50">Father's Name</div>
+                            <div class="fw-800 text-dark">@student.FatherName</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="small text-muted fw-800 text-uppercase mb-1 opacity-50">Mother's Name</div>
+                            <div class="fw-800 text-dark">@student.MotherName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marks Table -->
+            <div class="table-responsive mb-5">
+                <table class="table table-bordered text-center align-middle">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="py-3 text-start px-4">SUBJECT NAME</th>
+                            <th>FULL MARKS</th>
+                            <th>PASS MARKS</th>
+                            <th>OBTAINED MARKS</th>
+                            <th>GRADE</th>
+                            <th>REMARKS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model)
+                        {
+                            <tr>
+                                <td class="py-3 text-start px-4 fw-800 text-dark">@m.Subject.Name</td>
+                                <td class="fw-700">@m.MaxMarks</td>
+                                <td class="fw-700">@(m.MaxMarks * 0.33m)</td>
+                                <td class="fw-900 @(m.MarksObtained < (m.MaxMarks * 0.33m) ? "text-danger" : "text-primary")">@m.MarksObtained</td>
+                                <td class="fw-900">@m.Grade</td>
+                                <td class="small font-italic">@m.Remarks</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-light fw-900 border-top-2">
+                        <tr>
+                            <td class="text-end px-4">CONSOLIDATED TOTAL</td>
+                            <td>@Model.Sum(m => m.MaxMarks)</td>
+                            <td>@Model.Sum(m => m.MaxMarks * 0.33m)</td>
+                            <td class="text-primary" style="font-size: 1.2rem;">@Model.Sum(m => m.MarksObtained)</td>
+                            <td colspan="2">
+                                @{
+                                    var avg = Model.Any() ? Model.Average(m => (m.MarksObtained / (m.MaxMarks > 0 ? m.MaxMarks : 100)) * 100) : 0;
+                                }
+                                <span class="badge @(avg >= 33 ? "bg-success" : "bg-danger") px-4 py-2">
+                                    @(avg >= 33 ? "PASSED" : "FAILED") (@avg.ToString("F1")%)
+                                </span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Signatures Section -->
+            <div class="row mt-5 pt-4 text-center">
+                <div class="col-md-4">
+                    <div class="border-top pt-2 mx-5">
+                        <p class="small fw-800 text-muted m-0">Class Teacher</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="signature-stamp opacity-10">
+                         <i class="fas fa-stamp fa-4x text-primary"></i>
+                    </div>
+                    <p class="small fw-800 text-muted m-0">Institutional Seal</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="border-top pt-2 mx-5">
+                        <p class="small fw-800 text-muted m-0">Principal / Controller</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .opacity-05 { opacity: 0.05; }
+    .opacity-10 { opacity: 0.1; }
+    @@media print {
+        .no-print { display: none !important; }
+        .sidebar, .topbar { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; }
+        .premium-card { border: none !important; }
+    }
+</style>

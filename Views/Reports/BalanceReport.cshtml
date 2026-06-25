@@ -1,0 +1,99 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Account Balance Summary";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 text-dark">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Student Account Balances</h3>
+            <p class="text-muted small fw-600">Unified summary of total billing, received payments, and net balances per student</p>
+        </div>
+        <div class="no-print">
+            <button class="btn btn-premium-dark btn-sm rounded-8 shadow-lg" onclick="window.print()">
+                <i class="fas fa-file-invoice-dollar me-2"></i>PRINT AUDIT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print text-dark">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-10">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Filter by Academic Class</label>
+                <select name="classId" class="form-select form-control-premium text-dark fw-700" asp-items="ViewBag.Classes">
+                    <option value="">All Academic Batches</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100 shadow-sm border-0">CALCULATE</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0 align-middle">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="px-4 py-3">STUDENT DETAILS</th>
+                            <th>CLASS</th>
+                            <th class="text-center">GROSS BILLING</th>
+                            <th class="text-center">NET PAID</th>
+                            <th class="text-center">TOTAL WAIVERS</th>
+                            <th class="text-end px-4">OUTSTANDING BALANCE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var s in Model)
+                        {
+                            var gross = s.FeesInvoices.Sum(i => i.TotalAmount + i.TotalFine);
+                            var paid = s.FeesInvoices.Sum(i => i.PaidAmount);
+                            var waiver = s.FeesInvoices.Sum(i => i.TotalWaiver);
+                            var balance = gross - paid - waiver;
+                            
+                            <tr class="@(balance > 1000 ? "bg-warning-soft-tr" : "")">
+                                <td class="px-4">
+                                    <div class="fw-900 text-dark">@s.FullName</div>
+                                    <div class="small text-muted fw-700">ADM: @s.AdmissionNumber</div>
+                                </td>
+                                <td class="fw-800 text-muted">@s.Class?.Name</td>
+                                <td class="text-center fw-600">@gross.ToString("C")</td>
+                                <td class="text-center fw-900 text-success">@paid.ToString("C")</td>
+                                <td class="text-center fw-600 text-primary opacity-75">@waiver.ToString("C")</td>
+                                <td class="text-end px-4">
+                                    <div class="fw-900 @(balance > 0 ? "text-danger h5 mb-0" : "text-success opacity-50")">
+                                        @balance.ToString("C")
+                                    </div>
+                                    @if(balance > 0) {
+                                        <div class="small fw-800 text-danger opacity-50 italic" style="font-size: 0.65rem;">ACTION REQUIRED</div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-light fw-900 border-top border-dark border-3">
+                        <tr>
+                            <td colspan="5" class="text-end px-4 py-3">INSTITUTIONAL AGGREGATE OUTSTANDING</td>
+                            @{
+                                var totalGross = Model.Sum(s => s.FeesInvoices.Sum(i => i.TotalAmount + i.TotalFine));
+                                var totalPaid = Model.Sum(s => s.FeesInvoices.Sum(i => i.PaidAmount));
+                                var totalWaiver = Model.Sum(s => s.FeesInvoices.Sum(i => i.TotalWaiver));
+                                var totalBalance = totalGross - totalPaid - totalWaiver;
+                            }
+                            <td class="text-end px-4 h5 mb-0 @(totalBalance > 0 ? "text-danger" : "text-success")">
+                                @totalBalance.ToString("C")
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-warning-soft-tr { background-color: rgba(245, 158, 11, 0.05); }
+    @@media print { .no-print { display: none !important; } }
+</style>

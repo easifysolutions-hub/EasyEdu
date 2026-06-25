@@ -1,0 +1,139 @@
+@model IEnumerable<EasyEdu.Models.ExpertTeacher>
+@{
+    ViewData["Title"] = "Expert Teaching Faculty";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Frontend Expert Faculty</h3>
+            <p class="text-muted small fw-600">Featured teachers for institutional promotion and landing pages</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm" onclick="toggleForm()">
+            <i class="fas fa-plus me-2"></i>ADD EXPERT FACULTY
+        </button>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+            <i class="fas fa-check-circle fs-5"></i>
+            <div>@TempData["Success"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+            <i class="fas fa-exclamation-circle fs-5"></i>
+            <div>@TempData["Error"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <!-- Add/Edit Column -->
+        <div class="col-xl-4" id="formColumn" style="display:none;">
+            <div class="premium-card p-4 border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-900 text-dark m-0">Promotion Profile</h5>
+                    <button class="btn btn-sm btn-light-soft rounded-circle" onclick="toggleForm()"><i class="fas fa-times"></i></button>
+                </div>
+                <form asp-action="AddExpertTeacher" method="post">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Select Staff/Teacher*</label>
+                        <select name="TeacherId" class="form-select form-control-premium text-dark fw-700" asp-items="ViewBag.Teachers" required>
+                            <option value="">Select Professional Registry</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Public Specialization</label>
+                        <input type="text" name="Specialization" class="form-control form-control-premium" placeholder="e.g. PhD in Quantum Physics">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Landing Page Bio</label>
+                        <textarea name="ShortBio" rows="4" class="form-control form-control-premium" placeholder="Write a short attractive bio for the website..."></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Professional Social (FB)</label>
+                        <input type="url" name="FacebookUrl" class="form-control form-control-premium mb-2" placeholder="https://facebook.com/profilename">
+                        <input type="url" name="LinkedInUrl" class="form-control form-control-premium" placeholder="https://linkedin.com/in/profilename">
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 fw-900">
+                        <i class="fas fa-user-plus me-2"></i>PUBLISH TO FRONTEND
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- List Column -->
+        <div class="col-xl-12" id="listColumn">
+            <div class="row g-4">
+                @foreach (var exp in Model)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="premium-card p-0 overflow-hidden border-0 shadow-sm transition-all hover-lift">
+                            <div class="profile-header bg-premium-dark p-4 text-center">
+                                <img src="@(exp.Teacher.ProfilePicture ?? "https://ui-avatars.com/api/?name=" + exp.Teacher.FirstName + "+" + exp.Teacher.LastName)" 
+                                     class="rounded-circle border border-white border-4 shadow-lg mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                <h5 class="fw-900 text-white mb-1">@exp.Teacher.FullName</h5>
+                                <span class="badge bg-premium-purple-soft text-premium-purple px-3 rounded-pill fw-800">@exp.Specialization</span>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <p class="small text-muted fw-600 mb-4 line-clamp-3">@exp.ShortBio</p>
+                                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                    <div class="social-icons d-flex gap-2">
+                                        @if(!string.IsNullOrEmpty(exp.FacebookUrl)) { <a href="@exp.FacebookUrl" class="text-primary" target="_blank"><i class="fab fa-facebook"></i></a> }
+                                        @if(!string.IsNullOrEmpty(exp.LinkedInUrl)) { <a href="@exp.LinkedInUrl" class="text-info" target="_blank"><i class="fab fa-linkedin"></i></a> }
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <form asp-action="DeleteExpertTeacher" method="post" onsubmit="return confirm('Remove this teacher from featured faculty?');" class="d-inline">
+                                            <input type="hidden" name="Id" value="@exp.Id" />
+                                            <button type="submit" class="btn btn-sm btn-light-soft text-danger rounded-8 shadow-sm" title="Remove Feature">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" checked="@exp.ShowOnHome" disabled>
+                                            <label class="small text-muted fw-700 m-0">FEATURED</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if(!Model.Any()){
+                    <div class="col-12 py-5 text-center">
+                         <div class="premium-card p-5 bg-light-soft">
+                             <i class="fas fa-users-slash fa-4x text-muted opacity-20 mb-3"></i>
+                             <h5 class="fw-800 text-muted italic">No expert teachers featured on frontend yet.</h5>
+                         </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+</script>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-premium-purple-soft { background: rgba(139, 92, 246, 0.1); }
+    .text-premium-purple { color: #8b5cf6; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+</style>

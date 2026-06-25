@@ -1,0 +1,78 @@
+@model IEnumerable<EasyEdu.Models.Mark>
+@{
+    ViewData["Title"] = "Marks Register";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="card premium-card border-0 shadow-sm">
+        <div class="card-header bg-gradient-success text-white py-3">
+            <h5 class="mb-0 fw-800"><i class="fas fa-file-invoice me-2"></i>Comprehensive Marks Register</h5>
+        </div>
+        <div class="card-body p-4">
+            <form method="get" class="row g-3 mb-5">
+                <div class="col-md-5">
+                    <select name="examId" class="form-select border-2 py-2" asp-items="ViewBag.Exams">
+                        <option value="">Select Exam...</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <select name="classId" class="form-select border-2 py-2" asp-items="ViewBag.Classes">
+                        <option value="">Select Class...</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100 fw-900 py-2">LOAD REGISTER</button>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table premium-table align-middle">
+                    <thead>
+                        <tr class="bg-light">
+                            <th class="ps-4">Student</th>
+                            <th>Exam</th>
+                            <th>Subject</th>
+                            <th class="text-center">Marks Obtained</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-end pe-4">Protocol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-800 text-dark">@m.Student.FirstName @m.Student.LastName</div>
+                                    <div class="small text-muted fw-600">Roll: @m.Student.RollNumber</div>
+                                </td>
+                                <td class="fw-700">@m.Examination.Name</td>
+                                <td class="fw-800 text-primary">@m.Subject.Name</td>
+                                <td class="text-center">
+                                    <h5 class="mb-0 fw-900 @(m.MarksObtained < 33 ? "text-danger" : "text-success")">@m.MarksObtained / @m.MaxMarks</h5>
+                                </td>
+                                <td class="text-center">
+                                    @if (m.MarksObtained >= 33)
+                                    {
+                                        <span class="badge bg-success-soft text-success px-3 py-2 rounded-pill fw-800">PASSED</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-soft text-danger px-3 py-2 rounded-pill fw-800">FAILED</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-icon-premium text-warning"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-danger-soft { background: rgba(220, 53, 69, 0.1); }
+</style>

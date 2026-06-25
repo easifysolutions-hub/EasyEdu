@@ -1,0 +1,204 @@
+﻿@model EasyEdu.Controllers.FinancialReportsViewModel
+@{
+    ViewData["Title"] = "Fees Management Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Fees Management Dashboard</h3>
+            <p class="text-muted small fw-600 mb-0">Overview of student invoicing, collections, and accounting.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="CreateInvoice" class="btn btn-premium-purple rounded-pill px-4 shadow-sm">
+                <i class="fas fa-plus-circle me-2"></i>New Invoice
+            </a>
+            <a asp-action="CollectFee" class="btn btn-success rounded-pill px-4 shadow-sm">
+                 <i class="fas fa-hand-holding-usd me-2"></i>Collect Fee
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5 stat-card-row">
+        <div class="col-md-3">
+            <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative" style="background: linear-gradient(135deg, #042954 0%, #0c4a91 100%) !important; backdrop-filter: none !important; box-shadow: none !important;">
+                <div class="card-body p-4 position-relative" style="z-index: 2; background: transparent !important; backdrop-filter: none !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(0,0,0,0.1);">
+                            <i class="fas fa-file-invoice-dollar fa-lg"></i>
+                        </div>
+                        <span class="badge border border-white text-white fw-800">THIS MONTH</span>
+                    </div>
+                    <h2 class="fw-800 mb-1">@Model.TotalIncome.ToString("C0")</h2>
+                    <p class="small opacity-75 fw-600 mb-0">Total Invoiced</p>
+                </div>
+                <!-- Decor -->
+                <i class="fas fa-file-invoice position-absolute text-white opacity-10" style="font-size: 8rem; right: -20px; bottom: -20px;"></i>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%) !important; backdrop-filter: none !important; box-shadow: none !important;">
+                <div class="card-body p-4 position-relative" style="z-index: 2; background: transparent !important; backdrop-filter: none !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(0,0,0,0.1);">
+                            <i class="fas fa-coins fa-lg"></i>
+                        </div>
+                         <span class="badge border border-white text-white fw-800">REALIZED</span>
+                    </div>
+                    <h2 class="fw-800 mb-1">@((Model.TotalIncome - Model.PendingFees).ToString("C0"))</h2>
+                    <p class="small opacity-75 fw-600 mb-0">Fee Collected</p>
+                </div>
+                <i class="fas fa-wallet position-absolute text-white opacity-10" style="font-size: 8rem; right: -20px; bottom: -20px;"></i>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%) !important; backdrop-filter: none !important; box-shadow: none !important;">
+                <div class="card-body p-4 position-relative" style="z-index: 2; background: transparent !important; backdrop-filter: none !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(0,0,0,0.1);">
+                            <i class="fas fa-clock fa-lg"></i>
+                        </div>
+                        <span class="badge border border-white text-white fw-800">PENDING</span>
+                    </div>
+                     <h2 class="fw-800 mb-1">@Model.PendingFees.ToString("C0")</h2>
+                    <p class="small opacity-75 fw-600 mb-0">Outstanding Dues</p>
+                </div>
+                 <i class="fas fa-history position-absolute text-white opacity-10" style="font-size: 8rem; right: -20px; bottom: -20px;"></i>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important; backdrop-filter: none !important; box-shadow: none !important;">
+                <div class="card-body p-4 position-relative" style="z-index: 2; background: transparent !important; backdrop-filter: none !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(0,0,0,0.1);">
+                            <i class="fas fa-chart-line fa-lg"></i>
+                        </div>
+                         <span class="badge border border-white text-white fw-800">REPORT</span>
+                    </div>
+                    <h5 class="fw-800 mb-1">Financial Rpt</h5>
+                    <a asp-action="Reports" class="text-white small fw-700 text-decoration-none stretched-link">View Detailed Reports &rarr;</a>
+                </div>
+                 <i class="fas fa-chart-pie position-absolute text-white opacity-10" style="font-size: 8rem; right: -20px; bottom: -20px;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Quick Links -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-16 h-100">
+                <div class="card-header bg-white border-bottom border-light py-3">
+                    <h6 class="fw-800 m-0 text-dark text-uppercase small ls-1">Configuration & Master Data</h6>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a asp-action="FeesGroup" class="d-block text-decoration-none p-3 rounded-12 bg-light hover-shadow text-center transition-all h-100">
+                                <i class="fas fa-layer-group fa-2x text-primary mb-3"></i>
+                                <h6 class="fw-700 text-dark mb-1">Fee Groups</h6>
+                                <p class="small text-muted mb-0">Manage Categories</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-action="FeesType" class="d-block text-decoration-none p-3 rounded-12 bg-light hover-shadow text-center transition-all h-100">
+                                <i class="fas fa-tags fa-2x text-warning mb-3"></i>
+                                <h6 class="fw-700 text-dark mb-1">Fee Heads</h6>
+                                <p class="small text-muted mb-0">Tuition, Transport, etc.</p>
+                            </a>
+                        </div>
+                         <div class="col-md-4">
+                            <a asp-action="FeeStructure" class="d-block text-decoration-none p-3 rounded-12 bg-light hover-shadow text-center transition-all h-100">
+                                <i class="fas fa-project-diagram fa-2x text-info mb-3"></i>
+                                <h6 class="fw-700 text-dark mb-1">Fee Structure</h6>
+                                <p class="small text-muted mb-0">Assign to Classes</p>
+                            </a>
+                        </div>
+                         <div class="col-md-4 mt-3">
+                            <a asp-action="FeesInvoice" class="d-block text-decoration-none p-3 rounded-12 bg-light hover-shadow text-center transition-all h-100">
+                                <i class="fas fa-list-alt fa-2x text-secondary mb-3"></i>
+                                <h6 class="fw-700 text-dark mb-1">Invoice List</h6>
+                                <p class="small text-muted mb-0">View All Invoices</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4 mt-3">
+                             <a asp-action="TrialBalance" class="d-block text-decoration-none p-3 rounded-12 bg-light hover-shadow text-center transition-all h-100">
+                                <i class="fas fa-balance-scale fa-2x text-success mb-3"></i>
+                                <h6 class="fw-700 text-dark mb-1">Account Books</h6>
+                                <p class="small text-muted mb-0">Trial Balance & Ledger</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+             <div class="card border-0 shadow-sm rounded-16 h-100">
+                <div class="card-header bg-white border-bottom border-light py-3">
+                    <h6 class="fw-800 m-0 text-dark text-uppercase small ls-1">Recent Transactions</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @if (Model.RecentTransactions.Any())
+                        {
+                            foreach (var txn in Model.RecentTransactions.Take(5))
+                            {
+                                <div class="list-group-item px-4 py-3 border-light">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle p-2 me-3 @(txn.Type == "Income" ? "bg-success bg-opacity-10 text-success" : "bg-danger bg-opacity-10 text-danger")">
+                                                <i class="fas @(txn.Type == "Income" ? "fa-arrow-down" : "fa-arrow-up")"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-700 mb-0 text-dark small">@txn.Description</h6>
+                                                <small class="text-muted">@txn.Date.ToString("dd MMM")</small>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-800 text-dark">@txn.Amount.ToString("C0")</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center p-4 text-muted small">No recent transactions.</div>
+                        }
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ls-1 { letter-spacing: 1px; }
+    .hover-shadow:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; 
+        background: white !important;
+    }
+    .transition-all { transition: all 0.3s ease; }
+
+    /* Premium Gradients */
+    .grad-navy { background: linear-gradient(135deg, #042954 0%, #0c4a91 100%) !important; }
+    .grad-success { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%) !important; }
+    .grad-warning { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%) !important; }
+    .grad-info { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important; }
+
+    /* Override global glassmorphism for colored stat cards */
+    .stat-card-row .card {
+        background: unset !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .stat-card-row .card-body {
+        background: transparent !important;
+        backdrop-filter: none !important;
+    }
+</style>

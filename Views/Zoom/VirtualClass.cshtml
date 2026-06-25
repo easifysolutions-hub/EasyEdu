@@ -1,0 +1,152 @@
+@model IEnumerable<EasyEdu.Models.ZoomVirtualClass>
+@{
+    ViewData["Title"] = "Virtual Classroom Manager";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Classroom Architect</h2>
+            <p class="text-muted small fw-600">Design and automate virtual learning sessions across classes & sections</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#createClassModal">
+            <i class="fas fa-plus-circle me-2"></i>CREATE NEW SESSION
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">SESSION IDENTIFIER</th>
+                    <th class="py-4 fw-900 small text-uppercase">ACADEMIC LOCATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL SLOT</th>
+                    <th class="py-4 fw-900 small text-uppercase">SYNCHRONIZATION</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cls in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@cls.Topic</span>
+                            <span class="smallest text-muted fw-700">Meeting ID: @cls.MeetingId | Pass: @cls.Password</span>
+                            @if (!string.IsNullOrEmpty(cls.JoinUrl))
+                            {
+                                <span class="d-block smallest fw-800 text-muted">URL: <a href="@cls.JoinUrl" target="_blank" class="text-primary text-decoration-underline">@cls.JoinUrl</a></span>
+                            }
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-800 text-primary">@cls.Subject?.Name</div>
+                            <div class="smallest text-muted fw-700">@cls.Class?.Name - @cls.Section?.Name</div>
+                        </td>
+                         <td class="py-4">
+                            <div class="fw-900 text-dark">@cls.Date.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700">@cls.StartTime | @cls.DurationMinutes MINS</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge @(cls.Status == "Live" ? "bg-danger flash" : "bg-light text-dark") px-3 rounded-pill fw-900 shadow-sm border">@cls.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <a href="@cls.StartUrl" target="_blank" class="btn btn-sm btn-premium-purple rounded-8 px-3 fw-900 shadow-sm">START CLASS</a>
+                                @if(cls.Status == "Pending"){
+                                    <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm"><i class="fas fa-edit text-primary"></i></button>
+                                    <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm"><i class="fas fa-trash text-danger"></i></button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                     <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <i class="fas fa-video-slash fa-3x text-muted opacity-20 mb-3"></i>
+                            <h5 class="fw-800 text-muted italic">No virtual classroom sessions have been designed yet.</h5>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="createClassModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-24">
+            <form asp-action="SaveVirtualClass" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-video me-2"></i>ESTABLISH VIRTUAL SESSION</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Class Topic Identification*</label>
+                        <input name="Topic" required class="form-control form-control-premium" placeholder="e.g. Advanced Calculus - Weekly Review">
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Target Class</label>
+                            <select name="ClassId" class="form-select form-control-premium" required>
+                                <option value="">Select Academic Class</option>
+                                @foreach (var c in (List<EasyEdu.Models.Class>)ViewBag.Classes) { <option value="@c.Id">@c.Name</option> }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Specific Section</label>
+                            <select name="SectionId" class="form-select form-control-premium" required>
+                                 <option value="">Select Section</option>
+                                 @foreach (var s in (List<EasyEdu.Models.Section>)ViewBag.Sections) { <option value="@s.Id">@s.Name</option> }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Curriculum Subject</label>
+                            <select name="SubjectId" class="form-select form-control-premium" required>
+                                <option value="">Select Subject</option>
+                                @foreach (var sub in (List<EasyEdu.Models.Subject>)ViewBag.Subjects) { <option value="@sub.Id">@sub.Name</option> }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Execution Date</label>
+                            <input name="Date" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Temporal Start Time</label>
+                            <input name="StartTime" type="time" required class="form-control form-control-premium">
+                        </div>
+                         <div class="col-md-4">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Session Duration (Min)</label>
+                            <input name="DurationMinutes" type="number" required value="40" class="form-control form-control-premium">
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Pedagogical Description / Instructions</label>
+                        <textarea name="Description" class="form-control form-control-premium" rows="3" placeholder="Session goals, required materials..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-check-circle me-2"></i>INITIALIZE VIRTUAL CLASSROOM
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .rounded-24 { border-radius: 24px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+     .flash { animation: flash-anim 1.5s infinite; }
+    @@keyframes flash-anim { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+</style>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<EasyEdu.Models.ExamSchedule>
+@{
+    ViewData["Title"] = "Exam Routine";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Exam Routine</h3>
+            <p class="text-muted small fw-600">Institutional Examination Schedules</p>
+        </div>
+        <button class="btn btn-premium-primary btn-sm rounded-8" onclick="window.print()">
+            <i class="fas fa-print me-2"></i>PRINT SCHEDULE
+        </button>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Examination</label>
+                <select name="examId" class="form-select form-control-premium" asp-items="ViewBag.Examinations">
+                    <option value="">Select Exam</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Class</label>
+                <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-premium-purple w-100">SEARCH ROUTINE</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">DATE</th>
+                            <th>SUBJECT</th>
+                            <th>CLASS (SECTION)</th>
+                            <th>TIME</th>
+                            <th>ROOM</th>
+                            <th class="text-end px-4">MARKS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-800 text-dark">@item.ExamDate.ToString("dd MMM yyyy")</td>
+                                <td class="fw-700 text-primary">@item.Subject.Name</td>
+                                <td><span class="badge bg-light-subtle text-muted fw-800 border">@item.Class.Name (@(item.Section?.Name ?? "N/A"))</span></td>
+                                <td class="fw-600">@item.StartTime - @item.EndTime</td>
+                                <td>@item.ClassRoom.RoomNo</td>
+                                <td class="text-end px-4">
+                                    <span class="small fw-700 text-muted">Full: @item.FullMarks</span><br>
+                                    <span class="small fw-800 text-success">Pass: @item.PassMarks</span>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr><td colspan="6" class="text-center py-5 text-muted">No schedules found for selected criteria.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .no-print { display: none !important; }
+        .sidebar, .topbar { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; }
+        .premium-card { border: 1px solid #eee !important; box-shadow: none !important; }
+    }
+</style>

@@ -1,0 +1,121 @@
+@model EasyEdu.Models.OnlineRegistrationSetting
+@{
+    ViewData["Title"] = "Admission Portal Architecture";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Portal Architecture Nexus</h2>
+            <p class="text-muted small fw-600">Coordinate and brand the institutional online admission experience</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-arrow-left me-2"></i>DASHBOARD
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm rounded-16 mb-4 animate-slide-up">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        </div>
+    }
+
+    <form asp-action="SaveSettings" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CompanyId" />
+
+        <div class="row g-4">
+            <div class="col-xl-8">
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <div class="d-flex align-items-center mb-5 border-bottom pb-4 justify-content-between">
+                         <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                                <i class="fas fa-globe-americas text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-900 text-dark mb-0">Portal Status & Pricing</h4>
+                                <p class="smallest text-muted fw-700 uppercase opacity-50 italic">Control availability and submission fees</p>
+                            </div>
+                         </div>
+                         <div class="form-check form-switch p-0 d-flex align-items-center">
+                            <label class="small fw-900 text-uppercase opacity-75 m-0 me-3">Public Portal Status</label>
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="IsEnabled" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Registration Processing Fee*</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light-soft border-0 fw-900">$</span>
+                                <input asp-for="RegistrationFee" class="form-control form-control-premium" placeholder="0.00">
+                            </div>
+                            <div class="smallest text-muted fw-700 mt-2 italic px-1"><i class="fas fa-info-circle me-1 opacity-50"></i>Charged to prospective students via online payment gateway.</div>
+                        </div>
+                        <div class="col-md-12">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Custom Success Synchronization Message</label>
+                             <input asp-for="SuccessMessage" class="form-control form-control-premium" placeholder="e.g. Your application has been logged into our nexus.">
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Portal Header Infrastructure (Top Content)</label>
+                        <textarea asp-for="HeaderContent" class="form-control form-control-premium" rows="4" placeholder="Institutional branding, instructions, or welcome messages..."></textarea>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Portal Footer Legalities (Bottom Content)</label>
+                        <textarea asp-for="FooterContent" class="form-control form-control-premium" rows="3" placeholder="Privacy policy links, contact details, or institutional credentials..."></textarea>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center shadow-lg" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-info me-3 fa-lg shadow-sm"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">Configurations are synchronized across public CDN nodes instantly.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0 text-white">
+                        <i class="fas fa-sync-alt me-2 text-info"></i>SYNCHRONIZE PORTAL ARCHITECTURE
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                 <div class="premium-card p-5 border-0 shadow-lg bg-light-soft text-center mb-4" style="border-radius: 24px;">
+                    <h5 class="fw-900 text-dark mb-4">Frontend Sync</h5>
+                    <div class="p-4 bg-white rounded-16 border dashed d-flex flex-column align-items-center">
+                         <i class="fas fa-external-link-alt fa-2x text-muted opacity-25 mb-3"></i>
+                         <p class="small fw-700 text-muted mb-3">Your public registration nexus is active at:</p>
+                         <code class="small fw-900 text-primary p-2 bg-primary bg-opacity-10 rounded-8 w-100">/admission/online-form</code>
+                    </div>
+                 </div>
+
+                 <div class="premium-card p-5 border-0 shadow-lg bg-premium-dark text-white text-center" style="border-radius: 24px;">
+                     <h6 class="fw-900 mb-3 opacity-50 ls-1 uppercase smallest">API Integration Health</h6>
+                     <div class="d-flex justify-content-center gap-2 mb-4">
+                         <div class="bg-success rounded-circle" style="width: 10px; height:10px;"></div>
+                         <div class="bg-success rounded-circle" style="width: 10px; height:10px;"></div>
+                         <div class="bg-success rounded-circle" style="width: 10px; height:10px;"></div>
+                     </div>
+                     <p class="small fw-700 opacity-75">All institutional payment nodes are online and synchronized.</p>
+                 </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .rounded-8 { border-radius: 8px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); border: none; }
+    .dashed { border: 2px dashed #e2e8f0 !important; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

@@ -1,0 +1,111 @@
+@model EasyEdu.Models.ZoomSetting
+@{
+    ViewData["Title"] = "Zoom Integration Nexus";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Architecture Integration</h2>
+            <p class="text-muted small fw-600">Authenticate and synchronize institutional Zoom API credentials for virtual automation</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-arrow-left me-2"></i>DASHBOARD
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm rounded-16 mb-4 animate-slide-up">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        </div>
+    }
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-xl-8">
+            <form asp-action="SaveSettings" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CompanyId" />
+
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <div class="d-flex align-items-center mb-5 border-bottom pb-4">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-circle me-4">
+                             <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Zoom_Video_Communications_logo.svg" style="height: 30px;" />
+                        </div>
+                        <div>
+                            <h4 class="fw-900 text-dark mb-0">API Credentials Nexus</h4>
+                            <p class="text-muted smallest fw-700 m-0 uppercase opacity-50 italic">Synchronizing institutional account via JWT/Server-to-Server flow</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Zoom Client ID / API Key*</label>
+                        <input asp-for="ApiKey" required class="form-control form-control-premium" type="password" placeholder="••••••••••••••••••••••••••••">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Zoom Client Secret / API Secret*</label>
+                        <input asp-for="ApiSecret" required class="form-control form-control-premium" type="password" placeholder="••••••••••••••••••••••••••••">
+                    </div>
+
+                     <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Account ID (Server-to-Server Apps only)</label>
+                        <input asp-for="AccountId" class="form-control form-control-premium" placeholder="e.g. 1Gk2h3...">
+                    </div>
+
+                    <div class="mb-0">
+                         <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between">
+                            <label class="small fw-800 text-uppercase opacity-75 m-0">Synchronize via Legacy JWT Flow</label>
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="UseJwt" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center shadow-lg" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-success me-3 fa-lg shadow-sm"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">Credentials are encrypted and stored within the institutional security vault.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-sync-alt me-2 text-info"></i>SYNCHRONIZE API ARCHITECTURE
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-xl-4 text-center">
+             <div class="premium-card p-5 border-0 shadow-lg bg-light-soft h-100" style="border-radius: 24px;">
+                 <h5 class="fw-900 text-dark mb-4">Integration Workflow</h5>
+                 <div class="vertical-steps text-start">
+                     <div class="step-item d-flex gap-3 mb-4">
+                         <div class="step-dot bg-primary">1</div>
+                         <div class="step-content small fw-700 text-muted">Create a Server-to-Server App on Zoom Marketplace.</div>
+                     </div>
+                      <div class="step-item d-flex gap-3 mb-4">
+                         <div class="step-dot bg-primary">2</div>
+                         <div class="step-content small fw-700 text-muted">Initialize Client ID and Secret in this nexus.</div>
+                     </div>
+                      <div class="step-item d-flex gap-3">
+                         <div class="step-dot bg-primary">3</div>
+                         <div class="step-content small fw-700 text-muted">Enable Virtual Classrooms across all departments.</div>
+                     </div>
+                 </div>
+                 <hr class="my-5 opacity-10">
+                 <p class="smallest text-muted fw-700 italic">Need assistance? Contact institutional technical support or Zoom developer documentation.</p>
+             </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+    .step-dot { width: 25px; height: 25px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; font-weight: 900; }
+</style>

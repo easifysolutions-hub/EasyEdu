@@ -1,0 +1,380 @@
+﻿@model List<EasyEdu.Models.MenuItem>
+@{
+    ViewData["Title"] = "Menu Manager - EasyEdu Premium";
+    Layout = "_Layout";
+    var selectedRole = ViewBag.SelectedRole as string ?? "Staff";
+    var roles = ViewBag.Roles as List<string> ?? new List<string>();
+    var groupedMenus = Model?.GroupBy(m => m.Section ?? "OTHER").OrderBy(g => g.Key) ?? Enumerable.Empty<IGrouping<string, EasyEdu.Models.MenuItem>>();
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-bars-staggered me-2 text-primary"></i> Menu Manager</h1>
+        <p class="text-muted fw-600">Customize sidebar navigation and access control for each user role</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-premium-purple rounded-12 px-4 fw-800 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCustomLinkModal">
+            <i class="fas fa-plus-circle me-2"></i> ADD CUSTOM LINK
+        </button>
+        <form asp-action="ResetToDefault" method="post" onsubmit="return confirm('This will reset all menus for this role to defaults. Continue?');">
+            <input type="hidden" name="role" value="@selectedRole" />
+            <button type="submit" class="btn btn-outline-danger rounded-12 px-4 fw-800 shadow-sm">
+                <i class="fas fa-undo me-2"></i> RESET DEFAULT
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="row g-4 animate-fade-in">
+        <!-- Sidebar: Role & Tools -->
+        <div class="col-xl-3">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden mb-4 rounded-20">
+                <div class="p-4 border-bottom" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                    <h6 class="fw-800 m-0 text-white">Select User Role</h6>
+                </div>
+                <div class="p-4">
+                    <select class="form-select form-control-premium fw-700 py-2" onchange="window.location.href='/Menu/Manage?role=' + this.value">
+                        @foreach (var role in roles)
+                        {
+                            <option value="@role" selected="@(role == selectedRole)">@role</option>
+                        }
+                    </select>
+                    <div class="mt-3 small text-muted fw-600">
+                        <i class="fas fa-info-circle me-1 text-primary"></i>
+                        Menus are role-specific. Changing the structure for <strong>@selectedRole</strong> won't affect others.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Modules -->
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20">
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="fw-800 m-0 text-dark">Available Modules</h6>
+                    <span class="badge bg-primary-soft text-primary rounded-pill px-2 small fw-800">DRAG</span>
+                </div>
+                <div class="p-3 bg-light-soft available-items" style="max-height: 500px; overflow-y: auto;">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content: Menu Builder -->
+        <div class="col-xl-5">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20 h-100">
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                    <h6 class="fw-800 m-0 text-white">Sidebar Structure: @selectedRole</h6>
+                    <span class="badge bg-white text-primary rounded-pill px-3 py-1 small fw-800">ACTIVE UI</span>
+                </div>
+                <div class="p-3 bg-light-soft" style="overflow-y: auto; max-height: calc(100vh - 250px);">
+                    @if (!groupedMenus.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-layer-group text-muted mb-3" style="font-size: 3rem; opacity: 0.2;"></i>
+                            <h5 class="text-muted fw-800">No Menus Assigned</h5>
+                            <p class="small text-muted fw-600 px-4">Drag modules from the left list or click "Reset Default" to load original settings.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var group in groupedMenus)
+                        {
+                            <div class="menu-section mb-4 bg-white rounded-16 shadow-sm border border-light overflow-hidden">
+                                <div class="section-header px-4 py-3 bg-light border-bottom d-flex align-items-center justify-content-between">
+                                    <span class="fw-900 text-uppercase small text-dark opacity-75">@group.Key</span>
+                                    <i class="fas fa-chevron-down text-muted small"></i>
+                                </div>
+                                <div class="section-container p-3" data-section="@group.Key">
+                                    @foreach (var item in group)
+                                    {
+                                        <div class="menu-item d-flex align-items-center p-3 mb-2 rounded-12 bg-white border border-light transition-all" 
+                                             data-id="@item.Id" 
+                                             data-name="@item.Name" 
+                                             data-url="@item.Url" 
+                                             data-icon="@item.Icon" 
+                                             data-active="@item.IsActive.ToString().ToLower()">
+                                            
+                                            <i class="fas fa-grip-lines text-muted me-3" style="cursor: grab;"></i>
+                                            <div class="icon-box-sm bg-primary-soft text-primary rounded-8 me-3">
+                                                <i class="@(string.IsNullOrEmpty(item.Icon) ? "fas fa-circle" : item.Icon) small"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="fw-800 text-dark small">@item.Name</div>
+                                                <div class="text-muted small fw-600" style="font-size: 0.7rem;">@item.Url</div>
+                                            </div>
+                                            <div class="actions d-flex align-items-center gap-2">
+                                                <button class="btn btn-sm btn-light-soft text-primary p-2" onclick="editMenuItem(this)" title="Edit Link">
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-light-soft text-danger p-2" onclick="deleteMenuItem(@item.Id, this)" title="Remove Item">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Preview -->
+        <div class="col-xl-4">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-20 h-100">
+                <div class="p-4 border-bottom bg-dark d-flex align-items-center justify-content-between">
+                    <h6 class="fw-800 m-0 text-white"><i class="fas fa-eye me-2 text-primary"></i> Live Sidebar Preview</h6>
+                    <span class="badge bg-primary text-white rounded-pill px-3 py-1 small fw-800">REAL-TIME</span>
+                </div>
+                <div class="p-0 bg-white">
+                    <div class="sidebar-preview-mock p-4" style="background: #1e293b; min-height: 600px; color: #cbd5e1;">
+                        <!-- Mock Sidebar Layout -->
+                        <div class="d-flex align-items-center mb-5 ps-2">
+                            <div class="bg-primary rounded-8" style="width: 32px; height: 32px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-graduation-cap text-white small"></i>
+                            </div>
+                            <div class="ms-3 fw-900 text-white fs-5">EasyEdu</div>
+                        </div>
+
+                        @foreach (var group in groupedMenus)
+                        {
+                            <div class="mb-4">
+                                <div class="text-muted fw-900 small text-uppercase mb-2 ps-2" style="font-size: 0.65rem; letter-spacing: 1.2px; opacity: 0.5;">@group.Key</div>
+                                @foreach (var item in group.Where(m => m.IsActive))
+                                {
+                                    <div class="d-flex align-items-center p-2 px-3 rounded-8 mb-1 hover-bg-dark-sidebar" style="cursor: pointer; transition: all 0.2s;">
+                                        <div style="width: 28px;" class="text-center me-2">
+                                            <i class="@(string.IsNullOrEmpty(item.Icon) ? "fas fa-circle" : item.Icon)" style="font-size: 0.95rem;"></i>
+                                        </div>
+                                        <span class="small fw-700">@item.Name</span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade" id="editMenuModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-20 overflow-hidden">
+            <div class="modal-header bg-primary text-white p-4">
+                <h5 class="modal-title fw-800">Customize Link Properties</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="edit_id">
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">Display Label</label>
+                    <input type="text" class="form-control-premium w-100" id="edit_name">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">Navigation URL</label>
+                    <input type="text" class="form-control-premium w-100" id="edit_url">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">Icon (FontAwesome)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light-soft border-0"><i class="fas fa-icons text-primary"></i></span>
+                        <input type="text" class="form-control-premium w-100 border-start-0" id="edit_icon">
+                    </div>
+                </div>
+                <div class="form-check form-switch bg-light-soft p-3 rounded-12">
+                    <input class="form-check-input" type="checkbox" id="edit_active" style="cursor:pointer;">
+                    <label class="form-check-label fw-800 ms-2" for="edit_active" style="cursor:pointer;">Published in Sidebar?</label>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-premium-primary w-100 py-3" onclick="saveMenuEdit()">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCustomLinkModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-20 overflow-hidden">
+            <div class="modal-header bg-success text-white p-4">
+                <h5 class="modal-title fw-800">Add New Navigation Link</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">Label Name</label>
+                    <input type="text" class="form-control-premium w-100" id="custom_name" placeholder="e.g. Help Center">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">URL</label>
+                    <input type="text" class="form-control-premium w-100" id="custom_url" placeholder="https://...">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">Target Section</label>
+                    <select class="form-select form-control-premium w-100" id="custom_section">
+                        @foreach(var g in groupedMenus) {
+                            <option value="@g.Key">@g.Key</option>
+                        }
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-800 small text-uppercase text-muted">Icon Class</label>
+                    <input type="text" class="form-control-premium w-100" id="custom_icon" value="fas fa-link">
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-premium-primary bg-success w-100 py-3" onclick="addCustomLink()">CREATE LINK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Predefined module icons
+        const modules = [
+            {name: "Dashboard", icon: "fas fa-th"},
+            {name: "Students", icon: "fas fa-user-graduate"},
+            {name: "Teachers", icon: "fas fa-chalkboard-teacher"},
+            {name: "Classes", icon: "fas fa-cubes"},
+            {name: "Subjects", icon: "fas fa-book"},
+            {name: "Examinations", icon: "fas fa-file-alt"},
+            {name: "Attendance", icon: "fas fa-clipboard-check"},
+            {name: "Accounts", icon: "fas fa-file-invoice-dollar"},
+            {name: "Library", icon: "fas fa-book-open"},
+            {name: "Transport", icon: "fas fa-bus"},
+            {name: "Settings", icon: "fas fa-cog"}
+        ];
+        
+        const container = document.querySelector('.available-items');
+        modules.forEach(m => {
+            const el = document.createElement('div');
+            el.className = 'available-item d-flex align-items-center gap-3 p-3 mb-2 rounded-12 bg-white border border-light shadow-sm transition-all';
+            el.setAttribute('data-name', m.name);
+            el.setAttribute('data-icon', m.icon);
+            el.innerHTML = `
+                <i class="fas fa-arrows-up-down-left-right text-muted opacity-25"></i>
+                <div class="icon-box-sm bg-light text-primary rounded-8"><i class="${m.icon} small"></i></div>
+                <span class="fw-800 small text-dark">${m.name}</span>
+                <i class="fas fa-plus ms-auto text-muted opacity-50 small"></i>
+            `;
+            container.appendChild(el);
+        });
+
+        // Sortable Setup
+        new Sortable(container, {
+            group: { name: 'shared', pull: 'clone', put: false },
+            animation: 200,
+            sort: false,
+            onEnd: handleDrop
+        });
+
+        document.querySelectorAll('.section-container').forEach(el => {
+            new Sortable(el, {
+                group: 'shared',
+                animation: 200,
+                handle: '.fas.fa-grip-lines',
+                ghostClass: 'sortable-ghost',
+                onEnd: saveOrder
+            });
+        });
+    });
+
+    function handleDrop(evt) {
+        if (evt.from.classList.contains('available-items') && evt.to.classList.contains('section-container')) {
+            const name = evt.item.getAttribute('data-name');
+            const icon = evt.item.getAttribute('data-icon');
+            const section = evt.to.getAttribute('data-section');
+            const role = '@selectedRole';
+
+            fetch('/Menu/AddMenuItem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, section, role, icon, url: '#' })
+            }).then(() => location.reload());
+        }
+    }
+
+    function saveOrder() {
+        const updates = [];
+        document.querySelectorAll('.section-container').forEach(section => {
+            const sectionName = section.getAttribute('data-section');
+            section.querySelectorAll('.menu-item').forEach((item, index) => {
+                const id = item.getAttribute('data-id');
+                if (id) updates.push({ id: parseInt(id), order: index + 1, section: sectionName });
+            });
+        });
+
+        fetch('/Menu/UpdateMenuOrder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates)
+        });
+    }
+
+    window.editMenuItem = function(btn) {
+        const item = btn.closest('.menu-item');
+        document.getElementById('edit_id').value = item.getAttribute('data-id');
+        document.getElementById('edit_name').value = item.getAttribute('data-name');
+        document.getElementById('edit_url').value = item.getAttribute('data-url');
+        document.getElementById('edit_icon').value = item.getAttribute('data-icon');
+        document.getElementById('edit_active').checked = item.getAttribute('data-active') === 'true';
+        new bootstrap.Modal(document.getElementById('editMenuModal')).show();
+    }
+
+    window.saveMenuEdit = function() {
+        const data = {
+            id: document.getElementById('edit_id').value,
+            name: document.getElementById('edit_name').value,
+            url: document.getElementById('edit_url').value,
+            icon: document.getElementById('edit_icon').value,
+            isActive: document.getElementById('edit_active').checked
+        };
+        fetch('/Menu/UpdateMenuItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(r => r.ok && location.reload());
+    }
+
+    window.addCustomLink = function() {
+        const data = {
+            name: document.getElementById('custom_name').value,
+            url: document.getElementById('custom_url').value,
+            section: document.getElementById('custom_section').value,
+            icon: document.getElementById('custom_icon').value,
+            role: '@selectedRole'
+        };
+        if(!data.name) return;
+        fetch('/Menu/AddMenuItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(r => r.ok && location.reload());
+    }
+
+    window.deleteMenuItem = function(id) {
+        if(confirm('Delete item?')) {
+            fetch('/Menu/DeleteMenuItem?id=' + id, { method: 'POST' }).then(r => r.ok && location.reload());
+        }
+    }
+</script>
+
+<style>
+    .available-item:hover { cursor: grab; transform: scale(1.02); border-color: #6366f1 !important; }
+    .menu-item:hover { transform: translateX(5px); border-color: #6366f1 !important; }
+    .hover-bg-dark-sidebar:hover { background: rgba(255,255,255,0.05); color: white !important; }
+    .sortable-ghost { opacity: 0.4; border: 2px dashed #6366f1 !important; }
+    .bg-primary-soft { background: rgba(99,102,241,0.1); color: #6366f1; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-20 { border-radius: 20px !important; }
+    .rounded-16 { border-radius: 16px !important; }
+    .rounded-12 { border-radius: 12px !important; }
+    .fw-800 { font-weight: 800 !important; }
+    .fw-900 { font-weight: 900 !important; }
+</style>

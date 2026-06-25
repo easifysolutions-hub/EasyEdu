@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = "CBSE Examination Nexus";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">CBSE Performance Nexus</h2>
+            <p class="text-muted small fw-600">Coordinate and manage standard academic evaluation rituals under CBSE paradigms</p>
+        </div>
+        <div class="d-flex gap-3">
+             <a href="@Url.Action("Exams")" class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900">
+                <i class="fas fa-scroll me-2"></i>ESTABLISH EXAM
+            </a>
+            <a href="@Url.Action("Reports")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-chart-line me-2"></i>ACADEMIC ANALYTICS
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Matrix -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-primary">
+                <p class="text-uppercase smallest fw-900 text-muted mb-2">Academic Terms</p>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h3 class="fw-900 m-0 text-dark">@ViewBag.TermCount</h3>
+                    <i class="fas fa-calendar-check text-primary opacity-25 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-success">
+                <p class="text-uppercase smallest fw-900 text-muted mb-2">Active Exams</p>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h3 class="fw-900 m-0 text-dark">@ViewBag.ExamCount</h3>
+                    <i class="fas fa-file-signature text-success opacity-25 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-3">
+            <div class="stat-card p-4 rounded-24 bg-white shadow-sm border-0 border-start border-4 border-warning">
+                <p class="text-uppercase smallest fw-900 text-muted mb-2">Grading Nodes</p>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h3 class="fw-900 m-0 text-dark">ACTIVE</h3>
+                    <i class="fas fa-graduation-cap text-warning opacity-25 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-3">
+            <div class="premium-card p-4 bg-premium-dark text-white shadow-lg border-0 h-100" style="border-radius: 20px;">
+                <p class="text-uppercase smallest fw-900 opacity-75 mb-4 ls-1">Curriculum Status</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-success px-3 rounded-pill fw-900">CBSE-SYNC</span>
+                    <i class="fas fa-check-double text-info opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-xl-4">
+             <div class="premium-card p-5 border-0 shadow-lg bg-light-soft text-center h-100" style="border-radius: 24px;">
+                 <i class="fas fa-user-check fa-3x text-primary opacity-25 mb-4"></i>
+                 <h5 class="fw-900 text-dark mb-4 ls-1 uppercase italic opacity-50">Observation Protocol</h5>
+                 <div class="d-grid gap-3">
+                     <a href="@Url.Action("Observations")" class="btn btn-white shadow-sm py-3 rounded-16 fw-900 border-0 h6">MANAGE DOMAINS</a>
+                     <a href="@Url.Action("AssignObservations")" class="btn btn-white shadow-sm py-3 rounded-16 fw-900 border-0 h6">ASSIGN QUALITATIVE</a>
+                 </div>
+             </div>
+        </div>
+        <div class="col-xl-4">
+             <div class="premium-card p-5 border-0 shadow-lg bg-light-soft text-center h-100" style="border-radius: 24px;">
+                 <i class="fas fa-print fa-3x text-success opacity-25 mb-4"></i>
+                 <h5 class="fw-900 text-dark mb-4 ls-1 uppercase italic opacity-50">Certification Vault</h5>
+                 <div class="d-grid gap-3">
+                     <a href="@Url.Action("Templates")" class="btn btn-white shadow-sm py-3 rounded-16 fw-900 border-0 h6">DESIGN TEMPLATES</a>
+                     <a href="@Url.Action("PrintMarksheet")" class="btn btn-white shadow-sm py-3 rounded-16 fw-900 border-0 h6">GENERATE MARKSHEETS</a>
+                 </div>
+             </div>
+        </div>
+        <div class="col-xl-4">
+             <div class="premium-card p-5 border-0 shadow-lg bg-light-soft text-center h-100" style="border-radius: 24px;">
+                 <i class="fas fa-cogs fa-3x text-warning opacity-25 mb-4"></i>
+                 <h5 class="fw-900 text-dark mb-4 ls-1 uppercase italic opacity-50">Infrastructure Nodes</h5>
+                 <div class="d-grid gap-3">
+                     <a href="@Url.Action("Assessments")" class="btn btn-white shadow-sm py-3 rounded-16 fw-900 border-0 h6">WEIGHTAGE LOGIC</a>
+                     <a href="@Url.Action("ExamGrade")" class="btn btn-white shadow-sm py-3 rounded-16 fw-900 border-0 h6">GRADING NODES</a>
+                 </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .ls-1 { letter-spacing: 1px; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+</style>

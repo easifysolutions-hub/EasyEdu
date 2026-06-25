@@ -1,0 +1,110 @@
+@model EasyEdu.Models.LessonPlanSettings
+@{
+    ViewData["Title"] = "Lesson Plan Settings";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Lesson Plan Settings</h3>
+            <p class="text-muted small">Configure general rules, permissions, and alerts for lesson planning modules.</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-12 shadow-sm mb-4 border-0 p-3" role="alert" style="background-color: #ecfdf5; color: #065f46;">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-3 fa-lg"></i>
+                <div class="fw-700">@TempData["Success"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Module Preferences</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="Settings" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CompanyId" />
+                        <input type="hidden" asp-for="UpdatedAt" />
+
+                        <!-- Switch 1: Restrict Edit -->
+                        <div class="mb-4">
+                            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light-subtle cursor-pointer">
+                                <div>
+                                    <div class="fw-800 text-dark">Restrict Lesson Editing</div>
+                                    <div class="small text-muted">Only allow the creator of a lesson plan to modify it</div>
+                                </div>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" asp-for="RestrictEdit">
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Switch 2: Notify Students -->
+                        <div class="mb-4">
+                            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light-subtle cursor-pointer">
+                                <div>
+                                    <div class="fw-800 text-dark">Automated Notifications</div>
+                                    <div class="small text-muted">Alert students and parents when a new lesson plan is published</div>
+                                </div>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" asp-for="NotifyStudents">
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Switch 3: Require Admin Approval -->
+                        <div class="mb-4">
+                            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light-subtle cursor-pointer">
+                                <div>
+                                    <div class="fw-800 text-dark">Require Approval Flow</div>
+                                    <div class="small text-muted">Newly created plans require administrator review before going live</div>
+                                </div>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" asp-for="RequireApproval">
+                                </div>
+                            </label>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Input: Overdue Warning Days -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-700 text-uppercase">Overdue Alert Threshold (Days)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 rounded-start-8"><i class="fas fa-exclamation-triangle text-warning"></i></span>
+                                <input type="number" asp-for="WarningDays" class="form-control-premium w-100 rounded-end-8" min="1" max="30" required>
+                            </div>
+                            <div class="form-text text-muted small mt-1">Number of days a plan remains "Pending" before triggering an overdue alert in the administrator dashboard.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-premium-primary w-100 shadow mt-3">SAVE SETTINGS</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6">
+            <!-- Documentation Card -->
+            <div class="premium-card bg-light-soft" style="border: 1px dashed rgba(99,102,241,0.25);">
+                <div class="card-body p-4">
+                    <h5 class="fw-800 text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Lesson Plan Module Rules</h5>
+                    <p class="small text-secondary mb-3">Settings configured here impact the scheduling lifecycle of academic topics:</p>
+                    <ul class="list-unstyled small text-secondary">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Permissions:</strong> Restricted editing prevents teacher cross-modifications.</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Approval Flow:</strong> If activated, lesson plans remain hidden from student portal calendars until marked "Approved".</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Alerts:</strong> Status alerts remind subject teachers to execute topics before deadlines.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

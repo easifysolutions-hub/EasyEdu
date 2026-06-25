@@ -1,0 +1,76 @@
+﻿@model IEnumerable<EasyEdu.Models.BankPayment>
+@{
+    ViewData["Title"] = "Bank Payment";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Bank Payments</h3>
+            <p class="text-muted small fw-600">Verify and approve offline bank transfers</p>
+        </div>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">STUDENT</th>
+                            <th>INVOICE #</th>
+                            <th>BANK DETAILS</th>
+                            <th>AMOUNT</th>
+                            <th>DATE</th>
+                            <th>STATUS</th>
+                            <th class="text-end px-4">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4">
+                                    <div class="fw-800 text-dark">@item.Student.FirstName @item.Student.LastName</div>
+                                    <div class="small text-muted">ID: @item.Student.AdmissionNumber</div>
+                                </td>
+                                <td class="fw-700 text-primary">@item.FeesInvoice.InvoiceNumber</td>
+                                <td>
+                                    <div class="fw-700 text-dark">@item.BankName</div>
+                                    <div class="small text-muted">ACC: @item.AccountNumber</div>
+                                </td>
+                                <td class="fw-900 text-dark">@item.Amount.ToString("C2")</td>
+                                <td class="small fw-600">@item.Date.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if(item.Status == "Pending"){
+                                        <span class="badge badge-warning-premium">PENDING</span>
+                                    } else if(item.Status == "Approved"){
+                                        <span class="badge badge-success-premium">APPROVED</span>
+                                    } else {
+                                        <span class="badge badge-danger-premium">REJECTED</span>
+                                    }
+                                </td>
+                                <td class="text-end px-4">
+                                    @if(item.Status == "Pending"){
+                                        <form asp-action="ApproveBankPayment" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-premium-success rounded-8 px-3">APPROVE</button>
+                                        </form>
+                                        <button class="btn btn-sm btn-light-soft rounded-8 px-3 ms-2">REJECT</button>
+                                    }
+                                    @if(!string.IsNullOrEmpty(item.SlipPath)){
+                                        <a href="@item.SlipPath" target="_blank" class="btn btn-sm btn-light-soft rounded-circle px-2 ms-2"><i class="fas fa-file-image"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        @if(!Model.Any()){
+                            <tr><td colspan="7" class="text-center py-5 text-muted small fw-600">No bank payments pending review.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

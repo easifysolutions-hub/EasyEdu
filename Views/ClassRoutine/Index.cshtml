@@ -1,0 +1,172 @@
+﻿@model EasyEdu.Controllers.ClassRoutinePageViewModel
+@{
+    ViewData["Title"] = "Class Routine";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid p-4">
+    <!-- Search Card -->
+    <div class="card border-0 shadow-sm rounded-12 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="fw-800 text-primary m-0"><i class="fas fa-calendar-alt me-2"></i> Class Routine Search</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-700 text-muted small text-uppercase">Select Class</label>
+                    <select name="classId" id="ddlClass" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Classes" onchange="this.form.submit()">
+                        <option value="">Select Class</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-700 text-muted small text-uppercase">Select Section</label>
+                    <select name="sectionId" id="ddlSection" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Sections" onchange="this.form.submit()">
+                        <option value="">Select Section</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary fw-700 w-100 py-2"><i class="fas fa-search me-1"></i> Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.ClassId > 0 && Model.SectionId > 0)
+    {
+        <!-- Action Row -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-800 text-dark m-0">Institutional Routine</h6>
+            <button class="btn btn-premium-primary shadow-sm fw-700" data-bs-toggle="modal" data-bs-target="#addRoutineModal">
+                <i class="fas fa-plus me-1"></i> Add Routine
+            </button>
+        </div>
+
+        <!-- Routine Grid -->
+        <div class="card border-0 shadow-sm rounded-12">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle mb-0 text-center">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="py-3 fw-700" style="width: 120px;">Day</th>
+                                <th class="py-3 fw-700">Class Routine</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var day in Model.Days)
+                            {
+                                <tr>
+                                    <td class="bg-light fw-800 text-primary">@day</td>
+                                    <td class="p-3">
+                                        <div class="d-flex flex-wrap gap-3 justify-content-center">
+                                            @if (Model.RoutineData.ContainsKey(day))
+                                            {
+                                                foreach (var item in Model.RoutineData[day])
+                                                {
+                                                    <div class="routine-card p-3 rounded-12 text-start position-relative shadow-sm" style="min-width: 180px; background: #f8faff; border-left: 4px solid #4e73df;">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="fw-800 text-dark small mb-1">@item.Subject?.Name</div>
+                                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Delete this routine entry?');">
+                                                                <button type="submit" class="p-0 border-0 bg-transparent text-danger small"><i class="fas fa-times-circle"></i></button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="text-primary fw-700 small mb-1">
+                                                            <i class="far fa-clock me-1"></i> @item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")
+                                                        </div>
+                                                        <div class="text-muted small mb-1">
+                                                            <i class="fas fa-user-tie me-1"></i> @item.Teacher?.FullName
+                                                        </div>
+                                                        <div class="small text-success fw-600">
+                                                            <i class="fas fa-door-open me-1"></i> @item.ClassRoom?.RoomNo
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small py-3">No schedule defined for this day.</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Add Routine Modal -->
+<div class="modal fade" id="addRoutineModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-12">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title fw-800">Add Class Routine</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddRoutine" method="post">
+                <input type="hidden" name="ClassId" value="@Model.ClassId" />
+                <input type="hidden" name="SectionId" value="@Model.SectionId" />
+                
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label fw-700 small text-uppercase">Day of Week *</label>
+                            <select name="DayOfWeek" class="form-select border-0 bg-light shadow-none fw-600" required>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-700 small text-uppercase">Subject *</label>
+                            <select name="SubjectId" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Subjects" required>
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-700 small text-uppercase">Teacher *</label>
+                            <select name="TeacherId" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Teachers" required>
+                                <option value="">Select Teacher</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-700 small text-uppercase">Class Room *</label>
+                            <select name="ClassRoomId" class="form-select border-0 bg-light shadow-none fw-600" asp-items="ViewBag.Rooms" required>
+                                <option value="">Select Room</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-700 small text-uppercase">Start Time *</label>
+                            <input type="time" name="StartTime" class="form-control border-0 bg-light shadow-none fw-600" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-700 small text-uppercase">End Time *</label>
+                            <input type="time" name="EndTime" class="form-control border-0 bg-light shadow-none fw-600" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light fw-700" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-700 px-4">Save Routine</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .routine-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .routine-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+</style>

@@ -1,0 +1,180 @@
+﻿@model IEnumerable<EasyEdu.Models.Teacher>
+@{
+    ViewData["Title"] = "Institutional Staff Nexus";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-users-gear me-2 text-primary"></i> Staff Nexus</h1>
+        <p class="text-muted fw-600">Archival registry of institutional personnel and faculty members</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="@Url.Action("AddStaff", "HumanResource")" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-user-plus me-2"></i> ONBOARD STAFF
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">FILTER BY DEPARTMENT</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-building text-primary"></i></span>
+                    <select name="departmentId" class="form-select rounded-end-12 border-0 bg-light fw-700" asp-items="ViewBag.Departments">
+                        <option value="">All Institutional Departments</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-muted uppercase">FILTER BY DESIGNATION</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-id-card-clip text-primary"></i></span>
+                    <select name="designationId" class="form-select rounded-end-12 border-0 bg-light fw-700" asp-items="ViewBag.Designations">
+                        <option value="">All Organizational Designations</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-12 fw-800">
+                    <i class="fas fa-filter me-2"></i> APPLY FILTERS
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row g-4 animate-fade-in" style="animation-delay: 0.1s">
+        @foreach (var s in Model)
+        {
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="staff-entity-card">
+                    <div class="status-indicator @(s.IsActive ? "active" : "inactive")"></div>
+                    <div class="card-options">
+                        <button class="btn btn-icon-only"><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                    <div class="card-content text-center p-4">
+                        <div class="avatar-wrapper mb-3">
+                            <img src="@(string.IsNullOrEmpty(s.ProfilePicture) ? "https://ui-avatars.com/api/?name=" + s.FirstName + "+" + s.LastName + "&background=6366f1&color=fff&size=128" : s.ProfilePicture)" 
+                                 class="staff-avatar shadow-lg" alt="@s.FullName">
+                        </div>
+                        <h5 class="fw-900 text-dark mb-1">@s.FullName</h5>
+                        <div class="badge bg-primary-soft text-primary px-3 rounded-pill fw-800 mb-2">@s.Designation?.Title</div>
+                        <p class="text-muted small fw-700 mb-4"><i class="fas fa-building-columns me-1"></i> @s.Department?.Name</p>
+                        
+                        <div class="contact-ribbon bg-light rounded-16 p-2 d-flex justify-content-around mb-4">
+                            <a href="tel:@s.Phone" class="contact-btn" title="Call Staff"><i class="fas fa-phone"></i></a>
+                            <a href="mailto:@s.Email" class="contact-btn" title="Email Staff"><i class="fas fa-envelope"></i></a>
+                            <a href="#" class="contact-btn" title="Chat"><i class="fas fa-comment-dots"></i></a>
+                        </div>
+
+                        <div class="action-grid d-flex gap-2">
+                            <a href="@Url.Action("StaffDetails", "HumanResource", new { id = s.Id })" class="btn btn-premium-light flex-grow-1 border rounded-12 fw-800 small py-2">
+                                <i class="fas fa-eye me-1"></i> PROFILE
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if(!Model.Any()){
+            <div class="col-12 py-5 text-center">
+                <div class="premium-card p-5 bg-white border-0 shadow-lg rounded-24">
+                    <i class="fas fa-users-slash fa-4x text-muted opacity-25 mb-4 d-block"></i>
+                    <h4 class="fw-800 text-muted">No Staff Entities Found</h4>
+                    <p class="text-muted fw-600">Try adjusting your institutional filters or onboard new personnel.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .staff-entity-card {
+        background: white;
+        border-radius: 24px;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(0,0,0,0.05);
+        overflow: hidden;
+        height: 100%;
+        box-shadow: 0 10px 30px -15px rgba(0,0,0,0.1);
+    }
+
+    .staff-entity-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px -20px rgba(99, 102, 241, 0.3);
+        border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .status-indicator {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid white;
+        z-index: 2;
+    }
+
+    .status-indicator.active { background: #10b981; box-shadow: 0 0 10px #10b981; }
+    .status-indicator.inactive { background: #ef4444; }
+
+    .card-options {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 2;
+    }
+
+    .btn-icon-only {
+        background: transparent;
+        border: none;
+        color: #64748b;
+        padding: 8px;
+        transition: 0.2s;
+    }
+
+    .btn-icon-only:hover { color: #6366f1; }
+
+    .avatar-wrapper {
+        position: relative;
+        display: inline-block;
+        padding: 5px;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        border-radius: 50%;
+    }
+
+    .staff-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+    }
+
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.1); }
+    
+    .contact-btn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: #64748b;
+        transition: all 0.2s;
+        text-decoration: none !important;
+    }
+
+    .contact-btn:hover {
+        background: white;
+        color: #6366f1;
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .page-title { font-weight: 900; color: #1e293b; }
+</style>

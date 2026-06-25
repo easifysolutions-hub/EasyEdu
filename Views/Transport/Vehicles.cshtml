@@ -1,0 +1,106 @@
+﻿@model IEnumerable<EasyEdu.Models.Vehicle>
+@{
+    ViewData["Title"] = "Institutional Fleet Operations";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Fleet Command Center</h1>
+        <p class="text-muted fw-600">Managing vehicular assets, maintenance logs, and mobility readiness</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="AssignVehicle" class="btn-premium animate-fade-in shadow-md bg-purple text-white">
+            <i class="fas fa-link me-2"></i> Assignment Nexus
+        </a>
+        <a asp-action="CreateVehicle" class="btn-premium btn-premium-primary animate-fade-in shadow-lg">
+            <i class="fas fa-plus-circle me-2"></i> Register Vehicle
+        </a>
+        <a asp-action="Drivers" class="btn-premium btn-premium-primary animate-fade-in shadow-sm bg-white text-primary border border-primary">
+            <i class="fas fa-id-card me-2 text-primary"></i> Driver Registry
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    @if (Model.Any())
+    {
+        @foreach (var v in Model)
+        {
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-card bg-white h-100 shadow-md animate-fade-in hover-scale">
+                    <div class="p-4 border-bottom d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-primary-soft text-primary rounded-16 me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="fas fa-bus h3 mb-0"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-900 text-dark mb-0">@v.VehicleNumber</h5>
+                                <div class="small text-muted fw-700">@v.Model (@v.VehicleType)</div>
+                            </div>
+                        </div>
+                        <span class="badge @(v.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") border fw-800 px-2 py-1 rounded-8" style="font-size: 0.65rem;">
+                            @(v.IsActive ? "ACTIVE" : "MAINTENANCE")
+                        </span>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div class="small fw-700 text-muted uppercase">Corridor</div>
+                                <div class="fw-800 text-dark">@(v.Route?.Name ?? "Unassigned")</div>
+                            </div>
+                            <div class="col-6 border-start ps-3">
+                                <div class="small fw-700 text-muted uppercase">Navigator</div>
+                                <div class="fw-800 text-primary">@(v.Driver?.Name ?? "None")</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-16 p-3 mb-4 border">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-gauge-high text-primary me-2"></i>
+                                <span class="small fw-800 text-primary uppercase">Readiness Metrics</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small fw-600 text-muted">Capacity Load</span>
+                                <span class="small fw-800 text-dark">@v.Capacity Seats</span>
+                            </div>
+                            <div class="progress" style="height: 6px; border-radius: 10px;">
+                                <div class="progress-bar bg-primary" style="width: 75%"></div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a asp-action="EditVehicle" asp-route-id="@v.Id" class="btn-premium btn-premium-primary w-100 py-2 shadow-md">
+                                <i class="fas fa-sliders me-1"></i> Configure
+                            </a>
+                            <button class="btn btn-light rounded-12 px-3" title="Log Maintenance">
+                                <i class="fas fa-tools"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center py-5">
+            <div class="premium-card p-5 bg-white shadow-sm border-2 border-dashed">
+                <i class="fas fa-car-side fa-4x text-light mb-3"></i>
+                <h4 class="fw-800 text-dark">Fleet inventory is empty.</h4>
+                <p class="text-muted fw-600 mb-4">Register your institutional vehicles to track maintenance and routing.</p>
+                <a asp-action="CreateVehicle" class="btn btn-premium-primary px-5 py-3 rounded-12">
+                    Register New Vehicle
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .bg-purple { background: #6f42c1; }
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: translateY(-5px); }
+    .bg-gray-50 { background-color: #f9fafb; }
+</style>

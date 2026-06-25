@@ -1,0 +1,84 @@
+@model IEnumerable<EasyEdu.Models.EvaluationCriterion>
+@{
+    ViewData["Title"] = "Evaluation Settings";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Evaluation Protocols</h1>
+        <p class="text-muted fw-600">Configure institutional appraisal metrics and weightage</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-4">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-primary text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-plus-circle me-2"></i> NEW_CRITERION</h5>
+            </div>
+            <div class="p-4">
+                <form asp-action="AddCriterion" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-800 text-muted small uppercase">Criterion Title</label>
+                        <input name="Title" class="form-control-premium w-100" required placeholder="e.g. Communication Skills" />
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-800 text-muted small uppercase">Max Points</label>
+                            <input type="number" name="MaxPoint" class="form-control-premium w-100" value="5" />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-800 text-muted small uppercase">Weight</label>
+                            <input type="number" name="Weight" class="form-control-premium w-100" value="1" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-premium-primary w-100 mt-2">DEPLOY_CRITERION</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+            <div class="p-4 border-bottom bg-info text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-list-check me-2"></i> EVALUATION_MATRIX</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">CRITERION</th>
+                            <th>MAX_POINTS</th>
+                            <th>WEIGHT</th>
+                            <th>STATUS</th>
+                            <th class="text-end pe-4">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-800 text-dark">@c.Title</div>
+                                </td>
+                                <td><span class="badge bg-light text-primary fw-900">@c.MaxPoint PTS</span></td>
+                                <td><span class="badge bg-light text-info fw-900">x @c.Weight</span></td>
+                                <td>
+                                    @if(c.IsActive) {
+                                        <span class="badge badge-success-premium">ACTIVE</span>
+                                    } else {
+                                        <span class="badge badge-danger-premium">INACTIVE</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-light-soft"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

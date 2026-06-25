@@ -1,0 +1,81 @@
+﻿@model IEnumerable<EasyEdu.Models.Student>
+@{
+    var exam = ViewBag.Exam as EasyEdu.Models.Examination;
+    var currentClass = ViewBag.Class as EasyEdu.Models.Class;
+    var subject = ViewBag.Subject as EasyEdu.Models.Subject;
+    var existingMarks = ViewBag.ExistingMarks as Dictionary<int, EasyEdu.Models.Mark>;
+    ViewData["Title"] = "Enter Marks";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Enter Grade Sheet</h1>
+        <div class="text-muted fw-500">
+            <span class="text-primary fw-700">@exam?.Name</span> | 
+            <span class="text-dark fw-700">@subject?.Name</span> | 
+            Class <span class="text-info fw-700">@currentClass?.Name</span>
+        </div>
+    </div>
+    <a asp-action="Index" class="btn btn-light rounded-10 px-4 fw-600 border-0 shadow-sm bg-white">Cancel</a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-24 overflow-hidden">
+    <form asp-action="SaveMarks" method="post">
+        <input type="hidden" name="examId" value="@exam?.Id" />
+        <input type="hidden" name="subjectId" value="@subject?.Id" />
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light-soft border-0">
+                        <tr>
+                            <th class="px-4 py-3 border-0 text-muted fw-600 small">STUDENT NAME</th>
+                            <th class="px-4 py-3 border-0 text-muted fw-600 small">ADMISSION #</th>
+                            <th class="px-4 py-3 border-0 text-muted fw-600 small text-center" style="width: 150px;">MARKS (MAX 100)</th>
+                            <th class="px-4 py-3 border-0 text-muted fw-600 small">REMARKS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            var mark = existingMarks?.ContainsKey(student.Id) == true ? existingMarks[student.Id].MarksObtained : 0;
+                            var remark = existingMarks?.ContainsKey(student.Id) == true ? existingMarks[student.Id].Remarks : "";
+                            <tr>
+                                <td class="px-4 py-3">
+                                    <div class="fw-700 text-dark">@student.FirstName @student.LastName</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge bg-light text-secondary border fw-600">@student.AdmissionNumber</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input type="number" name="marksData[@student.Id]" class="form-control rounded-10 text-center fw-800 border-primary-soft" 
+                                           step="0.1" min="0" max="100" value="@mark" required />
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input type="text" name="remarksData[@student.Id]" class="form-control rounded-10 border-light" 
+                                           placeholder="Small remark..." value="@remark" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-0 p-4 text-center shadow-sm mt-3">
+            <button type="submit" class="btn btn-primary btn-lg rounded-12 px-5 fw-700 shadow">
+                <i class="fas fa-check-double me-2"></i> Publish Results
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .rounded-24 { border-radius: 24px; }
+    .rounded-10 { border-radius: 10px; }
+    .rounded-12 { border-radius: 12px; }
+    .bg-light-soft { background-color: #f8fafc; }
+    .border-primary-soft { border-color: rgba(79, 70, 229, 0.2); }
+    .fw-600 { font-weight: 600; }
+    .fw-700 { font-weight: 700; }
+    .fw-800 { font-weight: 800; }
+</style>

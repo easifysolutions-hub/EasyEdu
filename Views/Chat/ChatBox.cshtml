@@ -1,0 +1,155 @@
+@model IEnumerable<EasyEdu.Models.ChatMessage>
+@{
+    var otherUser = ViewBag.OtherUser as EasyEdu.Models.ApplicationUser;
+    ViewData["Title"] = $"Chat with {otherUser?.FullName}";
+    Layout = "_Layout";
+    var currentUserId = ViewBag.CurrentUserId as string;
+}
+
+<div class="container-fluid px-4 pb-5 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in d-flex flex-column" style="height: 80vh;">
+                <!-- Chat Header -->
+                <div class="p-4 border-bottom bg-light d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <a asp-action="Index" class="btn btn-light rounded-circle me-3 shadow-sm d-flex align-items-center justify-content-center border-0" style="width: 40px; height: 40px;">
+                            <i class="fas fa-arrow-left text-muted"></i>
+                        </a>
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(otherUser?.ProfilePicture))
+                            {
+                                <img src="@otherUser.ProfilePicture" class="rounded-circle shadow-sm border border-2 border-white" style="width: 48px; height: 48px; object-fit: cover;" alt="@otherUser.FullName" />
+                            }
+                            else
+                            {
+                                <div class="avatar-placeholder rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; font-weight: 800;">
+                                    @(otherUser?.FullName?[0] ?? otherUser?.UserName?[0] ?? '?')
+                                </div>
+                            }
+                            <span class="status-indicator online" style="width: 12px; height: 12px; position: absolute; bottom: 0; right: 0; border: 2px solid #fff; border-radius: 50%; background: #10b981;"></span>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="fw-800 text-dark mb-0">@otherUser?.FullName</h5>
+                            <span class="small text-success fw-700">Online | Colleague</span>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-light shadow-none rounded-circle px-3 border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v text-muted"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end rounded-16 shadow-lg border-0 p-2">
+                            <li><a class="dropdown-item fw-700 rounded-8 py-2" href="#"><i class="fas fa-user-circle me-2 text-primary"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form asp-action="BlockUser" method="post" onsubmit="return confirm('Archive/Block this conversation?')">
+                                    <input type="hidden" name="id" value="@otherUser.Id" />
+                                    <button type="submit" class="dropdown-item text-danger fw-700 rounded-8 py-2"><i class="fas fa-ban me-2"></i> Block User</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div id="messagesList" class="flex-grow-1 p-4 overflow-auto bg-light-soft" style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png');">
+                    @foreach (var msg in Model)
+                    {
+                        var isMine = msg.SenderId == currentUserId;
+                        <div class="d-flex mb-4 @(isMine ? "justify-content-end" : "justify-content-start") animate-slide-up">
+                            <div class="message-bubble p-3 @(isMine ? "bg-primary text-white rounded-message-right" : "bg-white shadow-sm text-dark rounded-message-left") shadow-sm" style="max-width: 70%; position: relative;">
+                                <div class="fw-600 fs-6">@msg.Message</div>
+                                <div class="text-end mt-1" style="font-size: 0.6rem; opacity: 0.8;">
+                                    @msg.SentAt.ToString("HH:mm") 
+                                    @if(isMine) { <i class="fas @(msg.IsRead ? "fa-check-double text-info" : "fa-check") ms-1"></i> }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center py-5 opacity-50 d-flex flex-column align-items-center">
+                            <div class="icon-box-lg bg-light rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-envelope-open fa-2x text-primary animate-bounce"></i>
+                            </div>
+                            <p class="fw-800 text-muted">Your conversation with @otherUser?.FullName starts here.</p>
+                            <span class="small fw-600">Messages are end-to-end encrypted.</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Chat Input Area -->
+                <div class="p-4 border-top bg-white">
+                    <form id="chatForm" class="d-flex gap-3 align-items-center">
+                        <button type="button" class="btn btn-light rounded-circle shadow-sm px-3 py-2 border-0"><i class="fas fa-paperclip text-muted"></i></button>
+                        <div class="flex-grow-1 position-relative">
+                            <input type="text" id="messageInput" class="form-control border-0 bg-light rounded-pill px-4 shadow-none py-3 fw-600" placeholder="Compose message..." autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0" style="width: 52px; height: 52px; transition: all 0.3s ease;">
+                            <i class="fas fa-paper-plane fs-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background: rgba(0,0,0,0.015); }
+    .rounded-message-right { border-radius: 20px 20px 0px 20px; }
+    .rounded-message-left { border-radius: 20px 20px 20px 0px; }
+    .btn-premium-primary:hover { transform: scale(1.05) rotate(-5deg); filter: brightness(1.1); }
+    
+    #messagesList::-webkit-scrollbar { width: 4px; }
+    #messagesList::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.2); border-radius: 10px; }
+    
+    @@keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-up { animation: slideUp 0.3s ease-out forwards; }
+    
+    .status-indicator.online { background: #10b981; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var messagesList = document.getElementById("messagesList");
+            messagesList.scrollTop = messagesList.scrollHeight;
+
+            $("#chatForm").on("submit", function(e) {
+                e.preventDefault();
+                var msg = $("#messageInput").val();
+                if (!msg.trim()) return;
+
+                // Optimistic UI update
+                var now = new Date();
+                var time = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+                
+                $.post("/Chat/SendMessage", { receiverId: "@otherUser.Id", message: msg }, function(res) {
+                    if (res.success) {
+                        var html = `
+                            <div class="d-flex mb-4 justify-content-end animate-slide-up">
+                                <div class="message-bubble p-3 bg-primary text-white rounded-message-right shadow-sm" style="max-width: 70%;">
+                                    <div class="fw-600 fs-6">${msg}</div>
+                                    <div class="text-end mt-1" style="font-size: 0.6rem; opacity: 0.8;">
+                                        ${res.sentAt} <i class="fas fa-check ms-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        $("#messagesList").append(html);
+                        $("#messageInput").val("");
+                        messagesList.scrollTop = messagesList.scrollHeight;
+                    }
+                });
+            });
+
+            // Prevent scroll jump on focus
+            $("#messageInput").on("focus", function() {
+                setTimeout(function() {
+                    messagesList.scrollTop = messagesList.scrollHeight;
+                }, 300);
+            });
+        });
+    </script>
+}

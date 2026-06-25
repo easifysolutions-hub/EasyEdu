@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Calendar Settings - EasyEdu Premium";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4">
+    <div class="mb-4">
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <a href="@Url.Action("Index")" class="btn btn-icon-modern" style="width: 32px; height: 32px; background: white;">
+                <i class="fas fa-chevron-left text-muted"></i>
+            </a>
+            <h2 class="fw-800 text-dark m-0">Calendar Settings</h2>
+        </div>
+        <p class="text-muted small ms-5">Customize event types and colors for your institutional calendar.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 20px; overflow: hidden;">
+        <div class="card-body p-5">
+            <form method="post" asp-action="SaveCalendarSettings">
+                <div class="row g-4">
+                    @{
+                        var eventTypes = new List<(string Name, string DefaultBg, string DefaultText)>
+                        {
+                            ("ADMISSION QUERY", "#008000", "#FFFFFF"),
+                            ("HOMEWORK", "#FF0000", "#FFFFFF"),
+                            ("EXAM", "#000080", "#FFFFFF"),
+                            ("LEAVE", "#008B8B", "#FFFFFF"),
+                            ("HOLIDAY", "#808080", "#FFFFFF"),
+                            ("LIBRARY", "#8B0000", "#FFFFFF"),
+                            ("LESSON PLAN", "#008000", "#FFFFFF"),
+                            ("STUDY MATERIAL", "#800080", "#FFFFFF"),
+                            ("ONLINE EXAM", "#808000", "#FFFFFF"),
+                            ("NOTICE BOARD", "#00CED1", "#000000"),
+                            ("EVENT", "#8B0000", "#FFFFFF")
+                        };
+                    }
+
+                    @foreach (var eventType in eventTypes)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <div class="p-3 border rounded" style="border-color: #e2e8f0 !important;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="form-check form-switch me-3">
+                                        <input class="form-check-input" type="checkbox" checked style="width: 3em; height: 1.5em; background-color: #8b5cf6; border-color: #8b5cf6;">                                    </div>
+                                    <span class="fw-700 text-dark small text-uppercase">@eventType.Name</span>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small fw-700 text-uppercase">Font Color *</label>
+                                        <input type="color" class="form-control form-control-color border-0" value="@eventType.DefaultText" style="width: 100%; height: 40px; border-radius: 8px;">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small fw-700 text-uppercase">Background Color *</label>
+                                        <input type="color" class="form-control form-control-color border-0" value="@eventType.DefaultBg" style="width: 100%; height: 40px; border-radius: 8px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="mt-5 text-center">
+                    <button type="submit" class="btn px-5 py-3 fw-700 text-white" style="background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%); border-radius: 15px; border: none; box-shadow: 0 10px 20px rgba(124, 58, 237, 0.25);">
+                        <i class="fas fa-check me-2"></i> UPDATE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-icon-modern {
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+    .btn-icon-modern:hover { transform: translateX(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+</style>

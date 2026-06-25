@@ -1,0 +1,174 @@
+﻿@model EasyEdu.Models.Student
+@{
+    ViewData["Title"] = "Student Profile";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Student Profile</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Administration")" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Students</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Profile</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary shadow-sm border-0 px-4 py-2 fw-600 rounded-10 bg-white">
+            <i class="fas fa-edit me-2"></i> Edit Profile
+        </a>
+        <button class="btn btn-primary shadow-sm border-0 px-4 py-2 fw-600 rounded-10">
+            <i class="fas fa-print me-2"></i> Print ID Card
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-16 mb-4 text-center">
+            <div class="card-body p-5">
+                <div class="profile-pic-container mb-4 mx-auto">
+                    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                    {
+                        <img src="@Model.ProfilePicture" class="rounded-circle shadow" style="width: 150px; height: 150px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="avatar-lg bg-primary-soft text-primary fw-800 rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; font-size: 3rem;">
+                            @(Model.FirstName.Substring(0, 1) + Model.LastName.Substring(0, 1))
+                        </div>
+                    }
+                </div>
+                <h3 class="fw-800 text-dark mb-1">@Model.FirstName @Model.LastName</h3>
+                <p class="text-muted fw-500 mb-3">@Model.AdmissionNumber</p>
+                <div class="d-flex justify-content-center gap-2 mb-4">
+                    <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill">@(Model.Class?.Name ?? "N/A")</span>
+                    <span class="badge bg-success-soft text-success px-3 py-2 rounded-pill">Active</span>
+                </div>
+                
+                <hr class="my-4 border-light">
+                
+                <div class="row text-start g-3">
+                    <div class="col-12">
+                        <label class="small text-muted mb-0">Email</label>
+                        <div class="fw-600 text-dark">@(Model.Email ?? "Not provided")</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="small text-muted mb-0">Phone</label>
+                        <div class="fw-600 text-dark">@(Model.Phone ?? "Not provided")</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="small text-muted mb-0">Institution</label>
+                        <div class="fw-600 text-dark">@(Model.Company?.Name ?? "N/A")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-16 mb-4">
+            <div class="card-header bg-transparent border-0 p-0">
+                <ul class="nav nav-pills custom-pills p-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-info-tab" data-bs-toggle="pill" data-bs-target="#pills-info" type="button" role="tab">Personal Info</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-academic-tab" data-bs-toggle="pill" data-bs-target="#pills-academic" type="button" role="tab">Academic Records</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-fees-tab" data-bs-toggle="pill" data-bs-target="#pills-fees" type="button" role="tab">Fees & Finance</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-attendance-tab" data-bs-toggle="pill" data-bs-target="#pills-attendance" type="button" role="tab">Attendance</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4 pt-2">
+                <div class="tab-content" id="pills-tabContent">
+                    <!-- Personal Info Tab -->
+                    <div class="tab-pane fade show active" id="pills-info" role="tabpanel">
+                        <div class="row g-4 pt-3">
+                            <div class="col-md-6">
+                                <h6 class="text-muted small fw-700 text-uppercase mb-3">Basic Information</h6>
+                                <table class="table table-borderless table-sm">
+                                    <tr><td class="text-secondary ps-0">Full Name:</td><td class="fw-600">@Model.FirstName @Model.LastName</td></tr>
+                                    <tr><td class="text-secondary ps-0">Date of Birth:</td><td class="fw-600">@Model.DateOfBirth.ToString("MMM dd, yyyy")</td></tr>
+                                    <tr><td class="text-secondary ps-0">Gender:</td><td class="fw-600">@Model.Gender</td></tr>
+                                    <tr><td class="text-secondary ps-0">Blood Group:</td><td class="fw-600">@(Model.BloodGroup ?? "N/A")</td></tr>
+                                    <tr><td class="text-secondary ps-0">Joined Date:</td><td class="fw-600">@Model.AdmissionDate.ToString("MMM dd, yyyy")</td></tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted small fw-700 text-uppercase mb-3">Family Information</h6>
+                                <table class="table table-borderless table-sm">
+                                    <tr><td class="text-secondary ps-0">Father's Name:</td><td class="fw-600">@(Model.FatherName ?? "N/A")</td></tr>
+                                    <tr><td class="text-secondary ps-0">Father's Contact:</td><td class="fw-600">@(Model.FatherPhone ?? "N/A")</td></tr>
+                                    <tr><td class="text-secondary ps-0">Mother's Name:</td><td class="fw-600">@(Model.MotherName ?? "N/A")</td></tr>
+                                    <tr><td class="text-secondary ps-0">Mother's Contact:</td><td class="fw-600">@(Model.MotherPhone ?? "N/A")</td></tr>
+                                </table>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <h6 class="text-muted small fw-700 text-uppercase mb-3">Contact Address</h6>
+                                <p class="fw-600 text-dark">@(Model.Address ?? "No address recorded.")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Records Tab Placeholder -->
+                    <div class="tab-pane fade" id="pills-academic" role="tabpanel">
+                        <div class="text-center py-5">
+                            <i class="fas fa-file-invoice fa-3x text-light mb-3"></i>
+                            <h5 class="text-secondary">No academic records yet</h5>
+                            <p class="text-muted">Exam marks and grade sheets will appear here.</p>
+                        </div>
+                    </div>
+
+                    <!-- Fees Tab Placeholder -->
+                    <div class="tab-pane fade" id="pills-fees" role="tabpanel">
+                        <div class="text-center py-5">
+                            <i class="fas fa-dollar-sign fa-3x text-light mb-3"></i>
+                            <h5 class="text-secondary">No fee history</h5>
+                            <button class="btn btn-sm btn-primary rounded-10 mt-2">Generate Invoice</button>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Tab Placeholder -->
+                    <div class="tab-pane fade" id="pills-attendance" role="tabpanel">
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-check fa-3x text-light mb-3"></i>
+                            <h5 class="text-secondary">Attendance Summary</h5>
+                            <div class="mt-4">
+                                <span class="h4 fw-800 text-success">98%</span>
+                                <div class="text-muted small">Overall Attendance</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-16 { border-radius: 16px; }
+    .rounded-10 { border-radius: 10px; }
+    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.1); }
+    .bg-success-soft { background-color: rgba(16, 185, 129, 0.1); }
+    .nav-pills.custom-pills .nav-link { 
+        color: #64748b; 
+        font-weight: 600; 
+        padding: 10px 20px; 
+        border-radius: 10px;
+        transition: all 0.2s;
+    }
+    .nav-pills.custom-pills .nav-link.active { 
+        background-color: var(--primary); 
+        color: white; 
+        box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+    }
+    .fw-600 { font-weight: 600; }
+    .fw-700 { font-weight: 700; }
+    .fw-800 { font-weight: 800; }
+</style>

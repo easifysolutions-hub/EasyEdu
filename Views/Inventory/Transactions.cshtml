@@ -1,0 +1,122 @@
+@model IEnumerable<EasyEdu.Models.InventoryTransaction>
+@{
+    ViewData["Title"] = "Inventory Transactions - Audit Logs";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-history me-2 text-primary"></i> Asset Movement Audit</h1>
+        <p class="text-muted fw-600">Complete historical trace of all asset issuances, sales, and logistical adjustments</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="ItemSell" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-cart-shopping me-2"></i> NEW SALE
+        </a>
+        <a asp-action="IssueItem" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800 ms-2">
+            <i class="fas fa-hand-holding-box me-2"></i> NEW ISSUANCE
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 animate-fade-in">
+        <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+            <h5 class="fw-800 text-dark mb-0"><i class="fas fa-microscope text-primary me-2"></i> Transaction Surveillance</h5>
+            <div class="d-flex gap-2">
+                <span class="badge bg-primary-soft text-primary fw-800 px-3 py-2 rounded-8">TOTAL MOVEMENTS: @Model.Count()</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">TIMESTAMP</th>
+                        <th>TRANSACTION TYPE</th>
+                        <th>ASSET IDENTITY</th>
+                        <th>RECIPIENT / CUSTOMER</th>
+                        <th class="text-center">QUANTITY</th>
+                        <th>FINANCIAL STAMP</th>
+                        <th class="text-end pe-4">DOCUMENTATION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        var typeClass = log.TransactionType == "Sale" ? "bg-success-soft text-success border-success-soft" : "bg-purple-soft text-purple border-purple-soft";
+                        var typeIcon = log.TransactionType == "Sale" ? "fa-cart-shopping" : "fa-hand-holding-box";
+                        
+                        <tr class="align-middle transition-all">
+                            <td class="ps-4">
+                                <div class="fw-800 text-dark">@log.TransactionDate.ToString("dd MMM yyyy")</div>
+                                <div class="small text-muted fw-700 uppercase" style="font-size: 0.6rem;">@log.CreatedAt.ToLocalTime().ToString("hh:mm tt")</div>
+                            </td>
+                            <td>
+                                <span class="badge @typeClass fw-800 px-3 py-2 rounded-pill shadow-none border" style="font-size: 0.65rem;">
+                                    <i class="fas @typeIcon me-1"></i> @log.TransactionType.ToUpper()
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box-sm bg-light-soft text-primary rounded-12 me-3">
+                                        <i class="fas fa-cube small"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-dark">@(log.Inventory?.ItemName ?? "Unknown Asset")</div>
+                                        <div class="text-muted small fw-700 uppercase" style="font-size: 0.6rem;">SKU: @log.InventoryId</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-800 text-dark">@log.Student?.FirstName @log.Student?.LastName</div>
+                                <div class="small text-muted fw-700 uppercase" style="font-size: 0.62rem;">ADM: @(log.Student?.AdmissionNumber ?? "N/A")</div>
+                            </td>
+                            <td class="text-center">
+                                <div class="h5 fw-900 text-dark mb-0">@log.Quantity</div>
+                                <div class="small text-muted fw-800 uppercase" style="font-size: 0.55rem;">UNITS @(log.TransactionType == "Sale" ? "SOLD" : "ISSUED")</div>
+                            </td>
+                            <td>
+                                @if (log.TransactionType == "Sale")
+                                {
+                                    <div class="fw-900 text-success">$@log.TotalAmount.ToString("N2")</div>
+                                    <div class="small text-muted fw-600" style="font-size: 0.6rem;">($@log.UnitPrice/unit)</div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small fw-800 uppercase" style="font-size: 0.6rem;">N/A (INTERNAL)</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="small text-muted fw-700 truncate-text" style="max-width: 200px;" title="@log.Remarks">
+                                    @(string.IsNullOrEmpty(log.Remarks) ? "No protocol remarks." : log.Remarks)
+                                </div>
+                                <div class="small text-dark fw-800 uppercase" style="font-size: 0.55rem;"><i class="fas fa-user-check me-1"></i> VERIFIED</div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-list-check fa-3x text-muted opacity-25 mb-3 d-block"></i>
+                                <div class="fw-800 text-muted">No transaction history recorded.</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99,102,241,0.1); color: #6366f1; }
+    .bg-success-soft { background: rgba(16,185,129,0.1); color: #10b981; }
+    .bg-purple-soft { background: rgba(168,85,247,0.1); color: #a855f7; }
+    .text-purple { color: #a855f7; }
+    .border-purple-soft { border-color: rgba(168,85,247,0.2) !important; }
+    .border-success-soft { border-color: rgba(16,185,129,0.2) !important; }
+    .bg-light-soft { background: rgba(0,0,0,0.03); color: #334155; }
+    .icon-box-sm { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+    .truncate-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>

@@ -1,0 +1,245 @@
+@model EasyEdu.Models.Teacher
+@{
+    ViewData["Title"] = $"Nexus Profile: {Model.FullName}";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 animate-slide-in">
+    <div class="d-flex align-items-center gap-3">
+        <a href="@Url.Action("StaffDirectory", "HumanResource")" class="btn btn-light rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+            <i class="fas fa-arrow-left text-muted"></i>
+        </a>
+        <div>
+            <h1 class="page-title mb-0">Personnel Dossier</h1>
+            <p class="text-muted fw-600 mb-0">Institutional record for <span class="text-primary">@Model.FullName</span></p>
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-edit me-2"></i> UPDATE ARCHIVE
+        </button>
+        <button onclick="window.print()" class="btn btn-premium-purple rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-print me-2"></i> PRINT DOSSIER
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        <!-- Sidebar Profile Card -->
+        <div class="col-xl-3">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in p-4 text-center">
+                <div class="badge @(Model.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") rounded-pill px-3 py-1 fw-800 smallest float-end">
+                    @(Model.IsActive ? "OPERATIONAL" : "INACTIVE")
+                </div>
+                <div class="mt-4 mb-4">
+                    <img src="@(string.IsNullOrEmpty(Model.ProfilePicture) ? "https://ui-avatars.com/api/?name=" + Model.FirstName + "+" + Model.LastName + "&background=6366f1&color=fff&size=200" : Model.ProfilePicture)" 
+                         class="rounded-circle shadow-lg border border-4 border-white mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h4 class="fw-900 text-dark mb-1">@Model.FullName</h4>
+                    <div class="text-primary fw-800 small uppercase tracking-wider mb-2">@Model.Designation?.Title</div>
+                    <p class="text-muted small fw-600"><i class="fas fa-building-columns me-1"></i> @Model.Department?.Name</p>
+                </div>
+
+                <div class="d-flex flex-column gap-2 mt-4 text-start">
+                    <div class="p-3 bg-light rounded-20 d-flex align-items-center gap-3">
+                        <div class="icon-box bg-white rounded-12 p-2 shadow-xs"><i class="fas fa-fingerprint text-primary"></i></div>
+                        <div>
+                            <div class="smallest fw-900 text-muted uppercase">ARCHIVAL ID</div>
+                            <div class="small fw-800 text-dark">#@Model.EmployeeNumber</div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-light rounded-20 d-flex align-items-center gap-3">
+                        <div class="icon-box bg-white rounded-12 p-2 shadow-xs"><i class="fas fa-calendar-check text-success"></i></div>
+                        <div>
+                            <div class="smallest fw-900 text-muted uppercase">JOINING CYCLE</div>
+                            <div class="small fw-800 text-dark">@Model.JoiningDate.ToString("MMMM yyyy")</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-4 border-top">
+                    <h6 class="fw-900 text-muted uppercase tracking-widest smallest mb-3">PROFESSIONAL NEXUS</h6>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="tel:@Model.Phone" class="btn btn-light-soft rounded-circle p-3"><i class="fas fa-phone text-primary"></i></a>
+                        <a href="mailto:@Model.Email" class="btn btn-light-soft rounded-circle p-3"><i class="fas fa-envelope text-primary"></i></a>
+                        <a href="#" class="btn btn-light-soft rounded-circle p-3"><i class="fas fa-comment-dots text-primary"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Tabs -->
+        <div class="col-xl-9">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in" style="animation-delay: 0.1s">
+                <ul class="nav nav-tabs nav-justified border-0 bg-light-soft" id="staffTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active py-4 border-0 fw-900 uppercase tracking-widest" id="info-tab" data-bs-toggle="tab" data-bs-target="#info-pane" type="button">
+                            <i class="fas fa-id-card me-2"></i> BIOGRAPHY
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link py-4 border-0 fw-900 uppercase tracking-widest" id="attendance-tab" data-bs-toggle="tab" data-bs-target="#attendance-pane" type="button">
+                            <i class="fas fa-calendar-check me-2"></i> ATTENDANCE
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link py-4 border-0 fw-900 uppercase tracking-widest" id="payroll-tab" data-bs-toggle="tab" data-bs-target="#payroll-pane" type="button">
+                            <i class="fas fa-money-check-dollar me-2"></i> PAYROLL HISTORY
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="staffTabContent">
+                    <!-- Biography Pane -->
+                    <div class="tab-pane fade show active p-5" id="info-pane" role="tabpanel">
+                        <div class="row g-5">
+                            <div class="col-md-6 border-end">
+                                <h6 class="fw-900 text-primary uppercase small mb-4 border-bottom pb-2">PERSONAL IDENTITY</h6>
+                                <div class="info-stack d-flex flex-column gap-4">
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">DATE OF BIRTH</div>
+                                        <div class="fw-800 text-dark">@Model.DateOfBirth.ToString("dd MMMM yyyy")</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">GENDER SIGNATURE</div>
+                                        <div class="fw-800 text-dark">@Model.Gender</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">BLOOD ARCHIVE</div>
+                                        <div class="fw-800 text-dark">@(string.IsNullOrEmpty(Model.BloodGroup) ? "NOT ARCHIVED" : Model.BloodGroup)</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">RESIDENTIAL LOCUS</div>
+                                        <div class="fw-800 text-dark small">@Model.Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-900 text-purple uppercase small mb-4 border-bottom pb-2">ACADEMIC & FINANCIAL</h6>
+                                <div class="info-stack d-flex flex-column gap-4">
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">QUALIFICATIONS</div>
+                                        <div class="fw-800 text-dark">@Model.Qualification</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">INSTITUTIONAL SPECIALIZATION</div>
+                                        <div class="fw-800 text-dark">@Model.Specialization</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">BASE RETAINER</div>
+                                        <div class="fw-800 text-success fs-4">$@Model.Salary?.ToString("N2")</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="smallest fw-900 text-muted uppercase">PROFESSIONAL EXPERIENCE</div>
+                                        <p class="small text-muted fw-600 mt-1">@Model.Experience</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Pane -->
+                    <div class="tab-pane fade" id="attendance-pane" role="tabpanel">
+                        <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                            <h6 class="fw-900 text-dark mb-0 Small">RECENT PRESENCE CYCLES</h6>
+                            <div class="badge bg-primary rounded-pill px-3 py-2 fw-800 small shadow-sm">@(Model.Attendances.Count(a => a.Status == "Present")) DAYS PRESENT</div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table premium-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4 py-3">CYCLE DATE</th>
+                                        <th class="py-3">OPERATIONAL STATUS</th>
+                                        <th class="py-3">ARCHIVAL REMARKS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var att in Model.Attendances.OrderByDescending(a => a.Date).Take(20))
+                                    {
+                                        <tr>
+                                            <td class="ps-4 fw-800 text-dark">@att.Date.ToString("dd MMM yyyy")</td>
+                                            <td>
+                                                <span class="badge @(att.Status == "Present" ? "bg-success-soft text-success" : att.Status == "Absent" ? "bg-danger-soft text-danger" : "bg-warning-soft text-warning") rounded-pill px-3 py-2 fw-800 small uppercase">
+                                                    @att.Status
+                                                </span>
+                                            </td>
+                                            <td class="small fw-600 text-muted">@(string.IsNullOrEmpty(att.Remarks) ? "—" : att.Remarks)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Payroll Pane -->
+                    <div class="tab-pane fade" id="payroll-pane" role="tabpanel">
+                        <div class="p-4 border-bottom bg-light">
+                            <h6 class="fw-900 text-dark mb-0">DISBURSEMENT LEDGER</h6>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table premium-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">PERIOD</th>
+                                        <th>GROSS DISBURSEMENT</th>
+                                        <th>NET SETTLEMENT</th>
+                                        <th>FINANCIAL STATUS</th>
+                                        <th class="text-end pe-4">DOCUMENTATION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var pay in Model.Payrolls.OrderByDescending(p => p.Year).ThenByDescending(p => p.Month))
+                                    {
+                                        <tr class="align-middle">
+                                            <td class="ps-4 fw-800 text-dark">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(pay.Month) @pay.Year</td>
+                                            <td class="fw-700 text-muted">$@pay.GrossSalary.ToString("N2")</td>
+                                            <td class="fw-900 text-success">$@pay.NetSalary.ToString("N2")</td>
+                                            <td>
+                                                <span class="badge @(pay.Status == "Paid" ? "bg-success" : "bg-warning") rounded-pill px-3 py-1 fw-800 smallest">
+                                                    @pay.Status.ToUpper()
+                                                </span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <a href="@Url.Action("Payslip", "HumanResource", new { id = pay.Id })" class="btn btn-premium-light border rounded-12 btn-sm fw-800 px-3">
+                                                    <i class="fas fa-file-invoice-dollar me-1"></i> PAYSLIP
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-soft { background: #f8fafc; }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.1); }
+    
+    .nav-tabs .nav-link { color: #64748b; font-size: 0.75rem; transition: all 0.3s ease; }
+    .nav-tabs .nav-link.active { 
+        color: #6366f1; 
+        background: white; 
+        border-bottom: 3px solid #6366f1 !important;
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.02);
+    }
+
+    .shadow-xs { box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .smallest { font-size: 0.65rem; }
+    .rounded-20 { border-radius: 20px; }
+    .rounded-32 { border-radius: 32px; }
+    
+    @@media print {
+        .page-header, .nav-tabs, .btn, .card-options { display: none !important; }
+        .tab-pane { display: block !important; opacity: 1 !important; border: none !important; }
+        body { background: white !important; }
+        .premium-card { box-shadow: none !important; border: 1px solid #eee !important; }
+    }
+</style>

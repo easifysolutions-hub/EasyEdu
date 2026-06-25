@@ -1,0 +1,128 @@
+@model IEnumerable<EasyEdu.Models.GmeetVirtualClass>
+@{
+    ViewData["Title"] = "Gmeet Virtual Classroom";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Google Class Architect</h2>
+            <p class="text-muted small fw-600">Design and automate collaborative learning via Google Meet infrastructure</p>
+        </div>
+        <button class="btn btn-google px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#createClassModal">
+            <i class="fab fa-google me-2"></i>INITIALIZE CLASS
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">SESSION TOPIC</th>
+                    <th class="py-4 fw-900 small text-uppercase">ACADEMIC LOCATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOG</th>
+                    <th class="py-4 fw-900 small text-uppercase">SYNC STATUS</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cls in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@cls.Topic</span>
+                            <span class="smallest text-muted fw-700 font-monospace">MEET URL: <a href="@cls.MeetUrl" target="_blank" class="text-primary text-decoration-underline">@cls.MeetUrl</a></span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-800 text-primary small">@cls.Subject?.Name</div>
+                            <div class="smallest text-muted fw-700">@cls.Class?.Name - @cls.Section?.Name</div>
+                        </td>
+                         <td class="py-4">
+                            <div class="fw-900 text-dark">@cls.Date.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 uppercase">TIME: @cls.StartTime</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge @(cls.Status == "Live" ? "bg-success" : "bg-light text-dark") px-3 rounded-pill fw-900 shadow-sm border small">@cls.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <a href="@cls.MeetUrl" target="_blank" class="btn btn-sm btn-google rounded-8 px-4 fw-900 shadow-sm">LAUNCH MEET</a>
+                                <button class="btn btn-icon btn-light-soft rounded-circle shadow-sm"><i class="fas fa-edit text-primary"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero Google virtual classes detected.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="createClassModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-24">
+            <form asp-action="SaveVirtualClass" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fab fa-google me-2"></i>INITIALIZE GOOGLE SPACE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Virtual Space Topic*</label>
+                        <input name="Topic" required class="form-control form-control-premium" placeholder="e.g. Advanced Calculus - Google Workspace Live">
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Target Class</label>
+                            <select name="ClassId" class="form-select form-control-premium" required>
+                                <option value="">Select Class</option>
+                                @foreach (var c in (List<EasyEdu.Models.Class>)ViewBag.Classes) { <option value="@c.Id">@c.Name</option> }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Curriculum Subject</label>
+                             <select name="SubjectId" class="form-select form-control-premium" required>
+                                <option value="">Select Subject</option>
+                                @foreach (var sub in (List<EasyEdu.Models.Subject>)ViewBag.Subjects) { <option value="@sub.Id">@sub.Name</option> }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Session Date</label>
+                            <input name="Date" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-control-premium">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Spatial Start Time</label>
+                            <input name="StartTime" type="time" required class="form-control form-control-premium">
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                         <label class="form-label small fw-800 text-uppercase opacity-50">Manual Google Meet Link (Optional)</label>
+                         <input name="MeetUrl" class="form-control form-control-premium" placeholder="https://meet.google.com/xxx-yyyy-zzz">
+                         <div class="smallest text-muted fw-700 mt-2 italic px-1">Leave blank to auto-generate a secure institutional link.</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-google w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-check-circle me-2"></i>ESTABLISH GOOGLE SPACE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .rounded-24 { border-radius: 24px; }
+    .btn-google { background: #4285F4; color: white; border: none; }
+</style>

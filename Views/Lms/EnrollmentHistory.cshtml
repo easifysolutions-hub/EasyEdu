@@ -1,0 +1,63 @@
+@model IEnumerable<EasyEdu.Models.LmsEnrollment>
+@{
+    ViewData["Title"] = "Progression History";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Student Progression Registry</h2>
+            <p class="text-muted small fw-600">Track and monitor student enrollment status across the institutional digital curriculum</p>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">STUDENT IDENTITY</th>
+                    <th class="py-4 fw-900 small text-uppercase">COURSE NODE</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOG</th>
+                    <th class="py-4 fw-900 small text-uppercase">PROGRESSION</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var en in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@en.Student?.FirstName @en.Student?.LastName</span>
+                            <span class="smallest text-muted fw-700 uppercase italic">ID: @en.Student?.AdmissionNumber</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="fw-800 text-primary">@en.Course?.Title</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@en.EnrollmentDate.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td class="py-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="progress w-100" style="height: 8px; border-radius: 4px; background: #f1f5f9;">
+                                    <div class="progress-bar bg-success" style="width: @en.ProgressPercent%"></div>
+                                </div>
+                                <span class="fw-900 small">@en.ProgressPercent%</span>
+                            </div>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <span class="badge @(en.Status == "Active" ? "bg-success" : "bg-info") px-3 rounded-pill fw-900 shadow-sm border small">@en.Status.ToUpper()</span>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero progression nodes identified in current temporal window.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+</style>

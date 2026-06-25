@@ -1,0 +1,94 @@
+@model IEnumerable<EasyEdu.Models.GmeetVirtualClass>
+@{
+    ViewData["Title"] = "Gmeet Class Analytics";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Google Learning Intelligence</h2>
+            <p class="text-muted small fw-600">Historical performance and participation analytics for all academic Google spaces</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-print me-2"></i>BATCH EXPORT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg mb-5" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">WORKSPACE TOPIC</th>
+                    <th class="py-4 fw-900 small text-uppercase">ACADEMIC LOCATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">CHRONOLOGY</th>
+                    <th class="py-4 fw-900 small text-uppercase">MEETING CODE</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ENGAGEMENT STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cls in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark">@cls.Topic</span>
+                            <div class="smallest text-muted fw-700 uppercase">SYNC: GOOGLE CLOUD</div>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-800 text-muted small">@cls.Subject?.Name</div>
+                            <div class="smallest text-muted fw-700">@cls.Class?.Name</div>
+                        </td>
+                         <td class="py-4">
+                            <div class="fw-700 text-dark small">@cls.Date.ToString("dd MMM yyyy")</div>
+                             <div class="smallest text-muted fw-700 opacity-50 uppercase">TIME: @cls.StartTime</div>
+                        </td>
+                         <td class="py-4">
+                            <code class="small fw-900 text-primary p-2 bg-primary bg-opacity-10 rounded-8 w-100">@cls.MeetUrl?.Split('/').LastOrDefault()</code>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <span class="badge @(cls.Status == "Finished" ? "bg-light-soft text-muted border" : "bg-success shadow-sm") px-3 py-2 rounded-pill fw-900 shadow-sm border small">@cls.Status.ToUpper()</span>
+                        </td>
+                    </tr>
+                }
+                 @if(!Model.Any()){
+                    <tr><td colspan="5" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero historical Google Analytics available.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row g-4 no-print">
+         <div class="col-md-6">
+            <div class="stat-card p-5 rounded-24 bg-white shadow-lg text-center h-100">
+                <i class="fab fa-google-drive fa-3x text-info opacity-25 mb-4"></i>
+                <h5 class="fw-900 text-dark">Workspace Synchronization</h5>
+                <p class="text-muted small fw-600 mb-0">Aggregate performance of Google Cloud nodes during academic integration windows.</p>
+                <div class="mt-4 opacity-50 border p-4 rounded-16 bg-light text-muted fw-900 italic ls-2 uppercase smaller">CLOUD: OPTIMAL</div>
+            </div>
+        </div>
+         <div class="col-md-6">
+            <div class="stat-card p-5 rounded-24 bg-white shadow-lg text-center h-100">
+                <i class="fas fa-brain fa-3x text-primary opacity-25 mb-4"></i>
+                <h5 class="fw-900 text-dark">Pedagogical Intelligence</h5>
+                <p class="text-muted small fw-600 mb-0">High-fidelity tracking of participant interaction metrics and cloud collaboration tool utilization.</p>
+                 <div class="mt-4 opacity-50 border p-4 rounded-16 bg-light text-muted fw-900 italic ls-2 uppercase smaller">ANALYTICS: ACTIVE</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-light-soft { background: #f1f5f9; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .rounded-8 { border-radius: 8px; }
+     .ls-2 { letter-spacing: 2px; }
+    @@media print {
+        .no-print, .btn, .card-header, .sidebar, .topbar { display: none !important; }
+        .content-wrapper { padding: 0 !important; margin: 0 !important; }
+        .premium-card { border: 1px solid #eee !important; box-shadow: none !important; border-radius: 0 !important; }
+    }
+</style>

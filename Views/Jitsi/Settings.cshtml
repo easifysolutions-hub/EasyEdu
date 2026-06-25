@@ -1,0 +1,84 @@
+@model EasyEdu.Models.JitsiSetting
+@{
+    ViewData["Title"] = "Jitsi Meet Settings";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Jitsi Infrastructure</h2>
+            <p class="text-muted small fw-600">Configure global parameters for the decentralized virtual meeting network</p>
+        </div>
+        <div class="badge bg-primary bg-opacity-10 text-primary px-4 py-3 rounded-12 fw-900 border">
+             <i class="fas fa-satellite me-2"></i> P2P RELAY ACTIVE
+        </div>
+    </div>
+
+    <form asp-action="SaveSettings" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="row justify-content-center">
+            <div class="col-xl-7">
+                <div class="premium-card p-5 border-0 shadow-lg" style="border-radius: 24px;">
+                    <div class="mb-5 d-flex align-items-center justify-content-center gap-4">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-circle border border-primary border-opacity-25 shadow-sm">
+                             <i class="fas fa-video text-primary fa-4x"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-900 text-dark mb-1">Decentralized Video Hub</h4>
+                            <p class="text-muted fw-600 small m-0 uppercase ls-1">Peer-to-Peer Enterprise Relay</p>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-900 text-dark mb-4 border-bottom pb-3"><i class="fas fa-network-wired me-2 text-primary"></i>SERVER TOPOLOGY</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Custom Host Domain Name</label>
+                        <input asp-for="ServerDomain" class="form-control form-control-premium text-primary fw-900 shadow-sm" placeholder="e.g. meet.jit.si (Leave default if self-hosting not available)">
+                        <div class="form-text mt-2 small text-muted"><i class="fas fa-info-circle me-1"></i> Point to your dedicated Jitsi server instance or rely on the global network.</div>
+                    </div>
+
+                    <h5 class="fw-900 text-dark mt-5 mb-4 border-bottom pb-3"><i class="fas fa-user-shield me-2 text-info"></i>CLIENT PROTOCOLS</h5>
+
+                    <div class="protocol-node p-4 rounded-20 bg-light-soft mb-4 border d-flex align-items-center justify-content-between shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                             <div class="bg-white p-3 rounded-circle shadow-sm border"><i class="fas fa-desktop text-success"></i></div>
+                             <div>
+                                <h6 class="fw-900 text-dark mb-1">Global Screen Sharing Privilege</h6>
+                                <p class="smallest text-muted fw-700 m-0 text-uppercase ls-1">Permit participants to broadcast their local desktop environments</p>
+                             </div>
+                        </div>
+                        <div class="form-check form-switch p-0">
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="AllowScreenShare" style="width: 50px; height: 26px;">
+                        </div>
+                    </div>
+
+                    <div class="protocol-node p-4 rounded-20 bg-light-soft mb-4 border d-flex align-items-center justify-content-between shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                             <div class="bg-white p-3 rounded-circle shadow-sm border"><i class="fas fa-microphone-slash text-danger"></i></div>
+                             <div>
+                                <h6 class="fw-900 text-dark mb-1">Force Audio Suppression</h6>
+                                <p class="smallest text-muted fw-700 m-0 text-uppercase ls-1">Initialize all incoming connections in a muted state</p>
+                             </div>
+                        </div>
+                        <div class="form-check form-switch p-0">
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="MuteOnStart" style="width: 50px; height: 26px;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-16 fw-900 h6 mb-0 mt-5 shadow-lg">
+                        <i class="fas fa-sync me-2"></i> SYNCHRONIZE PROTOCOLS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .rounded-20 { border-radius: 20px; }
+    .bg-light-soft { background: #f8fafc; }
+    .ls-1 { letter-spacing: 1px; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .uppercase { text-transform: uppercase; }
+</style>

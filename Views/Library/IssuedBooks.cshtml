@@ -1,0 +1,122 @@
+﻿@model IEnumerable<EasyEdu.Models.BookIssue>
+@{
+    ViewData["Title"] = "Circulation Hub | Asset Tracking";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Asset Circulation Ledger</h1>
+        <p class="text-muted fw-600">Traceable documentation of all literary resource transfers and recovery status</p>
+    </div>
+    <div class="d-flex gap-3">
+        <a asp-action="Index" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-book-open me-2"></i> Book Registry
+        </a>
+        <a asp-action="IssueBook" class="btn btn-premium-primary shadow-lg px-4 d-flex align-items-center gap-2">
+            <i class="fas fa-hand-holding-box"></i> Initialize Provision
+        </a>
+    </div>
+</div>
+
+<div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+    <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+        <h5 class="fw-900 text-dark mb-0"><i class="fas fa-microscope text-primary me-2"></i> Active Unit Surveillance</h5>
+        <div class="d-flex gap-2">
+            <span class="badge bg-primary-soft text-primary fw-800">TOTAL LOGS: @Model.Count()</span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table premium-table mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">RESOURCE IDENTITY</th>
+                    <th>RECIPIENT (ADMISSION)</th>
+                    <th>PROVISION DATE</th>
+                    <th>THRESHOLD (DUE)</th>
+                    <th>STATUS & RECOVERY</th>
+                    <th class="text-end pe-4">PROTOCOLS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr class="align-middle transition-all">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm bg-light rounded-12 me-3 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    <i class="fas fa-book text-primary" style="font-size: 0.8rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-800 text-dark">@(log.Book?.Title ?? "Unknown Asset")</div>
+                                    <div class="small text-muted fw-600 uppercase" style="font-size: 0.55rem;">ISBN: @(log.Book?.ISBN ?? "N/A")</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-800 text-primary">@log.Student?.FirstName @log.Student?.LastName</div>
+                            <div class="small text-muted fw-600">ADM: @log.Student?.AdmissionNumber</div>
+                        </td>
+                        <td>
+                            <div class="fw-800 text-dark">@log.IssueDate.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td>
+                            <div class="fw-800 @(log.Status == "Issued" && log.DueDate < DateTime.Today ? "text-danger animate-pulse" : "text-dark")">
+                                @log.DueDate.ToString("dd MMM yyyy")
+                            </div>
+                            @if (log.Status == "Issued" && log.DueDate < DateTime.Today)
+                            {
+                                <div class="small text-danger fw-700 uppercase" style="font-size: 0.5rem;"><i class="fas fa-exclamation-triangle me-1"></i> Breach Detected</div>
+                            }
+                        </td>
+                        <td>
+                            @if (log.Status == "Issued")
+                            {
+                                <span class="badge bg-warning-soft text-warning fw-900 px-3 py-2 rounded-pill">
+                                    <i class="fas fa-clock-rotate-left me-1"></i> ACTIVE_Provision
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success-soft text-success fw-900 px-3 py-2 rounded-pill">
+                                    <i class="fas fa-check-double me-1"></i> RECOVERED
+                                </span>
+                                <div class="small text-muted fw-600 mt-1">On @log.ReturnDate?.ToString("dd MMM")</div>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            @if (log.Status == "Issued")
+                            {
+                                <form asp-action="ReturnBook" asp-route-id="@log.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-premium-primary btn-sm px-3 fw-900 shadow-sm rounded-pill">
+                                        RECOVER ASSET
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                @if (log.LateFee > 0)
+                                {
+                                    <div class="text-danger fw-900 fs-6">Fee: $@log.LateFee?.ToString("N2")</div>
+                                }
+                                else
+                                {
+                                    <div class="text-success fw-800 fs-6"><i class="fas fa-shield-check me-1"></i> Compliant</div>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(13, 110, 253, 0.1); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .animate-pulse { animation: pulse 2s infinite; }
+    @@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+</style>

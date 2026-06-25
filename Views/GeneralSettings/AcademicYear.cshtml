@@ -1,0 +1,141 @@
+@model IEnumerable<EasyEdu.Models.AcademicYear>
+@{
+    ViewData["Title"] = "Academic Cycle Management";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Academic Year Matrix</h3>
+            <p class="text-muted small fw-600">Operational cycles and terminal boundaries for the institution</p>
+        </div>
+        <button class="btn btn-premium-purple btn-sm rounded-12 px-4 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#createAcademicYearModal">
+            <i class="fas fa-plus me-2"></i>INITIALIZE NEW CYCLE
+        </button>
+    </div>
+
+    <div class="premium-card border-0 shadow-sm rounded-24 overflow-hidden bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 smallest fw-800 uppercase text-muted">Cycle Identity</th>
+                        <th class="smallest fw-800 uppercase text-muted">Temporal Range</th>
+                        <th class="smallest fw-800 uppercase text-muted">Status</th>
+                        <th class="text-end pe-4 smallest fw-800 uppercase text-muted">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-900 text-dark">@item.Name</div>
+                                <div class="smallest text-muted italic">ID: #ARC-@item.Id.ToString("D3")</div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-light text-dark border fw-700">@item.StartDate.ToString("MMM yyyy")</span>
+                                    <i class="fas fa-arrow-right smallest opacity-25"></i>
+                                    <span class="badge bg-light text-dark border fw-700">@item.EndDate.ToString("MMM yyyy")</span>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.IsCurrent)
+                                {
+                                    <span class="badge bg-primary text-white rounded-pill px-3 py-2 fw-800">
+                                        <i class="fas fa-star me-1 text-warning"></i> ACTIVE & CURRENT
+                                    </span>
+                                }
+                                else if (item.IsActive)
+                                {
+                                    <span class="badge bg-success-soft text-success rounded-pill px-3 py-2 fw-800">
+                                        <i class="fas fa-circle-check me-1"></i> ACTIVE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-muted rounded-pill px-3 py-2 fw-700">ARCHIVED</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-flex justify-content-end gap-1">
+                                    @if (!item.IsCurrent)
+                                    {
+                                        <form asp-action="SetCurrentYear" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-icon btn-light-soft rounded-circle text-primary" title="Set as Current Cycle">
+                                                <i class="fas fa-star small"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    <button class="btn btn-icon btn-light-soft rounded-circle" title="Modify Configuration">
+                                        <i class="fas fa-edit small"></i>
+                                    </button>
+                                    <form asp-action="DeleteAcademicYear" method="post" class="d-inline" onsubmit="return confirm('Decommission this cycle? This will impact all linked records.')">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-icon btn-light-soft rounded-circle text-danger" title="Decommission Cycle">
+                                            <i class="fas fa-trash-alt small"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <div class="opacity-10 mb-2"><i class="fas fa-calendar-times fa-3x"></i></div>
+                                <p class="text-muted fw-600">No academic operational cycles have been defined.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createAcademicYearModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-24 bg-white text-dark">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h5 class="modal-title fw-900">Provision New Academic Cycle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="CreateAcademicYear" method="post">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label smallest fw-800 text-muted uppercase">Cycle Label (e.g. 2024-2025)</label>
+                        <input type="text" name="Name" class="form-control form-control-premium" required>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label smallest fw-800 text-muted uppercase">Genesis Date</label>
+                            <input type="date" name="StartDate" class="form-control form-control-premium" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label smallest fw-800 text-muted uppercase">Terminal Date</label>
+                            <input type="date" name="EndDate" class="form-control form-control-premium" required>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch mt-4 p-3 bg-light rounded-16 d-flex align-items-center justify-content-between">
+                        <div>
+                            <label class="form-check-label fw-800 text-dark ms-0">SET AS CURRENT CYCLE</label>
+                            <div class="smallest text-muted fw-600">Primary operational cycle for the system</div>
+                        </div>
+                        <input class="form-check-input ms-3 rounded-pill" type="checkbox" name="IsCurrent" value="true" checked style="width: 50px; height: 26px;">
+                    </div>
+                    <input type="hidden" name="IsActive" value="true" />
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light-soft fw-800 px-4 rounded-12" data-bs-dismiss="modal">DISCARD</button>
+                    <button type="submit" class="btn btn-premium-purple fw-900 px-4 rounded-12 shadow-sm">COMMENCE CYCLE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,163 @@
+﻿@model IEnumerable<EasyEdu.Models.FeesType>
+@{
+    ViewData["Title"] = "Fees Head";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Fees Head</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider">
+                <i class="fas fa-tags me-2 text-primary"></i> 
+                Specific fee items like Tuition Fee, Bus Fee etc.
+            </p>
+        </div>
+        <button class="btn btn-premium-purple btn-sm px-4 rounded-pill shadow-lg fw-800 animate-up" onclick="toggleForm()">
+            <i class="fas fa-plus-circle me-2"></i> NEW FEE HEAD
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-4" id="formColumn" style="display: none;">
+            <div class="premium-card">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-800 text-dark m-0">Create New Head</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <form asp-action="CreateFeesType" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Head Name*</label>
+                            <input type="text" name="Name" class="form-control-premium w-100" required placeholder="e.g. Tuition Fee">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Fees Group*</label>
+                            <select name="FeesGroupId" class="form-select form-control-premium" asp-items="ViewBag.FeesGroups" required>
+                                <option value="">Select Group</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Default Amount</label>
+                            <input type="number" step="0.01" name="Amount" class="form-control-premium w-100" placeholder="0.00">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-700 text-uppercase">Description</label>
+                            <textarea name="Description" rows="2" class="form-control-premium w-100"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-premium-primary w-100">SAVE HEAD</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12" id="listColumn">
+            <div class="premium-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table premium-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4">NAME</th>
+                                    <th>GROUP</th>
+                                    <th>AMOUNT HEAD</th>
+                                    <th class="text-end px-4">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 fw-800 text-dark">@item.Name</td>
+                                        <td><span class="badge bg-primary-soft text-primary fw-800">@item.FeesGroup?.Name</span></td>
+                                        <td class="fw-900 text-dark">@item.Amount.ToString("C2")</td>
+                                        <td class="text-end px-4">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <button class="btn btn-sm btn-light-soft rounded-circle px-2" title="Edit"
+                                                        onclick="editHead(@item.Id, '@item.Name', @item.FeesGroupId, @item.Amount, '@item.Description')">
+                                                    <i class="fas fa-edit text-primary"></i>
+                                                </button>
+                                                <form asp-action="DeleteFeesType" method="post" onsubmit="return confirm('Are you sure you want to delete this fee head? @item.Name');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-light-soft rounded-circle px-2" title="Delete"><i class="fas fa-trash text-danger"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                @if(!Model.Any()){
+                                    <tr><td colspan="4" class="text-center py-5 text-muted">No fee heads found.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-20 border-0 shadow-lg">
+            <div class="modal-header border-0 p-4">
+                <h5 class="fw-800 m-0">Edit Fees Head</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="EditFeesType" method="post">
+                <div class="modal-body p-4 pt-0">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="Id" id="edit_id" />
+                    <div class="mb-3">
+                        <label class="form-label small fw-700 text-uppercase">Head Name*</label>
+                        <input type="text" name="Name" id="edit_name" class="form-control-premium w-100" required>
+                    </div>
+                     <div class="mb-3">
+                        <label class="form-label small fw-700 text-uppercase">Fees Group*</label>
+                        <select name="FeesGroupId" id="edit_groupId" class="form-select form-control-premium" asp-items="ViewBag.FeesGroups" required>
+                            <option value="">Select Group</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700 text-uppercase">Default Amount</label>
+                        <input type="number" step="0.01" name="Amount" id="edit_amount" class="form-control-premium w-100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700 text-uppercase">Description</label>
+                        <textarea name="Description" id="edit_desc" rows="2" class="form-control-premium w-100"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-premium-primary px-4">UPDATE HEAD</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('formColumn');
+        const list = document.getElementById('listColumn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            list.className = 'col-xl-8';
+        } else {
+            form.style.display = 'none';
+            list.className = 'col-xl-12';
+        }
+    }
+
+    function editHead(id, name, groupId, amount, desc) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_name').value = name;
+        document.getElementById('edit_groupId').value = groupId;
+        document.getElementById('edit_amount').value = amount;
+        document.getElementById('edit_desc').value = desc;
+        new bootstrap.Modal(document.getElementById('editModal')).show();
+    }
+</script>

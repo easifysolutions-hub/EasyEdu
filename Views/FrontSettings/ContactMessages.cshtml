@@ -1,0 +1,76 @@
+@model IEnumerable<EasyEdu.Models.ContactMessage>
+@{
+    ViewData["Title"] = "Institutional Inquiry Feed";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Frontend Digital Inquiries</h3>
+            <p class="text-muted small fw-600">Feed of all contact messages, admission inquiries, and institutional feedback</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-premium-success btn-sm rounded-8 shadow-sm">
+                <i class="fas fa-file-excel me-2"></i>EXPORT LOGS
+            </button>
+            <button class="btn btn-premium-danger btn-sm rounded-8 shadow-sm">
+                <i class="fas fa-trash-alt me-2"></i>CLEAR RESOLVED
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-12">
+            <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0 align-middle">
+                        <thead class="bg-premium-dark text-white">
+                            <tr>
+                                <th class="ps-5 py-4 small fw-900 text-uppercase">INQUIRY FROM</th>
+                                <th class="py-4 small fw-900 text-uppercase">SUBJECT CATEGORY</th>
+                                <th class="py-4 small fw-900 text-uppercase">CHRONOLOGY</th>
+                                <th class="py-4 small fw-900 text-uppercase text-center">STATUS</th>
+                                <th class="pe-5 py-4 text-end small fw-900 text-uppercase">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var msg in Model)
+                            {
+                                <tr class="@(msg.IsRead ? "opacity-75" : "bg-light-subtle")">
+                                    <td class="ps-5 py-3">
+                                        <div class="fw-900 text-dark h6 mb-1">@msg.Name</div>
+                                        <div class="small text-muted fw-700">@msg.Email</div>
+                                    </td>
+                                    <td class="py-3 fw-800 text-muted italic">@msg.Subject</td>
+                                    <td class="py-3">
+                                        <div class="fw-800 text-dark">@msg.SentAt.ToString("dd MMM yyyy")</div>
+                                        <div class="small text-muted fw-600">@msg.SentAt.ToString("hh:mm tt")</div>
+                                    </td>
+                                    <td class="text-center py-3">
+                                        <span class="badge @(msg.IsRead ? "bg-success-soft text-success" : "bg-warning-soft text-warning") px-3 rounded-pill fw-900">
+                                            @(msg.IsRead ? "RESOLVED" : "NEW INQUIRY")
+                                        </span>
+                                    </td>
+                                    <td class="pe-5 text-end py-3">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-sm btn-light shadow-sm rounded-8" title="Read Message"><i class="fas fa-envelope-open text-primary"></i></button>
+                                            <button class="btn btn-sm btn-light shadow-sm rounded-8" title="Reply Email"><i class="fas fa-reply text-success"></i></button>
+                                            <button class="btn btn-sm btn-light shadow-sm rounded-8" title="Delete Permanent"><i class="fas fa-trash text-danger"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+</style>

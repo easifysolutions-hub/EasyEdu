@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Trial Balance";
+    Layout = "_Layout";
+    var data = ViewBag.TrialBalance as dynamic;
+    decimal totalDebit = 0;
+    decimal totalCredit = 0;
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Institutional Trial Balance</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider"><i class="fas fa-calendar-alt me-2"></i> Snapshot as of @DateTime.Now.ToString("dd MMM yyyy")</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-premium-purple btn-sm px-4 rounded-pill shadow-sm fw-800" onclick="window.print()">
+                <i class="fas fa-print me-2"></i> STATEMENT EXPORT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light fw-800 small text-muted text-uppercase">
+                        <tr>
+                            <th class="ps-4">Particulars</th>
+                            <th>Group</th>
+                            <th class="text-end">Debit</th>
+                            <th class="text-end pe-4">Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in data)
+                        {
+                            totalDebit += (decimal)item.Debit;
+                            totalCredit += (decimal)item.Credit;
+                            
+                            if (item.Debit != 0 || item.Credit != 0) {
+                                <tr>
+                                    <td class="ps-4 fw-700">@item.Name</td>
+                                    <td class="small text-muted">@item.GroupName</td>
+                                    <td class="text-end fw-600 @(item.Debit > 0 ? "text-dark" : "text-muted opacity-50")">
+                                        @(item.Debit != 0 ? ((decimal)item.Debit).ToString("N2") : "-")
+                                    </td>
+                                    <td class="text-end pe-4 fw-600 @(item.Credit > 0 ? "text-dark" : "text-muted opacity-50")">
+                                        @(item.Credit != 0 ? ((decimal)item.Credit).ToString("N2") : "-")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    <tfoot class="bg-light fw-900 border-top-2">
+                        <tr>
+                            <td colspan="2" class="ps-4">TOTAL</td>
+                            <td class="text-end">@totalDebit.ToString("N2")</td>
+                            <td class="text-end pe-4">@totalCredit.ToString("N2")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            @if (Math.Abs(totalDebit - totalCredit) > 0.01m)
+            {
+                <div class="alert alert-danger m-3 rounded-12 shadow-sm d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle me-3 fa-2x"></i>
+                    <div>
+                        <div class="fw-800">Difference in Trial Balance: @Math.Abs(totalDebit - totalCredit).ToString("N2")</div>
+                        <div class="small">The books are imbalanced. Please check your journal entries and opening balances.</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

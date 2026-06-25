@@ -1,0 +1,107 @@
+@model IEnumerable<EasyEdu.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Institution Directory - Chat";
+    Layout = "_Layout";
+    var pendingSentIds = ViewBag.PendingSentIds as List<string> ?? new List<string>();
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-users me-2 text-primary"></i> Institution Directory</h1>
+        <p class="text-muted fw-600">Discover and connect with registered colleagues across the institution</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-inbox me-2"></i> CHAT BOX
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 animate-fade-in overflow-hidden">
+        <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+            <h6 class="fw-800 text-dark mb-0">REGISTERED PERSONNEL</h6>
+            <div class="search-box position-relative" style="width: 300px;">
+                <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input type="text" class="form-control form-control-sm rounded-pill ps-5 border-0 bg-white" id="directorySearch" placeholder="Search by name or email...">
+            </div>
+        </div>
+        
+        <div class="row g-0">
+            @foreach (var user in Model)
+            {
+                <div class="col-xl-4 col-lg-6 border-bottom border-end directory-card">
+                    <div class="p-4 transition-all hover-light h-100 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                            {
+                                <img src="@user.ProfilePicture" class="rounded-circle shadow-sm" style="width: 54px; height: 54px; object-fit: cover;" alt="" />
+                            }
+                            else
+                            {
+                                <div class="avatar-placeholder rounded-circle bg-light text-muted d-flex align-items-center justify-content-center border" style="width: 54px; height: 54px; font-weight: 800; font-size: 1.2rem;">
+                                    @(user.FullName?[0] ?? '?')
+                                </div>
+                            }
+                            <div class="ms-3">
+                                <h6 class="fw-800 text-dark mb-0">@user.FullName</h6>
+                                <p class="text-muted small mb-0 fw-600">@user.UserName</p>
+                            </div>
+                        </div>
+                        <div>
+                            @if (pendingSentIds.Contains(user.Id))
+                            {
+                                <span class="badge bg-light text-muted fw-700 p-2 rounded-8">PENDING</span>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 invite-btn" data-userid="@user.Id">
+                                    <i class="fas fa-user-plus me-1"></i> INVITE
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!Model.Any())
+            {
+                <div class="col-12 p-5 text-center">
+                    <i class="fas fa-user-slash fa-4x text-muted opacity-25 mb-4"></i>
+                    <h5 class="fw-800 text-muted">No discoveries available in the directory.</h5>
+                    <p class="text-muted small fw-600">Refine your search or check privacy settings.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .directory-card:hover { background: rgba(99,102,241,0.02); }
+    .hover-light:hover { background: rgba(0,0,0,0.01); }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#directorySearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $(".directory-card").filter(function() { 
+                    $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1) 
+                });
+            });
+
+            $(".invite-btn").on("click", function() {
+                var btn = $(this);
+                var userId = btn.data("userid");
+                $.post("/Chat/SendInvitation", { receiverId: userId }, function(res) {
+                    if (res.success) {
+                        btn.replaceWith('<span class="badge bg-light text-muted fw-700 p-2 rounded-8">PENDING</span>');
+                        Swal.fire({ icon: 'success', title: 'Invitation Sent', text: 'Connection request dispatched successfully.', timer: 2000, showConfirmButton: false });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Operation Failed', text: res.message });
+                    }
+                });
+            });
+        });
+    </script>
+}

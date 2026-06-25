@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation / Sidebar -->
+  <data name="Dashboard" xml:space="preserve"><value>ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</value></data>
+  <data name="Administration" xml:space="preserve"><value>ಆಡಳಿತ</value></data>
+  <data name="AdminSection" xml:space="preserve"><value>ನಿರ್ವಾಹಕ ವಿಭಾಗ</value></data>
+  <data name="Students" xml:space="preserve"><value>ವಿದ್ಯಾರ್ಥಿಗಳು</value></data>
+  <data name="Teachers" xml:space="preserve"><value>ಶಿಕ್ಷಕರು</value></data>
+  <data name="Academics" xml:space="preserve"><value>ಶೈಕ್ಷಣಿಕ</value></data>
+  <data name="Finance" xml:space="preserve"><value>ಹಣಕಾಸು</value></data>
+  <data name="Accounts" xml:space="preserve"><value>ಖಾತೆಗಳು</value></data>
+  <data name="HumanResource" xml:space="preserve"><value>ಮಾನವ ಸಂಪನ್ಮೂಲ</value></data>
+  <data name="Library" xml:space="preserve"><value>ಗ್ರಂಥಾಲಯ</value></data>
+  <data name="Transport" xml:space="preserve"><value>ಸಾರಿಗೆ</value></data>
+  <data name="Reports" xml:space="preserve"><value>ವರದಿಗಳು</value></data>
+  <data name="Settings" xml:space="preserve"><value>ಸೆಟ್ಟಿಂಗ್‌ಗಳು</value></data>
+  <data name="Communicate" xml:space="preserve"><value>ಸಂವಹನ</value></data>
+  <data name="Attendance" xml:space="preserve"><value>ಹಾಜರಾತಿ</value></data>
+  <data name="Examinations" xml:space="preserve"><value>ಪರೀಕ್ಷೆಗಳು</value></data>
+  <data name="Homework" xml:space="preserve"><value>ಗೃಹಕಾರ್ಯ</value></data>
+  <data name="LessonPlan" xml:space="preserve"><value>ಪಾಠ ಯೋಜನೆ</value></data>
+  <data name="LeaveManagement" xml:space="preserve"><value>ರಜೆ ನಿರ್ವಹಣೆ</value></data>
+  <data name="Inventory" xml:space="preserve"><value>ದಾಸ್ತಾನು</value></data>
+  <data name="FeesCollection" xml:space="preserve"><value>ಶುಲ್ಕ ಸಂಗ್ರಹ</value></data>
+  <data name="OnlineExam" xml:space="preserve"><value>ಆನ್‌ಲೈನ್ ಪರೀಕ್ಷೆ</value></data>
+  <data name="VirtualClassroom" xml:space="preserve"><value>ವರ್ಚುವಲ್ ತರಗತಿ</value></data>
+  <data name="DataManagement" xml:space="preserve"><value>ಡೇಟಾ ನಿರ್ವಹಣೆ</value></data>
+  <data name="SystemSettings" xml:space="preserve"><value>ಸಿಸ್ಟಂ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</value></data>
+
+  <!-- Topbar -->
+  <data name="Back" xml:space="preserve"><value>ಹಿಂದೆ</value></data>
+  <data name="SearchHere" xml:space="preserve"><value>ಇಲ್ಲಿ ಹುಡುಕಿ ...</value></data>
+  <data name="FeesDashboard" xml:space="preserve"><value>ಶುಲ್ಕ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</value></data>
+  <data name="AccountingDashboard" xml:space="preserve"><value>ಲೆಕ್ಕಪತ್ರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</value></data>
+  <data name="Messages" xml:space="preserve"><value>ಸಂದೇಶಗಳು</value></data>
+  <data name="Notifications" xml:space="preserve"><value>ಅಧಿಸೂಚನೆಗಳು</value></data>
+  <data name="ViewAll" xml:space="preserve"><value>ಎಲ್ಲಾ ನೋಡಿ</value></data>
+  <data name="MyProfile" xml:space="preserve"><value>ನನ್ನ ಪ್ರೊಫೈಲ್</value></data>
+  <data name="Logout" xml:space="preserve"><value>ಲಾಗ್ ಔಟ್</value></data>
+  <data name="VisitHomePage" xml:space="preserve"><value>ಮುಖಪುಟಕ್ಕೆ ಭೇಟಿ ನೀಡಿ</value></data>
+
+  <!-- Login Page -->
+  <data name="WelcomeBack" xml:space="preserve"><value>ಮರಳಿ ಸ್ವಾಗತ</value></data>
+  <data name="LoginSubtitle" xml:space="preserve"><value>ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಪ್ರವೇಶಿಸಲು ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ.</value></data>
+  <data name="EmailAddress" xml:space="preserve"><value>ಇಮೇಲ್ ವಿಳಾಸ</value></data>
+  <data name="Password" xml:space="preserve"><value>ಪಾಸ್‌ವರ್ಡ್</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>ನನ್ನನ್ನು ನೆನಪಿಡಿ</value></data>
+  <data name="ForgotPassword" xml:space="preserve"><value>ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿದ್ದೀರಾ?</value></data>
+  <data name="SignIn" xml:space="preserve"><value>ಸೈನ್ ಇನ್</value></data>
+  <data name="BackToHome" xml:space="preserve"><value>ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ</value></data>
+  <data name="QuickAccess" xml:space="preserve"><value>ತ್ವರಿತ ಪ್ರವೇಶ</value></data>
+  <data name="SelectRole" xml:space="preserve"><value>ಆಟೋ-ಫಿಲ್‌ಗಾಗಿ ಪಾತ್ರ ಆಯ್ಕೆ ಮಾಡಿ...</value></data>
+  <data name="ExcellenceInEducation" xml:space="preserve"><value>ಶಿಕ್ಷಣ ನಿರ್ವಹಣೆಯಲ್ಲಿ ಶ್ರೇಷ್ಠತೆ</value></data>
+
+  <!-- General -->
+  <data name="Save" xml:space="preserve"><value>ಉಳಿಸಿ</value></data>
+  <data name="Cancel" xml:space="preserve"><value>ರದ್ದುಮಾಡಿ</value></data>
+  <data name="Edit" xml:space="preserve"><value>ಸಂಪಾದಿಸಿ</value></data>
+  <data name="Delete" xml:space="preserve"><value>ಅಳಿಸಿ</value></data>
+  <data name="Add" xml:space="preserve"><value>ಸೇರಿಸಿ</value></data>
+  <data name="Search" xml:space="preserve"><value>ಹುಡುಕಿ</value></data>
+  <data name="Submit" xml:space="preserve"><value>ಸಲ್ಲಿಸಿ</value></data>
+  <data name="Reset" xml:space="preserve"><value>ಮರುಹೊಂದಿಸಿ</value></data>
+  <data name="Actions" xml:space="preserve"><value>ಕ್ರಿಯೆಗಳು</value></data>
+  <data name="Status" xml:space="preserve"><value>ಸ್ಥಿತಿ</value></data>
+  <data name="Active" xml:space="preserve"><value>ಸಕ್ರಿಯ</value></data>
+  <data name="Inactive" xml:space="preserve"><value>ನಿಷ್ಕ್ರಿಯ</value></data>
+  <data name="Name" xml:space="preserve"><value>ಹೆಸರು</value></data>
+  <data name="Date" xml:space="preserve"><value>ದಿನಾಂಕ</value></data>
+  <data name="NoRecordsFound" xml:space="preserve"><value>ಯಾವುದೇ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</value></data>
+  <data name="Loading" xml:space="preserve"><value>ಲೋಡ್ ಆಗುತ್ತಿದೆ...</value></data>
+  <data name="SelectLanguage" xml:space="preserve"><value>ಭಾಷೆ</value></data>
+</root>

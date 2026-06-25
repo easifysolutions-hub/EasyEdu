@@ -1,0 +1,82 @@
+@model EasyEdu.Models.BookIssue
+@{
+    ViewData["Title"] = "Asset Provisioning | Circulation Hub";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in primary-gradient text-gradient">Initialize Asset Provision</h1>
+        <p class="text-muted fw-800 uppercase tracking-widest small"><i class="fas fa-hand-holding-box me-1"></i> Circulation Protocol Terminal</p>
+    </div>
+    <div>
+        <a asp-action="IssuedBooks" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i> Active Ledger
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden animate-fade-in">
+            <div class="p-5 border-bottom bg-primary text-white">
+                <h5 class="fw-900 mb-0"><i class="fas fa-user-lock me-2"></i> Authorized Distribution Protocol</h5>
+            </div>
+            <div class="p-5">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger-soft border-0 text-danger mb-4 shadow-sm px-4 py-3 rounded-12 animate-slide-in">
+                        <div class="d-flex align-items-center fw-900">
+                            <i class="fas fa-exclamation-triangle h4 mb-0 me-3"></i> Protocol Breach: @ViewData.ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage
+                        </div>
+                    </div>
+                }
+
+                <form asp-action="IssueBook" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-muted small uppercase">Target Literary Asset</label>
+                        <select asp-for="BookId" class="form-select border-2 fw-900 fs-5" required>
+                            <option value="">Select Asset to Provision...</option>
+                            @foreach (var book in ViewBag.Books)
+                            {
+                                <!option value="@book.Id" @(ViewBag.SelectedBookId == book.Id ? "selected" : "")>@book.Title (@book.AvailableCopies Units Available)</!option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-muted small uppercase">Recipient Identification (Student)</label>
+                        <select asp-for="StudentId" class="form-select border-2 fw-800" required>
+                            <option value="">Search for Authorized Recipient...</option>
+                            @foreach (var student in ViewBag.Students)
+                            {
+                                <option value="@student.Id">@student.FirstName @student.LastName (@student.AdmissionNumber)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-12">
+                            <label class="form-label fw-800 text-muted small uppercase">Return Threshold (Due date)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-2"><i class="fas fa-calendar-clock"></i></span>
+                                <input asp-for="DueDate" type="date" class="form-control border-2 fw-900" value="@DateTime.Now.AddDays(14).ToString("yyyy-MM-dd")" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" class="btn-premium btn-premium-primary w-100 py-3 shadow-lg fs-5">
+                            <i class="fas fa-share-nodes me-2"></i> AUTHORIZE_PROVISION
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .alert-danger-soft { background: rgba(220, 53, 69, 0.1); }
+</style>

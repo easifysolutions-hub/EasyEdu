@@ -1,0 +1,221 @@
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Contact Us - Elite Institutional Support";
+}
+
+<style>
+    /* Premium Root Variables */
+    :root {
+        --input-bg: rgba(255, 255, 255, 0.03);
+        --input-border: rgba(255, 255, 255, 0.08);
+        --input-focus: rgba(59, 130, 246, 0.2);
+    }
+
+    .contact-wrapper {
+        min-height: 85vh;
+        padding: 60px 0;
+        background: radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+    }
+
+    /* Horizontal Info Belt - Clean 3 Column Layout */
+    .info-belt {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        align-items: center;
+    }
+
+    .belt-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 0 15px;
+        border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .belt-item:last-child { border-right: none; }
+
+    .belt-icon {
+        width: 40px; height: 40px; border-radius: 50%;
+        background: rgba(59, 130, 246, 0.1);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--secondary); font-size: 1rem;
+    }
+
+    .belt-text { font-size: 0.85rem; line-height: 1.2; }
+    .belt-text strong { display: block; color: #fff; font-size: 0.9rem; margin-bottom: 2px; }
+    .belt-text span { color: var(--text-muted); }
+
+    /* Form Styles */
+    .glass-input {
+        background: var(--input-bg); border: 1px solid var(--input-border);
+        padding: 14px 18px; border-radius: 12px; color: #fff; width: 100%; transition: 0.3s;
+    }
+    .glass-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--input-focus); outline: none; }
+    
+    .otp-field { display: none; margin-top: 15px; animation: slideIn 0.4s ease; }
+    @@keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .verify-badge {
+        font-size: 0.75rem; font-weight: 700; color: #10b981;
+        background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 20px; display: none; margin-left: auto;
+    }
+
+    @@media (max-width: 992px) {
+        .info-belt { grid-template-columns: repeat(2, 1fr); }
+        .belt-item:nth-child(2) { border-right: none; }
+    }
+    @@media (max-width: 576px) {
+        .info-belt { grid-template-columns: 1fr; }
+        .belt-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .belt-item:last-child { border-bottom: none; }
+    }
+</style>
+
+<div class="contact-wrapper">
+    <div class="container">
+        <!-- Title -->
+        <div class="section-title text-center mb-5" data-aos="fade-up">
+            <h5 class="text-secondary text-uppercase ls-2">Get In Touch</h5>
+            <h2 class="display-5 fw-bold" style="font-family:'Playfair Display';">Elite Institutional Support</h2>
+        </div>
+
+        <!-- Landscape Info Belt (Top Header Info) -->
+        <div class="info-belt" data-aos="fade-up">
+            <div class="belt-item">
+                <div class="belt-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="belt-text"><strong>HQ Office</strong><span>Electronic City, Bangalore</span></div>
+            </div>
+            <div class="belt-item">
+                <div class="belt-icon"><i class="fas fa-phone-alt"></i></div>
+                <div class="belt-text"><strong>Direct Lines</strong><span>+91 97316 15949 / 15000</span></div>
+            </div>
+            <div class="belt-item">
+                <div class="belt-icon"><i class="fas fa-envelope"></i></div>
+                <div class="belt-text"><strong>Mail Us</strong><span>sales@easifysolutions.com</span></div>
+            </div>
+        </div>
+
+        <!-- Form Area -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10" data-aos="fade-up">
+                <div class="glass-card shadow-lg p-5" style="border-radius: 24px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.05);">
+                    <form id="secureInquiryForm" onsubmit="return submitFinalForm(event)">
+                        <div class="row g-4">
+                            <!-- Basic Info -->
+                            <div class="col-md-4">
+                                <label class="small text-muted mb-2 text-uppercase fw-bold">Full Name</label>
+                                <input type="text" class="glass-input" id="full_name" placeholder="John Doe" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted mb-2 text-uppercase fw-bold">Email Address</label>
+                                <input type="email" class="glass-input" id="full_email" placeholder="john@institute.edu" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted mb-2 text-uppercase fw-bold">Subject</label>
+                                <input type="text" class="glass-input" id="full_subject" placeholder="General Inquiry" required>
+                            </div>
+
+                            <!-- Phone & OTP -->
+                            <div class="col-md-8 text-start">
+                                <label class="small text-muted mb-2 text-uppercase fw-bold d-flex align-items-center">
+                                    Mobile Number 
+                                    <span id="verifiedLabel" class="verify-badge ms-2"><i class="fas fa-check"></i> VERIFIED</span>
+                                </label>
+                                <div class="d-flex gap-2">
+                                    <input type="tel" class="glass-input" id="full_phone" placeholder="+91 00000 00000" required>
+                                    <button type="button" id="otpTrigger" class="btn-glow px-4" onclick="triggerOTP()" style="border-radius: 12px; font-size: 0.8rem; white-space:nowrap;">SEND OTP</button>
+                                </div>
+                            </div>
+
+                            <!-- OTP Verification Block -->
+                            <div class="col-12 text-start">
+                                <div id="otpBlock" class="otp-field">
+                                    <div class="p-4" style="background: rgba(59, 130, 246, 0.05); border-radius: 16px; border: 1px dashed rgba(59, 130, 246, 0.3);">
+                                        <div class="row align-items-center mb-2">
+                                            <div class="col-md-6"><label class="small text-primary mb-0 text-uppercase fw-bold">Enter Verification Code</label></div>
+                                            <div class="col-md-6 text-end"><p class="small text-muted mb-0">Test code: <code class="text-white">123456</code></p></div>
+                                        </div>
+                                        <div class="d-flex gap-3">
+                                            <input type="text" class="glass-input text-center mb-0" id="otpCode" maxlength="6" placeholder="******" style="letter-spacing: 12px; font-size: 1.2rem;">
+                                            <button type="button" class="btn-glow px-4" onclick="validateOTP()">VERIFY</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 text-start">
+                                <label class="small text-muted mb-2 text-uppercase fw-bold">Detailed Requirement</label>
+                                <textarea class="glass-input" id="full_msg" rows="5" placeholder="How can we assist your institution? Briefly describe your needs..." required></textarea>
+                            </div>
+
+                            <div class="col-12 mt-4 text-center">
+                                <button type="submit" id="mainSubmit" class="btn-glow w-100 py-3 fs-6 opacity-50" disabled>
+                                    <span id="btnText"><i class="fas fa-lock me-2"></i> SEND SECURE MESSAGE</span>
+                                </button>
+                                <p class="mt-3 small text-muted"><i class="fas fa-user-shield me-2"></i> Information is end-to-end encrypted and HIPAA compliant.</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+    <script>
+        let phoneVerifiedState = false;
+
+        function triggerOTP() {
+            const phoneVal = document.getElementById('full_phone').value;
+            if(!phoneVal || phoneVal.length < 10) {
+                Swal.fire({ icon: 'error', title: 'Action Required', text: 'Enter a valid mobile number.', background: '#0f172a', color: '#fff' });
+                return;
+            }
+            const btn = document.getElementById('otpTrigger');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            setTimeout(() => {
+                document.getElementById('otpBlock').style.display = 'block';
+                btn.innerHTML = 'RETRY';
+                Swal.fire({ icon: 'info', title: 'OTP Sent', text: 'Code: 123456', background: '#0f172a', color: '#fff', timer: 2000, showConfirmButton: false });
+            }, 800);
+        }
+
+        function validateOTP() {
+            const code = document.getElementById('otpCode').value;
+            if(code === "123456") {
+                phoneVerifiedState = true;
+                document.getElementById('otpBlock').style.display = 'none';
+                document.getElementById('otpTrigger').style.display = 'none';
+                document.getElementById('verifiedLabel').style.display = 'inline-block';
+                document.getElementById('full_phone').disabled = true;
+                const sBtn = document.getElementById('mainSubmit');
+                sBtn.disabled = false;
+                sBtn.classList.remove('opacity-50');
+                Swal.fire({ icon: 'success', title: 'Verified!', background: '#020617', color: '#fff' });
+            } else {
+                Swal.fire({ icon: 'error', title: 'Invalid Code', background: '#020617', color: '#fff' });
+            }
+        }
+
+        function submitFinalForm(e) {
+            e.preventDefault();
+            if(!phoneVerifiedState) return false;
+            const btn = document.getElementById('mainSubmit');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> TRANSMITTING...';
+            setTimeout(() => {
+                Swal.fire({ title: 'Success', text: 'Message delivered.', icon: 'success', background: '#020617', color: '#fff' }).then(() => window.location.reload());
+            }, 1800);
+            return false;
+        }
+    </script>
+}

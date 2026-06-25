@@ -1,0 +1,72 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Exam Attendance";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="card premium-card border-0 shadow-sm">
+        <div class="card-header bg-gradient-dark text-white py-3">
+            <h5 class="mb-0 fw-800"><i class="fas fa-clipboard-user me-2"></i>Exam Attendance Marking</h5>
+        </div>
+        <div class="card-body p-4">
+            <form method="get" class="row g-3 mb-5">
+                <div class="col-md-9">
+                    <select name="scheduleId" class="form-select border-2 py-2" asp-items="ViewBag.Schedules">
+                        <option value="">Select Scheduled Subject Examination...</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-dark w-100 fw-800 py-2">FETCH STUDENTS</button>
+                </div>
+            </form>
+
+            @if (ViewBag.Schedule != null)
+            {
+                <div class="alert alert-info border-0 shadow-sm d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h6 class="mb-0 fw-800 text-dark">Currently Marking: @ViewBag.Schedule.Subject.Name</h6>
+                        <p class="mb-0 small fw-600 opacity-75">Class: @ViewBag.Schedule.Class.Name | Date: @ViewBag.Schedule.ExamDate.ToString("dd MMM yyyy")</p>
+                    </div>
+                </div>
+
+                <form asp-action="SaveAttendance" method="post">
+                    <div class="table-responsive">
+                        <table class="table premium-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th class="ps-4">Roll</th>
+                                    <th>Student Name</th>
+                                    <th>Admission No</th>
+                                    <th class="text-center">Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var s in Model)
+                                {
+                                    <tr>
+                                        <td class="ps-4 fw-800">@s.RollNumber</td>
+                                        <td class="fw-800 text-dark">@s.FirstName @s.LastName</td>
+                                        <td class="fw-700 text-muted">@s.AdmissionNumber</td>
+                                        <td class="text-center">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="att[@s.Id]" value="true" checked>
+                                                <label class="form-check-label text-success fw-800">Present</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="att[@s.Id]" value="false">
+                                                <label class="form-check-label text-danger fw-800">Absent</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary px-5 fw-900 py-3 shadow-lg">SAVE ATTENDANCE</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>

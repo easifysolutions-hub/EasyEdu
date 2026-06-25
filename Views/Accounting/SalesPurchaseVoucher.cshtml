@@ -1,0 +1,409 @@
+@{
+    ViewData["Title"] = ViewBag.Title ?? "Sales/Purchase Voucher";
+    Layout = "_Layout";
+    int voucherTypeInt = ViewBag.VoucherType ?? 5;
+    string voucherTypeName = ViewBag.VoucherTypeName ?? "Sales";
+    bool isSales = voucherTypeName == "Sales";
+
+    var ledgerList = ViewBag.Ledgers as dynamic;
+    var inventoryList = ViewBag.Inventories as dynamic;
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">
+                @if (isSales) { <i class="fas fa-shopping-cart text-teal me-2"></i> }
+                else { <i class="fas fa-shopping-bag text-purple me-2"></i> }
+                @ViewBag.Title
+            </h3>
+            <p class="text-muted small fw-700 mb-0">
+                @if (isSales) { <text><i class="fas fa-arrow-right text-teal me-1"></i> Sell items & update stock levels</text> }
+                else { <text><i class="fas fa-arrow-left text-purple me-1"></i> Purchase items & increase stock levels</text> }
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("VoucherList", new { type = voucherTypeName })" class="btn btn-sm btn-light rounded-pill px-3 fw-700">
+                <i class="fas fa-list me-1"></i> @voucherTypeName List
+            </a>
+            <a href="@Url.Action("Index")" class="btn btn-sm btn-light rounded-pill px-3 fw-700">
+                <i class="fas fa-arrow-left me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Alert for success/error -->
+    <div id="spAlert" class="alert d-none mb-3" role="alert"></div>
+
+    <div class="row g-4">
+        <!-- Left: Item Entry -->
+        <div class="col-lg-7">
+            <div class="premium-card-animated border-0 bg-white shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-0 p-4 pb-2">
+                    <h5 class="fw-800 text-dark mb-0">
+                        <i class="fas fa-box-open @(isSales ? "text-teal" : "text-purple") me-2"></i>
+                        Item Details
+                    </h5>
+                </div>
+                <div class="p-4">
+                    <!-- Voucher Header -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label-premium">Transaction Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-calendar-alt text-muted"></i></span>
+                                <input type="date" id="vDate" class="form-control border-0 bg-light" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-premium">Narration / Memo</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-pen-nib text-muted"></i></span>
+                                <input type="text" id="vNarration" class="form-control border-0 bg-light" placeholder="Describe the transaction..." />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Item Row -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-5">
+                            <label class="form-label-premium small">Select Item</label>
+                            <select id="itemSelect" class="form-select border-0 bg-light">
+                                <option value="">-- Choose Inventory Item --</option>
+                                @if (inventoryList != null)
+                                {
+                                    foreach (var item in inventoryList)
+                                    {
+                                        <option value="@item.Id" data-price="@item.UnitPrice" data-stock="@item.Quantity" data-unit="@item.Unit" data-name="@item.ItemName">
+                                            @item.ItemName (@item.Quantity @item.Unit) - ₹@item.UnitPrice
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label-premium small">Qty</label>
+                            <input type="number" id="itemQty" class="form-control border-0 bg-light" value="1" min="1" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label-premium small">Rate</label>
+                            <input type="number" id="itemRate" class="form-control border-0 bg-light" placeholder="0.00" step="0.01" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label-premium small">&nbsp;</label>
+                            <button class="btn btn-sm @(isSales ? "btn-teal" : "btn-purple") rounded-pill px-3 fw-800 w-100 d-block" onclick="addItem()">
+                                <i class="fas fa-plus-circle me-1"></i> Add Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Item Table -->
+                    <div class="table-responsive">
+                        <table class="table align-middle border-0 mb-0" id="itemTable">
+                            <thead class="table-light">
+                                <tr class="small text-muted fw-800 text-uppercase">
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th class="text-end">Amount</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemBody">
+                                <!-- Items added here -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="fw-800">
+                                    <td colspan="3" class="text-end">Total Item Amount:</td>
+                                    <td class="text-end text-primary" id="itemTotal">0.00</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div id="itemError" class="text-danger small mt-2 d-none"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Accounting Entry -->
+        <div class="col-lg-5">
+            <div class="premium-card-animated border-0 bg-white shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-0 p-4 pb-2">
+                    <h5 class="fw-800 text-dark mb-0">
+                        <i class="fas fa-balance-scale text-primary me-2"></i>
+                        Accounting Entry
+                    </h5>
+                    <p class="small text-muted mt-1 mb-0">
+                        @if (isSales) { <text>Debit: Cash/Bank • Credit: Sales/Item ledger</text> }
+                        else { <text>Debit: Purchase/Item ledger • Credit: Cash/Bank</text> }
+                    </p>
+                </div>
+                <div class="p-4">
+                    <!-- Main Account Row -->
+                    <div class="mb-3">
+                        <label class="form-label-premium">@(isSales ? "Receipt Account (Dr)" : "Payment Account (Cr)")</label>
+                        <select id="mainLedger" class="form-select border-0 bg-light">
+                            <option value="">-- Select Account --</option>
+                            @if (ledgerList != null)
+                            {
+                                foreach (var l in ledgerList)
+                                {
+                                    <option value="@l.Id">@l.Name (@l.Group)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Item Ledger -->
+                    <div class="mb-3">
+                        <label class="form-label-premium">
+                            @(isSales ? "Sales Account (Cr)" : "Purchase Account (Dr)")
+                        </label>
+                        <select id="itemLedger" class="form-select border-0 bg-light">
+                            <option value="">-- Select Account --</option>
+                            @if (ledgerList != null)
+                            {
+                                foreach (var l in ledgerList)
+                                {
+                                    <option value="@l.Id">@l.Name (@l.Group)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Balance Check -->
+                    <div class="balance-check-box mb-4">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="balance-side dr-side">
+                                    <div class="bs-label">Total Debit</div>
+                                    <div class="bs-value" id="totalDr">0.00</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="balance-side cr-side">
+                                    <div class="bs-label">Total Credit</div>
+                                    <div class="bs-value" id="totalCr">0.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="balanceStatus" class="balance-status mt-2 text-center d-none">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            <span class="fw-700 text-success">Balanced</span>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button class="btn @(isSales ? "btn-teal" : "btn-purple") rounded-pill w-100 py-3 fw-800 fs-6 shadow-sm" id="saveBtn" onclick="saveVoucher()">
+                        <i class="fas fa-save me-2"></i>
+                        Save @voucherTypeName Voucher
+                    </button>
+                    <div class="text-center mt-2">
+                        <small class="text-muted fw-600">Stock will be @(isSales ? "decremented" : "incremented") automatically</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-teal { color: #0d9488 !important; }
+    .text-purple { color: #9333ea !important; }
+    .btn-teal { background: linear-gradient(135deg, #0d9488, #0f766e); color: white; border: none; }
+    .btn-teal:hover { background: linear-gradient(135deg, #0f766e, #115e59); color: white; }
+    .btn-purple { background: linear-gradient(135deg, #9333ea, #7c3aed); color: white; border: none; }
+    .btn-purple:hover { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; }
+
+    .form-label-premium { font-weight: 700; font-size: 0.82rem; color: #64748b; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .balance-check-box { background: #f8fafc; border-radius: 16px; padding: 1rem; border: 1px solid #e2e8f0; }
+    .balance-side { padding: 12px; border-radius: 12px; text-align: center; }
+    .dr-side { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .cr-side { background: #fff1f2; border: 1px solid #fecdd3; }
+    .bs-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; opacity: 0.7; }
+    .bs-value { font-size: 1.3rem; font-weight: 800; }
+    .dr-side .bs-value { color: #16a34a; }
+    .cr-side .bs-value { color: #e11d48; }
+    .balance-status { padding: 8px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; }
+
+    #itemBody tr { border-color: #f1f5f9; }
+    #itemBody td { padding: 10px 8px; }
+    .item-row-del { cursor: pointer; color: #e11d48; }
+    .item-row-del:hover { opacity: 0.7; }
+</style>
+
+@section Scripts {
+    <script>
+        // State
+        const isSales = @(isSales ? "true" : "false");
+        let items = [];
+
+        // Auto-fill rate when item selected
+        document.getElementById('itemSelect').addEventListener('change', function() {
+            const opt = this.options[this.selectedIndex];
+            if (opt.value) {
+                document.getElementById('itemRate').value = opt.dataset.price || '';
+            }
+        });
+
+        function addItem() {
+            const sel = document.getElementById('itemSelect');
+            const opt = sel.options[sel.selectedIndex];
+            const qty = parseInt(document.getElementById('itemQty').value);
+            const rate = parseFloat(document.getElementById('itemRate').value);
+            const errEl = document.getElementById('itemError');
+
+            if (!opt.value) { showItemError('Please select an item.'); return; }
+            if (!qty || qty <= 0) { showItemError('Quantity must be greater than 0.'); return; }
+            if (!rate || rate <= 0) { showItemError('Rate must be greater than 0.'); return; }
+
+            const stock = parseInt(opt.dataset.stock);
+            if (isSales && qty > stock) {
+                showItemError(`Insufficient stock. Available: ${stock} ${opt.dataset.unit}`);
+                return;
+            }
+
+            errEl.classList.add('d-none');
+
+            const item = {
+                inventoryId: parseInt(opt.value),
+                itemName: opt.dataset.name,
+                unit: opt.dataset.unit,
+                qty: qty,
+                rate: rate,
+                amount: qty * rate
+            };
+
+            items.push(item);
+            renderItems();
+            updateTotals();
+
+            // Reset
+            sel.selectedIndex = 0;
+            document.getElementById('itemQty').value = 1;
+            document.getElementById('itemRate').value = '';
+        }
+
+        function removeItem(idx) {
+            items.splice(idx, 1);
+            renderItems();
+            updateTotals();
+        }
+
+        function renderItems() {
+            const tbody = document.getElementById('itemBody');
+            tbody.innerHTML = '';
+            items.forEach((item, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="fw-700">${item.itemName} <small class="text-muted">(${item.unit})</small></td>
+                        <td class="fw-700">${item.qty}</td>
+                        <td class="fw-700">₹${item.rate.toFixed(2)}</td>
+                        <td class="text-end fw-800 text-primary">₹${item.amount.toFixed(2)}</td>
+                        <td class="text-center"><i class="fas fa-trash-alt item-row-del" onclick="removeItem(${idx})"></i></td>
+                    </tr>`;
+            });
+        }
+
+        function updateTotals() {
+            const total = items.reduce((s, i) => s + i.amount, 0);
+            document.getElementById('itemTotal').textContent = '₹' + total.toFixed(2);
+            document.getElementById('totalDr').textContent = '₹' + total.toFixed(2);
+            document.getElementById('totalCr').textContent = '₹' + total.toFixed(2);
+
+            const statusEl = document.getElementById('balanceStatus');
+            if (total > 0 && document.getElementById('mainLedger').value && document.getElementById('itemLedger').value) {
+                statusEl.classList.remove('d-none');
+            } else {
+                statusEl.classList.add('d-none');
+            }
+        }
+
+        function showItemError(msg) {
+            const el = document.getElementById('itemError');
+            el.textContent = msg;
+            el.classList.remove('d-none');
+        }
+
+        async function saveVoucher() {
+            const date = document.getElementById('vDate').value;
+            const narration = document.getElementById('vNarration').value;
+            const mainLedgerId = parseInt(document.getElementById('mainLedger').value);
+            const itemLedgerId = parseInt(document.getElementById('itemLedger').value);
+            const alert = document.getElementById('spAlert');
+
+            if (!date) { showAlert('danger', 'Please select a date.'); return; }
+            if (items.length === 0) { showAlert('danger', 'Please add at least one item.'); return; }
+            if (!mainLedgerId) { showAlert('danger', isSales ? 'Please select a receipt account (Debit).' : 'Please select a payment account (Credit).'); return; }
+            if (!itemLedgerId) { showAlert('danger', isSales ? 'Please select a sales account (Credit).' : 'Please select a purchase account (Debit).'); return; }
+
+            const totalAmount = items.reduce((s, i) => s + i.amount, 0);
+
+            const payload = {
+                date: date,
+                type: @voucherTypeInt,
+                narration: narration,
+                // Main ledger row (Cash/Bank)
+                accountRows: [
+                    {
+                        ledgerId: mainLedgerId,
+                        debit: isSales ? totalAmount : 0,
+                        credit: isSales ? 0 : totalAmount,
+                        note: narration
+                    }
+                ],
+                // Item rows with inventory info
+                items: items.map(i => ({
+                    inventoryId: i.inventoryId,
+                    itemName: i.itemName,
+                    ledgerId: itemLedgerId,
+                    quantity: i.qty,
+                    unitPrice: i.rate
+                }))
+            };
+
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Saving...';
+
+            try {
+                const resp = await fetch('@Url.Action("CreateSalesPurchaseVoucher")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || '' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await resp.json();
+                if (resp.ok) {
+                    showAlert('success', '✅ ' + data.message + ' (ID: ' + data.id + ')');
+                    items = [];
+                    renderItems();
+                    updateTotals();
+                    document.getElementById('vNarration').value = '';
+                } else {
+                    showAlert('danger', '❌ ' + (data || 'Unknown error'));
+                }
+            } catch(err) {
+                showAlert('danger', '❌ Network error: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save me-2"></i> Save @voucherTypeName Voucher';
+            }
+        }
+
+        function showAlert(type, msg) {
+            const el = document.getElementById('spAlert');
+            el.className = `alert alert-${type} fw-700`;
+            el.innerHTML = msg;
+            el.classList.remove('d-none');
+            setTimeout(() => el.classList.add('d-none'), 5000);
+        }
+
+        // Update balance check when ledgers change
+        document.getElementById('mainLedger').addEventListener('change', updateTotals);
+        document.getElementById('itemLedger').addEventListener('change', updateTotals);
+    </script>
+}

@@ -1,0 +1,109 @@
+@model IEnumerable<EasyEdu.Models.Parent>
+@{
+    ViewData["Title"] = "Guardian Registry Report";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 animate-slide-in">
+    <div>
+        <h1 class="page-title mb-1"><i class="fas fa-user-shield me-2 text-primary"></i> Guardian Registry</h1>
+        <p class="text-muted fw-600">Comprehensive mapping of institutional guardians and student associations</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-print me-2"></i> ARCHIVE PRINT
+        </button>
+        <button class="btn btn-premium-purple rounded-12 px-4 shadow-sm fw-800 border-0">
+            <i class="fas fa-file-excel me-2"></i> EXPORT DATA
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-3">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in text-dark">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-800 text-muted uppercase">Search Guardians</label>
+                <input type="text" name="search" class="form-control rounded-12 border-0 bg-light fw-700" placeholder="Guardian Name, Student Name or Phone...">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-12 fw-800">
+                    <i class="fas fa-search me-2"></i> SEARCH REGISTRY
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in">
+        <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+            <h6 class="fw-800 text-dark mb-0 uppercase tracking-widest smallest">Protectorate Archive</h6>
+            <div class="badge bg-primary-soft text-primary rounded-pill px-3 py-2 fw-800 small shadow-xs">@Model.Count() ENTITIES ARCHIVED</div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">GUARDIAN IDENTITY</th>
+                        <th>COMMUNICATION HUB</th>
+                        <th>STUDENT ASSOCIATION</th>
+                        <th>ACADEMIC LOCUS</th>
+                        <th class="pe-4 text-end">PROFESSIONAL STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-users-slash fa-3x text-muted opacity-25 mb-4 d-block"></i>
+                                <h5 class="fw-800 text-muted">No guardian records detected in the current archive.</h5>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var parent in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar-sm bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: 900;">
+                                        @(parent.FirstName?[0])
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-dark">@parent.FirstName @parent.LastName</div>
+                                        <div class="smallest text-muted fw-700 uppercase">Relation: @parent.Relationship</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-800 text-dark">@parent.Phone</div>
+                                <div class="small text-muted fw-600">@parent.Email</div>
+                            </td>
+                            <td>
+                                <div class="fw-800 text-primary">@parent.Student?.FirstName @parent.Student?.LastName</div>
+                                <div class="smallest text-muted fw-900 uppercase">ID: #@parent.Student?.AdmissionNumber</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border fw-800 rounded-pill px-3 py-1">
+                                    @parent.Student?.Class?.Name / @parent.Student?.Section?.Name
+                                </span>
+                            </td>
+                            <td class="pe-4 text-end">
+                                <div class="fw-800 text-dark small">@parent.Occupation</div>
+                                <div class="smallest text-muted fw-600 uppercase">Archived Activity</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.1); }
+    .shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .smallest { font-size: 0.65rem; }
+</style>

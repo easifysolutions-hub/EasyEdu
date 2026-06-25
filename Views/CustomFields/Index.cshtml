@@ -1,0 +1,159 @@
+@model IEnumerable<EasyEdu.Models.CustomField>
+@{
+    ViewData["Title"] = "Custom Fields Management";
+    Layout = "_Layout";
+    string formType = ViewBag.FormType ?? "Student";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Custom Fields Hub</h3>
+            <p class="text-muted small fw-600">Architect dynamic data points for @formType registration forms</p>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="btn-group shadow-sm rounded-12 overflow-hidden">
+                <a href="@Url.Action("Index", new { formType = "Student" })" class="btn @(formType == "Student" ? "btn-premium-purple" : "btn-light") btn-sm px-4 fw-800">STUDENT FORM</a>
+                <a href="@Url.Action("Index", new { formType = "Staff" })" class="btn @(formType == "Staff" ? "btn-premium-purple" : "btn-light") btn-sm px-4 fw-800">STAFF FORM</a>
+            </div>
+            <button class="btn btn-premium-success btn-sm rounded-12 px-4 shadow-sm fw-800" data-bs-toggle="modal" data-bs-target="#addFieldModal">
+                <i class="fas fa-plus-circle me-2"></i>DEFINE NEW FIELD
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="premium-card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0 align-middle">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th class="px-4 py-3">FIELD NAME</th>
+                                <th>TYPE</th>
+                                <th>CONFIGURATION</th>
+                                <th class="text-center">REQUIREMENT</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-end px-4">ORCHESTRATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var f in Model)
+                            {
+                                <tr>
+                                    <td class="px-4">
+                                        <div class="fw-900 text-dark">@f.FieldName</div>
+                                        <div class="small text-muted fw-600">ID: #ORD-@f.Id</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary-soft text-primary px-3 rounded-pill fw-800 uppercase">@f.FieldType</span>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted fw-700 italic">@(string.IsNullOrEmpty(f.Options) ? "Standard Input" : $"Options: {f.Options}")</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input class="form-check-input" type="checkbox" @(f.IsRequired ? "checked" : "") disabled>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge @(f.IsActive ? "bg-success" : "bg-danger") px-3 rounded-pill fw-800 uppercase" style="font-size: 0.65rem;">@(f.IsActive ? "LIVE" : "ARCHIVED")</span>
+                                    </td>
+                                    <td class="text-end px-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-light-soft btn-sm rounded-circle" title="Edit Hardware Parameters">
+                                                <i class="fas fa-cog text-muted"></i>
+                                            </button>
+                                            <form asp-action="Delete" asp-route-id="@f.Id" method="post" onsubmit="return confirm('Archive this field definition?')">
+                                                <button type="submit" class="btn btn-danger-soft btn-sm rounded-circle">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <div class="opacity-10 mb-3"><i class="fas fa-drafting-compass fa-4x"></i></div>
+                                        <h5 class="fw-800 text-muted">No custom fields defined for @formType form yet.</h5>
+                                        <p class="text-muted small">Start by defining dynamic data points to extend your registration intelligence.</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Field Modal -->
+<div class="modal fade animate-fade-in" id="addFieldModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-24 overflow-hidden">
+            <div class="modal-header bg-dark text-white p-4">
+                <h5 class="modal-title fw-900 ls-tight">NEW FIELD DEFINITION</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Create" method="post">
+                <input type="hidden" name="FormType" value="@formType" />
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Field Label</label>
+                            <input type="text" name="FieldName" class="form-control form-control-premium" placeholder="e.g. Passport Number" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Input Architecture</label>
+                            <select name="FieldType" class="form-select form-control-premium" id="fieldTypeSelect">
+                                <option value="Text">Standard Text</option>
+                                <option value="Number">Numeric Value</option>
+                                <option value="Date">Date Picker</option>
+                                <option value="Select">Dropdown Menu</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Mandatory Logic</label>
+                            <div class="form-check form-switch mt-2">
+                                <input class="form-check-input" type="checkbox" name="IsRequired" value="true">
+                                <label class="smallest fw-800 text-muted ms-2 mt-1">FIELD IS REQUIRED</label>
+                            </div>
+                        </div>
+                        <div class="col-12 d-none" id="optionsContainer">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Menu Options (Comma Separated)</label>
+                            <textarea name="Options" class="form-control form-control-premium" rows="2" placeholder="Option A, Option B, Option C"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p-4 bg-light border-0">
+                    <button type="button" class="btn btn-light-soft rounded-12 px-4 fw-800" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-premium-purple rounded-12 px-5 fw-900 shadow-sm">DEPLOY FIELD</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('fieldTypeSelect').addEventListener('change', function() {
+        var optionsContainer = document.getElementById('optionsContainer');
+        if (this.value === 'Select') {
+            optionsContainer.classList.remove('d-none');
+        } else {
+            optionsContainer.classList.add('d-none');
+        }
+    });
+</script>
+
+<style>
+    .rounded-24 { border-radius: 24px; }
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.1); }
+    .btn-danger-soft { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; }
+    .btn-danger-soft:hover { background: #ef4444; color: white; }
+    .uppercase { text-transform: uppercase; }
+    .ls-tight { letter-spacing: -0.5px; }
+</style>

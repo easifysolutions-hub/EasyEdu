@@ -1,0 +1,123 @@
+﻿@model IEnumerable<EasyEdu.Models.Designation>
+@{
+    ViewData["Title"] = "Organizational Designations";
+    Layout = "_Layout";
+}
+
+<div class="page-header mb-4 px-4 animate-slide-in">
+    <h1 class="page-title"><i class="fas fa-id-card-clip me-2 text-primary"></i> Organizational Designations</h1>
+    <p class="text-muted fw-600">Configure institutional roles and professional hierarchy for the faculty nexus</p>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        <!-- Configuration Column -->
+        <div class="col-xl-4 animate-fade-in">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden p-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-box bg-primary-soft text-primary rounded-16 p-3 shadow-sm"><i class="fas fa-plus-circle fa-lg"></i></div>
+                    <h5 class="fw-900 text-dark m-0">PROVISION ROLE</h5>
+                </div>
+                
+                <form asp-action="CreateDesignation" method="post">
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-muted uppercase">ARCHIVAL TITLE*</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0 rounded-start-12"><i class="fas fa-tag text-primary"></i></span>
+                            <input type="text" name="Title" class="form-control rounded-end-12 border-0 bg-light fw-700 py-3" required placeholder="e.g. Senior Academic Faculty">
+                        </div>
+                        <p class="small text-muted mt-2 fw-600"><i class="fas fa-info-circle me-1"></i> Ensure title matches institutional standards.</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-premium-primary w-100 rounded-16 py-3 fw-900 shadow-primary animate-hover-pulse">
+                        <i class="fas fa-save me-2"></i> ARCHIVE DESIGNATION
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Registry Column -->
+        <div class="col-xl-8 animate-fade-in" style="animation-delay: 0.1s">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden h-100">
+                <div class="table-responsive">
+                    <table class="table premium-table mb-0 align-middle">
+                        <thead class="bg-light-soft text-dark">
+                            <tr>
+                                <th class="ps-4">ID ARCHIVE</th>
+                                <th>PROFESSIONAL TITLE</th>
+                                <th class="text-center">ENTITY STATUS</th>
+                                <th class="text-end pe-4">REGISTRY ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var d in Model)
+                            {
+                                <tr class="hover-shadow-sm transition-all border-bottom">
+                                    <td class="ps-4 py-3 fw-900 text-muted small">#@d.Id.ToString("D3")</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="icon-box-mini bg-primary-soft text-primary rounded-8 p-2">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                            <div class="fw-800 text-dark">@d.Title</div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        @if(d.IsActive){
+                                            <span class="badge bg-success-soft text-success px-3 rounded-pill fw-900 shadow-xs border">
+                                                <i class="fas fa-check-circle me-1"></i> ACTIVE
+                                            </span>
+                                        } else {
+                                            <span class="badge bg-danger-soft text-danger px-3 rounded-pill fw-900 shadow-xs border">
+                                                <i class="fas fa-times-circle me-1"></i> ARCHIVED
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group-premium d-flex justify-content-end gap-2">
+                                            <button class="btn btn-light-soft rounded-12 p-2 @(d.IsActive ? "text-success" : "text-muted")" title="Toggle Status"><i class="fas fa-power-off"></i></button>
+                                            <button class="btn btn-light-soft rounded-12 p-2 text-danger" title="Purge Record"><i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            @if(!Model.Any()){
+                                <tr>
+                                    <td colspan="4" class="text-center py-5">
+                                        <i class="fas fa-id-card-clip fa-4x text-muted opacity-25 mb-4 d-block"></i>
+                                        <h5 class="fw-800 text-muted">No designations provisioned in the current ledger.</h5>
+                                        <p class="small text-muted fw-600">Provide a title to archive a new professional role.</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.08); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.08); }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.08); }
+    .bg-light-soft { background: #f8fafc; }
+    
+    .shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .shadow-primary { box-shadow: 0 8px 15px -5px rgba(99, 102, 241, 0.5); }
+    
+    .hover-shadow-sm:hover {
+        background: #f8fafc;
+        transform: scale(1.002);
+    }
+
+    .animate-hover-pulse:hover {
+        animation: mini-pulse 1s infinite;
+    }
+
+    @@keyframes mini-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(0.98); }
+    }
+</style>

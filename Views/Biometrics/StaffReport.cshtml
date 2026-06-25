@@ -1,0 +1,65 @@
+@model IEnumerable<EasyEdu.Models.TeacherAttendance>
+@{
+    ViewData["Title"] = "Staff Biometric Analytics";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Staff Physical Intelligence</h2>
+            <p class="text-muted small fw-600">Historical performance analytics for staff synchronization rituals via biometric nodes</p>
+        </div>
+        <button onclick="window.print()" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+            <i class="fas fa-print me-2"></i>BATCH EXPORT
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg mb-5" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">STAFF PRINCIPAL</th>
+                    <th class="py-4 fw-900 small text-uppercase">TEMPORAL LOG</th>
+                    <th class="py-4 fw-900 small text-uppercase">PHYSICAL NODE</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark d-block">@log.Teacher?.FullName</span>
+                            <span class="smallest text-muted fw-700 font-monospace">STAFF ID: @log.Teacher?.EmployeeNumber</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark small">@log.Date.ToString("dd MMM yyyy")</div>
+                             <div class="smallest text-muted fw-700 opacity-50 uppercase">SYNC: @log.CreatedAt.ToString("HH:mm:ss")</div>
+                        </td>
+                         <td class="py-4">
+                            <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 ls-1 italic small">BIOMETRIC GATE 01</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <span class="badge @(log.Status == "Present" ? "bg-success" : "bg-danger") px-3 py-2 rounded-pill fw-900 shadow-sm border small">@log.Status.ToUpper()</span>
+                        </td>
+                    </tr>
+                }
+                 @if(!Model.Any()){
+                    <tr><td colspan="4" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero historical staff biometric analytic events available.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .rounded-24 { border-radius: 24px; }
+    .ls-1 { letter-spacing: 1px; }
+    @@media print {
+        .btn, .sidebar, .topbar { display: none !important; }
+        .content-wrapper { padding: 0 !important; margin: 0 !important; }
+        .premium-card { border: 1px solid #eee !important; box-shadow: none !important; border-radius: 0 !important; }
+    }
+</style>

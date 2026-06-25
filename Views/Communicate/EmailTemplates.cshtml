@@ -1,0 +1,130 @@
+@model IEnumerable<EasyEdu.Models.MessageTemplate>
+@{
+    ViewData["Title"] = "Email Templates - Utilities";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-file-code me-2 text-primary"></i> Email Architect</h1>
+        <p class="text-muted fw-600">Design and manage re-usable electronic mail structures</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800" data-bs-toggle="modal" data-bs-target="#templateModal">
+            <i class="fas fa-plus me-2"></i> NEW TEMPLATE
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        @foreach (var t in Model)
+        {
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 animate-fade-in transition-all h-100 hover-lift">
+                    <div class="p-4 bg-light border-bottom d-flex justify-content-between align-items-center">
+                        <span class="badge rounded-pill @(t.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") fw-800 px-3 py-2">
+                            @(t.IsActive ? "ACTIVE" : "DISABLED")
+                        </span>
+                        <div class="icon-box-sm bg-primary text-white rounded-circle shadow-sm">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-grow-1">
+                        <h5 class="fw-900 text-dark mb-1">@t.Name</h5>
+                        <div class="small fw-700 text-muted mb-3">Subject: @t.Subject</div>
+                        <div class="notice-desc text-muted fw-600 extra-small line-clamp-3 mb-4">
+                            @t.Body
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-auto pt-3 border-top">
+                             <button class="btn btn-light-soft text-primary rounded-pill px-3 fw-800 border-0 edit-template" 
+                                     data-id="@t.Id" data-name="@t.Name" data-subject="@t.Subject" data-body="@t.Body" data-active="@t.IsActive.ToString().ToLower()">
+                                <i class="fas fa-edit me-1"></i> MODIFY
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+             <div class="col-12 text-center py-5">
+                <div class="premium-card bg-white shadow-xl border-0 p-5 rounded-24 d-inline-block">
+                    <i class="fas fa-file-invoice fa-4x text-muted opacity-25 mb-4 d-block"></i>
+                    <h4 class="fw-900 text-dark">No Templates Found</h4>
+                    <p class="text-muted fw-600">Start by creating your first institutional email structure.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="templateModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-24 shadow-2xl">
+            <div class="modal-header bg-primary text-white p-4">
+                <h5 class="modal-title fw-800">Email Structure Architecture</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="SaveTemplate" method="post">
+                <input type="hidden" name="Id" id="templateId" value="0">
+                <input type="hidden" name="Type" value="Email">
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small-caps">Template Identifier</label>
+                        <input type="text" name="Name" id="templateName" class="form-control premium-input shadow-none" placeholder="e.g. Admission Confirmation..." required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small-caps">Default Subject Nexus</label>
+                        <input type="text" name="Subject" id="templateSubject" class="form-control premium-input shadow-none" placeholder="Primary transmission title..." required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small-caps">Architectural Body (HTML Supported)</label>
+                        <textarea name="Body" id="templateBody" class="form-control premium-input shadow-none" rows="8" placeholder="Enter detailed communication content..." required></textarea>
+                    </div>
+                    <div class="form-check form-switch fs-5">
+                        <input class="form-check-input shadow-none" type="checkbox" name="IsActive" id="templateIsActive" value="true" checked>
+                        <label class="form-check-label fw-800 text-dark ms-2 small-caps">Operational Status (Live)</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 p-4">
+                    <button type="submit" class="btn btn-premium-primary w-100 py-3 rounded-16 shadow-lg fw-900 border-0">AUTHORIZE & STORE TEMPLATE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); }
+    .btn-light-soft { background: rgba(99,102,241,0.05); }
+    .premium-input { border: 2px solid #f3f4f6; border-radius: 12px; padding: 12px 16px; font-weight: 600; }
+    .premium-input:focus { border-color: #6366f1; background: rgba(99,102,241,0.02); }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .small-caps { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .icon-box-sm { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+    .hover-lift:hover { transform: translateY(-5px); }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $(".edit-template").click(function() {
+                var d = $(this).data();
+                $("#templateId").val(d.id);
+                $("#templateName").val(d.name);
+                $("#templateSubject").val(d.subject);
+                $("#templateBody").val(d.body);
+                $("#templateIsActive").prop("checked", d.active);
+                $("#templateModal").modal("show");
+            });
+
+            $('#templateModal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+                $("#templateId").val(0);
+            });
+        });
+    </script>
+}

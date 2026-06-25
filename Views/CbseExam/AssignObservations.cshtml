@@ -1,0 +1,49 @@
+@{
+    ViewData["Title"] = "Qualitative Assessment Assignment";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Qualitative Assessment Hub</h2>
+            <p class="text-muted small fw-600">Apply behavioral evaluation grades to individual student principles across academic terms</p>
+        </div>
+        <div class="d-flex gap-2">
+             <a href="@Url.Action("Observations")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-eye me-2"></i>DOMAIN REGISTRY
+            </a>
+        </div>
+    </div>
+
+    <div class="premium-card p-5 border-0 shadow-lg mb-5" style="border-radius: 24px;">
+        <div class="row g-4 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Academic Term</label>
+                <select id="TermId" class="form-select form-control-premium">
+                    @foreach (var t in (List<EasyEdu.Models.CbseTerm>)ViewBag.Terms) { <option value="@t.Id">@t.Name</option> }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Target Curriculum Class</label>
+                <select id="ClassId" class="form-select form-control-premium">
+                    @foreach (var c in (List<EasyEdu.Models.Class>)ViewBag.Classes) { <option value="@c.Id">@c.Name</option> }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE REGISTRY</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card p-5 border-0 shadow-lg empty-state text-center" style="border-radius: 24px;">
+         <i class="fas fa-search fa-3x text-muted opacity-25 mb-4"></i>
+         <h5 class="fw-800 text-muted italic">Initialize curriculum filter to perform qualitative evaluation.</h5>
+         <p class="smallest text-muted fw-700 uppercase ls-1 mb-0">Waiting for parameter synchronization...</p>
+    </div>
+</div>
+
+<style>
+    .rounded-16 { border-radius: 16px; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

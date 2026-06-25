@@ -1,0 +1,108 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Student Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900">Student Report</h3>
+            <p class="text-muted small fw-600">Institutional student statistics and demographics</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-light-soft btn-sm rounded-8 px-3">
+                <i class="fas fa-print me-2"></i>PRINT REPORT
+            </button>
+            <button class="btn btn-premium-purple btn-sm rounded-8 px-3">
+                <i class="fas fa-file-excel me-2"></i>EXPORT EXCEL
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4">
+        <form method="get" asp-action="StudentReport" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-800 small uppercase">Academic Class</label>
+                <select name="classId" class="form-select premium-input" asp-items="ViewBag.Classes">
+                    <option value="">All Classes</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-800 small uppercase">Section</label>
+                <select name="sectionId" class="form-select premium-input" asp-items="ViewBag.Sections">
+                    <option value="">All Sections</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-800 small uppercase">Gender</label>
+                <select name="gender" class="form-select premium-input">
+                    <option value="">All Genders</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-purple w-100 rounded-8 py-2 fw-800">
+                    <i class="fas fa-search me-2"></i>GENERATE
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light-soft text-dark">
+                    <tr>
+                        <th class="ps-4 py-3 fw-800 small">ADMISSION NO.</th>
+                        <th class="py-3 fw-800 small">FULL NAME</th>
+                        <th class="py-3 fw-800 small">CLASS & SECTION</th>
+                        <th class="py-3 fw-800 small">GENDER</th>
+                        <th class="py-3 fw-800 small">DATE OF BIRTH</th>
+                        <th class="py-3 fw-800 small">MOBILE</th>
+                        <th class="py-3 fw-800 small">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">No students found matching current filters.</td>
+                        </tr>
+                    }
+                    @foreach (var student in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-700">@student.AdmissionNumber</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="user-avatar-small bg-primary-soft text-primary">
+                                        @(student.FirstName.Substring(0,1))
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-dark">@student.FirstName @student.LastName</div>
+                                        <div class="small text-muted">@student.User?.Email</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-700">@(student.Class?.Name ?? "N/A")</span>
+                                <span class="text-muted small">(@(student.Section?.Name ?? "N/A"))</span>
+                            </td>
+                            <td>@student.Gender</td>
+                            <td class="small fw-600">@student.DateOfBirth.ToString("dd MMM yyyy")</td>
+                            <td class="small fw-700">@student.Phone</td>
+                            <td>
+                                <span class="badge @(student.IsActive ? "bg-success-soft text-success" : "bg-danger-soft text-danger") px-3 rounded-pill fw-800">
+                                    @(student.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

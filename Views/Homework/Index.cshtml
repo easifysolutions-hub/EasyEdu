@@ -1,0 +1,69 @@
+﻿@model IEnumerable<EasyEdu.Models.Homework>
+@{
+    ViewData["Title"] = "Homework List";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Homework Registry</h3>
+            <p class="text-muted small fw-600">Track and manage student assignments</p>
+        </div>
+        <a href="@Url.Action("Create")" class="btn btn-premium-purple btn-sm rounded-8">
+            <i class="fas fa-plus me-2"></i>ADD HOMEWORK
+        </a>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">TITLE</th>
+                            <th>CLASS (SUBJECT)</th>
+                            <th>ASSIGN DATE</th>
+                            <th>SUBMISSION</th>
+                            <th>STATUS</th>
+                            <th class="text-end px-4">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var h in Model)
+                        {
+                            <tr>
+                                <td class="px-4">
+                                    <div class="fw-800 text-dark">@h.Title</div>
+                                    <div class="small text-muted text-truncate" style="max-width: 200px;">@h.Description</div>
+                                </td>
+                                <td>
+                                    <div class="fw-700">@h.Class?.Name</div>
+                                    <div class="small text-primary fw-800">@h.Subject?.Name</div>
+                                </td>
+                                <td class="small fw-700">@h.AssignDate.ToString("dd MMM yyyy")</td>
+                                <td class="small fw-800 text-danger">@h.SubmissionDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if(h.SubmissionDate >= DateTime.Now){
+                                        <span class="badge badge-success-premium">ACTIVE</span>
+                                    } else {
+                                        <span class="badge badge-danger-premium">CLOSED</span>
+                                    }
+                                </td>
+                                <td class="text-end px-4">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-light-soft rounded-circle px-2" title="Evaluate"><i class="fas fa-edit text-primary"></i></button>
+                                        @if(!string.IsNullOrEmpty(h.FilePath)){
+                                            <a href="@h.FilePath" class="btn btn-sm btn-light-soft rounded-circle px-2" download><i class="fas fa-download"></i></a>
+                                        }
+                                        <button class="btn btn-sm btn-light-soft rounded-circle px-2"><i class="fas fa-trash text-danger"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

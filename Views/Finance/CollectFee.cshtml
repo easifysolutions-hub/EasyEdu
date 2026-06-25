@@ -1,0 +1,204 @@
+@model EasyEdu.Models.FeeCollection
+@{
+    ViewData["Title"] = "Fees Received (Collection)";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Fees Received Voucher</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider">
+                <i class="fas fa-coins me-2 text-warning"></i> 
+                Record student fee payments against invoices
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("FeesInvoice")" class="btn btn-premium-white btn-sm px-4 rounded-pill shadow-sm fw-800">
+                <i class="fas fa-arrow-left me-2 text-danger"></i> BACK TO INVOICES
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="premium-card-animated border-0 shadow-lg bg-white overflow-hidden mb-5">
+                <div class="card-header bg-indigo p-4 text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle-lg bg-white-trans me-3">
+                            <i class="fas fa-wallet fa-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-800 m-0">Payment Entry Window</h4>
+                            <p class="small fw-600 mb-0 opacity-75">Admission Record: @(ViewBag.StudentName ?? "Select Student")</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="CollectFee" method="post" id="feeForm">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="row g-4">
+                            <!-- Student & Invoice Selection -->
+                            <div class="col-md-6">
+                                <label class="form-label-premium">1. Student Admission</label>
+                                <select name="StudentId" id="StudentSelect" class="form-select form-control-premium select2-simple" required>
+                                    <option value="">Search Admission No...</option>
+                                    @foreach(var item in (SelectList)ViewBag.Students)
+                                    {
+                                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label-premium">2. Select Pending Invoice</label>
+                                <select name="FeesInvoiceId" id="InvoiceSelect" class="form-select form-control-premium select2-simple" asp-items="ViewBag.Invoices">
+                                    <option value="">Select Invoice to Pay</option>
+                                </select>
+                            </div>
+
+                            <!-- Amount Details -->
+                            <div class="col-md-4">
+                                <div class="stat-card-mini bg-light-soft border-0 p-3 rounded-16">
+                                    <label class="form-label-premium text-primary mb-1">Total Due</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0">₹</span>
+                                        <input type="number" name="AmountDue" id="AmountDue" class="form-control border-0 bg-transparent fw-900 fs-4 py-0" value="@Model.AmountDue.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" step="0.01" readonly />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="stat-card-mini bg-emerald-soft border-0 p-3 rounded-16 border-primary">
+                                    <label class="form-label-premium text-success mb-1">Cash Received</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0 text-success">₹</span>
+                                        <input type="number" name="AmountPaid" id="AmountPaid" class="form-control border-0 bg-transparent fw-900 fs-4 py-0 text-success" value="@Model.AmountPaid.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" step="0.01" required oninput="calculateBalance()" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="stat-card-mini bg-rose-soft border-0 p-3 rounded-16">
+                                    <label class="form-label-premium text-danger mb-1">Balance Unpaid</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0 text-danger">₹</span>
+                                        <input type="number" name="AmountPending" id="AmountPending" class="form-control border-0 bg-transparent fw-900 fs-4 py-0 text-danger" value="@Model.AmountPending.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" readonly step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Meta Details -->
+                            <div class="col-md-4">
+                                <label class="form-label-premium">Payment Mode</label>
+                                <select name="PaymentMethod" class="form-select form-control-premium" required>
+                                    <option value="Cash">Cash Currency</option>
+                                    <option value="Bank">Bank Transfer / Check</option>
+                                    <option value="Card">Credit / Debit Card</option>
+                                    <option value="Online">Online Gateway</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label-premium">Transaction Date</label>
+                                <input type="date" name="PaidDate" class="form-control form-control-premium" value="@Model.PaidDate?.ToString("yyyy-MM-dd")" required />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label-premium">Reference / Receipt Note</label>
+                                <input type="text" name="Note" class="form-control form-control-premium" placeholder="e.g. Check #, Transaction ID..." />
+                            </div>
+
+                            <div class="col-12 mt-5">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center text-muted small fw-600">
+                                        <i class="fas fa-shield-check text-success me-2 h5 mb-0"></i>
+                                        Financial Record: Payment will be posted to General Ledger.
+                                    </div>
+                                    <button type="submit" class="btn btn-premium-blue-lg rounded-pill px-5 py-3 animate-up fw-900 shadow-lg" id="btnSubmit">
+                                        <i class="fas fa-check-circle me-2"></i> POST PAYMENT
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if($.fn.select2) {
+                $('.select2-simple').select2({ width: '100%' });
+            }
+
+            $('#StudentSelect').on('change', function() {
+                const id = $(this).val();
+                if(id) {
+                    window.location.href = '@Url.Action("CollectFee")?studentId=' + id;
+                }
+            });
+
+            $('#InvoiceSelect').on('change', function() {
+                const id = $(this).val();
+                if(id) {
+                    window.location.href = '@Url.Action("CollectFee")?studentId=@Model.StudentId&invoiceId=' + id;
+                }
+            });
+        });
+
+        function calculateBalance() {
+            const due = parseFloat($('#AmountDue').val()) || 0;
+            const paid = parseFloat($('#AmountPaid').val()) || 0;
+            const pending = due - paid;
+            $('#AmountPending').val(pending.toFixed(2));
+            
+            if(pending < 0) {
+                 $('#AmountPending').addClass('text-info').removeClass('text-danger');
+                 $('#btnSubmit').prop('disabled', true);
+                 Swal.fire('Amount Overpaid', 'Paid amount cannot exceed due amount.', 'warning');
+            } else {
+                 $('#AmountPending').addClass('text-danger').removeClass('text-info');
+                  $('#btnSubmit').prop('disabled', false);
+            }
+        }
+
+        // Form confirmation
+        $('#feeForm').on('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            Swal.fire({
+                title: 'Confirm Receipt?',
+                text: "Post this payment to the student's ledger?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3b82f6',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, Post Payment'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .bg-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+    .bg-white-trans { background: rgba(255,255,255,0.2); }
+    .icon-circle-lg { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .form-label-premium { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+    .bg-light-soft { background: #f8fafc; }
+    .bg-emerald-soft { background: #ecfdf5; }
+    .bg-rose-soft { background: #fef2f2; }
+    .btn-premium-blue-lg { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; transition: all 0.3s; }
+    .btn-premium-blue-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); color: white; }
+    .border-primary { border: 1px solid #3b82f6 !important; }
+</style>

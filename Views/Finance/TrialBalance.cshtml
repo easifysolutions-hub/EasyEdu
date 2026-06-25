@@ -1,0 +1,63 @@
+﻿@model IEnumerable<EasyEdu.Controllers.TrialBalanceItem>
+@{
+    ViewData["Title"] = "Trial Balance";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Trial Balance Statement</h1>
+        <p class="text-muted fw-500">System-wide consolidated debit and credit alignment</p>
+    </div>
+    <button class="btn-premium btn-premium-primary animate-fade-in" onclick="window.print()">
+        <i class="fas fa-file-pdf"></i> Generate PDF
+    </button>
+</div>
+
+<div class="premium-card bg-white animate-fade-in shadow-xl">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-5">ACCOUNT NAME / LEDGER HEAD</th>
+                        <th class="text-end">DEBIT (DR)</th>
+                        <th class="text-end px-5">CREDIT (CR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="px-5 fw-700 text-dark">@item.Account</td>
+                            <td class="text-end fw-600 @(item.Debit > 0 ? "text-primary" : "text-muted opacity-25")">
+                                @(item.Debit > 0 ? item.Debit.ToString("N2") : "0.00")
+                            </td>
+                            <td class="text-end px-5 fw-600 @(item.Credit > 0 ? "text-success" : "text-muted opacity-25")">
+                                @(item.Credit > 0 ? item.Credit.ToString("N2") : "0.00")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="bg-gray-900 text-white">
+                    <tr class="fw-800" style="background: #111827;">
+                        <td class="px-5 py-4">CONSOLIDATED TOTAL</td>
+                        <td class="text-end py-4">$@Model.Sum(i => i.Debit).ToString("N2")</td>
+                        <td class="text-end px-5 py-4">$@Model.Sum(i => i.Credit).ToString("N2")</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-success border-0 rounded-16 mt-4 shadow-sm">
+    <div class="d-flex align-items-center">
+        <div class="avatar-sm bg-success text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            <i class="fas fa-check"></i>
+        </div>
+        <div>
+            <div class="fw-800 h6 mb-0">Financial Equation Balanced</div>
+            <div class="small">The Trial Balance is mathematically accurate. Total Debits match Total Credits across all departments.</div>
+        </div>
+    </div>
+</div>

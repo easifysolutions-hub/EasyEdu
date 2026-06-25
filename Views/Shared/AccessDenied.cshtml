@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="text-center animate-fade-in-up">
+        <div class="mb-4">
+             <div class="bg-light-danger d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 100px; height: 100px; background-color: #fef2f2;">
+                 <i class="fas fa-lock text-danger" style="font-size: 3rem;"></i>
+             </div>
+        </div>
+        <h1 class="fw-900 text-dark mb-2" style="font-size: 2.5rem;">Access Denied</h1>
+        <p class="text-muted fw-600 mb-4" style="max-width: 500px; margin: 0 auto; line-height: 1.6;">
+            You do not have the necessary permissions to view this resource. <br>
+            Please contact your system administrator if you believe this is an error.
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="javascript:history.back()" class="btn btn-light shadow-sm text-muted fw-700 px-4 py-2" style="border-radius: 12px;">
+                <i class="fas fa-arrow-left me-2"></i> Go Back
+            </a>
+            <a href="/" class="btn btn-primary shadow-lg fw-700 px-4 py-2" style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); border-radius: 12px; border: none;">
+                <i class="fas fa-home me-2"></i> Dashboard
+            </a>
+        </div>
+    </div>
+</div>

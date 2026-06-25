@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Certification Generation Hub";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Certification Generation Hub</h2>
+            <p class="text-muted small fw-600">Synthesize and propagate student performance certifications using architected CBSE templates</p>
+        </div>
+        <div class="d-flex gap-2 text-dark">
+             <a href="@Url.Action("Templates")" class="btn btn-light-soft px-4 py-2 rounded-12 fw-700">
+                <i class="fas fa-palette me-2"></i>TEMPLATES
+            </a>
+        </div>
+    </div>
+
+    <div class="premium-card p-5 border-0 shadow-lg mb-5" style="border-radius: 24px;">
+        <div class="row g-4 align-items-end">
+            <div class="col-md-3 text-dark">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Evaluation Cycle</label>
+                <select id="ExamId" class="form-select form-control-premium">
+                     @foreach (var e in (List<EasyEdu.Models.CbseExam>)ViewBag.Exams) { <option value="@e.Id">@e.Name</option> }
+                </select>
+            </div>
+            <div class="col-md-3 text-dark">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Curriculum Class</label>
+                <select id="ClassId" class="form-select form-control-premium">
+                    @foreach (var c in (List<EasyEdu.Models.Class>)ViewBag.Classes) { <option value="@c.Id">@c.Name</option> }
+                </select>
+            </div>
+             <div class="col-md-3 text-dark">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Design Template</label>
+                <select id="TemplateId" class="form-select form-control-premium">
+                    <option value="1">Standard CBSE Node</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">PROPAGATE CERTIFICATES</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card p-5 border-0 shadow-lg empty-state text-center" style="border-radius: 24px;">
+         <i class="fas fa-print fa-3x text-muted opacity-25 mb-4"></i>
+         <h5 class="fw-800 text-muted italic">Awaiting certification parameters...</h5>
+         <p class="smallest text-muted fw-700 uppercase ls-1 mb-0">Select evaluation cycle to initialize batch generation.</p>
+    </div>
+</div>

@@ -1,0 +1,142 @@
+﻿@model IEnumerable<EasyEdu.Models.PhoneCallLog>
+@{
+    ViewData["Title"] = "Institutional Communication";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Communication & Call Center</h1>
+        <p class="text-muted fw-600">Unified tracking for institutional telephonic engagement and follow-ups</p>
+    </div>
+    <div class="d-flex gap-3">
+        <button class="btn-premium btn-premium-primary animate-fade-in shadow-lg" onclick="toggleForm()">
+            <i class="fas fa-phone-arrow-up-right"></i> Log Institutional Call
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-4 d-none" id="formColumn">
+        <div class="premium-card bg-white shadow-lg animate-fade-in">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light">
+                <h5 class="fw-800 text-dark mb-0">Record Communication</h5>
+                <button class="btn btn-sm btn-light rounded-circle" onclick="toggleForm()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4">
+                <form asp-action="CreatePhoneCallLog" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-700 text-muted small uppercase">Responder / Contact Name</label>
+                        <input type="text" name="Name" class="form-control border-2 fw-700" placeholder="e.g. Parent of Student ID" required />
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Registered Phone</label>
+                            <input type="tel" name="Phone" class="form-control border-2" placeholder="Primary number..." required />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Call Type</label>
+                            <select name="CallType" class="form-select border-2 fw-700">
+                                <option value="Incoming">Incoming Flow</option>
+                                <option value="Outgoing">Outgoing Contact</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Duration (Min)</label>
+                            <input type="text" name="CallDuration" class="form-control border-2" placeholder="e.g. 5:20" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-700 text-muted small uppercase">Follow-up Call</label>
+                            <input type="date" name="FollowUpDate" class="form-control border-2 fw-700 text-primary" />
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-700 text-muted small uppercase">Interaction Summary</label>
+                        <textarea name="Description" class="form-control border-2" rows="3" placeholder="Core discussion points..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-premium btn-premium-primary w-100 py-3 shadow-md">
+                        <i class="fas fa-headset me-2"></i> Commit Log Entry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-12" id="listColumn">
+        <div class="premium-card bg-white shadow-sm overflow-hidden animate-fade-in">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 fw-800 text-muted small uppercase">Engagement Identity</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Call Metadata</th>
+                            <th class="py-3 fw-800 text-muted small uppercase">Interaction Brief</th>
+                            <th class="py-3 fw-800 text-muted small uppercase text-center">Protocol</th>
+                            <th class="pe-4 py-3 fw-800 text-muted small uppercase text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var l in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-800 text-dark">@l.Name</div>
+                                    <div class="small fw-700 text-primary">@l.Phone</div>
+                                </td>
+                                <td>
+                                    <div class="fw-700 text-dark">@l.Date.ToString("MMM dd, yyyy")</div>
+                                    <div class="small text-muted fw-600">Duration: @(l.CallDuration ?? "N/A")</div>
+                                </td>
+                                <td>
+                                    <div class="small fw-600 text-muted line-clamp-2" style="max-width: 300px;">@(l.Description ?? "No summary provided.")</div>
+                                    @if(l.FollowUpDate.HasValue) {
+                                        <div class="badge bg-warning-soft text-warning fw-800 small mt-1">FOLLOW-UP: @l.FollowUpDate.Value.ToString("dd MMM")</div>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if(l.CallType == "Incoming") {
+                                        <span class="badge bg-success-soft text-success border border-success-light fw-800 px-3 py-2 rounded-12">INCOMING</span>
+                                    } else {
+                                        <span class="badge bg-primary-soft text-primary border border-primary-light fw-800 px-3 py-2 rounded-12">OUTGOING</span>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <a asp-action="DeletePhoneCallLog" asp-route-id="@l.Id" class="btn btn-light btn-sm text-danger border-0 rounded-circle" style="width: 32px; height: 32px;" onclick="return confirm('Erase communication log?')">
+                                        <i class="fas fa-trash-can small"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-phone-slash fa-4x text-gray-100 mb-3"></i>
+                <h4 class="text-muted fw-700">No communication history archived.</h4>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleForm() {
+            const formCol = document.getElementById('formColumn');
+            const listCol = document.getElementById('listColumn');
+            
+            if(formCol.classList.contains('d-none')) {
+                formCol.classList.remove('d-none');
+                listCol.classList.replace('col-xl-12', 'col-xl-8');
+            } else {
+                formCol.classList.add('d-none');
+                listCol.classList.replace('col-xl-8', 'col-xl-12');
+            }
+        }
+    </script>
+}

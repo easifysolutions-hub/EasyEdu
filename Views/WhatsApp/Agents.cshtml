@@ -1,0 +1,116 @@
+@model IEnumerable<EasyEdu.Models.WhatsAppAgent>
+@{
+    ViewData["Title"] = "Support Agent Registry";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Support Agent Registry</h2>
+            <p class="text-muted small fw-600">Coordinate the human-to-WhatsApp communication nodes for institutional support</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#agentModal">
+            <i class="fas fa-plus me-2"></i>DEPLOY AGENT NODE
+        </button>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var agent in Model)
+        {
+            <div class="col-md-4">
+                <div class="premium-card p-4 border-0 shadow-lg position-relative" style="border-radius: 20px;">
+                    <div class="position-absolute" style="top: 20px; right: 20px;">
+                        <span class="badge @(agent.IsOnline ? "bg-success" : "bg-secondary") rounded-pill px-3 py-2 fw-900 small shadow-sm">
+                            <i class="fas fa-circle me-1 small"></i> @(agent.IsOnline ? "ONLINE" : "OFFLINE")
+                        </span>
+                    </div>
+                    <div class="text-center mb-4">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-circle d-inline-block mb-3">
+                            <i class="fas fa-user-headset text-primary fa-2x"></i>
+                        </div>
+                        <h5 class="fw-900 text-dark mb-1">@agent.Name</h5>
+                        <p class="smallest text-muted fw-800 text-uppercase ls-1">@agent.Designation</p>
+                    </div>
+                    <div class="bg-light-soft p-3 rounded-12 mb-4 border">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="smallest text-muted fw-800 text-uppercase">Direct Node</span>
+                            <span class="small fw-900 text-dark">@agent.PhoneNumber</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="smallest text-muted fw-800 text-uppercase">Window</span>
+                            <span class="small fw-900 text-dark">@agent.WorkingHours</span>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary rounded-12 fw-900 small py-2" onclick="editAgent(@agent.Id, '@agent.Name', '@agent.PhoneNumber', '@agent.Designation', '@agent.WorkingHours', @agent.IsOnline.ToString().ToLower())"><i class="fas fa-edit me-2"></i>RE-ARCHITECT</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade animate-slide-up" id="agentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <form asp-action="SaveAgent" method="post">
+                <input type="hidden" name="Id" id="agentId" value="0" />
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-user-plus me-2 text-info"></i>DEPLOY AGENT NODE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Agent Identity Name*</label>
+                        <input name="Name" id="agentName" required class="form-control form-control-premium" placeholder="e.g. Sarah J. Support">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Authorized WhatsApp Number*</label>
+                        <input name="PhoneNumber" id="agentPhone" required class="form-control form-control-premium" placeholder="+1234567890">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Institutional Designation</label>
+                        <input name="Designation" id="agentDesignation" class="form-control form-control-premium" placeholder="e.g. Senior Academic Support">
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Temporal window</label>
+                            <input name="WorkingHours" id="agentHours" class="form-control form-control-premium" placeholder="09:00 - 18:00">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Initial Status</label>
+                            <select name="IsOnline" id="agentStatus" class="form-select form-control-premium">
+                                <option value="true">Online</option>
+                                <option value="false">Offline</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">SYNCHRONIZE NODE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editAgent(id, name, phone, des, hours, status) {
+        document.getElementById('agentId').value = id;
+        document.getElementById('agentName').value = name;
+        document.getElementById('agentPhone').value = phone;
+        document.getElementById('agentDesignation').value = des;
+        document.getElementById('agentHours').value = hours;
+        document.getElementById('agentStatus').value = status;
+        new bootstrap.Modal(document.getElementById('agentModal')).show();
+    }
+</script>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .btn-premium-purple { background: #8b5cf6; color: white; border: none; }
+    .bg-light-soft { background: #f8fafc; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

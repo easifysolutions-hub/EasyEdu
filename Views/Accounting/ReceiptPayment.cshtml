@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Receipts & Payments";
+    Layout = "_Layout";
+    var receipts = ViewBag.Receipts as Dictionary<string, decimal> ?? new Dictionary<string, decimal>();
+    var payments = ViewBag.Payments as Dictionary<string, decimal> ?? new Dictionary<string, decimal>();
+    var openingBalance = (decimal)(ViewBag.OpeningBalance ?? 0m);
+    
+    decimal totalRec = receipts.Values.Sum() + openingBalance;
+    decimal totalPay = payments.Values.Sum();
+    decimal closingBalance = totalRec - totalPay;
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Receipts & Payments Account</h3>
+            <p class="text-muted small fw-600">Period: @ViewBag.DateRange</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm rounded-8" onclick="window.print()">Print Report</button>
+        </div>
+    </div>
+
+    <div class="premium-card shadow-premium">
+        <div class="card-body p-0">
+            <div class="row g-0">
+                <!-- Receipts Side -->
+                <div class="col-md-6 border-end">
+                    <div class="p-3 bg-light-soft fw-800 text-center border-bottom text-uppercase text-primary shadow-sm">Receipts</div>
+                    <div class="p-4" style="min-height: 400px;">
+                        <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                            <span class="fw-800 text-dark">To Opening Balance (Cash/Bank)</span>
+                            <span class="fw-800">@openingBalance.ToString("N2")</span>
+                        </div>
+                        
+                        @foreach(var item in receipts)
+                        {
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600 text-secondary">To @item.Key</span>
+                                <span class="fw-700">@item.Value.ToString("N2")</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Payments Side -->
+                <div class="col-md-6">
+                    <div class="p-3 bg-light-soft fw-800 text-center border-bottom text-uppercase text-danger shadow-sm">Payments</div>
+                    <div class="p-4" style="min-height: 400px;">
+                        @foreach(var item in payments)
+                        {
+                             <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600 text-secondary">By @item.Key</span>
+                                <span class="fw-700">@item.Value.ToString("N2")</span>
+                            </div>
+                        }
+                        
+                        <div class="mt-auto pt-4">
+                             <div class="d-flex justify-content-between mb-3 pt-2 border-top">
+                                <span class="fw-800 text-dark">By Closing Balance (Cash/Bank)</span>
+                                <span class="fw-800 text-primary">@closingBalance.ToString("N2")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-0 bg-dark text-white">
+                <div class="col-md-6 border-end text-end p-3 fw-900">
+                    TOTAL: @totalRec.ToString("N2")
+                </div>
+                <div class="col-md-6 text-end p-3 fw-900">
+                    TOTAL: @totalRec.ToString("N2")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

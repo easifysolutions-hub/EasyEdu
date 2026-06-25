@@ -1,0 +1,76 @@
+@model IEnumerable<EasyEdu.Models.TeacherEvaluation>
+@{
+    ViewData["Title"] = "Pending Evaluations";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Verification Ledger</h1>
+        <p class="text-muted fw-600">Review and authorize pending faculty performance appraisals</p>
+    </div>
+</div>
+
+<div class="premium-card bg-white shadow-xl border-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table premium-table mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">FACULTY_MEMBER</th>
+                    <th>EVALUATION_DATE</th>
+                    <th>RATING_INDEX</th>
+                    <th>STATUS</th>
+                    <th class="text-end pe-4">AUTHORIZATION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm bg-primary-soft text-primary rounded-circle me-3 d-flex align-items-center justify-content-center fw-900" style="width: 40px; height: 40px;">
+                                    @e.Teacher.FirstName[0]
+                                </div>
+                                <div>
+                                    <div class="fw-800 text-dark">@e.Teacher.FullName</div>
+                                    <div class="small text-muted fw-600">@e.Teacher.EmployeeNumber</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="fw-700 text-muted">@e.EvaluationDate.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-900 text-primary me-2">@e.TotalRating.ToString("F1")</span>
+                                <div class="progress w-100px" style="height: 6px; width: 100px;">
+                                    <div class="progress-bar bg-primary" style="width: @(e.TotalRating * 20)%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-warning-soft text-warning fw-900">PENDING_REVIEW</span></td>
+                        <td class="text-end pe-4">
+                            <form asp-action="Approve" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@e.Id" />
+                                <button type="submit" class="btn btn-sm btn-success fw-800 px-3 shadow-sm">
+                                    <i class="fas fa-check-double me-1"></i> VERIFY
+                                </button>
+                            </form>
+                            <button class="btn btn-sm btn-light-soft ms-2"><i class="fas fa-eye"></i></button>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted fw-600">No pending evaluations found for verification.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-warning-soft { background: rgba(255, 193, 7, 0.1); }
+    .bg-primary-soft { background: rgba(13, 110, 253, 0.1); }
+</style>

@@ -1,0 +1,117 @@
+@model IEnumerable<EasyEdu.Models.ExamRule>
+@{
+    ViewData["Title"] = "Exam Rules Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">Establish Exam Rules</h3>
+            <p class="text-muted small fw-600">Define logic for merit lists, weighted averages, and multi-exam consolidation</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm fw-900" data-bs-toggle="modal" data-bs-target="#addRuleModal">
+            <i class="fas fa-plus-circle me-2"></i>CREATE NEW CALCULATION RULE
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">RULE CONFIGURATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">LOGIC ARCHITECTURE</th>
+                    <th class="py-4 fw-900 small text-uppercase">PASS THRESHOLD</th>
+                    <th class="py-4 fw-900 small text-uppercase">PREVIOUS TERMS</th>
+                    <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rule in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@rule.RuleName</span>
+                            <span class="small text-muted fw-700">Created: @rule.CreatedAt.ToString("dd MMM yyyy")</span>
+                        </td>
+                        <td class="py-4"><span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 italic">@rule.CalculationLogic.ToUpper()</span></td>
+                        <td class="py-4"><span class="fw-900 text-dark">@rule.PassThresholdPercent%</span></td>
+                        <td class="py-4">
+                            <span class="badge @(rule.IncludePreviousTerms ? "bg-success" : "bg-light text-muted") p-2 rounded-pill shadow-sm">
+                                <i class="fas @(rule.IncludePreviousTerms ? "fa-check" : "fa-times")"></i>
+                            </span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                             <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="Modify Weightage"><i class="fas fa-edit text-primary"></i></button>
+                                <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="Delete Rule"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <i class="fas fa-project-diagram fa-3x text-muted opacity-20 mb-3"></i>
+                            <h5 class="fw-800 text-muted italic">No merit calculation rules have been established yet.</h5>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Rule Modal -->
+<div class="modal fade animate-slide-up" id="addRuleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-24">
+            <form asp-action="SaveExamRule" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header border-0 bg-premium-dark text-white p-4">
+                    <h5 class="fw-900 m-0"><i class="fas fa-layer-group me-2"></i>ESTABLISH NEW RULE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label small fw-800 text-uppercase opacity-50">Rule Identification Name*</label>
+                        <input name="RuleName" required class="form-control form-control-premium" placeholder="e.g. Final Combined Merit 2026">
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Calculation Logic Architecture</label>
+                            <select name="CalculationLogic" class="form-select form-control-premium">
+                                <option value="WeightedAverage">Weighted Average (Recommended)</option>
+                                <option value="Summing">Absolute Mark Summing</option>
+                                <option value="BestOfN">Best of N Performance</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Pass Threshold (%)</label>
+                            <input type="number" name="PassThresholdPercent" value="33" class="form-control form-control-premium">
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                         <div class="form-check form-switch p-0 d-flex align-items-center justify-content-between">
+                            <label class="small fw-800 text-uppercase opacity-75 m-0">Consolidate Marks from Previous Terms</label>
+                            <input class="form-check-input ms-0" type="checkbox" name="IncludePreviousTerms" value="true" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-purple w-100 py-3 rounded-12 shadow-lg fw-900 h6 mb-0">
+                        <i class="fas fa-check-circle me-2"></i>INITIALIZE RULE ARCHITECTURE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .rounded-24 { border-radius: 24px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; }
+</style>

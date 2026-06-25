@@ -1,0 +1,134 @@
+@model EasyEdu.Models.BiometricSetting
+@{
+    ViewData["Title"] = "Biometric infrastructure Architect";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">Physical Infrastructure Architect</h2>
+            <p class="text-muted small fw-600">Coordinate API handshakes and authentication rituals with biometric hardware nodes</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index")" class="btn btn-light-soft px-4 py-2 rounded-12 shadow-sm fw-700">
+                <i class="fas fa-arrow-left me-2"></i>DASHBOARD
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm rounded-16 mb-4 animate-slide-up">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        </div>
+    }
+
+    <form asp-action="SaveSettings" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CompanyId" />
+
+        <div class="row g-4">
+            <div class="col-xl-8">
+                <div class="premium-card p-5 mb-4 border-0 shadow-lg" style="border-radius: 24px;">
+                    <div class="d-flex align-items-center mb-5 border-bottom pb-4 justify-content-between">
+                         <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                                <i class="fas fa-fingerprint text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-900 text-dark mb-0">Hardware API Gateway</h4>
+                                <p class="smallest text-muted fw-700 uppercase opacity-50 italic">Synchronize with institutional physical nodes</p>
+                            </div>
+                         </div>
+                         <div class="form-check form-switch p-0 d-flex align-items-center text-dark">
+                            <label class="small fw-900 text-uppercase opacity-75 m-0 me-3">Service Active</label>
+                            <input class="form-check-input ms-0" type="checkbox" asp-for="IsEnabled" style="width: 45px; height: 22px;">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                         <div class="col-md-6 text-dark">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Hardware Device Identifier*</label>
+                            <input asp-for="DeviceId" required class="form-control form-control-premium" placeholder="e.g. ZK-TF700-001">
+                        </div>
+                        <div class="col-md-6 text-dark">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Physical Integration API Key*</label>
+                            <input asp-for="ApiKey" required class="form-control form-control-premium" type="password" placeholder="••••••••••••••••••••••••••••">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                         <div class="col-md-12 text-dark">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Integration User Principal (User ID)</label>
+                            <input asp-for="IntegrationUserId" class="form-control form-control-premium" placeholder="Nexus-Integration-777">
+                            <div class="smallest text-muted fw-700 mt-2 italic px-1">Required for authenticated handshakes with cloud biometric providers.</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-0">
+                        <div class="col-md-4">
+                             <label class="form-label small fw-800 text-uppercase opacity-50">Hardware Provider</label>
+                             <select asp-for="Provider" class="form-select form-control-premium">
+                                 <option value="ZKTeco">ZKTeco Nexus</option>
+                                 <option value="HikVision">HikVision Core</option>
+                                 <option value="Suprema">Suprema Intelligence</option>
+                             </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Node IP Address</label>
+                            <input asp-for="IpAddress" class="form-control form-control-premium" placeholder="192.168.1.100">
+                        </div>
+                         <div class="col-md-3">
+                            <label class="form-label small fw-800 text-uppercase opacity-50">Communication Port</label>
+                            <input asp-for="Port" required type="number" class="form-control form-control-premium">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-4 bg-premium-dark d-flex justify-content-between align-items-center shadow-lg" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-info me-3 fa-lg shadow-sm"></i>
+                        <p class="text-white opacity-50 m-0 small fw-700">Physical credentials are encrypted within the institutional nexus vault.</p>
+                    </div>
+                    <button type="submit" class="btn btn-premium-purple px-5 py-3 rounded-12 shadow-lg fw-900 h6 mb-0 text-white">
+                        <i class="fas fa-sync-alt me-2 text-info"></i>SYNCHRONIZE INFRASTRUCTURE
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                 <div class="premium-card p-5 border-0 shadow-lg bg-light-soft text-center h-100" style="border-radius: 24px;">
+                     <h5 class="fw-900 text-dark mb-4 ls-1 uppercase italic opacity-50">Physical Handshake</h5>
+                     <div class="vertical-steps text-start">
+                         <div class="step-item d-flex gap-3 mb-4">
+                             <div class="step-dot bg-primary">1</div>
+                             <div class="step-content small fw-700 text-dark">Define physical hardware node identifiers and API keys.</div>
+                         </div>
+                          <div class="step-item d-flex gap-3 mb-4">
+                             <div class="step-dot bg-primary">2</div>
+                             <div class="step-content small fw-700 text-dark">Establish IP/Port pathways for real-time synchronization.</div>
+                         </div>
+                          <div class="step-item d-flex gap-3">
+                             <div class="step-dot bg-primary">3</div>
+                             <div class="step-content small fw-700 text-dark">Propagate user templates to biometric collection nodes.</div>
+                         </div>
+                     </div>
+                     <hr class="my-5 opacity-10">
+                     <p class="smallest text-muted fw-700 uppercase ls-1">Hardware Sync: OPTIMAL</p>
+                 </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .btn-premium-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border: none; }
+    .step-dot { width: 25px; height: 25px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; font-weight: 900; }
+    .ls-1 { letter-spacing: 1px; }
+</style>

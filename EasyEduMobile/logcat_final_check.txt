@@ -1,0 +1,91 @@
+﻿
+03-09 23:16:55.099  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|132813256. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.113  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217893, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.113  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.115  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms.unstable|57849076. Error: android.os.DeadObjectException. 
+[CONTEXT service_id=51 ]
+03-09 23:16:55.309  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217906, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.309  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.309  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|260943280. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.376  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217909, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.403  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.420  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|245253365. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.424  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217922, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.428  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.435  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|180393776. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.440  1406 26175 E libbinder.IPCThreadState: Binder transaction failure. id: 3217924, cmd: BR_DEAD_REPLY 
+(29189), error: -22 (Invalid argument)
+03-09 23:16:55.440  1406 26175 D ActivityThread: Too many transaction errors, throttling freezer binder callback.
+03-09 23:16:55.446  1406 26175 W FlagUpdateListenerRegis: Unable to invoke IFlagUpdateListener.onFlagUpdate. App: 
+com.google.android.gms. Process: com.google.android.gms|164933341. Error: android.os.DeadObjectException. [CONTEXT 
+service_id=51 ]
+03-09 23:16:55.882   824  2161 W BinderNative: Uncaught exception from death notification
+03-09 23:16:55.882   824  2161 W BinderNative: java.lang.SecurityException: Specified package 
+"com.google.android.googlequicksearchbox" under uid 1000 but it is not
+03-09 23:16:56.224   824   906 W BinderNative: Uncaught exception from death notification
+03-09 23:16:56.224   824   906 W BinderNative: java.lang.SecurityException: Specified package 
+"com.google.android.googlequicksearchbox" under uid 1000 but it is not
+03-09 23:16:56.874  1406  7294 W PhBaseOp: Phenotype API error. Event: # imqs@b205879b, EventCode: COMMIT_CONFIG 
+[CONTEXT service_id=51 ]
+03-09 23:16:56.914  1406  7294 W AsyncOperation: OperationException[Status{statusCode=Stale snapshot for 
+com.google.android.gms.phenotype(committed configuration changed), resolution=null}]
+03-09 23:16:56.927  1406 26175 W PhenotypeFlagCommitter: java.util.concurrent.ExecutionException: bduu: 29501: Stale 
+snapshot token
+03-09 23:16:57.855  8248  8354 I BugleRcsJibe: RcsServiceConnectionException was raised while waiting to connect to 
+RcsEngineLifecycleServiceV2
+03-09 23:19:46.532 18668 26079 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.532 18668 26079 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.533 18668 22136 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.533 18668 22136 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.534 18668 26077 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.534 18668 26077 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.536 18668 19133 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.536 18668 19133 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.536 18668 22835 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.536 18668 22835 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.538 18668 21430 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.538 18668 21430 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.538 18668 18800 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.538 18668 18800 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:19:46.542 18668 26041 E unknown:ReconnectingWebSocket: Error occurred, shutting down websocket connection: 
+Websocket exception
+03-09 23:19:46.542 18668 26041 E unknown:ReconnectingWebSocket: java.net.SocketException: Connection reset
+03-09 23:20:40.916  1082  1139 D WindowManagerShell: onActivityRestartAttempt: 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity}, wasVisible=false, 
+displayId=0, pipDisplayLayoutState#displayId=0
+03-09 23:20:41.202   824   845 V WindowManager:     startWCT=WindowContainerTransaction { changes= {} hops= [] 
+errorCallbackToken=null taskFragmentOrganizer=null }
+03-09 23:20:41.749   824   845 I ActivityTaskManager: Displayed host.exp.exponent/.experience.ErrorActivity for user 
+0: +1s609ms
+03-09 23:20:42.174 17321 17321 I AdvertisingIdClient: getting error as 17: API: ClientTelemetry.API is not available 
+on this device. Connection failed with: ConnectionResult{statusCode=API_DISABLED_FOR_CONNECTION, resolution=null, 
+message=null, clientMethodKey=null}
+03-09 23:20:42.588  1406 26412 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:20:42.638  1406 25860 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:20:42.716  1406 26412 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:20:42.786  1406 25860 I NetworkScheduler: (REDACTED) Error inserting %s
+03-09 23:20:43.920   824  1763 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+03-09 23:21:10.971  1193 26430 D NetworkMonitor/108: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 
+Probe failed with exception java.io.IOException: unexpected end of stream on com.android.okhttp.Address@36eac20f
+
+

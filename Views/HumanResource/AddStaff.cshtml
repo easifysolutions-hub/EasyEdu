@@ -1,0 +1,274 @@
+@model EasyEdu.Models.Teacher
+@{
+    ViewData["Title"] = "Personnel Onboarding Registry";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 pb-2 animate-slide-in">
+    <div>
+        <h1 class="page-title"><i class="fas fa-user-plus me-2 text-primary"></i> Personnel Onboarding</h1>
+        <p class="text-muted fw-600">Register new institutional faculty and staff members to the central nexus</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="@Url.Action("StaffDirectory", "HumanResource")" class="btn btn-premium-light border rounded-12 px-4 shadow-xs fw-800">
+            <i class="fas fa-arrow-left me-2"></i> RETURN TO NEXUS
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <form asp-action="CreateStaff" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="row g-4">
+            <!-- Left Column: Identity & Contact -->
+            <div class="col-xl-8">
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="icon-box bg-primary-soft text-primary rounded-16 p-3 shadow-sm"><i class="fas fa-id-card fa-lg"></i></div>
+                        <h4 class="fw-900 text-dark m-0">IDENTITY REGISTRATION</h4>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 mt-0">
+                            <label class="form-label small fw-800 text-muted uppercase">FACULTY FIRST NAME*</label>
+                            <input type="text" asp-for="FirstName" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="Archival first name" required>
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mt-0">
+                            <label class="form-label small fw-800 text-muted uppercase">FACULTY LAST NAME*</label>
+                            <input type="text" asp-for="LastName" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="Archival last name" required>
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-muted uppercase">EMAIL SIGNATURE*</label>
+                            <input type="email" asp-for="Email" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="Institutional email address" required>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-muted uppercase">CONTACT NUMBER*</label>
+                            <input type="tel" asp-for="Phone" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="Verified telephone number" required>
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-800 text-muted uppercase">RESIDENTIAL ARCHIVE</label>
+                            <textarea asp-for="Address" class="form-control rounded-12 border-0 bg-light fw-700 py-3" rows="3" placeholder="Permanent residential address for institutional records"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in" style="animation-delay: 0.1s">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="icon-box bg-purple-soft text-purple rounded-16 p-3 shadow-sm"><i class="fas fa-briefcase fa-lg"></i></div>
+                        <h4 class="fw-900 text-dark m-0">INSTITUTIONAL POSITIONING</h4>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 mt-0">
+                            <label class="form-label small fw-800 text-muted uppercase">EMPLOYEE NUMBER*</label>
+                            <input type="text" asp-for="EmployeeNumber" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="ARCH-000-00-0000" required>
+                        </div>
+                        <div class="col-md-6 mt-0">
+                            <label class="form-label small fw-800 text-muted uppercase">ONBOARDING DATE*</label>
+                            <input type="date" asp-for="JoiningDate" class="form-control rounded-12 border-0 bg-light fw-700 py-3" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-muted uppercase">DEPARTMENT ASSIGNMENT*</label>
+                            <select asp-for="DepartmentId" class="form-select rounded-12 border-0 bg-light fw-700 py-3" asp-items="ViewBag.Departments" required>
+                                <option value="">Select Institutional Department</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-muted uppercase">DESIGNATION ASSIGNMENT*</label>
+                            <select asp-for="DesignationId" class="form-select rounded-12 border-0 bg-light fw-700 py-3" asp-items="ViewBag.Designations" required>
+                                <option value="">Select Organizational Designation</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden p-4 animate-fade-in" style="animation-delay: 0.2s">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="icon-box bg-success-soft text-success rounded-16 p-3 shadow-sm"><i class="fas fa-graduation-cap fa-lg"></i></div>
+                        <h4 class="fw-900 text-dark m-0">ACADEMIC & FINANCIAL</h4>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 mt-0">
+                            <label class="form-label small fw-800 text-muted uppercase">ACADEMIC QUALIFICATIONS</label>
+                            <input type="text" asp-for="Qualification" class="form-control rounded-12 border-0 bg-light fw-700 py-3" placeholder="e.g. PhD in Mathematics">
+                        </div>
+                        <div class="col-md-6 mt-0">
+                            <label class="form-label small fw-800 text-muted uppercase">BASE RETAINER SALARY*</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0 rounded-start-12 fw-900 text-success">$</span>
+                                <input type="number" asp-for="Salary" class="form-control rounded-end-12 border-0 bg-light fw-700 py-3" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-800 text-muted uppercase">PROFESSIONAL BIO-REGISTERY</label>
+                            <textarea asp-for="Experience" class="form-control rounded-12 border-0 bg-light fw-700 py-3" rows="3" placeholder="Archival professional summary and biography"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in" style="animation-delay: 0.25s">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="icon-box bg-warning-soft text-warning rounded-16 p-3 shadow-sm"><i class="fas fa-edit fa-lg"></i></div>
+                        <h4 class="fw-900 text-dark m-0">CUSTOM PARAMETERS</h4>
+                    </div>
+                    
+                    <div class="row g-4">
+                        @{
+                            var staffFields = ViewBag.CustomFields as List<EasyEdu.Models.CustomField> ?? new List<EasyEdu.Models.CustomField>();
+                        }
+                        @if (!staffFields.Any())
+                        {
+                            <div class="col-12 text-center py-4 bg-light rounded-16">
+                                <p class="text-muted fw-700 mb-0 italic small">No dynamic institutional data points defined. <a href="@Url.Action("Index", "CustomFields", new { formType = "Staff" })" class="text-primary fw-bold">DEFINE NOW</a></p>
+                            </div>
+                        }
+                        @foreach (var field in staffFields)
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label small fw-800 text-muted uppercase @(field.IsRequired ? "text-danger" : "")">
+                                    @field.FieldName @(field.IsRequired ? "*" : "")
+                                </label>
+                                
+                                @if (field.FieldType == "Select")
+                                {
+                                    <select name="CustomField_@field.Id" class="form-select rounded-12 border-0 bg-light fw-700 py-3" @(field.IsRequired ? "required" : "")>
+                                        <option value="">Select @field.FieldName</option>
+                                        @if (!string.IsNullOrEmpty(field.Options))
+                                        {
+                                            @foreach (var option in field.Options.Split(','))
+                                            {
+                                                <option value="@option.Trim()">@option.Trim()</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                else if (field.FieldType == "Date")
+                                {
+                                    <input type="date" name="CustomField_@field.Id" class="form-control rounded-12 border-0 bg-light fw-700 py-3" @(field.IsRequired ? "required" : "") />
+                                }
+                                else if (field.FieldType == "Number")
+                                {
+                                    <input type="number" name="CustomField_@field.Id" class="form-control rounded-12 border-0 bg-light fw-700 py-3" @(field.IsRequired ? "required" : "") />
+                                }
+                                else
+                                {
+                                    <input type="text" name="CustomField_@field.Id" class="form-control rounded-12 border-0 bg-light fw-700 py-3" @(field.IsRequired ? "required" : "") />
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Profile & Settings -->
+            <div class="col-xl-4">
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in" style="animation-delay: 0.3s">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <h4 class="fw-900 text-dark m-0">FACULTY IMAGE</h4>
+                    </div>
+                    <div class="text-center p-3">
+                        <div class="image-upload-nexus border-dashed-2 rounded-24 p-5 mb-4 position-relative hover-shadow-sm transition-all" id="imagePreviewContainer">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted opacity-50 mb-3 d-block"></i>
+                            <h6 class="fw-800 text-muted">UPLOAD ARCHIVAL PHOTO</h6>
+                            <p class="small text-muted fw-600 mb-0">Drag and drop or click to browse files (JPG, PNG)</p>
+                            <input type="file" name="ImageFile" class="absolute-form-input opacity-0" id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                        </div>
+                        <img id="imagePlaceholder" src="#" class="d-none rounded-24 shadow-lg mb-4 w-100" style="max-height: 250px; object-fit: cover;">
+                        <input type="hidden" asp-for="ProfilePicture">
+                    </div>
+                </div>
+
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in" style="animation-delay: 0.4s">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <h4 class="fw-900 text-dark m-0">NEXUS PREFERENCES</h4>
+                    </div>
+                    
+                    <div class="d-flex flex-column gap-3">
+                        <div class="form-check form-switch p-3 bg-light rounded-16 d-flex align-items-center justify-content-between">
+                            <div>
+                                <label class="form-check-label fw-800 text-dark mb-0 ms-0" for="isActiveSwitch">ACTIVE ENTITY</label>
+                                <div class="small text-muted fw-600">Onboard as active faculty member</div>
+                            </div>
+                            <input class="form-check-input ms-3 rounded-pill" type="checkbox" asp-for="IsActive" id="isActiveSwitch" checked style="width: 50px; height: 26px;">
+                        </div>
+                        
+                        <div class="form-check form-switch p-3 bg-light rounded-16 d-flex align-items-center justify-content-between">
+                            <div>
+                                <label class="form-check-label fw-800 text-dark mb-0 ms-0" for="loginSwitch">PORTAL ACCESS</label>
+                                <div class="small text-muted fw-600">Provision institutional login credentials</div>
+                            </div>
+                            <input class="form-check-input ms-3 rounded-pill" type="checkbox" id="loginSwitch" checked style="width: 50px; height: 26px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-premium-primary w-100 rounded-20 py-3 shadow-primary fw-900 fs-5 animate-pulse-slow">
+                        <i class="fas fa-check-double me-2"></i> FINALIZE ONBOARDING
+                    </button>
+                    <p class="text-center text-muted small mt-3 fw-700">Digital verification required upon activation.</p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('imagePlaceholder');
+            output.src = reader.result;
+            output.classList.remove('d-none');
+            document.getElementById('imagePreviewContainer').classList.add('d-none');
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+<style>
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.08); }
+    .bg-purple-soft { background: rgba(168, 85, 247, 0.08); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.08); }
+    .text-purple { color: #a855f7; }
+
+    .border-dashed-2 { border: 2px dashed #cbd5e1; }
+    
+    .absolute-form-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .image-upload-nexus {
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .image-upload-nexus:hover {
+        background: #f8fafc;
+        border-color: #6366f1;
+        transform: translateY(-5px);
+    }
+
+    .shadow-primary { box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.5); }
+    
+    .form-check-input:checked {
+        background-color: #6366f1;
+        border-color: #6366f1;
+    }
+
+    @@keyframes pulse-slow {
+        0%, 100% { transform: scale(1); box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.5); }
+        50% { transform: scale(0.98); box-shadow: 0 4px 15px -5px rgba(99, 102, 241, 0.3); }
+    }
+    .animate-pulse-slow { animation: pulse-slow 3s infinite; }
+</style>

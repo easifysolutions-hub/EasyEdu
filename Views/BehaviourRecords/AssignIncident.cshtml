@@ -1,0 +1,81 @@
+﻿@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Assign Incident";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <h3 class="page-title mb-4">Assign Behaviour Incident</h3>
+
+    <div class="premium-card p-4 mb-4">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Filter by Class</label>
+                <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                 <button type="submit" class="btn btn-premium-purple w-100">FILTER STUDENTS</button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="premium-card">
+            <div class="card-header bg-white border-0 p-4">
+                <h5 class="fw-800 text-dark m-0">Assignment Details</h5>
+            </div>
+            <div class="card-body p-4 pt-0">
+                <form asp-action="SaveAssignment" method="post">
+                    <div class="row g-4 mb-4 p-3 bg-light-subtle rounded-16 border">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase">Incident Type*</label>
+                            <select name="incidentId" class="form-select form-control-premium" asp-items="ViewBag.Incidents" required>
+                                <option value="">Select Incident</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase">Remarks / Details</label>
+                            <input type="text" name="remarks" class="form-control-premium w-100" placeholder="Optional details about the occurrence">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table premium-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>Adm No</th>
+                                    <th>Student Name</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var s in Model)
+                                {
+                                    <tr>
+                                        <td><input type="checkbox" name="studentIds" value="@s.Id" class="student-check"></td>
+                                        <td class="fw-800 text-primary">@s.AdmissionNumber</td>
+                                        <td class="fw-700 text-dark">@s.FirstName @s.LastName</td>
+                                        <td class="small fw-600">@s.Gender</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-premium-primary px-5 py-3 rounded-12 shadow-premium">ASSIGN TO SELECTED</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function() {
+        document.querySelectorAll('.student-check').forEach(cb => cb.checked = this.checked);
+    });
+</script>

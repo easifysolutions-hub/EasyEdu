@@ -1,0 +1,149 @@
+﻿@model EasyEdu.Controllers.FinancialReportsViewModel
+@{
+    ViewData["Title"] = "Financial Reports";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Financial Analysis Dashboard</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider"><i class="fas fa-chart-line me-2"></i> Comprehensive school financial health monitoring</p>
+        </div>
+        <div class="d-flex gap-3">
+            <a asp-action="TrialBalance" class="btn btn-premium-blue btn-sm px-4 rounded-pill shadow-sm fw-800">
+                <i class="fas fa-balance-scale me-2"></i> TRIAL BALANCE
+            </a>
+            <button class="btn btn-premium-purple btn-sm px-4 rounded-pill shadow-sm fw-800" onclick="window.print()">
+                <i class="fas fa-print me-2"></i> EXPORT HUB
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-emerald">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-arrow-up"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">Revenue</span>
+                </div>
+                <div class="stat-label">Total Collections</div>
+                <div class="stat-value">$@Model.TotalIncome.ToString("N0")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-rose">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-arrow-down"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">Burn Rate</span>
+                </div>
+                <div class="stat-label">Total Outflow</div>
+                <div class="stat-value">$@Model.TotalExpenses.ToString("N0")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-indigo">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-chart-pie"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">Net</span>
+                </div>
+                <div class="stat-label">Calculated Profit</div>
+                <div class="stat-value">$@Model.NetProfit.ToString("N0")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card-premium grad-amber">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon-blob bg-white-trans"><i class="fas fa-clock"></i></div>
+                    <span class="badge bg-white-trans text-white fw-800">Pending</span>
+                </div>
+                <div class="stat-label">Accounts Receivable</div>
+                <div class="stat-value">$@Model.PendingFees.ToString("N0")</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <div class="premium-card-animated p-4 bg-white shadow-sm border-0">
+                <h5 class="fw-800 text-dark mb-4">Consolidated Activity Stream</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="bg-light-subtle small fw-800 text-muted text-uppercase">
+                                <th>Date</th>
+                                <th>Transaction Detail</th>
+                                <th>Classification</th>
+                                <th class="text-end">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.RecentTransactions)
+                            {
+                                <tr>
+                                    <td class="small fw-700">@item.Date.ToString("dd MMM yyyy")</td>
+                                    <td class="text-dark fw-600">@item.Description</td>
+                                    <td>
+                                        <span class="badge-custom @(item.Type == "Income" ? "b-emerald" : "b-rose")">
+                                            @item.Type
+                                        </span>
+                                    </td>
+                                    <td class="text-end fw-800 @(item.Type == "Income" ? "text-success" : "text-danger")">
+                                        @(item.Type == "Income" ? "+" : "-")$@item.Amount.ToString("N2")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+             <div class="premium-card-animated p-4 bg-white shadow-sm border-0 h-100">
+                <h5 class="fw-800 text-dark mb-4">Accounting Modules</h5>
+                <div class="d-grid gap-3">
+                    <a href="@Url.Action("FeeStructure", "Finance")" class="op-button-animated grad-indigo-light">
+                        <div class="d-flex align-items-center w-100">
+                            <i class="fas fa-layer-group h4 mb-0 me-3"></i>
+                            <div class="text-start">
+                                <div class="op-label text-dark">Manage Fee Units</div>
+                                <div class="small text-muted fw-600" style="text-transform: none;">Per-class billing settings</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="@Url.Action("Index", "Finance")" class="op-button-animated grad-emerald-light">
+                        <div class="d-flex align-items-center w-100">
+                            <i class="fas fa-cash-register h4 mb-0 me-3"></i>
+                            <div class="text-start">
+                                <div class="op-label text-dark">Quick Fee Entry</div>
+                                <div class="small text-muted fw-600" style="text-transform: none;">Direct payment collection</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="alert bg-light border-0 rounded-16 mt-3 mb-0">
+                        <div class="d-flex align-items-start">
+                             <i class="fas fa-shield-alt text-primary mt-1 me-3"></i>
+                             <div class="small fw-600 text-muted">Secure Financial Records: Every transaction is cryptographically linked to the performing user.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Reusing dashboard styles for consistency */
+    .stat-card-premium { padding: 1.5rem; border-radius: 20px; color: white; transition: all 0.4s ease; position: relative; overflow: hidden; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+    .grad-emerald { background: linear-gradient(135deg, #10b981, #059669); }
+    .grad-rose { background: linear-gradient(135deg, #f43f5e, #be123c); }
+    .grad-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+    .grad-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .stat-icon-blob { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); }
+    .stat-label { font-size: 0.8rem; font-weight: 700; opacity: 0.9; margin: 10px 0 2px; }
+    .stat-value { font-size: 1.6rem; font-weight: 800; }
+    
+    .op-button-animated { display: block; padding: 1.25rem; border-radius: 15px; text-decoration: none; transition: all 0.3s; border: 1px solid transparent; }
+    .op-button-animated:hover { transform: translateX(8px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .grad-indigo-light { background: #f5f3ff; color: #7c3aed; }
+    .grad-emerald-light { background: #f0fdf4; color: #16a34a; }
+</style>

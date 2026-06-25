@@ -1,0 +1,647 @@
+@{
+    if (ViewBag.Title != null) {
+        ViewData["Title"] = ViewBag.Title;
+    }
+    else {
+        ViewData["Title"] = "Voucher Entry";
+    }
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper pt-0 animate-up">
+    <!-- Premium Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <div>
+            <h3 class="fw-800 text-dark mb-1">Financial Entry Module</h3>
+            <p class="text-muted small fw-700 uppercase tracking-wider">
+                <i class="fas fa-file-invoice-dollar me-2 text-primary"></i> 
+                <span id="voucherTitleText">@ViewData["Title"]</span> Selection
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("AccountLedger")" class="btn btn-premium-white btn-sm px-3 rounded-pill shadow-sm fw-800">
+                <i class="fas fa-book-open me-2 text-indigo"></i> LEDGER
+            </a>
+            <a href="@Url.Action("ChartOfAccounts")" class="btn btn-premium-white btn-sm px-3 rounded-pill shadow-sm fw-800">
+                <i class="fas fa-sitemap me-2 text-primary"></i> CHART
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="premium-card-animated shadow-lg border-0 bg-white overflow-hidden">
+                <div class="card-header bg-white border-0 p-4">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <label class="form-label-premium">Voucher Category</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-tag text-muted"></i></span>
+                                <select id="voucherType" class="form-select form-control-premium border-0 bg-light">
+                                    <option value="1">Payment</option>
+                                    <option value="2">Receipt</option>
+                                    <option value="3">Contra</option>
+                                    <option value="4">Journal</option>
+                                </select>
+                            </div>
+                            @if (ViewBag.SelectedType != null)
+                            {
+                                <input type="hidden" id="voucherTypeHidden" value="@ViewBag.SelectedType" />
+                            }
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label-premium">Fiscal Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-calendar-alt text-muted"></i></span>
+                                <input type="date" id="voucherDate" class="form-control-premium border-0 bg-light" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-premium">Official Narration</label>
+                            <div class="input-group shadow-sm rounded-12 overflow-hidden">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-pen-nib text-muted"></i></span>
+                                <input type="text" id="voucherNarration" class="form-control-premium border-0 bg-light w-100 py-3" placeholder="Describe this transaction comprehensively...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="min-height: 400px;">
+                        <table class="table align-middle mb-0" id="voucherTable">
+                            <thead class="bg-light-soft fw-800 small text-muted text-uppercase">
+                                <tr style="border-bottom: 2px solid #f1f5f9;">
+                                    <th width="10%" class="ps-4 py-3">Type</th>
+                                    <th width="30%" class="py-3">Account Head / Ledger</th>
+                                    <th width="12%" class="py-3">Balance</th>
+                                    <th width="14%" class="text-end py-3">Debit ($)</th>
+                                    <th width="14%" class="text-end py-3">Credit ($)</th>
+                                    <th width="15%" class="py-3">Remarks</th>
+                                    <th width="5%" class="text-center py-3"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="voucherBody" class="snug-rows">
+                                <!-- Dynamic Professional Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Enhanced Footer Actions -->
+                    <div class="p-4 bg-light-subtle border-top">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <div class="btn-group shadow-sm rounded-pill overflow-hidden">
+                                    <button class="btn btn-emerald-gradient border-0 px-4 fw-800 text-white" onclick="addRow('Dr')">
+                                        <i class="fas fa-plus-circle me-2"></i> ADD DR
+                                    </button>
+                                    <button class="btn btn-rose-gradient border-0 px-4 fw-800 text-white" onclick="addRow('Cr')">
+                                        <i class="fas fa-plus-circle me-2"></i> ADD CR
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div id="balanceDiff" class="animate-bounce-in"></div>
+                            </div>
+                            <div class="col-md-4 text-end d-flex align-items-center justify-content-end gap-4">
+                                <div class="total-summary-mini px-4 border-end">
+                                    <div class="small fw-800 text-muted opacity-50 uppercase mb-2">ACCUMULATED TOTAL</div>
+                                    <div class="d-flex gap-5">
+                                        <div class="text-end">
+                                            <span class="d-block small fw-700 text-muted">Total Debit</span>
+                                            <span class="fs-4 fw-900 text-dark transition-all" id="totalDebit">0.00</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="d-block small fw-700 text-muted">Total Credit</span>
+                                            <span class="fs-4 fw-900 text-dark transition-all" id="totalCredit">0.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-premium-blue-lg rounded-16 px-5 py-3 shadow-premium animate-up" onclick="saveVoucher(this)">
+                                    <span class="fw-900 fs-5"><i class="fas fa-cloud-upload-alt me-2"></i> POST VOUCHER</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Ledgers data from server
+    const ledgers = @Html.Raw(Json.Serialize(ViewBag.Ledgers));
+    
+    // Initial rows
+    document.addEventListener('DOMContentLoaded', () => {
+        const hiddenType = document.getElementById('voucherTypeHidden');
+        if (hiddenType) {
+            document.getElementById('voucherType').value = hiddenType.value;
+        }
+        
+        addRow('Dr');
+        addRow('Cr');
+        
+        // Initialize Select2 if exists
+        if($.fn.select2) {
+            $('.select2-simple').select2({
+                placeholder: "Search account...",
+                allowClear: true,
+                width: '100%'
+            });
+        }
+    });
+
+    // Keyboard Navigation handled globally in _Layout
+    
+    const voucherTypeNames = {
+        '1': 'Payment Voucher',
+        '2': 'Receipt Voucher',
+        '3': 'Contra Voucher',
+        '4': 'Journal Voucher'
+    };
+
+    document.getElementById('voucherType').addEventListener('change', (e) => {
+        const type = e.target.value;
+        if (type == '1') window.location.href = '/Accounting/PaymentVoucher';
+        else if (type == '2') window.location.href = '/Accounting/ReceiptVoucher';
+        else if (type == '3') window.location.href = '/Accounting/ContraVoucher';
+        else if (type == '4') window.location.href = '/Accounting/JournalVoucher';
+    });
+
+    function getAllowedLedgers(voucherType, rowType) {
+        function isCashOrBank(l) {
+            const g = (l.group || l.Group || "").toLowerCase();
+            const n = (l.name || l.Name || "").toLowerCase();
+            return g === "cash-in-hand" || g === "bank accounts" || n.includes("cash") || n.includes("bank");
+        }
+
+        if (voucherType === '1') { // Payment
+            if (rowType === 'Dr') {
+                return ledgers.filter(l => !isCashOrBank(l));
+            } else {
+                return ledgers.filter(l => isCashOrBank(l));
+            }
+        } 
+        else if (voucherType === '2') { // Receipt
+            if (rowType === 'Dr') {
+                return ledgers.filter(l => isCashOrBank(l));
+            } else {
+                return ledgers.filter(l => !isCashOrBank(l));
+            }
+        } 
+        else if (voucherType === '3') { // Contra
+            return ledgers.filter(l => isCashOrBank(l));
+        } 
+        else { // Journal
+            return ledgers;
+        }
+    }
+
+    function addRow(type = 'Dr') {
+        const tbody = document.getElementById('voucherBody');
+        const tr = document.createElement('tr');
+        tr.className = 'align-middle animate-slide-right-row';
+        
+        const voucherType = document.getElementById('voucherType').value;
+        const allowed = getAllowedLedgers(voucherType, type);
+
+        let ledgerOptions = '<option value="">Search Ledger Account...</option>';
+        allowed.sort((a,b) => {
+            const nameA = (a.name || a.Name || "").toLowerCase();
+            const nameB = (b.name || b.Name || "").toLowerCase();
+            return nameA.localeCompare(nameB);
+        }).forEach(l => {
+            const id = l.id || l.Id;
+            const name = l.name || l.Name;
+            const group = l.group || l.Group;
+            ledgerOptions += `<option value="${id}">${name} (${group})</option>`;
+        });
+
+        tr.innerHTML = `
+            <td class="ps-4">
+                <div class="badge-row-type ${type === 'Dr' ? 'dr-bg' : 'cr-bg'} shadow-sm">
+                    <select class="form-select form-select-sm border-0 fw-800 bg-transparent text-white row-type" onchange="updateRowColor(this); toggleInputs(this);">
+                        <option value="Dr" ${type === 'Dr' ? 'selected' : ''}>BY (DR)</option>
+                        <option value="Cr" ${type === 'Cr' ? 'selected' : ''}>TO (CR)</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="select2-wrapper" style="min-width: 0;">
+                    <select class="form-select form-select-sm row-ledger select2-simple" onchange="updateBalance(this)">
+                        ${ledgerOptions}
+                    </select>
+                </div>
+            </td>
+            <td>
+                <span class="ledger-balance-pill shadow-xs">Awaiting...</span>
+            </td>
+            <td>
+                <div class="input-group input-group-sm shadow-sm rounded-8 overflow-hidden voucher-input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control row-debit" value="0" step="0.01" oninput="calculateTotals()" ${type === 'Cr' ? 'disabled' : ''}>
+                </div>
+            </td>
+            <td>
+                 <div class="input-group input-group-sm shadow-sm rounded-8 overflow-hidden voucher-input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control row-credit" value="0" step="0.01" oninput="calculateTotals()" ${type === 'Dr' ? 'disabled' : ''}>
+                </div>
+            </td>
+            <td>
+                <input type="text" class="form-control form-control-sm row-note voucher-note-input" placeholder="Reference note...">
+            </td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-light-soft text-danger rounded-circle hover-scale" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;" onclick="removeRow(this)"><i class="fas fa-trash-alt"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        if($.fn.select2) {
+            $(tr).find('.select2-simple').select2({ width: '100%' });
+        }
+    }
+
+    function refreshLedgerOptions() {
+        const voucherType = document.getElementById('voucherType').value;
+        document.querySelectorAll('#voucherBody tr').forEach(tr => {
+            const rowType = tr.querySelector('.row-type').value;
+            const select = tr.querySelector('.row-ledger');
+            const currentVal = select.value; // Preserve selection if possible
+            
+            const allowed = getAllowedLedgers(voucherType, rowType);
+            let html = '<option value="">Search Ledger Account...</option>';
+            
+            allowed.sort((a,b) => {
+                const nameA = (a.name || a.Name || "").toLowerCase();
+                const nameB = (b.name || b.Name || "").toLowerCase();
+                return nameA.localeCompare(nameB);
+            }).forEach(l => {
+                const id = l.id || l.Id;
+                const name = l.name || l.Name;
+                const group = l.group || l.Group;
+                const selected = id == currentVal ? 'selected' : '';
+                html += `<option value="${id}" ${selected}>${name} (${group})</option>`;
+            });
+            
+            $(select).empty().append(html).trigger('change.select2'); // Update Select2
+        });
+    }
+
+    function updateRowColor(select) {
+        const badge = select.closest('.badge-row-type');
+        if(select.value === 'Dr') {
+            badge.className = 'badge-row-type dr-bg';
+        } else {
+            badge.className = 'badge-row-type cr-bg';
+        }
+        // Also refresh options because row type changed
+        refreshLedgerOptions();
+    }
+
+    function updateBalance(select) {
+        const id = select.value;
+        if (!id) return;
+        
+        const tr = select.closest('tr');
+        const pill = tr.querySelector('.ledger-balance-pill');
+        pill.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Checking...';
+        
+        fetch(`@Url.Action("GetLedgerBalance")?id=${id}`)
+            .then(res => res.json())
+            .then(data => {
+                pill.innerHTML = `Bal: ${data.balance} <span class="text-secondary fw-800">${data.nature}</span>`;
+                pill.classList.add('ready');
+            })
+            .catch(() => {
+                pill.innerHTML = 'Error fetching balance';
+            });
+    }
+
+    function toggleInputs(select) {
+        const tr = select.closest('tr');
+        const debitInput = tr.querySelector('.row-debit');
+        const creditInput = tr.querySelector('.row-credit');
+        
+        if (select.value === 'Dr') {
+            creditInput.value = 0;
+            creditInput.disabled = true;
+            debitInput.disabled = false;
+        } else {
+            debitInput.value = 0;
+            debitInput.disabled = true;
+            creditInput.disabled = false;
+        }
+        calculateTotals();
+    }
+
+    function removeRow(btn) {
+        if (document.querySelectorAll('#voucherBody tr').length > 1) {
+            btn.closest('tr').remove();
+            calculateTotals();
+        } else {
+            alert('At least one row is required.');
+        }
+    }
+
+    function calculateTotals() {
+        let totalDr = 0;
+        let totalCr = 0;
+        
+        document.querySelectorAll('.row-debit').forEach(i => totalDr += parseFloat(i.value || 0));
+        document.querySelectorAll('.row-credit').forEach(i => totalCr += parseFloat(i.value || 0));
+        
+        document.getElementById('totalDebit').innerText = totalDr.toLocaleString('en-US', { minimumFractionDigits: 2 });
+        document.getElementById('totalCredit').innerText = totalCr.toLocaleString('en-US', { minimumFractionDigits: 2 });
+        
+        const diff = Math.abs(totalDr - totalCr);
+        const diffDiv = document.getElementById('balanceDiff');
+        
+        if (diff < 0.01 && totalDr > 0) {
+            document.getElementById('totalDebit').className = 'text-end text-success';
+            document.getElementById('totalCredit').className = 'text-end text-success';
+            diffDiv.innerHTML = '<span class="badge bg-success-soft text-success px-3 py-2 rounded-pill"><i class="fas fa-check-circle me-1"></i> BALANCED</span>';
+        } else {
+            document.getElementById('totalDebit').className = 'text-end text-danger';
+            document.getElementById('totalCredit').className = 'text-end text-danger';
+            if (totalDr > 0 || totalCr > 0) {
+                diffDiv.innerHTML = `<span class="badge bg-danger-soft text-danger px-3 py-2 rounded-pill"><i class="fas fa-exclamation-triangle me-1"></i> DIFF: ${diff.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
+            } else {
+                diffDiv.innerHTML = "";
+            }
+        }
+    }
+
+    async function saveVoucher(btn) {
+        const type = document.getElementById('voucherType').value;
+        const date = document.getElementById('voucherDate').value;
+        const narration = document.getElementById('voucherNarration').value;
+        
+        const rows = [];
+        let totalDr = 0;
+        let totalCr = 0;
+        
+        document.querySelectorAll('#voucherBody tr').forEach(tr => {
+            const ledgerId = tr.querySelector('.row-ledger').value;
+            const debit = parseFloat(tr.querySelector('.row-debit').value) || 0;
+            const credit = parseFloat(tr.querySelector('.row-credit').value) || 0;
+            const note = tr.querySelector('.row-note').value;
+            
+            if (!ledgerId) return;
+            
+            totalDr += debit;
+            totalCr += credit;
+            rows.push({ ledgerId: parseInt(ledgerId), debit, credit, note });
+        });
+
+        if (rows.length === 0) {
+            Swal.fire('Error', 'Please add at least one ledger entry.', 'error');
+            return;
+        }
+
+        if (Math.abs(totalDr - totalCr) > 0.01) {
+            Swal.fire('Imbalanced', 'Debit and Credit totals must match! Current Diff: ' + (totalDr - totalCr).toFixed(2), 'warning');
+            return;
+        }
+
+        const payload = {
+            date,
+            type: parseInt(type),
+            narration,
+            rows
+        };
+
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> POSTING...';
+
+        try {
+            const response = await fetch('/Accounting/CreateVoucher', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Voucher Posted',
+                    text: 'The financial entry has been recorded successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                const text = await response.text();
+                Swal.fire('Error', text, 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        } catch (e) {
+            Swal.fire('Error', 'Error saving voucher: ' + e, 'error');
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    }
+</script>
+
+<style>
+    /* Premium Design Tokens */
+    .form-label-premium { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+    .bg-light-soft { background: #f8fafc; }
+    .rounded-16 { border-radius: 16px; }
+    
+    /* Gradients */
+    .btn-emerald-gradient { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-emerald-gradient:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); }
+    .btn-rose-gradient { background: linear-gradient(135deg, #f43f5e, #be123c); }
+    .btn-rose-gradient:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3); }
+    .btn-premium-blue-lg { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .btn-premium-blue-lg:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
+    
+    .btn-premium-white { background: white; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 50px; transition: all 0.2s; }
+    .btn-premium-white:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); }
+
+    /* Row UI styling */
+    .badge-row-type { 
+        height: 38px !important; 
+        border-radius: 8px !important; 
+        transition: all 0.3s !important; 
+        display: flex !important; 
+        align-items: center !important; 
+        padding: 0 4px !important; 
+    }
+    .dr-bg { background: #10b981; }
+    .cr-bg { background: #f43f5e; }
+    .dr-bg option, .cr-bg option { color: #333; }
+
+    .badge-row-type select.row-type {
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
+        color: white !important;
+        background-color: transparent !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        cursor: pointer !important;
+        height: 100% !important;
+    }
+
+    .ledger-balance-pill { 
+        font-size: 0.7rem !important; 
+        font-weight: 700 !important; 
+        color: #64748b !important; 
+        background: #f1f5f9 !important; 
+        padding: 0 10px !important; 
+        border-radius: 6px !important; 
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.3s !important;
+        white-space: nowrap !important;
+        height: 38px !important;
+        border: 1px solid #e2e8f0 !important;
+        min-width: 110px !important;
+    }
+    
+    .ledger-balance-pill.ready { 
+        background: #f0fdf4 !important; 
+        border-color: #bbf7d0 !important; 
+        color: #166534 !important; 
+    }
+
+    /* Select2 Premium Theme Integration */
+    .select2-container--default .select2-selection--single {
+        height: 38px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        background-color: #f8fafc !important;
+        display: flex !important;
+        align-items: center !important;
+        padding-left: 8px !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #1e293b !important;
+        font-weight: 700 !important;
+        font-size: 0.875rem !important;
+        padding-left: 0 !important;
+        line-height: normal !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: #94a3b8 !important;
+        font-weight: 600 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px !important;
+        right: 8px !important;
+    }
+
+    .select2-container--default.select2-container--focus .select2-selection--single,
+    .select2-container--default .select2-selection--single:hover {
+        border-color: #cbd5e1 !important;
+        background-color: #fff !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        overflow: hidden !important;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #3b82f6 !important;
+    }
+
+    .select2-container--default .select2-results__option {
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        padding: 8px 12px !important;
+    }
+
+    /* Input Styling Updates */
+    .voucher-input-group {
+        height: 38px !important;
+        border-radius: 8px !important;
+        overflow: hidden;
+        border: 1px solid #e2e8f0 !important;
+        transition: all 0.2s ease !important;
+        background-color: #fff !important;
+    }
+    
+    .voucher-input-group:focus-within {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+
+    .voucher-input-group .input-group-text {
+        border: none !important;
+        background-color: #f8fafc !important;
+        font-size: 0.875rem !important;
+        font-weight: 800 !important;
+        color: #64748b !important;
+        padding-left: 12px !important;
+        padding-right: 8px !important;
+        border-right: 1px solid #e2e8f0 !important;
+    }
+
+    .voucher-input-group .form-control {
+        border: none !important;
+        height: 100% !important;
+        font-size: 0.875rem !important;
+        font-weight: 800 !important;
+        color: #1e293b !important;
+        background-color: #fff !important;
+        padding: 0 12px !important;
+    }
+
+    .voucher-input-group .form-control:disabled {
+        background-color: #f1f5f9 !important;
+        color: #94a3b8 !important;
+    }
+
+    .voucher-note-input {
+        height: 38px !important;
+        border: 1px solid #e2e8f0 !important;
+        background-color: #f8fafc !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        border-radius: 8px !important;
+        padding: 0 12px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .voucher-note-input:focus {
+        border-color: #3b82f6 !important;
+        background-color: #fff !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+
+    /* Animations */
+    @@keyframes slideInRow {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    .animate-slide-right-row { animation: slideInRow 0.4s ease forwards; }
+    
+    .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @@keyframes bounceIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: scale(1.2); }
+
+    .total-summary-mini { padding-right: 20px; border-right: 1px solid #e2e8f0; }
+    
+    /* Layout snug */
+    .card-header { position: sticky; top: 0; z-index: 10; }
+</style>

@@ -1,0 +1,145 @@
+﻿@model IEnumerable<EasyEdu.Models.Book>
+@{
+    ViewData["Title"] = "Knowledge Nexus | Library Books";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Literary Asset Registry</h1>
+        <p class="text-muted fw-600">Managing institutional intelligence and educational resources</p>
+    </div>
+    <div class="d-flex gap-3">
+        <a asp-action="Reports" class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm">
+            <i class="fas fa-chart-pie me-2"></i> Circulation Intel
+        </a>
+        <a asp-action="CreateBook" class="btn btn-premium-primary shadow-lg px-4 d-flex align-items-center gap-2">
+            <i class="fas fa-plus-circle"></i> Index New Asset
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-9">
+        <div class="premium-card bg-white shadow-xl border-0 overflow-hidden h-100">
+            <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                <form method="get" class="d-flex gap-3 w-100 max-w-600">
+                    <div class="input-group flex-grow-1">
+                        <span class="input-group-text bg-white border-2 border-end-0"><i class="fas fa-search text-primary"></i></span>
+                        <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control border-2 border-start-0 ps-0" placeholder="Search by Title, Author, or ISBN..." />
+                    </div>
+                    <select name="categoryId" class="form-select border-2 w-auto" onchange="this.form.submit()">
+                        <option value="">All Disciplines</option>
+                        @foreach (var cat in ViewBag.Categories)
+                        {
+                            <!option value="@cat.Id" @(ViewBag.SelectedCategoryId == cat.Id ? "selected" : "")>@cat.Name</!option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary px-4 fw-800">SCAN</button>
+                    @if (!string.IsNullOrEmpty(ViewBag.SearchString) || ViewBag.SelectedCategoryId != null)
+                    {
+                        <a asp-action="Index" class="btn btn-light border-2 text-muted px-4 fw-800">RESET</a>
+                    }
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">RESOURCE IDENTITY</th>
+                            <th>AUTHOR/PUBLISHER</th>
+                            <th>DISCIPLINE</th>
+                            <th class="text-center">AVAILABILITY</th>
+                            <th class="text-end pe-4">PROTOCOLS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in Model)
+                        {
+                            <tr class="align-middle transition-all">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-md bg-primary-soft rounded-12 me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                            <i class="fas fa-book-open text-primary fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-900 text-dark">@book.Title</div>
+                                            <div class="small text-muted fw-700 uppercase" style="font-size: 0.6rem;">ISBN: @(book.ISBN ?? "NOT_INDEXED")</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-800 text-dark">@book.Author</div>
+                                    <div class="small text-muted fw-600">@book.Publisher</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-primary border border-primary-soft px-3 py-2 rounded-pill fw-800">
+                                        <i class="fas fa-tag me-1 small"></i> @(book.Category?.Name ?? "General")
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="fw-900 @((book.AvailableCopies ?? 0) > 0 ? "text-success" : "text-danger")">
+                                        @(book.AvailableCopies ?? 0) / @(book.TotalCopies ?? 0)
+                                    </div>
+                                    <div class="progress mt-1 mx-auto" style="height: 4px; width: 60px;">
+                                        @{
+                                            var pct = ((book.TotalCopies ?? 0) > 0) ? (int)((double)(book.AvailableCopies ?? 0) / (book.TotalCopies ?? 1) * 100) : 0;
+                                        }
+                                        <div class="progress-bar @(pct > 30 ? "bg-success" : "bg-danger")" style="width: @pct%"></div>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="dropdown">
+                                        <button class="btn btn-icon-premium" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-xl border-0">
+                                            <li><a class="dropdown-item fw-700 py-2" asp-action="EditBook" asp-route-id="@book.Id"><i class="fas fa-edit me-2 text-warning"></i> Modify Data</a></li>
+                                            <li><a class="dropdown-item fw-700 py-2" asp-action="IssueBook" asp-route-bookId="@book.Id"><i class="fas fa-hand-holding-box me-2 text-primary"></i> Issue to User</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <form asp-action="DeleteBook" asp-route-id="@book.Id" method="post" onsubmit="return confirm('Archive this literary asset?')">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="dropdown-item fw-700 py-2 text-danger"><i class="fas fa-trash-alt me-2"></i> Archive</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3">
+        <div class="premium-card bg-primary text-white p-4 shadow-xl border-0 mb-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+                <h5 class="fw-900 mb-3">Library Vitals</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="opacity-75">Total Index</span>
+                    <span class="fw-900">@Model.Count()</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="opacity-75">Stock Health</span>
+                    <span class="fw-900">Good</span>
+                </div>
+                <hr class="bg-white opacity-25">
+                <p class="small opacity-75 fw-600">The knowledge nexus currently manages @Model.Sum(b => b.TotalCopies ?? 0) physical volumes across @ViewBag.Categories.Count disciplines.</p>
+            </div>
+            <div class="mt-auto">
+                <a asp-action="IssuedBooks" class="btn btn-white w-100 fw-900 py-2 text-primary">
+                    VIEW ACTIVE CIRCULATION
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-primary-soft { background: rgba(13, 110, 253, 0.1); }
+    .max-w-600 { max-width: 600px; }
+    .avatar-md { width: 48px; height: 48px; line-height: 48px; text-align: center; }
+</style>

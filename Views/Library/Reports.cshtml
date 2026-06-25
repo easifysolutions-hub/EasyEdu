@@ -1,0 +1,140 @@
+@model EasyEdu.Controllers.LibraryReportsViewModel
+@{
+    ViewData["Title"] = "Circulation Intel | Knowledge Analytics";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Knowledge Analytics Dashboard</h1>
+        <p class="text-muted fw-600">Enterprise intelligence on institutional resource circulation and literacy turnover</p>
+    </div>
+    <div class="d-flex gap-3">
+        <button class="btn btn-premium-primary bg-white text-primary border border-primary px-4 shadow-sm" onclick="window.print()">
+            <i class="fas fa-print me-2"></i> Export PDF
+        </button>
+        <a asp-action="Index" class="btn btn-premium-primary shadow-lg px-4 d-flex align-items-center gap-2">
+            <i class="fas fa-arrow-left"></i> Book Registry
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-xl-3">
+        <div class="premium-card bg-primary text-white p-5 shadow-lg border-0 h-100">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <div class="small fw-800 uppercase opacity-75">Global Asset Index</div>
+                    <div class="display-5 fw-900 mb-0">@Model.TotalBooks</div>
+                </div>
+                <div class="avatar-lg bg-white-10 rounded-24 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                    <i class="fas fa-book h3 mb-0"></i>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-white-20 fw-800">AVAILABILITY: @Model.AvailableBooks</span>
+                <span class="small fw-700 opacity-75">Total Units</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3">
+        <div class="premium-card bg-white p-5 shadow-lg border-0 h-100 d-flex flex-column justify-content-between border-start border-4 border-warning">
+            <div>
+                <div class="small fw-800 text-muted uppercase mb-2">Active Circulation</div>
+                <div class="h2 fw-900 text-warning mb-4">@Model.ActiveIssues Units Outsourced</div>
+                <p class="text-muted fw-600 small">Literary assets currently deployed to authorized knowledge navigators.</p>
+            </div>
+            <div class="d-grid mt-auto">
+                <a asp-action="IssuedBooks" class="btn btn-warning-soft text-warning fw-900 rounded-16 py-2">
+                    SURVEILLANCE LEDGER
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3">
+        <div class="premium-card bg-dark text-white p-5 shadow-lg border-0 h-100 position-relative overflow-hidden">
+            <div class="position-relative z-index-1">
+                <div class="small fw-800 uppercase opacity-50 mb-1">Knowledge Coverage</div>
+                <div class="display-6 fw-900 mb-3 text-info">94.8%</div>
+                <ul class="list-unstyled mb-0">
+                    <li class="d-flex justify-content-between mb-2 pb-2 border-bottom border-white-10">
+                        <span class="small fw-600 opacity-75">Total Members</span>
+                        <span class="small fw-900">@Model.TotalMembers</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                        <span class="small fw-600 opacity-75">Trust Score</span>
+                        <span class="small fw-900">Excellent</span>
+                    </li>
+                </ul>
+            </div>
+            <i class="fas fa-microscope position-absolute" style="bottom: -20px; right: -20px; font-size: 150px; opacity: 0.05;"></i>
+        </div>
+    </div>
+
+    <div class="col-xl-3">
+        <div class="premium-card bg-white p-5 shadow-lg border-0 h-100 border-start border-4 border-success">
+            <div class="small fw-800 text-muted uppercase mb-2">Recovery Efficiency</div>
+            <div class="display-6 fw-900 text-success mb-3">99.2%</div>
+            <div class="progress" style="height: 10px; border-radius: 10px;">
+                <div class="progress-bar bg-success" style="width: 99.2%"></div>
+            </div>
+            <p class="small text-muted mt-3 fw-600 mb-0">High protocol compliance detected across all academic cohorts.</p>
+        </div>
+    </div>
+</div>
+
+<div class="premium-card bg-white shadow-xl border-0 overflow-hidden mb-5">
+    <div class="p-4 border-bottom bg-light">
+        <h5 class="fw-900 text-dark mb-0"><i class="fas fa-clock-rotate-left text-primary me-2"></i> Recent Circulation Cycles (Last 10)</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table premium-table mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">RESOURCE IDENTITY</th>
+                    <th>RECIPIENT AUTHORIZATION</th>
+                    <th class="text-center">PROVISION STAMP</th>
+                    <th>THRESHOLD (DUE)</th>
+                    <th class="text-end pe-4">ACTIVITY STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.RecentIssues)
+                {
+                    <tr class="align-middle">
+                        <td class="ps-4">
+                            <div class="fw-900 text-dark">@(r.Book?.Title ?? "Asset")</div>
+                        </td>
+                        <td>
+                            <div class="fw-800 text-primary">@(r.Student?.FirstName ?? "N/A") @(r.Student?.LastName ?? "")</div>
+                        </td>
+                        <td class="text-center">
+                            <div class="fw-900 text-dark">@r.IssueDate.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td>
+                            <div class="fw-900 text-dark">@r.DueDate.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td class="text-end pe-4">
+                            <span class="badge @(r.Status == "Issued" ? "bg-warning-soft text-warning" : "bg-success-soft text-success") fw-900 px-3 py-2 rounded-pill">
+                                @r.Status.ToUpper()
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-white-10 { background: rgba(255, 255, 255, 0.1); }
+    .bg-white-20 { background: rgba(255, 255, 255, 0.2); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .border-white-10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+    .rounded-24 { border-radius: 24px; }
+    .rounded-16 { border-radius: 16px; }
+    .z-index-1 { z-index: 1; }
+</style>

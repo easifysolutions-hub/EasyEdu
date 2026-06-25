@@ -1,0 +1,102 @@
+@model IEnumerable<EasyEdu.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Chat Box - Utilities";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-inbox me-2 text-primary"></i> Chat Box</h1>
+        <p class="text-muted fw-600">Active conversations and institutional message history</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Directory" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-user-plus me-2"></i> NEW CHAT
+        </a>
+        <a asp-action="Invitations" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-envelope-open-text me-2"></i> INVITATIONS
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        <div class="col-xl-4 col-lg-5">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 h-100 animate-fade-in">
+                <div class="p-4 border-bottom bg-light">
+                    <h6 class="fw-800 text-dark mb-0">RECENT CONVERSATIONS</h6>
+                </div>
+                <div class="p-3 border-bottom">
+                    <input type="text" class="form-control form-control-sm rounded-pill border-0 bg-light px-3" id="contactSearch" placeholder="Filter conversations...">
+                </div>
+                <div class="contact-list overflow-auto" style="min-height: 400px; max-height: 600px;">
+                    @foreach (var user in Model)
+                    {
+                        <a asp-action="ChatBox" asp-route-id="@user.Id" class="contact-item d-flex align-items-center p-4 border-bottom text-decoration-none transition-all">
+                            <div class="position-relative">
+                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                                {
+                                    <img src="@user.ProfilePicture" class="rounded-circle shadow-sm border border-2 border-white" style="width: 50px; height: 50px; object-fit: cover;" alt="" />
+                                }
+                                else
+                                {
+                                    <div class="avatar-placeholder rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-weight: 800;">
+                                        @(user.FullName?[0] ?? '?')
+                                    </div>
+                                }
+                                <span class="status-indicator online"></span>
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <h6 class="fw-800 text-dark mb-0">@user.FullName</h6>
+                                <p class="text-muted small mb-0 text-truncate fw-500">Click to resume chat</p>
+                            </div>
+                        </a>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <div class="p-5 text-center text-muted">
+                            <i class="fas fa-comments-slash fa-3x opacity-25 mb-3 d-block"></i>
+                            <h5 class="fw-800 text-dark opacity-50">Empty Inbox</h5>
+                            <p class="small fw-700">No active conversations found.<br>Use "New Chat" to find colleagues.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8 col-lg-7 d-none d-lg-block">
+            <div class="premium-card bg-white shadow-xl border-0 rounded-24 h-100 d-flex flex-column align-items-center justify-content-center p-5 text-center animate-fade-in">
+                <div class="illustration-box bg-primary-soft rounded-circle mb-4 animate-bounce" style="width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-inbox fa-3x text-primary"></i>
+                </div>
+                <h2 class="fw-900 text-dark mb-3">Institutional Inbox</h2>
+                <p class="text-muted fw-600 mb-5" style="max-width: 450px;">Your centralized hub for all active professional communications within the institution.</p>
+                <div class="row g-3 w-100 justify-content-center" style="max-width: 600px;">
+                    <button onclick="location.href='/Chat/Directory'" class="btn btn-premium-primary rounded-16 py-3 px-5 fw-800">
+                        <i class="fas fa-search me-2"></i> SEARCH DIRECTORY
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contact-item { border-left: 4px solid transparent; }
+    .contact-item:hover { background: rgba(99,102,241,0.03); border-left-color: #6366f1; }
+    .status-indicator { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; background: #10b981; }
+    .bg-primary-soft { background: rgba(99,102,241,0.1); }
+    @@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .animate-bounce { animation: bounce 2s infinite ease-in-out; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#contactSearch").on("keyup", function() {
+                var v = $(this).val().toLowerCase();
+                $(".contact-item").filter(function() { $(this).toggle($(this).text().toLowerCase().indexOf(v) > -1) });
+            });
+        });
+    </script>
+}

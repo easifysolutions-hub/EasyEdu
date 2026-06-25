@@ -1,0 +1,79 @@
+﻿@model IEnumerable<EasyEdu.Controllers.ClassRevenueViewModel>
+@{
+    ViewData["Title"] = "Class-wise Revenue";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title animate-slide-in">Sectional Income Analytics</h1>
+        <p class="text-muted fw-600">Revenue contribution and recovery metrics categorized by academic class</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Reports" class="btn-premium btn-premium-primary animate-fade-in" style="background: white; color: var(--primary); border: 1px solid var(--primary-light);">
+            <i class="fas fa-arrow-left"></i> Hub Overview
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-4 col-md-6">
+            <div class="premium-card p-4 bg-white animate-fade-in shadow-sm hover-shadow border-bottom border-5 border-info">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <h4 class="fw-800 text-dark mb-0">Class: @item.ClassName</h4>
+                        <div class="small fw-700 text-primary">@item.StudentCount ACTIVE STUDENTS</div>
+                    </div>
+                    <div class="p-3 bg-info-soft rounded-12">
+                        <i class="fas fa-chalkboard text-info h4 mb-0"></i>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="small fw-700 text-muted">COLLECTION EFFICIENCY</span>
+                        <span class="small fw-800 text-success">@((item.AmountCollected + item.AmountPending > 0) ? (item.AmountCollected / (item.AmountCollected + item.AmountPending) * 100).ToString("N1") : "0")%</span>
+                    </div>
+                    <div class="progress" style="height: 8px; border-radius: 10px;">
+                        <div class="progress-bar bg-success" style="width: @((item.AmountCollected + item.AmountPending > 0) ? (item.AmountCollected / (item.AmountCollected + item.AmountPending) * 100).ToString("N1") : "0")%"></div>
+                    </div>
+                </div>
+
+                <div class="row mt-4 pt-3 border-top">
+                    <div class="col-6">
+                        <div class="small text-muted fw-600">Collected</div>
+                        <div class="fw-800 text-success">$@item.AmountCollected.ToString("N2")</div>
+                    </div>
+                    <div class="col-6 border-start">
+                        <div class="small text-muted fw-600">Receivable</div>
+                        <div class="fw-800 text-warning">$@item.AmountPending.ToString("N2")</div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-top">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="small fw-700 text-muted">AV. INCOME / STUDENT</div>
+                        <div class="fw-800 text-dark">$@((item.StudentCount > 0 ? item.AmountCollected / item.StudentCount : 0).ToString("N2"))</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="premium-card p-5 bg-white text-center mt-5">
+        <div class="py-5 text-center">
+            <i class="fas fa-chart-pie fa-4x text-light mb-4"></i>
+            <h3 class="text-secondary fw-700">Analytics Data Unavailable</h3>
+            <p class="text-muted">Once students start enrolling and pays their fees, sectional analytics will appear here.</p>
+        </div>
+    </div>
+}
+
+<style>
+    .hover-shadow { transition: all 0.3s ease; }
+    .hover-shadow:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+</style>

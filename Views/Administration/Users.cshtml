@@ -1,0 +1,334 @@
+@model IEnumerable<EasyEdu.Controllers.UserManagementViewModel>
+@{
+    ViewData["Title"] = "User Management - EasyEdu Premium";
+    Layout = "_Layout";
+    var allRoles = ViewBag.Roles as IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole> ?? new List<Microsoft.AspNetCore.Identity.IdentityRole>();
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-800 text-dark mb-1">User Management</h2>
+            <p class="text-muted small">Control and manage all system users and their permissions.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-premium-gradient" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                <i class="fas fa-user-plus me-2"></i> Add New User
+            </button>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 rounded-12 shadow-sm mb-4">
+            <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-12 shadow-sm mb-4">
+            <i class="fas fa-times-circle me-2"></i> @TempData["Error"]
+        </div>
+    }
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stats-card-modern p-4 text-center">
+                <div class="stats-icon mb-2 mx-auto" style="background: rgba(102, 126, 234, 0.1); color: #667eea;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="fw-800 text-dark mb-0">@Model.Count()</h3>
+                <p class="text-muted small mb-0">Total Identities</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card-modern p-4 text-center">
+                <div class="stats-icon mb-2 mx-auto" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h3 class="fw-800 text-dark mb-0">@Model.Count(u => u.IsActive)</h3>
+                <p class="text-muted small mb-0">Active Matrix</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card-modern p-4 text-center">
+                <div class="stats-icon mb-2 mx-auto" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3 class="fw-800 text-dark mb-0">@Model.Count(u => u.Role.Contains("Admin"))</h3>
+                <p class="text-muted small mb-0">System Controllers</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+        <div class="card-header bg-white border-bottom-0 p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-700 m-0">Identity Registry</h5>
+                <div class="search-bar-modern w-25">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control border-0" placeholder="Search identities..." id="userSearchInput" />
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle m-0 text-dark" id="userTable">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Full Name</th>
+                            <th>Role / Permission</th>
+                            <th>Institution</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center py-2">
+                                        <div class="user-avatar-modern me-3" style="width: 40px; height: 40px; font-size: 0.9rem;">
+                                            @user.FullName.Substring(0, Math.Min(2, user.FullName.Length)).ToUpper()
+                                        </div>
+                                        <div>
+                                            <div class="fw-700 mb-0">@user.FullName</div>
+                                            <div class="text-muted small">@user.Email</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @foreach(var r in user.Role.Split(", ")) {
+                                        <span class="badge rounded-pill bg-primary text-white me-1" style="font-size: 0.65rem; padding: 5px 10px;">@r</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="text-muted fw-600">@user.InstitutionName</span>
+                                </td>
+                                <td>
+                                    <span class="badge @(user.IsActive ? "bg-success" : "bg-danger") rounded-pill" style="font-size: 0.65rem;">
+                                        @(user.IsActive ? "ACTIVE" : "DISABLED")
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-icon-modern me-1" onclick="editUser('@user.UserId', '@user.FullName', '@user.Role', @(user.IsActive ? "true" : "false"))">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-icon-modern text-danger" onclick="confirmDelete('@user.UserId', '@user.FullName')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-bottom-0 p-4">
+                <h5 class="modal-title fw-800">Assign New Identity</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="CreateUser" method="post">
+                <div class="modal-body p-4 pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">FULL NAME</label>
+                        <input type="text" name="fullName" class="form-control-premium" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">EMAIL ADDRESS</label>
+                        <input type="email" name="email" class="form-control-premium" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">PASSWORD</label>
+                        <input type="password" name="password" class="form-control-premium" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">ASSIGN ROLES</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var role in allRoles)
+                            {
+                                <div class="form-check form-check-inline m-0">
+                                    <input class="form-check-input d-none" type="checkbox" name="roles" value="@role.Name" id="role-@role.Id">
+                                    <label class="badge rounded-pill border py-2 px-3 fw-600 role-label" for="role-@role.Id" style="cursor:pointer;">
+                                        @role.Name
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-gradient w-100 py-3">SYNCHRONIZE IDENTITY</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-bottom-0 p-4">
+                <h5 class="modal-title fw-800">Update Identity Matrix</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="UpdateUser" method="post">
+                <input type="hidden" name="userId" id="editUserId" />
+                <div class="modal-body p-4 pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">FULL NAME</label>
+                        <input type="text" name="fullName" id="editFullName" class="form-control-premium" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">STAUTS</label>
+                        <select name="isActive" id="editIsActive" class="form-select-premium">
+                            <option value="true">ACTIVE</option>
+                            <option value="false">DISABLED / LOCKED</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-700">UPDATE ROLES</label>
+                        <div class="d-flex flex-wrap gap-2" id="editRolesContainer">
+                            @foreach (var role in allRoles)
+                            {
+                                <div class="form-check form-check-inline m-0">
+                                    <input class="form-check-input d-none edit-role-check" type="checkbox" name="roles" value="@role.Name" id="edit-role-@role.Id">
+                                    <label class="badge rounded-pill border py-2 px-3 fw-600 role-label" for="edit-role-@role.Id" style="cursor:pointer;">
+                                        @role.Name
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 pt-0">
+                    <button type="submit" class="btn btn-premium-gradient w-100 py-3">COMMIT MATRIX UPDATES</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Global Helpers -->
+<form id="deleteUserForm" asp-action="DeleteUser" method="post" style="display:none;">
+    <input type="hidden" name="userId" id="deleteUserId" />
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function editUser(id, name, roles, active) {
+        document.getElementById('editUserId').value = id;
+        document.getElementById('editFullName').value = name;
+        document.getElementById('editIsActive').value = active.toString();
+        
+        const roleList = roles.split(", ");
+        document.querySelectorAll('.edit-role-check').forEach(cb => {
+            cb.checked = roleList.includes(cb.value);
+            updateRoleBadgeStyle(cb);
+        });
+
+        new bootstrap.Modal(document.getElementById('editUserModal')).show();
+    }
+
+    function confirmDelete(id, name) {
+        Swal.fire({
+            title: 'Terminate Account?',
+            text: `Permanently delete ${name} from the system?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            confirmButtonText: 'Yes, Terminate',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('deleteUserId').value = id;
+                document.getElementById('deleteUserForm').submit();
+            }
+        });
+    }
+
+    function updateRoleBadgeStyle(cb) {
+        const label = document.querySelector(`label[for="${cb.id}"]`);
+        if (cb.checked) {
+            label.style.backgroundColor = '#667eea';
+            label.style.color = 'white';
+            label.style.borderColor = '#667eea';
+        } else {
+            label.style.backgroundColor = 'transparent';
+            label.style.color = '#64748b';
+            label.style.borderColor = '#e2e8f0';
+        }
+    }
+
+    document.querySelectorAll('.form-check-input').forEach(cb => {
+        cb.addEventListener('change', () => updateRoleBadgeStyle(cb));
+    });
+
+    // Search functionality
+    document.getElementById('userSearchInput').addEventListener('keyup', function() {
+        const query = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#userTable tbody tr');
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(query) ? '' : 'none';
+        });
+    });
+</script>
+
+<style>
+    .stats-card-modern {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+    .stats-card-modern:hover {
+        transform: translateY(-5px);
+    }
+    .stats-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    .form-control-premium, .form-select-premium {
+        height: 50px;
+        border-radius: 12px;
+        padding-horizontal: 15px;
+        border: 1px solid #e2e8f0;
+        font-weight: 600;
+        width: 100%;
+    }
+    .btn-premium-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 12px;
+        font-weight: 800;
+        border: none;
+        padding: 10px 20px;
+    }
+    .btn-icon-modern {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        border: none;
+        background: #f1f5f9;
+        color: #64748b;
+    }
+    .role-label {
+        transition: all 0.2s ease;
+    }
+</style>

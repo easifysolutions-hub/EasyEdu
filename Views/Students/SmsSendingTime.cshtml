@@ -1,0 +1,53 @@
+@model dynamic
+@{
+    ViewData["Title"] = "SMS Sending Time";
+}
+
+<div class="container-fluid animate-fade-in">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card premium-card border-0 shadow-sm">
+                <div class="card-header bg-gradient-primary text-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>SMS Sending Time Configuration</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Morning Attendance SMS Time</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-sun"></i></span>
+                                <input type="time" name="morningTime" class="form-control form-control-premium" value="09:30" required>
+                            </div>
+                            <div class="form-text mt-2 text-muted small">Select the time when daily absence SMS will be sent automatically to parents.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Evening Summary/Homework SMS Time</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-moon"></i></span>
+                                <input type="time" name="eveningTime" class="form-control form-control-premium" value="16:00" required>
+                            </div>
+                            <div class="form-text mt-2 text-muted small">Select the time for sending homework notifications or daily performance summaries.</div>
+                        </div>
+
+                        <div class="mb-4 p-3 bg-light rounded border-start border-4 border-info">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-info-circle text-info me-3 fa-2x"></i>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Automated Scheduling</h6>
+                                    <p class="mb-0 small text-muted">The system cron job uses these settings to trigger the SMS gateway. Large batches may have 2-5 min latency.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                                <i class="fas fa-save me-1"></i> Save Configuration
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

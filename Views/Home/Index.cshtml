@@ -1,0 +1,654 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "EasyEdu - Excellence in Education";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <style>
+        :root {
+            /* Professional Dark Theme (Matches Login) */
+            --bg-color: #0f172a;       /* Deep Navy */
+            --card-bg: rgba(30, 41, 59, 0.6); /* Glassy Slate */
+            --nav-bg: rgba(15, 23, 42, 0.95);
+            
+            --primary: #3b82f6;        /* Royal Blue */
+            --secondary: #f59e0b;      /* Gold */
+            --accent: #8b5cf6;         /* Purple Accent */
+            
+            --text-main: #f8fafc;      /* White-ish */
+            --text-muted: #94a3b8;     /* Grey */
+            
+            --gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif; /* Classic Professional Font */
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        a { text-decoration: none; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- Header Top --- */
+        .header-top {
+            background: linear-gradient(90deg, #1e293b, #0f172a);
+            padding: 10px 0;
+            border-bottom: var(--glass-border);
+            font-size: 13px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-flex { display: flex; justify-content: space-between; align-items: center; }
+
+        .header-contact span { margin-right: 20px; color: var(--text-muted); }
+        .header-contact i { color: var(--secondary); margin-right: 8px; }
+
+        .social-icons a { color: var(--text-muted); margin-left: 15px; font-size: 14px; }
+        .social-icons a:hover { color: var(--primary); }
+
+        /* --- Footer --- */
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 2fr; gap: 40px; margin-bottom: 60px; }
+        .footer-widget h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; font-weight: 700; position: relative; padding-bottom: 10px; }
+        .footer-widget h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 30px; height: 2px; background: var(--secondary); }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: var(--text-muted); transition: 0.3s; font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--secondary); padding-left: 8px; }
+
+        .newsletter-form { display: flex; gap: 10px; margin-top: 20px; }
+        .newsletter-form input { 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 12px 15px; border-radius: 8px; color: white; flex: 1; font-size: 0.9rem;
+        }
+        .newsletter-form button { 
+            background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s;
+        }
+        .newsletter-form button:hover { background: var(--accent); transform: scale(1.05); }
+
+        /* --- Navbar --- */
+        .main-menu {
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: var(--glass-border);
+        }
+
+        .navbar-brand {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .navbar-brand img { height: 60px; width: auto; } /* White logo for dark theme */
+        
+        .nav-items { display: flex; align-items: center; gap: 30px; }
+        .nav-items a {
+            color: var(--text-main); font-weight: 500; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .nav-items a:hover { color: var(--secondary); }
+
+        .btn-glow {
+            background: var(--gradient);
+            color: white !important;
+            padding: 10px 30px;
+            border-radius: 50px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-glow:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); transform: translateY(-2px); }
+
+        /* --- Hero Section --- */
+        .hero-banner {
+            padding: 120px 0 160px;
+            position: relative;
+            background: transparent;
+        }
+
+        .hero-layout { display: flex; align-items: center; gap: 50px; }
+        .hero-text { flex: 1; }
+
+        .hero-text h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 25px; }
+        .hero-text h1 span {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 40px; max-width: 550px; }
+
+        .search-area {
+            background: rgba(255,255,255,0.05);
+            border: var(--glass-border);
+            padding: 8px;
+            border-radius: 50px;
+            display: flex;
+            max-width: 450px;
+            backdrop-filter: blur(5px);
+        }
+        .search-area input {
+            background: transparent; border: none; color: white; flex: 1; padding: 0 20px;
+        }
+        .search-area button {
+            background: var(--secondary); color: #0f172a; font-weight: 700;
+            border: none; padding: 12px 30px; border-radius: 40px; cursor: pointer;
+        }
+
+        .hero-img { flex: 1; position: relative; }
+        .hero-img img {
+            width: 100%; border-radius: 20px;
+            border: var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- Cards (Overlap) --- */
+        .feature-area { margin-top: -100px; position: relative; z-index: 10; padding-bottom: 80px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            transition: 0.4s;
+            box-shadow: var(--shadow-card);
+        }
+
+        .glass-card:hover {  transform: translateY(-10px); background: rgba(59, 130, 246, 0.15); border-color: var(--primary); }
+        .glass-card:hover .icon-box { background: var(--secondary); color: #000; }
+
+        .icon-box {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: rgba(255,255,255,0.05); color: var(--secondary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; margin: 0 auto 25px; transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .glass-card h3 { font-size: 1.4rem; margin-bottom: 15px; font-family: 'Outfit', sans-serif; font-weight: 600; }
+        .glass-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* --- Sections --- */
+        .section-padding { padding: 100px 0; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h5 { color: var(--secondary); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 10px; font-family: 'Outfit', sans-serif; }
+        .section-title h2 { font-size: 2.5rem; }
+
+        /* --- Module Cards refinements --- */
+        .module-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: left; /* Left align for professional look like Infix */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-card:hover {
+            transform: translateY(-12px);
+            background: rgba(30, 41, 59, 0.7);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .module-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            transition: 0.4s;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .module-card:hover .module-icon-wrapper {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: rotate(-10deg) scale(1.1);
+        }
+
+        .module-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            transition: 0.3s;
+            -webkit-text-fill-color: initial; /* Resetting previous hack */
+            background: none;
+        }
+
+        .module-card:hover i {
+            color: #fff;
+        }
+
+        .module-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .module-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Feature Badge Style for More Features */
+        .mini-feature-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+            height: 100%;
+        }
+
+        .mini-feature-card:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .mini-feature-card i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Video Section tweak */
+        .video-placeholder {
+            border-radius: 30px;
+            box-shadow: 0 0 100px rgba(59, 130, 246, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- CTA --- */
+        .cta-area {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover; background-attachment: fixed;
+            padding: 120px 0; text-align: center;
+            border-top: var(--glass-border);
+            border-bottom: var(--glass-border);
+        }
+
+        /* Hero Adjustments */
+        .hero-banner { padding: 100px 0 150px; }
+        .hero-img { border-radius: 24px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .hero-layout { grid-template-columns: 1fr; flex-direction: column; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+            .hero-text { text-align: center; }
+            .search-area { margin: 0 auto; }
+            .nav-items { display: none; }
+            .module-card { text-align: center; }
+            .module-icon-wrapper { margin-left: auto; margin-right: auto; }
+        }
+
+        @@media (max-width: 576px) {
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .social-icons { justify-content: center; display: flex; }
+            .mini-feature-card { font-size: 0.8rem; padding: 15px; }
+            .hero-text h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Top -->
+    <div class="header-top">
+        <div class="container">
+            <div class="header-flex">
+                <div class="header-contact">
+                    <span><i class="fas fa-phone-alt"></i> +91 9731615949</span>
+                    <span><i class="fas fa-envelope"></i> sales@easifysolutions.com</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Bangalore, Karnataka</span>
+                </div>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-menu">
+        <div class="container">
+            <div class="header-flex">
+                <a href="#" class="navbar-brand">
+                    <img src="/images/easyedu_full_logo_white.png" alt="Easify Solutions">
+                </a>
+                <div class="nav-items">
+                    <a href="/">Home</a>
+                    <a href="/Home/Products">Products</a>
+                    <a href="/Home/Modules">Modules</a>
+                    <a href="/Home/Pricing">Pricing</a>
+                    <a href="/Home/Contact">Contact Us</a>
+                    <a href="/Account/Login" class="btn-glow">CLIENT LOGIN</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-banner">
+        <div class="container">
+            <div class="hero-layout">
+                <div class="hero-text" data-aos="fade-right">
+                    <h1>The Ultimate <br> <span>Education Management System</span></h1>
+                    <p>Managing various administrative tasks in one place is now quite easy and time-saving with EasyEdu. Give your valued time to your institute that will increase next-generation productivity for our society.</p>
+                    
+                    <div class="d-flex gap-3 mt-4">
+                        <button class="btn-glow">TRY LIVE DEMO</button>
+                        <button class="btn-glow" style="background: transparent; border: 1px solid var(--secondary);">BUY NOW</button>
+                    </div>
+                </div>
+                <div class="hero-img" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dashboard Preview">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proud Features -->
+    <section class="feature-area">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h5>Amazing Features</h5>
+                <h2>Some Features that make Us Proud</h2>
+                <p style="color:var(--text-muted); max-width: 600px; margin: 0 auto;">Looking forward to something different & unique! Here we are with few that never expected in others.</p>
+            </div>
+
+            <div class="feature-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon-box"><i class="fas fa-layer-group"></i></div>
+                    <h3>Tons of Features</h3>
+                    <p>EasyEdu has all in one place. You’ll find everything what you are looking into education management system software.</p>
+                </div>
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="icon-box"><i class="fas fa-smile"></i></div>
+                    <h3>User Friendly</h3>
+                    <p>We care! User will never bothered in our real eye catchy user friendly UI & UX Interface design.</p>
+                </div>
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="icon-box"><i class="fas fa-file-alt"></i></div>
+                    <h3>Proper Documentation</h3>
+                    <p>You know! Smart Idea always comes to well planners. And Our EasyEdu is Smart for its Well Documentation.</p>
+                </div>
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="icon-box"><i class="fas fa-headset"></i></div>
+                    <h3>Powerful Support</h3>
+                    <p>Explore in new support world! It’s now faster & quicker. You’ll find us on Support Ticket, Email, Skype, WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Video Overview / Complete Package -->
+    <section class="section-padding bg-dark" style="background: linear-gradient(to right, rgba(15, 23, 42, 1), rgba(30, 41, 59, 0.5));">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <!-- Image on the Left -->
+                <div class="col-lg-7" data-aos="fade-right">
+                    <div class="video-placeholder glass-card p-0 overflow-hidden position-relative" style="aspect-ratio: 16/9; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" class="w-100 h-100 object-fit-cover" alt="EasyEdu Platform Overview">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(15, 23, 42, 0.3);">
+                            <a href="#" class="text-white" style="font-size: 5rem; text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);"><i class="fas fa-play-circle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Text on the Right -->
+                <div class="col-lg-5" data-aos="fade-left">
+                    <div class="section-title text-start mb-4">
+                        <h5 style="text-align: left;">Complete Package</h5>
+                        <h2 style="text-align: left; font-size: 2.8rem; line-height: 1.1;">Take A Look At Our <br><span style="color: var(--secondary);">EasyEdu Overview</span></h2>
+                    </div>
+                    <p style="color:var(--text-muted); font-size: 1.1rem; margin-bottom: 30px;">What’s query you have in mind? How it works? Have a look at our videos you’ll be crystal clear about it. Our platform provides a seamless experience for administrators, teachers, and students alike.</p>
+                    <ul class="list-unstyled" style="color: var(--text-main); font-weight: 500;">
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Real-time Data Analytics</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> User-friendly Dashboard</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> High-speed Performance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Modules -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h5>Complete Package</h5>
+                <h2>Every Single Module You Want</h2>
+                <p style="color:var(--text-muted);">Curiosity is future of new discover. Explore all our single modules that will blow your mind!</p>
+            </div>
+            
+            <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- Row 1 -->
+                <div class="module-card" data-aos="fade-up">
+                    <div class="module-icon-wrapper"><i class="fas fa-user-shield"></i></div>
+                    <h4>Admin Module</h4>
+                    <p>Comprehensive management of users, roles, and school policies.</p>
+                </div>
+                 <div class="module-card" data-aos="fade-up" data-aos-delay="50">
+                    <div class="module-icon-wrapper"><i class="fas fa-user-graduate"></i></div>
+                    <h4>Student Info</h4>
+                    <p>End-to-end student lifecycle management from admission to alumni.</p>
+                </div>
+                 <div class="module-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="module-icon-wrapper"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h4>Teacher</h4>
+                    <p>Tools for content sharing, attendance, and evaluation management.</p>
+                </div>
+                 <div class="module-card" data-aos="fade-up" data-aos-delay="150">
+                    <div class="module-icon-wrapper"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <h4>Fees Collection</h4>
+                    <p>Smart invoicing, automated reminders, and online payment gateways.</p>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="module-card" data-aos="fade-up" data-aos-delay="50">
+                    <div class="module-icon-wrapper"><i class="fas fa-wallet"></i></div>
+                    <h4>Accounts</h4>
+                    <p>Detailed financial tracking, income, expenses, and audit-ready reports.</p>
+                </div>
+                 <div class="module-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="module-icon-wrapper"><i class="fas fa-users"></i></div>
+                    <h4>Human Resource</h4>
+                    <p>Staff records, payroll processing, and attendance tracking.</p>
+                </div>
+                 <div class="module-card" data-aos="fade-up" data-aos-delay="150">
+                    <div class="module-icon-wrapper"><i class="fas fa-pencil-alt"></i></div>
+                    <h4>Examination</h4>
+                    <p>Online/offline exams, marks entry, and automated report card generation.</p>
+                </div>
+                 <div class="module-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="module-icon-wrapper"><i class="fas fa-book"></i></div>
+                    <h4>Academics</h4>
+                    <p>Curriculum planning, class routines, and subject assignment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- More Features List -->
+    <section class="section-padding" style="background: rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-title">
+                <h2>More Features Has EasyEdu</h2>
+                <p style="color:var(--text-muted);">It's vast! We have more additional features that you expect in a complete solution.</p>
+            </div>
+            <div class="row g-3">
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left"><i class="fas fa-bolt"></i><span>Optimized Performance</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="50"><i class="fas fa-sync"></i><span>One Click Update</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="100"><i class="fas fa-network-wired"></i><span>RESTful APIs Support</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="150"><i class="fas fa-code"></i><span>Clean Code Quality</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="200"><i class="fas fa-magic"></i><span>Installation Wizard</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="250"><i class="fas fa-language"></i><span>Multi Lingual</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="300"><i class="fas fa-mobile-alt"></i><span>Fully Responsive</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="350"><i class="fas fa-align-right"></i><span>RTL Support</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="400"><i class="fas fa-envelope-open-text"></i><span>Email Notifications</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="450"><i class="fas fa-comment-alt"></i><span>SMS Support</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="500"><i class="fas fa-print"></i><span>Printable Reports</span></div></div>
+                <div class="col-xl-3 col-md-6"><div class="mini-feature-card" data-aos="fade-left" data-aos-delay="550"><i class="fas fa-history"></i><span>Inbuilt Backup Tool</span></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Team -->
+    <section class="section-padding" style="background: rgba(15, 23, 42, 0.3);">
+        <div class="container">
+            <div class="section-title">
+                <h5>Our Team</h5>
+                <h2>Visionary Leadership</h2>
+                <p style="color:var(--text-muted);">The driving force behind our commitment to educational excellence.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 400px)); gap: 30px; justify-content: center;">
+                <div class="module-card" data-aos="zoom-in" style="text-align: center;">
+                    <div class="teacher-img" style="width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--primary); margin: 0 auto 25px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                         <img src="/images/sharief_abdull.jpg" alt="Mr. Sharief Abdull" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 8px;">Mr. Sharief Abdull M A</h4>
+                    <p style="color:var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Director (MBA, M.Com)</p>
+                </div>
+                <div class="module-card" data-aos="zoom-in" data-aos-delay="100" style="text-align: center;">
+                    <div class="teacher-img" style="width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--primary); margin: 0 auto 25px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                         <img src="/images/abdul_hakeem.jpg" alt="Mr. Abdul Hakeem" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 8px;">Mr. Abdul Hakeem</h4>
+                    <p style="color:var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Director (MSC)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #020617; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 100px;">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Col 1: About -->
+                <div class="footer-widget">
+                    <a href="#" class="navbar-brand" style="margin-bottom:25px; display: inline-block;">
+                        <img src="/images/easyedu_full_logo_white.png" alt="Logo" style="height: 50px;">
+                    </a>
+                    <p style="line-height: 1.8; font-size: 0.95rem;">EasyEdu is a state-of-the-art education management platform designed to streamline administrative workflows and enhance the learning experience for everyone.</p>
+                </div>
+
+                <!-- Col 2: Product -->
+                <div class="footer-widget footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="/Home/Products">Products</a></li>
+                        <li><a href="/Home/Modules">Modules</a></li>
+                        <li><a href="#">Finance Sync</a></li>
+                        <li><a href="#">LMS Tools</a></li>
+                        <li><a href="#">API Docs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Company -->
+                <div class="footer-widget footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Leadership</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="/Home/Contact">Contact Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Support -->
+                <div class="footer-widget footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">System Status</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 5: Newsletter -->
+                <div class="footer-widget">
+                    <h4>Newsletter</h4>
+                    <p style="font-size: 0.9rem;">Stay updated with our latest news and software updates.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Your Email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright d-flex flex-column flex-md-row justify-content-between align-items-center pt-5 pb-4" style="border-top: 1px solid rgba(255,255,255,0.08); gap: 20px;">
+                <p class="m-0" style="font-size: 0.85rem; opacity: 0.6; letter-spacing: 0.5px;">&copy; @DateTime.Now.Year Easify Solutions. All Rights Reserved. Empowering Education Through Technology.</p>
+                <div class="social-icons d-flex gap-4">
+                    <a href="#" style="font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" style="font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#" style="font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" style="font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
+</body>
+</html>

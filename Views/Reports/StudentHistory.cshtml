@@ -1,0 +1,89 @@
+@model IEnumerable<EasyEdu.Models.Student>
+@{
+    ViewData["Title"] = "Institutional Student History";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-landmark me-2 text-primary"></i> Legacy Registry</h1>
+        <p class="text-muted fw-600">Archival history and chronological student enrollment records</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-light rounded-12 px-4 shadow-sm fw-800 border">
+            <i class="fas fa-file-archive me-2"></i> ARCHIVE REPORT
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-3">
+    <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden mb-4 p-4 animate-fade-in">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-800 text-muted uppercase">Search History</label>
+                <input type="text" name="search" class="form-control rounded-12 border-0 bg-light fw-700" placeholder="Student Name or ID...">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium-primary w-100 rounded-12 fw-800">
+                    <i class="fas fa-history me-2"></i> SEARCH ARCHIVE
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        @foreach (var student in Model)
+        {
+            <div class="col-xl-6 col-xxl-4">
+                <div class="premium-card bg-white shadow-xl border-0 rounded-24 overflow-hidden animate-fade-in transition-all hover-lift h-100">
+                    <div class="p-4 bg-light-gradient border-bottom d-flex align-items-center">
+                        @if (!string.IsNullOrEmpty(student.ProfilePicture))
+                        {
+                            <img src="@student.ProfilePicture" class="rounded-circle shadow-sm border border-3 border-white" style="width: 60px; height: 60px; object-fit: cover;" alt="" />
+                        }
+                        else
+                        {
+                            <div class="avatar-placeholder rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 60px; height: 60px; font-weight: 800; font-size: 1.5rem;">
+                                @(student.FirstName?[0] ?? '?')
+                            </div>
+                        }
+                        <div class="ms-4">
+                            <h5 class="fw-900 text-dark mb-0">@student.FirstName @student.LastName</h5>
+                            <span class="badge bg-primary-soft text-primary fw-800 rounded-pill px-3 py-1 mt-1">@student.AdmissionNumber</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="small fw-800 text-muted uppercase d-block mb-1">Enrolled Since</label>
+                                <div class="fw-700 text-dark">@student.AdmissionDate.ToString("dd MMM yyyy")</div>
+                            </div>
+                            <div class="col-6 border-start">
+                                <label class="small fw-800 text-muted uppercase d-block mb-1">Academic Level</label>
+                                <div class="fw-700 text-dark">@student.Class?.Name</div>
+                            </div>
+                            <div class="col-12 mt-3 pt-3 border-top">
+                                <label class="small fw-800 text-muted uppercase d-block mb-2">Institutional Notes</label>
+                                <p class="small fw-600 text-muted mb-0">@(student.AdditionalNotes ?? "No critical remarks found in historical records.")</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-4 py-3 bg-light border-top d-flex justify-content-between align-items-center">
+                        <div class="small fw-800 @(student.IsActive ? "text-success" : "text-danger")">
+                            <i class="fas fa-circle me-1" style="font-size: 8px;"></i> @(student.IsActive ? "ACTIVE ENROLLMENT" : "ARCHIVED")
+                        </div>
+                        <a href="/Students/Details/@student.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-800 px-3">VIEW PROFILE</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .bg-light-gradient { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
+    .bg-primary-soft { background: rgba(99,102,241,0.1); }
+    .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04) !important; }
+</style>

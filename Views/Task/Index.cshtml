@@ -1,0 +1,204 @@
+@model IEnumerable<EasyEdu.Models.TodoTask>
+@{
+    ViewData["Title"] = "Task Terminal - Utilities";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-list-check me-2 text-primary"></i> Productivity Terminal</h1>
+        <p class="text-muted fw-600">Personal task management and goal architecture</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-premium-primary rounded-12 px-4 shadow-sm fw-800" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+            <i class="fas fa-plus me-2"></i> NEW OBJECTIVE
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        <!-- Dashboard Stats -->
+        <div class="col-xl-3 col-lg-4">
+            <div class="premium-card bg-primary text-white shadow-xl border-0 p-4 rounded-24 mb-4 animate-fade-in">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="icon-box-sm bg-white-20 rounded-circle">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    @if(Model.Any()) { <span class="badge bg-white text-primary rounded-pill fw-800">@(Math.Round((double)Model.Count(t => t.IsCompleted) / Model.Count() * 100))% Done</span> }
+                </div>
+                <h2 class="fw-900 mb-1">@Model.Count()</h2>
+                <div class="fw-700 opacity-75 small uppercase tracker-wider">TOTAL OBJECTIVES</div>
+            </div>
+
+            <div class="premium-card bg-white shadow-xl border-0 p-4 rounded-24 animate-fade-in transition-all">
+                <h6 class="fw-800 text-dark mb-4">CRITICALITY MATRIX</h6>
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-20">
+                        <div class="d-flex align-items-center">
+                            <span class="status-indicator me-3" style="background: #ef4444;"></span>
+                            <span class="fw-800 text-dark">High Priority</span>
+                        </div>
+                        <span class="badge rounded-pill bg-danger-soft text-danger fw-800">@Model.Count(t => t.Priority == "High")</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-20">
+                        <div class="d-flex align-items-center">
+                            <span class="status-indicator me-3" style="background: #f59e0b;"></span>
+                            <span class="fw-800 text-dark">Balanced</span>
+                        </div>
+                        <span class="badge rounded-pill bg-warning-soft text-warning fw-800">@Model.Count(t => t.Priority == "Medium")</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-20">
+                        <div class="d-flex align-items-center">
+                            <span class="status-indicator me-3" style="background: #10b981;"></span>
+                            <span class="fw-800 text-dark">Low Impact</span>
+                        </div>
+                        <span class="badge rounded-pill bg-success-soft text-success fw-800">@Model.Count(t => t.Priority == "Low")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="col-xl-9 col-lg-8">
+            <div class="premium-card bg-white shadow-xl border-0 overflow-hidden rounded-24 animate-fade-in">
+                <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="fw-800 text-dark mb-0">Active Objectives Repository</h5>
+                    <div class="btn-group">
+                        <button class="btn btn-light btn-sm border fw-700 active">ALL</button>
+                        <button class="btn btn-light btn-sm border fw-700">PENDING</button>
+                        <button class="btn btn-light btn-sm border fw-700">COMPLETED</button>
+                    </div>
+                </div>
+                <div class="p-0">
+                    <div class="task-list">
+                        @foreach (var task in Model)
+                        {
+                            <div class="task-item @(task.IsCompleted ? "completed" : "") d-flex align-items-center p-4 border-bottom transition-all" id="task-@task.Id">
+                                <div class="form-check fs-4 mb-0 me-4">
+                                    <input class="form-check-input task-toggle cursor-pointer shadow-none" type="checkbox" @(task.IsCompleted ? "checked" : "") data-id="@task.Id">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-800 text-dark mb-1 task-title">@task.Title</h6>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="small fw-700 text-muted">Created @task.CreatedAt.ToString("MMM dd")</span>
+                                        @if(task.DueDate.HasValue)
+                                        {
+                                            <span class="small fw-700 @(task.DueDate.Value < DateTime.Now ? "text-danger" : "text-primary")">
+                                                <i class="far fa-calendar-alt me-1"></i> Due @task.DueDate.Value.ToString("MMM dd")
+                                            </span>
+                                        }
+                                        <span class="badge rounded-pill @(task.Priority == "High" ? "bg-danger" : task.Priority == "Medium" ? "bg-warning" : "bg-success") fw-800" style="font-size: 0.6rem;">@task.Priority.ToUpper()</span>
+                                    </div>
+                                    @if(!string.IsNullOrEmpty(task.Description))
+                                    {
+                                        <p class="task-desc mb-0 mt-2 small text-muted fw-600 opacity-75">@task.Description</p>
+                                    }
+                                </div>
+                                <div>
+                                    <form asp-action="Delete" method="post" onsubmit="return confirm('Archive this objective permanently?')">
+                                        <input type="hidden" name="id" value="@task.Id" />
+                                        <button type="submit" class="btn btn-light rounded-circle shadow-sm px-3 border-0 transition-all hover-danger">
+                                            <i class="fas fa-trash-alt text-muted"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <div class="text-center py-5 opacity-50">
+                                <div class="icon-box-lg bg-light rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-list-check fa-3x text-muted opacity-25"></i>
+                                </div>
+                                <h4 class="fw-900 text-muted mb-2">Workspace Clean</h4>
+                                <p class="fw-700 text-muted">All objectives are clear. Time to architect something new.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-24 shadow-2xl overflow-hidden">
+            <div class="modal-header bg-primary text-white p-4">
+                <h5 class="modal-title fw-800">New Objective Architecture</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Create" method="post">
+                <div class="modal-body p-5">
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small uppercase">Objective Title</label>
+                        <input type="text" name="title" class="form-control premium-input shadow-none" placeholder="What needs to be achieved?" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-800 text-dark small uppercase">Operational Strategy (Description)</label>
+                        <textarea name="description" class="form-control premium-input shadow-none" rows="3" placeholder="Define the steps or context..."></textarea>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-dark small uppercase">Hard Deadline</label>
+                            <input type="date" name="dueDate" class="form-control premium-input shadow-none">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-800 text-dark small uppercase">Criticality Level</label>
+                            <select name="priority" class="form-select premium-input shadow-none">
+                                <option value="Low">Low Impact</option>
+                                <option value="Medium" selected>Balanced</option>
+                                <option value="High">High Criticality</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 p-4">
+                    <button type="submit" class="btn btn-premium-primary w-100 py-3 rounded-16 shadow-lg fw-900">COMMIT OBJECTIVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-24 { border-radius: 24px; }
+    .rounded-20 { border-radius: 20px; }
+    .bg-white-20 { background: rgba(255,255,255,0.2); }
+    .status-indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); }
+    .premium-input { border: 2px solid #f3f4f6; border-radius: 12px; padding: 12px 16px; font-weight: 600; }
+    .premium-input:focus { border-color: #6366f1; background: rgba(99,102,241,0.02); }
+    .task-item:hover { background: rgba(99,102,241,0.02); }
+    .task-item.completed .task-title { text-decoration: line-through; opacity: 0.5; }
+    .task-item.completed .task-desc { opacity: 0.3; }
+    .hover-danger:hover { background: #fee2e2 !important; color: #ef4444 !important; }
+    .cursor-pointer { cursor: pointer; }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $(".task-toggle").on("change", function() {
+                var id = $(this).data("id");
+                $.post("/Task/ToggleComplete", { id: id }, function(res) {
+                    if (res.success) {
+                        $("#task-" + id).toggleClass("completed");
+                        Swal.fire({ 
+                            icon: 'success', 
+                            title: res.isCompleted ? 'Objective Archived' : 'Objective Reopened', 
+                            timer: 1000, 
+                            showConfirmButton: false, 
+                            position: 'bottom-end',
+                             toast: true
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

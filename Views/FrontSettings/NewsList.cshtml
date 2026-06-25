@@ -1,0 +1,233 @@
+@model IEnumerable<EasyEdu.Models.NewsPost>
+@{
+    ViewData["Title"] = "News & Press Releases";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1 fw-900 text-dark">News & Press Releases</h3>
+            <p class="text-muted small fw-600">Manage news updates and announcements</p>
+        </div>
+        <button class="btn btn-premium-purple px-4 py-2 rounded-12 shadow-sm" data-bs-toggle="modal" data-bs-target="#createNewsModal">
+            <i class="fas fa-plus me-2"></i>CREATE POST
+        </button>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+            <i class="fas fa-check-circle fs-5"></i>
+            <div>@TempData["Success"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg mb-4" style="border-radius: 24px;">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0 align-middle">
+                <thead class="bg-premium-dark text-white">
+                    <tr>
+                        <th class="ps-5 py-4 fw-900 small text-uppercase">POST TITLE</th>
+                        <th class="py-4 fw-900 small text-uppercase">CATEGORY</th>
+                        <th class="py-4 fw-900 small text-uppercase text-center">STATUS</th>
+                        <th class="pe-5 py-4 text-end fw-900 small text-uppercase">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var n in Model)
+                    {
+                        <tr>
+                            <td class="ps-5 py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    @if (!string.IsNullOrEmpty(n.ImagePath))
+                                    {
+                                        <img src="@n.ImagePath" class="rounded-8 border shadow-sm" style="width: 50px; height: 50px; object-fit: cover;" />
+                                    }
+                                    <div>
+                                        <div class="fw-900 text-dark h6 mb-0">@n.Title</div>
+                                        <div class="small text-muted fw-700">Published: @n.PublishedDate.ToString("dd MMM yyyy")</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3"><span class="badge bg-light text-muted border px-3 py-2 rounded-pill fw-800">@n.Category?.Name</span></td>
+                            <td class="text-center py-3">
+                                <span class="badge @(n.IsPublished ? "bg-premium-success-gradient" : "bg-warning") px-3 rounded-pill fw-900">
+                                    @(n.IsPublished ? "PUBLISHED" : "DRAFT")
+                                </span>
+                            </td>
+                            <td class="pe-5 text-end py-3">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="Edit Post"
+                                            data-id="@n.Id" 
+                                            data-title="@n.Title" 
+                                            data-category="@n.CategoryId" 
+                                            data-content="@n.Content"
+                                            data-published="@n.IsPublished.ToString().ToLower()" 
+                                            onclick="openEditNewsModal(this)">
+                                        <i class="fas fa-edit text-primary"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-light-soft rounded-8 shadow-sm" title="Delete Post" onclick="openDeleteNewsModal(@n.Id)">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if(!Model.Any()){
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <i class="far fa-newspaper fa-3x text-muted opacity-20 mb-3"></i>
+                                <h5 class="fw-800 text-muted italic">No news posts have been created yet.</h5>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Create News Modal -->
+<div class="modal fade" id="createNewsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header bg-premium-dark text-white p-4" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                <h5 class="modal-title fw-900"><i class="far fa-newspaper me-2"></i> CREATE NEW POST</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="CreateNews" method="post" enctype="multipart/form-data">
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-70">Post Title*</label>
+                        <input type="text" name="Title" class="form-control form-control-premium" required placeholder="Enter an engaging title..." />
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-70">Category*</label>
+                            <select name="CategoryId" class="form-select form-control-premium" asp-items="ViewBag.Categories" required>
+                                <option value="">-- Choose Category --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-70">Feature Image</label>
+                            <input type="file" name="file" class="form-control" accept="image/*" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-70">Post Content*</label>
+                        <textarea name="Content" class="form-control" rows="6" required placeholder="Write the main body content here..."></textarea>
+                    </div>
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" name="IsPublished" value="true" checked id="createIsPublished" />
+                        <label class="form-check-label small fw-800 text-uppercase opacity-70" for="createIsPublished">Publish Immediately</label>
+                    </div>
+                </div>
+                <div class="modal-footer p-4 border-top-0 d-flex gap-2">
+                    <button type="button" class="btn btn-light px-4 py-2.5 rounded-12 fw-700" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-premium-purple px-4 py-2.5 rounded-12 fw-900"><i class="fas fa-paper-plane me-2"></i>Publish Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit News Modal -->
+<div class="modal fade" id="editNewsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header bg-primary text-white p-4" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                <h5 class="modal-title fw-900"><i class="far fa-edit me-2"></i> EDIT POST</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="EditNews" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="Id" id="editNewsId" />
+                <div class="modal-body p-4 text-dark">
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-70">Post Title*</label>
+                        <input type="text" name="Title" id="editNewsTitle" class="form-control form-control-premium" required placeholder="Enter post title..." />
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-70">Category*</label>
+                            <select name="CategoryId" id="editNewsCategory" class="form-select form-control-premium" asp-items="ViewBag.Categories" required>
+                                <option value="">-- Choose Category --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-800 text-uppercase opacity-70">Feature Image (leave empty to keep current)</label>
+                            <input type="file" name="file" class="form-control" accept="image/*" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-800 text-uppercase opacity-70">Post Content*</label>
+                        <textarea name="Content" id="editNewsContent" class="form-control" rows="6" required placeholder="Write the main body content here..."></textarea>
+                    </div>
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" name="IsPublished" value="true" id="editNewsIsPublished" />
+                        <label class="form-check-label small fw-800 text-uppercase opacity-70" for="editNewsIsPublished">Published</label>
+                    </div>
+                </div>
+                <div class="modal-footer p-4 border-top-0 d-flex gap-2">
+                    <button type="button" class="btn btn-light px-4 py-2.5 rounded-12 fw-700" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4 py-2.5 rounded-12 fw-900"><i class="fas fa-save me-2"></i>Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteNewsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-body p-4 text-center text-dark">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                <h5 class="fw-900 mb-2">DELETE POST?</h5>
+                <p class="text-muted small">Are you sure you want to permanently remove this news post? This action cannot be undone.</p>
+                <form asp-action="DeleteNews" method="post" class="mt-4 d-flex gap-2 justify-content-center">
+                    <input type="hidden" name="Id" id="deleteNewsIdInput" />
+                    <button type="button" class="btn btn-light px-4 py-2 rounded-12 fw-700" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger px-4 py-2 rounded-12 fw-900">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openEditNewsModal(btn) {
+        var id = btn.getAttribute('data-id');
+        var title = btn.getAttribute('data-title');
+        var categoryId = btn.getAttribute('data-category');
+        var content = btn.getAttribute('data-content');
+        var isPublished = btn.getAttribute('data-published') === 'true';
+
+        document.getElementById('editNewsId').value = id;
+        document.getElementById('editNewsTitle').value = title;
+        document.getElementById('editNewsCategory').value = categoryId;
+        document.getElementById('editNewsContent').value = content;
+        document.getElementById('editNewsIsPublished').checked = isPublished;
+
+        var myModal = new bootstrap.Modal(document.getElementById('editNewsModal'));
+        myModal.show();
+    }
+
+    function openDeleteNewsModal(id) {
+        document.getElementById('deleteNewsIdInput').value = id;
+        var myModal = new bootstrap.Modal(document.getElementById('deleteNewsModal'));
+        myModal.show();
+    }
+</script>
+
+<style>
+    .bg-premium-dark { background: #1e293b; }
+    .bg-premium-success-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .form-control-premium {
+        border-radius: 10px;
+        border: 1px solid rgba(0,0,0,0.15);
+        padding: 12px 16px;
+    }
+    .rounded-12 { border-radius: 12px; }
+</style>

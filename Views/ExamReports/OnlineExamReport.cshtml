@@ -1,0 +1,110 @@
+﻿@model IEnumerable<EasyEdu.Models.OnlineExam>
+@{
+    ViewData["Title"] = "Online Exam Report";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Online Examination Report</h3>
+            <p class="text-muted small fw-600">Digital Assessment Performance & Status</p>
+        </div>
+        <div class="no-print">
+            <button class="btn btn-premium-primary btn-sm rounded-8" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>PRINT REPORT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Select Online Exam</label>
+                <select name="examId" class="form-select form-control-premium" asp-items="ViewBag.OnlineExams">
+                    <option value="">All Online Exams</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Class</label>
+                <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100">SEARCH</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var exam in Model)
+        {
+            <div class="col-md-6">
+                <div class="premium-card p-4 hover-lift transition-all">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="badge bg-premium-purple-soft text-premium-purple mb-2">@exam.Title</span>
+                            <h5 class="fw-800 text-dark mb-0">ID: EXM-@exam.Id.ToString("D4")</h5>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge @(exam.IsPublished ? "bg-success-soft text-success" : "bg-warning-soft text-warning") rounded-pill">
+                                @(exam.IsPublished ? "PUBLISHED" : "DRAFT")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="small text-muted fw-700">START DATE</div>
+                            <div class="fw-800">@exam.StartDate.ToString("dd MMM yyyy")</div>
+                            <div class="small text-muted mt-1">@exam.StartTime</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="small text-muted fw-700">DURATION</div>
+                            <div class="fw-800">@exam.DurationMinutes Mins</div>
+                            <div class="small text-muted mt-1">Pass: @exam.PassPercentage%</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <div class="d-flex align-items-center gap-2">
+                             <div class="avatar-group">
+                                 <div class="avatar-group-item bg-primary text-white">S</div>
+                                 <div class="avatar-group-item bg-info text-white">P</div>
+                             </div>
+                             <span class="small fw-700 text-muted">Assigned Subjects</span>
+                        </div>
+                        <button class="btn btn-sm btn-light-soft fw-800">VIEW DETAILS</button>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="premium-card p-5 text-center">
+                    <i class="fas fa-search fa-3x text-muted opacity-20 mb-3"></i>
+                    <h5 class="fw-800 text-dark">No Online Exams Found</h5>
+                    <p class="text-muted">Try adjusting your filters or create a new online exam.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .avatar-group { display: flex; }
+    .avatar-group-item {
+        width: 24px; height: 24px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.6rem; font-weight: 800; border: 2px solid white;
+        margin-right: -8px;
+    }
+    .bg-premium-purple-soft { background: rgba(139, 92, 246, 0.1); }
+    .text-premium-purple { color: #8b5cf6; }
+    
+    @@media print {
+        .no-print { display: none !important; }
+    }
+</style>

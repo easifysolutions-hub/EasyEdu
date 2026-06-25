@@ -1,0 +1,89 @@
+@model IEnumerable<EasyEdu.Models.ChatInvitation>
+@{
+    ViewData["Title"] = "Chat Invitations - Utilities";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4">
+    <div>
+        <h1 class="page-title animate-slide-in"><i class="fas fa-envelope-open-text me-2 text-primary"></i> Connection Requests</h1>
+        <p class="text-muted fw-600">Manage incoming invitations to collaborate via instant messaging</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-premium-blue rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-arrow-left me-2"></i> CHAT TERMINAL
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+        @foreach (var invite in Model)
+        {
+            <div class="col-xl-4 col-lg-6">
+                <div class="premium-card bg-white shadow-xl border-0 p-4 rounded-24 animate-fade-in transition-all hover-lift">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(invite.Sender?.ProfilePicture))
+                            {
+                                <img src="@invite.Sender.ProfilePicture" class="rounded-circle shadow-sm" style="width: 64px; height: 64px; object-fit: cover;" alt="@invite.Sender.FullName" />
+                            }
+                            else
+                            {
+                                <div class="avatar-placeholder rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 64px; height: 64px; font-weight: 800; font-size: 1.5rem;">
+                                    @(invite.Sender?.FullName?[0] ?? invite.Sender?.UserName?[0] ?? '?')
+                                </div>
+                            }
+                            <span class="badge bg-warning rounded-pill position-absolute" style="top: -5px; right: -5px; border: 2px solid #fff;">NEW</span>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="fw-800 text-dark mb-0">@invite.Sender?.FullName</h5>
+                            <span class="small text-muted fw-700">Sent @invite.SentAt.ToString("dd MMM yyyy")</span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-muted fw-600 mb-4">Greeting! A colleague has invited you to join a secure communication channel for professional collaboration.</p>
+                    
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <form asp-action="RespondToInvitation" method="post">
+                                <input type="hidden" name="id" value="@invite.Id" />
+                                <input type="hidden" name="response" value="Accepted" />
+                                <button type="submit" class="btn btn-success w-100 rounded-12 py-2 fw-800 shadow-sm border-0">
+                                    <i class="fas fa-check-circle me-1"></i> ACCEPT
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-6">
+                            <form asp-action="RespondToInvitation" method="post">
+                                <input type="hidden" name="id" value="@invite.Id" />
+                                <input type="hidden" name="response" value="Rejected" />
+                                <button type="submit" class="btn btn-light-soft w-100 rounded-12 py-2 fw-800 text-danger border-0">
+                                    <i class="fas fa-times-circle me-1"></i> DECLINE
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <div class="premium-card bg-white shadow-xl border-0 p-5 rounded-24 d-inline-block text-center mx-auto" style="max-width: 500px;">
+                    <div class="icon-box-lg bg-light rounded-circle mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                        <i class="fas fa-inbox fa-3x text-muted opacity-25"></i>
+                    </div>
+                    <h4 class="fw-900 text-dark mb-2">Registry is Empty</h4>
+                    <p class="text-muted fw-600 mb-0">You have no pending connection requests at this time.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .btn-light-soft { background: rgba(0,0,0,0.03); }
+    .btn-light-soft:hover { background: rgba(220, 53, 69, 0.1); }
+    .hover-lift:hover { transform: translateY(-5px); }
+</style>

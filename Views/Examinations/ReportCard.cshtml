@@ -1,0 +1,211 @@
+﻿@model IEnumerable<EasyEdu.Models.Mark>
+@{
+    var student = (EasyEdu.Models.Student)ViewBag.Student;
+    var ay = (EasyEdu.Models.AcademicYear)ViewBag.AcademicYear;
+    ViewData["Title"] = "Academic Report Card - " + student.FirstName;
+    
+    // Data for Chart
+    var subjects = Model.Select(m => m.Subject.Name).Distinct().ToList();
+    var marks = Model.Select(m => (m.MarksObtained / m.MaxMarks * 100)).ToList();
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="breadcrumb-premium">ACADEMIC EXCELLENCE TRACKER</div>
+        <h1 class="page-title animate-slide-in">Scholastic Achievement Record</h1>
+        <p class="text-muted fw-600">Comprehensive evaluation for @ay.Name Session</p>
+    </div>
+    <div class="d-flex gap-3">
+        <button class="btn-premium btn-premium-primary animate-fade-in shadow-premium" onclick="window.print()">
+            <i class="fas fa-print"></i> Generate Official Transcript
+        </button>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-xl-4">
+        <div class="premium-card p-4 bg-white shadow-premium border-top border-5 border-primary h-100">
+            <h5 class="fw-800 text-dark mb-4 text-uppercase small opacity-50">Student Profile</h5>
+            <div class="d-flex align-items-center mb-4 p-3 bg-gray-50 rounded-15">
+                <div class="avatar-lg bg-primary-soft text-primary rounded-15 me-3 d-flex align-items-center justify-content-center fw-800" style="font-size: 1.8rem;">
+                    @(student.FirstName.Substring(0,1) + (student.LastName.Length > 0 ? student.LastName.Substring(0,1) : ""))
+                </div>
+                <div>
+                    <h4 class="fw-800 mb-0">@student.FirstName @student.LastName</h4>
+                    <div class="small fw-700 text-muted mt-1"><i class="fas fa-fingerprint me-1"></i> ID: @student.AdmissionNumber</div>
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="small text-muted fw-700 mb-1">CURRENT CLASS</div>
+                    <div class="fw-800 text-dark">@(student.Class?.Name ?? "Unassigned")</div>
+                </div>
+                <div class="col-6">
+                    <div class="small text-muted fw-700 mb-1">PERFORMANCE</div>
+                    <div class="fw-800 text-primary">@((Model.Any() ? Model.Average(m => m.MarksObtained / m.MaxMarks * 100) : 0).ToString("N1"))%</div>
+                </div>
+                <div class="col-12">
+                    <hr class="my-2 opacity-10">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small fw-600 text-muted">Attendance Status</span>
+                        <span class="badge-premium badge-success-premium">94% Regular</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 text-center">
+        <div class="premium-card p-4 bg-white shadow-premium h-100">
+            <h5 class="fw-800 text-dark mb-3 text-uppercase small opacity-50">Skill Proficiency Wheel</h5>
+            <canvas id="performanceChart" style="max-height: 220px;"></canvas>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="premium-card p-4 bg-dark text-white h-100 shadow-xl" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-800 text-uppercase small m-0 opacity-75">Executive Summary</h5>
+                <div class="avatar-sm bg-primary rounded-10"><i class="fas fa-trophy text-white"></i></div>
+            </div>
+            <div class="row g-4 mb-4">
+                <div class="col-6">
+                    <div class="h2 fw-800 m-0 text-white">@Model.Select(m => m.ExaminationId).Distinct().Count()</div>
+                    <div class="small opacity-50 fw-600">Total Exams</div>
+                </div>
+                <div class="col-6 text-end">
+                    @{
+                        var totalEarned = Model.Sum(m => m.MarksObtained);
+                        var totalPossible = Model.Sum(m => m.MaxMarks);
+                        var overallPerc = totalPossible > 0 ? (totalEarned / totalPossible * 100) : 0;
+                        string grade = overallPerc >= 90 ? "A+" : overallPerc >= 80 ? "A" : overallPerc >= 70 ? "B" : overallPerc >= 60 ? "C" : "D";
+                    }
+                    <div class="h2 fw-800 m-0 text-primary-light">@grade</div>
+                    <div class="small opacity-50 fw-600">Final Grade</div>
+                </div>
+            </div>
+            <div class="p-3 bg-white bg-opacity-10 rounded-10 border border-white border-opacity-10">
+                <p class="small m-0 fw-500 italic text-white text-opacity-75">
+                    "Cognitive assessment indicates high aptitude in analytical subjects. Recommend focusing on creative writing to balance the portfolio."
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="premium-card bg-white shadow-premium animate-fade-in border-0">
+    <div class="card-header border-0 bg-transparent py-4 px-5 d-flex justify-content-between align-items-center">
+        <h5 class="fw-800 m-0 text-dark">Subject-Wise Evaluation Data</h5>
+        <div class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fw-700">Detailed View</div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table premium-table mb-0">
+                <thead class="bg-gray-50 border-bottom">
+                    <tr>
+                        <th class="px-5">ASSESSMENT MODULE</th>
+                        <th>SUBJECT</th>
+                        <th class="text-center">SCORE</th>
+                        <th class="text-center">TOTAL</th>
+                        <th class="text-center">INDEX (%)</th>
+                        <th class="px-5">FACULTY FEEDBACK</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var group in Model.GroupBy(m => m.Examination.Name))
+                    {
+                        <tr class="bg-gray-50">
+                            <td colspan="6" class="px-5 py-3 fw-800 text-primary">
+                                <i class="fas fa-file-invoice me-2"></i> @group.Key Evaluation
+                            </td>
+                        </tr>
+                        @foreach (var item in group)
+                        {
+                            <tr>
+                                <td class="px-5">@item.Examination.StartDate.ToString("MMM yyyy")</td>
+                                <td class="fw-700 text-dark">@item.Subject.Name</td>
+                                <td class="text-center fw-800 text-success">@item.MarksObtained.ToString("N1")</td>
+                                <td class="text-center fw-600 text-muted">@item.MaxMarks.ToString("N0")</td>
+                                <td class="text-center">
+                                    @{
+                                        var perc = (item.MarksObtained / item.MaxMarks * 100);
+                                        var progressColor = perc >= 75 ? "bg-success" : perc >= 50 ? "bg-warning" : "bg-danger";
+                                    }
+                                    <div class="fw-800 mb-1">@perc.ToString("N1")%</div>
+                                    <div class="progress" style="height: 4px; width: 60px; margin: 0 auto;">
+                                        <div class="progress-bar @progressColor" style="width: @perc%"></div>
+                                    </div>
+                                </td>
+                                <td class="px-5 small italic text-muted fw-500">
+                                    <span class="text-truncate d-inline-block" style="max-width: 200px;" title="@item.Remarks">
+                                        @(string.IsNullOrEmpty(item.Remarks) ? "Standard academic progress noted." : item.Remarks)
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="p-5">
+                                    <i class="fas fa-search fa-3x text-gray-200 mb-3"></i>
+                                    <h5 class="text-muted fw-700">No Assessment Records Found</h5>
+                                    <p class="small text-muted">Academic data for the selected session has not been finalized yet.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(subjects)),
+                    datasets: [{
+                        label: 'Performance Index',
+                        data: @Html.Raw(Json.Serialize(marks)),
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                        pointBorderColor: '#fff'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    @@media print {
+        .page-header, .sidebar, .topbar, .btn-premium { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        .premium-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        body { background: #fff !important; }
+        .page-title { color: #000 !important; }
+    }
+    .italic { font-style: italic; }
+</style>
+

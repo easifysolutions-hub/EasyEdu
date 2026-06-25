@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "System Updates";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-800 m-0 text-gradient-primary">System Control Center</h2>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="premium-card bg-white shadow-xl border-0 p-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="avatar-lg bg-soft-success text-success rounded-circle me-4 p-3 border border-success">
+                    <i class="fas fa-sync-alt fa-2x"></i>
+                </div>
+                <div>
+                    <h4 class="fw-800 m-0 text-success">One-Click Update</h4>
+                    <p class="text-muted m-0 fw-600">Your system is currently on version 8.2.0 (Latest)</p>
+                </div>
+            </div>
+            
+            <div class="system-status-box bg-light rounded-20 p-4 border mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-700 text-muted">System Integrity Check</span>
+                    <span class="badge bg-success px-3 rounded-pill">STABLE</span>
+                </div>
+                <div class="progress" style="height: 10px; border-radius: 5px;">
+                    <div class="progress-bar bg-success" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-premium btn-premium-primary w-100 py-3 shadow-lg">
+                <i class="fas fa-download me-2"></i> CHECK FOR UPDATES NOW
+            </button>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="premium-card bg-white shadow-xl border-0 p-4 h-100">
+            <h5 class="fw-800 mb-4">Quick Actions</h5>
+            <div class="d-grid gap-3">
+                <button class="btn btn-light text-start p-3 rounded-15 border">
+                    <i class="fas fa-database me-2 text-primary"></i> Backup Database
+                </button>
+                <button class="btn btn-light text-start p-3 rounded-15 border">
+                    <i class="fas fa-broom me-2 text-warning"></i> Clear System Cache
+                </button>
+                <button class="btn btn-light text-start p-3 rounded-15 border">
+                    <i class="fas fa-file-export me-2 text-info"></i> Export Logs
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

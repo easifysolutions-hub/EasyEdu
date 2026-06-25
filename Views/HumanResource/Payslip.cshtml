@@ -1,0 +1,175 @@
+@model EasyEdu.Models.Payroll
+@{
+    ViewData["Title"] = $"Payslip: {Model.Teacher.FullName} - {System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Month)} {Model.Year}";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4 px-4 no-print animate-slide-in">
+    <div class="d-flex align-items-center gap-3">
+        <a href="javascript:history.back()" class="btn btn-light rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+            <i class="fas fa-arrow-left text-muted"></i>
+        </a>
+        <div>
+            <h1 class="page-title mb-0">Financial Settlement Audit</h1>
+            <p class="text-muted fw-600 mb-0">Archival payslip for <span class="text-primary">@Model.Teacher.FullName</span></p>
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-premium-purple rounded-12 px-4 shadow-sm fw-800">
+            <i class="fas fa-print me-2"></i> AUTHORIZE PRINT
+        </button>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="premium-card bg-white shadow-2xl border-0 rounded-32 overflow-hidden animate-fade-in p-0 printable-area">
+        <!-- Payslip Header -->
+        <div class="p-5 bg-light-soft border-bottom d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+                <div class="brand-box bg-primary p-3 rounded-20 shadow-primary">
+                    <img src="~/images/easyedu_full_logo.png" style="height: 40px; filter: brightness(0) invert(1);" alt="EasyEdu">
+                </div>
+                <div>
+                    <h3 class="fw-900 text-dark mb-0 ls-tight">SALARY SETTLEMENT ADVICE</h3>
+                    <div class="fw-800 text-muted uppercase tracking-widest smallest">INSTITUTIONAL FINANCIAL SERVICES</div>
+                </div>
+            </div>
+            <div class="text-end">
+                <div class="fw-900 text-primary fs-4">#PS-@Model.Id@Model.Year@Model.Month</div>
+                <div class="small fw-700 text-muted">GENERATED ON @DateTime.Now.ToString("dd MMM yyyy")</div>
+            </div>
+        </div>
+
+        <div class="p-5">
+            <div class="row g-4 mb-5">
+                <div class="col-md-6 border-end">
+                    <h6 class="fw-900 text-muted uppercase smallest mb-3 tracking-widest">FACULTY DETAILS</h6>
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <div class="fw-900 fs-5 text-dark">@Model.Teacher.FullName</div>
+                        <span class="badge bg-primary-soft text-primary rounded-pill px-3 py-1 fw-800 smallest">ACTIVE</span>
+                    </div>
+                    <div class="small fw-700 text-muted mb-1"><i class="fas fa-id-card me-2"></i> EMPLOYEE ID: <span class="text-dark">@Model.Teacher.EmployeeNumber</span></div>
+                    <div class="small fw-700 text-muted mb-1"><i class="fas fa-building me-2"></i> DEPT: <span class="text-dark">@Model.Teacher.Department?.Name</span></div>
+                    <div class="small fw-700 text-muted"><i class="fas fa-user-tie me-2"></i> ROLE: <span class="text-dark">@Model.Teacher.Designation?.Title</span></div>
+                </div>
+                <div class="col-md-6 ps-md-5">
+                    <h6 class="fw-900 text-muted uppercase smallest mb-3 tracking-widest">PAYMENT ARCHIVE</h6>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="smallest fw-800 text-muted">MONTH/YEAR</div>
+                            <div class="fw-800 text-dark">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Month) @Model.Year</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="smallest fw-800 text-muted">MODE</div>
+                            <div class="fw-800 text-dark">@Model.PaymentMethod</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="smallest fw-800 text-muted">STATUS</div>
+                            <div class="badge bg-success rounded-pill px-3 fw-800 smallest">@Model.Status.ToUpper()</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="smallest fw-800 text-muted">BANK</div>
+                            <div class="fw-800 text-dark">@(Model.Teacher.BankDetails?.Split(',')[0] ?? "INSTITUTIONAL ESCROW")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Breakdown -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="receipt-section p-4 bg-light rounded-24 border">
+                        <h6 class="fw-900 text-success uppercase small mb-4 d-flex justify-content-between align-items-center">
+                            EARNINGS ELEMENTS <i class="fas fa-plus-circle"></i>
+                        </h6>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-700 text-muted small">BASIC RETAINER</div>
+                                <div class="fw-800 text-dark">$@Model.BasicSalary.ToString("N2")</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-700 text-muted small">INSTITUTIONAL ALLOWANCE (HRA)</div>
+                                <div class="fw-800 text-dark">$@((Model.HRA ?? 0).ToString("N2"))</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-700 text-muted small">TRANSPORT COMMUTE (TA)</div>
+                                <div class="fw-800 text-dark">$@((Model.TA ?? 0).ToString("N2"))</div>
+                            </div>
+                            <div class="d-flex justify-content-between pt-3 border-top mt-2">
+                                <div class="fw-900 text-dark small">GROSS ACCRUAL</div>
+                                <div class="fw-900 text-dark">$@Model.GrossSalary.ToString("N2")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="receipt-section p-4 bg-light rounded-24 border">
+                        <h6 class="fw-900 text-danger uppercase small mb-4 d-flex justify-content-between align-items-center">
+                            DEDUCTIONS & TAX <i class="fas fa-minus-circle"></i>
+                        </h6>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-700 text-muted small">TAX WITHHOLDING (TDS)</div>
+                                <div class="fw-800 text-dark">$@((Model.TDS ?? 0).ToString("N2"))</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-700 text-muted small">DEDUCTIONS</div>
+                                <div class="fw-800 text-dark">$@Model.TotalDeductions.ToString("N2")</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center text-white opacity-0">
+                                <div class="fw-700 small">SPACER</div>
+                                <div class="fw-800">0</div>
+                            </div>
+                            <div class="d-flex justify-content-between pt-3 border-top mt-2">
+                                <div class="fw-900 text-danger small">TOTAL DEBITS</div>
+                                <div class="fw-900 text-danger">$@Model.TotalDeductions.ToString("N2")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Settlement -->
+            <div class="mt-5 p-5 bg-primary rounded-32 text-white shadow-primary d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-900 mb-0 ls-tight">$@Model.NetSalary.ToString("N2")</h2>
+                    <div class="fw-800 opacity-75 smallest uppercase tracking-widest">NET DISBURSEMENT SETTLEMENT</div>
+                </div>
+                <div class="text-end">
+                    <div class="fw-800 fs-5 mb-0">AUTHORIZED</div>
+                    <div class="smallest opacity-50 fw-600">Digital Signature Encrypted</div>
+                </div>
+            </div>
+
+            <!-- Verification Footer -->
+            <div class="mt-5 pt-4 text-center border-top">
+                <p class="small text-muted fw-600 px-5 mb-4">
+                    This is a digitally generated settlement advice from the EasyEdu Institutional Finance Hub. No physical signature is required for archival validation. Please contact audit department for discrepancies.
+                </p>
+                <div class="archive-tags d-flex justify-content-center gap-3">
+                    <span class="smallest fw-900 text-muted opacity-50 bg-light px-3 py-1 rounded-pill">FID: @Model.Id@Model.Teacher.Id</span>
+                    <span class="smallest fw-900 text-muted opacity-50 bg-light px-3 py-1 rounded-pill">STAMP: @DateTime.UtcNow.Ticks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-32 { border-radius: 32px; }
+    .rounded-24 { border-radius: 24px; }
+    .bg-light-soft { background: #f8fafc; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+    .ls-tight { letter-spacing: -1px; }
+    .smallest { font-size: 0.65rem; }
+    .shadow-primary { box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.5); }
+    
+    @@media print {
+        .page-header, .no-print { display: none !important; }
+        .container { width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+        .premium-card { box-shadow: none !important; border: 1px solid #ddd !important; border-radius: 0 !important; }
+        .rounded-32, .rounded-24, .rounded-20 { border-radius: 12px !important; }
+        .bg-primary { background-color: #4f46e5 !important; -webkit-print-color-adjust: exact; }
+        .text-white { color: white !important; -webkit-print-color-adjust: exact; }
+    }
+</style>

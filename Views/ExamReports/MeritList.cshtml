@@ -1,0 +1,110 @@
+﻿@model IEnumerable<EasyEdu.Controllers.MeritListItemViewModel>
+@{
+    ViewData["Title"] = "Merit List";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="page-title mb-1">Examination Merit List</h3>
+            <p class="text-muted small fw-600">Top performers across the institution</p>
+        </div>
+        <div class="d-flex gap-2 no-print">
+            <button class="btn btn-premium-success btn-sm rounded-8" onclick="exportExcel()">
+                <i class="fas fa-file-excel me-2"></i>EXCEL
+            </button>
+            <button class="btn btn-premium-primary btn-sm rounded-8" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>PRINT
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4 no-print">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Examination</label>
+                <select name="examId" class="form-select form-control-premium" asp-items="ViewBag.Examinations" required>
+                    <option value="">Select Exam</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label small fw-800 text-uppercase opacity-50">Class</label>
+                <select name="classId" class="form-select form-control-premium" asp-items="ViewBag.Classes" required>
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-purple w-100">GENERATE</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="premium-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table premium-table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">POS</th>
+                            <th>STUDENT NAME</th>
+                            <th>REG NO</th>
+                            <th>TOTAL MARKS</th>
+                            <th>AVG %</th>
+                            <th class="text-end px-4">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4">
+                                    <div class="pos-badge @(item.Position <= 3 ? "pos-" + item.Position : "")">@item.Position</div>
+                                </td>
+                                <td class="fw-800 text-dark">@item.StudentName</td>
+                                <td class="fw-700 text-muted small">@item.AdmissionNumber</td>
+                                <td class="fw-900 text-primary">@item.TotalMarks</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress flex-grow-1" style="height: 6px; min-width: 100px;">
+                                            <div class="progress-bar bg-primary" style="width: @item.AveragePercentage%"></div>
+                                        </div>
+                                        <span class="small fw-800">@item.AveragePercentage.ToString("F1")%</span>
+                                    </div>
+                                </td>
+                                <td class="text-end px-4">
+                                    @if(item.AveragePercentage >= 33){
+                                        <span class="badge badge-success-premium">PASSED</span>
+                                    } else {
+                                        <span class="badge badge-danger-premium">FAILED</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pos-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: #475569;
+    }
+    .pos-1 { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .pos-2 { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .pos-3 { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; }
+    
+    @@media print {
+        .no-print { display: none !important; }
+    }
+</style>

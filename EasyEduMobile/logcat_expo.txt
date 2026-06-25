@@ -1,0 +1,606 @@
+﻿
+03-09 21:47:18.608  2538  6817 I artd    : GetBestInfo: odex next to the dex file 
+(/data/app/~~ZIiihzzeyGeQhVFPJjOu1A==/host.exp.exponent-9dVBtI2QNT6syS4ZLC7jow==/oat/x86_64/base.odex) is kOatUpToDate 
+with filter 'verify' executable 'false'
+03-09 21:47:18.834   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null 
+activity=ActivityRecord{17864993 u0 host.exp.exponent/.experience.HomeActivity display-area-from-current-params=null 
+display-area-for-record=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 task null, skipping
+03-09 21:47:18.834   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null 
+activity=ActivityRecord{17864993 u0 host.exp.exponent/.experience.HomeActivity t-1} 
+display-area-from-current-params=null display-area-for-record=DefaultTaskDisplayArea@246485193 display-id=0 
+task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193
+03-09 21:47:18.835   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{c117e30 #40 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{17864993 u0 
+host.exp.exponent/.experience.HomeActivity t-1} display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 not entering desktop mode, skipping
+03-09 21:47:18.836   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{c117e30 #40 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{17864993 u0 host.exp.exponent/.experience.HomeActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-task=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 21:47:18.837   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{c117e30 #40 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{17864993 u0 
+host.exp.exponent/.experience.HomeActivity t-1} display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 not entering desktop mode, skipping
+03-09 21:47:18.837   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{c117e30 #40 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{17864993 u0 host.exp.exponent/.experience.HomeActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-task=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 21:47:18.853   824  1480 I ActivityTaskManager: START u0 {flg=0x30000000 xflg=0x5 
+cmp=host.exp.exponent/.experience.HomeActivity} with LAUNCH_SINGLE_TASK from uid 2000 (com.android.shell) 
+(BAL_ALLOW_PERMISSION) result code=2
+03-09 21:47:18.854  1082  1139 V WindowManagerShell: Transition requested (#54): android.os.BinderProxy@73a1577 
+TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=40 effectiveUid=10232 displayId=0 
+isRunning=true baseIntent=Intent { flg=0x30000000 cmp=host.exp.exponent/.experience.HomeActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} numActivities=1 
+lastActiveTime=24896006 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{android.os.BinderProxy@901bc5} topActivityType=1 pictureInPictureParams=null 
+shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 
+- 0, 0) topActivityInfo=ActivityInfo{74f95e4 host.exp.exponent.experience.HomeActivity} launchCookies=[] 
+positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false 
+isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false 
+isActivityStackTransparent=false lastNonFullscreenBounds=null capturedLink=null capturedLinkTimestamp=0 
+requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 54 }
+03-09 21:47:18.855  1082  1139 V ShellDesktopMode: DesktopTasksController: handleRequest request=TransitionRequestInfo 
+{ type = OPEN, triggerTask = TaskInfo{userId=0 taskId=40 effectiveUid=10232 displayId=0 isRunning=true 
+baseIntent=Intent { flg=0x30000000 cmp=host.exp.exponent/.experience.HomeActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} numActivities=1 
+lastActiveTime=24896006 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{android.os.BinderProxy@901bc5} topActivityType=1 pictureInPictureParams=null 
+shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 
+- 0, 0) topActivityInfo=ActivityInfo{74f95e4 host.exp.exponent.experience.HomeActivity} launchCookies=[] 
+positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false 
+isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false 
+isActivityStackTransparent=false lastNonFullscreenBounds=null capturedLink=null capturedLinkTimestamp=0 
+requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 54 }
+03-09 21:47:18.892  1082  1139 D WindowManagerShell: onActivityRestartAttempt: 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity}, wasVisible=false, displayId=0, 
+pipDisplayLayoutState#displayId=0
+03-09 21:47:19.026   824  1480 D CoreBackPreview: Window{d51a834 u0 Splash Screen host.exp.exponent}: Setting back 
+callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@2715bd2, mPriority=0, 
+mIsAnimationCallback=false, mOverrideBehavior=0}
+03-09 21:47:19.054  1082  1230 D VRI[exponent]: visibilityChanged oldVisibility=false newVisibility=true
+03-09 21:47:19.281   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null 
+activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity display-area-from-current-params=null 
+display-area-for-record=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 task null, skipping
+03-09 21:47:19.282   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null 
+activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} display-area-from-current-params=null 
+display-area-for-record=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193
+03-09 21:47:19.284   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{c117e30 #40 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 not entering desktop mode, skipping
+03-09 21:47:19.286   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{c117e30 #40 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-task=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 21:47:19.288   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{c117e30 #40 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 not entering desktop mode, skipping
+03-09 21:47:19.294   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{c117e30 #40 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-task=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 21:47:19.318   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{c117e30 #40 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 not entering desktop mode, skipping
+03-09 21:47:19.331   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{c117e30 #40 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{225228790 u0 host.exp.exponent/.LauncherActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-task=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 21:47:19.386   824  1480 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW 
+dat=exp://127.0.0.1:8081/... flg=0x10000000 xflg=0x4 cmp=host.exp.exponent/.LauncherActivity} with LAUNCH_SINGLE_TASK 
+from uid 2000 (com.android.shell) (BAL_ALLOW_PERMISSION) result code=0
+03-09 21:47:19.392   824   840 W ProcessStats: Tracking association SourceState{867b705 host.exp.exponent/10232 BTop 
+#12145} whose proc state 2 is better than process ProcessState{908015 com.google.android.gms/10155 
+pkg=com.google.android.gms} proc state 14 (17 skipped)
+03-09 21:47:19.663  1082  1139 D WindowManagerShell: onActivityRestartAttempt: 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity}, wasVisible=true, displayId=0, 
+pipDisplayLayoutState#displayId=0
+03-09 21:47:19.781 18668 18677 W st.exp.exponent: Suspending all threads took: 7.504ms
+03-09 21:47:19.846   824   845 V WindowManager: Sent Transition (#54) createdAt=03-09 21:47:18.833 via 
+request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=40 effectiveUid=10232 displayId=0 
+isRunning=true baseIntent=Intent { flg=0x30000000 cmp=host.exp.exponent/.experience.HomeActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.HomeActivity} numActivities=1 
+lastActiveTime=24896006 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{RemoteToken{2d78d4 Task{c117e30 #40 type=standard A=10232:host.exp.exponent}}} 
+topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 
+lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{6253a7d 
+host.exp.exponent.experience.HomeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 
+isFocused=false isVisible=false isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null 
+displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null 
+capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 
+topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 54 }
+03-09 21:47:19.911   824  1068 D CoreBackPreview: Window{5becfce u0 
+host.exp.exponent/host.exp.exponent.LauncherActivity}: Setting back callback 
+OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@47d3dfc, mPriority=0, 
+mIsAnimationCallback=false, mOverrideBehavior=0}
+03-09 21:47:19.944 18668 18677 I st.exp.exponent: Background young concurrent mark compact GC freed 7976KB AllocSpace 
+bytes, 24(1248KB) LOS objects, 45% free, 10236KB/18MB, paused 25.557ms,9.997ms total 284.953ms
+03-09 21:47:20.171   824  1069 D CoreBackPreview: Window{5becfce u0 
+host.exp.exponent/host.exp.exponent.LauncherActivity}: Setting back callback null
+03-09 21:47:20.295   824   952 I ImeTracker: host.exp.exponent:d43a6bfe: onRequestHide at ORIGIN_SERVER reason 
+HIDE_SAME_WINDOW_FOCUSED_WITHOUT_EDITOR fromUser false
+03-09 21:47:20.362   824  1869 D CoreBackPreview: Window{d51a834 u0 Splash Screen host.exp.exponent}: Setting back 
+callback null
+03-09 21:47:20.406  9203  9203 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1384 
+onStartInput(EditorInfo{EditorInfo{packageName=host.exp.exponent, inputType=0, inputTypeString=NULL, 
+enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, 
+actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, 
+fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+03-09 21:47:20.419 18668 18668 I ImeTracker: host.exp.exponent:d43a6bfe: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+03-09 21:47:20.450   824  1068 W PackageConfigPersister: App-specific configuration not found for packageName: 
+host.exp.exponent and userId: 0
+03-09 21:48:37.832  1696 23918 D PickerSyncController:    RESULT=SyncRequestParams{type=MEDIA_INCREMENTAL, gen=188, 
+latest=Bundle[{last_media_sync_generation=197, media_collection_id=e8bad7ae2b32044f:0000-0000:external_primary}], 
+pageSize=1000}
+03-09 21:48:38.127  1696 23918 I PickerSyncController: Paged sync successful. QueryArgs: 
+Bundle[{android.provider.extra.PAGE_TOKEN=1773073115000|46, android.provider.extra.SYNC_GENERATION=188, 
+android.provider.extra.PAGE_SIZE=1000}] Total Rows: 1
+03-09 21:48:38.170  1696 23918 I PickerSyncController: Paged sync successful. QueryArgs: 
+Bundle[{android.provider.extra.PAGE_TOKEN=1773073115000|46, android.provider.extra.SYNC_GENERATION=188, 
+android.provider.extra.PAGE_SIZE=1000}] Total Rows: 0
+03-09 22:15:35.448  1233  1233 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: E with appInfoTitle: 
+Expo Go
+03-09 22:15:35.459  1233  1233 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: E with appInfoTitle: 
+Expo Go
+03-09 22:24:00.836  1233  1233 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: E with appInfoTitle: 
+Expo Go
+03-09 22:24:00.842  1233  1233 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: E with appInfoTitle: 
+Expo Go
+03-09 22:34:34.429  1233  1233 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: E with appInfoTitle: 
+Expo Go
+03-09 22:34:34.446  1233  1233 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: E with appInfoTitle: 
+Expo Go
+03-09 22:46:44.647 18668 18677 I st.exp.exponent: Background concurrent mark compact GC freed 8731KB AllocSpace bytes, 
+6(312KB) LOS objects, 49% free, 9360KB/18MB, paused 7.429ms,4.607ms total 144.073ms
+03-09 22:46:44.647 18668 18677 W st.exp.exponent: Reducing the number of considered missed Gc histogram windows from 
+112 to 100
+03-09 22:48:54.085  1082  1139 V WindowManagerShell: Transition requested (#55): android.os.BinderProxy@1037032 
+TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=45 effectiveUid=10232 displayId=0 
+isRunning=true baseIntent=Intent { flg=0x1c080000 cmp=host.exp.exponent/.experience.ExperienceActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} numActivities=2 
+lastActiveTime=25421244 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{android.os.BinderProxy@208db01} topActivityType=1 pictureInPictureParams=null 
+shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 
+- 0, 0) topActivityInfo=ActivityInfo{3523183 host.exp.exponent.experience.ErrorActivity} launchCookies=[] 
+positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true 
+isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false 
+isActivityStackTransparent=false lastNonFullscreenBounds=null capturedLink=null capturedLinkTimestamp=0 
+requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 55 }
+03-09 22:48:54.086  1082  1139 V ShellDesktopMode: DesktopTasksController: handleRequest request=TransitionRequestInfo 
+{ type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=45 effectiveUid=10232 displayId=0 isRunning=true 
+baseIntent=Intent { flg=0x1c080000 cmp=host.exp.exponent/.experience.ExperienceActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} numActivities=2 
+lastActiveTime=25421244 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{android.os.BinderProxy@208db01} topActivityType=1 pictureInPictureParams=null 
+shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 
+- 0, 0) topActivityInfo=ActivityInfo{3523183 host.exp.exponent.experience.ErrorActivity} launchCookies=[] 
+positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true 
+isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false 
+isActivityStackTransparent=false lastNonFullscreenBounds=null capturedLink=null capturedLinkTimestamp=0 
+requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 55 }
+03-09 22:48:54.116   824  2165 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null 
+activity=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity 
+display-area-from-current-params=null display-area-for-launching-record=DefaultTaskDisplayArea@246485193 display-id=0 
+task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 task null, skipping
+03-09 22:48:54.116   824  2165 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null 
+activity=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity t-1} 
+display-area-from-current-params=null display-area-for-launching-record=DefaultTaskDisplayArea@246485193 display-id=0 
+task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193
+03-09 22:48:54.116   824  2165 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=null 
+activity=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity t-1} 
+display-area-from-current-params=null display-area-for-launching-record=DefaultTaskDisplayArea@246485193 display-id=0 
+task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 task null, skipping
+03-09 22:48:54.116   824  2165 V WindowManager: TaskLaunchParamsModifier:phase=3 task=null 
+activity=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity t-1} 
+display-area-from-current-params=null display-area-for-launching-record=DefaultTaskDisplayArea@246485193 display-id=0 
+task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 
+non-freeform-task-display-area display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 22:48:54.121   824  2165 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{7a7b422 #46 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{210693613 u0 
+host.exp.exponent/.experience.ExperienceActivity t-1} display-from-task=0 display-id=0 
+task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 not entering desktop mode, 
+skipping
+03-09 22:48:54.122   824  2165 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{7a7b422 #46 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity t-1} 
+display-from-task=0 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-task=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 22:48:54.125   824  2165 I ActivityTaskManager: START u0 {flg=0xc080000 xflg=0x4 
+cmp=host.exp.exponent/.experience.ExperienceActivity (has extras)} with LAUNCH_MULTIPLE from uid 10232 
+(host.exp.exponent) (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+03-09 22:48:54.151   824   840 D CoreBackPreview: Window{fb0f06e u0 Splash Screen host.exp.exponent}: Setting back 
+callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@effa57a, mPriority=0, 
+mIsAnimationCallback=false, mOverrideBehavior=0}
+03-09 22:48:54.183  1082  1139 D WindowManagerShell: onActivityRestartAttempt: 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}, wasVisible=false, 
+displayId=0, pipDisplayLayoutState#displayId=0
+03-09 22:48:54.203   824  1840 D CoreBackPreview: Window{81d87cd u0 
+host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}: Setting back callback null
+03-09 22:48:54.227   824   920 W UsageStatsService: Unexpected activity event reported! 
+(host.exp.exponent/host.exp.exponent.experience.ExperienceActivity event : 23 instanceId : 147205135)
+03-09 22:48:54.277   824   845 V WindowManager: Sent Transition (#55) createdAt=03-09 22:48:54.080 via 
+request=TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=45 effectiveUid=10232 displayId=0 
+isRunning=true baseIntent=Intent { flg=0x1c080000 cmp=host.exp.exponent/.experience.ExperienceActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} numActivities=2 
+lastActiveTime=25421244 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{RemoteToken{3b441b Task{5efcd6e #45 type=standard A=10232:host.exp.exponent}}} 
+topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 
+lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{a30f4d1 
+host.exp.exponent.experience.ErrorActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 
+isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null 
+displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null 
+capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 
+topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 55 }
+03-09 22:48:54.278   824   845 V WindowManager:         {WCT{RemoteToken{5529f46 Task{7a7b422 #46 type=standard 
+A=10232:host.exp.exponent}}} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=46#645)/@0xda0d12b sb=Rect(0, 0 - 1080, 
+2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+03-09 22:48:54.278   824   845 V WindowManager:         {WCT{RemoteToken{3b441b Task{5efcd6e #45 type=standard 
+A=10232:host.exp.exponent}}} m=CLOSE f=NONE leash=Surface(name=Task=45#608)/@0x16e66a0 sb=Rect(0, 0 - 1080, 2400) 
+eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0}
+03-09 22:48:54.352   824  1480 D CoreBackPreview: Window{5c4d1a0 u0 
+host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}: Setting back callback 
+OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@ef0511e, mPriority=0, 
+mIsAnimationCallback=false, mOverrideBehavior=0}
+03-09 22:48:54.388   824   848 W ProcessStats: Tracking association SourceState{867b705 host.exp.exponent/10232 BTop 
+#12635} whose proc state 2 is better than process ProcessState{908015 com.google.android.gms/10155 
+pkg=com.google.android.gms} proc state 14 (3 skipped)
+03-09 22:48:54.447   824   845 I ActivityTaskManager: Displayed host.exp.exponent/.experience.ExperienceActivity for 
+user 0: +330ms
+03-09 22:48:54.500   824   952 I ImeTracker: host.exp.exponent:f07373c3: onRequestHide at ORIGIN_SERVER reason 
+HIDE_UNSPECIFIED_WINDOW fromUser false
+03-09 22:48:54.519 18668 18668 I ImeTracker: host.exp.exponent:f07373c3: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+03-09 22:48:54.562  9203  9203 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1384 
+onStartInput(EditorInfo{EditorInfo{packageName=host.exp.exponent, inputType=0, inputTypeString=NULL, 
+enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, 
+actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, 
+fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+03-09 22:48:54.586   824  1911 W PackageConfigPersister: App-specific configuration not found for packageName: 
+host.exp.exponent and userId: 0
+03-09 22:48:54.809   824  2165 D CoreBackPreview: Window{fb0f06e u0 Splash Screen host.exp.exponent EXITING}: Setting 
+back callback null
+03-09 22:48:54.868   824  1068 D CoreBackPreview: Window{8fc5e30 u0 
+host.exp.exponent/host.exp.exponent.experience.ErrorActivity}: Setting back callback null
+03-09 22:48:56.200 18668 23315 E dev.expo.updates: {"timestamp":1773076736199,"message":"Failed to download remote upda
+te","code":"UpdateFailedToLoad","level":"error","stacktrace":["okhttp3.internal.http1.Http1ExchangeCodec.readResponseHe
+aders(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:160)","okhttp3.internal.connection.Exc
+hange.readResponseHeaders(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:3)","okhttp3.inter
+nal.http.CallServerInterceptor.intercept(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:171
+)","okhttp3.internal.http.RealInterceptorChain.proceed(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481
+303a0b5033:152)","okhttp3.internal.connection.ConnectInterceptor.intercept(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb1
+5ed91b1a36a6525fd481303a0b5033:33)","okhttp3.internal.http.RealInterceptorChain.proceed(r8-map-id-607d19e9ec95a38ef9801
+14ad5752dfcb15ed91b1a36a6525fd481303a0b5033:152)","okhttp3.internal.cache.CacheInterceptor.intercept(r8-map-id-607d19e9
+ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:190)","okhttp3.internal.http.RealInterceptorChain.proceed(r8-m
+ap-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:152)","okhttp3.internal.http.BridgeInterceptor.i
+ntercept(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:167)","okhttp3.internal.http.RealIn
+terceptorChain.proceed(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:152)","okhttp3.intern
+al.http.RetryAndFollowUpInterceptor.intercept(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b503
+3:35)","okhttp3.internal.http.RealInterceptorChain.proceed(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525f
+d481303a0b5033:152)","okhttp3.brotli.BrotliInterceptor.intercept(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36
+a6525fd481303a0b5033:36)","okhttp3.internal.http.RealInterceptorChain.proceed(r8-map-id-607d19e9ec95a38ef980114ad5752df
+cb15ed91b1a36a6525fd481303a0b5033:152)","okhttp3.internal.connection.RealCall.getResponseWithInterceptorChain$okhttp(r8
+-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:113)","okhttp3.internal.connection.RealCall.ex
+ecute(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:28)","expo.modules.updates.loader.File
+Downloader.downloadData(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:30)","expo.modules.u
+pdates.loader.FileDownloader.downloadData$default(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0
+b5033:6)","expo.modules.updates.loader.FileDownloader.downloadRemoteUpdate(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb1
+5ed91b1a36a6525fd481303a0b5033:75)","expo.modules.updates.loader.RemoteLoader.loadRemoteUpdate(r8-map-id-607d19e9ec95a3
+8ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:29)"]}
+03-09 22:48:56.201 18668 23315 E dev.expo.updates: {"timestamp":1773076736200,"message":"Load error","code":"UpdateFail
+edToLoad","level":"error","stacktrace":["expo.modules.updates.loader.FileDownloader.downloadRemoteUpdate(r8-map-id-607d
+19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:147)","expo.modules.updates.loader.RemoteLoader.loadRemote
+Update(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:29)","expo.modules.updates.loader.Loa
+der.load(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:74)","expo.modules.updates.loader.L
+oaderTask.launchRemoteUpdateInBackground(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:210
+)","expo.modules.updates.loader.LoaderTask.launchRemoteUpdate(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a65
+25fd481303a0b5033:58)","expo.modules.updates.loader.LoaderTask.start(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b
+1a36a6525fd481303a0b5033:252)","oi.g.B(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:34)",
+"oi.g.k(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","oi.g$d.invokeSuspend(r8-map-id-
+607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:45)","kotlin.coroutines.jvm.internal.a.resumeWith(r8-m
+ap-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:12)","Vk.c0.run(r8-map-id-607d19e9ec95a38ef98011
+4ad5752dfcb15ed91b1a36a6525fd481303a0b5033:129)","al.l$a.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a652
+5fd481303a0b5033:4)","cl.i.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:3)","cl.a.r0(
+r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","cl.a$c.b(r8-map-id-607d19e9ec95a38ef980
+114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:34)","cl.a$c.m(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525
+fd481303a0b5033:29)","cl.a$c.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)"]}
+03-09 22:48:56.203 18668 23315 E dev.expo.updates: {"timestamp":1773076736201,"message":"Failed to download remote upda
+te","code":"UpdateFailedToLoad","level":"error","stacktrace":["expo.modules.updates.loader.FileDownloader.downloadRemot
+eUpdate(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:147)","expo.modules.updates.loader.R
+emoteLoader.loadRemoteUpdate(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:29)","expo.modu
+les.updates.loader.Loader.load(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:74)","expo.mo
+dules.updates.loader.LoaderTask.launchRemoteUpdateInBackground(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6
+525fd481303a0b5033:210)","expo.modules.updates.loader.LoaderTask.launchRemoteUpdate(r8-map-id-607d19e9ec95a38ef980114ad
+5752dfcb15ed91b1a36a6525fd481303a0b5033:58)","expo.modules.updates.loader.LoaderTask.start(r8-map-id-607d19e9ec95a38ef9
+80114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:252)","oi.g.B(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a652
+5fd481303a0b5033:34)","oi.g.k(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","oi.g$d.in
+vokeSuspend(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:45)","kotlin.coroutines.jvm.inte
+rnal.a.resumeWith(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:12)","Vk.c0.run(r8-map-id-
+607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:129)","al.l$a.run(r8-map-id-607d19e9ec95a38ef980114ad5
+752dfcb15ed91b1a36a6525fd481303a0b5033:4)","cl.i.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd48130
+3a0b5033:3)","cl.a.r0(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","cl.a$c.b(r8-map-i
+d-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:34)","cl.a$c.m(r8-map-id-607d19e9ec95a38ef980114ad57
+52dfcb15ed91b1a36a6525fd481303a0b5033:29)","cl.a$c.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481
+303a0b5033:1)"]}
+03-09 22:48:56.210 18668 23315 E dev.expo.updates: {"timestamp":1773076736210,"message":"Unexpected error encountered 
+while loading this app","code":"Unknown","level":"error","stacktrace":["expo.modules.updates.loader.FileDownloader.down
+loadRemoteUpdate(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:147)","expo.modules.updates
+.loader.RemoteLoader.loadRemoteUpdate(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:29)","
+expo.modules.updates.loader.Loader.load(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:74)"
+,"expo.modules.updates.loader.LoaderTask.launchRemoteUpdateInBackground(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed
+91b1a36a6525fd481303a0b5033:210)","expo.modules.updates.loader.LoaderTask.launchRemoteUpdate(r8-map-id-607d19e9ec95a38e
+f980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:58)","expo.modules.updates.loader.LoaderTask.start(r8-map-id-607d19e9e
+c95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:252)","oi.g.B(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91
+b1a36a6525fd481303a0b5033:34)","oi.g.k(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","
+oi.g$d.invokeSuspend(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:45)","kotlin.coroutines
+.jvm.internal.a.resumeWith(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:12)","Vk.c0.run(r
+8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:129)","al.l$a.run(r8-map-id-607d19e9ec95a38ef
+980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:4)","cl.i.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a65
+25fd481303a0b5033:3)","cl.a.r0(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","cl.a$c.b
+(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:34)","cl.a$c.m(r8-map-id-607d19e9ec95a38ef9
+80114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:29)","cl.a$c.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a
+6525fd481303a0b5033:1)"]}
+03-09 22:48:56.212 18668 23315 E dev.expo.updates: {"timestamp":1773076736211,"message":"Failed to launch embedded or 
+launchable update","code":"UpdateFailedToLoad","level":"error","stacktrace":["expo.modules.updates.launcher.DatabaseLau
+ncher.launch(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:624)","expo.modules.updates.loa
+der.LoaderTask.launchFallbackUpdateFromDisk(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:
+305)","expo.modules.updates.loader.LoaderTask.start(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303
+a0b5033:144)","oi.g.B(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:34)","oi.g.k(r8-map-id
+-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","oi.g$d.invokeSuspend(r8-map-id-607d19e9ec95a38ef
+980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:45)","kotlin.coroutines.jvm.internal.a.resumeWith(r8-map-id-607d19e9ec9
+5a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:12)","Vk.c0.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91
+b1a36a6525fd481303a0b5033:129)","al.l$a.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:
+4)","cl.i.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:3)","cl.a.r0(r8-map-id-607d19e
+9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)","cl.a$c.b(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed
+91b1a36a6525fd481303a0b5033:34)","cl.a$c.m(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:2
+9)","cl.a$c.run(r8-map-id-607d19e9ec95a38ef980114ad5752dfcb15ed91b1a36a6525fd481303a0b5033:1)"]}
+03-09 22:48:56.232   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null 
+activity=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity 
+display-area-from-source=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 task null, skipping
+03-09 22:48:56.232   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null 
+activity=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity t-1} 
+display-area-from-source=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193
+03-09 22:48:56.233   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{7a7b422 #46 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{49119995 u0 
+host.exp.exponent/.experience.ErrorActivity t-1} display-area-from-source=DefaultTaskDisplayArea@246485193 
+display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 not entering 
+desktop mode, skipping
+03-09 22:48:56.233   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{7a7b422 #46 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity t-1} 
+display-area-from-source=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-source=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 22:48:56.233   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{7a7b422 #46 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{49119995 u0 
+host.exp.exponent/.experience.ErrorActivity t-1} display-area-from-source=DefaultTaskDisplayArea@246485193 
+display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 not entering 
+desktop mode, skipping
+03-09 22:48:56.233   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{7a7b422 #46 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity t-1} 
+display-area-from-source=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-source=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 22:48:56.234   824  1480 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{7a7b422 #46 
+type=standard A=10232:host.exp.exponent} activity=ActivityRecord{49119995 u0 
+host.exp.exponent/.experience.ErrorActivity t-1} display-area-from-source=DefaultTaskDisplayArea@246485193 
+display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@246485193 not entering 
+desktop mode, skipping
+03-09 22:48:56.234   824  1480 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{7a7b422 #46 type=standard 
+A=10232:host.exp.exponent} activity=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity t-1} 
+display-area-from-source=DefaultTaskDisplayArea@246485193 display-id=0 task-display-area-windowing-mode=1 
+suggested-display-area=DefaultTaskDisplayArea@246485193 inherit-from-source=fullscreen non-freeform-task-display-area 
+display-area=DefaultTaskDisplayArea@246485193 skip-bounds-fullscreen
+03-09 22:48:56.242   824  1480 I ActivityTaskManager: START u0 {flg=0x24000000 xflg=0x4 
+cmp=host.exp.exponent/.experience.ErrorActivity (has extras)} with LAUNCH_MULTIPLE from uid 10232 (host.exp.exponent) 
+(sr=210693613) (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+03-09 22:48:56.243  1082  1139 V WindowManagerShell: Transition requested (#56): android.os.BinderProxy@fa784b7 
+TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=46 effectiveUid=10232 displayId=0 
+isRunning=true baseIntent=Intent { flg=0x1c080000 cmp=host.exp.exponent/.experience.ExperienceActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} numActivities=2 
+lastActiveTime=26672499 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{android.os.BinderProxy@14d7424} topActivityType=1 pictureInPictureParams=null 
+shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 
+- 0, 0) topActivityInfo=ActivityInfo{f359b8d host.exp.exponent.experience.ErrorActivity} launchCookies=[] 
+positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true 
+isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false 
+isActivityStackTransparent=false lastNonFullscreenBounds=null capturedLink=null capturedLinkTimestamp=0 
+requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 56 }
+03-09 22:48:56.244  1082  1139 V ShellDesktopMode: DesktopTasksController: handleRequest request=TransitionRequestInfo 
+{ type = OPEN, triggerTask = TaskInfo{userId=0 taskId=46 effectiveUid=10232 displayId=0 isRunning=true 
+baseIntent=Intent { flg=0x1c080000 cmp=host.exp.exponent/.experience.ExperienceActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} numActivities=2 
+lastActiveTime=26672499 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{android.os.BinderProxy@14d7424} topActivityType=1 pictureInPictureParams=null 
+shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 
+- 0, 0) topActivityInfo=ActivityInfo{f359b8d host.exp.exponent.experience.ErrorActivity} launchCookies=[] 
+positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true 
+isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false 
+isActivityStackTransparent=false lastNonFullscreenBounds=null capturedLink=null capturedLinkTimestamp=0 
+requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 56 }
+03-09 22:48:56.322   824  1068 D CoreBackPreview: Window{80753d7 u0 
+host.exp.exponent/host.exp.exponent.experience.ErrorActivity}: Setting back callback 
+OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@35acfad, mPriority=0, 
+mIsAnimationCallback=false, mOverrideBehavior=0}
+03-09 22:48:56.326 18668 18668 E l       : ErrorActivity message: Sorry about that. You can go back to Expo home or 
+try to reload the project.
+03-09 22:48:56.403  1082  1139 V WindowManagerShell:         {m=OPEN f=FILLS_TASK 
+leash=Surface(name=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity t46}#662)/@0xb466142 
+sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff 
+activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity}, taskId = 46, appCompatTransitionInfo = 
+null } opt={t=FROM_STYLE mUserId=0}},
+03-09 22:48:56.403  1082  1139 V WindowManagerShell:         {m=TO_BACK f=FILLS_TASK 
+leash=Surface(name=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity t46}#646)/@0x9a5b553 
+sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff 
+activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}, taskId = 46, appCompatTransitionInfo 
+= null } opt={t=FROM_STYLE mUserId=0}}
+03-09 22:48:56.404   824   845 I ActivityTaskManager: Displayed host.exp.exponent/.experience.ErrorActivity for user 
+0: +169ms
+03-09 22:48:56.406   824   845 V WindowManager: Sent Transition (#56) createdAt=03-09 22:48:56.231 via 
+request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=46 effectiveUid=10232 displayId=0 
+isRunning=true baseIntent=Intent { flg=0x1c080000 cmp=host.exp.exponent/.experience.ExperienceActivity } 
+baseActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} 
+topActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity} origActivity=null 
+realActivity=ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity} numActivities=2 
+lastActiveTime=26672499 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 
+defaultMinSize=220 token=WCT{RemoteToken{5529f46 Task{7a7b422 #46 type=standard A=10232:host.exp.exponent}}} 
+topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 
+lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{2134765 
+host.exp.exponent.experience.ErrorActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 
+isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null 
+displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null 
+capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 
+topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { 
+topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true 
+isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false 
+isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 
+topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) 
+isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false 
+topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} 
+topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, 
+remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = 
+null, flags = 0, debugId = 56 }
+03-09 22:48:56.406  1082  1139 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match 
+for {id=56 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{49119995 u0 
+host.exp.exponent/.experience.ErrorActivity t46}#662)/@0xb466142 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) 
+epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity}, taskId = 46, appCompatTransitionInfo = 
+null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{210693613 u0 
+host.exp.exponent/.experience.ExperienceActivity t46}#646)/@0x9a5b553 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 
+2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}, taskId = 46, appCompatTransitionInfo 
+= null } opt={t=FROM_STYLE mUserId=0}}]}
+03-09 22:48:56.406   824   845 V WindowManager:         {m=OPEN f=FILLS_TASK 
+leash=Surface(name=ActivityRecord{49119995 u0 host.exp.exponent/.experience.ErrorActivity t46}#662)/@0x1b2e6cf 
+sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff 
+activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity}, taskId = 46, appCompatTransitionInfo = 
+null } opt={t=FROM_STYLE mUserId=0}},
+03-09 22:48:56.406   824   845 V WindowManager:         {m=TO_BACK f=FILLS_TASK 
+leash=Surface(name=ActivityRecord{210693613 u0 host.exp.exponent/.experience.ExperienceActivity t46}#646)/@0xf83bb2e 
+sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff 
+activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}, taskId = 46, appCompatTransitionInfo 
+= null } opt={t=FROM_STYLE mUserId=0}}
+03-09 22:48:56.407  1082  1139 V WindowManagerShell: start default transition animation, info = {id=56 t=OPEN f=0x0 
+trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{49119995 u0 
+host.exp.exponent/.experience.ErrorActivity t46}#662)/@0xb466142 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) 
+epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ErrorActivity}, taskId = 46, appCompatTransitionInfo = 
+null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{210693613 u0 
+host.exp.exponent/.experience.ExperienceActivity t46}#646)/@0x9a5b553 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 
+2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = 
+ComponentInfo{host.exp.exponent/host.exp.exponent.experience.ExperienceActivity}, taskId = 46, appCompatTransitionInfo 
+= null } opt={t=FROM_STYLE mUserId=0}}]}
+03-09 22:48:56.514   824   952 I ImeTracker: host.exp.exponent:7117873e: onRequestHide at ORIGIN_SERVER reason 
+HIDE_UNSPECIFIED_WINDOW fromUser false
+03-09 22:48:56.515 18668 18668 I ImeTracker: host.exp.exponent:7117873e: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+03-09 22:48:56.518  9203  9203 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1384 
+onStartInput(EditorInfo{EditorInfo{packageName=host.exp.exponent, inputType=0, inputTypeString=NULL, 
+enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, 
+actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, 
+fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+03-09 22:48:56.522   824  1068 W PackageConfigPersister: App-specific configuration not found for packageName: 
+host.exp.exponent and userId: 0
+
+

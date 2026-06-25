@@ -1,0 +1,62 @@
+@model IEnumerable<EasyEdu.Models.LmsFeesInvoice>
+@{
+    ViewData["Title"] = "LMS Fiscal Invoices";
+    Layout = "_Layout";
+}
+
+<div class="content-wrapper p-4 animate-fade-in text-dark">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-900 text-dark mb-1">LMS Fiscal Invoices</h2>
+            <p class="text-muted small fw-600">Coordinate and track institutional fee nodes for digital learning assets</p>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+        <table class="table premium-table mb-0 align-middle text-dark">
+            <thead class="bg-premium-dark text-white">
+                <tr>
+                    <th class="ps-5 py-4 fw-900 small text-uppercase">INVOICE NODE ID</th>
+                    <th class="py-4 fw-900 small text-uppercase">RECIPIENT NODE</th>
+                    <th class="py-4 fw-900 small text-uppercase">DOMINANT VALUATION</th>
+                    <th class="py-4 fw-900 small text-uppercase">PAID RESOLUTION</th>
+                    <th class="py-4 fw-900 small text-uppercase">STATUS NODE</th>
+                    <th class="pe-5 text-end py-4 fw-900 small text-uppercase">CHRONOLOGY</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var inv in Model)
+                {
+                    <tr>
+                        <td class="ps-5 py-4">
+                            <span class="fw-900 text-dark h6 mb-1 d-block">@inv.InvoiceNumber</span>
+                        </td>
+                        <td class="py-4">
+                            <div class="fw-900 text-dark">@inv.Student?.FirstName @inv.Student?.LastName</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="fw-900 text-dark">$@inv.TotalAmount.ToString("N2")</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="fw-900 text-success">$@inv.PaidAmount.ToString("N2")</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge @(inv.Status == "Paid" ? "bg-success" : "bg-danger") px-3 rounded-pill fw-900 shadow-sm border small">@inv.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-5 text-end py-4">
+                            <div class="fw-900 text-dark">@inv.DueDate.ToString("dd MMM yyyy")</div>
+                            <div class="smallest text-muted fw-700 uppercase">DUE DATE LOG</div>
+                        </td>
+                    </tr>
+                }
+                @if(!Model.Any()){
+                    <tr><td colspan="6" class="text-center py-5 text-muted fw-700 italic opacity-50">Zero active fiscal invoice nodes identified.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .bg-premium-dark { background: #0f172a; }
+</style>
