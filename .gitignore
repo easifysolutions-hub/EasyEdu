@@ -251,6 +251,11 @@ EasyEduMobile/screen_test.png
 EasyEduMobile/window_dump.xml
 EasyEduMobile/window_dump_pretty.xml
 
+# Root-level screenshots and dump files
+screen.png
+*.screenshot.png
+window_dump*.xml
+
 # Mobile App builds and binaries
 *.apk
 *.ipa
