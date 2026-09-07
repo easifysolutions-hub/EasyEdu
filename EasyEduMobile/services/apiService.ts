@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 // Note: iOS Simulator can use 'localhost'.
 // For a real device, you need your laptop's Wi-Fi IP address.
 // Update this to your host IP for real device testing
-const API_URL = 'http://10.0.2.2:5004/api/';
+const API_URL = 'https://easyedu.easifysolutions.com/api/';
 
 const api = axios.create({
     baseURL: API_URL,

@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 // In development with an emulator, '10.0.2.2' is the special alias for the host loopback interface in Android Emulator.
-const API_URL = 'http://10.0.2.2:5004/api/';
+const API_URL = 'https://easyedu.easifysolutions.com/api/';
 
 const api = axios.create({
     baseURL: API_URL,
