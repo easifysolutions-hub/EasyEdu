@@ -56,7 +56,7 @@ namespace EasyEdu.Data
         public DbSet<TrainingAttendance> TrainingAttendances { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<VehicleMaintenance> VehicleMaintenances { get; set; }
-        
+
         // Admin Section Entities
         public DbSet<AdmissionQuery> AdmissionQueries { get; set; }
         public DbSet<AdmissionQuerySetting> AdmissionQuerySettings { get; set; }
@@ -65,20 +65,20 @@ namespace EasyEdu.Data
         public DbSet<PostalLog> PostalLogs { get; set; }
         public DbSet<PhoneCallLog> PhoneCallLogs { get; set; }
         public DbSet<AdminSetupItem> AdminSetupItems { get; set; }
-        
+
         // Student Info Extended Entities
         public DbSet<StudentGroup> StudentGroups { get; set; }
         public DbSet<StudentPromotion> StudentPromotions { get; set; }
         public DbSet<SubjectWiseAttendance> SubjectWiseAttendances { get; set; }
         public DbSet<StudentSettings> StudentSettings { get; set; }
-        
+
         // Behaviour Records Entities
         public DbSet<Incident> Incidents { get; set; }
         public DbSet<StudentIncident> StudentIncidents { get; set; }
         public DbSet<BehaviourSettings> BehaviourSettings { get; set; }
         public DbSet<LessonPlanSettings> LessonPlanSettings { get; set; }
 
-        
+
         // Finance Extended Entities
         public DbSet<FeesGroup> FeesGroups { get; set; }
         public DbSet<FeesType> FeesTypes { get; set; }
@@ -86,38 +86,38 @@ namespace EasyEdu.Data
         public DbSet<FeesInvoiceDetail> FeesInvoiceDetails { get; set; }
         public DbSet<BankPayment> BankPayments { get; set; }
         public DbSet<FeesCarryForward> FeesCarryForwards { get; set; }
-        
+
         // Exam Extended Entities
         public DbSet<ExamSchedule> ExamSchedules { get; set; }
         public DbSet<MarkGrade> MarkGrades { get; set; }
         public DbSet<ExamSettings> ExamSettings { get; set; }
-        
+
         // HR Extended Entities
         public DbSet<Designation> Designations { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<StaffSettings> StaffSettings { get; set; }
-        
+
         // Leave Management Entities
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<LeaveDefine> LeaveDefines { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        
+
         // Accounts Extended Entities
         public DbSet<Income> Incomes { get; set; }
         public DbSet<ChartOfAccount> ChartOfAccounts { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<FundTransfer> FundTransfers { get; set; }
-        
+
         // Inventory Extended Entities
         public DbSet<ItemCategory> ItemCategories { get; set; }
         public DbSet<ItemStore> ItemStores { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<ItemReceive> ItemReceives { get; set; }
-        
+
         // Library Extended Entities
         public DbSet<BookCategory> BookCategories { get; set; }
         public DbSet<LibraryMember> LibraryMembers { get; set; }
-        
+
         // Examination Depth Entities
         public DbSet<ExamType> ExamTypes { get; set; }
         // public DbSet<ExamAttendance> ExamAttendances { get; set; }
@@ -126,7 +126,7 @@ namespace EasyEdu.Data
         public DbSet<OnlineExam> OnlineExams { get; set; }
         public DbSet<WrittenExam> WrittenExams { get; set; }
         public DbSet<OnlineExamSetting> OnlineExamSettings { get; set; }
-        
+
         // Front CMS Entities
         public DbSet<HomeSlider> HomeSliders { get; set; }
         public DbSet<CustomPage> CustomPages { get; set; }
@@ -144,7 +144,7 @@ namespace EasyEdu.Data
         public DbSet<ContactMessage> ContactMessages { get; set; }
         public DbSet<FormDownload> FormDownloads { get; set; }
         public DbSet<BulkInvoiceSettings> BulkInvoiceSettings { get; set; }
-        
+
         // --- Exam Settings Modules ---
         public DbSet<ExamRule> ExamRules { get; set; }
         public DbSet<ExamPosition> ExamPositions { get; set; }
@@ -152,37 +152,37 @@ namespace EasyEdu.Data
         public DbSet<ExamFormatSetting> ExamFormatSettings { get; set; }
         public DbSet<AdmitCardSetting> AdmitCardSettings { get; set; }
         public DbSet<SeatPlanSetting> SeatPlanSettings { get; set; }
-        
+
         // --- Zoom Integration ---
         public DbSet<ZoomSetting> ZoomSettings { get; set; }
         public DbSet<ZoomVirtualClass> ZoomVirtualClasses { get; set; }
         public DbSet<ZoomVirtualMeeting> ZoomVirtualMeetings { get; set; }
-        
+
         // --- Online Student Registration Addon ---
         public DbSet<OnlineRegistrationSetting> OnlineRegistrationSettings { get; set; }
         public DbSet<RegistrationSubmission> RegistrationSubmissions { get; set; }
-        
+
         // --- BigBlueButton Integration ---
         public DbSet<BBBSetting> BBBSettings { get; set; }
         public DbSet<BBBVirtualClass> BBBVirtualClasses { get; set; }
         public DbSet<BBBVirtualMeeting> BBBVirtualMeetings { get; set; }
         public DbSet<BBBRecording> BBBRecordings { get; set; }
-        
+
         // --- Smart Attendance: QR Code Addon ---
         public DbSet<QrAttendanceSetting> QrAttendanceSettings { get; set; }
-        
+
         // --- Google Meet (Gmeet) Integration ---
         public DbSet<GmeetSetting> GmeetSettings { get; set; }
         public DbSet<GmeetVirtualClass> GmeetVirtualClasses { get; set; }
         public DbSet<GmeetVirtualMeeting> GmeetVirtualMeetings { get; set; }
-        
+
         public DbSet<BiometricSetting> BiometricSettings { get; set; }
-        
+
         // --- Jitsi Integration Addon ---
         public DbSet<JitsiSetting> JitsiSettings { get; set; }
         public DbSet<JitsiVirtualClass> JitsiVirtualClasses { get; set; }
         public DbSet<JitsiVirtualMeeting> JitsiVirtualMeetings { get; set; }
-        
+
         // --- CBSE Examination Suite ---
         public DbSet<CbseExam> CbseExams { get; set; }
         public DbSet<CbseTerm> CbseTerms { get; set; }
@@ -193,12 +193,12 @@ namespace EasyEdu.Data
         public DbSet<CbseObservationParameter> CbseObservationParameters { get; set; }
         public DbSet<CbseAssignObservation> CbseAssignObservations { get; set; }
         public DbSet<CbseMarkSheetTemplate> CbseMarkSheetTemplates { get; set; }
-        
+
         // --- WhatsApp Support Suite ---
         public DbSet<WhatsAppSetting> WhatsAppSettings { get; set; }
         public DbSet<WhatsAppAgent> WhatsAppAgents { get; set; }
         public DbSet<WhatsAppLog> WhatsAppLogs { get; set; }
-        
+
         // --- LMS (Learning Management System) Suite ---
         public DbSet<LmsCategory> LmsCategories { get; set; }
         public DbSet<LmsCourseLevel> LmsCourseLevels { get; set; }
@@ -207,7 +207,7 @@ namespace EasyEdu.Data
         public DbSet<LmsPurchaseLog> LmsPurchaseLogs { get; set; }
         public DbSet<LmsFeesInvoice> LmsFeesInvoices { get; set; }
         public DbSet<LmsSettings> LmsSettings { get; set; }
-        
+
         // Modules added for Infix compatibility
         public DbSet<Homework> Homeworks { get; set; }
         public DbSet<HomeworkSubmission> HomeworkSubmissions { get; set; }
@@ -299,7 +299,7 @@ namespace EasyEdu.Data
                 .WithMany()
                 .HasForeignKey(b => b.BlockedId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             // Wallet Transactions
             modelBuilder.Entity<WalletTransaction>()
                 .HasOne(wt => wt.Student)
@@ -580,7 +580,7 @@ namespace EasyEdu.Data
             modelBuilder.Entity<Inventory>().Property(i => i.TotalValue).HasPrecision(18, 2);
             modelBuilder.Entity<InventoryTransaction>().Property(it => it.UnitPrice).HasPrecision(18, 2);
             modelBuilder.Entity<InventoryTransaction>().Property(it => it.TotalAmount).HasPrecision(18, 2);
-            
+
             // Payroll allowances/deductions
             modelBuilder.Entity<Payroll>().Property(p => p.HRA).HasPrecision(18, 2);
             modelBuilder.Entity<Payroll>().Property(p => p.DA).HasPrecision(18, 2);
@@ -966,6 +966,22 @@ namespace EasyEdu.Data
                 .WithMany()
                 .HasForeignKey(c => c.CompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            ApplyTableNamePrefix(modelBuilder);
+        }
+
+        private const string TablePrefix = "easyEdu_";
+
+        private static void ApplyTableNamePrefix(ModelBuilder modelBuilder)
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entityType.GetTableName();
+                if (string.IsNullOrEmpty(tableName) || tableName.StartsWith(TablePrefix, StringComparison.Ordinal))
+                    continue;
+
+                entityType.SetTableName(TablePrefix + tableName);
+            }
         }
     }
 }

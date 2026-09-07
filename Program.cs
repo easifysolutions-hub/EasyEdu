@@ -12,14 +12,15 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Server=(localdb)\\mssqllocaldb;Database=EasyEdu;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=True";
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Add Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -70,7 +71,7 @@ builder.Services.AddAuthentication(options =>
 // Add MVC and API controllers
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
-    .AddJsonOptions(options => 
+    .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
@@ -191,9 +192,7 @@ app.MapControllers();
 
 
 // Seed default roles and admin user
-bool isDesignTime = Environment.GetEnvironmentVariable("ASPNETCORE_PREVENTHOSTSTARTUP") == "true"
-    || AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name?.Contains("EntityFrameworkCore") == true)
-    || AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name?.Contains("Design") == true);
+bool isDesignTime = Environment.GetEnvironmentVariable("ASPNETCORE_PREVENTHOSTSTARTUP") == "true";
 if (!isDesignTime)
 {
     using (var scope = app.Services.CreateScope())
@@ -204,12 +203,12 @@ if (!isDesignTime)
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             var context = services.GetRequiredService<ApplicationDbContext>();
-            
+
             // Ensure database is migrated
             await context.Database.MigrateAsync();
-            
-            await SeedRolesAndAdmin(roleManager, userManager);
+
             await SeedDashboardData(context);
+            await SeedRolesAndAdmin(roleManager, userManager);
 
             // Update Fees Settings menu URL if it is a placeholder hashtag
             var feesSettingsMenus = await context.MenuItems.Where(m => m.Name == "Fees Settings" && m.Url == "#").ToListAsync();
@@ -291,7 +290,7 @@ async Task SeedDashboardData(ApplicationDbContext context)
     {
         var company = context.Companies.FirstOrDefault();
         var year = context.AcademicYears.FirstOrDefault(y => y.IsCurrent);
-        
+
         if (company != null && year != null)
         {
             var classes = new List<Class>
@@ -329,7 +328,7 @@ async Task SeedDashboardData(ApplicationDbContext context)
     {
         var classes = context.Classes.ToList();
         var sections = context.Sections.ToList();
-        
+
         foreach (var cls in classes)
         {
             foreach (var sec in sections)
@@ -408,17 +407,17 @@ async Task SeedDashboardData(ApplicationDbContext context)
             var liabilities = new AccountGroup { Name = "Liabilities", Nature = AccountNature.Liabilities, IsPrimary = true, CompanyId = company.Id };
             var incomeRoot = new AccountGroup { Name = "Income", Nature = AccountNature.Income, IsPrimary = true, CompanyId = company.Id };
             var expenseRoot = new AccountGroup { Name = "Expenses", Nature = AccountNature.Expenses, IsPrimary = true, CompanyId = company.Id };
-            
+
             context.AccountGroups.AddRange(assets, liabilities, incomeRoot, expenseRoot);
             await context.SaveChangesAsync();
 
             // --- Level 2: Sub Groups ---
-            
+
             // Assets Subgroups
             var currentAssets = new AccountGroup { Name = "Current Assets", ParentGroupId = assets.Id, Nature = AccountNature.Assets, CompanyId = company.Id };
             var fixedAssets = new AccountGroup { Name = "Fixed Assets", ParentGroupId = assets.Id, Nature = AccountNature.Assets, CompanyId = company.Id };
             var investments = new AccountGroup { Name = "Investments", ParentGroupId = assets.Id, Nature = AccountNature.Assets, CompanyId = company.Id };
-            
+
             // Liabilities Subgroups
             var capitalAccount = new AccountGroup { Name = "Capital Account", ParentGroupId = liabilities.Id, Nature = AccountNature.Liabilities, CompanyId = company.Id };
             var currentLiabilities = new AccountGroup { Name = "Current Liabilities", ParentGroupId = liabilities.Id, Nature = AccountNature.Liabilities, CompanyId = company.Id };
@@ -441,7 +440,7 @@ async Task SeedDashboardData(ApplicationDbContext context)
             var cashInHand = new AccountGroup { Name = "Cash-in-Hand", ParentGroupId = currentAssets.Id, Nature = AccountNature.Assets, CompanyId = company.Id };
             var bankAccounts = new AccountGroup { Name = "Bank Accounts", ParentGroupId = currentAssets.Id, Nature = AccountNature.Assets, CompanyId = company.Id };
             var sundryDebtors = new AccountGroup { Name = "Sundry Debtors (Receivables)", ParentGroupId = currentAssets.Id, Nature = AccountNature.Assets, CompanyId = company.Id };
-            
+
             // Under Current Liabilities
             var sundryCreditors = new AccountGroup { Name = "Sundry Creditors (Payables)", ParentGroupId = currentLiabilities.Id, Nature = AccountNature.Liabilities, CompanyId = company.Id };
             var dutiesTaxes = new AccountGroup { Name = "Duties & Taxes", ParentGroupId = currentLiabilities.Id, Nature = AccountNature.Liabilities, CompanyId = company.Id };
@@ -486,12 +485,12 @@ async Task SeedDashboardData(ApplicationDbContext context)
             ledgers.Add(new Ledger { Name = "Visiting Faculty Honorarium", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
             ledgers.Add(new Ledger { Name = "Security Service Charges", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
             ledgers.Add(new Ledger { Name = "Housekeeping Charges", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
-            
+
             // Utilities
             ledgers.Add(new Ledger { Name = "Electricity Charges", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
             ledgers.Add(new Ledger { Name = "Water Charges", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
             ledgers.Add(new Ledger { Name = "Telephone & Internet", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
-            
+
             // Admin
             ledgers.Add(new Ledger { Name = "Printing & Stationery", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
             ledgers.Add(new Ledger { Name = "Postage & Courier", AccountGroupId = indirectExpenses.Id, CompanyId = company.Id, IsDebitOpening = true });
@@ -587,10 +586,10 @@ async Task SeedDashboardData(ApplicationDbContext context)
 
             if (!context.FeesTypes.Any())
             {
-                var monthly   = feesGroups[0];
-                var annual    = feesGroups[1];
+                var monthly = feesGroups[0];
+                var annual = feesGroups[1];
                 var transport = feesGroups[2];
-                var exam      = feesGroups[3];
+                var exam = feesGroups[3];
                 var feesTypes = new List<FeesType>
                 {
                     new FeesType { FeesCode = "TF001", Name = "Tuition Fee",          Amount = 2000, FeesGroupId = monthly.Id,   IsActive = true },
@@ -849,12 +848,12 @@ async Task SeedDashboardData(ApplicationDbContext context)
             {
                 dormRooms.Add(new DormitoryRoom
                 {
-                    RoomNumber    = $"{dorm.Name.Substring(0,1)}-{r:D2}",
-                    RoomType      = "Non-AC",
-                    NumberOfBeds  = 4,
-                    CostPerBed    = 3000m,
-                    DormitoryId   = dorm.Id,
-                    Description   = "Standard " + dorm.Type + " hostel room"
+                    RoomNumber = $"{dorm.Name.Substring(0, 1)}-{r:D2}",
+                    RoomType = "Non-AC",
+                    NumberOfBeds = 4,
+                    CostPerBed = 3000m,
+                    DormitoryId = dorm.Id,
+                    Description = "Standard " + dorm.Type + " hostel room"
                 });
             }
         }
@@ -1067,13 +1066,13 @@ async Task SeedRolesAndAdmin(RoleManager<IdentityRole> roleManager, UserManager<
                 {
                     using var scope = app.Services.CreateScope();
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    
+
                     if (!context.Students.Any(s => s.UserId == newUser.Id))
                     {
                         var mcomClass = context.Classes.FirstOrDefault(c => c.Name == "Master of Commerce");
                         var company = context.Companies.FirstOrDefault();
                         var section = context.Sections.FirstOrDefault();
-                        
+
                         if (mcomClass != null && company != null && section != null)
                         {
                             context.Students.Add(new Student
