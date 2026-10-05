@@ -1,51 +1,623 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Examinations & Marksheets</h3>
-      <p class="text-muted small mb-0">Schedule exam terms, publish time tables, and record marks</p>
+      <h3 class="fw-bold mb-1 text-dark">Examinations & Grade Book</h3>
+      <p class="text-muted small mb-0">Manage exam schedules, marks register evaluation, grade scales, admit cards, and report cards</p>
     </div>
-    <div>
-      <button class="btn btn-primary">
-        <i class="fas fa-plus"></i> Create Exam Schedule
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="viewAdmitCard(marksList[0])">
+        <i class="fas fa-id-badge me-1"></i> Print Hall Tickets
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="openCreateExamModal()">
+        <i class="fas fa-calendar-plus me-1"></i> Schedule Exam
       </button>
     </div>
   </div>
 
-  <div class="premium-card">
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-clipboard-list fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TERM 2025-26</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ exams.length }} Active</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Scheduled Examinations</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-user-graduate fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ENROLLED</span>
+        </div>
+        <h2 class="fw-bold mb-1">1,248</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Candidates Appearing</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-check-double fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">AVERAGE</span>
+        </div>
+        <h2 class="fw-bold mb-1">84.8%</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">School Pass Percentage</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-award fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TOP TIER</span>
+        </div>
+        <h2 class="fw-bold mb-1">A+ (9.2 GPA)</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Academic Quality Rating</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'schedules'" (click)="activeTab = 'schedules'">
+          <i class="fas fa-calendar-alt me-2"></i> Exam Schedules & Timetable
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'marks'" (click)="activeTab = 'marks'">
+          <i class="fas fa-pen-fancy me-2"></i> Marks Register Entry Matrix
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'grades'" (click)="activeTab = 'grades'">
+          <i class="fas fa-sliders-h me-2"></i> Grade Scale Master (CBSE / GPA)
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'admit'" (click)="activeTab = 'admit'">
+          <i class="fas fa-id-card me-2"></i> Hall Tickets / Admit Cards
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'reportcard'" (click)="activeTab = 'reportcard'">
+          <i class="fas fa-file-alt me-2"></i> Student Report Cards
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Exam Schedules & Timetable -->
+  <div *ngIf="activeTab === 'schedules'" class="animate-fade-in">
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-lg-7">
+        <div class="premium-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="fw-bold mb-1 text-dark">Scheduled Examinations</h5>
+              <p class="text-muted small mb-0">Active and upcoming examination terms for the academic session</p>
+            </div>
+            <button class="btn btn-sm btn-primary rounded-pill px-3" (click)="openCreateExamModal()">
+              <i class="fas fa-plus me-1"></i> New Exam
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>Exam Title</th>
+                  <th>Category</th>
+                  <th>Class</th>
+                  <th>Date Window</th>
+                  <th>Status</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ex of exams">
+                  <td>
+                    <strong class="text-dark">{{ ex.title }}</strong>
+                    <div class="small text-muted">{{ ex.totalSubjects }} Subjects • Session {{ ex.session }}</div>
+                  </td>
+                  <td><span class="badge bg-light text-secondary border">{{ ex.type }}</span></td>
+                  <td><span class="fw-semibold text-primary">{{ ex.class }}</span></td>
+                  <td><small class="text-muted">{{ ex.startDate }} to {{ ex.endDate }}</small></td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'bg-success': ex.status === 'Ongoing',
+                      'bg-info text-white': ex.status === 'Upcoming',
+                      'bg-secondary': ex.status === 'Completed',
+                      'bg-primary': ex.status === 'Published'
+                    }">{{ ex.status }}</span>
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-secondary rounded-circle me-1" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-primary rounded-circle" title="View Schedule"><i class="fas fa-eye"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Timetable Matrix -->
+      <div class="col-12 col-lg-5">
+        <div class="premium-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="fw-bold mb-1 text-dark">Term 1 Schedule Timetable</h5>
+              <p class="text-muted small mb-0">Grade 10-A • Hall & Date Allocation</p>
+            </div>
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">Hall 101</span>
+          </div>
+
+          <div class="list-group list-group-flush">
+            <div class="list-group-item px-0 py-3 border-light" *ngFor="let item of examSchedule">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="fw-bold text-dark mb-1">{{ item.subject }}</h6>
+                  <div class="small text-muted">
+                    <i class="far fa-calendar-alt text-primary me-1"></i> {{ item.date }} • 
+                    <i class="far fa-clock text-warning me-1"></i> {{ item.time }}
+                  </div>
+                </div>
+                <div class="text-end">
+                  <span class="badge bg-light text-dark border">{{ item.room }}</span>
+                  <div class="small text-muted mt-1">Max: {{ item.maxMarks }} M</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Marks Register Entry Matrix -->
+  <div *ngIf="activeTab === 'marks'" class="premium-card animate-fade-in">
+    <div class="row g-3 align-items-center mb-4 pb-3 border-bottom">
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted mb-1">Select Examination</label>
+        <select class="form-select modern-select" [(ngModel)]="selectedExamForMarks">
+          <option *ngFor="let ex of exams" [value]="ex.id">{{ ex.title }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted mb-1">Select Class / Section</label>
+        <select class="form-select modern-select" [(ngModel)]="selectedClassForMarks">
+          <option value="Grade 10-A">Grade 10 - Section A</option>
+          <option value="Grade 10-B">Grade 10 - Section B</option>
+          <option value="Grade 9-A">Grade 9 - Section A</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted mb-1">Select Subject</label>
+        <select class="form-select modern-select" [(ngModel)]="selectedSubjectForMarks">
+          <option value="Mathematics">Mathematics (Max 100)</option>
+          <option value="Physics & Chemistry">Physics & Chemistry (Max 100)</option>
+          <option value="English Literature">English Literature (Max 100)</option>
+          <option value="Computer Science">Computer Science (Max 100)</option>
+          <option value="Social Studies">Social Studies (Max 100)</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3 d-flex align-items-end">
+        <button class="btn btn-primary w-100 rounded-12 shadow-sm" (click)="saveMarks()">
+          <i class="fas fa-save me-1"></i> Save & Publish Marks
+        </button>
+      </div>
+    </div>
+
     <div class="table-responsive">
       <table class="table-premium">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Exam Title</th>
-            <th>Academic Session</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-            <th class="text-end">Actions</th>
+            <th>Roll #</th>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th style="width: 140px;" class="text-center">Marks (Max 100)</th>
+            <th class="text-center">Grade / GPA</th>
+            <th class="text-center">Result</th>
+            <th>Teacher Remarks & Feedback</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let ex of exams">
-            <td><strong>EX-{{ ex.id }}</strong></td>
-            <td><strong class="text-primary">{{ ex.title }}</strong></td>
-            <td>{{ ex.session }}</td>
-            <td>{{ ex.startDate }}</td>
-            <td>{{ ex.endDate }}</td>
+          <tr *ngFor="let student of marksList">
+            <td><strong>{{ student.rollNo }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ student.admissionNo }}</span></td>
+            <td><strong class="text-dark">{{ student.studentName }}</strong></td>
             <td>
-              <span class="badge-status" [ngClass]="{
-                'badge-active': ex.status === 'Completed',
-                'badge-pending': ex.status === 'Upcoming',
-                'badge-info': ex.status === 'Draft'
-              }">{{ ex.status }}</span>
+              <input 
+                type="number" 
+                class="form-control text-center fw-bold modern-input" 
+                [(ngModel)]="student.marksObtained" 
+                min="0" 
+                max="100"
+              >
             </td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-file-signature"></i> Marks Entry</button>
-              <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-print"></i> Report Cards</button>
+            <td class="text-center">
+              <span class="badge px-3 py-1 fw-bold text-white rounded-pill" [style.background-color]="getGrade(student.marksObtained).color">
+                {{ getGrade(student.marksObtained).grade }} ({{ getGrade(student.marksObtained).point }})
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="badge" [ngClass]="student.marksObtained >= 35 ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' : 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25'">
+                {{ student.marksObtained >= 35 ? 'PASSED' : 'FAILED' }}
+              </span>
+            </td>
+            <td>
+              <input type="text" class="form-control modern-input" [(ngModel)]="student.remarks" placeholder="Enter remark...">
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: Grade Scale Master -->
+  <div *ngIf="activeTab === 'grades'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Institutional Grading System (CBSE / 10-Point GPA)</h5>
+        <p class="text-muted small mb-0">Configured grade intervals, grade point values, and qualitative descriptors</p>
+      </div>
+      <button class="btn btn-outline-primary rounded-pill px-3" (click)="printDocument()">
+        <i class="fas fa-print me-1"></i> Print Scale Matrix
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Grade</th>
+            <th>Min Percentage (%)</th>
+            <th>Max Percentage (%)</th>
+            <th>Grade Point (GPA)</th>
+            <th>Qualitative Performance Descriptor</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let g of gradeScales">
+            <td>
+              <span class="badge px-3 py-2 fw-bold text-white rounded-pill" [style.background-color]="getGrade((g.minScore + g.maxScore)/2).color">
+                {{ g.grade }}
+              </span>
+            </td>
+            <td><strong class="text-dark">{{ g.minScore }}%</strong></td>
+            <td><strong class="text-dark">{{ g.maxScore }}%</strong></td>
+            <td><span class="badge bg-light text-dark border fw-bold">{{ g.gradePoint | number:'1.1-1' }}</span></td>
+            <td>{{ g.remarks }}</td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Active Standard</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: Hall Tickets / Admit Cards -->
+  <div *ngIf="activeTab === 'admit'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Admit Card / Hall Ticket Generator</h5>
+        <p class="text-muted small mb-0">Generate and print examination hall entrance tickets with QR authentication</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary" (click)="printDocument()"><i class="fas fa-print me-1"></i> Print All Tickets</button>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-4 col-lg-3" *ngFor="let s of marksList">
+        <div class="card border rounded-16 p-3 shadow-sm bg-light hover-shadow text-center">
+          <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-weight: bold; font-size: 1.25rem;">
+            {{ (s.studentName || 'S').charAt(0) }}
+          </div>
+          <h6 class="fw-bold text-dark mb-0">{{ s.studentName }}</h6>
+          <p class="small text-muted mb-2">Roll #: {{ s.rollNo }} • {{ s.admissionNo }}</p>
+          <button class="btn btn-sm btn-primary rounded-pill w-100 mt-2" (click)="viewAdmitCard(s)">
+            <i class="fas fa-id-badge me-1"></i> View Admit Card
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Student Report Cards -->
+  <div *ngIf="activeTab === 'reportcard'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Comprehensive Student Progress Report Cards</h5>
+        <p class="text-muted small mb-0">Generate official cumulative term marksheets with grade conversions and remarks</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Roll #</th>
+            <th>Student Name</th>
+            <th>Admission No</th>
+            <th>Total Score (Out of 500)</th>
+            <th>Percentage</th>
+            <th>Final Grade</th>
+            <th>Academic Standing</th>
+            <th class="text-end">Report Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of marksList">
+            <td><strong>{{ s.rollNo }}</strong></td>
+            <td><strong class="text-dark">{{ s.studentName }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ s.admissionNo }}</span></td>
+            <td><strong>{{ s.marksObtained * 5 - 12 }} / 500</strong></td>
+            <td class="fw-bold text-primary">{{ s.marksObtained }}%</td>
+            <td>
+              <span class="badge px-3 py-1 fw-bold text-white rounded-pill" [style.background-color]="getGrade(s.marksObtained).color">
+                {{ getGrade(s.marksObtained).grade }}
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">
+                {{ s.marksObtained >= 90 ? 'High Distinction' : s.marksObtained >= 75 ? 'First Class' : 'Passed' }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="viewReportCard(s)">
+                <i class="fas fa-file-alt me-1"></i> View Report Card
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- 1. Schedule Exam Modal -->
+<div class="modal-backdrop-custom" *ngIf="showCreateExamModal">
+  <div class="modal-content-custom" style="max-width: 520px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-calendar-plus text-primary me-2"></i> Schedule Examination</h5>
+      <button class="btn-close" (click)="showCreateExamModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Examination Title *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newExam.title" placeholder="e.g. Term 2 Summative Evaluation">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Exam Category</label>
+          <select class="form-select modern-select" [(ngModel)]="newExam.type">
+            <option value="Term Exam">Term Examination</option>
+            <option value="Unit Test">Unit Assessment Test</option>
+            <option value="Annual Board">Annual Board Mock</option>
+            <option value="Practical Exam">Practical Lab Exam</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Class & Section</label>
+          <select class="form-select modern-select" [(ngModel)]="newExam.class">
+            <option value="Grade 10-A">Grade 10-A</option>
+            <option value="Grade 10-B">Grade 10-B</option>
+            <option value="Grade 9-A">Grade 9-A</option>
+            <option value="Grade 11-Science">Grade 11-Science</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Start Date *</label>
+          <input type="date" class="form-control modern-input" [(ngModel)]="newExam.startDate">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">End Date</label>
+          <input type="date" class="form-control modern-input" [(ngModel)]="newExam.endDate">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showCreateExamModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExam()">Create Exam</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Admit Card / Hall Ticket Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAdmitCardModal">
+  <div class="modal-content-custom" style="max-width: 650px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
+      <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-id-badge text-primary me-2"></i> Official Examination Admit Card</h6>
+      <button class="btn-close" (click)="showAdmitCardModal = false"></button>
+    </div>
+    <div class="modal-body-custom p-4" *ngIf="selectedStudentForAdmit">
+      <div class="border rounded-16 p-4 bg-white shadow-sm" id="printableAdmitCard">
+        <div class="text-center border-bottom pb-3 mb-3">
+          <h4 class="fw-bold text-dark mb-0">EASYEDU INTERNATIONAL ACADEMY</h4>
+          <p class="small text-muted mb-1">Affiliated to CBSE • Examination Cell • Hall Entrance Ticket</p>
+          <span class="badge bg-primary text-white px-3 py-1 rounded-pill">TERM 1 MID-SEMESTER EXAM (2025-26)</span>
+        </div>
+
+        <div class="row g-2 small mb-3 align-items-center">
+          <div class="col-8">
+            <div class="mb-1"><strong>Student Name:</strong> {{ selectedStudentForAdmit.studentName }}</div>
+            <div class="mb-1"><strong>Roll Number:</strong> {{ selectedStudentForAdmit.rollNo }}</div>
+            <div class="mb-1"><strong>Admission Number:</strong> {{ selectedStudentForAdmit.admissionNo }}</div>
+            <div class="mb-1"><strong>Class & Section:</strong> Grade 10 - Section A</div>
+            <div><strong>Exam Center:</strong> Main Campus Hall 101</div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="border rounded p-2 d-inline-block bg-light">
+              <i class="fas fa-user fa-3x text-secondary"></i>
+              <div class="small text-muted mt-1">Photo Verified</div>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="fw-bold small text-dark border-bottom pb-1 mb-2">Subject Schedule & Seating</h6>
+        <table class="table table-bordered table-sm small mb-3">
+          <thead class="table-light">
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Subject</th>
+              <th>Room #</th>
+              <th>Invigilator Sign</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of examSchedule">
+              <td>{{ s.date }}</td>
+              <td>{{ s.time }}</td>
+              <td class="fw-bold">{{ s.subject }}</td>
+              <td>{{ s.room }}</td>
+              <td style="width: 100px;"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center pt-3 small text-muted">
+          <div>
+            <i class="fas fa-info-circle me-1"></i> Bring this Hall Ticket daily. Electronic gadgets strictly prohibited.
+          </div>
+          <div class="text-end">
+            <div class="border-top pt-1 mt-3" style="width: 130px;">
+              <strong>Controller of Exams</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showAdmitCardModal = false">Close</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printDocument()">
+        <i class="fas fa-print me-1"></i> Print Hall Ticket
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Student Report Card Modal -->
+<div class="modal-backdrop-custom" *ngIf="showReportCardModal">
+  <div class="modal-content-custom" style="max-width: 680px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
+      <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-file-alt text-primary me-2"></i> Academic Progress Report Card</h6>
+      <button class="btn-close" (click)="showReportCardModal = false"></button>
+    </div>
+    <div class="modal-body-custom p-4" *ngIf="selectedStudentForReport">
+      <div class="border rounded-16 p-4 bg-white shadow-sm" id="printableReportCard">
+        <div class="text-center border-bottom pb-3 mb-3">
+          <h4 class="fw-bold text-dark mb-0">EASYEDU INTERNATIONAL ACADEMY</h4>
+          <p class="small text-muted mb-1">Academic Session 2025-26 • Continuous & Comprehensive Evaluation</p>
+          <span class="badge bg-success text-white px-3 py-1 rounded-pill">TERM 1 PROGRESS REPORT CARD</span>
+        </div>
+
+        <div class="row g-2 small mb-3">
+          <div class="col-6"><strong>Student Name:</strong> {{ selectedStudentForReport.studentName }}</div>
+          <div class="col-6 text-end"><strong>Roll No:</strong> {{ selectedStudentForReport.rollNo }}</div>
+          <div class="col-6"><strong>Admission #:</strong> {{ selectedStudentForReport.admissionNo }}</div>
+          <div class="col-6 text-end"><strong>Grade & Section:</strong> Grade 10-A</div>
+        </div>
+
+        <table class="table table-bordered table-sm small mb-3">
+          <thead class="table-light">
+            <tr>
+              <th>Subject</th>
+              <th class="text-center">Max Marks</th>
+              <th class="text-center">Marks Obtained</th>
+              <th class="text-center">Grade</th>
+              <th class="text-center">Grade Point</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mathematics</td>
+              <td class="text-center">100</td>
+              <td class="text-center fw-bold">{{ selectedStudentForReport.marksObtained }}</td>
+              <td class="text-center"><span class="badge bg-success">A+</span></td>
+              <td class="text-center">10.0</td>
+            </tr>
+            <tr>
+              <td>Physics & Chemistry</td>
+              <td class="text-center">100</td>
+              <td class="text-center fw-bold">{{ selectedStudentForReport.marksObtained - 3 }}</td>
+              <td class="text-center"><span class="badge bg-success">A+</span></td>
+              <td class="text-center">10.0</td>
+            </tr>
+            <tr>
+              <td>English Literature</td>
+              <td class="text-center">100</td>
+              <td class="text-center fw-bold">{{ selectedStudentForReport.marksObtained - 2 }}</td>
+              <td class="text-center"><span class="badge bg-success">A+</span></td>
+              <td class="text-center">10.0</td>
+            </tr>
+            <tr>
+              <td>Computer Science</td>
+              <td class="text-center">100</td>
+              <td class="text-center fw-bold">{{ selectedStudentForReport.marksObtained }}</td>
+              <td class="text-center"><span class="badge bg-success">A+</span></td>
+              <td class="text-center">10.0</td>
+            </tr>
+            <tr>
+              <td>Social Studies</td>
+              <td class="text-center">100</td>
+              <td class="text-center fw-bold">{{ selectedStudentForReport.marksObtained - 5 }}</td>
+              <td class="text-center"><span class="badge bg-primary">A</span></td>
+              <td class="text-center">9.0</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="table-light fw-bold">
+              <td>Grand Total (GPA 9.8)</td>
+              <td class="text-center">500</td>
+              <td class="text-center text-success">{{ selectedStudentForReport.marksObtained * 5 - 10 }}</td>
+              <td class="text-center"><span class="badge bg-success">A+</span></td>
+              <td class="text-center">9.8 / 10</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class="p-3 bg-light rounded-12 mb-3">
+          <strong>Class Teacher Remark:</strong>
+          <p class="small text-muted mb-0 mt-1">{{ selectedStudentForReport.remarks }} Outstanding work ethic and active class participation throughout the semester.</p>
+        </div>
+
+        <div class="row g-2 pt-4 small text-center">
+          <div class="col-4">
+            <div class="border-top pt-2"><strong>Class Teacher</strong></div>
+          </div>
+          <div class="col-4">
+            <div class="border-top pt-2"><strong>Exam Coordinator</strong></div>
+          </div>
+          <div class="col-4">
+            <div class="border-top pt-2"><strong>Principal Seal</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showReportCardModal = false">Close</button>
+      <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="printDocument()">
+        <i class="fas fa-print me-1"></i> Print / Download Marksheet
+      </button>
     </div>
   </div>
 </div>

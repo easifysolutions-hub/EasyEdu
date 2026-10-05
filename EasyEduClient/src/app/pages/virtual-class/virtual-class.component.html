@@ -1,35 +1,250 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Virtual Classrooms & Live Meetings</h3>
-      <p class="text-muted small mb-0">Integrated Zoom, Google Meet, and Jitsi relays for remote education</p>
+      <h3 class="fw-bold mb-1 text-dark">Live Virtual Classrooms & LMS</h3>
+      <p class="text-muted small mb-0">Launch interactive video lessons via Zoom, Google Meet, Microsoft Teams, and Jitsi Open-Source</p>
     </div>
-    <div class="d-flex gap-2">
-      <button class="btn btn-primary"><i class="fas fa-video"></i> Schedule Zoom Class</button>
-      <button class="btn btn-success"><i class="fab fa-google"></i> Launch GMeet</button>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="showCreateMeetingModal = true">
+        <i class="fas fa-video-plus me-1"></i> Schedule Live Class
+      </button>
     </div>
   </div>
 
-  <div class="row g-4">
-    <div class="col-12" *ngFor="let m of meetings">
-      <div class="premium-card d-flex flex-wrap justify-content-between align-items-center gap-3">
-        <div class="d-flex align-items-center gap-3">
-          <div class="avatar-circle" [style.background]="m.provider === 'Zoom' ? '#2563eb' : (m.provider === 'Google Meet' ? '#059669' : '#7c3aed')">
-            <i [class]="m.provider === 'Zoom' ? 'fas fa-video' : (m.provider === 'Google Meet' ? 'fab fa-google' : 'fas fa-users')"></i>
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-broadcast-tower fa-lg text-white"></i>
           </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">STREAMING</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ liveNowCount }} Live Now</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Interactive Sessions in Progress</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-calendar-check fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TODAY</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ meetings.length }} Lectures</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Scheduled Across Grades</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-users fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ATTENDEES</span>
+        </div>
+        <h2 class="fw-bold mb-1">155 Students</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Active In Virtual Classes</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-photo-video fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ARCHIVE</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ recordings.length }} Recorded</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Cloud Video Lectures</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'all'" (click)="activeTab = 'all'">
+          <i class="fas fa-video me-2"></i> All Scheduled Classes
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'zoom'" (click)="activeTab = 'zoom'">
+          <i class="fas fa-cube text-primary me-2"></i> Zoom Virtual Rooms
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'gmeet'" (click)="activeTab = 'gmeet'">
+          <i class="fab fa-google text-success me-2"></i> Google Meet Rooms
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'jitsi'" (click)="activeTab = 'jitsi'">
+          <i class="fas fa-globe text-info me-2"></i> Jitsi & In-App Classrooms
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'recordings'" (click)="activeTab = 'recordings'">
+          <i class="fas fa-play-circle text-danger me-2"></i> Recorded Lessons
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Virtual Class Cards Grid -->
+  <div *ngIf="activeTab !== 'recordings'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-md-6" *ngFor="let m of filteredMeetings">
+      <div class="card border rounded-16 p-4 shadow-sm bg-white h-100 hover-shadow position-relative">
+        <div class="d-flex justify-content-between align-items-start mb-3">
           <div>
-            <h5 class="fw-bold mb-1">{{ m.topic }}</h5>
-            <div class="text-muted small">
-              <span class="me-3"><i class="far fa-clock me-1"></i> {{ m.time }} ({{ m.duration }})</span>
-              <span><i class="far fa-user me-1"></i> Host: {{ m.host }}</span>
-            </div>
+            <span class="badge mb-2 px-2 py-1" [ngClass]="{
+              'bg-primary': m.provider === 'Zoom',
+              'bg-success': m.provider === 'Google Meet',
+              'bg-info text-dark': m.provider === 'Jitsi'
+            }">{{ m.provider }}</span>
+            <span class="badge bg-light text-dark border ms-2">{{ m.class }}</span>
+            <span class="badge bg-light text-secondary border ms-1">{{ m.subject }}</span>
+          </div>
+          <span class="badge" [ngClass]="{
+            'bg-danger text-white': m.status === 'Live Now',
+            'bg-warning text-dark': m.status === 'Scheduled',
+            'bg-primary text-white': m.status === 'Upcoming',
+            'bg-secondary text-white': m.status === 'Completed'
+          }">
+            <i *ngIf="m.status === 'Live Now'" class="fas fa-circle fa-beat text-white me-1"></i>
+            {{ m.status }}
+          </span>
+        </div>
+
+        <h5 class="fw-bold text-dark mb-2">{{ m.topic }}</h5>
+        
+        <div class="p-3 bg-light rounded-12 mb-3 small">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted"><i class="fas fa-user-tie text-primary me-1"></i> Host Faculty:</span>
+            <strong class="text-dark">{{ m.host }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted"><i class="far fa-clock text-warning me-1"></i> Time & Duration:</span>
+            <strong class="text-dark">{{ m.date }} • {{ m.time }} ({{ m.duration }})</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted"><i class="fas fa-key text-secondary me-1"></i> Meeting ID:</span>
+            <span class="fw-bold">{{ m.meetingId }} (Passcode: {{ m.passcode }})</span>
           </div>
         </div>
-        <div class="d-flex align-items-center gap-2">
-          <span class="badge bg-warning text-dark">{{ m.status }}</span>
-          <button class="btn btn-primary"><i class="fas fa-play me-1"></i> Join Class</button>
+
+        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+          <span class="small text-muted">
+            <i class="fas fa-user-friends me-1"></i> {{ m.participantsCount }} Registered
+          </span>
+          <button 
+            class="btn rounded-pill px-4 shadow-sm fw-bold" 
+            [ngClass]="m.status === 'Live Now' ? 'btn-danger' : 'btn-primary'"
+            (click)="joinMeeting(m)"
+          >
+            <i class="fas fa-video me-1"></i> {{ m.status === 'Live Now' ? 'Join Live Room' : 'Launch Meeting' }}
+          </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Recorded Lessons Tab -->
+  <div *ngIf="activeTab === 'recordings'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Lecture Video Archive (VOD)</h5>
+        <p class="text-muted small mb-0">High-definition recordings for student revision and asynchronous learning</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4" *ngFor="let rec of recordings">
+        <div class="card border rounded-16 p-3 shadow-sm bg-white hover-shadow">
+          <div class="position-relative mb-3 bg-dark rounded-12 d-flex align-items-center justify-content-center text-white" style="height: 160px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <i class="fas fa-play-circle fa-3x text-primary cursor-pointer" (click)="watchRecording(rec)"></i>
+            <span class="badge bg-black bg-opacity-75 text-white position-absolute bottom-0 end-0 m-2">{{ rec.duration }}</span>
+          </div>
+          <span class="badge bg-light text-primary border mb-1">{{ rec.subject }} • {{ rec.class }}</span>
+          <h6 class="fw-bold text-dark mb-1">{{ rec.topic }}</h6>
+          <p class="small text-muted mb-2">Faculty: {{ rec.teacher }} • {{ rec.date }}</p>
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top small">
+            <span class="text-muted"><i class="fas fa-eye me-1"></i> {{ rec.viewsCount }} Views</span>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="watchRecording(rec)">
+              <i class="fas fa-play me-1"></i> Watch Video
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- Schedule Virtual Class Modal -->
+<div class="modal-backdrop-custom" *ngIf="showCreateMeetingModal">
+  <div class="modal-content-custom" style="max-width: 540px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-video text-primary me-2"></i> Schedule Live Virtual Classroom</h5>
+      <button class="btn-close" (click)="showCreateMeetingModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Session Topic / Lesson Title *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newMeeting.topic" placeholder="e.g. Chapter 4 - Light & Reflection Numerical Problem Solving">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Platform / Provider</label>
+          <select class="form-select modern-select" [(ngModel)]="newMeeting.provider">
+            <option value="Zoom">Zoom Video</option>
+            <option value="Google Meet">Google Meet</option>
+            <option value="Jitsi">Jitsi Meet (In-App)</option>
+            <option value="BigBlueButton">BigBlueButton</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Host Teacher</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newMeeting.host" placeholder="Teacher Name">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Grade & Section</label>
+          <select class="form-select modern-select" [(ngModel)]="newMeeting.class">
+            <option value="Grade 10-A">Grade 10-A</option>
+            <option value="Grade 10-B">Grade 10-B</option>
+            <option value="Grade 9-A">Grade 9-A</option>
+            <option value="Grade 11-Science">Grade 11-Science</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Subject</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newMeeting.subject" placeholder="e.g. Physics">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Date & Time</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newMeeting.time" placeholder="Today 04:00 PM">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Duration</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newMeeting.duration" placeholder="45 mins">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Passcode / Access Code</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newMeeting.passcode" placeholder="e.g. EDU2025">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showCreateMeetingModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveMeeting()">Schedule Class</button>
     </div>
   </div>
 </div>

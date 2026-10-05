@@ -1,129 +1,326 @@
 <div class="container-fluid p-0 animate-fade-in">
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Student Admission Form</h3>
-      <p class="text-muted small mb-0">Enter student personal, academic and guardian details</p>
+      <h3 class="fw-bold mb-1">Student Admission Portal</h3>
+      <p class="text-muted small mb-0">Enroll a new student into the institutional repository with comprehensive records</p>
     </div>
     <div>
       <a routerLink="/students" class="btn btn-outline-secondary">
-        <i class="fas fa-arrow-left"></i> Back to Student Directory
+        <i class="fas fa-arrow-left me-1"></i> Back to Student Directory
       </a>
     </div>
   </div>
 
-  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show">
-    <i class="fas fa-check-circle me-2"></i> {{ successMessage }}
-  </div>
+  <div class="premium-card p-0 overflow-hidden shadow-sm">
+    <!-- Tab Navigation Bar -->
+    <div class="d-flex flex-wrap border-bottom bg-light">
+      <button 
+        type="button" 
+        class="btn py-3 px-4 rounded-0 fw-bold border-0" 
+        [class.btn-primary]="activeTab === 'general'" 
+        [class.btn-light]="activeTab !== 'general'"
+        (click)="setTab('general')"
+      >
+        <i class="fas fa-info-circle me-2"></i>General Info
+      </button>
+      <button 
+        type="button" 
+        class="btn py-3 px-4 rounded-0 fw-bold border-0" 
+        [class.btn-primary]="activeTab === 'parents'" 
+        [class.btn-light]="activeTab !== 'parents'"
+        (click)="setTab('parents')"
+      >
+        <i class="fas fa-users me-2"></i>Parents & Guardian
+      </button>
+      <button 
+        type="button" 
+        class="btn py-3 px-4 rounded-0 fw-bold border-0" 
+        [class.btn-primary]="activeTab === 'transport'" 
+        [class.btn-light]="activeTab !== 'transport'"
+        (click)="setTab('transport')"
+      >
+        <i class="fas fa-bus me-2"></i>Transport & Hostel
+      </button>
+      <button 
+        type="button" 
+        class="btn py-3 px-4 rounded-0 fw-bold border-0" 
+        [class.btn-primary]="activeTab === 'documents'" 
+        [class.btn-light]="activeTab !== 'documents'"
+        (click)="setTab('documents')"
+      >
+        <i class="fas fa-file-invoice me-2"></i>Bank & ID Documents
+      </button>
+      <button 
+        type="button" 
+        class="btn py-3 px-4 rounded-0 fw-bold border-0" 
+        [class.btn-primary]="activeTab === 'others'" 
+        [class.btn-light]="activeTab !== 'others'"
+        (click)="setTab('others')"
+      >
+        <i class="fas fa-notes-medical me-2"></i>Medical & Others
+      </button>
+    </div>
 
-  <div class="premium-card">
-    <form [formGroup]="admissionForm" (ngSubmit)="onSubmit()">
-      <!-- Academic Information -->
-      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
-        <i class="fas fa-school me-2"></i> Academic Details
-      </h5>
+    <!-- Form Body -->
+    <form [formGroup]="admissionForm" (ngSubmit)="onSubmit()" class="p-4">
+      <!-- 1. GENERAL INFO TAB -->
+      <div *ngIf="activeTab === 'general'" class="animate-fade-in">
+        <div class="row g-4">
+          <!-- Student Photo Upload Column -->
+          <div class="col-md-3 text-center border-end">
+            <div class="p-3 bg-light rounded-3">
+              <label class="form-label small fw-bold text-muted text-uppercase d-block mb-3">Student Photograph</label>
+              <div class="avatar-circle mx-auto mb-3" style="width: 140px; height: 140px; font-size: 3rem; background: #e0e7ff; color: #4f46e5; border: 4px solid #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <img *ngIf="photoPreview" [src]="photoPreview" alt="Student Photo" class="w-100 h-100 rounded-circle object-fit-cover">
+                <i *ngIf="!photoPreview" class="fas fa-user-graduate"></i>
+              </div>
+              <input type="file" class="form-control form-control-sm" accept="image/*" (change)="onPhotoSelected($event)">
+              <small class="text-muted d-block mt-2">JPG, PNG up to 2MB</small>
+            </div>
+          </div>
 
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">ADMISSION NO *</label>
-          <input type="text" class="form-control form-control-premium" formControlName="admissionNo" readonly>
-        </div>
+          <!-- Academic & Identity Details -->
+          <div class="col-md-9">
+            <h6 class="fw-bold text-primary mb-3"><i class="fas fa-graduation-cap me-2"></i>Academic Enrollment</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">ADMISSION NO *</label>
+                <input type="text" class="form-control fw-bold bg-light" formControlName="admissionNo" readonly>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">ROLL NUMBER *</label>
+                <input type="text" class="form-control" formControlName="rollNo" placeholder="e.g. 101">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">ADMISSION DATE *</label>
+                <input type="date" class="form-control fw-bold text-primary" formControlName="admissionDate">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">CLASS / GRADE *</label>
+                <select class="form-select fw-bold" formControlName="classId">
+                  <option [value]="1">Grade 10</option>
+                  <option [value]="2">Grade 9</option>
+                  <option [value]="3">Grade 12</option>
+                  <option [value]="4">Grade 8</option>
+                  <option [value]="5">Grade 11</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">SECTION *</label>
+                <select class="form-select fw-bold" formControlName="sectionId">
+                  <option [value]="1">Section A</option>
+                  <option [value]="2">Section B</option>
+                  <option [value]="3">Section C</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">STUDENT CATEGORY</label>
+                <select class="form-select" formControlName="category">
+                  <option>General</option>
+                  <option>Merit Scholarship</option>
+                  <option>Sports Quota</option>
+                  <option>Staff Ward</option>
+                </select>
+              </div>
+            </div>
 
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">CLASS / GRADE *</label>
-          <select class="form-select form-control-premium" formControlName="classId">
-            <option [value]="1">Grade 10</option>
-            <option [value]="2">Grade 9</option>
-            <option [value]="3">Grade 12</option>
-            <option [value]="4">Grade 8</option>
-            <option [value]="5">Grade 11</option>
-          </select>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">SECTION *</label>
-          <select class="form-select form-control-premium" formControlName="sectionId">
-            <option [value]="1">Section A</option>
-            <option [value]="2">Section B</option>
-            <option [value]="3">Section C</option>
-          </select>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">ROLL NUMBER *</label>
-          <input type="text" class="form-control form-control-premium" formControlName="rollNo" placeholder="e.g. 101">
+            <h6 class="fw-bold text-primary mb-3"><i class="fas fa-id-card me-2"></i>Personal Profile</h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">FIRST NAME *</label>
+                <input type="text" class="form-control" formControlName="firstName" placeholder="Student First Name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">LAST NAME *</label>
+                <input type="text" class="form-control" formControlName="lastName" placeholder="Student Last Name">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">GENDER *</label>
+                <select class="form-select" formControlName="gender">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">DATE OF BIRTH *</label>
+                <input type="date" class="form-control" formControlName="dateOfBirth">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">BLOOD GROUP</label>
+                <select class="form-select" formControlName="bloodGroup">
+                  <option>A+</option>
+                  <option>A-</option>
+                  <option>B+</option>
+                  <option>B-</option>
+                  <option>O+</option>
+                  <option>O-</option>
+                  <option>AB+</option>
+                  <option>AB-</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">STUDENT EMAIL</label>
+                <input type="email" class="form-control" formControlName="email" placeholder="student@easyedu.com">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">STUDENT PHONE</label>
+                <input type="tel" class="form-control" formControlName="phone" placeholder="+91 XXXXX XXXXX">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Student Personal Information -->
-      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
-        <i class="fas fa-user me-2"></i> Student Personal Information
-      </h5>
+      <!-- 2. PARENTS & GUARDIAN TAB -->
+      <div *ngIf="activeTab === 'parents'" class="animate-fade-in">
+        <div class="row g-4">
+          <div class="col-md-6 border-end">
+            <h6 class="fw-bold text-primary mb-3"><i class="fas fa-male me-2"></i>Father's Information</h6>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">FATHER'S FULL NAME</label>
+              <input type="text" class="form-control" formControlName="fatherName" placeholder="Father Name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">FATHER'S PHONE</label>
+              <input type="tel" class="form-control" formControlName="fatherPhone" placeholder="+91 98765 00000">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">OCCUPATION</label>
+              <input type="text" class="form-control" formControlName="fatherOccupation" placeholder="e.g. Software Engineer">
+            </div>
+          </div>
 
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">FIRST NAME *</label>
-          <input type="text" class="form-control form-control-premium" formControlName="firstName" placeholder="First Name">
-        </div>
+          <div class="col-md-6">
+            <h6 class="fw-bold text-primary mb-3"><i class="fas fa-female me-2"></i>Mother's Information</h6>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">MOTHER'S FULL NAME</label>
+              <input type="text" class="form-control" formControlName="motherName" placeholder="Mother Name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">MOTHER'S PHONE</label>
+              <input type="tel" class="form-control" formControlName="motherPhone" placeholder="+91 98450 00000">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">OCCUPATION</label>
+              <input type="text" class="form-control" formControlName="motherOccupation" placeholder="e.g. Doctor">
+            </div>
+          </div>
 
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">LAST NAME *</label>
-          <input type="text" class="form-control form-control-premium" formControlName="lastName" placeholder="Last Name">
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">GENDER *</label>
-          <select class="form-select form-control-premium" formControlName="gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">DATE OF BIRTH *</label>
-          <input type="date" class="form-control form-control-premium" formControlName="dateOfBirth">
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">EMAIL ADDRESS</label>
-          <input type="email" class="form-control form-control-premium" formControlName="email" placeholder="student@email.com">
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted">PHONE NUMBER</label>
-          <input type="tel" class="form-control form-control-premium" formControlName="phone" placeholder="+91 XXXXX XXXXX">
-        </div>
-      </div>
-
-      <!-- Guardian Details -->
-      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
-        <i class="fas fa-user-shield me-2"></i> Parent / Guardian Details
-      </h5>
-
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-md-6">
-          <label class="form-label small fw-bold text-muted">GUARDIAN NAME *</label>
-          <input type="text" class="form-control form-control-premium" formControlName="parentName" placeholder="Father / Mother Name">
-        </div>
-
-        <div class="col-12 col-md-6">
-          <label class="form-label small fw-bold text-muted">GUARDIAN PHONE *</label>
-          <input type="tel" class="form-control form-control-premium" formControlName="parentPhone" placeholder="Contact number">
-        </div>
-
-        <div class="col-12">
-          <label class="form-label small fw-bold text-muted">RESIDENTIAL ADDRESS</label>
-          <textarea class="form-control form-control-premium" rows="2" formControlName="address" placeholder="Full residential address..."></textarea>
+          <div class="col-12 border-top pt-3">
+            <h6 class="fw-bold text-danger mb-3"><i class="fas fa-shield-halved me-2"></i>Primary Guardian Emergency Contact</h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">PRIMARY GUARDIAN NAME *</label>
+                <input type="text" class="form-control" formControlName="parentName" placeholder="Guardian Name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">GUARDIAN CONTACT PHONE *</label>
+                <input type="tel" class="form-control" formControlName="parentPhone" placeholder="+91 XXXXX XXXXX">
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-bold text-muted">RESIDENTIAL ADDRESS</label>
+                <textarea class="form-control" rows="2" formControlName="address" placeholder="Complete postal address with city & PIN code..."></textarea>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Submit Actions -->
-      <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-        <button type="reset" class="btn btn-light">Reset</button>
-        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || admissionForm.invalid">
-          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
-          <i class="fas fa-check me-1" *ngIf="!isSubmitting"></i> Complete Admission
-        </button>
+      <!-- 3. TRANSPORT & HOSTEL TAB -->
+      <div *ngIf="activeTab === 'transport'" class="animate-fade-in">
+        <div class="row g-4">
+          <div class="col-md-6 border-end">
+            <h6 class="fw-bold text-primary mb-3"><i class="fas fa-bus me-2"></i>School Bus & Transport Facility</h6>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">ASSIGN ROUTE</label>
+              <select class="form-select" formControlName="transportRoute">
+                <option value="None">No Transport (Self Commute)</option>
+                <option value="Route 1">Route 1 - North Campus & Electronic City</option>
+                <option value="Route 2">Route 2 - MG Road & Indiranagar</option>
+                <option value="Route 3">Route 3 - Whitefield & Marathahalli</option>
+                <option value="Route 4">Route 4 - Jayanagar & JP Nagar</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">VEHICLE ASSIGNMENT</label>
+              <select class="form-select" formControlName="vehicleNo">
+                <option value="None">None</option>
+                <option value="KA-01-E-1001">Bus #1 (KA-01-E-1001)</option>
+                <option value="KA-01-E-2002">Bus #2 (KA-01-E-2002)</option>
+                <option value="KA-01-E-3003">Bus #3 (KA-01-E-3003)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="fw-bold text-primary mb-3"><i class="fas fa-hotel me-2"></i>Hostel & Boarding Facility</h6>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">HOSTEL ACCOMMODATION</label>
+              <select class="form-select" formControlName="hostelRoom">
+                <option value="Day Scholar">Day Scholar (Non-Hostelite)</option>
+                <option value="Boys Hostel Block A - Room 102">Boys Hostel Block A - Room 102</option>
+                <option value="Girls Hostel Block B - Room 205">Girls Hostel Block B - Room 205</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. BANK & ID DOCUMENTS TAB -->
+      <div *ngIf="activeTab === 'documents'" class="animate-fade-in">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-muted">NATIONAL IDENTITY / AADHAAR NO</label>
+            <input type="text" class="form-control" formControlName="nationalId" placeholder="XXXX-XXXX-XXXX">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-muted">BANK ACCOUNT NUMBER</label>
+            <input type="text" class="form-control" formControlName="bankAccountNo" placeholder="Account Number">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-muted">BANK NAME</label>
+            <input type="text" class="form-control" formControlName="bankName" placeholder="e.g. State Bank of India">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-muted">IFSC CODE</label>
+            <input type="text" class="form-control" formControlName="ifscCode" placeholder="SBIN0001234">
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. MEDICAL & OTHERS TAB -->
+      <div *ngIf="activeTab === 'others'" class="animate-fade-in">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-muted">PREVIOUS INSTITUTION / SCHOOL</label>
+            <input type="text" class="form-control" formControlName="previousSchool" placeholder="Previous School Name">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-muted">EMERGENCY CONTACT PERSON</label>
+            <input type="text" class="form-control" formControlName="emergencyContact" placeholder="Name & Phone">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold text-muted">KNOWN MEDICAL ALLERGIES / CONDITIONS</label>
+            <textarea class="form-control" rows="2" formControlName="medicalConditions" placeholder="Specify any chronic health condition or allergy..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Button Actions -->
+      <div class="d-flex justify-content-between align-items-center pt-4 mt-4 border-top">
+        <div>
+          <button *ngIf="activeTab !== 'general'" type="button" class="btn btn-outline-secondary me-2" (click)="setTab('general')">
+            <i class="fas fa-chevron-left me-1"></i> First Step
+          </button>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="reset" class="btn btn-light px-4">Reset</button>
+          <button type="submit" class="btn btn-primary px-4 shadow-sm" [disabled]="isSubmitting">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+            <i class="fas fa-check-circle me-1" *ngIf="!isSubmitting"></i> Complete & Finalize Admission
+          </button>
+        </div>
       </div>
     </form>
   </div>

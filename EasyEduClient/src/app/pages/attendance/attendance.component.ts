@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { AttendanceRecord, Student } from '../../core/models';
 
+declare const Swal: any;
+
 @Component({
   selector: 'app-attendance',
   standalone: true,
@@ -13,21 +15,52 @@ import { AttendanceRecord, Student } from '../../core/models';
 })
 export class AttendanceComponent implements OnInit {
   private api = inject(ApiService);
+  attendanceType: 'student' | 'staff' = 'student';
   selectedDate: string = new Date().toISOString().split('T')[0];
   selectedClass: string = 'Grade 10';
   attendanceRecords: AttendanceRecord[] = [];
-  isSaved = false;
+  staffAttendanceRecords: AttendanceRecord[] = [];
 
   ngOnInit(): void {
+    this.loadStudentAttendance();
+    this.loadStaffAttendance();
+  }
+
+  loadStudentAttendance(): void {
     this.api.getStudents().subscribe(students => {
-      this.attendanceRecords = students.map(s => ({
+      this.attendanceRecords = students.map((s, index) => ({
         studentId: s.id,
         studentName: `${s.firstName} ${s.lastName}`,
-        rollNo: s.rollNo || '-',
+        rollNo: s.rollNo || (101 + index).toString(),
+        date: this.selectedDate,
+        status: index === 3 ? 'Absent' : index === 5 ? 'Late' : 'Present'
+      }));
+    });
+  }
+
+  loadStaffAttendance(): void {
+    this.api.getStaff().subscribe(staff => {
+      this.staffAttendanceRecords = staff.map((st, index) => ({
+        studentId: st.id,
+        studentName: `${st.firstName} ${st.lastName} (${st.designation})`,
+        rollNo: st.staffNo,
         date: this.selectedDate,
         status: 'Present'
       }));
     });
+  }
+
+  get activeRecords(): AttendanceRecord[] {
+    return this.attendanceType === 'student' ? this.attendanceRecords : this.staffAttendanceRecords;
+  }
+
+  get totalCount(): number { return this.activeRecords.length; }
+  get presentCount(): number { return this.activeRecords.filter(r => r.status === 'Present').length; }
+  get absentCount(): number { return this.activeRecords.filter(r => r.status === 'Absent').length; }
+  get lateCount(): number { return this.activeRecords.filter(r => r.status === 'Late').length; }
+  get attendancePercent(): number {
+    if (this.totalCount === 0) return 100;
+    return Math.round((this.presentCount / this.totalCount) * 100);
   }
 
   setStatus(record: AttendanceRecord, status: 'Present' | 'Absent' | 'Late' | 'HalfDay'): void {
@@ -35,11 +68,16 @@ export class AttendanceComponent implements OnInit {
   }
 
   markAll(status: 'Present' | 'Absent'): void {
-    this.attendanceRecords.forEach(r => r.status = status);
+    this.activeRecords.forEach(r => r.status = status);
   }
 
   saveAttendance(): void {
-    this.isSaved = true;
-    setTimeout(() => this.isSaved = false, 3000);
+    Swal.fire({
+      icon: 'success',
+      title: 'Attendance Recorded!',
+      text: `Saved ${this.presentCount} present, ${this.absentCount} absent, and ${this.lateCount} late records for ${this.selectedDate}.`,
+      timer: 2000,
+      showConfirmButton: false
+    });
   }
 }

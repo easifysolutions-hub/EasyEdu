@@ -44,7 +44,7 @@
             <td>
               <div class="d-flex align-items-center gap-2">
                 <div class="avatar-circle" style="width: 32px; height: 32px; font-size: 0.8rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                  {{ s.firstName.charAt(0) }}
+                  {{ (s.firstName || 'T').charAt(0) }}
                 </div>
                 <div class="fw-bold">{{ s.firstName }} {{ s.lastName }}</div>
               </div>

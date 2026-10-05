@@ -1,23 +1,129 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Fee Invoices & Collections</h3>
-      <p class="text-muted small mb-0">Track tuition fees, installment balances, and payments</p>
+      <h3 class="fw-bold mb-1 text-dark">Fees & Financial Management</h3>
+      <p class="text-muted small mb-0">Track tuition invoicing, installment collections, fee heads, and account ledgers</p>
     </div>
-    <div>
-      <button class="btn btn-primary">
-        <i class="fas fa-file-invoice-dollar"></i> Generate Fee Invoices
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showBulkInvoiceModal = true">
+        <i class="fas fa-layer-group me-1"></i> Bulk Invoicing
+      </button>
+      <button class="btn btn-primary rounded-pill px-3 shadow-sm" (click)="showAddHeadModal = true">
+        <i class="fas fa-plus-circle me-1"></i> Add Fee Head
+      </button>
+      <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="openCollectModal(invoices[0])">
+        <i class="fas fa-hand-holding-usd me-1"></i> Quick Collect
       </button>
     </div>
   </div>
 
-  <div class="premium-card">
-    <div class="row g-3 align-items-center mb-3">
-      <div class="col-12 col-md-5">
-        <div class="search-bar-modern w-100">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by student name, admission #...">
+  <!-- KPI Metric Stat Cards (MVC Rich Gradients) -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #042954 0%, #0c4a91 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-file-invoice-dollar fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ACADEMIC YR</span>
         </div>
+        <h2 class="fw-bold mb-1">₹{{ totalInvoiced | number }}</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Total Invoiced Amount</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-coins fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">REALIZED</span>
+        </div>
+        <h2 class="fw-bold mb-1">₹{{ totalCollected | number }}</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Fee Collected (Realized)</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-clock fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">OUTSTANDING</span>
+        </div>
+        <h2 class="fw-bold mb-1">₹{{ totalPending | number }}</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Pending Outstanding Dues</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-chart-pie fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">COLLECTION RATE</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ totalInvoiced ? ((totalCollected / totalInvoiced) * 100 | number:'1.0-1') : 0 }}%</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Realization Efficiency</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'invoices'" (click)="activeTab = 'invoices'">
+          <i class="fas fa-file-invoice-dollar me-2"></i> Invoices & Student Billing
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'collect'" (click)="activeTab = 'collect'">
+          <i class="fas fa-cash-register me-2"></i> Cashier & Transactions Journal
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'heads'" (click)="activeTab = 'heads'">
+          <i class="fas fa-tags me-2"></i> Fee Heads Master
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'groups'" (click)="activeTab = 'groups'">
+          <i class="fas fa-layer-group me-2"></i> Fee Groups
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'ledger'" (click)="activeTab = 'ledger'">
+          <i class="fas fa-balance-scale me-2"></i> Account Books & Ledger
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Invoices & Student Billing -->
+  <div *ngIf="activeTab === 'invoices'" class="premium-card animate-fade-in">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <div class="d-flex flex-wrap gap-2 align-items-center flex-grow-1" style="max-width: 600px;">
+        <div class="search-bar-modern flex-grow-1">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by student, admission #, fee group...">
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <select class="form-select modern-select" style="width: 140px;" [(ngModel)]="statusFilter">
+          <option value="All">All Statuses</option>
+          <option value="Paid">Paid Only</option>
+          <option value="Partial">Partial Dues</option>
+          <option value="Unpaid">Unpaid Only</option>
+        </select>
+        <button class="btn btn-outline-primary" (click)="showBulkInvoiceModal = true">
+          <i class="fas fa-plus"></i> Generate Invoices
+        </button>
       </div>
     </div>
 
@@ -28,25 +134,29 @@
             <th>Invoice ID</th>
             <th>Student Name</th>
             <th>Admission No</th>
-            <th>Fee Category</th>
-            <th>Total Amount</th>
-            <th>Paid Amount</th>
-            <th>Balance</th>
+            <th>Fee Group / Category</th>
+            <th>Due Date</th>
+            <th>Total (₹)</th>
+            <th>Paid (₹)</th>
+            <th>Balance (₹)</th>
             <th>Status</th>
-            <th class="text-end">Action</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let inv of filteredInvoices">
-            <td><strong>INV-00{{ inv.id }}</strong></td>
+            <td><strong class="text-primary">INV-00{{ inv.id }}</strong></td>
             <td>
-              <div class="fw-bold">{{ inv.studentName }}</div>
+              <div class="fw-bold text-dark">{{ inv.studentName }}</div>
             </td>
-            <td>{{ inv.admissionNo }}</td>
-            <td>{{ inv.feeGroup }}</td>
+            <td><span class="badge bg-light text-dark border">{{ inv.admissionNo }}</span></td>
+            <td><span class="text-secondary fw-semibold">{{ inv.feeGroup }}</span></td>
+            <td><small class="text-muted">{{ inv.dueDate || '2025-05-15' }}</small></td>
             <td class="fw-bold">₹{{ inv.amount | number }}</td>
             <td class="text-success fw-bold">₹{{ inv.paidAmount | number }}</td>
-            <td class="text-danger fw-bold">₹{{ inv.balanceAmount | number }}</td>
+            <td class="fw-bold" [ngClass]="inv.balanceAmount > 0 ? 'text-danger' : 'text-muted'">
+              ₹{{ inv.balanceAmount | number }}
+            </td>
             <td>
               <span class="badge-status" [ngClass]="{
                 'badge-paid': inv.status === 'Paid',
@@ -55,24 +165,486 @@
               }">{{ inv.status }}</span>
             </td>
             <td class="text-end">
-              <button 
-                *ngIf="inv.status !== 'Paid'" 
-                class="btn btn-sm btn-success" 
-                (click)="collectFee(inv)"
-              >
-                <i class="fas fa-hand-holding-usd"></i> Collect
-              </button>
-              <button 
-                *ngIf="inv.status === 'Paid'" 
-                class="btn btn-sm btn-outline-secondary" 
-                title="Print Receipt"
-              >
-                <i class="fas fa-print"></i> Receipt
+              <div class="d-flex justify-content-end gap-1">
+                <button 
+                  *ngIf="inv.status !== 'Paid'" 
+                  class="btn btn-sm btn-success rounded-pill px-2 py-1" 
+                  (click)="openCollectModal(inv)"
+                  title="Collect Payment"
+                >
+                  <i class="fas fa-hand-holding-usd me-1"></i> Collect
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" 
+                  (click)="openReceiptModal(inv)"
+                  title="View / Print Receipt"
+                >
+                  <i class="fas fa-print me-1"></i> Receipt
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredInvoices.length === 0">
+            <td colspan="10" class="text-center py-5 text-muted">
+              <i class="fas fa-file-invoice fa-3x mb-3 text-muted opacity-50"></i>
+              <p class="mb-0">No fee invoices found matching criteria.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: Cashier & Transactions Journal -->
+  <div *ngIf="activeTab === 'collect'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1">Recent Collections & POS Journal</h5>
+        <p class="text-muted small mb-0">Audit log of all real-time collections and receipts generated</p>
+      </div>
+      <button class="btn btn-sm btn-outline-primary" (click)="openCollectModal(invoices[0])">
+        <i class="fas fa-cash-register me-1"></i> New Counter Collection
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Txn Ref</th>
+            <th>Invoice #</th>
+            <th>Student Name</th>
+            <th>Admission No</th>
+            <th>Class / Section</th>
+            <th>Amount Collected</th>
+            <th>Payment Mode</th>
+            <th>Time Stamp</th>
+            <th>Cashier / Collector</th>
+            <th class="text-end">Receipt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let txn of recentTransactions">
+            <td><strong>{{ txn.id }}</strong></td>
+            <td><span class="text-primary fw-semibold">{{ txn.invoiceNo }}</span></td>
+            <td><strong>{{ txn.studentName }}</strong></td>
+            <td>{{ txn.admissionNo }}</td>
+            <td><span class="badge bg-light text-dark border">{{ txn.class }}</span></td>
+            <td class="text-success fw-bold">₹{{ txn.amount | number }}</td>
+            <td>
+              <span class="badge bg-info bg-opacity-10 text-primary border border-info border-opacity-25 px-2 py-1">
+                <i class="fas fa-check-circle me-1"></i> {{ txn.paymentMode }}
+              </span>
+            </td>
+            <td><small class="text-muted">{{ txn.date }}</small></td>
+            <td><small class="text-secondary fw-semibold">{{ txn.collectedBy }}</small></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-dark rounded-circle" (click)="printReceipt()" title="Print Receipt">
+                <i class="fas fa-receipt"></i>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: Fee Heads Master -->
+  <div *ngIf="activeTab === 'heads'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1">Fee Heads Configuration</h5>
+        <p class="text-muted small mb-0">Define fee items such as Tuition, Transport, Lab, Hostel, and Examination</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="showAddHeadModal = true">
+        <i class="fas fa-plus me-1"></i> Add New Fee Head
+      </button>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-4 col-sm-6" *ngFor="let head of feeHeads">
+        <div class="card h-100 border rounded-16 p-3 shadow-sm bg-light hover-shadow">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 mb-1">{{ head.code }}</span>
+              <h6 class="fw-bold text-dark mb-0">{{ head.name }}</h6>
+            </div>
+            <span class="badge bg-warning text-dark fw-bold">{{ head.frequency }}</span>
+          </div>
+          <p class="small text-muted mb-3">{{ head.description }}</p>
+          <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+            <span class="small text-secondary">Category: <strong>{{ head.group }}</strong></span>
+            <span class="h6 mb-0 text-success fw-bold">₹{{ head.amount | number }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Fee Groups Master -->
+  <div *ngIf="activeTab === 'groups'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1">Fee Groups & Packages</h5>
+        <p class="text-muted small mb-0">Bundle multiple fee heads into standardized grade-level packages</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="showAddGroupModal = true">
+        <i class="fas fa-plus me-1"></i> Create Fee Group
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Group Name</th>
+            <th>Description</th>
+            <th>Assigned Fee Heads</th>
+            <th>Active Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let group of feeGroups">
+            <td><strong>GRP-{{ group.id }}</strong></td>
+            <td><strong class="text-dark">{{ group.name }}</strong></td>
+            <td class="text-muted">{{ group.description }}</td>
+            <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ group.headCount }} Heads Configured</span></td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">Active</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-secondary rounded-circle me-1" title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-sm btn-outline-danger rounded-circle" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 5: Account Books & Ledger -->
+  <div *ngIf="activeTab === 'ledger'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1">Institutional Trial Balance & General Ledger</h5>
+        <p class="text-muted small mb-0">Real-time accounting balance sheet and income realization breakdown</p>
+      </div>
+      <button class="btn btn-outline-primary" (click)="printReceipt()">
+        <i class="fas fa-file-excel me-1"></i> Export Ledger Report
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card border rounded-16 p-3 shadow-sm bg-white">
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="fas fa-arrow-down text-success me-2"></i> Income / Invoiced Breakdown</h6>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Tuition Fees</span>
+            <span class="fw-bold text-dark">₹1,45,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Transport Services</span>
+            <span class="fw-bold text-dark">₹32,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Science & IT Labs</span>
+            <span class="fw-bold text-dark">₹18,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Hostel & Food Mess</span>
+            <span class="fw-bold text-dark">₹48,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 bg-light px-2 rounded mt-2">
+            <strong>Total Revenue Assets</strong>
+            <strong class="text-primary">₹2,43,000</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card border rounded-16 p-3 shadow-sm bg-white">
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="fas fa-university text-primary me-2"></i> Banking & Payment Gateways</h6>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Main Institutional Bank (HDFC)</span>
+            <span class="fw-bold text-success">₹1,12,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>UPI & Online Gateway (Razorpay)</span>
+            <span class="fw-bold text-success">₹42,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Cashier Cash-in-Hand Vault</span>
+            <span class="fw-bold text-success">₹25,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>Uncollected Receivables (Pending)</span>
+            <span class="fw-bold text-danger">₹64,000</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 bg-light px-2 rounded mt-2">
+            <strong>Total Books Balance</strong>
+            <strong class="text-success">₹2,43,000</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- 1. Collect Fee Modal -->
+<div class="modal-backdrop-custom" *ngIf="showCollectModal">
+  <div class="modal-content-custom" style="max-width: 580px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-hand-holding-usd text-success me-2"></i> Collect Student Fee</h5>
+      <button class="btn-close" (click)="closeCollectModal()"></button>
+    </div>
+    <div class="modal-body-custom" *ngIf="selectedInvoice">
+      <div class="card bg-light border-0 p-3 rounded-12 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="fw-bold text-dark">{{ selectedInvoice.studentName }}</span>
+          <span class="badge bg-primary">{{ selectedInvoice.admissionNo }}</span>
+        </div>
+        <div class="small text-muted mb-2">Category: {{ selectedInvoice.feeGroup }}</div>
+        <div class="d-flex justify-content-between small border-top pt-2">
+          <span>Total: <strong>₹{{ selectedInvoice.amount | number }}</strong></span>
+          <span>Already Paid: <strong class="text-success">₹{{ selectedInvoice.paidAmount | number }}</strong></span>
+          <span>Due Balance: <strong class="text-danger">₹{{ selectedInvoice.balanceAmount | number }}</strong></span>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-bold">Collection Amount (₹) *</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="collectForm.amount" min="1" [max]="selectedInvoice.balanceAmount || selectedInvoice.amount">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-bold">Payment Mode *</label>
+          <select class="form-select modern-select" [(ngModel)]="collectForm.paymentMode">
+            <option value="Cash">Cash (Counter)</option>
+            <option value="UPI / Online">UPI / QR Code</option>
+            <option value="Net Banking">Net Banking (NEFT/RTGS)</option>
+            <option value="Debit Card">Debit / Credit Card (POS)</option>
+            <option value="Cheque / DD">Bank Cheque / DD</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-bold">Transaction / Ref Number</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="collectForm.referenceNo" placeholder="e.g. UTR / Cheque # / Slip ID">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-bold">Discount / Concession (₹)</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="collectForm.discount" placeholder="0">
+        </div>
+
+        <div class="col-12">
+          <label class="form-label small fw-bold">Receipt Notes</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="collectForm.note" placeholder="Remark on collection slip">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="closeCollectModal()">Cancel</button>
+      <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="submitCollectFee()">
+        <i class="fas fa-check-circle me-1"></i> Receive & Generate Receipt
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Printable Receipt Modal -->
+<div class="modal-backdrop-custom" *ngIf="showReceiptModal">
+  <div class="modal-content-custom" style="max-width: 620px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
+      <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-receipt text-primary me-2"></i> Official Fee Receipt Slip</h6>
+      <button class="btn-close" (click)="showReceiptModal = false"></button>
+    </div>
+    <div class="modal-body-custom p-4" *ngIf="receiptData">
+      <div class="border rounded-16 p-4 bg-white shadow-sm" id="printableFeeReceipt">
+        <!-- Receipt Header -->
+        <div class="text-center border-bottom pb-3 mb-3">
+          <h4 class="fw-bold text-dark mb-1">EASYEDU INTERNATIONAL ACADEMY</h4>
+          <p class="small text-muted mb-0">Affiliated to CBSE / ICSE • Main Campus Road, Bengaluru - 560001</p>
+          <span class="badge bg-dark text-white px-3 py-1 rounded-pill mt-2">STUDENT FEE PAYMENT RECEIPT</span>
+        </div>
+
+        <div class="row g-2 small mb-3">
+          <div class="col-6"><strong>Receipt No:</strong> {{ receiptData.receiptNo }}</div>
+          <div class="col-6 text-end"><strong>Date:</strong> {{ receiptData.date }}</div>
+          <div class="col-6"><strong>Student Name:</strong> {{ receiptData.studentName }}</div>
+          <div class="col-6 text-end"><strong>Admission #:</strong> {{ receiptData.admissionNo }}</div>
+          <div class="col-6"><strong>Payment Mode:</strong> {{ receiptData.paymentMode }}</div>
+          <div class="col-6 text-end"><strong>Txn Ref:</strong> {{ receiptData.referenceNo }}</div>
+        </div>
+
+        <table class="table table-bordered table-sm small mb-3">
+          <thead class="table-light">
+            <tr>
+              <th>Fee Head / Particulars</th>
+              <th class="text-end">Amount Paid (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ receiptData.feeGroup }}</td>
+              <td class="text-end fw-bold">₹{{ receiptData.amount | number }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="table-light fw-bold">
+              <td>Total Received:</td>
+              <td class="text-end text-success">₹{{ receiptData.amount | number }}</td>
+            </tr>
+            <tr>
+              <td>Remaining Balance Dues:</td>
+              <td class="text-end text-danger fw-bold">₹{{ receiptData.balanceRemaining | number }}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center pt-3 small text-muted">
+          <div>
+            <i class="fas fa-check-circle text-success me-1"></i> Computer Generated Receipt
+          </div>
+          <div class="text-end">
+            <div class="border-top pt-1 mt-3" style="width: 130px;">
+              <strong>Authorized Signatory</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showReceiptModal = false">Close</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printReceipt()">
+        <i class="fas fa-print me-1"></i> Print / Download PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Add Fee Head Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddHeadModal">
+  <div class="modal-content-custom" style="max-width: 500px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-tag text-primary me-2"></i> Register New Fee Head</h5>
+      <button class="btn-close" (click)="showAddHeadModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Fee Head Name *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newHead.name" placeholder="e.g. Science Laboratory Fee">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Code *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newHead.code" placeholder="e.g. SCI-LAB">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Category Group</label>
+          <select class="form-select modern-select" [(ngModel)]="newHead.group">
+            <option *ngFor="let g of feeGroups" [value]="g.name">{{ g.name }}</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Default Amount (₹)</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="newHead.amount">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Frequency</label>
+          <select class="form-select modern-select" [(ngModel)]="newHead.frequency">
+            <option value="Monthly">Monthly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="Annual">Annual</option>
+            <option value="One-Time">One-Time (Admission)</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Description</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newHead.description" placeholder="Brief note on fee head">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAddHeadModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewHead()">Save Fee Head</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Add Fee Group Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddGroupModal">
+  <div class="modal-content-custom" style="max-width: 480px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-layer-group text-primary me-2"></i> Create Fee Group</h5>
+      <button class="btn-close" (click)="showAddGroupModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Fee Group Name *</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="newGroup.name" placeholder="e.g. Senior Secondary Science Stream">
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Description</label>
+        <textarea class="form-control modern-input" rows="3" [(ngModel)]="newGroup.description" placeholder="Group purpose or scope"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-3 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAddGroupModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewGroup()">Save Group</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Bulk Invoice Generator Modal -->
+<div class="modal-backdrop-custom" *ngIf="showBulkInvoiceModal">
+  <div class="modal-content-custom" style="max-width: 520px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-file-invoice text-primary me-2"></i> Bulk Invoice Generation</h5>
+      <button class="btn-close" (click)="showBulkInvoiceModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Target Grade / Class *</label>
+          <select class="form-select modern-select" [(ngModel)]="bulkForm.targetClass">
+            <option value="All Classes">All Classes & Sections (Entire School)</option>
+            <option value="Grade 10-A">Grade 10 - Section A</option>
+            <option value="Grade 10-B">Grade 10 - Section B</option>
+            <option value="Grade 9-A">Grade 9 - Section A</option>
+            <option value="Grade 11-Science">Grade 11 - Science Stream</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Fee Group / Structure *</label>
+          <select class="form-select modern-select" [(ngModel)]="bulkForm.feeGroup">
+            <option *ngFor="let g of feeGroups" [value]="g.name">{{ g.name }}</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Billing Amount (₹)</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="bulkForm.amount">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Payment Due Date</label>
+          <input type="date" class="form-control modern-input" [(ngModel)]="bulkForm.dueDate">
+        </div>
+        <div class="col-12">
+          <div class="form-check form-switch mt-2">
+            <input class="form-check-input" type="checkbox" id="notifySwitch" [(ngModel)]="bulkForm.notifyParents">
+            <label class="form-check-label small fw-semibold" for="notifySwitch">Send automated SMS / WhatsApp bill notification to parents</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showBulkInvoiceModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="runBulkInvoicing()">
+        <i class="fas fa-cog fa-spin-hover me-1"></i> Generate & Issue Invoices
+      </button>
     </div>
   </div>
 </div>

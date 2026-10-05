@@ -1,37 +1,59 @@
 <div class="container-fluid p-0 animate-fade-in">
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Class & Section Management</h3>
-      <p class="text-muted small mb-0">Configure academic grades, classes and division sections</p>
+      <h3 class="fw-bold mb-1">Academic Curriculum & Scheduling</h3>
+      <p class="text-muted small mb-0">Manage classes, sections, course subjects and weekly class routines</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button *ngIf="activeTab === 'subjects'" class="btn btn-primary" (click)="showSubjectModal = true">
+        <i class="fas fa-plus me-1"></i> Add New Subject
+      </button>
     </div>
   </div>
 
-  <div class="row g-4">
+  <!-- Tab Navigation -->
+  <div class="d-flex gap-2 mb-4">
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'classes'" [class.btn-light]="activeTab !== 'classes'" (click)="activeTab = 'classes'">
+      <i class="fas fa-school me-1"></i> Classes & Sections
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'subjects'" [class.btn-light]="activeTab !== 'subjects'" (click)="activeTab = 'subjects'">
+      <i class="fas fa-book-bookmark me-1"></i> Subjects Master
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'timetable'" [class.btn-light]="activeTab !== 'timetable'" (click)="activeTab = 'timetable'">
+      <i class="fas fa-calendar-alt me-1"></i> Class Routine / Timetable
+    </button>
+  </div>
+
+  <!-- TAB 1: CLASSES & SECTIONS -->
+  <div *ngIf="activeTab === 'classes'" class="row g-4 animate-fade-in">
     <!-- Add Class Box -->
     <div class="col-12 col-lg-4">
       <div class="premium-card">
-        <h5 class="fw-bold mb-3">Add New Class</h5>
+        <h5 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Create New Grade</h5>
         <div class="mb-3">
-          <label class="form-label small fw-bold text-muted">CLASS NAME *</label>
-          <input type="text" class="form-control form-control-premium" [(ngModel)]="newClassName" placeholder="e.g. Grade 11">
+          <label class="form-label small fw-bold text-muted">CLASS / GRADE NAME *</label>
+          <input type="text" class="form-control" [(ngModel)]="newClassName" placeholder="e.g. Grade 11 - Arts">
         </div>
-        <button class="btn btn-primary w-100 justify-content-center" (click)="addClass()" [disabled]="!newClassName.trim()">
-          <i class="fas fa-plus"></i> Save Class
+        <button class="btn btn-primary w-100 justify-content-center py-2" (click)="addClass()" [disabled]="!newClassName.trim()">
+          <i class="fas fa-plus me-1"></i> Save Class
         </button>
       </div>
     </div>
 
-    <!-- Class List -->
+    <!-- Class List Table -->
     <div class="col-12 col-lg-8">
       <div class="premium-card">
-        <h5 class="fw-bold mb-3">Active Classes & Sections</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Active Academic Grades & Divisions</h5>
+          <span class="badge bg-soft-primary text-primary fw-bold">{{ classes.length }} Classes</span>
+        </div>
         <div class="table-responsive">
           <table class="table-premium">
             <thead>
               <tr>
                 <th>#</th>
                 <th>Class Name</th>
-                <th>Associated Sections</th>
+                <th>Sections</th>
                 <th class="text-end">Actions</th>
               </tr>
             </thead>
@@ -45,14 +67,146 @@
                   </span>
                 </td>
                 <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-plus"></i> Add Section</button>
-                  <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openAddSection(c)" title="Add Section"><i class="fas fa-plus"></i> Section</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteClass(c)" title="Delete Class"><i class="fas fa-trash"></i></button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: SUBJECTS MASTER -->
+  <div *ngIf="activeTab === 'subjects'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Course Curriculum & Subjects</h5>
+      <span class="text-muted small">Total Subjects: <strong>{{ subjects.length }}</strong></span>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Subject Name</th>
+            <th>Subject Type</th>
+            <th>Assigned Teacher</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sub of subjects">
+            <td><strong class="text-primary">{{ sub.code }}</strong></td>
+            <td><div class="fw-bold text-dark">{{ sub.name }}</div></td>
+            <td>
+              <span class="badge" [class.bg-info]="sub.type === 'Theory'" [class.bg-warning]="sub.type === 'Practical'">{{ sub.type }}</span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-chalkboard-user text-muted me-2"></i>
+                <span>{{ sub.teacher }}</span>
+              </div>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteSubject(sub)" title="Remove Subject"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: TIMETABLE ROUTINE -->
+  <div *ngIf="activeTab === 'timetable'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-0">Weekly Class Routine & Schedule Matrix</h5>
+        <small class="text-muted">Grade 10 - Section A (General Academic Schedule)</small>
+      </div>
+      <button class="btn btn-sm btn-outline-primary" onclick="window.print()"><i class="fas fa-print me-1"></i> Print Timetable</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center align-middle">
+        <thead class="bg-light">
+          <tr>
+            <th class="py-3">Day / Period</th>
+            <th class="py-3">Period 1<br><small class="text-muted">09:00 - 09:45</small></th>
+            <th class="py-3">Period 2<br><small class="text-muted">09:45 - 10:30</small></th>
+            <th class="py-3">Period 3<br><small class="text-muted">10:45 - 11:30</small></th>
+            <th class="py-3">Period 4<br><small class="text-muted">11:30 - 12:15</small></th>
+            <th class="py-3">Period 5<br><small class="text-muted">01:00 - 01:45</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let slot of timetableSlots">
+            <td class="fw-bold bg-light text-primary">{{ slot.day }}</td>
+            <td><span class="badge bg-soft-primary text-primary p-2 w-100">{{ slot.period1 }}</span></td>
+            <td><span class="badge bg-soft-success text-success p-2 w-100">{{ slot.period2 }}</span></td>
+            <td><span class="badge bg-soft-warning text-dark p-2 w-100">{{ slot.period3 }}</span></td>
+            <td><span class="badge bg-soft-info text-info p-2 w-100">{{ slot.period4 }}</span></td>
+            <td><span class="badge bg-light text-dark border p-2 w-100">{{ slot.period5 }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Section Modal -->
+<div class="modal-backdrop-custom" *ngIf="showSectionModal && selectedClassForSection">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-layer-group text-primary me-2"></i>Add Section to {{ selectedClassForSection.name }}</h5>
+      <button class="btn-close" (click)="showSectionModal = false"></button>
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold text-muted">SECTION NAME *</label>
+      <input type="text" class="form-control" [(ngModel)]="newSectionName" placeholder="e.g. Section D">
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showSectionModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="saveSection()"><i class="fas fa-check me-1"></i>Save Section</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Subject Modal -->
+<div class="modal-backdrop-custom" *ngIf="showSubjectModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-book text-primary me-2"></i>Create New Subject</h5>
+      <button class="btn-close" (click)="showSubjectModal = false"></button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold text-muted">SUBJECT NAME *</label>
+      <input type="text" class="form-control" [(ngModel)]="newSubject.name" placeholder="e.g. Advanced Biology">
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label small fw-bold text-muted">SUBJECT CODE *</label>
+        <input type="text" class="form-control" [(ngModel)]="newSubject.code" placeholder="e.g. BIO-101">
+      </div>
+      <div class="col-6">
+        <label class="form-label small fw-bold text-muted">TYPE</label>
+        <select class="form-select" [(ngModel)]="newSubject.type">
+          <option value="Theory">Theory</option>
+          <option value="Practical">Practical</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold text-muted">ASSIGNED FACULTY</label>
+      <select class="form-select" [(ngModel)]="newSubject.teacher">
+        <option>Dr. Abdul Hakeem</option>
+        <option>Prof. Sharief Abdull</option>
+        <option>Mrs. Priya Nair</option>
+        <option>Mr. Arvind Rao</option>
+      </select>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showSubjectModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="addSubject()"><i class="fas fa-check me-1"></i>Save Subject</button>
     </div>
   </div>
 </div>

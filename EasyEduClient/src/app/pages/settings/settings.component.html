@@ -1,86 +1,352 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">System & General Settings</h3>
-      <p class="text-muted small mb-0">Configure school profile, local currency, appearance and localization</p>
+      <h3 class="fw-bold mb-1 text-dark">System Configuration & Institution Settings</h3>
+      <p class="text-muted small mb-0">Manage global school profiles, academic sessions, payment gateways, messaging alerts, and backups</p>
     </div>
-    <div>
-      <button class="btn btn-primary" (click)="saveSettings()">
-        <i class="fas fa-save"></i> Save Changes
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'">
+          <i class="fas fa-university me-2"></i> Institution Profile & Branding
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'sessions'" (click)="activeTab = 'sessions'">
+          <i class="fas fa-calendar-alt me-2"></i> Academic Sessions & Terms
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'payments'" (click)="activeTab = 'payments'">
+          <i class="fas fa-credit-card me-2"></i> Payment Gateways & Currency
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
+          <i class="fab fa-whatsapp me-2"></i> SMS, WhatsApp & Alert Triggers
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'backup'" (click)="activeTab = 'backup'">
+          <i class="fas fa-database me-2"></i> Database Backup & Security
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Institution Profile & Branding -->
+  <div *ngIf="activeTab === 'profile'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Institutional Profile & Official Letterhead</h5>
+        <p class="text-muted small mb-0">This information will appear on official marksheets, fee receipts, and admit cards</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveProfile()">
+        <i class="fas fa-save me-1"></i> Save Changes
       </button>
     </div>
-  </div>
 
-  <div *ngIf="isSaved" class="alert alert-success">
-    <i class="fas fa-check-circle me-2"></i> Settings saved successfully!
-  </div>
-
-  <div class="row g-4">
-    <div class="col-12 col-lg-8">
-      <div class="premium-card mb-4">
-        <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
-          <i class="fas fa-building me-2"></i> Institute Profile
-        </h5>
-
-        <div class="row g-3">
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold text-muted">SCHOOL / COLLEGE NAME</label>
-            <input type="text" class="form-control form-control-premium" [(ngModel)]="schoolName">
-          </div>
-
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold text-muted">OFFICIAL EMAIL</label>
-            <input type="email" class="form-control form-control-premium" [(ngModel)]="schoolEmail">
-          </div>
-
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold text-muted">CONTACT PHONE</label>
-            <input type="tel" class="form-control form-control-premium" [(ngModel)]="schoolPhone">
-          </div>
-
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold text-muted">CURRENCY SYMBOL</label>
-            <input type="text" class="form-control form-control-premium" [(ngModel)]="currency">
-          </div>
-        </div>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Institution / School Name *</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.schoolName">
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold">School Code *</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.schoolCode">
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold">Affiliation Board</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.affiliation">
       </div>
 
-      <div class="premium-card">
-        <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
-          <i class="fas fa-language me-2"></i> Multilingual & Regional Preferences
-        </h5>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Official Email *</label>
+        <input type="email" class="form-control modern-input" [(ngModel)]="profile.email">
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Contact Phone Number *</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.phone">
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Official Website URL</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.website">
+      </div>
 
-        <div class="row g-3">
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold text-muted">SYSTEM LANGUAGE</label>
-            <select class="form-select form-control-premium" [(ngModel)]="language">
-              <option value="en">English</option>
-              <option value="hi">हिंदी (Hindi)</option>
-              <option value="kn">ಕನ್ನಡ (Kannada)</option>
-              <option value="ta">தமிழ் (Tamil)</option>
-              <option value="te">తెలుగు (Telugu)</option>
-            </select>
-          </div>
-        </div>
+      <div class="col-12">
+        <label class="form-label small fw-bold">Full Postal Address *</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.address">
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">System Currency</label>
+        <select class="form-select modern-select" [(ngModel)]="profile.currency">
+          <option value="INR (₹)">Indian Rupee - INR (₹)</option>
+          <option value="USD ($)">US Dollar - USD ($)</option>
+          <option value="AED (د.إ)">UAE Dirham - AED (د.إ)</option>
+          <option value="GBP (£)">British Pound - GBP (£)</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Date Format</label>
+        <select class="form-select modern-select" [(ngModel)]="profile.dateFormat">
+          <option value="dd/MM/yyyy">DD/MM/YYYY (e.g. 05/10/2026)</option>
+          <option value="yyyy-MM-dd">YYYY-MM-DD (ISO)</option>
+          <option value="MM/dd/yyyy">MM/DD/YYYY</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Timezone</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.timeZone" readonly>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Printout Header Tagline</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.headerNote">
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Printout Footer Legal Disclaimers</label>
+        <input type="text" class="form-control modern-input" [(ngModel)]="profile.footerNote">
       </div>
     </div>
+  </div>
 
-    <!-- Appearance Card -->
-    <div class="col-12 col-lg-4">
-      <div class="premium-card">
-        <h5 class="fw-bold mb-3">Theme & Appearance</h5>
+  <!-- TAB 2: Academic Sessions & Terms -->
+  <div *ngIf="activeTab === 'sessions'" class="premium-card animate-fade-in">
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <h5 class="fw-bold mb-1 text-dark">Configured Academic Years</h5>
+        <p class="text-muted small mb-3">Define school sessions and designate the active enrollment session</p>
 
-        <div class="d-flex justify-content-between align-items-center p-3 rounded-12 bg-light border mb-3">
-          <div>
-            <div class="fw-bold">Dark Mode</div>
-            <small class="text-muted">Toggle sleek dark mode theme</small>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Session Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of sessions">
+                <td><strong class="text-dark">{{ s.yearName }}</strong></td>
+                <td><small class="text-muted">{{ s.startDate }}</small></td>
+                <td><small class="text-muted">{{ s.endDate }}</small></td>
+                <td>
+                  <span class="badge" [ngClass]="s.isCurrent ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1' : 'bg-light text-muted border'">
+                    <i *ngIf="s.isCurrent" class="fas fa-check-circle me-1"></i> {{ s.status }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button 
+                    *ngIf="!s.isCurrent" 
+                    class="btn btn-sm btn-outline-primary rounded-pill px-3" 
+                    (click)="setCurrentSession(s)"
+                  >
+                    Set as Current
+                  </button>
+                  <span *ngIf="s.isCurrent" class="text-success small fw-bold">
+                    <i class="fas fa-star me-1"></i> Default
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add New Session Card -->
+      <div class="col-12 col-lg-4">
+        <div class="card border rounded-16 p-4 bg-light shadow-sm">
+          <h6 class="fw-bold text-dark mb-3"><i class="fas fa-calendar-plus text-primary me-2"></i> Add Academic Session</h6>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Session Name *</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="newSession.yearName" placeholder="e.g. 2027-2028">
           </div>
-          <button class="btn btn-sm btn-outline-primary" (click)="themeService.toggleTheme()">
-            <i [class]="themeService.isDarkMode() ? 'fas fa-sun' : 'fas fa-moon'"></i>
-            {{ themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode' }}
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Session Start Date *</label>
+            <input type="date" class="form-control modern-input" [(ngModel)]="newSession.startDate">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Session End Date</label>
+            <input type="date" class="form-control modern-input" [(ngModel)]="newSession.endDate">
+          </div>
+          <button class="btn btn-primary rounded-pill w-100 shadow-sm" (click)="saveNewSession()">
+            <i class="fas fa-plus me-1"></i> Save Session
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Payment Gateways & Currency -->
+  <div *ngIf="activeTab === 'payments'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Online Payment Gateways & Cashier POS</h5>
+        <p class="text-muted small mb-0">Configure Razorpay, Stripe, and instant automated fee receipt generation</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="savePaymentSettings()">
+        <i class="fas fa-save me-1"></i> Save Gateway Keys
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <div class="card border rounded-16 p-4 bg-light h-100 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-bolt fa-2x text-primary"></i>
+              <h6 class="fw-bold text-dark mb-0">Razorpay Payment Gateway</h6>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="paymentConfig.enableRazorpay">
+            </div>
+          </div>
+          <p class="small text-muted mb-3">Supports UPI (GPay, PhonePe), Net Banking, RuPay, Visa & MasterCard</p>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Razorpay Key ID</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="paymentConfig.razorpayKeyId">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Razorpay Key Secret</label>
+            <input type="password" class="form-control modern-input" [(ngModel)]="paymentConfig.razorpayKeySecret">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="card border rounded-16 p-4 bg-light h-100 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fab fa-stripe fa-2x text-info"></i>
+              <h6 class="fw-bold text-dark mb-0">Stripe Global Gateway</h6>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="paymentConfig.enableStripe">
+            </div>
+          </div>
+          <p class="small text-muted mb-3">International credit card processing for overseas students</p>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Stripe Publishable Key</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="paymentConfig.stripePublishableKey" placeholder="pk_live_...">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SMS, WhatsApp & Alert Triggers -->
+  <div *ngIf="activeTab === 'notifications'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Automated Parent & Student Notification Triggers</h5>
+        <p class="text-muted small mb-0">Send instant WhatsApp messages and SMS alerts on attendance, fees, and exam results</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNotificationSettings()">
+        <i class="fas fa-save me-1"></i> Save Preferences
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <div class="card border rounded-16 p-4 bg-white shadow-sm h-100">
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="fab fa-whatsapp text-success me-2"></i> WhatsApp & SMS Gateway</h6>
+          <div class="mb-3">
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="smsSwitch" [(ngModel)]="alertConfig.enableSms">
+              <label class="form-check-label fw-bold small" for="smsSwitch">Enable Cloud SMS Gateway (Twilio / Gupshup)</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="waSwitch" [(ngModel)]="alertConfig.enableWhatsApp">
+              <label class="form-check-label fw-bold small" for="waSwitch">Enable WhatsApp Business Cloud API</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="card border rounded-16 p-4 bg-white shadow-sm h-100">
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="fas fa-bell text-warning me-2"></i> Instant Event Triggers</h6>
+          
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="t1" [(ngModel)]="alertConfig.notifyAttendanceAbsent">
+            <label class="form-check-label small" for="t1">Notify parents immediately when student is marked <strong>Absent</strong></label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="t2" [(ngModel)]="alertConfig.notifyFeeInvoiceGenerated">
+            <label class="form-check-label small" for="t2">Send invoice PDF link when new quarterly fee is generated</label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="t3" [(ngModel)]="alertConfig.notifyFeeOverdueReminder">
+            <label class="form-check-label small" for="t3">Send automated fee due reminder 3 days prior to due date</label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="t4" [(ngModel)]="alertConfig.notifyExamAdmitCard">
+            <label class="form-check-label small" for="t4">Notify parents when Term Examination Admit Cards are published</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="t5" [(ngModel)]="alertConfig.notifyReportCardPublished">
+            <label class="form-check-label small" for="t5">Send digital marksheet download link on Report Card publish</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Database Backup & Security -->
+  <div *ngIf="activeTab === 'backup'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Institutional Database Backup & Disaster Recovery</h5>
+        <p class="text-muted small mb-0">Automated nightly SQL backups and encrypted cloud archive repository</p>
+      </div>
+      <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="triggerBackup()">
+        <i class="fas fa-cloud-download-alt me-1"></i> Generate Instant Snapshot
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Backup File Name</th>
+            <th>Type</th>
+            <th>Archive Size</th>
+            <th>Creation Timestamp</th>
+            <th>Integrity Check</th>
+            <th class="text-end">Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of backups">
+            <td><strong class="text-dark">{{ b.fileName }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ b.type }}</span></td>
+            <td><strong>{{ b.size }}</strong></td>
+            <td><small class="text-muted">{{ b.date }}</small></td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25"><i class="fas fa-check me-1"></i> SHA-256 Valid</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary rounded-circle" title="Download SQL Dump">
+                <i class="fas fa-download"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

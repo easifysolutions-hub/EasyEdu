@@ -1,1 +1,60 @@
-/* Fees CSS */
+.hover-shadow {
+  transition: all 0.25s ease;
+}
+.hover-shadow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+.custom-pills .nav-link {
+  color: #4b5563;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.custom-pills .nav-link.active {
+  background-color: var(--sidebar-bg, #12403E);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(18, 64, 62, 0.25);
+}
+
+.custom-pills .nav-link:hover:not(.active) {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.badge-status {
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.badge-paid {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-unpaid {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-partial {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.rounded-16 {
+  border-radius: 16px;
+}
+
+.rounded-12 {
+  border-radius: 12px;
+}

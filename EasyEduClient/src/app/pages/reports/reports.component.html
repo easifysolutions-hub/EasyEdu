@@ -1,32 +1,145 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Intelligence & Reporting Nexus</h3>
-      <p class="text-muted small mb-0">Export comprehensive academic, administrative, and financial reports</p>
+      <h3 class="fw-bold mb-1 text-dark">Centralized Reporting & Business Intelligence</h3>
+      <p class="text-muted small mb-0">Generate, schedule, and export comprehensive academic, financial, payroll, and logistical analytical reports</p>
     </div>
   </div>
 
-  <div class="row g-4">
-    <div class="col-12 col-md-6 col-xl-4" *ngFor="let rep of reportCards">
-      <div class="premium-card h-100 d-flex flex-column justify-content-between">
-        <div>
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <div class="stat-icon-wrapper" [style.background]="rep.color + '20'" [style.color]="rep.color">
-              <i [class]="rep.icon"></i>
-            </div>
-            <div>
-              <span class="badge bg-light text-dark border small mb-1">{{ rep.category }}</span>
-              <h5 class="fw-bold mb-0">{{ rep.title }}</h5>
-            </div>
-          </div>
-          <p class="text-muted small">Generate formatted PDF export, Excel spreadsheet, or live analytical view.</p>
-        </div>
-        <div class="d-flex gap-2 pt-3 border-top">
-          <button class="btn btn-sm btn-outline-primary flex-1"><i class="fas fa-file-pdf"></i> PDF</button>
-          <button class="btn btn-sm btn-outline-success flex-1"><i class="fas fa-file-excel"></i> Excel</button>
-          <button class="btn btn-sm btn-primary flex-1"><i class="fas fa-eye"></i> View</button>
+  <!-- Filter & Search Bar -->
+  <div class="premium-card mb-4 p-3">
+    <div class="row g-3 align-items-center">
+      <div class="col-12 col-md-5">
+        <div class="search-bar-modern w-100">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search reports by keyword (e.g. fees, attendance, marksheet)...">
         </div>
       </div>
+      <div class="col-12 col-md-7">
+        <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'All' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'All'">All</button>
+          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Academic' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Academic'">Academic</button>
+          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Attendance' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Attendance'">Attendance</button>
+          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Finance' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Finance'">Finance & Fees</button>
+          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Human Resource' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Human Resource'">Human Resource</button>
+          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Operations' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Operations'">Operations</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reports Grid -->
+  <div class="row g-4 animate-fade-in">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let r of filteredReports">
+      <div class="card border rounded-16 p-4 shadow-sm bg-white h-100 hover-shadow position-relative">
+        <div class="d-flex align-items-start justify-content-between mb-3">
+          <div class="rounded-12 p-3 d-flex align-items-center justify-content-center text-white" [style.background-color]="r.color" style="width: 52px; height: 52px;">
+            <i [class]="r.icon + ' fa-lg'"></i>
+          </div>
+          <span class="badge bg-light text-secondary border px-2 py-1">{{ r.category }}</span>
+        </div>
+
+        <h6 class="fw-bold text-dark mb-1">{{ r.title }}</h6>
+        <p class="small text-muted mb-3 flex-grow-1" style="min-height: 40px;">{{ r.description }}</p>
+
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto small">
+          <span class="text-muted"><i class="far fa-clock me-1"></i> {{ r.lastGenerated }}</span>
+          <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" (click)="generateReport(r)">
+            <i class="fas fa-file-export me-1"></i> Generate
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= REPORT PREVIEW MODAL ================= -->
+<div class="modal-backdrop-custom" *ngIf="showPreviewModal">
+  <div class="modal-content-custom" style="max-width: 850px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle p-2 text-white d-flex align-items-center justify-content-center" [style.background-color]="activeReport?.color" style="width: 38px; height: 38px;">
+          <i [class]="activeReport?.icon"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0 text-dark">{{ activeReport?.title }}</h6>
+          <small class="text-muted">{{ activeReport?.category }} Report • Module Code: {{ activeReport?.id }}</small>
+        </div>
+      </div>
+      <button class="btn-close" (click)="showPreviewModal = false"></button>
+    </div>
+
+    <div class="modal-body-custom p-3 mt-2">
+      <!-- Parameters Filter Bar -->
+      <div class="row g-2 mb-3 p-3 bg-light rounded-12 align-items-center">
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted mb-1">Time Period / Date Range</label>
+          <select class="form-select form-select-sm modern-select" [(ngModel)]="filterForm.dateRange">
+            <option value="This Academic Year">Current Academic Year (2025-26)</option>
+            <option value="This Month">This Month (May 2025)</option>
+            <option value="Last 30 Days">Last 30 Days</option>
+            <option value="Quarter 1">Quarter 1 (Apr - Jun)</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted mb-1">Class / Department Filter</label>
+          <select class="form-select form-select-sm modern-select" [(ngModel)]="filterForm.class">
+            <option value="All Classes">All Classes (Entire School)</option>
+            <option value="Grade 10-A">Grade 10 - Section A</option>
+            <option value="Grade 10-B">Grade 10 - Section B</option>
+            <option value="Grade 9-A">Grade 9 - Section A</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-4 d-flex align-items-end gap-2 pt-3">
+          <button class="btn btn-sm btn-outline-success rounded-pill w-50" (click)="exportData('Excel / CSV')">
+            <i class="fas fa-file-excel me-1"></i> CSV Export
+          </button>
+          <button class="btn btn-sm btn-primary rounded-pill w-50" (click)="printReport()">
+            <i class="fas fa-print me-1"></i> Print / PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Data Table -->
+      <div class="border rounded-12 p-3 bg-white shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark small mb-0"><i class="fas fa-table text-primary me-1"></i> Live Report Data Preview (Showing 4 of 248 records)</h6>
+          <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Verified Audit Data</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm table-hover align-middle small mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Identifier #</th>
+                <th>Entity / Name</th>
+                <th>Scope / Class</th>
+                <th>Metric 1</th>
+                <th>Metric 2</th>
+                <th class="text-end">Status / Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of previewRows">
+                <td><strong>{{ row.c1 }}</strong></td>
+                <td><strong class="text-dark">{{ row.c2 }}</strong></td>
+                <td><span class="badge bg-light text-secondary border">{{ row.c3 }}</span></td>
+                <td class="fw-bold text-primary">{{ row.c4 }}</td>
+                <td class="text-success fw-bold">{{ row.c5 }}</td>
+                <td class="text-end"><span class="badge bg-info bg-opacity-10 text-primary">{{ row.c6 }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 p-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showPreviewModal = false">Close</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printReport()">
+        <i class="fas fa-download me-1"></i> Download Complete Report
+      </button>
     </div>
   </div>
 </div>
