@@ -122,8 +122,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['lessonPlan']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['lessonPlan']">
-        <li><a routerLink="/lesson-plan" routerLinkActive="active" class="sub-nav-link text-info">Syllabus Tracker</a></li>
-        <li><a routerLink="/lesson-plan" class="sub-nav-link">Lesson Topics Checklist</a></li>
+        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'lesson'}" class="sub-nav-link">Lesson</a></li>
+        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'topic'}" class="sub-nav-link">Topic</a></li>
+        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'plan'}" class="sub-nav-link">Lesson Plan</a></li>
+        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'overview'}" class="sub-nav-link">Lesson Plan Overview</a></li>
+        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Settings</a></li>
       </ul>
     </div>
 

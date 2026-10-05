@@ -1,167 +1,560 @@
 <div class="container-fluid p-0 animate-fade-in">
-  <!-- Page Header -->
+  <!-- Top Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1 text-dark">Lesson Planning & Syllabus Tracker</h3>
-      <p class="text-muted small mb-0">Track chapter curriculum progress, planned teaching dates, and topic completion percentages</p>
+      <h3 class="fw-bold mb-1"><i class="fas fa-chalkboard-teacher text-primary me-2"></i>Lesson Plan & Academic Curriculum Tracking</h3>
+      <p class="text-muted small mb-0">Manage structured lessons, syllabus topics, executive lesson execution plans, audits & governance settings</p>
     </div>
-    <div class="d-flex flex-wrap gap-2">
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'add'">
-        <i class="fas fa-plus-circle me-1"></i> Add Lesson / Topic
+    <div class="d-flex gap-2">
+      <button *ngIf="activeTab === 'lesson'" class="btn btn-primary shadow-sm" (click)="toggleLessonForm()">
+        <i class="fas fa-plus me-1"></i> {{ showLessonForm ? 'HIDE FORM' : 'ADD LESSON' }}
+      </button>
+      <button *ngIf="activeTab === 'topic'" class="btn btn-primary shadow-sm" (click)="toggleTopicForm()">
+        <i class="fas fa-plus me-1"></i> {{ showTopicForm ? 'HIDE FORM' : 'ADD TOPIC' }}
+      </button>
+      <button *ngIf="activeTab === 'plan'" class="btn btn-primary shadow-sm" (click)="togglePlanForm()">
+        <i class="fas fa-plus me-1"></i> {{ showPlanForm ? 'HIDE FORM' : 'ADD PLAN' }}
       </button>
     </div>
   </div>
 
-  <!-- Navigation Pill Tabs -->
-  <div class="premium-card mb-4 p-2">
-    <ul class="nav nav-pills custom-pills">
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'tracker'" (click)="activeTab = 'tracker'">
-          <i class="fas fa-chart-line me-2"></i> Syllabus Completion Dashboard
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'topics'" (click)="activeTab = 'topics'">
-          <i class="fas fa-list-check me-2"></i> Topic Checklist & Dates
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'add'" (click)="activeTab = 'add'">
-          <i class="fas fa-plus me-2"></i> Create Lesson Topic
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <!-- TAB 1: Syllabus Completion Dashboard -->
-  <div *ngIf="activeTab === 'tracker'" class="row g-4 animate-fade-in">
-    <div class="col-12 col-md-6" *ngFor="let p of progressList">
-      <div class="card border rounded-16 p-4 shadow-sm bg-white hover-shadow">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <div>
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 mb-1">{{ p.class }}</span>
-            <h5 class="fw-bold text-dark mb-0">{{ p.subject }}</h5>
-          </div>
-          <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">
-            {{ p.percentage | number:'1.0-0' }}% Completed
-          </span>
-        </div>
-
-        <div class="small text-muted mb-3">Faculty: <strong>{{ p.teacher }}</strong></div>
-
-        <div class="progress mb-3" style="height: 10px;">
-          <div class="progress-bar bg-success" [style.width.%]="p.percentage"></div>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center pt-2 border-top small text-secondary">
-          <span>Chapters: <strong>{{ p.completedChapters }} / {{ p.totalChapters }} Covered</strong></span>
-          <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="activeTab = 'topics'">View Topics</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 2: Topic Checklist & Dates -->
-  <div *ngIf="activeTab === 'topics'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-1 text-dark">Topic Teaching Progress</h5>
-        <p class="text-muted small mb-0">Scheduled lecture topics, instructional methods, and completion dates</p>
-      </div>
-      <button class="btn btn-primary rounded-pill px-3" (click)="activeTab = 'add'">
-        <i class="fas fa-plus me-1"></i> Add Topic
+  <!-- Submodule Navigation Tabs -->
+  <div class="lesson-plan-tabs-wrapper mb-4">
+    <div class="d-flex flex-wrap gap-2 p-2 bg-white border rounded-12 shadow-sm">
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'lesson'" [class.btn-light]="activeTab !== 'lesson'" (click)="setTab('lesson')">
+        <i class="fas fa-book-open me-1"></i> Lesson
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'topic'" [class.btn-light]="activeTab !== 'topic'" (click)="setTab('topic')">
+        <i class="fas fa-list-check me-1"></i> Topic
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'plan'" [class.btn-light]="activeTab !== 'plan'" (click)="setTab('plan')">
+        <i class="fas fa-calendar-check me-1"></i> Lesson Plan
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'overview'" [class.btn-light]="activeTab !== 'overview'" (click)="setTab('overview')">
+        <i class="fas fa-chart-line me-1"></i> Lesson Plan Overview
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'settings'" [class.btn-light]="activeTab !== 'settings'" (click)="setTab('settings')">
+        <i class="fas fa-cog me-1"></i> Settings
       </button>
     </div>
-
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Chapter / Unit</th>
-            <th>Topic Title</th>
-            <th>Subject & Class</th>
-            <th>Faculty</th>
-            <th>Planned Date</th>
-            <th>Status</th>
-            <th class="text-end">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let t of topics">
-            <td><strong class="text-dark">{{ t.lessonName }}</strong></td>
-            <td><strong class="text-primary">{{ t.topicTitle }}</strong></td>
-            <td><span class="badge bg-light text-dark border">{{ t.subject }} ({{ t.class }})</span></td>
-            <td><small class="text-muted">{{ t.teacher }}</small></td>
-            <td><small class="text-secondary">{{ t.plannedDate }}</small></td>
-            <td>
-              <span class="badge" [ngClass]="{
-                'bg-success': t.status === 'Completed',
-                'bg-warning text-dark': t.status === 'In Progress',
-                'bg-secondary': t.status === 'Upcoming'
-              }">{{ t.status }}</span>
-            </td>
-            <td class="text-end">
-              <button *ngIf="t.status !== 'Completed'" class="btn btn-sm btn-success rounded-pill px-3" (click)="markCompleted(t)">
-                <i class="fas fa-check me-1"></i> Mark Done
-              </button>
-              <span *ngIf="t.status === 'Completed'" class="small text-muted">
-                Completed {{ t.completionDate }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
-  <!-- TAB 3: Add Lesson Topic -->
-  <div *ngIf="activeTab === 'add'" class="row g-4 animate-fade-in">
-    <div class="col-12 col-lg-8">
-      <div class="premium-card">
-        <h5 class="fw-bold text-dark mb-3">Create Lesson Plan Topic</h5>
-        <div class="row g-3">
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold">Chapter / Unit Name *</label>
-            <input type="text" class="form-control modern-input" [(ngModel)]="newTopic.lessonName" placeholder="e.g. Chapter 5 - Optics">
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="form-label small fw-bold">Topic / Section Title *</label>
-            <input type="text" class="form-control modern-input" [(ngModel)]="newTopic.topicTitle" placeholder="e.g. Section 5.4 - Refraction index">
-          </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Subject</label>
-            <select class="form-select modern-select" [(ngModel)]="newTopic.subject">
-              <option value="Mathematics">Mathematics</option>
-              <option value="Physics">Physics</option>
-              <option value="Chemistry">Chemistry</option>
-              <option value="Computer Science">Computer Science</option>
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 1: LESSON (/LessonPlan/Lesson) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'lesson'" class="row g-4 animate-fade-in">
+    <!-- Left: Add Lesson Form -->
+    <div [class.col-12]="!showLessonForm" [class.col-lg-4]="showLessonForm" *ngIf="showLessonForm">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-plus-circle me-2"></i>Add Lesson</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Class *</label>
+            <select class="form-select bg-light" [(ngModel)]="newLesson.classId" (change)="onLessonClassChange()">
+              <option [ngValue]="null">Select Class</option>
+              <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
             </select>
           </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Class / Grade</label>
-            <select class="form-select modern-select" [(ngModel)]="newTopic.class">
-              <option value="Grade 10-A">Grade 10-A</option>
-              <option value="Grade 10-B">Grade 10-B</option>
-              <option value="Grade 9-A">Grade 9-A</option>
-              <option value="Grade 11-Science">Grade 11-Science</option>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Subject *</label>
+            <select class="form-select bg-light" [(ngModel)]="newLesson.subjectId">
+              <option [ngValue]="null">Select Subject</option>
+              <option *ngFor="let s of availableSubjectsForLesson" [value]="s.id">{{ s.name }}</option>
             </select>
           </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Planned Instruction Date</label>
-            <input type="date" class="form-control modern-input" [(ngModel)]="newTopic.plannedDate">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Lesson Name *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newLesson.lessonName" placeholder="e.g. Chapter 1: Real Numbers" required>
           </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Assigned Teacher</label>
-            <input type="text" class="form-control modern-input" [(ngModel)]="newTopic.teacher">
-          </div>
-          <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-            <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'topics'">Cancel</button>
-            <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="saveTopic()">
-              <i class="fas fa-plus me-1"></i> Save to Lesson Plan
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveLesson()">
+              <i class="fas fa-check me-2"></i> Save Lesson
             </button>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Right: Academic Lessons Table -->
+    <div [class.col-12]="!showLessonForm" [class.col-lg-8]="showLessonForm">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Academic Lessons</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ lessons.length }} Lessons</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchLessonQuery" placeholder="Search lesson...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Class</th>
+                  <th class="py-3 fw-700">Subject</th>
+                  <th class="py-3 fw-700">Lesson Name</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of lessons">
+                  <td class="px-4 fw-700 text-dark">{{ item.className }}</td>
+                  <td>
+                    <span class="badge bg-light text-primary border fw-600">{{ item.subjectName }}</span>
+                  </td>
+                  <td>
+                    <div class="fw-800 text-dark">{{ item.lessonName }}</div>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="openEditLesson(item)" title="Edit Lesson">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteLesson(item)" title="Delete Lesson">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="lessons.length === 0">
+                  <td colspan="4" class="text-center py-5">
+                    <div class="py-4">
+                      <i class="fas fa-book-open text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                      <p class="text-muted small">No lessons recorded yet.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 2: TOPIC (/LessonPlan/Topic) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'topic'" class="row g-4 animate-fade-in">
+    <!-- Left: Add Topic Form -->
+    <div [class.col-12]="!showTopicForm" [class.col-lg-4]="showTopicForm" *ngIf="showTopicForm">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-plus-circle me-2"></i>Add Topic</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Lesson *</label>
+            <select class="form-select bg-light" [(ngModel)]="newTopic.lessonId">
+              <option [ngValue]="null">Select Lesson</option>
+              <option *ngFor="let l of lessons" [value]="l.id">{{ l.className }} - {{ l.lessonName }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Topic Name *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newTopic.topicName" placeholder="e.g. Fundamental Theorem of Arithmetic" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Description</label>
+            <textarea class="form-control bg-light" rows="3" [(ngModel)]="newTopic.description" placeholder="Brief teaching objectives or learning outcomes..."></textarea>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveTopic()">
+              <i class="fas fa-check me-2"></i> Save Topic
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Topics List Table -->
+    <div [class.col-12]="!showTopicForm" [class.col-lg-8]="showTopicForm">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Lesson Topics</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ topics.length }} Topics</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchTopicQuery" placeholder="Search topic...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Lesson</th>
+                  <th class="py-3 fw-700">Subject</th>
+                  <th class="py-3 fw-700">Topic Name</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of topics">
+                  <td class="px-4">
+                    <div class="fw-800 text-dark">{{ item.lessonName }}</div>
+                    <small class="text-muted">{{ item.className }}</small>
+                  </td>
+                  <td>
+                    <span class="badge bg-light text-primary border fw-600">{{ item.subjectName }}</span>
+                  </td>
+                  <td>
+                    <div class="fw-700 text-dark">{{ item.topicName }}</div>
+                    <small class="text-muted d-block" *ngIf="item.description">{{ item.description }}</small>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="openEditTopic(item)" title="Edit Topic">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteTopic(item)" title="Delete Topic">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="topics.length === 0">
+                  <td colspan="4" class="text-center py-5">
+                    <div class="py-4">
+                      <i class="fas fa-list-check text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                      <p class="text-muted small">No topics added yet.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 3: LESSON PLAN (/LessonPlan) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'plan'" class="row g-4 animate-fade-in">
+    <!-- Left: Plan Form -->
+    <div [class.col-12]="!showPlanForm" [class.col-lg-4]="showPlanForm" *ngIf="showPlanForm">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0">
+            <i class="fas fa-calendar-plus me-2"></i>{{ isEditingPlan ? 'Edit Lesson Plan' : 'Create Lesson Plan' }}
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Teacher *</label>
+            <select class="form-select bg-light" [(ngModel)]="planForm.teacherId">
+              <option [ngValue]="null">Select Teacher</option>
+              <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Lesson *</label>
+            <select class="form-select bg-light" [(ngModel)]="planForm.lessonId" (change)="onPlanLessonChange()">
+              <option [ngValue]="null">Select Lesson</option>
+              <option *ngFor="let l of lessons" [value]="l.id">{{ l.className }} - {{ l.lessonName }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Topic *</label>
+            <select class="form-select bg-light" [(ngModel)]="planForm.topicId">
+              <option [ngValue]="null">Select Topic</option>
+              <option *ngFor="let tp of availableTopicsForPlan" [value]="tp.id">{{ tp.topicName }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Execution Date *</label>
+            <input type="date" class="form-control bg-light" [(ngModel)]="planForm.executionDate" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Status</label>
+            <select class="form-select bg-light" [(ngModel)]="planForm.status">
+              <option value="Pending">Pending</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <div class="d-flex gap-2 mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 flex-grow-1 shadow-sm" (click)="savePlan()">
+              <i class="fas fa-check me-2"></i> {{ isEditingPlan ? 'UPDATE PLAN' : 'SAVE PLAN' }}
+            </button>
+            <button *ngIf="isEditingPlan" type="button" class="btn btn-light" (click)="resetPlanForm()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Executive Lesson Plans Table -->
+    <div [class.col-12]="!showPlanForm" [class.col-lg-8]="showPlanForm">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Executive Lesson Plans</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ plans.length }} Plans</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchPlanQuery" placeholder="Search plan...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Date</th>
+                  <th class="py-3 fw-700">Teacher</th>
+                  <th class="py-3 fw-700">Lesson / Topic</th>
+                  <th class="py-3 fw-700">Status</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of plans">
+                  <td class="px-4 fw-800 text-primary">{{ item.executionDate }}</td>
+                  <td>
+                    <div class="fw-700 text-dark">{{ item.teacherName }}</div>
+                  </td>
+                  <td>
+                    <div class="fw-800 text-dark">{{ item.lessonName }}</div>
+                    <small class="text-muted fw-600">{{ item.topicName }}</small>
+                  </td>
+                  <td>
+                    <span *ngIf="item.status === 'Completed'" class="badge bg-success bg-opacity-10 text-success fw-700 px-3 py-1 rounded-pill small">COMPLETED</span>
+                    <span *ngIf="item.status === 'Ongoing'" class="badge bg-warning bg-opacity-10 text-dark fw-700 px-3 py-1 rounded-pill small">ONGOING</span>
+                    <span *ngIf="item.status === 'Pending'" class="badge bg-danger bg-opacity-10 text-danger fw-700 px-3 py-1 rounded-pill small">PENDING</span>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="editPlan(item)" title="Edit Plan">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deletePlan(item)" title="Delete Plan">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="plans.length === 0">
+                  <td colspan="5" class="text-center py-5">
+                    <div class="py-4">
+                      <i class="fas fa-calendar-times text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                      <p class="text-muted small">No lesson plans found.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 4: LESSON PLAN OVERVIEW (/LessonPlan/LessonPlanOverview) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'overview'" class="animate-fade-in">
+    <!-- Filter Card -->
+    <div class="card border-0 shadow-sm rounded-12 mb-4">
+      <div class="card-header bg-white border-bottom py-3">
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-filter me-2"></i>Filter Teacher Audit Trail</h5>
+      </div>
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-6 col-lg-4">
+            <label class="form-label fw-700 text-muted small text-uppercase">Filter by Teacher</label>
+            <select class="form-select border-0 bg-light shadow-none fw-600" [(ngModel)]="overviewTeacherFilter">
+              <option [ngValue]="null">-- All Faculty Members --</option>
+              <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-lg-2">
+            <button class="btn btn-light w-100 fw-700 py-2" (click)="resetOverviewFilter()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overview Plan List -->
+    <div class="card border-0 shadow-sm rounded-12">
+      <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <h6 class="fw-700 m-0 text-dark">Institutional Lesson Plan Overview</h6>
+        <span class="badge bg-light text-primary fw-bold">Total: {{ getFilteredOverviewPlans().length }} Plans</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+              <tr>
+                <th class="px-4 py-3 fw-700">Date</th>
+                <th class="py-3 fw-700">Teacher</th>
+                <th class="py-3 fw-700">Lesson / Topic</th>
+                <th class="py-3 fw-700">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of getFilteredOverviewPlans()">
+                <td class="px-4 fw-800 text-primary">{{ item.executionDate }}</td>
+                <td class="fw-700 text-dark">{{ item.teacherName }}</td>
+                <td>
+                  <div class="fw-800 text-dark">{{ item.lessonName }}</div>
+                  <small class="text-muted fw-600">{{ item.topicName }}</small>
+                </td>
+                <td>
+                  <span *ngIf="item.status === 'Completed'" class="badge bg-success bg-opacity-10 text-success fw-700 px-3 py-1 rounded-pill small">COMPLETED</span>
+                  <span *ngIf="item.status === 'Ongoing'" class="badge bg-warning bg-opacity-10 text-dark fw-700 px-3 py-1 rounded-pill small">ONGOING</span>
+                  <span *ngIf="item.status === 'Pending'" class="badge bg-danger bg-opacity-10 text-danger fw-700 px-3 py-1 rounded-pill small">PENDING</span>
+                </td>
+              </tr>
+              <tr *ngIf="getFilteredOverviewPlans().length === 0">
+                <td colspan="4" class="text-center py-5">
+                  <div class="py-4">
+                    <i class="fas fa-calendar-times text-muted mb-3" style="font-size: 2.5rem; opacity: 0.2;"></i>
+                    <p class="text-muted small">No lesson plans found for the selected filter.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 5: SETTINGS (/LessonPlan/Settings) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'settings'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-xl-6">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-dark m-0"><i class="fas fa-sliders-h text-primary me-2"></i>Module Preferences</h5>
+        </div>
+        <div class="card-body p-4">
+          <!-- Switch 1 -->
+          <div class="mb-4">
+            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light cursor-pointer">
+              <div>
+                <div class="fw-800 text-dark">Restrict Lesson Editing</div>
+                <div class="small text-muted">Only allow the creator of a lesson plan to modify it</div>
+              </div>
+              <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="settings.restrictEdit">
+              </div>
+            </label>
+          </div>
+
+          <!-- Switch 2 -->
+          <div class="mb-4">
+            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light cursor-pointer">
+              <div>
+                <div class="fw-800 text-dark">Automated Notifications</div>
+                <div class="small text-muted">Alert students and parents when a new lesson plan is published</div>
+              </div>
+              <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="settings.notifyStudents">
+              </div>
+            </label>
+          </div>
+
+          <!-- Switch 3 -->
+          <div class="mb-4">
+            <label class="form-check-label d-flex align-items-center justify-content-between p-3 rounded-12 border bg-light cursor-pointer">
+              <div>
+                <div class="fw-800 text-dark">Require Approval Flow</div>
+                <div class="small text-muted">Newly created plans require administrator review before going live</div>
+              </div>
+              <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="settings.requireApproval">
+              </div>
+            </label>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- Input: Warning Days -->
+          <div class="mb-4">
+            <label class="form-label small fw-700 text-uppercase">Overdue Alert Threshold (Days)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0"><i class="fas fa-exclamation-triangle text-warning"></i></span>
+              <input type="number" class="form-control bg-light" [(ngModel)]="settings.warningDays" min="1" max="30" required>
+            </div>
+            <div class="form-text text-muted small mt-1">Number of days a plan remains "Pending" before triggering an overdue alert in the administrator dashboard.</div>
+          </div>
+
+          <button type="button" class="btn btn-primary fw-700 w-100 shadow mt-3 py-2" (click)="saveSettings()">
+            <i class="fas fa-check me-2"></i> SAVE SETTINGS
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Rules & Documentation -->
+    <div class="col-12 col-xl-6">
+      <div class="card border-0 shadow-sm rounded-12 bg-light-soft h-100" style="border: 1px dashed rgba(78, 115, 223, 0.3) !important;">
+        <div class="card-body p-4">
+          <h5 class="fw-800 text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Lesson Plan Module Rules</h5>
+          <p class="small text-secondary mb-3">Settings configured here impact the scheduling lifecycle of academic topics:</p>
+          <ul class="list-unstyled small text-secondary">
+            <li class="mb-3 d-flex align-items-start">
+              <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+              <div><strong>Permissions:</strong> Restricted editing prevents teacher cross-modifications and ensures strict curriculum accountability.</div>
+            </li>
+            <li class="mb-3 d-flex align-items-start">
+              <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+              <div><strong>Approval Flow:</strong> If activated, lesson plans remain hidden from student portal calendars until marked "Approved" by the academic dean.</div>
+            </li>
+            <li class="mb-3 d-flex align-items-start">
+              <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+              <div><strong>Alerts:</strong> Status alerts remind subject teachers to execute topics before statutory session deadlines.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- MODALS -->
+<!-- ========================================================================= -->
+
+<!-- Edit Lesson Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditLessonModal && editingLesson">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Lesson</h5>
+      <button class="btn-close" (click)="showEditLessonModal = false"></button>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Lesson Name</label>
+      <input type="text" class="form-control" [(ngModel)]="editingLesson.lessonName" required>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showEditLessonModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="updateLesson()"><i class="fas fa-check me-1"></i>Update Lesson</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Topic Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditTopicModal && editingTopic">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Topic</h5>
+      <button class="btn-close" (click)="showEditTopicModal = false"></button>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Topic Name</label>
+      <input type="text" class="form-control" [(ngModel)]="editingTopic.topicName" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Description</label>
+      <textarea class="form-control" rows="3" [(ngModel)]="editingTopic.description"></textarea>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showEditTopicModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="updateTopic()"><i class="fas fa-check me-1"></i>Update Topic</button>
     </div>
   </div>
 </div>
