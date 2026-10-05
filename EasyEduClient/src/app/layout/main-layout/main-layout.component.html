@@ -342,9 +342,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['transport']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['transport']">
-        <li><a routerLink="/transport" routerLinkActive="active" class="sub-nav-link">Routes & Vehicles</a></li>
-        <li><a routerLink="/transport" class="sub-nav-link">Student Bus Allocation</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Transport Reports</a></li>
+        <li><a routerLink="/Transport" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-success fw-bold">Routes</a></li>
+        <li><a routerLink="/Transport/Vehicles" routerLinkActive="active" class="sub-nav-link">Vehicles</a></li>
+        <li><a routerLink="/Transport/AssignVehicle" routerLinkActive="active" class="sub-nav-link">Assign Vehicle</a></li>
+        <li><a routerLink="/Transport/AssignStudents" routerLinkActive="active" class="sub-nav-link text-info">Student Allocation</a></li>
+        <li><a routerLink="/Transport/Reports" routerLinkActive="active" class="sub-nav-link">Transport Report</a></li>
       </ul>
     </div>
 

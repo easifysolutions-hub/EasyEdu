@@ -2,20 +2,20 @@
   <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1 text-dark">Transport & Fleet Logistics</h3>
-      <p class="text-muted small mb-0">Manage bus routes, GPS telemetry, vehicle fitness & insurance, drivers, and student pickup allocations</p>
+      <h3 class="fw-bold mb-1 text-dark">Transport & Campus Fleet Logistics</h3>
+      <p class="text-muted small mb-0">Manage bus routes, transit vehicles, driver allocations, student bus passes, and route reports</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
-      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showAllocateStudentModal = true">
-        <i class="fas fa-user-plus me-1"></i> Allocate Student
+      <button class="btn btn-outline-primary rounded-pill px-3 shadow-sm" (click)="showAllocateStudentModal = true">
+        <i class="fas fa-id-card me-1"></i> Allocate Student Seat
       </button>
       <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="showAddRouteModal = true">
-        <i class="fas fa-route me-1"></i> Add Bus Route
+        <i class="fas fa-plus-circle me-1"></i> Add Bus Route
       </button>
     </div>
   </div>
 
-  <!-- Metric Stat Cards -->
+  <!-- Metric Overview Cards -->
   <div class="row g-4 mb-4">
     <div class="col-12 col-sm-6 col-xl-3">
       <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
@@ -23,10 +23,10 @@
           <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
             <i class="fas fa-route fa-lg text-white"></i>
           </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">NETWORK</span>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">BUS ROUTES</span>
         </div>
-        <h2 class="fw-bold mb-1">{{ routes.length }} Routes</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Covering 34 Metro Stops</p>
+        <h2 class="fw-bold mb-1">{{ routes.length }} Active</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Across City Sectors</p>
       </div>
     </div>
 
@@ -34,12 +34,12 @@
       <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fas fa-bus fa-lg text-white"></i>
+            <i class="fas fa-bus-simple fa-lg text-white"></i>
           </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">FLEET</span>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">FLEET VEHICLES</span>
         </div>
-        <h2 class="fw-bold mb-1">{{ vehicles.length }} Buses</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">100% GPS & CCTV Enabled</p>
+        <h2 class="fw-bold mb-1">{{ activeBusesCount }} / {{ vehicles.length }} Ready</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">{{ totalFleetCapacity }} Total Passenger Seats</p>
       </div>
     </div>
 
@@ -47,12 +47,12 @@
       <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fas fa-id-card-alt fa-lg text-white"></i>
+            <i class="fas fa-users-line fa-lg text-white"></i>
           </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">STAFF</span>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">COMMUTERS</span>
         </div>
-        <h2 class="fw-bold mb-1">{{ drivers.length }} Drivers</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Verified & Police Cleared</p>
+        <h2 class="fw-bold mb-1">{{ totalStudentsTransported }} Students</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Boarding Daily Services</p>
       </div>
     </div>
 
@@ -60,100 +60,104 @@
       <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fas fa-users fa-lg text-white"></i>
+            <i class="fas fa-indian-rupee-sign fa-lg text-white"></i>
           </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">COMMUTERS</span>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TRANSIT REVENUE</span>
         </div>
-        <h2 class="fw-bold mb-1">{{ totalStudentsTransported }} Students</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Enrolled in Daily Transit</p>
+        <h2 class="fw-bold mb-1">₹{{ totalMonthlyFareRevenue | number }}</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Monthly Transport Collections</p>
       </div>
     </div>
   </div>
 
   <!-- Navigation Pill Tabs -->
-  <div class="premium-card mb-4 p-2">
+  <div class="transport-card mb-4 p-2">
     <ul class="nav nav-pills custom-pills">
       <li class="nav-item">
         <button class="nav-link" [class.active]="activeTab === 'routes'" (click)="activeTab = 'routes'">
-          <i class="fas fa-map-signs me-2"></i> Bus Routes & Fare Master
+          <i class="fas fa-route me-2"></i> Routes
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-link" [class.active]="activeTab === 'vehicles'" (click)="activeTab = 'vehicles'">
-          <i class="fas fa-bus-alt me-2"></i> Vehicle Fleet Master
+          <i class="fas fa-bus me-2"></i> Vehicles
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'drivers'" (click)="activeTab = 'drivers'">
-          <i class="fas fa-user-tie me-2"></i> Drivers & Conductors Directory
+        <button class="nav-link" [class.active]="activeTab === 'assign-vehicle'" (click)="activeTab = 'assign-vehicle'">
+          <i class="fas fa-shuffle me-2"></i> Assign Vehicle
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-link" [class.active]="activeTab === 'students'" (click)="activeTab = 'students'">
-          <i class="fas fa-user-check me-2"></i> Student Route Allocation
+          <i class="fas fa-id-card-clip me-2"></i> Student Allocation
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'tracking'" (click)="activeTab = 'tracking'">
-          <i class="fas fa-satellite-dish me-2"></i> Live Fleet GPS Telemetry
+        <button class="nav-link" [class.active]="activeTab === 'reports'" (click)="activeTab = 'reports'">
+          <i class="fas fa-chart-line me-2"></i> Transport Report
         </button>
       </li>
     </ul>
   </div>
 
-  <!-- TAB 1: Bus Routes & Fare Master -->
-  <div *ngIf="activeTab === 'routes'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-1 text-dark">Bus Routes & Pick-up Waypoints</h5>
-        <p class="text-muted small mb-0">Active transit lines, vehicle assignments, and quarterly transport fee rates</p>
+  <!-- ================= TAB 1: ROUTES ================= -->
+  <div *ngIf="activeTab === 'routes'" class="transport-card animate-fade-in mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3 p-4 border-bottom">
+      <div class="d-flex flex-wrap gap-2 align-items-center flex-grow-1" style="max-width: 600px;">
+        <div class="search-bar-modern flex-grow-1">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by route title, pickup point, driver, bus #...">
+        </div>
       </div>
-      <button class="btn btn-primary rounded-pill px-3" (click)="showAddRouteModal = true">
+
+      <button class="btn btn-primary px-3 rounded-12" (click)="showAddRouteModal = true">
         <i class="fas fa-plus me-1"></i> Add Route
       </button>
     </div>
 
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
+    <div class="table-responsive p-3">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
           <tr>
-            <th>Route Code</th>
-            <th>Route Name / Transit Path</th>
-            <th>Bus Assigned</th>
-            <th>Driver & Contact</th>
-            <th>Seat Occupancy</th>
+            <th class="ps-3">Route Code</th>
+            <th>Route Title & Path</th>
+            <th>Designated Stops</th>
+            <th>Assigned Bus</th>
+            <th>Captain / Driver</th>
             <th>Monthly Fare</th>
+            <th>Passenger Occupancy</th>
             <th>Status</th>
-            <th class="text-end">Actions</th>
+            <th class="text-end pe-3">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let r of routes">
-            <td><strong class="text-primary">RT-0{{ r.id }}</strong></td>
+            <td class="ps-3"><strong class="text-primary">{{ r.routeCode }}</strong></td>
             <td>
               <strong class="text-dark">{{ r.routeTitle }}</strong>
-              <div class="small text-muted">
-                <i class="fas fa-map-marker-alt text-danger me-1"></i> {{ r.startPoint }} &rarr; {{ r.endPoint }} ({{ r.stopsCount }} Stops)
-              </div>
+              <div class="small text-muted">{{ r.startPoint }} <i class="fas fa-arrow-right-long text-secondary mx-1"></i> {{ r.endPoint }}</div>
             </td>
-            <td><span class="badge bg-light text-dark border fw-bold">{{ r.vehicleNo }}</span></td>
+            <td><span class="badge bg-light text-secondary border">{{ r.stopsCount }} Scheduled Stops</span></td>
+            <td><strong class="text-info">{{ r.vehicleNo }}</strong></td>
             <td>
               <div class="fw-semibold text-dark">{{ r.driverName }}</div>
               <small class="text-muted">{{ r.driverPhone }}</small>
             </td>
+            <td><strong class="text-success">₹{{ r.fare | number }}</strong></td>
             <td>
               <div class="d-flex align-items-center gap-2">
                 <span class="small fw-bold">{{ r.studentsCount }} / {{ r.capacity }}</span>
-                <div class="progress flex-grow-1" style="height: 6px; width: 60px;">
+                <div class="progress flex-grow-1" style="width: 60px; height: 6px;">
                   <div class="progress-bar bg-success" [style.width.%]="(r.studentsCount / r.capacity) * 100"></div>
                 </div>
               </div>
             </td>
-            <td class="fw-bold text-success">₹{{ r.fare | number }}/mo</td>
-            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">{{ r.status }}</span></td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-secondary rounded-circle me-1"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-sm btn-outline-danger rounded-circle"><i class="fas fa-trash"></i></button>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ r.status }}</span></td>
+            <td class="text-end pe-3">
+              <button class="btn btn-sm btn-outline-secondary rounded-circle" title="Edit Route">
+                <i class="fas fa-edit"></i>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -161,51 +165,52 @@
     </div>
   </div>
 
-  <!-- TAB 2: Vehicle Fleet Master -->
-  <div *ngIf="activeTab === 'vehicles'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- ================= TAB 2: VEHICLES ================= -->
+  <div *ngIf="activeTab === 'vehicles'" class="transport-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h5 class="fw-bold mb-1 text-dark">Institutional Fleet & Bus Inventory</h5>
-        <p class="text-muted small mb-0">Vehicle registration, fitness certificates, pollution validity, and GPS device health</p>
+        <h5 class="fw-bold mb-1 text-dark">Institutional Fleet & Bus Registry</h5>
+        <p class="text-muted small mb-0">Vehicle maintenance, safety certifications, GPS tracker status, and fuel types</p>
       </div>
-      <button class="btn btn-primary rounded-pill px-3" (click)="showAddVehicleModal = true">
+      <button class="btn btn-primary rounded-12 px-3" (click)="showAddVehicleModal = true">
         <i class="fas fa-plus me-1"></i> Add Vehicle
       </button>
     </div>
 
     <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
           <tr>
-            <th>Vehicle #</th>
-            <th>Make / Model</th>
+            <th class="ps-3">Vehicle #</th>
+            <th>Bus Model & Specs</th>
             <th>Capacity</th>
-            <th>Fuel</th>
+            <th>Fuel Mechanism</th>
+            <th>Assigned Route</th>
             <th>Assigned Driver</th>
-            <th>Insurance Expiry</th>
+            <th>Fitness Valid Till</th>
             <th>GPS Status</th>
-            <th>Vehicle State</th>
-            <th class="text-end">Actions</th>
+            <th>Fleet State</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let v of vehicles">
-            <td><strong class="text-dark">{{ v.vehicleNo }}</strong></td>
-            <td>{{ v.model }}</td>
-            <td><span class="badge bg-light text-dark border">{{ v.seatingCapacity }} Seats</span></td>
-            <td><span class="badge bg-info bg-opacity-10 text-primary">{{ v.fuelType }}</span></td>
-            <td><strong class="text-secondary">{{ v.driverAssigned }}</strong></td>
-            <td><small class="text-muted">{{ v.insuranceExpiry }}</small></td>
+            <td class="ps-3"><strong class="text-primary">{{ v.vehicleNo }}</strong></td>
             <td>
-              <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">
-                <i class="fas fa-signal me-1"></i> Live Online
+              <strong class="text-dark">{{ v.model }}</strong>
+              <div class="small text-muted">{{ v.odometerKm | number }} KM Odometer</div>
+            </td>
+            <td><strong>{{ v.seatingCapacity }} Seats</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ v.fuelType }}</span></td>
+            <td><small class="text-secondary fw-semibold">{{ v.routeAssigned }}</small></td>
+            <td><small class="text-dark">{{ v.driverAssigned }}</small></td>
+            <td><small class="text-muted">{{ v.fitnessValidTill }}</small></td>
+            <td>
+              <span class="badge" [ngClass]="v.gpsEnabled ? 'bg-success bg-opacity-10 text-success' : 'bg-secondary bg-opacity-10 text-secondary'">
+                <i class="fas fa-satellite-dish me-1"></i> {{ v.gpsEnabled ? 'Live GPS' : 'Offline' }}
               </span>
             </td>
             <td>
-              <span class="badge" [ngClass]="v.status === 'Operational' ? 'bg-success' : 'bg-warning text-dark'">{{ v.status }}</span>
-            </td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="fas fa-wrench"></i></button>
+              <span class="badge" [ngClass]="v.status === 'Operational' ? 'bg-success text-white' : 'bg-warning text-dark'">{{ v.status }}</span>
             </td>
           </tr>
         </tbody>
@@ -213,155 +218,173 @@
     </div>
   </div>
 
-  <!-- TAB 3: Drivers Directory -->
-  <div *ngIf="activeTab === 'drivers'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- ================= TAB 3: ASSIGN VEHICLE ================= -->
+  <div *ngIf="activeTab === 'assign-vehicle'" class="transport-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h5 class="fw-bold mb-1 text-dark">Drivers & Conductors Staff</h5>
-        <p class="text-muted small mb-0">Commercial license records, emergency contacts, and driver performance rating</p>
+        <h5 class="fw-bold mb-1 text-dark">Vehicle & Route Driver Assignment</h5>
+        <p class="text-muted small mb-0">Map campus fleet buses with certified drivers and active transit routes</p>
       </div>
-      <button class="btn btn-primary rounded-pill px-3" (click)="showAddDriverModal = true">
-        <i class="fas fa-user-plus me-1"></i> Add Driver Record
+      <button class="btn btn-primary rounded-12 px-3" (click)="showAssignVehicleModal = true">
+        <i class="fas fa-plus me-1"></i> New Assignment
       </button>
     </div>
 
-    <div class="row g-3">
-      <div class="col-12 col-md-6 col-lg-3" *ngFor="let d of drivers">
-        <div class="card border rounded-16 p-3 shadow-sm bg-light hover-shadow text-center">
-          <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
-            <i class="fas fa-user-tie fa-lg"></i>
-          </div>
-          <h6 class="fw-bold text-dark mb-0">{{ d.name }}</h6>
-          <p class="small text-muted mb-1">{{ d.phone }}</p>
-          <span class="badge bg-light text-dark border mb-2">{{ d.licenseNo }}</span>
-          <div class="small text-secondary mb-3">
-            Assigned: <strong>{{ d.assignedVehicle }}</strong> • {{ d.experienceYears }} Yrs Exp
-          </div>
-          <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-            <span class="badge bg-success bg-opacity-10 text-success">{{ d.status }}</span>
-            <span class="small text-warning fw-bold"><i class="fas fa-star"></i> {{ d.rating }}</span>
-          </div>
-        </div>
-      </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
+          <tr>
+            <th class="ps-3">Route Title</th>
+            <th>Assigned Vehicle</th>
+            <th>Designated Captain</th>
+            <th>Shift Timing</th>
+            <th>Effective Date</th>
+            <th>Status</th>
+            <th class="text-end pe-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of vehicleAssignments">
+            <td class="ps-3"><strong class="text-dark">{{ a.routeTitle }}</strong></td>
+            <td><strong class="text-primary">{{ a.vehicleNo }}</strong></td>
+            <td><strong class="text-secondary">{{ a.driverName }}</strong></td>
+            <td><small class="text-muted">{{ a.shiftTime }}</small></td>
+            <td><small class="text-muted">{{ a.effectiveDate }}</small></td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ a.status }}</span></td>
+            <td class="text-end pe-3">
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" (click)="assignmentForm.routeTitle = a.routeTitle; assignmentForm.vehicleNo = a.vehicleNo; assignmentForm.driverName = a.driverName; showAssignVehicleModal = true">
+                <i class="fas fa-shuffle me-1"></i> Reassign
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- TAB 4: Student Route Allocation -->
-  <div *ngIf="activeTab === 'students'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- ================= TAB 4: STUDENT ALLOCATION ================= -->
+  <div *ngIf="activeTab === 'students'" class="transport-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h5 class="fw-bold mb-1 text-dark">Student Bus Boarding Allocations</h5>
-        <p class="text-muted small mb-0">Daily pickup/drop timings, assigned bus stops, and student passenger manifest</p>
+        <h5 class="fw-bold mb-1 text-dark">Student Bus Allocation & Pass Desk</h5>
+        <p class="text-muted small mb-0">Student commuter roster, designated pickup/drop stops, and transit fee status</p>
       </div>
-      <button class="btn btn-primary rounded-pill px-3" (click)="showAllocateStudentModal = true">
+      <button class="btn btn-primary rounded-12 px-3" (click)="showAllocateStudentModal = true">
         <i class="fas fa-user-plus me-1"></i> Allocate Student
       </button>
     </div>
 
     <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
           <tr>
-            <th>Student Name</th>
+            <th class="ps-3">Student Name</th>
             <th>Admission #</th>
-            <th>Grade</th>
-            <th>Route Name</th>
+            <th>Class / Section</th>
+            <th>Assigned Route</th>
             <th>Assigned Bus</th>
-            <th>Boarding Stop</th>
-            <th>Pickup / Drop</th>
-            <th>Monthly Fare</th>
-            <th class="text-end">Actions</th>
+            <th>Pickup Stop</th>
+            <th>Morning Pickup</th>
+            <th>Afternoon Drop</th>
+            <th>Monthly Fee</th>
+            <th>Pass Status</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let sa of studentAllocations">
-            <td><strong class="text-dark">{{ sa.studentName }}</strong></td>
-            <td><span class="badge bg-light text-dark border">{{ sa.admissionNo }}</span></td>
-            <td>{{ sa.class }}</td>
-            <td><strong class="text-primary">{{ sa.routeTitle }}</strong></td>
-            <td><span class="badge bg-light text-secondary border">{{ sa.vehicleNo }}</span></td>
-            <td><i class="fas fa-map-pin text-danger me-1"></i> {{ sa.pickupStop }}</td>
-            <td><small class="text-muted">{{ sa.pickupTime }} / {{ sa.dropTime }}</small></td>
-            <td class="text-success fw-bold">₹{{ sa.fare | number }}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger rounded-circle" title="Remove Allocation"><i class="fas fa-trash"></i></button>
-            </td>
+          <tr *ngFor="let s of studentAllocations">
+            <td class="ps-3"><strong class="text-dark">{{ s.studentName }}</strong></td>
+            <td><span class="badge bg-light text-secondary border">{{ s.admissionNo }}</span></td>
+            <td>{{ s.class }}</td>
+            <td><strong class="text-primary">{{ s.routeTitle }}</strong></td>
+            <td><span class="badge bg-info bg-opacity-10 text-primary">{{ s.vehicleNo }}</span></td>
+            <td><strong class="text-secondary">{{ s.pickupStop }}</strong></td>
+            <td><small class="text-muted">{{ s.pickupTime }}</small></td>
+            <td><small class="text-muted">{{ s.dropTime }}</small></td>
+            <td><strong>₹{{ s.fare | number }}</strong></td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ s.status }}</span></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- TAB 5: Live Fleet GPS Telemetry -->
-  <div *ngIf="activeTab === 'tracking'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- ================= TAB 5: TRANSPORT REPORT ================= -->
+  <div *ngIf="activeTab === 'reports'" class="transport-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h5 class="fw-bold mb-1 text-dark">Live GPS Fleet Telemetry Radar</h5>
-        <p class="text-muted small mb-0">Real-time bus speed, location coordinates, ignition status, and geo-fence alerts</p>
+        <h5 class="fw-bold mb-1 text-dark">Transport & Fleet Strategy Report</h5>
+        <p class="text-muted small mb-0">Route capacity analytics, fuel consumption metrics, and revenue summaries</p>
       </div>
-      <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2">
-        <i class="fas fa-circle fa-beat text-success me-1"></i> Real-time Feed Active
-      </span>
+      <button class="btn btn-outline-primary rounded-12 px-3">
+        <i class="fas fa-print me-1"></i> Print Logistics Report
+      </button>
     </div>
 
-    <div class="row g-3">
-      <div class="col-12 col-md-4" *ngFor="let v of vehicles.slice(0, 3)">
-        <div class="card border rounded-16 p-3 shadow-sm bg-white">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="fw-bold text-dark mb-0">{{ v.vehicleNo }}</h6>
-            <span class="badge bg-success">42 km/h</span>
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <div class="card border rounded-16 p-4 h-100 bg-light">
+          <h6 class="fw-bold text-dark mb-3"><i class="fas fa-chart-pie text-primary me-2"></i> Route Passenger Occupancy</h6>
+          <div class="d-flex flex-column gap-3">
+            <div *ngFor="let r of routes">
+              <div class="d-flex justify-content-between small fw-bold mb-1">
+                <span>{{ r.routeTitle }}</span>
+                <span>{{ r.studentsCount }} / {{ r.capacity }} ({{ ((r.studentsCount / r.capacity) * 100) | number:'1.0-0' }}%)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar" [ngClass]="(r.studentsCount / r.capacity) >= 0.9 ? 'bg-danger' : 'bg-primary'" [style.width.%]="(r.studentsCount / r.capacity) * 100"></div>
+              </div>
+            </div>
           </div>
-          <p class="small text-muted mb-2">Route: <strong>North Campus Route 1</strong></p>
-          <div class="p-2 bg-light rounded-12 mb-3 small">
-            <div><i class="fas fa-location-arrow text-primary me-1"></i> Current: <strong>Near Bellary Road Junction</strong></div>
-            <div class="text-muted mt-1"><i class="far fa-clock me-1"></i> Estimated ETA to School: <strong>14 mins</strong></div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center small">
-            <span class="text-success"><i class="fas fa-key me-1"></i> Ignition ON</span>
-            <span class="text-primary"><i class="fas fa-satellite me-1"></i> 14 Satellites</span>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="card border rounded-16 p-4 h-100 bg-light">
+          <h6 class="fw-bold text-dark mb-3"><i class="fas fa-gas-pump text-success me-2"></i> Fuel & Fleet Efficiency Overview</h6>
+          <div class="list-group list-group-flush">
+            <div *ngFor="let v of vehicles" class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
+              <div>
+                <strong class="text-dark">{{ v.vehicleNo }}</strong> ({{ v.model }})
+                <div class="small text-muted">{{ v.fuelType }} • {{ v.odometerKm | number }} KM Logged</div>
+              </div>
+              <span class="badge bg-light text-dark border">{{ v.status }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ================= MODALS ================= -->
+</div>
 
 <!-- 1. Add Route Modal -->
 <div class="modal-backdrop-custom" *ngIf="showAddRouteModal">
-  <div class="modal-content-custom" style="max-width: 520px;">
+  <div class="modal-content-custom" style="max-width: 540px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
-      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-route text-primary me-2"></i> Create Transport Route</h5>
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-route text-primary me-2"></i> Create Bus Route</h5>
       <button class="btn-close" (click)="showAddRouteModal = false"></button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
         <div class="col-12">
           <label class="form-label small fw-bold">Route Title *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newRoute.routeTitle" placeholder="e.g. North Campus Express Route 5">
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newRoute.routeTitle" placeholder="e.g. North Campus Route 1">
         </div>
         <div class="col-6">
           <label class="form-label small fw-bold">Starting Point *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newRoute.startPoint" placeholder="e.g. Yelahanka Circle">
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newRoute.startPoint" placeholder="e.g. Hebbal Flyover">
         </div>
         <div class="col-6">
-          <label class="form-label small fw-bold">Destination Campus</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newRoute.endPoint" placeholder="Main Campus Gate 1">
+          <label class="form-label small fw-bold">Ending Destination</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newRoute.endPoint" placeholder="e.g. Campus Gate 1">
         </div>
-        <div class="col-4">
-          <label class="form-label small fw-bold">Total Stops</label>
-          <input type="number" class="form-control modern-input" [(ngModel)]="newRoute.stopsCount">
+        <div class="col-6">
+          <label class="form-label small fw-bold">Number of Stops</label>
+          <input type="number" class="form-control form-control-modern" [(ngModel)]="newRoute.stopsCount" min="1">
         </div>
-        <div class="col-4">
-          <label class="form-label small fw-bold">Monthly Fare (₹)</label>
-          <input type="number" class="form-control modern-input" [(ngModel)]="newRoute.fare">
-        </div>
-        <div class="col-4">
-          <label class="form-label small fw-bold">Assign Bus</label>
-          <select class="form-select modern-select" [(ngModel)]="newRoute.vehicleNo">
-            <option *ngFor="let v of vehicles" [value]="v.vehicleNo">{{ v.vehicleNo }}</option>
-          </select>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Monthly Transit Fare (₹)</label>
+          <input type="number" class="form-control form-control-modern" [(ngModel)]="newRoute.fare">
         </div>
       </div>
     </div>
@@ -374,7 +397,7 @@
 
 <!-- 2. Add Vehicle Modal -->
 <div class="modal-backdrop-custom" *ngIf="showAddVehicleModal">
-  <div class="modal-content-custom" style="max-width: 500px;">
+  <div class="modal-content-custom" style="max-width: 520px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
       <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-bus text-primary me-2"></i> Register Fleet Vehicle</h5>
       <button class="btn-close" (click)="showAddVehicleModal = false"></button>
@@ -383,121 +406,117 @@
       <div class="row g-3">
         <div class="col-6">
           <label class="form-label small fw-bold">Vehicle Reg # *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newVehicle.vehicleNo" placeholder="e.g. KA-01-EB-9901">
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVehicle.vehicleNo" placeholder="e.g. KA-01-EB-1209">
         </div>
         <div class="col-6">
-          <label class="form-label small fw-bold">Make & Model *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newVehicle.model" placeholder="e.g. Tata Starbus Ultra">
+          <label class="form-label small fw-bold">Bus Model *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVehicle.model" placeholder="e.g. Tata Starbus">
         </div>
         <div class="col-6">
           <label class="form-label small fw-bold">Seating Capacity</label>
-          <input type="number" class="form-control modern-input" [(ngModel)]="newVehicle.seatingCapacity">
+          <input type="number" class="form-control form-control-modern" [(ngModel)]="newVehicle.seatingCapacity" min="10">
         </div>
         <div class="col-6">
-          <label class="form-label small fw-bold">Fuel Type</label>
-          <select class="form-select modern-select" [(ngModel)]="newVehicle.fuelType">
+          <label class="form-label small fw-bold">Fuel Mechanism</label>
+          <select class="form-select form-select-modern" [(ngModel)]="newVehicle.fuelType">
             <option value="Diesel">Diesel</option>
             <option value="CNG">CNG</option>
-            <option value="Electric">Electric (EV)</option>
+            <option value="Electric">Electric</option>
           </select>
         </div>
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
       <button class="btn btn-light rounded-pill px-4" (click)="showAddVehicleModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveVehicle()">Add to Fleet</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveVehicle()">Add Vehicle</button>
     </div>
   </div>
 </div>
 
-<!-- 3. Add Driver Modal -->
-<div class="modal-backdrop-custom" *ngIf="showAddDriverModal">
-  <div class="modal-content-custom" style="max-width: 480px;">
+<!-- 3. Assign Vehicle Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAssignVehicleModal">
+  <div class="modal-content-custom" style="max-width: 500px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
-      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-user-plus text-primary me-2"></i> Enroll Driver</h5>
-      <button class="btn-close" (click)="showAddDriverModal = false"></button>
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-shuffle text-primary me-2"></i> Assign Vehicle & Driver</h5>
+      <button class="btn-close" (click)="showAssignVehicleModal = false"></button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
         <div class="col-12">
-          <label class="form-label small fw-bold">Driver Name *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newDriver.name" placeholder="Full name">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Phone Number *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newDriver.phone" placeholder="+91 98...">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Commercial License #</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newDriver.licenseNo" placeholder="DL-KA...">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Experience (Years)</label>
-          <input type="number" class="form-control modern-input" [(ngModel)]="newDriver.experienceYears">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Assign Vehicle</label>
-          <select class="form-select modern-select" [(ngModel)]="newDriver.assignedVehicle">
-            <option *ngFor="let v of vehicles" [value]="v.vehicleNo">{{ v.vehicleNo }}</option>
+          <label class="form-label small fw-bold">Bus Route *</label>
+          <select class="form-select form-select-modern" [(ngModel)]="assignmentForm.routeTitle">
+            <option *ngFor="let r of routes" [value]="r.routeTitle">{{ r.routeTitle }}</option>
           </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Vehicle Fleet *</label>
+          <select class="form-select form-select-modern" [(ngModel)]="assignmentForm.vehicleNo">
+            <option *ngFor="let v of vehicles" [value]="v.vehicleNo">{{ v.vehicleNo }} ({{ v.model }} - {{ v.seatingCapacity }} seats)</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Assigned Driver *</label>
+          <select class="form-select form-select-modern" [(ngModel)]="assignmentForm.driverName">
+            <option *ngFor="let d of drivers" [value]="d.name">{{ d.name }} ({{ d.phone }})</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Shift Schedule</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="assignmentForm.shiftTime" placeholder="Morning & Afternoon Shift">
         </div>
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAddDriverModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveDriver()">Save Driver</button>
+      <button class="btn btn-light rounded-pill px-4" (click)="showAssignVehicleModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAssignment()">Confirm Assignment</button>
     </div>
   </div>
 </div>
 
 <!-- 4. Allocate Student Modal -->
 <div class="modal-backdrop-custom" *ngIf="showAllocateStudentModal">
-  <div class="modal-content-custom" style="max-width: 500px;">
+  <div class="modal-content-custom" style="max-width: 520px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
-      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-user-check text-primary me-2"></i> Allocate Student to Bus</h5>
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-id-card-clip text-primary me-2"></i> Allocate Student Seat</h5>
       <button class="btn-close" (click)="showAllocateStudentModal = false"></button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
+        <div class="col-6">
+          <label class="form-label small fw-bold">Admission # *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAllocation.admissionNo" placeholder="e.g. ADM-2025-009">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Class / Section</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAllocation.class" placeholder="e.g. Grade 10-A">
+        </div>
         <div class="col-12">
-          <label class="form-label small fw-bold">Student Name *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.studentName" placeholder="Student name">
+          <label class="form-label small fw-bold">Student Full Name *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAllocation.studentName" placeholder="Student name">
         </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Admission #</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.admissionNo" placeholder="ADM-2025-...">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Class / Grade</label>
-          <select class="form-select modern-select" [(ngModel)]="newAllocation.class">
-            <option value="Grade 10-A">Grade 10-A</option>
-            <option value="Grade 10-B">Grade 10-B</option>
-            <option value="Grade 9-A">Grade 9-A</option>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Transit Route *</label>
+          <select class="form-select form-select-modern" [(ngModel)]="newAllocation.routeTitle">
+            <option *ngFor="let r of routes" [value]="r.routeTitle">{{ r.routeTitle }} (₹{{ r.fare }}/mo)</option>
           </select>
         </div>
         <div class="col-12">
-          <label class="form-label small fw-bold">Select Bus Route</label>
-          <select class="form-select modern-select" [(ngModel)]="newAllocation.routeTitle">
-            <option *ngFor="let r of routes" [value]="r.routeTitle">{{ r.routeTitle }}</option>
-          </select>
-        </div>
-        <div class="col-12">
-          <label class="form-label small fw-bold">Boarding Pickup Stop *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.pickupStop" placeholder="e.g. Hebbal Esteem Mall">
+          <label class="form-label small fw-bold">Pickup Stop *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAllocation.pickupStop" placeholder="e.g. Hebbal Esteem Mall">
         </div>
         <div class="col-6">
           <label class="form-label small fw-bold">Pickup Time</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.pickupTime">
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAllocation.pickupTime" placeholder="07:30 AM">
         </div>
         <div class="col-6">
           <label class="form-label small fw-bold">Drop Time</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.dropTime">
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAllocation.dropTime" placeholder="03:30 PM">
         </div>
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
       <button class="btn btn-light rounded-pill px-4" (click)="showAllocateStudentModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAllocation()">Confirm Allocation</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAllocation()">Issue Bus Pass</button>
     </div>
   </div>
 </div>
