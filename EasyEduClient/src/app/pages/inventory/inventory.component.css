@@ -1,28 +1,95 @@
-.hover-shadow {
-  transition: all 0.25s ease;
-}
-.hover-shadow:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+.inventory-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
 .custom-pills .nav-link {
-  color: #4b5563;
+  color: #64748b;
   font-weight: 600;
-  border-radius: 9999px;
-  padding: 0.5rem 1.25rem;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 0.9rem;
   transition: all 0.2s ease;
 }
 
 .custom-pills .nav-link.active {
-  background-color: var(--sidebar-bg, #12403E);
+  background: #002b49;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(18, 64, 62, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 43, 73, 0.2);
 }
 
-.custom-pills .nav-link:hover:not(.active) {
-  background-color: #f3f4f6;
-  color: #111827;
+.search-bar-modern {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar-modern .search-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+}
+
+.search-bar-modern input {
+  padding: 10px 16px 10px 38px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 0.9rem;
+  color: #1e293b;
+  outline: none;
+}
+
+.search-bar-modern input:focus {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-control-modern,
+.form-select-modern {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  color: #1e293b;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control-modern:focus,
+.form-select-modern:focus {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  outline: none;
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 16px;
+}
+
+.modal-content-custom {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  padding: 24px;
 }
 
 .rounded-16 {
@@ -31,4 +98,13 @@
 
 .rounded-12 {
   border-radius: 12px;
+}
+
+.hover-shadow {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }

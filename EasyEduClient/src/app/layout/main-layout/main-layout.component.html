@@ -367,9 +367,13 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['inventory']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['inventory']">
-        <li><a routerLink="/inventory" routerLinkActive="active" class="sub-nav-link text-info">Item Catalog</a></li>
-        <li><a routerLink="/inventory" class="sub-nav-link text-success">Issue Item</a></li>
-        <li><a routerLink="/inventory" class="sub-nav-link">Suppliers Directory</a></li>
+        <li><a routerLink="/Inventory" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-success fw-bold">Asset Registry</a></li>
+        <li><a routerLink="/Inventory/ItemCategory" routerLinkActive="active" class="sub-nav-link">Category Logic</a></li>
+        <li><a routerLink="/Inventory/Supplier" routerLinkActive="active" class="sub-nav-link">Supplier Nexus</a></li>
+        <li><a routerLink="/Inventory/ItemReceive" routerLinkActive="active" class="sub-nav-link text-info">Procurement Log</a></li>
+        <li><a routerLink="/Inventory/IssueItem" routerLinkActive="active" class="sub-nav-link">Asset Issuance</a></li>
+        <li><a routerLink="/Inventory/Transactions" routerLinkActive="active" class="sub-nav-link">Audit Trail</a></li>
+        <li><a routerLink="/Inventory/Reports" routerLinkActive="active" class="sub-nav-link">Strategy Reports</a></li>
       </ul>
     </div>
 
