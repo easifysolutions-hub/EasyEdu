@@ -517,9 +517,15 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['examReports']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['examReports']">
-        <li><a routerLink="/reports" class="sub-nav-link">Tabulation Sheet</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Progress Card</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Merit List Report</a></li>
+        <li><a routerLink="/ExamReports/ExamRoutine" routerLinkActive="active" class="sub-nav-link text-primary"><i class="fas fa-calendar-check me-1"></i> Exam Routine</a></li>
+        <li><a routerLink="/ExamReports/MeritList" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-trophy me-1"></i> Merit List Report</a></li>
+        <li><a routerLink="/ExamReports/OnlineExamReport" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-laptop-code me-1"></i> Online Exam Report</a></li>
+        <li><a routerLink="/ExamReports/SubjectWiseMarksheet" routerLinkActive="active" class="sub-nav-link text-purple"><i class="fas fa-list-ol me-1"></i> Subject Wise Marksheet</a></li>
+        <li><a routerLink="/ExamReports/TabulationSheet" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-table-cells me-1"></i> Tabulation Sheet</a></li>
+        <li><a routerLink="/ExamReports/ProgressCard" routerLinkActive="active" class="sub-nav-link text-primary fw-bold"><i class="fas fa-id-card-clip me-1"></i> Progress Card Report</a></li>
+        <li><a routerLink="/ExamReports/MarkSheetReport" routerLinkActive="active" class="sub-nav-link text-danger"><i class="fas fa-stamp me-1"></i> Mark Sheet Report</a></li>
+        <li><a routerLink="/ExamReports/ProgressCard100Percent" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-chart-pie me-1"></i> Progress Card 100%</a></li>
+        <li><a routerLink="/ExamReports/PreviousResult" routerLinkActive="active" class="sub-nav-link text-secondary"><i class="fas fa-clock-rotate-left me-1"></i> Previous Result</a></li>
       </ul>
     </div>
 

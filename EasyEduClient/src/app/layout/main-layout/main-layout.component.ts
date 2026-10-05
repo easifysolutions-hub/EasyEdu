@@ -96,6 +96,7 @@ export class MainLayoutComponent implements OnInit {
     if (url.includes('importexport') || url.includes('datamanagement')) this.openMenus['dataManagement'] = true;
     if (url.includes('frontsettings') || url.includes('frontend-cms') || url.includes('frontendcms')) this.openMenus['frontendCms'] = true;
     if (url.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
+    if (url.includes('examreport') || url.includes('examreports')) this.openMenus['examReports'] = true;
     if (url.includes('report')) this.openMenus['reports'] = true;
     if (url.includes('setting') || url.includes('role')) this.openMenus['systemSettings'] = true;
   }

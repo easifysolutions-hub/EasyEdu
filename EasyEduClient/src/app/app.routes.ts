@@ -38,6 +38,7 @@ import { UtilitiesComponent } from './pages/utilities/utilities.component';
 import { RolePermissionComponent } from './pages/role-permission/role-permission.component';
 import { ImportExportComponent } from './pages/import-export/import-export.component';
 import { FrontendCmsComponent } from './pages/frontend-cms/frontend-cms.component';
+import { ExamReportsComponent } from './pages/exam-reports/exam-reports.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -318,7 +319,16 @@ export const routes: Routes = [
       { path: 'Reports/TransactionReport', component: ReportsComponent },
       { path: 'Reports/StaffReport', component: ReportsComponent },
       { path: 'Reports/StaffAttendanceReport', component: ReportsComponent },
-      { path: 'ExamReports', component: ReportsComponent },
+      { path: 'ExamReports', component: ExamReportsComponent },
+      { path: 'ExamReports/ExamRoutine', component: ExamReportsComponent },
+      { path: 'ExamReports/MeritList', component: ExamReportsComponent },
+      { path: 'ExamReports/OnlineExamReport', component: ExamReportsComponent },
+      { path: 'ExamReports/SubjectWiseMarksheet', component: ExamReportsComponent },
+      { path: 'ExamReports/TabulationSheet', component: ExamReportsComponent },
+      { path: 'ExamReports/ProgressCard', component: ExamReportsComponent },
+      { path: 'ExamReports/MarkSheetReport', component: ExamReportsComponent },
+      { path: 'ExamReports/ProgressCard100Percent', component: ExamReportsComponent },
+      { path: 'ExamReports/PreviousResult', component: ExamReportsComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'Settings', component: SettingsComponent },
       { path: 'Settings/Holiday', component: SettingsComponent },
