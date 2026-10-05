@@ -237,26 +237,26 @@
 
     <!-- 5. HUMAN RESOURCE -->
     <div class="menu-category">HUMAN RESOURCE</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="hrSubMenu">
       <a class="nav-link-premium" [class.open]="openMenus['hr']" (click)="toggleMenu('hr')">
         <span><i class="fas fa-users-gear main-icon"></i> <span class="sidebar-label">Human Resource</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['hr']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['hr']">
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'designation'}" class="sub-nav-link">Designation</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'department'}" class="sub-nav-link">Department</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'add-staff'}" class="sub-nav-link text-success fw-bold">Add Staff</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'directory'}" class="sub-nav-link">Staff Directory</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'attendance'}" class="sub-nav-link">Staff Attendance</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'payroll'}" class="sub-nav-link">Payroll</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Staff Settings</a></li>
-        <li><a [routerLink]="['/staff']" [queryParams]="{tab: 'bulk-payroll'}" class="sub-nav-link">Bulk Payroll Print</a></li>
-        <li><a [routerLink]="['/leave']" [queryParams]="{tab: 'apply'}" class="sub-nav-link">Apply Leave</a></li>
-        <li><a [routerLink]="['/leave']" [queryParams]="{tab: 'pending'}" class="sub-nav-link">Pending Leave Request</a></li>
-        <li><a [routerLink]="['/leave']" [queryParams]="{tab: 'approved'}" class="sub-nav-link">Approve Leave Request</a></li>
-        <li><a [routerLink]="['/leave']" [queryParams]="{tab: 'define'}" class="sub-nav-link">Leave Define</a></li>
-        <li><a [routerLink]="['/leave']" [queryParams]="{tab: 'types'}" class="sub-nav-link">Leave Type</a></li>
-        <li><a [routerLink]="['/reports']" class="sub-nav-link">Staff Reports</a></li>
+        <li><a routerLink="/HumanResource/Designation" routerLinkActive="active" class="sub-nav-link">Designation</a></li>
+        <li><a routerLink="/HumanResource/Department" routerLinkActive="active" class="sub-nav-link">Department</a></li>
+        <li><a routerLink="/HumanResource/AddStaff" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Staff</a></li>
+        <li><a routerLink="/HumanResource/StaffDirectory" routerLinkActive="active" class="sub-nav-link">Staff Directory</a></li>
+        <li><a routerLink="/HumanResource/StaffAttendance" routerLinkActive="active" class="sub-nav-link">Staff Attendance</a></li>
+        <li><a routerLink="/HumanResource/Payroll" routerLinkActive="active" class="sub-nav-link">Payroll</a></li>
+        <li><a routerLink="/HumanResource/StaffSettings" routerLinkActive="active" class="sub-nav-link">Staff Settings</a></li>
+        <li><a routerLink="/HumanResource/BulkPayrollPrint" routerLinkActive="active" class="sub-nav-link">Bulk Payroll Print</a></li>
+        <li><a routerLink="/Leave" routerLinkActive="active" class="sub-nav-link">Apply Leave</a></li>
+        <li><a routerLink="/Leave/PendingLeaveRequest" routerLinkActive="active" class="sub-nav-link">Pending Leave Request</a></li>
+        <li><a routerLink="/Leave/ApproveLeaveRequest" routerLinkActive="active" class="sub-nav-link">Approve Leave Request</a></li>
+        <li><a routerLink="/Leave/LeaveDefine" routerLinkActive="active" class="sub-nav-link">Leave Define</a></li>
+        <li><a routerLink="/Leave/LeaveType" routerLinkActive="active" class="sub-nav-link">Leave Type</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Staff Reports</a></li>
       </ul>
     </div>
 

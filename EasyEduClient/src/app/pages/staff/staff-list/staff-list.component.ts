@@ -117,26 +117,38 @@ export class StaffListComponent implements OnInit {
       this.staffList = res;
     });
 
+    this.syncActiveTabFromUrl();
+
     this.route.url.subscribe(() => {
-      const path = this.router.url.toLowerCase();
-      if (path.includes('designation')) {
-        this.activeTab = 'designation';
-      } else if (path.includes('department')) {
-        this.activeTab = 'department';
-      } else if (path.includes('addstaff')) {
-        this.activeTab = 'add-staff';
-      } else if (path.includes('staffattendance')) {
-        this.activeTab = 'attendance';
-      } else if (path.includes('bulkpayrollprint')) {
-        this.activeTab = 'bulk-payroll';
-      } else if (path.includes('payroll')) {
-        this.activeTab = 'payroll';
-      } else if (path.includes('staffsettings')) {
-        this.activeTab = 'settings';
-      } else if (path.includes('staffdirectory') || path.includes('staff')) {
-        this.activeTab = 'directory';
+      this.syncActiveTabFromUrl();
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.activeTab = params['tab'];
       }
     });
+  }
+
+  private syncActiveTabFromUrl(): void {
+    const path = this.router.url.toLowerCase();
+    if (path.includes('designation')) {
+      this.activeTab = 'designation';
+    } else if (path.includes('department')) {
+      this.activeTab = 'department';
+    } else if (path.includes('addstaff')) {
+      this.activeTab = 'add-staff';
+    } else if (path.includes('staffattendance')) {
+      this.activeTab = 'attendance';
+    } else if (path.includes('bulkpayrollprint')) {
+      this.activeTab = 'bulk-payroll';
+    } else if (path.includes('payroll')) {
+      this.activeTab = 'payroll';
+    } else if (path.includes('staffsettings')) {
+      this.activeTab = 'settings';
+    } else if (path.includes('staffdirectory') || path.includes('staff')) {
+      this.activeTab = 'directory';
+    }
   }
 
   setTab(tab: any): void {

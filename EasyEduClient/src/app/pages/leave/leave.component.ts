@@ -85,20 +85,32 @@ export class LeaveComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.syncActiveTabFromUrl();
+
     this.route.url.subscribe(() => {
-      const path = this.router.url.toLowerCase();
-      if (path.includes('pendingleaverequest')) {
-        this.activeTab = 'pending';
-      } else if (path.includes('approveleaverequest')) {
-        this.activeTab = 'approved';
-      } else if (path.includes('leavedefine')) {
-        this.activeTab = 'define';
-      } else if (path.includes('leavetype')) {
-        this.activeTab = 'types';
-      } else if (path.includes('leave') || path.includes('apply')) {
-        this.activeTab = 'apply';
+      this.syncActiveTabFromUrl();
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.activeTab = params['tab'];
       }
     });
+  }
+
+  private syncActiveTabFromUrl(): void {
+    const path = this.router.url.toLowerCase();
+    if (path.includes('pendingleaverequest')) {
+      this.activeTab = 'pending';
+    } else if (path.includes('approveleaverequest')) {
+      this.activeTab = 'approved';
+    } else if (path.includes('leavedefine')) {
+      this.activeTab = 'define';
+    } else if (path.includes('leavetype')) {
+      this.activeTab = 'types';
+    } else if (path.includes('leave') || path.includes('apply')) {
+      this.activeTab = 'apply';
+    }
   }
 
   setTab(tab: any): void {
