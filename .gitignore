@@ -260,5 +260,26 @@ window_dump*.xml
 *.apk
 *.ipa
 node_modules/
+**/node_modules/
+EasyEduMobile/node_modules/
+EasyEduMobile/.expo/
+EasyEduMobile/android/.gradle/
+EasyEduMobile/android/app/build/
+EasyEduMobile/android/build/
+
+# Angular Client Build Artifacts & Cache
+EasyEduClient/dist/
+EasyEduClient/.angular/
+EasyEduClient/node_modules/
+dist/
+.angular/
+
+# System / Logs & Dumps
+.gemini/
+*.log
+*.log.*
+logs/
+bin/
+obj/
 
 
