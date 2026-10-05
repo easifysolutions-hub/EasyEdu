@@ -368,8 +368,108 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.user-profile-badge:hover {
+/* Topbar Specific Custom Elements */
+.btn-back-topbar {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border-radius: 20px !important;
+  font-size: 0.82rem !important;
+  padding: 6px 14px !important;
+  font-weight: 600;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: none !important;
+}
+.btn-back-topbar:hover {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+.social-circle-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
   background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.social-circle-btn:hover {
+  background: #e2e8f0;
+  color: #2563eb;
+}
+
+.btn-topbar-pill {
+  border-radius: 20px !important;
+  font-size: 0.8rem !important;
+  padding: 6px 14px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  border: none !important;
+}
+
+.pill-purple {
+  background: #7c3aed !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3) !important;
+}
+.pill-purple:hover, .pill-purple.active-pill {
+  background: #6d28d9 !important;
+}
+
+.pill-blue {
+  background: #2563eb !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+}
+.pill-blue:hover, .pill-blue.active-pill {
+  background: #1d4ed8 !important;
+}
+
+.language-selector-badge {
+  background: #f1f5f9;
+  border-radius: 20px;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+}
+.language-selector-badge:hover {
+  background: #e2e8f0;
+}
+
+.notification-badge.badge-orange {
+  background: #ea580c !important;
+}
+
+.notification-badge.badge-yellow {
+  background: #f59e0b !important;
+}
+
+/* Sidebar Collapse Footer */
+.sidebar-collapse-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 20px;
+  background: rgba(10, 35, 30, 0.95);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+.sidebar-collapse-footer:hover {
+  background: #0d2e27;
+  color: #FFBC53;
 }
 
 .avatar-circle {

@@ -51,6 +51,10 @@ export class MainLayoutComponent {
     this.openMenus[menuKey] = !this.openMenus[menuKey];
   }
 
+  goBack(): void {
+    window.history.back();
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

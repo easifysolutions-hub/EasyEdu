@@ -346,55 +346,81 @@
       <span class="sidebar-label">Global Control Center</span>
     </a>
   </div>
+
+  <!-- Sidebar Collapse Footer -->
+  <div class="sidebar-collapse-footer" (click)="themeService.toggleSidebar()">
+    <span>Collapse</span>
+    <i class="fas fa-chevron-left ms-auto"></i>
+  </div>
 </aside>
 
 <!-- Topbar Navigation -->
 <header class="topbar" [class.sidebar-collapsed]="themeService.isSidebarCollapsed()">
-  <div class="d-flex align-items-center">
-    <button class="toggle-btn d-none d-lg-flex" (click)="themeService.toggleSidebar()" title="Toggle Sidebar">
-      <i class="fas fa-bars"></i>
-    </button>
-    <button class="toggle-btn d-flex d-lg-none" (click)="themeService.toggleMobileSidebar()" title="Toggle Menu">
+  <div class="d-flex align-items-center gap-2">
+    <button class="toggle-btn d-flex" (click)="themeService.toggleSidebar()" title="Toggle Sidebar">
       <i class="fas fa-bars"></i>
     </button>
 
-    <div class="search-bar-modern d-none d-sm-block">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" placeholder="Search students, staff, fees, records...">
+    <button class="btn btn-sm btn-back-topbar d-none d-sm-inline-flex align-items-center gap-1" (click)="goBack()" title="Go Back">
+      <i class="fas fa-arrow-left"></i> <span>Back</span>
+    </button>
+
+    <div class="search-bar-modern d-none d-md-block">
+      <input type="text" placeholder="Search Here ...">
     </div>
   </div>
 
-  <div class="topbar-icons">
-    <!-- Public Home Link -->
-    <a routerLink="/" class="btn btn-sm btn-outline-primary d-none d-md-inline-flex" title="Go to Public Landing Page">
-      <i class="fas fa-globe"></i> Website
+  <div class="topbar-icons d-flex align-items-center gap-2">
+    <!-- Social Icons -->
+    <div class="social-circle-icons d-none d-xl-flex align-items-center gap-1 me-2">
+      <a href="javascript:void(0)" class="social-circle-btn"><i class="fab fa-facebook-f"></i></a>
+      <a href="javascript:void(0)" class="social-circle-btn"><i class="fab fa-twitter"></i></a>
+      <a href="javascript:void(0)" class="social-circle-btn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="javascript:void(0)" class="social-circle-btn"><i class="fab fa-google-plus-g"></i></a>
+    </div>
+
+    <!-- Quick Switcher Dashboard Pills -->
+    <a routerLink="/fees" routerLinkActive="active-pill" class="btn btn-sm btn-topbar-pill pill-purple d-none d-lg-inline-flex align-items-center gap-1">
+      <i class="fas fa-file-invoice"></i> <span>Fees Dashboard</span>
     </a>
 
-    <!-- Theme Mode Switch -->
-    <button 
-      class="icon-wrapper" 
-      (click)="themeService.toggleTheme()" 
-      [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
-    >
-      <i [class]="themeService.isDarkMode() ? 'fas fa-sun text-warning' : 'fas fa-moon'"></i>
-    </button>
+    <a routerLink="/accounting" routerLinkActive="active-pill" class="btn btn-sm btn-topbar-pill pill-blue d-none d-lg-inline-flex align-items-center gap-1">
+      <i class="fas fa-chart-pie"></i> <span>Accounting Dashboard</span>
+    </a>
+
+    <!-- Language Selector Dropdown -->
+    <div class="language-selector-badge d-none d-sm-flex align-items-center gap-1 px-2 py-1">
+      <i class="fas fa-globe"></i>
+      <span>English</span>
+      <i class="fas fa-chevron-down" style="font-size: 0.65rem;"></i>
+    </div>
+
+    <!-- Home Icon -->
+    <a routerLink="/" class="icon-wrapper" title="Public Website">
+      <i class="fas fa-home"></i>
+    </a>
+
+    <!-- Messages / Chat -->
+    <a routerLink="/chat" class="icon-wrapper" title="Campus Chat">
+      <i class="far fa-envelope"></i>
+      <span class="notification-badge badge-orange">3</span>
+    </a>
 
     <!-- Notifications -->
     <button class="icon-wrapper" title="Notifications">
       <i class="far fa-bell"></i>
-      <span class="notification-badge">3</span>
+      <span class="notification-badge badge-yellow">8</span>
     </button>
 
-    <!-- User Profile Dropdown -->
-    <div class="user-profile-badge" (click)="logout()" title="Click to Logout">
+    <!-- User Profile Badge -->
+    <div class="user-profile-badge ms-1" (click)="logout()" title="Click to Logout">
       <div class="avatar-circle">
-        {{ authService.currentUser()?.fullName?.charAt(0) || 'A' }}
+        SA
       </div>
-      <div class="d-none d-md-block text-start">
-        <div class="fw-bold fs-7 lh-1">{{ authService.currentUser()?.fullName || 'Administrator' }}</div>
-        <small class="text-muted" style="font-size: 0.72rem;">SuperAdmin</small>
+      <div class="d-none d-md-block text-start lh-1">
+        <div class="fw-bold fs-7">{{ authService.currentUser()?.fullName || 'System Administrator' }}</div>
+        <small class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">SUPERADMIN</small>
       </div>
-      <i class="fas fa-sign-out-alt text-muted ms-2 me-1"></i>
     </div>
   </div>
 </header>

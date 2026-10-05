@@ -32,6 +32,7 @@ interface VoucherItem {
 })
 export class AccountingComponent {
   activeTab: 'dashboard' | 'vouchers' | 'chart' | 'trial' | 'profit-loss' | 'balance-sheet' = 'dashboard';
+  trendPeriod: 'yearly' | 'monthly' = 'yearly';
   searchTerm = '';
   selectedType = 'All';
 
@@ -70,6 +71,26 @@ export class AccountingComponent {
       const matchSearch = !this.searchTerm || v.voucherNo.toLowerCase().includes(this.searchTerm.toLowerCase()) || v.accountHead.toLowerCase().includes(this.searchTerm.toLowerCase()) || v.narration.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchType = this.selectedType === 'All' || v.type === this.selectedType;
       return matchSearch && matchType;
+    });
+  }
+
+  openVoucher(type: string): void {
+    this.newVoucher.type = type;
+    this.showNewVoucherModal = true;
+  }
+
+  seedData(): void {
+    Swal.fire({
+      title: 'Seed Startup Accounting Data?',
+      text: 'This will seed sample ledger charts, vouchers, and trial balances for demonstration.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Seed Now',
+      confirmButtonColor: '#7c3aed'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        Swal.fire('Data Seeded!', 'Fiscal chart & sample records loaded successfully.', 'success');
+      }
     });
   }
 

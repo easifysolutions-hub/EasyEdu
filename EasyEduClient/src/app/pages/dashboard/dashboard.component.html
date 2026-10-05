@@ -112,7 +112,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Students</div>
-            <div class="stat-value">{{ (stats?.totalStudents || 1250) | number }}</div>
+            <div class="stat-value">{{ (stats?.totalStudents !== undefined ? stats?.totalStudents : 1) | number }}</div>
           </div>
           <div class="stat-icon-bg"><i class="fas fa-user-graduate"></i></div>
         </div>
@@ -125,7 +125,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Teachers</div>
-            <div class="stat-value">{{ (stats?.totalTeachers || 84) | number }}</div>
+            <div class="stat-value">{{ (stats?.totalTeachers !== undefined ? stats?.totalTeachers : 0) | number }}</div>
           </div>
           <div class="stat-icon-bg"><i class="fas fa-chalkboard-teacher"></i></div>
         </div>
@@ -138,7 +138,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Parents</div>
-            <div class="stat-value">{{ (stats?.totalParents || 1120) | number }}</div>
+            <div class="stat-value">{{ (stats?.totalParents !== undefined ? stats?.totalParents : 0) | number }}</div>
           </div>
           <div class="stat-icon-bg"><i class="fas fa-users"></i></div>
         </div>
@@ -151,11 +151,11 @@
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Revenue</div>
-            <div class="stat-value">₹{{ (stats?.totalEarnings || 845000) | number }}</div>
+            <div class="stat-value">₹{{ (stats?.totalEarnings !== undefined ? stats?.totalEarnings : 0) | number }}</div>
           </div>
           <div class="stat-icon-bg"><i class="fas fa-money-bill-trend-up"></i></div>
         </div>
-        <div class="stat-footer mt-3"><i class="fas fa-chart-line me-1"></i> 845K Target Achieved</div>
+        <div class="stat-footer mt-3"><i class="fas fa-chart-line me-1"></i> 0.0K Target Achieved</div>
       </div>
     </div>
   </div>
