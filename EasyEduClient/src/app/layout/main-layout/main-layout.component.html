@@ -195,42 +195,43 @@
 
     <!-- 4. STUDENT MANAGEMENT -->
     <div class="menu-category">STUDENT MANAGEMENT</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="studentMenu">
       <a class="nav-link-premium" [class.open]="openMenus['students']" (click)="toggleMenu('students')">
         <span><i class="fas fa-user-graduate main-icon"></i> <span class="sidebar-label">Student Info</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['students']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['students']">
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'category'}" class="sub-nav-link">Student Category</a></li>
-        <li><a routerLink="/students/admission" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Student</a></li>
-        <li><a routerLink="/students" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Student List</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'multiclass'}" class="sub-nav-link">Multi Class Student</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'unassigned'}" class="sub-nav-link">Unassigned Student</a></li>
-        <li><a routerLink="/attendance" class="sub-nav-link">Student Attendance</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'group'}" class="sub-nav-link">Student Group</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'promote'}" class="sub-nav-link">Student Promote</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'disabled'}" class="sub-nav-link">Disabled Students</a></li>
-        <li><a [routerLink]="['/attendance']" [queryParams]="{tab: 'subject'}" class="sub-nav-link">Subject Wise Attendance</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'export'}" class="sub-nav-link">Student Export</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'sms-time'}" class="sub-nav-link">SMS Sending Time</a></li>
-        <li><a [routerLink]="['/students']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Student Settings</a></li>
+        <li><a routerLink="/StudentCategory" routerLinkActive="active" class="sub-nav-link">Student Category</a></li>
+        <li><a routerLink="/Students/Create" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Student</a></li>
+        <li><a routerLink="/Students" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Student List</a></li>
+        <li><a routerLink="/Students/MultiClassStudent" routerLinkActive="active" class="sub-nav-link">Multi Class Student</a></li>
+        <li><a routerLink="/Students" routerLinkActive="active" class="sub-nav-link">Delete Student Record</a></li>
+        <li><a routerLink="/Students/UnassignedStudent" routerLinkActive="active" class="sub-nav-link">Unassigned Student</a></li>
+        <li><a routerLink="/Attendance" routerLinkActive="active" class="sub-nav-link">Student Attendance</a></li>
+        <li><a routerLink="/Students/StudentGroup" routerLinkActive="active" class="sub-nav-link">Student Group</a></li>
+        <li><a routerLink="/Students/StudentPromote" routerLinkActive="active" class="sub-nav-link">Student Promote</a></li>
+        <li><a routerLink="/Students/DisabledStudents" routerLinkActive="active" class="sub-nav-link">Disabled Students</a></li>
+        <li><a routerLink="/Attendance/SubjectWiseAttendance" routerLinkActive="active" class="sub-nav-link">Subject Wise Attendance</a></li>
+        <li><a routerLink="/Students/StudentExport" routerLinkActive="active" class="sub-nav-link">Student Export</a></li>
+        <li><a routerLink="/Students/SmsSendingTime" routerLinkActive="active" class="sub-nav-link">SMS Sending Time</a></li>
+        <li><a routerLink="/Students/StudentSettings" routerLinkActive="active" class="sub-nav-link">Student Settings</a></li>
       </ul>
     </div>
 
     <!-- Behaviour Records -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="behaviourMenu">
       <a class="nav-link-premium" [class.open]="openMenus['behaviour']" (click)="toggleMenu('behaviour')">
         <span><i class="fas fa-hand-sparkles main-icon"></i> <span class="sidebar-label">Behaviour Records</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['behaviour']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['behaviour']">
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'incidents'}" class="sub-nav-link">Incidents</a></li>
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'assign'}" class="sub-nav-link">Assign Incident</a></li>
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'student-report'}" class="sub-nav-link">Student Incident Report</a></li>
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'behaviour-report'}" class="sub-nav-link">Behaviour Report</a></li>
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'class-section-report'}" class="sub-nav-link">Class Section Report</a></li>
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'incident-wise-report'}" class="sub-nav-link">Incident Wise Report</a></li>
-        <li><a [routerLink]="['/behaviour']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Settings</a></li>
+        <li><a routerLink="/BehaviourRecords/Incidents" routerLinkActive="active" class="sub-nav-link">Incidents</a></li>
+        <li><a routerLink="/BehaviourRecords/AssignIncident" routerLinkActive="active" class="sub-nav-link">Assign Incident</a></li>
+        <li><a routerLink="/BehaviourRecords/StudentIncidentReport" routerLinkActive="active" class="sub-nav-link">Student Incident Report</a></li>
+        <li><a routerLink="/BehaviourRecords/BehaviourReport" routerLinkActive="active" class="sub-nav-link">Behaviour Report</a></li>
+        <li><a routerLink="/BehaviourRecords/ClassSectionReport" routerLinkActive="active" class="sub-nav-link">Class Section Report</a></li>
+        <li><a routerLink="/BehaviourRecords/IncidentWiseReport" routerLinkActive="active" class="sub-nav-link">Incident Wise Report</a></li>
+        <li><a routerLink="/BehaviourRecords/Settings" routerLinkActive="active" class="sub-nav-link">Settings</a></li>
       </ul>
     </div>
 

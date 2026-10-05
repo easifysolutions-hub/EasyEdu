@@ -99,27 +99,10 @@ export class StudentListComponent implements OnInit {
   ngOnInit(): void {
     this.loadStudents();
 
+    this.syncActiveTabFromUrl();
+
     this.route.url.subscribe(() => {
-      const path = this.router.url.toLowerCase();
-      if (path.includes('studentcategory')) {
-        this.activeTab = 'category';
-      } else if (path.includes('multiclassstudent')) {
-        this.activeTab = 'multiclass';
-      } else if (path.includes('unassignedstudent')) {
-        this.activeTab = 'unassigned';
-      } else if (path.includes('studentgroup')) {
-        this.activeTab = 'group';
-      } else if (path.includes('studentpromote')) {
-        this.activeTab = 'promote';
-      } else if (path.includes('disabledstudents')) {
-        this.activeTab = 'disabled';
-      } else if (path.includes('studentexport')) {
-        this.activeTab = 'export';
-      } else if (path.includes('smssendingtime')) {
-        this.activeTab = 'sms-time';
-      } else if (path.includes('studentsettings')) {
-        this.activeTab = 'settings';
-      }
+      this.syncActiveTabFromUrl();
     });
 
     this.route.queryParams.subscribe(params => {
@@ -127,6 +110,31 @@ export class StudentListComponent implements OnInit {
         this.activeTab = params['tab'];
       }
     });
+  }
+
+  private syncActiveTabFromUrl(): void {
+    const path = this.router.url.toLowerCase();
+    if (path.includes('studentcategory')) {
+      this.activeTab = 'category';
+    } else if (path.includes('multiclassstudent')) {
+      this.activeTab = 'multiclass';
+    } else if (path.includes('unassignedstudent')) {
+      this.activeTab = 'unassigned';
+    } else if (path.includes('studentgroup')) {
+      this.activeTab = 'group';
+    } else if (path.includes('studentpromote')) {
+      this.activeTab = 'promote';
+    } else if (path.includes('disabledstudents')) {
+      this.activeTab = 'disabled';
+    } else if (path.includes('studentexport')) {
+      this.activeTab = 'export';
+    } else if (path.includes('smssendingtime')) {
+      this.activeTab = 'sms-time';
+    } else if (path.includes('studentsettings')) {
+      this.activeTab = 'settings';
+    } else if (path.endsWith('/students') || path.endsWith('/students/')) {
+      this.activeTab = 'list';
+    }
   }
 
   loadStudents(): void {
