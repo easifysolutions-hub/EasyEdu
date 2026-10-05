@@ -421,20 +421,109 @@
       </ul>
     </div>
 
-    <!-- 9. SYSTEM & SETTINGS -->
-    <div class="menu-category">REPORTS & SYSTEM</div>
-    <a routerLink="/reports" routerLinkActive="active" class="nav-link-premium">
-      <i class="fas fa-chart-line main-icon"></i>
-      <span class="sidebar-label">Reports Center</span>
-    </a>
-    <a routerLink="/role-permission" routerLinkActive="active" class="nav-link-premium">
-      <i class="fas fa-user-shield main-icon"></i>
-      <span class="sidebar-label">Role & Permissions</span>
-    </a>
-    <a routerLink="/settings" routerLinkActive="active" class="nav-link-premium">
-      <i class="fas fa-cogs main-icon"></i>
-      <span class="sidebar-label">Global Control Center</span>
-    </a>
+    <!-- 8. DATA & CMS -->
+    <div class="menu-category">DATA & CMS</div>
+    <div class="nav-item-wrapper" id="downloadCenterMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['downloadCenter']" (click)="toggleMenu('downloadCenter')">
+        <span><i class="fas fa-download main-icon"></i> <span class="sidebar-label">Download Center</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['downloadCenter']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['downloadCenter']">
+        <li><a routerLink="/download-center" routerLinkActive="active" class="sub-nav-link text-info">Upload Content</a></li>
+        <li><a routerLink="/download-center" class="sub-nav-link">Assignments</a></li>
+        <li><a routerLink="/download-center" class="sub-nav-link">Syllabus</a></li>
+        <li><a routerLink="/download-center" class="sub-nav-link">Other Downloads</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper" id="dataManagementMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['dataManagement']" (click)="toggleMenu('dataManagement')">
+        <span><i class="fas fa-database main-icon"></i> <span class="sidebar-label">Data Management</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dataManagement']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['dataManagement']">
+        <li><a routerLink="/settings" class="sub-nav-link">Backup & Restore</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Sample Data Import</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper" id="frontendCmsMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['frontendCms']" (click)="toggleMenu('frontendCms')">
+        <span><i class="fas fa-desktop main-icon"></i> <span class="sidebar-label">Frontend CMS</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['frontendCms']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['frontendCms']">
+        <li><a routerLink="/settings" class="sub-nav-link">Pages Management</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">News & Notices</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Photo Gallery</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper" id="styleArchitectMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['styleArchitect']" (click)="toggleMenu('styleArchitect')">
+        <span><i class="fas fa-palette main-icon"></i> <span class="sidebar-label">Style Architect</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['styleArchitect']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['styleArchitect']">
+        <li><a routerLink="/settings" class="sub-nav-link">Color Palette</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Typography & Fonts</a></li>
+      </ul>
+    </div>
+
+    <!-- 9. REPORTS -->
+    <div class="menu-category">REPORTS</div>
+    <div class="nav-item-wrapper" id="reportsMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['reports']" (click)="toggleMenu('reports')">
+        <span><i class="fas fa-chart-pie main-icon"></i> <span class="sidebar-label">Reports</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['reports']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['reports']">
+        <li><a routerLink="/reports" routerLinkActive="active" class="sub-nav-link text-primary">Student Report</a></li>
+        <li><a routerLink="/Reports/StaffReport" routerLinkActive="active" class="sub-nav-link">Staff Report</a></li>
+        <li><a routerLink="/Finance/FeesDueReport" routerLinkActive="active" class="sub-nav-link">Finance Due Report</a></li>
+        <li><a routerLink="/Transport/Reports" routerLinkActive="active" class="sub-nav-link">Transport Report</a></li>
+        <li><a routerLink="/Inventory/Reports" routerLinkActive="active" class="sub-nav-link">Inventory Report</a></li>
+        <li><a routerLink="/Library/Reports" routerLinkActive="active" class="sub-nav-link">Library Report</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper" id="examReportsMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['examReports']" (click)="toggleMenu('examReports')">
+        <span><i class="fas fa-file-chart-column main-icon"></i> <span class="sidebar-label">Exam Reports</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['examReports']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['examReports']">
+        <li><a routerLink="/reports" class="sub-nav-link">Tabulation Sheet</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Progress Card</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Merit List Report</a></li>
+      </ul>
+    </div>
+
+    <!-- 10. SYSTEM SETTINGS -->
+    <div class="menu-category">SYSTEM SETTINGS</div>
+    <div class="nav-item-wrapper" id="systemSettingsMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['systemSettings']" (click)="toggleMenu('systemSettings')">
+        <span><i class="fas fa-sliders main-icon"></i> <span class="sidebar-label">System Settings</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['systemSettings']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['systemSettings']">
+        <li><a routerLink="/settings" routerLinkActive="active" class="sub-nav-link text-primary">General Settings</a></li>
+        <li><a routerLink="/role-permission" routerLinkActive="active" class="sub-nav-link">Role & Permissions</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Payment Gateway</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Email & SMS Gateway</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper" id="moduleManagerMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['moduleManager']" (click)="toggleMenu('moduleManager')">
+        <span><i class="fas fa-cubes main-icon"></i> <span class="sidebar-label">Module Manager</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['moduleManager']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['moduleManager']">
+        <li><a routerLink="/settings" class="sub-nav-link">Module Toggle Matrix</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">License Key Verification</a></li>
+      </ul>
+    </div>
   </div>
 
   <!-- Sidebar Collapse Footer -->

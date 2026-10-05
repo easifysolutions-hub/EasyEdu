@@ -42,9 +42,11 @@ export class MainLayoutComponent implements OnInit {
     downloadCenter: false,
     dataManagement: false,
     frontendCms: false,
+    styleArchitect: false,
     reports: false,
     examReports: false,
     systemSettings: false,
+    moduleManager: false,
     virtualClass: false,
     addons: false
   };
@@ -56,6 +58,8 @@ export class MainLayoutComponent implements OnInit {
       }
     });
 
+    this.syncActiveMenuByUrl();
+
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe(() => {
@@ -65,7 +69,32 @@ export class MainLayoutComponent implements OnInit {
         const hash = url.substring(hashIndex + 1);
         this.expandMenuByFragment(hash);
       }
+      this.syncActiveMenuByUrl();
     });
+  }
+
+  private syncActiveMenuByUrl(): void {
+    const url = this.router.url.toLowerCase();
+    if (url.includes('transport')) this.openMenus['transport'] = true;
+    if (url.includes('library')) this.openMenus['library'] = true;
+    if (url.includes('inventory')) this.openMenus['inventory'] = true;
+    if (url.includes('accounting') || url.includes('accounts')) this.openMenus['accounts'] = true;
+    if (url.includes('finance') || url.includes('fees')) this.openMenus['fees'] = true;
+    if (url.includes('humanresource') || url.includes('staff') || url.includes('leave')) this.openMenus['hr'] = true;
+    if (url.includes('students') || url.includes('student') || url.includes('attendance')) this.openMenus['students'] = true;
+    if (url.includes('behaviour')) this.openMenus['behaviour'] = true;
+    if (url.includes('classes') || url.includes('section') || url.includes('subjects')) this.openMenus['academic'] = true;
+    if (url.includes('lessonplan')) this.openMenus['lessonPlan'] = true;
+    if (url.includes('homework')) this.openMenus['homework'] = true;
+    if (url.includes('examination') || url.includes('examsettings')) this.openMenus['exams'] = true;
+    if (url.includes('onlineexam')) this.openMenus['onlineExam'] = true;
+    if (url.includes('teacherevaluation')) this.openMenus['teacherEvaluation'] = true;
+    if (url.includes('dormitory')) this.openMenus['dormitory'] = true;
+    if (url.includes('certificates')) this.openMenus['certificates'] = true;
+    if (url.includes('virtual')) this.openMenus['virtualClass'] = true;
+    if (url.includes('download')) this.openMenus['downloadCenter'] = true;
+    if (url.includes('report')) this.openMenus['reports'] = true;
+    if (url.includes('setting') || url.includes('role')) this.openMenus['systemSettings'] = true;
   }
 
   expandMenuByFragment(fragment: string): void {
