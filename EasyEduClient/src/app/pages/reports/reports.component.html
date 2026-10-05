@@ -1,145 +1,230 @@
-<div class="container-fluid p-0 animate-fade-in">
-  <!-- Page Header -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-    <div>
-      <h3 class="fw-bold mb-1 text-dark">Centralized Reporting & Business Intelligence</h3>
-      <p class="text-muted small mb-0">Generate, schedule, and export comprehensive academic, financial, payroll, and logistical analytical reports</p>
-    </div>
-  </div>
-
-  <!-- Filter & Search Bar -->
-  <div class="premium-card mb-4 p-3">
-    <div class="row g-3 align-items-center">
-      <div class="col-12 col-md-5">
-        <div class="search-bar-modern w-100">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search reports by keyword (e.g. fees, attendance, marksheet)...">
-        </div>
+<div class="reports-wrapper">
+  <!-- Top Glass Header -->
+  <div class="reports-header-card">
+    <div class="header-left">
+      <div class="header-icon-pill">
+        <i class="fas fa-chart-pie"></i>
       </div>
-      <div class="col-12 col-md-7">
-        <div class="d-flex flex-wrap gap-2 justify-content-md-end">
-          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'All' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'All'">All</button>
-          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Academic' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Academic'">Academic</button>
-          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Attendance' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Attendance'">Attendance</button>
-          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Finance' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Finance'">Finance & Fees</button>
-          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Human Resource' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Human Resource'">Human Resource</button>
-          <button class="btn btn-sm rounded-pill px-3" [ngClass]="selectedCategory === 'Operations' ? 'btn-primary' : 'btn-light border'" (click)="selectedCategory = 'Operations'">Operations</button>
-        </div>
+      <div>
+        <h1 class="reports-title">Institutional Analytics & BI Reporting Hub</h1>
+        <p class="reports-subtitle">Generate, audit, schedule, and export comprehensive academic, attendance, fee ledgers, transport, and payroll reports.</p>
       </div>
     </div>
-  </div>
-
-  <!-- Reports Grid -->
-  <div class="row g-4 animate-fade-in">
-    <div class="col-12 col-md-6 col-lg-4" *ngFor="let r of filteredReports">
-      <div class="card border rounded-16 p-4 shadow-sm bg-white h-100 hover-shadow position-relative">
-        <div class="d-flex align-items-start justify-content-between mb-3">
-          <div class="rounded-12 p-3 d-flex align-items-center justify-content-center text-white" [style.background-color]="r.color" style="width: 52px; height: 52px;">
-            <i [class]="r.icon + ' fa-lg'"></i>
-          </div>
-          <span class="badge bg-light text-secondary border px-2 py-1">{{ r.category }}</span>
-        </div>
-
-        <h6 class="fw-bold text-dark mb-1">{{ r.title }}</h6>
-        <p class="small text-muted mb-3 flex-grow-1" style="min-height: 40px;">{{ r.description }}</p>
-
-        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto small">
-          <span class="text-muted"><i class="far fa-clock me-1"></i> {{ r.lastGenerated }}</span>
-          <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" (click)="generateReport(r)">
-            <i class="fas fa-file-export me-1"></i> Generate
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ================= REPORT PREVIEW MODAL ================= -->
-<div class="modal-backdrop-custom" *ngIf="showPreviewModal">
-  <div class="modal-content-custom" style="max-width: 850px;">
-    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
-      <div class="d-flex align-items-center gap-2">
-        <div class="rounded-circle p-2 text-white d-flex align-items-center justify-content-center" [style.background-color]="activeReport?.color" style="width: 38px; height: 38px;">
-          <i [class]="activeReport?.icon"></i>
-        </div>
-        <div>
-          <h6 class="fw-bold mb-0 text-dark">{{ activeReport?.title }}</h6>
-          <small class="text-muted">{{ activeReport?.category }} Report • Module Code: {{ activeReport?.id }}</small>
-        </div>
-      </div>
-      <button class="btn-close" (click)="showPreviewModal = false"></button>
-    </div>
-
-    <div class="modal-body-custom p-3 mt-2">
-      <!-- Parameters Filter Bar -->
-      <div class="row g-2 mb-3 p-3 bg-light rounded-12 align-items-center">
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted mb-1">Time Period / Date Range</label>
-          <select class="form-select form-select-sm modern-select" [(ngModel)]="filterForm.dateRange">
-            <option value="This Academic Year">Current Academic Year (2025-26)</option>
-            <option value="This Month">This Month (May 2025)</option>
-            <option value="Last 30 Days">Last 30 Days</option>
-            <option value="Quarter 1">Quarter 1 (Apr - Jun)</option>
-          </select>
-        </div>
-        <div class="col-12 col-md-4">
-          <label class="form-label small fw-bold text-muted mb-1">Class / Department Filter</label>
-          <select class="form-select form-select-sm modern-select" [(ngModel)]="filterForm.class">
-            <option value="All Classes">All Classes (Entire School)</option>
-            <option value="Grade 10-A">Grade 10 - Section A</option>
-            <option value="Grade 10-B">Grade 10 - Section B</option>
-            <option value="Grade 9-A">Grade 9 - Section A</option>
-          </select>
-        </div>
-        <div class="col-12 col-md-4 d-flex align-items-end gap-2 pt-3">
-          <button class="btn btn-sm btn-outline-success rounded-pill w-50" (click)="exportData('Excel / CSV')">
-            <i class="fas fa-file-excel me-1"></i> CSV Export
-          </button>
-          <button class="btn btn-sm btn-primary rounded-pill w-50" (click)="printReport()">
-            <i class="fas fa-print me-1"></i> Print / PDF
-          </button>
-        </div>
-      </div>
-
-      <!-- Preview Data Table -->
-      <div class="border rounded-12 p-3 bg-white shadow-sm">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h6 class="fw-bold text-dark small mb-0"><i class="fas fa-table text-primary me-1"></i> Live Report Data Preview (Showing 4 of 248 records)</h6>
-          <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Verified Audit Data</span>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-sm table-hover align-middle small mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Identifier #</th>
-                <th>Entity / Name</th>
-                <th>Scope / Class</th>
-                <th>Metric 1</th>
-                <th>Metric 2</th>
-                <th class="text-end">Status / Remarks</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of previewRows">
-                <td><strong>{{ row.c1 }}</strong></td>
-                <td><strong class="text-dark">{{ row.c2 }}</strong></td>
-                <td><span class="badge bg-light text-secondary border">{{ row.c3 }}</span></td>
-                <td class="fw-bold text-primary">{{ row.c4 }}</td>
-                <td class="text-success fw-bold">{{ row.c5 }}</td>
-                <td class="text-end"><span class="badge bg-info bg-opacity-10 text-primary">{{ row.c6 }}</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-footer-custom d-flex justify-content-end gap-2 p-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showPreviewModal = false">Close</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printReport()">
-        <i class="fas fa-download me-1"></i> Download Complete Report
+    <div class="header-right" *ngIf="viewMode === 'detail'">
+      <button class="btn-back-catalog" (click)="backToCatalog()">
+        <i class="fas fa-arrow-left me-2"></i> All Reports Directory
       </button>
     </div>
+  </div>
+
+  <!-- ================= VIEW MODE 1: CATALOG OF ALL 20 REPORTS ================= -->
+  <div class="catalog-view" *ngIf="viewMode === 'catalog'">
+    <!-- Filter & Search Strip -->
+    <div class="reports-filter-panel mb-4">
+      <div class="row g-3 align-items-center">
+        <div class="col-lg-5">
+          <div class="search-input-wrap">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+              type="text" 
+              class="form-control-dark search-box" 
+              [(ngModel)]="searchTerm" 
+              placeholder="Search by report name, ID, or keywords (e.g. attendance, fees due, transport, payroll)..."
+            />
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="category-pill-row">
+            <button class="btn-category-pill" [class.active]="selectedCategory === 'All'" (click)="selectedCategory = 'All'">
+              <i class="fas fa-layer-group"></i> All (20)
+            </button>
+            <button class="btn-category-pill" [class.active]="selectedCategory === 'Student & Academic'" (click)="selectedCategory = 'Student & Academic'">
+              <i class="fas fa-user-graduate"></i> Academic (6)
+            </button>
+            <button class="btn-category-pill" [class.active]="selectedCategory === 'Attendance & Homework'" (click)="selectedCategory = 'Attendance & Homework'">
+              <i class="fas fa-calendar-check"></i> Attendance (3)
+            </button>
+            <button class="btn-category-pill" [class.active]="selectedCategory === 'Finance & Fees'" (click)="selectedCategory = 'Finance & Fees'">
+              <i class="fas fa-file-invoice-dollar"></i> Finance & Fees (7)
+            </button>
+            <button class="btn-category-pill" [class.active]="selectedCategory === 'Logistics & Dormitory'" (click)="selectedCategory = 'Logistics & Dormitory'">
+              <i class="fas fa-bus"></i> Logistics (2)
+            </button>
+            <button class="btn-category-pill" [class.active]="selectedCategory === 'Staff & Operations'" (click)="selectedCategory = 'Staff & Operations'">
+              <i class="fas fa-users-gear"></i> Operations (2)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20 Reports Grid -->
+    <div class="row g-4">
+      <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let rep of filteredReports">
+        <div class="report-card-premium" (click)="openReportDetail(rep)">
+          <div class="card-top-row">
+            <div class="report-icon-box" [style.background-color]="rep.color">
+              <i [class]="rep.icon"></i>
+            </div>
+            <span class="report-category-badge">{{ rep.badge }}</span>
+          </div>
+
+          <h5 class="report-card-title">{{ rep.title }}</h5>
+          <p class="report-card-desc">{{ rep.description }}</p>
+
+          <div class="report-card-footer">
+            <span class="report-code"><i class="fas fa-hashtag me-1"></i>{{ rep.id }}</span>
+            <button class="btn-generate-sm">
+              <span>View Data</span>
+              <i class="fas fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VIEW MODE 2: DEDICATED REPORT DETAIL VIEW ================= -->
+  <div class="detail-view" *ngIf="viewMode === 'detail' && activeReport">
+    <!-- Breadcrumb & Title Bar -->
+    <div class="report-detail-header mb-4">
+      <div class="d-flex align-items-center gap-3">
+        <div class="report-icon-large" [style.background-color]="activeReport.color">
+          <i [class]="activeReport.icon"></i>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge-mini bg-primary">{{ activeReport.id }}</span>
+            <span class="badge-mini bg-secondary">{{ activeReport.category }}</span>
+          </div>
+          <h2 class="report-main-title">{{ activeReport.title }}</h2>
+          <p class="report-main-desc">{{ activeReport.description }}</p>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn-export-outline" (click)="exportData('CSV')">
+          <i class="fas fa-file-csv text-success me-1"></i> CSV
+        </button>
+        <button class="btn-export-outline" (click)="exportData('Excel XLSX')">
+          <i class="fas fa-file-excel text-success me-1"></i> Excel
+        </button>
+        <button class="btn-export-outline" (click)="exportData('PDF')">
+          <i class="fas fa-file-pdf text-danger me-1"></i> PDF
+        </button>
+        <button class="btn-primary-glow" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Metric KPI Tiles -->
+    <div class="row g-3 mb-4" *ngIf="activeReport.kpis && activeReport.kpis.length > 0">
+      <div class="col-md" *ngFor="let kpi of activeReport.kpis">
+        <div class="kpi-card">
+          <div class="kpi-label">{{ kpi.label }}</div>
+          <div class="kpi-value">{{ kpi.value }}</div>
+          <div class="kpi-trend" *ngIf="kpi.trend" [class.trend-positive]="kpi.isPositive">
+            <i class="fas fa-chart-line me-1" *ngIf="kpi.isPositive"></i> {{ kpi.trend }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parameter Filter Toolbar -->
+    <div class="card-glass mb-4">
+      <div class="card-header-clean">
+        <h4 class="card-title-sm"><i class="fas fa-sliders text-info me-2"></i> Query Parameters & Filters</h4>
+        <button class="btn-text-reset" (click)="resetFilters()"><i class="fas fa-rotate-left me-1"></i> Reset</button>
+      </div>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <label class="form-label-sm">Academic Session</label>
+          <select class="form-select-dark" [(ngModel)]="filterAcademicYear">
+            <option value="2025-2026">2025-2026 (Current)</option>
+            <option value="2024-2025">2024-2025 (Prior)</option>
+            <option value="2023-2024">2023-2024 (Archive)</option>
+          </select>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <label class="form-label-sm">Class Filter</label>
+          <select class="form-select-dark" [(ngModel)]="filterClass">
+            <option value="All Classes">All Classes</option>
+            <option value="Grade 10-A">Grade 10-A</option>
+            <option value="Grade 10-B">Grade 10-B</option>
+            <option value="Grade 9-A">Grade 9-A</option>
+            <option value="Grade 11-Sci">Grade 11-Sci</option>
+          </select>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <label class="form-label-sm">Date From</label>
+          <input type="date" class="form-control-dark" [(ngModel)]="filterDateFrom" />
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <label class="form-label-sm">Date To</label>
+          <input type="date" class="form-control-dark" [(ngModel)]="filterDateTo" />
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <label class="form-label-sm">Quick Search</label>
+          <input type="text" class="form-control-dark" [(ngModel)]="filterSearchQuery" placeholder="Filter table rows..." />
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <button class="btn-primary-glow w-100" (click)="applyFilters()">
+            <i class="fas fa-filter me-1"></i> Apply Filter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Data Table -->
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <h4 class="card-title-sm"><i class="fas fa-table-list text-primary me-2"></i> Verified Audit Ledger Records</h4>
+        <span class="badge-status-active">{{ activeReport.records.length }} Verified Records</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th *ngFor="let col of activeReport.columns">{{ col }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of activeReport.records">
+              <td class="fw-bold text-light" *ngIf="r.c1">{{ r.c1 }}</td>
+              <td *ngIf="r.c2">{{ r.c2 }}</td>
+              <td *ngIf="r.c3">{{ r.c3 }}</td>
+              <td *ngIf="r.c4">{{ r.c4 }}</td>
+              <td *ngIf="r.c5">{{ r.c5 }}</td>
+              <td *ngIf="r.c6">{{ r.c6 }}</td>
+              <td *ngIf="r.c7">{{ r.c7 }}</td>
+              <td *ngIf="r.c8">
+                <span class="badge" [ngClass]="r.c8 === 'Active' || r.c8 === 'Paid' || r.c8 === '100%' || r.c8 === 'Excellent' || r.c8 === 'Authenticated' || r.c8 === 'Active Pass' || r.c8 === 'Active Grant' ? 'bg-success' : (r.c8 === 'Unpaid' || r.c8 === 'Overdue' ? 'bg-danger' : 'bg-primary')">
+                  {{ r.c8 }}
+                </span>
+              </td>
+              <td *ngIf="r.c9">
+                <span class="badge" [ngClass]="r.c9 === 'Partially Paid' ? 'bg-warning text-dark' : (r.c9.includes('Overdue') ? 'bg-danger' : 'bg-secondary')">
+                  {{ r.c9 }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-notification" *ngIf="showSuccessToast">
+    <i class="fas fa-circle-check text-success me-2"></i>
+    <span>{{ toastMessage }}</span>
   </div>
 </div>

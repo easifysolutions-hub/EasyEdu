@@ -488,12 +488,26 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['reports']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['reports']">
-        <li><a routerLink="/reports" routerLinkActive="active" class="sub-nav-link text-primary">Student Report</a></li>
-        <li><a routerLink="/Reports/StaffReport" routerLinkActive="active" class="sub-nav-link">Staff Report</a></li>
-        <li><a routerLink="/Finance/FeesDueReport" routerLinkActive="active" class="sub-nav-link">Finance Due Report</a></li>
-        <li><a routerLink="/Transport/Reports" routerLinkActive="active" class="sub-nav-link">Transport Report</a></li>
-        <li><a routerLink="/Inventory/Reports" routerLinkActive="active" class="sub-nav-link">Inventory Report</a></li>
-        <li><a routerLink="/Library/Reports" routerLinkActive="active" class="sub-nav-link">Library Report</a></li>
+        <li><a routerLink="/Reports/StudentReport" routerLinkActive="active" class="sub-nav-link text-primary fw-bold"><i class="fas fa-user-graduate me-1"></i> Students Report</a></li>
+        <li><a routerLink="/Reports/StudentAttendanceReport" routerLinkActive="active" class="sub-nav-link text-success"><i class="fas fa-calendar-check me-1"></i> Student Attendance</a></li>
+        <li><a routerLink="/Reports/SubjectAttendanceReport" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-clipboard-user me-1"></i> Subject Attendance</a></li>
+        <li><a routerLink="/Reports/HomeworkEvaluationReport" routerLinkActive="active" class="sub-nav-link text-pink"><i class="fas fa-book-open-reader me-1"></i> Homework Evaluation</a></li>
+        <li><a routerLink="/Reports/GuardianReport" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-people-roof me-1"></i> Guardian Reports</a></li>
+        <li><a routerLink="/Reports/StudentHistory" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-timeline me-1"></i> Student History</a></li>
+        <li><a routerLink="/Reports/StudentLoginReport" routerLinkActive="active" class="sub-nav-link text-secondary"><i class="fas fa-shield-halved me-1"></i> Student Login Report</a></li>
+        <li><a routerLink="/Reports/ClassReport" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-chalkboard-user me-1"></i> Class Report</a></li>
+        <li><a routerLink="/Reports/ClassRoutineReport" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-clock-rotate-left me-1"></i> Class Routine</a></li>
+        <li><a routerLink="/Reports/PreviousRecord" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-folder-closed me-1"></i> Previous Record</a></li>
+        <li><a routerLink="/Reports/StudentTransportReport" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-bus me-1"></i> Student Transport</a></li>
+        <li><a routerLink="/Reports/StudentDormitoryReport" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-hotel me-1"></i> Student Dormitory</a></li>
+        <li><a routerLink="/Reports/FeesReport" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-cash-register me-1"></i> Payment (Fees) Report</a></li>
+        <li><a routerLink="/Reports/FeesDueReport" routerLinkActive="active" class="sub-nav-link text-danger fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Fees Due Report</a></li>
+        <li><a routerLink="/Reports/FineReport" routerLinkActive="active" class="sub-nav-link text-danger"><i class="fas fa-gavel me-1"></i> Fine Report</a></li>
+        <li><a routerLink="/Reports/BalanceReport" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-scale-balanced me-1"></i> Balance Report</a></li>
+        <li><a routerLink="/Reports/WaiverReport" routerLinkActive="active" class="sub-nav-link text-purple"><i class="fas fa-hand-holding-dollar me-1"></i> Waiver Report</a></li>
+        <li><a routerLink="/Reports/WalletReport" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-wallet me-1"></i> Wallet Report</a></li>
+        <li><a routerLink="/Reports/PayrollReport" routerLinkActive="active" class="sub-nav-link text-purple fw-bold"><i class="fas fa-money-check-dollar me-1"></i> Payroll Report</a></li>
+        <li><a routerLink="/Reports/TransactionReport" routerLinkActive="active" class="sub-nav-link text-primary"><i class="fas fa-arrow-right-arrow-left me-1"></i> Transaction Report</a></li>
       </ul>
     </div>
 
