@@ -1,8 +1,68 @@
 <div class="container-fluid p-0 animate-fade-in">
 
   <!-- ========================================== -->
-  <!-- FINANCIAL ENTRY MODULE (MAIN SCREENSHOT UX) -->
+  <!-- NAVIGATION BAR FOR ALL ACCOUNTING MODULES  -->
   <!-- ========================================== -->
+  <div class="premium-card mb-4 p-2 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <ul class="nav nav-pills custom-pills">
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'entry'" (click)="navigateToTab('entry')">
+            <i class="fas fa-pen-to-square me-2"></i> Financial Entry
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'dashboard'" (click)="navigateToTab('dashboard')">
+            <i class="fas fa-gauge me-2"></i> Financial Center
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'chart'" (click)="navigateToTab('chart')">
+            <i class="fas fa-sitemap me-2"></i> Account Master
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'item-chart'" (click)="navigateToTab('item-chart')">
+            <i class="fas fa-boxes-stacked me-2"></i> Item Master
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'vouchers'" (click)="navigateToTab('vouchers')">
+            <i class="fas fa-receipt me-2"></i> Voucher Register
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'ledger'" (click)="navigateToTab('ledger')">
+            <i class="fas fa-book-open me-2"></i> Account Ledger
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'trial'" (click)="navigateToTab('trial')">
+            <i class="fas fa-balance-scale me-2"></i> Trial Balance
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'receipt-payment'" (click)="navigateToTab('receipt-payment')">
+            <i class="fas fa-arrow-right-arrow-left me-2"></i> Receipt & Payment
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'profit-loss'" (click)="navigateToTab('profit-loss')">
+            <i class="fas fa-file-invoice-dollar me-2"></i> Income & Expenditure
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'balance-sheet'" (click)="navigateToTab('balance-sheet')">
+            <i class="fas fa-landmark me-2"></i> Balance Sheet
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 1. FINANCIAL ENTRY MODULE (MATCHING EXACT USER SCREENSHOT UX)  -->
+  <!-- ============================================================== -->
   <div *ngIf="activeTab === 'entry'" class="mb-4">
     <!-- Top Header matching screenshot -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -18,13 +78,13 @@
       
       <!-- Top-Right Actions: LEDGER & CHART -->
       <div class="d-flex gap-2">
-        <button class="btn-nav-action" (click)="activeTab = 'vouchers'">
+        <button class="btn-nav-action" (click)="navigateToTab('vouchers')">
           <i class="fas fa-book-open text-secondary"></i> LEDGER
         </button>
-        <button class="btn-nav-action" (click)="activeTab = 'chart'">
+        <button class="btn-nav-action" (click)="navigateToTab('chart')">
           <i class="fas fa-diagram-project text-primary"></i> CHART
         </button>
-        <button class="btn-nav-action" (click)="activeTab = 'dashboard'">
+        <button class="btn-nav-action" (click)="navigateToTab('dashboard')">
           <i class="fas fa-gauge text-success"></i> DASHBOARD
         </button>
       </div>
@@ -183,52 +243,611 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- NAVIGATION BAR FOR ALL ACCOUNTING MODULES  -->
-  <!-- ========================================== -->
-  <div class="premium-card mb-4 p-2">
-    <ul class="nav nav-pills custom-pills">
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'entry'" (click)="activeTab = 'entry'">
-          <i class="fas fa-pen-to-square me-2"></i> Financial Entry
+  <!-- ============================================================== -->
+  <!-- 2. ACCOUNT MASTER / CHART OF ACCOUNTS                          -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'chart'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Chart of Accounts (Account Master)</h4>
+        <small class="text-muted"><i class="fas fa-sitemap me-1"></i> General Ledger Heads & Account Classification Hierarchy</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Chart
         </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
-          <i class="fas fa-th-large me-2"></i> Financial Center
+        <button class="btn btn-primary btn-sm rounded-8" (click)="showAddAccountModal = true">
+          <i class="fas fa-plus me-1"></i> Add Account Head
         </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'vouchers'" (click)="activeTab = 'vouchers'">
-          <i class="fas fa-receipt me-2"></i> Voucher Register
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'chart'" (click)="activeTab = 'chart'">
-          <i class="fas fa-sitemap me-2"></i> Chart of Accounts
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'trial'" (click)="activeTab = 'trial'">
-          <i class="fas fa-balance-scale me-2"></i> Trial Balance
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'profit-loss'" (click)="activeTab = 'profit-loss'">
-          <i class="fas fa-file-invoice-dollar me-2"></i> Income & Expenditure
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'balance-sheet'" (click)="activeTab = 'balance-sheet'">
-          <i class="fas fa-landmark me-2"></i> Balance Sheet
-        </button>
-      </li>
-    </ul>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-4">
+        <div class="search-bar-modern w-100">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search accounts by code or name...">
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Account Code</th>
+            <th>Account Title</th>
+            <th>Category</th>
+            <th class="text-end">Current Balance ($)</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of accounts">
+            <td><code class="fw-bold text-primary">{{ a.code }}</code></td>
+            <td class="fw-bold text-dark">{{ a.name }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'bg-info bg-opacity-10 text-info': a.category === 'Asset',
+                'bg-warning bg-opacity-10 text-warning': a.category === 'Liability',
+                'bg-primary bg-opacity-10 text-primary': a.category === 'Equity',
+                'bg-success bg-opacity-10 text-success': a.category === 'Income',
+                'bg-danger bg-opacity-10 text-danger': a.category === 'Expense'
+              }">{{ a.category }}</span>
+            </td>
+            <td class="text-end fw-bold" [ngClass]="a.category === 'Expense' ? 'text-danger' : 'text-dark'">
+              ${{ a.balance | number:'1.2-2' }}
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-light rounded-8 px-2 py-1 me-1 text-primary" (click)="selectedLedgerHead = a.name; navigateToTab('ledger')" title="View Account Ledger">
+                <i class="fas fa-book-open"></i> Ledger
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- TAB: DASHBOARD / FINANCIAL CENTER          -->
-  <!-- ========================================== -->
+  <!-- ============================================================== -->
+  <!-- 3. ITEM ACCOUNT MASTER                                         -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'item-chart'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Item Account Master</h4>
+        <small class="text-muted"><i class="fas fa-boxes-stacked me-1"></i> Inventory & Supply Items Linked to General Ledger Accounts</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Catalog
+        </button>
+        <button class="btn btn-primary btn-sm rounded-8" (click)="showAddItemModal = true">
+          <i class="fas fa-plus me-1"></i> Add Item Master
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Item Code</th>
+            <th>Item Description</th>
+            <th>Category</th>
+            <th>Linked Ledger Head</th>
+            <th>Tax Rate</th>
+            <th>Stock Qty</th>
+            <th class="text-end">Unit Rate ($)</th>
+            <th class="text-end">Stock Value ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let itm of itemAccounts">
+            <td><code class="fw-bold text-dark">{{ itm.code }}</code></td>
+            <td class="fw-bold text-dark">{{ itm.name }}</td>
+            <td><span class="badge bg-secondary bg-opacity-10 text-secondary">{{ itm.category }}</span></td>
+            <td><small class="text-primary fw-bold">{{ itm.linkedAccount }}</small></td>
+            <td><span class="badge bg-light text-dark border">{{ itm.taxRate }}% GST</span></td>
+            <td><strong class="text-dark">{{ itm.stockQty }}</strong> <small class="text-muted">{{ itm.unit }}</small></td>
+            <td class="text-end fw-bold">${{ itm.rate | number:'1.2-2' }}</td>
+            <td class="text-end fw-bold text-success">${{ (itm.stockQty * itm.rate) | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 4. VOUCHER REGISTER / VOUCHER LIST                             -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'vouchers'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">General Voucher Register</h4>
+        <small class="text-muted"><i class="fas fa-receipt me-1"></i> Complete Journal & Cash Voucher Transactions Ledger</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Register
+        </button>
+        <button class="btn btn-primary btn-sm rounded-8" (click)="navigateToTab('entry')">
+          <i class="fas fa-plus me-1"></i> Create Voucher
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <div class="search-bar-modern flex-grow-1" style="max-width: 380px;">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search by number, head, narration...">
+      </div>
+      <div class="d-flex gap-2">
+        <select class="form-select modern-select" style="width: 160px;" [(ngModel)]="selectedType">
+          <option value="All">All Categories</option>
+          <option value="Payment">Payment</option>
+          <option value="Receipt">Receipt</option>
+          <option value="Journal">Journal</option>
+          <option value="Contra">Contra</option>
+          <option value="Sales">Sales</option>
+          <option value="Purchase">Purchase</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Voucher No</th>
+            <th>Type</th>
+            <th>Fiscal Date</th>
+            <th>Primary Account Head</th>
+            <th>Narration</th>
+            <th class="text-end">Debit ($)</th>
+            <th class="text-end">Credit ($)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of filteredVouchers">
+            <td><strong class="text-primary">{{ v.voucherNo }}</strong></td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'bg-danger bg-opacity-10 text-danger': v.type === 'Payment',
+                'bg-success bg-opacity-10 text-success': v.type === 'Receipt',
+                'bg-purple bg-opacity-10 text-purple': v.type === 'Journal',
+                'bg-warning bg-opacity-10 text-warning': v.type === 'Contra',
+                'bg-info bg-opacity-10 text-info': v.type === 'Sales' || v.type === 'Purchase'
+              }">{{ v.type }}</span>
+            </td>
+            <td><small class="text-muted">{{ v.date }}</small></td>
+            <td class="fw-bold">{{ v.accountHead }}</td>
+            <td><small class="text-secondary">{{ v.narration }}</small></td>
+            <td class="text-end fw-bold" [ngClass]="v.debit > 0 ? 'text-primary' : 'text-muted'">{{ v.debit ? '$' + (v.debit | number:'1.2-2') : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="v.credit > 0 ? 'text-success' : 'text-muted'">{{ v.credit ? '$' + (v.credit | number:'1.2-2') : '-' }}</td>
+            <td><span class="badge bg-success bg-opacity-10 text-success fw-bold">{{ v.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 5. ACCOUNT LEDGER (INDIVIDUAL STATEMENT)                       -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'ledger'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Account Ledger Statement</h4>
+        <small class="text-muted"><i class="fas fa-book-open me-1"></i> Running General Ledger Extracts by Account Head</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Statement
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="card p-3 mb-4 border-0 bg-light rounded-16">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-5">
+          <label class="form-label small fw-bold text-muted">Select Account Head</label>
+          <select class="form-select modern-select w-100" [(ngModel)]="selectedLedgerHead">
+            <option *ngFor="let a of accounts" [value]="a.name">{{ a.name }} ({{ a.code }})</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label small fw-bold text-muted">From Date</label>
+          <input type="date" class="form-control" [(ngModel)]="ledgerStartDate">
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label small fw-bold text-muted">To Date</label>
+          <input type="date" class="form-control" [(ngModel)]="ledgerEndDate">
+        </div>
+      </div>
+    </div>
+
+    <!-- Ledger Header Info -->
+    <div class="card border-0 bg-primary bg-opacity-10 p-3 rounded-16 mb-4" *ngIf="currentLedgerAccount">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <div class="badge bg-primary text-white mb-1">{{ currentLedgerAccount.category }}</div>
+          <h5 class="fw-bold text-primary mb-0">{{ currentLedgerAccount.name }} ({{ currentLedgerAccount.code }})</h5>
+        </div>
+        <div class="text-end">
+          <small class="text-muted fw-bold d-block">Current Balance</small>
+          <h4 class="fw-bold text-dark mb-0">${{ currentLedgerAccount.balance | number:'1.2-2' }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ledger Table -->
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Voucher No</th>
+            <th>Type</th>
+            <th>Particulars / Narration</th>
+            <th class="text-end">Debit ($)</th>
+            <th class="text-end">Credit ($)</th>
+            <th class="text-end">Running Balance ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of ledgerTransactions">
+            <td><small class="text-muted">{{ row.date }}</small></td>
+            <td><strong class="text-primary">{{ row.voucherNo }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ row.type }}</span></td>
+            <td>{{ row.narration }}</td>
+            <td class="text-end fw-bold" [ngClass]="row.debit > 0 ? 'text-primary' : 'text-muted'">{{ row.debit ? '$' + (row.debit | number:'1.2-2') : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="row.credit > 0 ? 'text-success' : 'text-muted'">{{ row.credit ? '$' + (row.credit | number:'1.2-2') : '-' }}</td>
+            <td class="text-end fw-bold text-dark">${{ row.balance | number:'1.2-2' }}</td>
+          </tr>
+          <tr *ngIf="ledgerTransactions.length === 0">
+            <td colspan="7" class="text-center py-4 text-muted">
+              <i class="fas fa-folder-open fs-2 mb-2 d-block"></i>
+              No transactions recorded for this period in {{ selectedLedgerHead }}
+            </td>
+          </tr>
+        </tbody>
+        <tfoot *ngIf="ledgerTransactions.length > 0" class="border-top">
+          <tr class="fw-bold bg-light">
+            <td colspan="4" class="text-end">Total Activity:</td>
+            <td class="text-end text-primary">${{ ledgerTotalDebit | number:'1.2-2' }}</td>
+            <td class="text-end text-success">${{ ledgerTotalCredit | number:'1.2-2' }}</td>
+            <td class="text-end text-dark">${{ (currentLedgerAccount?.balance || 0) | number:'1.2-2' }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 6. TRIAL BALANCE                                               -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'trial'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Trial Balance Statement</h4>
+        <small class="text-muted"><i class="fas fa-balance-scale me-1"></i> As of Fiscal Closing Date: {{ fiscalDate }}</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Statement
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Account Code</th>
+            <th>Account Head / Title</th>
+            <th>Classification</th>
+            <th class="text-end">Debit Balance ($)</th>
+            <th class="text-end">Credit Balance ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of accounts">
+            <td><code>{{ a.code }}</code></td>
+            <td class="fw-bold">{{ a.name }}</td>
+            <td><span class="badge bg-light text-dark border">{{ a.category }}</span></td>
+            <td class="text-end fw-bold" [ngClass]="a.category === 'Asset' || a.category === 'Expense' ? 'text-primary' : 'text-muted'">
+              {{ a.category === 'Asset' || a.category === 'Expense' ? '$' + (a.balance | number:'1.2-2') : '-' }}
+            </td>
+            <td class="text-end fw-bold" [ngClass]="a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? 'text-success' : 'text-muted'">
+              {{ a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? '$' + (a.balance | number:'1.2-2') : '-' }}
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="table-light fw-bold border-top">
+          <tr>
+            <td colspan="3" class="text-end fs-6">Grand Total:</td>
+            <td class="text-end text-primary fs-6">$2,066,000.00</td>
+            <td class="text-end text-success fs-6">$2,066,000.00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="alert alert-success mt-3 d-flex align-items-center gap-2 rounded-12 mb-0">
+      <i class="fas fa-circle-check fs-5"></i>
+      <span><strong>Trial Balance Reconciled:</strong> Total Debit equals Total Credit. General Ledger is in balance.</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 7. RECEIPT & PAYMENT STATEMENT                                 -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'receipt-payment'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Receipts & Payments Statement</h4>
+        <small class="text-muted"><i class="fas fa-arrow-right-arrow-left me-1"></i> Cash & Bank Liquid Transactions Summary</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Statement
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Receipts Column -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 bg-success bg-opacity-10 p-4 rounded-16 h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-success mb-0"><i class="fas fa-arrow-down me-2"></i> RECEIPTS</h5>
+            <span class="badge bg-success text-white">Inflows</span>
+          </div>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span><strong>Opening Cash & Bank Balance</strong></span>
+              <strong class="text-dark">$1,200,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Tuition Fees Receipts</span>
+              <strong class="text-success">$1,480,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Transport Facility Bus Fees</span>
+              <strong class="text-success">$290,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Admission Application & Prospectus Fees</span>
+              <strong class="text-success">$65,000.00</strong>
+            </li>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
+            <h6 class="fw-bold mb-0">Total Receipts:</h6>
+            <h5 class="fw-bold text-success mb-0">$3,035,000.00</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payments Column -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 bg-danger bg-opacity-10 p-4 rounded-16 h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-danger mb-0"><i class="fas fa-arrow-up me-2"></i> PAYMENTS</h5>
+            <span class="badge bg-danger text-white">Outflows</span>
+          </div>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Staff Monthly Salaries & Faculty Payroll</span>
+              <strong class="text-danger">$485,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Campus Utilities, Electricity & Water</span>
+              <strong class="text-danger">$64,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Science Labs Consumables & Chemical Reagents</span>
+              <strong class="text-danger">$32,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span>Vendor Supplies & Library Book Purchases</span>
+              <strong class="text-danger">$75,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+              <span><strong>Closing Cash & Bank Balance</strong></span>
+              <strong class="text-dark">$2,379,000.00</strong>
+            </li>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
+            <h6 class="fw-bold mb-0">Total Payments:</h6>
+            <h5 class="fw-bold text-danger mb-0">$3,035,000.00</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 8. INCOME & EXPENDITURE STATEMENT (P&L)                        -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'profit-loss'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Income & Expenditure Statement</h4>
+        <small class="text-muted"><i class="fas fa-file-invoice-dollar me-1"></i> For Fiscal Academic Year 2026-2027</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Statement
+        </button>
+      </div>
+    </div>
+    
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-lg-6">
+        <div class="card p-4 border-0 bg-light rounded-16 h-100">
+          <h6 class="fw-bold text-success mb-3"><i class="fas fa-circle-arrow-down me-2"></i> Operational Revenues (Income)</h6>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Tuition Fees Collection</span>
+              <strong class="text-success">$1,480,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Transport Bus Facility Fees</span>
+              <strong class="text-success">$290,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Admission Application & Exam Registration</span>
+              <strong class="text-success">$65,000.00</strong>
+            </li>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
+            <span class="fw-bold">Total Operating Income:</span>
+            <h5 class="fw-bold text-success mb-0">$1,835,000.00</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="card p-4 border-0 bg-light rounded-16 h-100">
+          <h6 class="fw-bold text-danger mb-3"><i class="fas fa-circle-arrow-up me-2"></i> Operational Expenditures (Expenses)</h6>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Staff Monthly Payroll & Salaries</span>
+              <strong class="text-danger">$485,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Campus Utilities, Electricity & Water</span>
+              <strong class="text-danger">$64,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Science Labs Consumables & Reagents</span>
+              <strong class="text-danger">$32,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Depreciation on Science Labs & Equipment</span>
+              <strong class="text-danger">$15,000.00</strong>
+            </li>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
+            <span class="fw-bold">Total Operating Expenses:</span>
+            <h5 class="fw-bold text-danger mb-0">$596,000.00</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operating Surplus Card -->
+    <div class="card border-0 bg-primary text-white p-4 rounded-20 shadow-sm">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <span class="badge bg-white text-primary fw-bold px-3 py-1 rounded-pill mb-2">Fiscal Performance</span>
+          <h4 class="fw-bold mb-0">Excess of Income over Expenditure (Operating Surplus)</h4>
+        </div>
+        <h2 class="fw-bold mb-0 text-white">+$1,239,000.00</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 9. BALANCE SHEET                                               -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'balance-sheet'" class="premium-card animate-fade-in shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Institutional Balance Sheet</h4>
+        <small class="text-muted"><i class="fas fa-landmark me-1"></i> Capital Assets, Reserves & Liabilities Statement</small>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
+          <i class="fas fa-print me-1"></i> Print Balance Sheet
+        </button>
+      </div>
+    </div>
+    
+    <div class="row g-4 mb-4">
+      <!-- Assets Column -->
+      <div class="col-12 col-lg-6">
+        <div class="card p-4 border-0 bg-light rounded-16 h-100">
+          <h5 class="fw-bold text-primary mb-3"><i class="fas fa-building-columns me-2"></i> Institutional Assets</h5>
+          <div class="small fw-bold text-muted text-uppercase mb-2">Liquid & Current Assets</div>
+          <ul class="list-group list-group-flush bg-transparent mb-3">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Cash in Hand (Cashier Desk)</span>
+              <strong class="text-dark">$185,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>HDFC Bank Campus Current A/c</span>
+              <strong class="text-dark">$840,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>State Bank of India Operations A/c</span>
+              <strong class="text-dark">$460,000.00</strong>
+            </li>
+          </ul>
+
+          <div class="small fw-bold text-muted text-uppercase mb-2">Fixed & Educational Assets</div>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Campus Buildings & Infrastructure</span>
+              <strong class="text-dark">$1,800,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Science Laboratories & ICT Equipment</span>
+              <strong class="text-dark">$529,000.00</strong>
+            </li>
+          </ul>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
+            <h6 class="fw-bold mb-0">Total Assets:</h6>
+            <h5 class="fw-bold text-primary mb-0">$3,814,000.00</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liabilities & Capital Column -->
+      <div class="col-12 col-lg-6">
+        <div class="card p-4 border-0 bg-light rounded-16 h-100">
+          <h5 class="fw-bold text-dark mb-3"><i class="fas fa-scale-balanced me-2"></i> Capital Fund & Liabilities</h5>
+          
+          <div class="small fw-bold text-muted text-uppercase mb-2">Capital & Reserves</div>
+          <ul class="list-group list-group-flush bg-transparent mb-3">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Institutional Capital Fund</span>
+              <strong class="text-dark">$2,500,000.00</strong>
+            </li>
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Current Year Operating Surplus</span>
+              <strong class="text-success">$1,239,000.00</strong>
+            </li>
+          </ul>
+
+          <div class="small fw-bold text-muted text-uppercase mb-2">Current Liabilities</div>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+              <span>Vendor & Supplier Payables</span>
+              <strong class="text-dark">$75,000.00</strong>
+            </li>
+          </ul>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
+            <h6 class="fw-bold mb-0">Total Liabilities & Equity:</h6>
+            <h5 class="fw-bold text-dark mb-0">$3,814,000.00</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-primary d-flex align-items-center gap-2 rounded-12 mb-0">
+      <i class="fas fa-circle-check fs-5"></i>
+      <span><strong>Balance Sheet Equilibrium:</strong> Assets ($3,814,000.00) = Liabilities ($75,000.00) + Capital Fund & Reserves ($3,739,000.00).</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 10. DASHBOARD / FINANCIAL CENTER                               -->
+  <!-- ============================================================== -->
   <div *ngIf="activeTab === 'dashboard'" class="animate-fade-in">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -332,7 +951,6 @@
           <!-- SVG Trends Chart with Dual Waves -->
           <div class="chart-box position-relative mt-4" style="height: 280px;">
             <svg viewBox="0 0 700 240" class="w-100 h-100" preserveAspectRatio="none">
-              <!-- Grid Lines -->
               <line x1="40" y1="20" x2="680" y2="20" stroke="#f1f5f9" stroke-width="1" />
               <line x1="40" y1="60" x2="680" y2="60" stroke="#f1f5f9" stroke-width="1" />
               <line x1="40" y1="100" x2="680" y2="100" stroke="#f1f5f9" stroke-width="1" />
@@ -340,7 +958,6 @@
               <line x1="40" y1="180" x2="680" y2="180" stroke="#f1f5f9" stroke-width="1" />
               <line x1="40" y1="220" x2="680" y2="220" stroke="#f1f5f9" stroke-width="1" />
 
-              <!-- Y-Axis Labels -->
               <text x="15" y="25" fill="#94a3b8" font-size="11">60</text>
               <text x="15" y="65" fill="#94a3b8" font-size="11">50</text>
               <text x="15" y="105" fill="#94a3b8" font-size="11">40</text>
@@ -360,7 +977,6 @@
               <path d="M50,215 C100,195 150,210 210,180 C270,190 330,165 390,175 C450,150 510,135 570,145 C630,130 680,115 680,115" fill="none" stroke="#ef4444" stroke-width="2.5" />
             </svg>
 
-            <!-- X-Axis Labels -->
             <div class="d-flex justify-content-between text-muted px-4 mt-2" style="font-size: 0.75rem;">
               <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
             </div>
@@ -376,7 +992,6 @@
           </h5>
 
           <div class="row g-3">
-            <!-- Payment -->
             <div class="col-6">
               <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #fef2f2;" (click)="openVoucher('Payment')">
                 <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #ef4444;">
@@ -386,7 +1001,6 @@
               </div>
             </div>
 
-            <!-- Receipt -->
             <div class="col-6">
               <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #f0fdf4;" (click)="openVoucher('Receipt')">
                 <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #10b981;">
@@ -396,7 +1010,6 @@
               </div>
             </div>
 
-            <!-- Journal -->
             <div class="col-6">
               <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #f5f3ff;" (click)="openVoucher('Journal')">
                 <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #8b5cf6;">
@@ -406,7 +1019,6 @@
               </div>
             </div>
 
-            <!-- Contra -->
             <div class="col-6">
               <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #fffbeb;" (click)="openVoucher('Contra')">
                 <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #f59e0b;">
@@ -416,7 +1028,6 @@
               </div>
             </div>
 
-            <!-- Sales -->
             <div class="col-6">
               <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #ecfeff;" (click)="openVoucher('Sales')">
                 <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #06b6d4;">
@@ -426,7 +1037,6 @@
               </div>
             </div>
 
-            <!-- Purchase -->
             <div class="col-6">
               <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #fdf2f8;" (click)="openVoucher('Purchase')">
                 <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #ec4899;">
@@ -441,251 +1051,89 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- TAB: VOUCHER REGISTER / LEDGER LIST        -->
-  <!-- ========================================== -->
-  <div *ngIf="activeTab === 'vouchers'" class="premium-card animate-fade-in">
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
-      <div>
-        <h5 class="fw-bold mb-0">General Voucher Register</h5>
-        <small class="text-muted">History of all posted debit & credit entries</small>
+  <!-- ============================================================== -->
+  <!-- MODALS: ADD ACCOUNT MASTER & ADD ITEM MASTER                   -->
+  <!-- ============================================================== -->
+  <!-- Modal: Add Account Head -->
+  <div class="modal-backdrop-custom" *ngIf="showAddAccountModal">
+    <div class="modal-content-custom" style="max-width: 520px;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Create New Account Master Head</h5>
+        <button class="btn btn-sm btn-light" (click)="showAddAccountModal = false">&times;</button>
       </div>
-      <div class="d-flex gap-2">
-        <div class="search-bar-modern" style="min-width: 260px;">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" [(ngModel)]="searchTerm" placeholder="Search vouchers...">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Account Code *</label>
+          <input type="text" class="form-control" [(ngModel)]="newAccount.code" placeholder="e.g. 5040">
         </div>
-        <select class="form-select modern-select" style="width: 140px;" [(ngModel)]="selectedType">
-          <option value="All">All Types</option>
-          <option value="Payment">Payment</option>
-          <option value="Receipt">Receipt</option>
-          <option value="Journal">Journal</option>
-          <option value="Contra">Contra</option>
-          <option value="Sales">Sales</option>
-          <option value="Purchase">Purchase</option>
-        </select>
-        <button class="btn btn-primary rounded-8 px-3" (click)="activeTab = 'entry'">
-          <i class="fas fa-plus me-1"></i> New Entry
-        </button>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Voucher No</th>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Account Head</th>
-            <th>Narration</th>
-            <th class="text-end">Debit ($)</th>
-            <th class="text-end">Credit ($)</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let v of filteredVouchers">
-            <td><strong class="text-primary">{{ v.voucherNo }}</strong></td>
-            <td>
-              <span class="badge" [ngClass]="{
-                'bg-danger bg-opacity-10 text-danger': v.type === 'Payment',
-                'bg-success bg-opacity-10 text-success': v.type === 'Receipt',
-                'bg-purple bg-opacity-10 text-purple': v.type === 'Journal',
-                'bg-warning bg-opacity-10 text-warning': v.type === 'Contra',
-                'bg-info bg-opacity-10 text-info': v.type === 'Sales' || v.type === 'Purchase'
-              }">{{ v.type }}</span>
-            </td>
-            <td><small class="text-muted">{{ v.date }}</small></td>
-            <td class="fw-bold">{{ v.accountHead }}</td>
-            <td><small class="text-secondary">{{ v.narration }}</small></td>
-            <td class="text-end fw-bold" [ngClass]="v.debit > 0 ? 'text-primary' : 'text-muted'">{{ v.debit ? '$' + (v.debit | number:'1.2-2') : '-' }}</td>
-            <td class="text-end fw-bold" [ngClass]="v.credit > 0 ? 'text-success' : 'text-muted'">{{ v.credit ? '$' + (v.credit | number:'1.2-2') : '-' }}</td>
-            <td><span class="badge bg-success bg-opacity-10 text-success fw-bold">{{ v.status }}</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- TAB: CHART OF ACCOUNTS                     -->
-  <!-- ========================================== -->
-  <div *ngIf="activeTab === 'chart'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-0">Chart of Accounts Hierarchy</h5>
-        <small class="text-muted">Master Ledger Heads & Classification</small>
-      </div>
-      <button class="btn btn-primary btn-sm rounded-8" (click)="activeTab = 'entry'">
-        <i class="fas fa-plus me-1"></i> Post Transaction
-      </button>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Account Code</th>
-            <th>Account Title</th>
-            <th>Category</th>
-            <th class="text-end">Current Balance ($)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let a of accounts">
-            <td><code>{{ a.code }}</code></td>
-            <td class="fw-bold">{{ a.name }}</td>
-            <td>
-              <span class="badge" [ngClass]="{
-                'bg-info bg-opacity-10 text-info': a.category === 'Asset',
-                'bg-warning bg-opacity-10 text-warning': a.category === 'Liability',
-                'bg-primary bg-opacity-10 text-primary': a.category === 'Equity',
-                'bg-success bg-opacity-10 text-success': a.category === 'Income',
-                'bg-danger bg-opacity-10 text-danger': a.category === 'Expense'
-              }">{{ a.category }}</span>
-            </td>
-            <td class="text-end fw-bold" [ngClass]="a.category === 'Expense' ? 'text-danger' : 'text-dark'">${{ a.balance | number:'1.2-2' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- TAB: TRIAL BALANCE                         -->
-  <!-- ========================================== -->
-  <div *ngIf="activeTab === 'trial'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-0">Trial Balance Statement</h5>
-        <small class="text-muted">Summary of All Ledger Balances as of Fiscal Period</small>
-      </div>
-      <button class="btn btn-outline-secondary btn-sm" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead class="table-dark">
-          <tr>
-            <th>Account Head</th>
-            <th>Account Type</th>
-            <th class="text-end">Debit Balance ($)</th>
-            <th class="text-end">Credit Balance ($)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let a of accounts">
-            <td><strong>{{ a.name }}</strong> ({{ a.code }})</td>
-            <td>{{ a.category }}</td>
-            <td class="text-end fw-bold" [ngClass]="a.category === 'Asset' || a.category === 'Expense' ? 'text-primary' : 'text-muted'">
-              {{ a.category === 'Asset' || a.category === 'Expense' ? '$' + (a.balance | number:'1.2-2') : '-' }}
-            </td>
-            <td class="text-end fw-bold" [ngClass]="a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? 'text-success' : 'text-muted'">
-              {{ a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? '$' + (a.balance | number:'1.2-2') : '-' }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- TAB: INCOME & EXPENDITURE                  -->
-  <!-- ========================================== -->
-  <div *ngIf="activeTab === 'profit-loss'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-0">Income & Expenditure Statement (P&L)</h5>
-        <small class="text-muted">Financial Year 2026-2027</small>
-      </div>
-      <button class="btn btn-outline-secondary btn-sm" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card p-3 border-0 bg-light">
-          <h6 class="fw-bold text-success mb-3"><i class="fas fa-arrow-down me-1"></i> Operational Revenues (Income)</h6>
-          <ul class="list-group list-group-flush bg-transparent">
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Tuition Fees Collection</span>
-              <strong class="text-success">$1,480,000.00</strong>
-            </li>
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Transport Bus Facility Fees</span>
-              <strong class="text-success">$290,000.00</strong>
-            </li>
-          </ul>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Account Category *</label>
+          <select class="form-select" [(ngModel)]="newAccount.category">
+            <option value="Asset">Asset</option>
+            <option value="Liability">Liability</option>
+            <option value="Equity">Equity</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Account Title / Name *</label>
+          <input type="text" class="form-control" [(ngModel)]="newAccount.name" placeholder="e.g. Sports & Fitness Equipment">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Opening Balance ($)</label>
+          <input type="number" class="form-control" [(ngModel)]="newAccount.balance" placeholder="0.00">
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card p-3 border-0 bg-light">
-          <h6 class="fw-bold text-danger mb-3"><i class="fas fa-arrow-up me-1"></i> Operational Expenditures (Expenses)</h6>
-          <ul class="list-group list-group-flush bg-transparent">
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Staff Monthly Payroll & Salaries</span>
-              <strong class="text-danger">$485,000.00</strong>
-            </li>
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Campus Utilities, Electricity & Water</span>
-              <strong class="text-danger">$64,000.00</strong>
-            </li>
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Science Labs Consumables & Reagents</span>
-              <strong class="text-danger">$32,000.00</strong>
-            </li>
-          </ul>
-        </div>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-light" (click)="showAddAccountModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="saveNewAccount()">Save Account Head</button>
       </div>
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- TAB: BALANCE SHEET                         -->
-  <!-- ========================================== -->
-  <div *ngIf="activeTab === 'balance-sheet'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-0">Institutional Balance Sheet</h5>
-        <small class="text-muted">Capital Assets & Liabilities Statement</small>
+  <!-- Modal: Add Item Account -->
+  <div class="modal-backdrop-custom" *ngIf="showAddItemModal">
+    <div class="modal-content-custom" style="max-width: 550px;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Create Inventory Item Master</h5>
+        <button class="btn btn-sm btn-light" (click)="showAddItemModal = false">&times;</button>
       </div>
-      <button class="btn btn-outline-secondary btn-sm" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card p-3 border-0 bg-light">
-          <h6 class="fw-bold text-primary mb-3"><i class="fas fa-building-columns me-1"></i> Institutional Assets</h6>
-          <ul class="list-group list-group-flush bg-transparent">
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Cash in Hand (Cashier Desk)</span>
-              <strong class="text-primary">$185,000.00</strong>
-            </li>
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>HDFC Bank Campus Current A/c</span>
-              <strong class="text-primary">$840,000.00</strong>
-            </li>
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>State Bank of India Operations A/c</span>
-              <strong class="text-primary">$460,000.00</strong>
-            </li>
-          </ul>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Item Code *</label>
+          <input type="text" class="form-control" [(ngModel)]="newItemAccount.code" placeholder="e.g. ITM-501">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Category</label>
+          <input type="text" class="form-control" [(ngModel)]="newItemAccount.category" placeholder="e.g. Science Labs">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Item Name *</label>
+          <input type="text" class="form-control" [(ngModel)]="newItemAccount.name" placeholder="e.g. Microscope Slide Glass Pack">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Linked General Ledger Head</label>
+          <select class="form-select" [(ngModel)]="newItemAccount.linkedAccount">
+            <option *ngFor="let a of accounts" [value]="a.name">{{ a.name }} ({{ a.code }})</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-bold">Tax Rate (%)</label>
+          <input type="number" class="form-control" [(ngModel)]="newItemAccount.taxRate" placeholder="18">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-bold">Unit Type</label>
+          <input type="text" class="form-control" [(ngModel)]="newItemAccount.unit" placeholder="Pcs / Box">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-bold">Unit Rate ($)</label>
+          <input type="number" class="form-control" [(ngModel)]="newItemAccount.rate" placeholder="0.00">
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card p-3 border-0 bg-light">
-          <h6 class="fw-bold text-warning mb-3"><i class="fas fa-scale-balanced me-1"></i> Liabilities & Capital Fund</h6>
-          <ul class="list-group list-group-flush bg-transparent">
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Vendor & Supplier Payables</span>
-              <strong class="text-dark">$75,000.00</strong>
-            </li>
-            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
-              <span>Institutional Capital Fund</span>
-              <strong class="text-dark">$2,500,000.00</strong>
-            </li>
-          </ul>
-        </div>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-light" (click)="showAddItemModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="saveNewItemAccount()">Save Item</button>
       </div>
     </div>
   </div>

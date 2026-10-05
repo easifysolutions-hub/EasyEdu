@@ -1,7 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 
 declare const Swal: any;
 
@@ -10,6 +11,17 @@ export interface LedgerAccount {
   name: string;
   category: 'Asset' | 'Liability' | 'Equity' | 'Income' | 'Expense';
   balance: number;
+}
+
+export interface ItemAccount {
+  code: string;
+  name: string;
+  category: string;
+  linkedAccount: string;
+  taxRate: number;
+  unit: string;
+  stockQty: number;
+  rate: number;
 }
 
 export interface VoucherItem {
@@ -44,7 +56,7 @@ export class AccountingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  activeTab: 'entry' | 'dashboard' | 'vouchers' | 'chart' | 'trial' | 'profit-loss' | 'balance-sheet' = 'entry';
+  activeTab: 'entry' | 'dashboard' | 'vouchers' | 'chart' | 'item-chart' | 'ledger' | 'trial' | 'receipt-payment' | 'profit-loss' | 'balance-sheet' = 'entry';
   trendPeriod: 'yearly' | 'monthly' = 'yearly';
   searchTerm = '';
   selectedType = 'All';
@@ -72,29 +84,59 @@ export class AccountingComponent implements OnInit {
     { code: '5030', name: 'Science Labs Consumables & Reagents', category: 'Expense', balance: 32000 }
   ];
 
+  itemAccounts: ItemAccount[] = [
+    { code: 'ITM-101', name: 'Physics Lab Prism & Optical Lenses', category: 'Lab Consumables', linkedAccount: 'Science Labs Consumables & Reagents', taxRate: 18, unit: 'Sets', stockQty: 45, rate: 1200 },
+    { code: 'ITM-102', name: 'Chemistry Organic Reagent Kit Grade 12', category: 'Lab Consumables', linkedAccount: 'Science Labs Consumables & Reagents', taxRate: 12, unit: 'Bottles', stockQty: 120, rate: 850 },
+    { code: 'ITM-201', name: 'Institutional Student Uniform Tie & Belt', category: 'Merchandise', linkedAccount: 'Tuition Fees Collection', taxRate: 5, unit: 'Pieces', stockQty: 300, rate: 450 },
+    { code: 'ITM-301', name: 'Advanced Mathematics Curriculum Grade 10', category: 'Publications', linkedAccount: 'Tuition Fees Collection', taxRate: 0, unit: 'Copies', stockQty: 180, rate: 650 },
+    { code: 'ITM-401', name: 'Campus Fleet Diesel Fuel Bulk Stock', category: 'Fuel & Energy', linkedAccount: 'Campus Utilities, Electricity & Water', taxRate: 18, unit: 'Litres', stockQty: 1500, rate: 94 }
+  ];
+
   vouchers: VoucherItem[] = [
     { id: '1', voucherNo: 'RV-2026-001', type: 'Receipt', date: '2026-10-05', accountHead: 'Tuition Fees Collection', debit: 90000, credit: 0, narration: 'Quarter 1 Tuition receipts collected', status: 'Approved' },
     { id: '2', voucherNo: 'PV-2026-002', type: 'Payment', date: '2026-10-04', accountHead: 'Campus Utilities, Electricity & Water', debit: 0, credit: 28400, narration: 'Monthly electrical bill paid via NEFT', status: 'Approved' },
     { id: '3', voucherNo: 'JV-2026-003', type: 'Journal', date: '2026-10-03', accountHead: 'Depreciation on Science Labs', debit: 15000, credit: 15000, narration: 'Monthly accumulated depreciation entry', status: 'Approved' },
     { id: '4', voucherNo: 'PV-2026-004', type: 'Payment', date: '2026-10-02', accountHead: 'Staff Monthly Payroll & Salaries', debit: 0, credit: 485000, narration: 'Faculty & Admin staff salaries for October', status: 'Approved' },
-    { id: '5', voucherNo: 'CV-2026-005', type: 'Contra', date: '2026-10-01', accountHead: 'Cash Deposited to HDFC Bank', debit: 50000, credit: 50000, narration: 'Daily counter cash deposit to bank current A/c', status: 'Approved' }
+    { id: '5', voucherNo: 'CV-2026-005', type: 'Contra', date: '2026-10-01', accountHead: 'Cash Deposited to HDFC Bank', debit: 50000, credit: 50000, narration: 'Daily counter cash deposit to bank current A/c', status: 'Approved' },
+    { id: '6', voucherNo: 'SV-2026-006', type: 'Sales', date: '2026-09-30', accountHead: 'Tuition Fees Collection', debit: 65000, credit: 0, narration: 'Annual prospectus and student stationery bundle invoice', status: 'Approved' },
+    { id: '7', voucherNo: 'PUV-2026-007', type: 'Purchase', date: '2026-09-28', accountHead: 'Science Labs Consumables & Reagents', debit: 0, credit: 32000, narration: 'Science lab chemical supplies purchase from ChemTech', status: 'Approved' }
   ];
 
-  showNewVoucherModal = false;
-  newVoucher = {
-    type: 'Payment',
-    accountHead: 'Campus Utilities, Electricity & Water',
-    amount: 5000,
-    narration: '',
-    date: '2026-10-05'
+  // Ledger Filter State
+  selectedLedgerHead = 'Tuition Fees Collection';
+  ledgerStartDate = '2026-04-01';
+  ledgerEndDate = '2026-10-05';
+
+  // Add Account Master Modal
+  showAddAccountModal = false;
+  newAccount: LedgerAccount = {
+    code: '',
+    name: '',
+    category: 'Expense',
+    balance: 0
+  };
+
+  // Add Item Account Modal
+  showAddItemModal = false;
+  newItemAccount: ItemAccount = {
+    code: '',
+    name: '',
+    category: 'Lab Consumables',
+    linkedAccount: 'Science Labs Consumables & Reagents',
+    taxRate: 18,
+    unit: 'Units',
+    stockQty: 0,
+    rate: 0
   };
 
   ngOnInit(): void {
     this.syncActiveTabFromUrl();
 
-    this.route.url.subscribe(() => {
-      this.syncActiveTabFromUrl();
-    });
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.syncActiveTabFromUrl();
+      });
 
     this.route.queryParams.subscribe(params => {
       if (params['tab']) {
@@ -126,20 +168,45 @@ export class AccountingComponent implements OnInit {
     } else if (path.includes('purchasevoucher')) {
       this.activeTab = 'entry';
       this.voucherCategory = 'Purchase';
-    } else if (path.includes('chartofaccounts') || path.includes('itemaccountmaster') || path.includes('accountledger')) {
+    } else if (path.includes('chartofaccounts')) {
       this.activeTab = 'chart';
+    } else if (path.includes('itemaccountmaster')) {
+      this.activeTab = 'item-chart';
+    } else if (path.includes('accountledger')) {
+      this.activeTab = 'ledger';
     } else if (path.includes('trialbalance')) {
       this.activeTab = 'trial';
+    } else if (path.includes('receiptpayment')) {
+      this.activeTab = 'receipt-payment';
     } else if (path.includes('incomeexpenditure')) {
       this.activeTab = 'profit-loss';
     } else if (path.includes('balancesheet')) {
       this.activeTab = 'balance-sheet';
-    } else if (path.includes('receiptpayment') || path.includes('voucherlist')) {
+    } else if (path.includes('voucherlist')) {
       this.activeTab = 'vouchers';
     } else if (path.includes('dashboard') || path.includes('financialcenter')) {
       this.activeTab = 'dashboard';
-    } else {
+    } else if (path.includes('accounting') || path.includes('accounts')) {
       this.activeTab = 'entry';
+    }
+  }
+
+  navigateToTab(tab: 'entry' | 'dashboard' | 'vouchers' | 'chart' | 'item-chart' | 'ledger' | 'trial' | 'receipt-payment' | 'profit-loss' | 'balance-sheet'): void {
+    this.activeTab = tab;
+    const urlMap: Record<string, string> = {
+      'entry': `/Accounting/${this.voucherCategory}Voucher`,
+      'dashboard': '/Accounting',
+      'vouchers': '/Accounting/VoucherList',
+      'chart': '/Accounting/ChartOfAccounts',
+      'item-chart': '/Accounting/ItemAccountMaster',
+      'ledger': '/Accounting/AccountLedger',
+      'trial': '/Accounting/TrialBalance',
+      'receipt-payment': '/Accounting/ReceiptPayment',
+      'profit-loss': '/Accounting/IncomeExpenditure',
+      'balance-sheet': '/Accounting/BalanceSheet'
+    };
+    if (urlMap[tab]) {
+      this.router.navigateByUrl(urlMap[tab]);
     }
   }
 
@@ -264,6 +331,16 @@ export class AccountingComponent implements OnInit {
 
     this.vouchers.unshift(newV);
 
+    // Update account balance
+    const acc = this.accounts.find(a => a.name === mainHead);
+    if (acc) {
+      if (acc.category === 'Asset' || acc.category === 'Expense') {
+        acc.balance += (tDebit - tCredit);
+      } else {
+        acc.balance += (tCredit - tDebit);
+      }
+    }
+
     Swal.fire({
       title: 'Voucher Posted Successfully!',
       text: `${this.voucherCategory} Voucher ${vNo} with total $${tDebit.toFixed(2)} has been recorded into General Ledger.`,
@@ -271,7 +348,7 @@ export class AccountingComponent implements OnInit {
       confirmButtonColor: '#2563eb'
     });
 
-    // Reset rows to initial state
+    // Reset rows
     this.officialNarration = '';
     this.entryRows = [
       { type: 'BY (DR)', accountHead: '', balance: 'Awaiting...', debit: 0, credit: 0, remarks: '' },
@@ -279,9 +356,65 @@ export class AccountingComponent implements OnInit {
     ];
   }
 
+  // Account Ledger Calculations
+  get currentLedgerAccount(): LedgerAccount | undefined {
+    return this.accounts.find(a => a.name === this.selectedLedgerHead);
+  }
+
+  get ledgerTransactions(): Array<{ date: string; voucherNo: string; type: string; narration: string; debit: number; credit: number; balance: number }> {
+    const acc = this.currentLedgerAccount;
+    const baseBalance = acc ? acc.balance : 0;
+    const matched = this.vouchers.filter(v => v.accountHead === this.selectedLedgerHead);
+    
+    let running = baseBalance > 100000 ? baseBalance * 0.7 : 0;
+    return matched.map(v => {
+      running += (v.debit - v.credit);
+      return {
+        date: v.date,
+        voucherNo: v.voucherNo,
+        type: v.type,
+        narration: v.narration,
+        debit: v.debit,
+        credit: v.credit,
+        balance: running
+      };
+    });
+  }
+
+  get ledgerTotalDebit(): number {
+    return this.ledgerTransactions.reduce((s, t) => s + t.debit, 0);
+  }
+
+  get ledgerTotalCredit(): number {
+    return this.ledgerTransactions.reduce((s, t) => s + t.credit, 0);
+  }
+
+  // Master Modals
+  saveNewAccount(): void {
+    if (!this.newAccount.name || !this.newAccount.code) {
+      Swal.fire('Required Fields', 'Please provide an account code and account title.', 'warning');
+      return;
+    }
+    this.accounts.push({ ...this.newAccount, balance: Number(this.newAccount.balance) || 0 });
+    this.showAddAccountModal = false;
+    this.newAccount = { code: '', name: '', category: 'Expense', balance: 0 };
+    Swal.fire('Account Created', 'New ledger master head created successfully.', 'success');
+  }
+
+  saveNewItemAccount(): void {
+    if (!this.newItemAccount.name || !this.newItemAccount.code) {
+      Swal.fire('Required Fields', 'Please provide an item code and name.', 'warning');
+      return;
+    }
+    this.itemAccounts.push({ ...this.newItemAccount });
+    this.showAddItemModal = false;
+    this.newItemAccount = { code: '', name: '', category: 'Lab Consumables', linkedAccount: 'Science Labs Consumables & Reagents', taxRate: 18, unit: 'Units', stockQty: 0, rate: 0 };
+    Swal.fire('Item Master Created', 'Item catalog master saved successfully.', 'success');
+  }
+
   openVoucher(type: string): void {
     this.voucherCategory = type as any;
-    this.activeTab = 'entry';
+    this.navigateToTab('entry');
   }
 
   seedData(): void {
@@ -297,32 +430,6 @@ export class AccountingComponent implements OnInit {
         Swal.fire('Data Seeded!', 'Fiscal chart & sample records loaded successfully.', 'success');
       }
     });
-  }
-
-  saveVoucher(): void {
-    const amt = Number(this.newVoucher.amount) || 0;
-    if (amt <= 0) {
-      Swal.fire('Invalid Amount', 'Please enter a valid amount.', 'warning');
-      return;
-    }
-
-    const item: VoucherItem = {
-      id: (this.vouchers.length + 1).toString(),
-      voucherNo: `${this.newVoucher.type.substring(0, 2).toUpperCase()}V-2026-${(this.vouchers.length + 1).toString().padStart(3, '0')}`,
-      type: this.newVoucher.type as any,
-      date: this.newVoucher.date,
-      accountHead: this.newVoucher.accountHead,
-      debit: this.newVoucher.type === 'Receipt' ? amt : 0,
-      credit: this.newVoucher.type === 'Payment' ? amt : (this.newVoucher.type === 'Journal' ? amt : 0),
-      narration: this.newVoucher.narration || 'General ledger entry',
-      status: 'Approved'
-    };
-
-    this.vouchers.unshift(item);
-    this.showNewVoucherModal = false;
-    this.newVoucher = { type: 'Payment', accountHead: 'Campus Utilities, Electricity & Water', amount: 5000, narration: '', date: '2026-10-05' };
-
-    Swal.fire('Voucher Posted!', `Voucher ${item.voucherNo} recorded successfully into general ledger.`, 'success');
   }
 
   printReport(): void {
