@@ -1,74 +1,698 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Top Academic Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Academic Curriculum & Scheduling</h3>
-      <p class="text-muted small mb-0">Manage classes, sections, course subjects and weekly class routines</p>
+      <h3 class="fw-bold mb-1"><i class="fas fa-graduation-cap text-primary me-2"></i>Academics & Curriculum Management</h3>
+      <p class="text-muted small mb-0">Unified institutional engine for class structures, course subjects, teacher allocations, routines & optional tracks</p>
     </div>
     <div class="d-flex gap-2">
-      <button *ngIf="activeTab === 'subjects'" class="btn btn-primary" (click)="showSubjectModal = true">
-        <i class="fas fa-plus me-1"></i> Add New Subject
+      <button *ngIf="activeTab === 'routine'" class="btn btn-outline-primary shadow-sm" (click)="printRoutine()">
+        <i class="fas fa-print me-1"></i> Print Timetable
+      </button>
+      <button *ngIf="activeTab === 'routine'" class="btn btn-primary shadow-sm" (click)="openAddRoutine()">
+        <i class="fas fa-plus me-1"></i> Add Routine Slot
       </button>
     </div>
   </div>
 
-  <!-- Tab Navigation -->
-  <div class="d-flex gap-2 mb-4">
-    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'classes'" [class.btn-light]="activeTab !== 'classes'" (click)="activeTab = 'classes'">
-      <i class="fas fa-school me-1"></i> Classes & Sections
-    </button>
-    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'subjects'" [class.btn-light]="activeTab !== 'subjects'" (click)="activeTab = 'subjects'">
-      <i class="fas fa-book-bookmark me-1"></i> Subjects Master
-    </button>
-    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'timetable'" [class.btn-light]="activeTab !== 'timetable'" (click)="activeTab = 'timetable'">
-      <i class="fas fa-calendar-alt me-1"></i> Class Routine / Timetable
-    </button>
+  <!-- Sub-Module Tab Navigation Bar -->
+  <div class="academic-tabs-wrapper mb-4">
+    <div class="d-flex flex-wrap gap-2 p-2 bg-white border rounded-12 shadow-sm">
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'classes'" [class.btn-light]="activeTab !== 'classes'" (click)="setTab('classes')">
+        <i class="fas fa-school me-1"></i> Class
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'sections'" [class.btn-light]="activeTab !== 'sections'" (click)="setTab('sections')">
+        <i class="fas fa-layer-group me-1"></i> Section
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'subjects'" [class.btn-light]="activeTab !== 'subjects'" (click)="setTab('subjects')">
+        <i class="fas fa-book me-1"></i> Subjects
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'assign-teacher'" [class.btn-light]="activeTab !== 'assign-teacher'" (click)="setTab('assign-teacher')">
+        <i class="fas fa-chalkboard-teacher me-1"></i> Assign Class Teacher
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'assign-subject'" [class.btn-light]="activeTab !== 'assign-subject'" (click)="setTab('assign-subject')">
+        <i class="fas fa-book-reader me-1"></i> Assign Subject
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'class-rooms'" [class.btn-light]="activeTab !== 'class-rooms'" (click)="setTab('class-rooms')">
+        <i class="fas fa-door-open me-1"></i> Class Room
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'routine'" [class.btn-light]="activeTab !== 'routine'" (click)="setTab('routine')">
+        <i class="fas fa-calendar-alt me-1"></i> Class Routine
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'optional-subject'" [class.btn-light]="activeTab !== 'optional-subject'" (click)="setTab('optional-subject')">
+        <i class="fas fa-check-double me-1"></i> Optional Subject
+      </button>
+    </div>
   </div>
 
-  <!-- TAB 1: CLASSES & SECTIONS -->
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 1: CLASS (/Classes) -->
+  <!-- ========================================================================= -->
   <div *ngIf="activeTab === 'classes'" class="row g-4 animate-fade-in">
-    <!-- Add Class Box -->
+    <!-- Left: Add Class Form -->
     <div class="col-12 col-lg-4">
-      <div class="premium-card">
-        <h5 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Create New Grade</h5>
-        <div class="mb-3">
-          <label class="form-label small fw-bold text-muted">CLASS / GRADE NAME *</label>
-          <input type="text" class="form-control" [(ngModel)]="newClassName" placeholder="e.g. Grade 11 - Arts">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-plus-circle me-2"></i>Add Class</h5>
         </div>
-        <button class="btn btn-primary w-100 justify-content-center py-2" (click)="addClass()" [disabled]="!newClassName.trim()">
-          <i class="fas fa-plus me-1"></i> Save Class
-        </button>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Class Name *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newClass.name" placeholder="e.g. Class 1, Grade 10" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase mb-2">Sections *</label>
+            <div class="d-flex flex-wrap gap-2">
+              <div *ngFor="let sec of availableSections" class="form-check form-check-inline bg-light p-2 rounded border">
+                <input class="form-check-input" type="checkbox" [id]="'sec_' + sec.id" [checked]="isSectionSelected(sec.id)" (change)="toggleSectionForClass(sec.id)">
+                <label class="form-check-label small fw-600 cursor-pointer" [for]="'sec_' + sec.id">
+                  {{ sec.name }}
+                </label>
+              </div>
+            </div>
+            <div class="form-text small text-muted mt-2">
+              <i class="fas fa-info-circle me-1"></i> Select sections available for this class.
+            </div>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveClass()">
+              <i class="fas fa-check me-2"></i> Save Class
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Class List Table -->
+    <!-- Right: Class List Table -->
     <div class="col-12 col-lg-8">
-      <div class="premium-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="fw-bold mb-0">Active Academic Grades & Divisions</h5>
-          <span class="badge bg-soft-primary text-primary fw-bold">{{ classes.length }} Classes</span>
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Class List</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ classes.length }} Classes</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchClassQuery" placeholder="Search class...">
+          </div>
         </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Class</th>
+                  <th class="py-3 fw-700" style="width: 40%;">Sections</th>
+                  <th class="py-3 fw-700">Students</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of classes">
+                  <td class="px-4 fw-700 text-dark">{{ item.name }}</td>
+                  <td>
+                    <div class="d-flex flex-wrap gap-1" *ngIf="item.sections && item.sections.length > 0; else noSections">
+                      <span *ngFor="let s of item.sections" class="badge bg-light text-primary border fw-600">
+                        {{ s.name }}
+                      </span>
+                    </div>
+                    <ng-template #noSections>
+                      <span class="text-muted small">No Sections</span>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <span class="badge bg-success bg-opacity-10 text-success fw-700 rounded-pill px-3">{{ item.studentCount }} Students</span>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="openEditClass(item)" title="Edit Class">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteClass(item)" title="Delete Class">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="classes.length === 0">
+                  <td colspan="4" class="text-center py-5">
+                    <div class="py-4">
+                      <i class="fas fa-chalkboard text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                      <p class="text-muted small">No classes found.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 2: SECTION (/Section) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'sections'" class="row g-4 animate-fade-in">
+    <!-- Left: Add Section Form -->
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-plus-circle me-2"></i>Add Section</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Section Name *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newSection.name" placeholder="e.g. A, B, Morning" required>
+          </div>
+          <div class="mb-3">
+            <div class="form-check form-switch mt-4">
+              <input class="form-check-input" type="checkbox" id="isActiveSwitch" [(ngModel)]="newSection.isActive">
+              <label class="form-check-label fw-700 text-dark" for="isActiveSwitch">Is Active?</label>
+            </div>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveSection()">
+              <i class="fas fa-check me-2"></i> Save Section
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Section List Table -->
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Section List</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ availableSections.length }} Sections</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchSectionQuery" placeholder="Quick Search...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700" style="width: 10%;">SL</th>
+                  <th class="py-3 fw-700">Section Name</th>
+                  <th class="py-3 fw-700">Status</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sec of availableSections; let i = index">
+                  <td class="px-4 fw-600 text-muted">{{ i + 1 }}</td>
+                  <td><span class="fw-700 text-dark">{{ sec.name }}</span></td>
+                  <td>
+                    <span *ngIf="sec.isActive" class="badge bg-success bg-opacity-10 text-success fw-700 px-3 py-1 rounded-pill small">Active</span>
+                    <span *ngIf="!sec.isActive" class="badge bg-danger bg-opacity-10 text-danger fw-700 px-3 py-1 rounded-pill small">Inactive</span>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="openEditSection(sec)" title="Edit Section">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteSection(sec)" title="Delete Section">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 3: SUBJECTS (/Subjects) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'subjects'" class="row g-4 animate-fade-in">
+    <!-- Left: Add Subject Form -->
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-plus-circle me-2"></i>Add Subject</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Subject Name *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newSubject.name" placeholder="e.g. Mathematics" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Subject Code</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newSubject.code" placeholder="e.g. MATH101">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Subject Type</label>
+            <select class="form-select bg-light" [(ngModel)]="newSubject.type">
+              <option value="Theory">Theory</option>
+              <option value="Practical">Practical</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Applicable Classes</label>
+            <div class="d-flex flex-wrap gap-2 max-h-40 overflow-auto p-2 border rounded bg-light">
+              <div *ngFor="let cls of classes" class="form-check">
+                <input class="form-check-input" type="checkbox" [id]="'sub_cls_' + cls.id" [checked]="isClassSelectedForSubject(cls.id)" (change)="toggleClassForSubject(cls.id)">
+                <label class="form-check-label small fw-600" [for]="'sub_cls_' + cls.id">{{ cls.name }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check form-switch mt-2">
+              <input class="form-check-input" type="checkbox" id="isOptionalSwitch" [(ngModel)]="newSubject.isOptional">
+              <label class="form-check-label fw-700 text-dark" for="isOptionalSwitch">Is Optional Subject?</label>
+            </div>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveSubject()">
+              <i class="fas fa-check me-2"></i> Save Subject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Subject List Table -->
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Subject List</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ subjects.length }} Subjects</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchSubjectQuery" placeholder="Search subjects...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Subject</th>
+                  <th class="py-3 fw-700">Type</th>
+                  <th class="py-3 fw-700">Class</th>
+                  <th class="py-3 fw-700">Code</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of subjects">
+                  <td class="px-4">
+                    <span class="fw-700 text-dark">{{ item.name }}</span>
+                    <span *ngIf="item.isOptional" class="badge bg-warning text-dark ms-2 small">Optional</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-light text-primary border fw-600">{{ item.type }}</span>
+                  </td>
+                  <td>
+                    <span class="fw-600 text-muted">{{ item.className || 'Class 10' }}</span>
+                  </td>
+                  <td>
+                    <span class="fw-700 text-muted small">{{ item.code }}</span>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="openEditSubject(item)" title="Edit Subject">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteSubject(item)" title="Delete Subject">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 4: ASSIGN CLASS TEACHER (/AssignClassTeacher) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'assign-teacher'" class="row g-4 animate-fade-in">
+    <!-- Left: Assign Teacher Form -->
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-user-plus me-2"></i>Assign Class Teacher</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Class *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignTeacher.classId" (change)="onTeacherClassChange()">
+              <option [ngValue]="null">Select Class</option>
+              <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Section *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignTeacher.sectionId">
+              <option [ngValue]="null">Select Section</option>
+              <option *ngFor="let s of availableSectionsForTeacher" [value]="s.id">{{ s.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Teacher *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignTeacher.teacherId">
+              <option [ngValue]="null">Select Teacher</option>
+              <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }}</option>
+            </select>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveAssignTeacher()">
+              <i class="fas fa-check me-2"></i> Save Assign
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Class Teacher List Table -->
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Class Teacher List</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ classTeachers.length }} Assignments</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchTeacherQuery" placeholder="Search teacher...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Class</th>
+                  <th class="py-3 fw-700">Section</th>
+                  <th class="py-3 fw-700">Teacher</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of classTeachers">
+                  <td class="px-4 fw-700 text-dark">{{ item.className }}</td>
+                  <td>
+                    <span class="badge bg-light text-primary border fw-600">{{ item.sectionName }}</span>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="rounded-circle bg-soft-primary text-primary fw-bold d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                        {{ item.avatarInitial }}
+                      </div>
+                      <span class="fw-600 text-dark">{{ item.teacherName }}</span>
+                    </div>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteAssignTeacher(item)" title="Delete Assignment">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="classTeachers.length === 0">
+                  <td colspan="4" class="text-center py-5">
+                    <div class="py-4">
+                      <i class="fas fa-chalkboard-teacher text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                      <p class="text-muted small">No class teachers assigned.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 5: ASSIGN SUBJECT (/AssignSubject) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'assign-subject'" class="row g-4 animate-fade-in">
+    <!-- Left: Assign Subject Form -->
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-book-open me-2"></i>Assign Subject</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Class *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignSubject.classId" (change)="onAssignSubClassChange()">
+              <option [ngValue]="null">Select Class</option>
+              <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Section *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignSubject.sectionId">
+              <option [ngValue]="null">Select Section</option>
+              <option *ngFor="let s of availableSectionsForAssignSub" [value]="s.id">{{ s.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Subject *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignSubject.subjectId">
+              <option [ngValue]="null">Select Subject</option>
+              <option *ngFor="let sub of availableSubjectsForAssignSub" [value]="sub.id">{{ sub.name }} ({{ sub.code }})</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Teacher *</label>
+            <select class="form-select bg-light" [(ngModel)]="newAssignSubject.teacherId">
+              <option [ngValue]="null">Select Teacher</option>
+              <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }}</option>
+            </select>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveAssignSubject()">
+              <i class="fas fa-check me-2"></i> Save Assign
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Assigned Subject List Table -->
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Subject Assign List</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ assignedSubjects.length }} Assigned</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchAssignSubQuery" placeholder="Search assignment...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Class (Section)</th>
+                  <th class="py-3 fw-700">Subject</th>
+                  <th class="py-3 fw-700">Teacher</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of assignedSubjects">
+                  <td class="px-4 fw-700 text-dark">
+                    {{ item.className }} <span class="badge bg-light text-muted border ms-1">{{ item.sectionName }}</span>
+                  </td>
+                  <td><span class="fw-600 text-primary">{{ item.subjectName }}</span></td>
+                  <td><span class="fw-600 text-dark">{{ item.teacherName }}</span></td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteAssignSubject(item)" title="Delete Allocation">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="assignedSubjects.length === 0">
+                  <td colspan="4" class="text-center py-5">
+                    <div class="py-4">
+                      <i class="fas fa-book-reader text-muted mb-3" style="font-size: 2rem; opacity: 0.2;"></i>
+                      <p class="text-muted small">No subjects assigned.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 6: CLASS ROOM (/ClassRoom) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'class-rooms'" class="row g-4 animate-fade-in">
+    <!-- Left: Add Class Room Form -->
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3">
+          <h5 class="fw-800 text-primary m-0"><i class="fas fa-plus-circle me-2"></i>Add Class Room</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Room No *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newRoom.roomNo" placeholder="e.g. 101, Physics Lab" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-700 text-muted small text-uppercase">Capacity (Students) *</label>
+            <input type="number" class="form-control bg-light" [(ngModel)]="newRoom.capacity" placeholder="e.g. 45">
+          </div>
+          <div class="mb-3">
+            <div class="form-check form-switch mt-3">
+              <input class="form-check-input" type="checkbox" id="roomActiveSwitch" [(ngModel)]="newRoom.isActive">
+              <label class="form-check-label fw-700 text-dark" for="roomActiveSwitch">Is Active?</label>
+            </div>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary fw-700 py-2 shadow-sm" (click)="saveClassRoom()">
+              <i class="fas fa-check me-2"></i> Save Class Room
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Class Room List Table -->
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm rounded-12 h-100">
+        <div class="card-header bg-white border-bottom border-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-800 text-dark m-0">Class Room List</h5>
+            <span class="badge bg-soft-primary text-primary fw-bold">{{ classRooms.length }} Rooms</span>
+          </div>
+          <div class="search-box">
+            <input type="text" class="form-control form-control-sm border-0 bg-light" [(ngModel)]="searchRoomQuery" placeholder="Search rooms...">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Room No</th>
+                  <th class="py-3 fw-700">Capacity</th>
+                  <th class="py-3 fw-700">Status</th>
+                  <th class="text-end px-4 py-3 fw-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let room of classRooms">
+                  <td class="px-4 fw-700 text-dark">{{ room.roomNo }}</td>
+                  <td>
+                    <span class="badge bg-light text-muted border fw-600">{{ room.capacity }} Students</span>
+                  </td>
+                  <td>
+                    <span *ngIf="room.isActive" class="badge bg-success bg-opacity-10 text-success fw-700 px-3 py-1 rounded-pill small">Active</span>
+                    <span *ngIf="!room.isActive" class="badge bg-danger bg-opacity-10 text-danger fw-700 px-3 py-1 rounded-pill small">Inactive</span>
+                  </td>
+                  <td class="text-end px-4">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="openEditRoom(room)" title="Edit Room">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="deleteRoom(room)" title="Delete Room">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 7: CLASS ROUTINE / TIMETABLE (/ClassRoutine) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'routine'" class="animate-fade-in">
+    <!-- Filter Card -->
+    <div class="card border-0 shadow-sm rounded-12 mb-4">
+      <div class="card-header bg-white border-bottom py-3">
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-calendar-alt me-2"></i>Class Routine Search</h5>
+      </div>
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label fw-700 text-muted small text-uppercase">Select Class</label>
+            <select class="form-select border-0 bg-light shadow-none fw-600" [(ngModel)]="routineFilter.classId" (change)="onRoutineClassChange()">
+              <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label fw-700 text-muted small text-uppercase">Select Section</label>
+            <select class="form-select border-0 bg-light shadow-none fw-600" [(ngModel)]="routineFilter.sectionId">
+              <option *ngFor="let s of routineSections" [value]="s.id">{{ s.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary fw-700 w-100 py-2 shadow-sm">
+              <i class="fas fa-search me-1"></i> Filter Matrix
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Interactive Grid -->
+    <div class="card border-0 shadow-sm rounded-12">
+      <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="fw-800 text-dark m-0">Institutional Weekly Routine</h6>
+          <small class="text-muted">{{ getSelectedClassName() }} - {{ getSelectedSectionName() }}</small>
+        </div>
+        <button class="btn btn-sm btn-primary shadow-sm fw-700" (click)="openAddRoutine()">
+          <i class="fas fa-plus me-1"></i> Add Routine Slot
+        </button>
+      </div>
+      <div class="card-body p-0">
         <div class="table-responsive">
-          <table class="table-premium">
-            <thead>
+          <table class="table table-bordered align-middle mb-0 text-center">
+            <thead class="bg-light text-muted small text-uppercase">
               <tr>
-                <th>#</th>
-                <th>Class Name</th>
-                <th>Sections</th>
-                <th class="text-end">Actions</th>
+                <th class="py-3 fw-700" style="width: 140px;">Day</th>
+                <th class="py-3 fw-700">Class Routine Schedule</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let c of classes; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td><strong class="text-primary">{{ c.name }}</strong></td>
-                <td>
-                  <span *ngFor="let sec of c.sections" class="badge bg-light text-dark border me-1">
-                    {{ sec.name }}
-                  </span>
-                </td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openAddSection(c)" title="Add Section"><i class="fas fa-plus"></i> Section</button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="deleteClass(c)" title="Delete Class"><i class="fas fa-trash"></i></button>
+              <tr *ngFor="let day of daysOfWeek">
+                <td class="bg-light fw-800 text-primary py-4">{{ day }}</td>
+                <td class="p-3 text-start">
+                  <div class="d-flex flex-wrap gap-3" *ngIf="getRoutinesForDay(day).length > 0; else noRoutineForDay">
+                    <div *ngFor="let item of getRoutinesForDay(day)" class="routine-slot-card p-3 rounded-12 position-relative shadow-sm">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-800 text-dark small">{{ item.subjectName }}</span>
+                        <button class="btn btn-link text-danger p-0 border-0 ms-2" (click)="deleteRoutine(item)">
+                          <i class="fas fa-times-circle"></i>
+                        </button>
+                      </div>
+                      <div class="text-primary fw-700 small mb-1">
+                        <i class="far fa-clock me-1"></i> {{ item.startTime }} - {{ item.endTime }}
+                      </div>
+                      <div class="text-muted small mb-1">
+                        <i class="fas fa-user-tie me-1"></i> {{ item.teacherName }}
+                      </div>
+                      <div class="small text-success fw-600">
+                        <i class="fas fa-door-open me-1"></i> {{ item.roomNo }}
+                      </div>
+                    </div>
+                  </div>
+                  <ng-template #noRoutineForDay>
+                    <span class="text-muted small fst-italic">No routine schedule defined for this day.</span>
+                  </ng-template>
                 </td>
               </tr>
             </tbody>
@@ -78,135 +702,253 @@
     </div>
   </div>
 
-  <!-- TAB 2: SUBJECTS MASTER -->
-  <div *ngIf="activeTab === 'subjects'" class="premium-card animate-fade-in shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Course Curriculum & Subjects</h5>
-      <span class="text-muted small">Total Subjects: <strong>{{ subjects.length }}</strong></span>
-    </div>
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Subject Name</th>
-            <th>Subject Type</th>
-            <th>Assigned Teacher</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let sub of subjects">
-            <td><strong class="text-primary">{{ sub.code }}</strong></td>
-            <td><div class="fw-bold text-dark">{{ sub.name }}</div></td>
-            <td>
-              <span class="badge" [class.bg-info]="sub.type === 'Theory'" [class.bg-warning]="sub.type === 'Practical'">{{ sub.type }}</span>
-            </td>
-            <td>
-              <div class="d-flex align-items-center">
-                <i class="fas fa-chalkboard-user text-muted me-2"></i>
-                <span>{{ sub.teacher }}</span>
-              </div>
-            </td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteSubject(sub)" title="Remove Subject"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- TAB 3: TIMETABLE ROUTINE -->
-  <div *ngIf="activeTab === 'timetable'" class="premium-card animate-fade-in shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-0">Weekly Class Routine & Schedule Matrix</h5>
-        <small class="text-muted">Grade 10 - Section A (General Academic Schedule)</small>
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 8: OPTIONAL SUBJECT (/OptionalSubject/Assign) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'optional-subject'" class="animate-fade-in">
+    <!-- Search Criteria -->
+    <div class="card border-0 shadow-sm rounded-12 mb-4">
+      <div class="card-header bg-white border-bottom py-3">
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-book-open me-2"></i>Optional Subject Assignment</h5>
       </div>
-      <button class="btn btn-sm btn-outline-primary" onclick="window.print()"><i class="fas fa-print me-1"></i> Print Timetable</button>
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label fw-700 text-muted small text-uppercase">Select Class</label>
+            <select class="form-select border-0 bg-light shadow-none fw-600" [(ngModel)]="optionalSubjectFilter.classId">
+              <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-primary fw-700 w-100 py-2 shadow-sm">
+              <i class="fas fa-search me-1"></i> Filter Students
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-bordered text-center align-middle">
-        <thead class="bg-light">
-          <tr>
-            <th class="py-3">Day / Period</th>
-            <th class="py-3">Period 1<br><small class="text-muted">09:00 - 09:45</small></th>
-            <th class="py-3">Period 2<br><small class="text-muted">09:45 - 10:30</small></th>
-            <th class="py-3">Period 3<br><small class="text-muted">10:45 - 11:30</small></th>
-            <th class="py-3">Period 4<br><small class="text-muted">11:30 - 12:15</small></th>
-            <th class="py-3">Period 5<br><small class="text-muted">01:00 - 01:45</small></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let slot of timetableSlots">
-            <td class="fw-bold bg-light text-primary">{{ slot.day }}</td>
-            <td><span class="badge bg-soft-primary text-primary p-2 w-100">{{ slot.period1 }}</span></td>
-            <td><span class="badge bg-soft-success text-success p-2 w-100">{{ slot.period2 }}</span></td>
-            <td><span class="badge bg-soft-warning text-dark p-2 w-100">{{ slot.period3 }}</span></td>
-            <td><span class="badge bg-soft-info text-info p-2 w-100">{{ slot.period4 }}</span></td>
-            <td><span class="badge bg-light text-dark border p-2 w-100">{{ slot.period5 }}</span></td>
-          </tr>
-        </tbody>
-      </table>
+
+    <!-- Student List Table -->
+    <div class="card border-0 shadow-sm rounded-12">
+      <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <h6 class="fw-700 m-0 text-dark">Student List for Optional Allocation</h6>
+        <span class="badge bg-light text-primary fw-bold">Total Students: {{ studentsForOptional.length }}</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+              <tr>
+                <th class="px-4 py-3 fw-700">Admission No</th>
+                <th class="py-3 fw-700">Student Name</th>
+                <th class="py-3 fw-700">Optional Subject Choice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of studentsForOptional; let i = index">
+                <td class="px-4">
+                  <span class="fw-600 text-muted">{{ s.admissionNo }}</span>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                      <i class="fas fa-user text-muted small"></i>
+                    </div>
+                    <span class="fw-700 text-dark">{{ s.studentName }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex gap-3 flex-wrap align-items-center">
+                    <div *ngFor="let opt of getOptionalSubjectsForClass()" class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" [id]="'opt_' + i + '_' + opt.id" [name]="'opt_choice_' + i" [value]="opt.id" [(ngModel)]="s.assignedSubjectId">
+                      <label class="form-check-label fw-600 small cursor-pointer" [for]="'opt_' + i + '_' + opt.id">
+                        {{ opt.name }} ({{ opt.code }})
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" [id]="'opt_' + i + '_none'" [name]="'opt_choice_' + i" [value]="null" [(ngModel)]="s.assignedSubjectId">
+                      <label class="form-check-label text-muted small cursor-pointer" [for]="'opt_' + i + '_none'">None</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-4 border-top bg-light d-flex justify-content-end">
+          <button class="btn btn-success fw-700 px-4 py-2 shadow-sm" (click)="saveOptionalAssignments()">
+            <i class="fas fa-save me-2"></i> Save Assignments
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Add Section Modal -->
-<div class="modal-backdrop-custom" *ngIf="showSectionModal && selectedClassForSection">
+<!-- ========================================================================= -->
+<!-- MODALS -->
+<!-- ========================================================================= -->
+
+<!-- Edit Class Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditClassModal && editingClass">
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-layer-group text-primary me-2"></i>Add Section to {{ selectedClassForSection.name }}</h5>
-      <button class="btn-close" (click)="showSectionModal = false"></button>
+      <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Class</h5>
+      <button class="btn-close" (click)="showEditClassModal = false"></button>
     </div>
     <div class="mb-3">
-      <label class="form-label small fw-bold text-muted">SECTION NAME *</label>
-      <input type="text" class="form-control" [(ngModel)]="newSectionName" placeholder="e.g. Section D">
+      <label class="form-label fw-600 small text-uppercase">Class Name</label>
+      <input type="text" class="form-control" [(ngModel)]="editingClass.name" required>
     </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showSectionModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveSection()"><i class="fas fa-check me-1"></i>Save Section</button>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase mb-2">Sections</label>
+      <div class="d-flex flex-wrap gap-2">
+        <div *ngFor="let sec of availableSections" class="form-check form-check-inline bg-light p-2 rounded border">
+          <input class="form-check-input" type="checkbox" [id]="'edit_sec_' + sec.id" [checked]="isSectionSelected(sec.id, true)" (change)="toggleSectionForClass(sec.id, true)">
+          <label class="form-check-label small fw-600 cursor-pointer" [for]="'edit_sec_' + sec.id">{{ sec.name }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showEditClassModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="updateClass()"><i class="fas fa-check me-1"></i>Update Changes</button>
     </div>
   </div>
 </div>
 
-<!-- Add Subject Modal -->
-<div class="modal-backdrop-custom" *ngIf="showSubjectModal">
+<!-- Edit Section Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditSectionModal && editingSection">
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-book text-primary me-2"></i>Create New Subject</h5>
-      <button class="btn-close" (click)="showSubjectModal = false"></button>
+      <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Section</h5>
+      <button class="btn-close" (click)="showEditSectionModal = false"></button>
     </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold text-muted">SUBJECT NAME *</label>
-      <input type="text" class="form-control" [(ngModel)]="newSubject.name" placeholder="e.g. Advanced Biology">
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Section Name</label>
+      <input type="text" class="form-control" [(ngModel)]="editingSection.name" required>
     </div>
-    <div class="row g-2 mb-2">
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" id="editSecActive" [(ngModel)]="editingSection.isActive">
+      <label class="form-check-label fw-600" for="editSecActive">Is Active?</label>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showEditSectionModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="updateSection()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Subject Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditSubjectModal && editingSubject">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Subject</h5>
+      <button class="btn-close" (click)="showEditSubjectModal = false"></button>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Subject Name</label>
+      <input type="text" class="form-control" [(ngModel)]="editingSubject.name" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Subject Code</label>
+      <input type="text" class="form-control" [(ngModel)]="editingSubject.code">
+    </div>
+    <div class="row g-2 mb-3">
       <div class="col-6">
-        <label class="form-label small fw-bold text-muted">SUBJECT CODE *</label>
-        <input type="text" class="form-control" [(ngModel)]="newSubject.code" placeholder="e.g. BIO-101">
-      </div>
-      <div class="col-6">
-        <label class="form-label small fw-bold text-muted">TYPE</label>
-        <select class="form-select" [(ngModel)]="newSubject.type">
+        <label class="form-label fw-600 small text-uppercase">Type</label>
+        <select class="form-select" [(ngModel)]="editingSubject.type">
           <option value="Theory">Theory</option>
           <option value="Practical">Practical</option>
         </select>
       </div>
+      <div class="col-6">
+        <label class="form-label fw-600 small text-uppercase">Class</label>
+        <select class="form-select" [(ngModel)]="editingSubject.classId">
+          <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" id="editSubOptional" [(ngModel)]="editingSubject.isOptional">
+      <label class="form-check-label fw-600" for="editSubOptional">Is Optional?</label>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showEditSubjectModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="updateSubject()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Class Room Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditRoomModal && editingRoom">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Class Room</h5>
+      <button class="btn-close" (click)="showEditRoomModal = false"></button>
     </div>
     <div class="mb-3">
-      <label class="form-label small fw-bold text-muted">ASSIGNED FACULTY</label>
-      <select class="form-select" [(ngModel)]="newSubject.teacher">
-        <option>Dr. Abdul Hakeem</option>
-        <option>Prof. Sharief Abdull</option>
-        <option>Mrs. Priya Nair</option>
-        <option>Mr. Arvind Rao</option>
-      </select>
+      <label class="form-label fw-600 small text-uppercase">Room No</label>
+      <input type="text" class="form-control" [(ngModel)]="editingRoom.roomNo" required>
     </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showSubjectModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="addSubject()"><i class="fas fa-check me-1"></i>Save Subject</button>
+    <div class="mb-3">
+      <label class="form-label fw-600 small text-uppercase">Capacity</label>
+      <input type="number" class="form-control" [(ngModel)]="editingRoom.capacity">
+    </div>
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" id="editRoomActive" [(ngModel)]="editingRoom.isActive">
+      <label class="form-check-label fw-600" for="editRoomActive">Is Active?</label>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showEditRoomModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="updateRoom()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Routine Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddRoutineModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-calendar-plus text-primary me-2"></i>Add Class Routine Slot</h5>
+      <button class="btn-close" (click)="showAddRoutineModal = false"></button>
+    </div>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label fw-700 small text-uppercase">Day of Week *</label>
+        <select class="form-select bg-light" [(ngModel)]="newRoutine.dayOfWeek">
+          <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-700 small text-uppercase">Subject *</label>
+        <select class="form-select bg-light" [(ngModel)]="newRoutine.subjectId">
+          <option *ngFor="let s of subjects" [value]="s.id">{{ s.name }} ({{ s.code }})</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-700 small text-uppercase">Teacher *</label>
+        <select class="form-select bg-light" [(ngModel)]="newRoutine.teacherId">
+          <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }}</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-700 small text-uppercase">Class Room *</label>
+        <select class="form-select bg-light" [(ngModel)]="newRoutine.classRoomId">
+          <option *ngFor="let r of classRooms" [value]="r.id">{{ r.roomNo }} (Cap: {{ r.capacity }})</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label class="form-label fw-700 small text-uppercase">Start Time *</label>
+        <input type="time" class="form-control bg-light" [(ngModel)]="newRoutine.startTime" required>
+      </div>
+      <div class="col-6">
+        <label class="form-label fw-700 small text-uppercase">End Time *</label>
+        <input type="time" class="form-control bg-light" [(ngModel)]="newRoutine.endTime" required>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-sm btn-light" (click)="showAddRoutineModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="saveRoutine()"><i class="fas fa-check me-1"></i>Save Routine</button>
     </div>
   </div>
 </div>

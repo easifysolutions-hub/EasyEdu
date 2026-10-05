@@ -104,12 +104,14 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['academic']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['academic']">
-        <li><a routerLink="/academic/classes" routerLinkActive="active" class="sub-nav-link">Class & Sections</a></li>
-        <li><a routerLink="/academic/subjects" routerLinkActive="active" class="sub-nav-link">Subjects Master</a></li>
-        <li><a routerLink="/academic/classes" class="sub-nav-link">Assign Class Teacher</a></li>
-        <li><a routerLink="/academic/classes" class="sub-nav-link">Assign Subject</a></li>
-        <li><a routerLink="/academic/classes" class="sub-nav-link">Class Room</a></li>
-        <li><a routerLink="/academic/timetable" routerLinkActive="active" class="sub-nav-link">Class Routine / Timetable</a></li>
+        <li><a [routerLink]="['/academic/classes']" [queryParams]="{tab: 'classes'}" class="sub-nav-link">Class</a></li>
+        <li><a [routerLink]="['/academic/sections']" [queryParams]="{tab: 'sections'}" class="sub-nav-link">Section</a></li>
+        <li><a [routerLink]="['/academic/subjects']" [queryParams]="{tab: 'subjects'}" class="sub-nav-link">Subjects</a></li>
+        <li><a [routerLink]="['/academic/assign-teacher']" [queryParams]="{tab: 'assign-teacher'}" class="sub-nav-link">Assign Class Teacher</a></li>
+        <li><a [routerLink]="['/academic/assign-subject']" [queryParams]="{tab: 'assign-subject'}" class="sub-nav-link">Assign Subject</a></li>
+        <li><a [routerLink]="['/academic/class-room']" [queryParams]="{tab: 'class-rooms'}" class="sub-nav-link">Class Room</a></li>
+        <li><a [routerLink]="['/academic/timetable']" [queryParams]="{tab: 'routine'}" class="sub-nav-link">Class Routine</a></li>
+        <li><a [routerLink]="['/academic/optional-subject']" [queryParams]="{tab: 'optional-subject'}" class="sub-nav-link">Optional Subject</a></li>
       </ul>
     </div>
 
