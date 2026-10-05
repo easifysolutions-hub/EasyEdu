@@ -2,84 +2,249 @@
   <!-- Page Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1 text-dark">Download Center & Study Material Hub</h3>
-      <p class="text-muted small mb-0">Centralized digital library for official syllabi, assignment worksheets, exemplar solutions, and past papers</p>
+      <h3 class="fw-bold mb-1 text-dark">Download Center & Digital Resource Hub</h3>
+      <p class="text-muted small mb-0">Centralized academic study materials, syllabus repository, homework attachments, and video lectures</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-primary rounded-pill px-3 shadow-sm" (click)="showAddVideoModal = true">
+        <i class="fas fa-video me-1"></i> Add Video Lecture
+      </button>
       <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'upload'">
         <i class="fas fa-cloud-arrow-up me-1"></i> Upload Content
       </button>
     </div>
   </div>
 
+  <!-- Metric Overview Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-file-arrow-down fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TOTAL REPOSITORIES</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ contentList.length }} Documents</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Across {{ contentTypes.length }} Classification Categories</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-share-nodes fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">SHARED CONTENT</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ sharedList.length }} Active Links</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Class and Student Portals</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-circle-play fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">VIDEO LECTURES</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ videoList.length }} Video Lessons</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Recorded Classroom Modules</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-cloud-arrow-down fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TOTAL DOWNLOADS</span>
+        </div>
+        <h2 class="fw-bold mb-1">1,527 Fetches</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Student Knowledge Usage</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Navigation Pill Tabs -->
-  <div class="premium-card mb-4 p-2">
+  <div class="download-card mb-4 p-2">
     <ul class="nav nav-pills custom-pills">
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'all'" (click)="activeTab = 'all'">
-          <i class="fas fa-layer-group me-2"></i> All Study Materials
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'notes'" (click)="activeTab = 'notes'">
-          <i class="fas fa-book-open-reader me-2"></i> Chapter Notes & Revision
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'syllabus'" (click)="activeTab = 'syllabus'">
-          <i class="fas fa-file-lines me-2"></i> Board Syllabus
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'assignments'" (click)="activeTab = 'assignments'">
-          <i class="fas fa-file-pen me-2"></i> Worksheets & Question Banks
+        <button class="nav-link" [class.active]="activeTab === 'types'" (click)="activeTab = 'types'">
+          <i class="fas fa-layer-group me-2"></i> Content Type
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-link" [class.active]="activeTab === 'upload'" (click)="activeTab = 'upload'">
-          <i class="fas fa-upload me-2"></i> Upload Content
+          <i class="fas fa-cloud-arrow-up me-2 text-success"></i> Upload Content
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'content-list'" (click)="activeTab = 'content-list'">
+          <i class="fas fa-list-check me-2"></i> Content List
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'shared'" (click)="activeTab = 'shared'">
+          <i class="fas fa-share-nodes me-2 text-info"></i> Shared Content List
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'videos'" (click)="activeTab = 'videos'">
+          <i class="fas fa-circle-play me-2 text-warning"></i> Video List
         </button>
       </li>
     </ul>
   </div>
 
-  <!-- TAB 1: All Materials Grid & Table -->
-  <div *ngIf="activeTab !== 'upload'" class="premium-card animate-fade-in">
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
-      <div class="search-bar-modern flex-grow-1" style="max-width: 500px;">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by document title, subject, grade...">
+  <!-- ================= TAB 1: CONTENT TYPE ================= -->
+  <div *ngIf="activeTab === 'types'" class="download-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Content Classification Types</h5>
+        <p class="text-muted small mb-0">Schema categories for organizing digital learning materials and study resources</p>
+      </div>
+      <button class="btn btn-primary rounded-12 px-3" (click)="showAddTypeModal = true">
+        <i class="fas fa-plus me-1"></i> Add Content Type
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4" *ngFor="let t of contentTypes">
+        <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow h-100">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-primary text-white fw-bold px-2 py-1 rounded">{{ t.code }}</span>
+            <span class="badge bg-white text-dark border">{{ t.totalFiles }} Documents</span>
+          </div>
+          <h5 class="fw-bold text-dark mt-2 mb-1">{{ t.name }}</h5>
+          <p class="text-muted small mb-0">{{ t.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 2: UPLOAD CONTENT ================= -->
+  <div *ngIf="activeTab === 'upload'" class="animate-fade-in mb-5">
+    <div class="download-card p-4">
+      <div class="mb-4">
+        <h4 class="fw-bold text-dark mb-1"><i class="fas fa-cloud-arrow-up text-success me-2"></i> Upload Academic Study Material</h4>
+        <p class="text-muted small mb-0">Publish documents, sample papers, notes, or syllabi for students and faculty</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-7">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-bold text-dark">Content Title *</label>
+              <input type="text" class="form-control form-control-modern" [(ngModel)]="uploadForm.title" placeholder="e.g. Chapter 4 Trigonometry Notes & Solved Problems">
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label small fw-bold text-dark">Content Type *</label>
+              <select class="form-select form-select-modern" [(ngModel)]="uploadForm.contentType">
+                <option *ngFor="let t of contentTypes" [value]="t.name">{{ t.name }}</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label small fw-bold text-dark">Target Class *</label>
+              <select class="form-select form-select-modern" [(ngModel)]="uploadForm.class">
+                <option value="All Classes">All Classes (Institution-wide)</option>
+                <option value="Grade 10-A">Grade 10-A</option>
+                <option value="Grade 10-B">Grade 10-B</option>
+                <option value="Grade 11-Science">Grade 11-Science</option>
+                <option value="Grade 12-Science">Grade 12-Science</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label small fw-bold text-dark">Subject / Course</label>
+              <input type="text" class="form-control form-control-modern" [(ngModel)]="uploadForm.subject" placeholder="e.g. Mathematics">
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label small fw-bold text-dark">Availability / Sharing Scope</label>
+              <select class="form-select form-select-modern" [(ngModel)]="uploadForm.availableFor">
+                <option value="All Students">All Enrolled Students</option>
+                <option value="Class Specific">Class Specific Only</option>
+                <option value="Faculty Only">Faculty / Teachers Only</option>
+                <option value="Public Portal">Public Website & Downloads</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+          <label class="form-label small fw-bold text-dark">Upload Document Attachment (PDF, DOCX, ZIP)</label>
+          <div class="upload-dropzone p-4 text-center border border-2 border-dashed rounded-16 bg-light d-flex flex-column align-items-center justify-content-center" style="min-height: 220px;">
+            <i class="fas fa-cloud-arrow-up fa-3x text-primary mb-2 opacity-75"></i>
+            <h6 class="fw-bold text-dark mb-1">Drag and drop resource file here</h6>
+            <p class="small text-muted mb-2">Supported formats: .pdf, .docx, .xlsx, .pptx, .zip (Max 25 MB)</p>
+            <span class="badge bg-white text-dark border px-3 py-1">{{ uploadForm.fileName }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'content-list'">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveUploadedContent()">
+          <i class="fas fa-check-circle me-1"></i> Publish Content
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 3: CONTENT LIST ================= -->
+  <div *ngIf="activeTab === 'content-list'" class="download-card animate-fade-in mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3 p-4 border-bottom">
+      <div class="d-flex flex-wrap gap-2 align-items-center flex-grow-1" style="max-width: 600px;">
+        <div class="search-bar-modern flex-grow-1">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by content title, subject, teacher, class...">
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <select class="form-select form-select-modern" style="width: 210px;" [(ngModel)]="typeFilter">
+          <option value="All">All Content Types</option>
+          <option *ngFor="let t of contentTypes" [value]="t.name">{{ t.name }}</option>
+        </select>
+        <button class="btn btn-primary px-3 rounded-12" (click)="activeTab = 'upload'">
+          <i class="fas fa-plus me-1"></i> Upload Content
+        </button>
       </div>
     </div>
 
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
+    <div class="table-responsive p-3">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
           <tr>
-            <th>Content Title</th>
+            <th class="ps-3">Content Title</th>
             <th>Type</th>
-            <th>Class / Section</th>
+            <th>Class / Scope</th>
             <th>Subject</th>
-            <th>Uploaded Date</th>
+            <th>Uploaded By</th>
+            <th>Date</th>
             <th>File Size</th>
             <th>Downloads</th>
-            <th class="text-end">Download</th>
+            <th class="text-end pe-3">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let m of filteredMaterials">
-            <td>
-              <strong class="text-dark">{{ m.title }}</strong>
-              <div class="small text-muted">Uploaded by: {{ m.uploadedBy }}</div>
+          <tr *ngFor="let doc of filteredContent">
+            <td class="ps-3">
+              <strong class="text-dark">{{ doc.title }}</strong>
+              <div class="small text-muted"><i class="fas fa-file-pdf text-danger me-1"></i> {{ doc.fileName }}</div>
             </td>
-            <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ m.type }}</span></td>
-            <td><span class="badge bg-light text-dark border">{{ m.class }}</span></td>
-            <td><strong class="text-secondary">{{ m.subject }}</strong></td>
-            <td><small class="text-muted">{{ m.uploadDate }}</small></td>
-            <td><small class="fw-semibold text-dark">{{ m.fileSize }}</small></td>
-            <td><span class="badge bg-light text-dark border">{{ m.downloadsCount }} hits</span></td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="downloadMaterial(m)">
+            <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ doc.contentType }}</span></td>
+            <td><strong class="text-secondary">{{ doc.class }}</strong></td>
+            <td>{{ doc.subject }}</td>
+            <td><small class="text-muted">{{ doc.uploadedBy }}</small></td>
+            <td><small class="text-muted">{{ doc.uploadDate }}</small></td>
+            <td><span class="badge bg-light text-dark border">{{ doc.fileSize }}</span></td>
+            <td><strong class="text-primary">{{ doc.downloadsCount }}</strong></td>
+            <td class="text-end pe-3">
+              <button class="btn btn-sm btn-success rounded-pill px-3 py-1" (click)="downloadContent(doc)">
                 <i class="fas fa-download me-1"></i> Download
               </button>
             </td>
@@ -89,57 +254,149 @@
     </div>
   </div>
 
-  <!-- TAB 2: Upload Content Form -->
-  <div *ngIf="activeTab === 'upload'" class="row g-4 animate-fade-in">
-    <div class="col-12 col-lg-8">
-      <div class="premium-card">
-        <h5 class="fw-bold text-dark mb-3">Upload Material to Repository</h5>
-        <div class="row g-3">
-          <div class="col-12">
-            <label class="form-label small fw-bold">Content Title *</label>
-            <input type="text" class="form-control modern-input" [(ngModel)]="uploadForm.title" placeholder="e.g. Grade 10 Science Sample Papers with Answer Key">
+  <!-- ================= TAB 4: SHARED CONTENT LIST ================= -->
+  <div *ngIf="activeTab === 'shared'" class="download-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Shared Content & Access Tokens</h5>
+        <p class="text-muted small mb-0">Active access sharing URLs, class recipient groups, and security validity dates</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
+          <tr>
+            <th class="ps-3">Share Token #</th>
+            <th>Resource Title</th>
+            <th>Shared With Audience</th>
+            <th>Issued By</th>
+            <th>Share Date</th>
+            <th>Valid Until</th>
+            <th>Status</th>
+            <th class="text-end pe-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of sharedList">
+            <td class="ps-3"><strong class="text-primary">{{ s.accessCode }}</strong></td>
+            <td><strong class="text-dark">{{ s.contentTitle }}</strong></td>
+            <td><span class="badge bg-info bg-opacity-10 text-primary">{{ s.sharedWith }}</span></td>
+            <td>{{ s.sharedBy }}</td>
+            <td><small class="text-muted">{{ s.shareDate }}</small></td>
+            <td><small class="text-dark fw-bold">{{ s.validUntil }}</small></td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ s.status }}</span></td>
+            <td class="text-end pe-3">
+              <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1">
+                <i class="fas fa-link me-1"></i> Copy Link
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ================= TAB 5: VIDEO LIST ================= -->
+  <div *ngIf="activeTab === 'videos'" class="download-card animate-fade-in p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Video Lectures & Digital Classrooms</h5>
+        <p class="text-muted small mb-0">Recorded lectures, lab walkthroughs, and online streaming lessons</p>
+      </div>
+      <button class="btn btn-primary rounded-12 px-3" (click)="showAddVideoModal = true">
+        <i class="fas fa-video me-1"></i> Add Video Lecture
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6" *ngFor="let v of videoList">
+        <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow h-100">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-danger text-white px-2 py-1 rounded"><i class="fas fa-play me-1"></i> {{ v.duration }}</span>
+            <span class="badge bg-white text-dark border">{{ v.class }} • {{ v.subject }}</span>
           </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Content Category</label>
-            <select class="form-select modern-select" [(ngModel)]="uploadForm.type">
-              <option value="Study Material">Study Material / Notes</option>
-              <option value="Syllabus">Official Syllabus</option>
-              <option value="Assignments">Assignments & Question Bank</option>
-              <option value="Other Downloads">Other Circulars & Downloads</option>
-            </select>
-          </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Target Grade</label>
-            <select class="form-select modern-select" [(ngModel)]="uploadForm.class">
-              <option value="All Classes">All Classes (Entire School)</option>
-              <option value="Grade 10-A">Grade 10-A</option>
-              <option value="Grade 10-B">Grade 10-B</option>
-              <option value="Grade 9-A">Grade 9-A</option>
-              <option value="Grade 11-Science">Grade 11-Science</option>
-            </select>
-          </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Subject</label>
-            <select class="form-select modern-select" [(ngModel)]="uploadForm.subject">
-              <option value="Mathematics">Mathematics</option>
-              <option value="Physics">Physics</option>
-              <option value="Chemistry">Chemistry</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="All Subjects">All Subjects</option>
-            </select>
-          </div>
-          <div class="col-6">
-            <label class="form-label small fw-bold">Choose Document File (PDF/DOC/ZIP)</label>
-            <input type="file" class="form-control modern-input">
-          </div>
-          <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-            <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'all'">Cancel</button>
-            <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="saveContent()">
-              <i class="fas fa-cloud-arrow-up me-1"></i> Upload Document
-            </button>
+          <h5 class="fw-bold text-dark mt-2 mb-1">{{ v.title }}</h5>
+          <p class="text-muted small mb-3"><i class="fas fa-chalkboard-user me-1 text-primary"></i> Instructor: {{ v.instructor }} | <i class="fas fa-eye me-1 text-info"></i> {{ v.viewsCount }} Views</p>
+          <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+            <small class="text-muted">{{ v.publishedDate }}</small>
+            <a [href]="v.videoUrl" target="_blank" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1">
+              <i class="fas fa-circle-play me-1"></i> Watch Lecture
+            </a>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 1. Add Content Type Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddTypeModal">
+  <div class="modal-content-custom" style="max-width: 440px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-layer-group text-primary me-2"></i> Add Content Type</h5>
+      <button class="btn-close" (click)="showAddTypeModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Type Name *</label>
+        <input type="text" class="form-control form-control-modern" [(ngModel)]="newType.name" placeholder="e.g. Practical Lab Manuals">
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Classification Code *</label>
+        <input type="text" class="form-control form-control-modern" [(ngModel)]="newType.code" placeholder="e.g. LABM">
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Description</label>
+        <textarea class="form-control form-control-modern" [(ngModel)]="newType.description" rows="2" placeholder="Brief description"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-3 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAddTypeModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewType()">Save Type</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Add Video Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddVideoModal">
+  <div class="modal-content-custom" style="max-width: 520px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-video text-primary me-2"></i> Add Video Lecture</h5>
+      <button class="btn-close" (click)="showAddVideoModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Lecture Title *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVideo.title" placeholder="e.g. Wave Optics Masterclass Part 1">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Class *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVideo.class" placeholder="e.g. Grade 12">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Subject</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVideo.subject" placeholder="e.g. Physics">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Video Link / YouTube URL *</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVideo.videoUrl" placeholder="https://youtube.com/watch?v=...">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Duration</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVideo.duration" placeholder="e.g. 45 Mins">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Instructor / Faculty</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newVideo.instructor" placeholder="Faculty Name">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAddVideoModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewVideo()">Publish Video</button>
     </div>
   </div>
 </div>

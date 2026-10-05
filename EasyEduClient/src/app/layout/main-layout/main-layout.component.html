@@ -429,10 +429,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['downloadCenter']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['downloadCenter']">
-        <li><a routerLink="/download-center" routerLinkActive="active" class="sub-nav-link text-info">Upload Content</a></li>
-        <li><a routerLink="/download-center" class="sub-nav-link">Assignments</a></li>
-        <li><a routerLink="/download-center" class="sub-nav-link">Syllabus</a></li>
-        <li><a routerLink="/download-center" class="sub-nav-link">Other Downloads</a></li>
+        <li><a routerLink="/DownloadCenter/ContentType" routerLinkActive="active" class="sub-nav-link">Content Type</a></li>
+        <li><a routerLink="/DownloadCenter/UploadContent" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Upload Content</a></li>
+        <li><a routerLink="/DownloadCenter/ContentList" routerLinkActive="active" class="sub-nav-link">Content List</a></li>
+        <li><a routerLink="/DownloadCenter/SharedContent" routerLinkActive="active" class="sub-nav-link text-info">Shared Content List</a></li>
+        <li><a routerLink="/DownloadCenter/VideoList" routerLinkActive="active" class="sub-nav-link text-warning">Video List</a></li>
       </ul>
     </div>
 
