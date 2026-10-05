@@ -63,7 +63,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'Dashboard', component: DashboardComponent },
       { path: 'administration', component: AdministrationComponent },
+      { path: 'Administration', component: AdministrationComponent },
+      { path: 'AdminSection', component: AdministrationComponent },
+      { path: 'Communicate', component: CommunicationComponent },
+      { path: 'Academics', component: ClassesComponent },
       // Student Management
       { path: 'students', component: StudentListComponent },
       { path: 'Students', component: StudentListComponent },
