@@ -140,6 +140,16 @@
         </button>
       </li>
       <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'bulk-print'" (click)="activeTab = 'bulk-print'">
+          <i class="fas fa-print me-2 text-warning"></i> Bulk Print Queue
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'print-settings'" (click)="activeTab = 'print-settings'">
+          <i class="fas fa-sliders-h me-2 text-info"></i> Fees Invoice Settings
+        </button>
+      </li>
+      <li class="nav-item">
         <button class="nav-link" [class.active]="activeTab === 'accounting'" (click)="activeTab = 'accounting'">
           <i class="fas fa-receipt me-2"></i> Voucher Entry
         </button>
@@ -696,7 +706,247 @@
     </div>
   </div>
 
-  <!-- MODAL: NEW INVOICE -->
+  <!-- TAB: BULK INVOICE PRINT QUEUE -->
+  <div *ngIf="activeTab === 'bulk-print'" class="premium-card animate-fade-in mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h5 class="fw-bold mb-1"><i class="fas fa-print text-warning me-2"></i> Bulk Invoice Print Spool Queue</h5>
+        <small class="text-muted">Batch select, filter, and dispatch multi-part fee invoices, bank challans, and thermal receipts</small>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-success rounded-pill px-3" (click)="triggerBatchPrint('CSV')">
+          <i class="fas fa-file-csv me-1"></i> Spool Manifest (CSV)
+        </button>
+        <button class="btn btn-outline-primary rounded-pill px-3" (click)="triggerBatchPrint('Thermal')">
+          <i class="fas fa-receipt me-1"></i> Thermal 80mm Batch
+        </button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="triggerBatchPrint('PDF')">
+          <i class="fas fa-print me-1"></i> Print Selected ({{ selectedInvoicesCount }})
+        </button>
+      </div>
+    </div>
+
+    <!-- Spool Metrics Summary Banner -->
+    <div class="row g-3 mb-4 p-3 bg-light rounded-16 border">
+      <div class="col-md-4">
+        <div class="small text-muted fw-semibold">Selected Invoices for Spool</div>
+        <div class="fs-4 fw-bold text-primary">{{ selectedInvoicesCount }} / {{ filteredInvoices.length }} Invoices</div>
+      </div>
+      <div class="col-md-4">
+        <div class="small text-muted fw-semibold">Total Spool Revenue Value</div>
+        <div class="fs-4 fw-bold text-success">₹{{ selectedInvoicesTotalValue | number }}</div>
+      </div>
+      <div class="col-md-4">
+        <div class="small text-muted fw-semibold">Estimated Paper Consumption</div>
+        <div class="fs-4 fw-bold text-dark">{{ selectedInvoicesCount * (invoiceSettings.copiesCount || 1) }} Pages ({{ invoiceSettings.printLayout }})</div>
+      </div>
+    </div>
+
+    <!-- Spool Table -->
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th style="width: 40px;">
+              <input type="checkbox" class="form-check-input" [checked]="selectAllInvoices" (change)="toggleSelectAllInvoices()" />
+            </th>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th>Fee Category</th>
+            <th>Due Date</th>
+            <th class="text-end">Invoice Amount</th>
+            <th class="text-end">Paid (₹)</th>
+            <th class="text-end">Balance (₹)</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inv of filteredInvoices">
+            <td>
+              <input type="checkbox" class="form-check-input" [(ngModel)]="selectedInvoiceIds[inv.id]" />
+            </td>
+            <td><code>{{ inv.admissionNo }}</code></td>
+            <td class="fw-bold text-dark">{{ inv.studentName }}</td>
+            <td><span class="badge bg-light text-dark border">{{ inv.feeGroup }}</span></td>
+            <td><small class="text-muted">{{ inv.dueDate }}</small></td>
+            <td class="text-end fw-bold">₹{{ inv.amount | number }}</td>
+            <td class="text-end fw-bold text-success">₹{{ inv.paidAmount | number }}</td>
+            <td class="text-end fw-bold text-danger">₹{{ inv.balanceAmount | number }}</td>
+            <td>
+              <span class="badge" [ngClass]="inv.status === 'Paid' ? 'bg-success' : (inv.status === 'Partial' ? 'bg-warning text-dark' : 'bg-danger')">
+                {{ inv.status }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="generateReceipt(inv)">
+                <i class="fas fa-print me-1"></i> Print Slip
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: FEES INVOICE SETTINGS & TEMPLATE CUSTOMIZER -->
+  <div *ngIf="activeTab === 'print-settings'" class="animate-fade-in mb-4">
+    <div class="row g-4">
+      <!-- Left: Form Controls -->
+      <div class="col-lg-7">
+        <div class="premium-card h-100 p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h5 class="fw-bold mb-1"><i class="fas fa-sliders-h text-info me-2"></i> Fees Invoice Template Customizer</h5>
+              <small class="text-muted">Branding, copies allocation, print layouts, terms, and QR code gateways</small>
+            </div>
+            <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveInvoiceSettings()">
+              <i class="fas fa-save me-1"></i> Save Template
+            </button>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label small fw-bold">Institution Header Title</label>
+              <input type="text" class="form-control" [(ngModel)]="invoiceSettings.instituteTitle" />
+            </div>
+            <div class="col-md-12">
+              <label class="form-label small fw-bold">Header Sub-Heading & Accreditation</label>
+              <input type="text" class="form-control" [(ngModel)]="invoiceSettings.subHeading" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Receipt Number Prefix</label>
+              <input type="text" class="form-control" [(ngModel)]="invoiceSettings.receiptPrefix" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Print Page Format</label>
+              <select class="form-select" [(ngModel)]="invoiceSettings.printLayout">
+                <option value="A4 Multi-Part (2-Up)">A4 Multi-Part (2 Copies per Page)</option>
+                <option value="A4 Single Sheet (Detailed)">A4 Single Sheet (Detailed Table)</option>
+                <option value="A5 Mini Voucher (Single)">A5 Mini Voucher Slip</option>
+                <option value="Thermal 80mm Roll (POS)">Thermal 80mm Roll (POS Cashier)</option>
+              </select>
+            </div>
+
+            <div class="col-12 mt-3 pt-3 border-top">
+              <label class="form-label small fw-bold mb-2">Print Copies Generated Per Transaction</label>
+              <div class="d-flex flex-wrap gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="cStudent" [(ngModel)]="invoiceSettings.includeStudentCopy" />
+                  <label class="form-check-label small fw-semibold" for="cStudent">Student Copy</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="cParent" [(ngModel)]="invoiceSettings.includeParentCopy" />
+                  <label class="form-check-label small fw-semibold" for="cParent">Parent Copy</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="cSchool" [(ngModel)]="invoiceSettings.includeSchoolCopy" />
+                  <label class="form-check-label small fw-semibold" for="cSchool">School Archive Copy</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="cBank" [(ngModel)]="invoiceSettings.includeBankCopy" />
+                  <label class="form-check-label small fw-semibold" for="cBank">Bank Deposit Copy</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-3 pt-3 border-top">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="swQr" [(ngModel)]="invoiceSettings.showQrPayment" />
+                    <label class="form-check-label small fw-bold" for="swQr">Print UPI QR Payment Scan Code</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="swWatermark" [(ngModel)]="invoiceSettings.showWatermark" />
+                    <label class="form-check-label small fw-bold" for="swWatermark">Show Security Watermark ("PAID")</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold">Terms & Conditions Disclaimer</label>
+              <textarea class="form-control font-monospace small" rows="3" [(ngModel)]="invoiceSettings.termsConditions"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Authorized Signatory Title</label>
+              <input type="text" class="form-control" [(ngModel)]="invoiceSettings.authorizedSignatory" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Live Simulated Preview -->
+      <div class="col-lg-5">
+        <div class="premium-card h-100 p-4 bg-white border">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold m-0 text-dark"><i class="fas fa-eye text-primary me-2"></i> Live Invoice Print Preview</h6>
+            <span class="badge bg-primary bg-opacity-10 text-primary">{{ invoiceSettings.printLayout }}</span>
+          </div>
+
+          <div class="p-3 border rounded-12 position-relative bg-white shadow-sm" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <div class="watermark-preview" *ngIf="invoiceSettings.showWatermark">{{ invoiceSettings.watermarkText }}</div>
+            
+            <div class="text-center pb-2 border-bottom">
+              <img src="/images/easyedu_full_logo.png" style="height: 32px;" class="mb-1" />
+              <h6 class="fw-bold mb-0 text-dark">{{ invoiceSettings.instituteTitle }}</h6>
+              <small class="text-muted d-block" style="font-size: 0.7rem;">{{ invoiceSettings.subHeading }}</small>
+              <span class="badge bg-dark text-white rounded-pill px-2 py-0 mt-1" style="font-size: 0.65rem;">STUDENT RECEIPT COPY</span>
+            </div>
+
+            <div class="d-flex justify-content-between mt-2 pt-1 small" style="font-size: 0.75rem;">
+              <div>
+                <strong>Receipt #:</strong> {{ invoiceSettings.receiptPrefix }}9901<br>
+                <strong>Student:</strong> Aarav Sharma (Grade 10-A)
+              </div>
+              <div class="text-end">
+                <strong>Date:</strong> 06 Oct 2026<br>
+                <strong>Mode:</strong> Cash Currency
+              </div>
+            </div>
+
+            <table class="table table-sm table-bordered mt-2 mb-2" style="font-size: 0.75rem;">
+              <thead class="table-light">
+                <tr>
+                  <th>Fee Head</th>
+                  <th class="text-end">Amount (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Quarter 1 Tuition Fee</td>
+                  <td class="text-end fw-bold">25,000.00</td>
+                </tr>
+                <tr>
+                  <td>STEM Robotics Lab Maintenance</td>
+                  <td class="text-end fw-bold">6,000.00</td>
+                </tr>
+                <tr class="table-light fw-bold">
+                  <td>TOTAL PAID:</td>
+                  <td class="text-end text-success">₹31,000.00</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top" style="font-size: 0.7rem;">
+              <div *ngIf="invoiceSettings.showQrPayment">
+                <i class="fas fa-qrcode fa-2x text-dark me-1"></i>
+                <span class="text-muted">Scan to Verify</span>
+              </div>
+              <div class="text-end ms-auto">
+                <div style="width: 100px; border-bottom: 1px dashed #444; margin-bottom: 2px;"></div>
+                <small class="text-muted">{{ invoiceSettings.authorizedSignatory }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL: CREATE INVOICE -->
   <div class="modal-backdrop-custom" *ngIf="showCreateInvoiceModal">
     <div class="modal-content-custom" style="max-width: 550px;">
       <div class="modal-header-custom">

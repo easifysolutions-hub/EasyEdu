@@ -70,10 +70,72 @@ interface VoucherItem {
 export class FeesComponent implements OnInit {
   private api = inject(ApiService);
 
-  activeTab: 'dashboard' | 'invoices' | 'collect' | 'heads' | 'groups' | 'structure' | 'ledger' | 'accounting' = 'dashboard';
+  activeTab: 'dashboard' | 'invoices' | 'collect' | 'heads' | 'groups' | 'structure' | 'ledger' | 'accounting' | 'bulk-print' | 'print-settings' = 'dashboard';
   searchTerm = '';
   statusFilter = 'All';
   classFilter = 'All';
+
+  // Invoice Layout Settings
+  invoiceSettings = {
+    instituteTitle: 'EasyEdu International Academy',
+    subHeading: 'Affiliated to CBSE Board • School Center Code: 830412',
+    addressLine: '#42, Campus Green Valley, Main Tech Park Road, Bengaluru - 560001',
+    phone: '+91 80 2845 9900',
+    email: 'accounts@easyedu.org',
+    receiptPrefix: 'REC-2026-',
+    printLayout: 'A4 Multi-Part (2-Up)',
+    copiesCount: 3,
+    includeStudentCopy: true,
+    includeParentCopy: true,
+    includeSchoolCopy: true,
+    includeBankCopy: false,
+    showQrPayment: true,
+    showWatermark: true,
+    watermarkText: 'PAID & AUDITED',
+    showFeeBreakdown: true,
+    showPreviousDues: true,
+    termsConditions: '1. Fees once deposited are non-refundable.\n2. In case of delay, a late fee of ₹50 per day will be levied.\n3. Retain official physical receipt for statutory tax verification.',
+    authorizedSignatory: 'Accounts Bursar / Finance Controller'
+  };
+
+  // Bulk Print Spool Queue State
+  selectedInvoiceIds: { [id: number]: boolean } = { 1: true, 2: true };
+  selectAllInvoices = false;
+
+  toggleSelectAllInvoices(): void {
+    this.selectAllInvoices = !this.selectAllInvoices;
+    this.filteredInvoices.forEach(inv => {
+      this.selectedInvoiceIds[inv.id] = this.selectAllInvoices;
+    });
+  }
+
+  get selectedInvoicesCount(): number {
+    return Object.values(this.selectedInvoiceIds).filter(Boolean).length;
+  }
+
+  get selectedInvoicesTotalValue(): number {
+    return this.invoices
+      .filter(i => this.selectedInvoiceIds[i.id])
+      .reduce((sum, i) => sum + (i.amount || 0), 0);
+  }
+
+  triggerBatchPrint(mode: 'PDF' | 'Thermal' | 'CSV'): void {
+    if (this.selectedInvoicesCount === 0) {
+      Swal.fire('No Invoices Selected', 'Please check at least one invoice in the spool queue.', 'warning');
+      return;
+    }
+    Swal.fire({
+      title: `Batch Spool Dispatched (${mode})`,
+      text: `Printing ${this.selectedInvoicesCount} invoices totaling ₹${this.selectedInvoicesTotalValue.toLocaleString()}...`,
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false
+    });
+  }
+
+  saveInvoiceSettings(): void {
+    Swal.fire('Settings Saved', 'Fees invoice branding, copies count, and print templates saved successfully.', 'success');
+  }
 
   invoices: FeeInvoice[] = [
     { id: 1, studentId: 1, studentName: 'Aarav Sharma', admissionNo: 'ADM-2024-001', feeGroup: 'Quarter 1 Tuition', amount: 25000, paidAmount: 25000, balanceAmount: 0, dueDate: '2025-04-15', status: 'Paid' },
@@ -270,13 +332,14 @@ export class FeesComponent implements OnInit {
 
   private syncActiveTabFromUrl(): void {
     const path = this.router.url.toLowerCase();
-    if (path.includes('feesgroup')) {
+    if (path.includes('bulkinvoiceprintsettings') || path.includes('invoicesettings')) {
+      this.activeTab = 'print-settings';
+    } else if (path.includes('bulkinvoiceprint') || path.includes('printqueue')) {
+      this.activeTab = 'bulk-print';
+    } else if (path.includes('feesgroup')) {
       this.activeTab = 'groups';
     } else if (path.includes('feestype')) {
       this.activeTab = 'heads';
-    } else if (path.includes('bulkinvoiceprint')) {
-      this.activeTab = 'invoices';
-      Swal.fire('Bulk Print Ready', 'Invoice print spooler prepared for batch generation.', 'info');
     } else if (path.includes('bulkinvoice')) {
       this.activeTab = 'invoices';
       this.showBulkInvoiceModal = true;
@@ -419,6 +482,10 @@ export class FeesComponent implements OnInit {
       balanceRemaining: inv.balanceAmount
     };
     this.showReceiptModal = true;
+  }
+
+  generateReceipt(inv: FeeInvoice): void {
+    this.openReceiptModal(inv);
   }
 
   printReceipt(): void {
