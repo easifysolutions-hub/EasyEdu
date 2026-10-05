@@ -70,10 +70,98 @@ interface VoucherItem {
 export class FeesComponent implements OnInit {
   private api = inject(ApiService);
 
-  activeTab: 'dashboard' | 'invoices' | 'collect' | 'heads' | 'groups' | 'structure' | 'ledger' | 'accounting' | 'bulk-print' | 'print-settings' = 'dashboard';
+  activeTab: 'dashboard' | 'invoices' | 'collect' | 'create-invoice' | 'heads' | 'groups' | 'structure' | 'ledger' | 'accounting' | 'bulk-print' | 'print-settings' = 'dashboard';
   searchTerm = '';
   statusFilter = 'All';
   classFilter = 'All';
+
+  // New Invoice Window state matching the voucher UI model
+  newInvAdmission = 'ADM-2024-001';
+  newInvStudentName = 'Aarav Sharma';
+  newInvClass = 'Grade 10 - Section A';
+  newInvFeeGroup = 'Quarter 1 Tuition';
+  newInvBaseAmount = 25000;
+  newInvConcession = 0;
+  newInvBillingCycle = 'Quarter 1 (Apr - Jun)';
+  newInvDueDate = '2026-10-31';
+  newInvRemarks = 'Term 1 Tuition + STEM & Robotics Lab Fee';
+
+  get newInvNetPayable(): number {
+    return Math.max(0, (Number(this.newInvBaseAmount) || 0) - (Number(this.newInvConcession) || 0));
+  }
+
+  onNewInvAdmissionChange(): void {
+    const studentMap: { [adm: string]: { name: string; class: string; defaultFee: number } } = {
+      'ADM-2024-001': { name: 'Aarav Sharma', class: 'Grade 10 - Section A', defaultFee: 25000 },
+      'ADM-2024-002': { name: 'Diya Patel', class: 'Grade 10 - Section B', defaultFee: 32000 },
+      'ADM-2024-003': { name: 'Rohan Gupta', class: 'Grade 9 - Section A', defaultFee: 12000 },
+      'ADM-2024-004': { name: 'Ananya Verma', class: 'Grade 9 - Section B', defaultFee: 25000 },
+      'ADM-2024-005': { name: 'Kabir Singh', class: 'Grade 11 - Science', defaultFee: 48000 },
+      'ADM-2024-006': { name: 'Meera Nair', class: 'Grade 12 - Commerce', defaultFee: 26000 }
+    };
+
+    const s = studentMap[this.newInvAdmission];
+    if (s) {
+      this.newInvStudentName = s.name;
+      this.newInvClass = s.class;
+      this.newInvBaseAmount = s.defaultFee;
+    }
+  }
+
+  onNewInvFeeGroupChange(): void {
+    const groupFees: { [grp: string]: number } = {
+      'Quarter 1 Tuition': 25000,
+      'Quarter 1 Tuition + Transport': 32000,
+      'Quarter 1 Tuition + Hostel': 48000,
+      'Annual Computer Lab & Library': 12000,
+      'Senior Science + Lab + Hostel': 72000,
+      'Sports & Activity Fee': 5000
+    };
+    if (groupFees[this.newInvFeeGroup]) {
+      this.newInvBaseAmount = groupFees[this.newInvFeeGroup];
+    }
+  }
+
+  generateCustomInvoice(): void {
+    if (!this.newInvStudentName || this.newInvNetPayable <= 0) {
+      Swal.fire('Invalid Amount', 'Please ensure valid student and positive invoice payable amount.', 'warning');
+      return;
+    }
+
+    const newInv: FeeInvoice = {
+      id: this.invoices.length + 1,
+      studentId: 100 + this.invoices.length,
+      studentName: this.newInvStudentName,
+      admissionNo: this.newInvAdmission,
+      feeGroup: this.newInvFeeGroup,
+      amount: this.newInvNetPayable,
+      paidAmount: 0,
+      balanceAmount: this.newInvNetPayable,
+      dueDate: this.newInvDueDate,
+      status: 'Unpaid'
+    };
+
+    this.invoices.unshift(newInv);
+    this.selectedAdmission = newInv.admissionNo || '';
+    this.selectedInvoiceId = newInv.id;
+    this.cashReceived = newInv.balanceAmount;
+
+    Swal.fire({
+      title: 'Invoice Generated Successfully!',
+      text: `Invoice INV-00${newInv.id} issued for ₹${newInv.amount.toLocaleString()} to ${newInv.studentName} (${newInv.admissionNo}). Debited to student ledger.`,
+      icon: 'success',
+      confirmButtonColor: '#4f46e5',
+      showCancelButton: true,
+      confirmButtonText: '<i class="fas fa-hand-holding-usd me-1"></i> Collect Payment Now',
+      cancelButtonText: 'View All Invoices'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        this.activeTab = 'collect';
+      } else {
+        this.activeTab = 'invoices';
+      }
+    });
+  }
 
   // Invoice Layout Settings
   invoiceSettings = {

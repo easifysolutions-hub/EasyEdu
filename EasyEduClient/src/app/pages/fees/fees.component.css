@@ -55,6 +55,109 @@
   border-radius: 16px;
 }
 
+.rounded-20 {
+  border-radius: 20px;
+}
+
 .rounded-12 {
   border-radius: 12px;
 }
+
+.rounded-8 {
+  border-radius: 8px;
+}
+
+/* Voucher Window Styles matching screenshot */
+.voucher-window-card {
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eef2f6;
+  overflow: hidden;
+}
+
+.voucher-header-bar {
+  background: #4f46e5;
+  padding: 1.25rem 1.75rem;
+  color: #ffffff;
+}
+
+.voucher-icon-badge {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+.field-label-sm {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #475569;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.modern-form-input {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.modern-form-input:focus {
+  background: #ffffff;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  outline: none;
+}
+
+.stat-box-due {
+  background: #eff6ff;
+  border: 1.5px solid #dbeafe;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+}
+
+.stat-box-received {
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+}
+
+.stat-box-balance {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+}
+
+.btn-post-payment {
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  padding: 0.65rem 1.5rem;
+  border: none;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-post-payment:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
