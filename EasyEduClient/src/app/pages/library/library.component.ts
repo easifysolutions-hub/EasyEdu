@@ -64,7 +64,7 @@ export interface BookCategory {
   styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit {
-  activeTab: 'add-book' | 'catalog' | 'circulation' | 'members' | 'categories' = 'add-book';
+  activeTab: 'add-book' | 'catalog' | 'categories' | 'members' | 'issue-return' | 'circulation' | 'reports' = 'catalog';
   searchTerm = '';
   categoryFilter = 'All';
 
@@ -137,9 +137,8 @@ export class LibraryComponent implements OnInit {
     { id: 6, name: 'Language & Literature', code: 'LIT', totalBooks: 30 }
   ];
 
-  // Modals state
-  showIssueModal = false;
-  issueForm = {
+  // Desk Form state
+  deskForm = {
     memberId: 'ADM-2024-001',
     bookId: 1,
     issueDate: new Date().toISOString().substring(0, 10),
@@ -172,16 +171,20 @@ export class LibraryComponent implements OnInit {
 
   private syncActiveTabFromUrl(): void {
     const url = this.router.url.toLowerCase();
-    if (url.includes('addbook') || url.endsWith('/library') || url.endsWith('/library/')) {
+    if (url.includes('createbook') || url.includes('addbook')) {
       this.activeTab = 'add-book';
-    } else if (url.includes('booklist')) {
-      this.activeTab = 'catalog';
-    } else if (url.includes('issuebooks')) {
-      this.activeTab = 'circulation';
-    } else if (url.includes('members')) {
-      this.activeTab = 'members';
-    } else if (url.includes('categories')) {
+    } else if (url.includes('bookcategory') || url.includes('categories')) {
       this.activeTab = 'categories';
+    } else if (url.includes('addmember') || url.includes('members')) {
+      this.activeTab = 'members';
+    } else if (url.includes('issuebook') && !url.includes('issuedbooks') && !url.includes('issuebooks')) {
+      this.activeTab = 'issue-return';
+    } else if (url.includes('issuedbooks') || url.includes('issuebooks')) {
+      this.activeTab = 'circulation';
+    } else if (url.includes('reports')) {
+      this.activeTab = 'reports';
+    } else {
+      this.activeTab = 'catalog';
     }
   }
 
@@ -195,6 +198,10 @@ export class LibraryComponent implements OnInit {
 
   get overdueCount(): number {
     return this.issuedRecords.filter(r => r.status === 'Overdue').length;
+  }
+
+  get totalLibraryValuation(): number {
+    return this.books.reduce((acc, b) => acc + (b.quantity * b.price), 0);
   }
 
   get filteredBooks(): Book[] {
@@ -264,16 +271,9 @@ export class LibraryComponent implements OnInit {
     };
   }
 
-  openIssueModal(book?: Book): void {
-    if (book) {
-      this.issueForm.bookId = book.id;
-    }
-    this.showIssueModal = true;
-  }
-
-  submitIssueBook(): void {
-    const book = this.books.find(b => b.id === Number(this.issueForm.bookId));
-    const member = this.members.find(m => m.id === this.issueForm.memberId);
+  submitDeskIssue(): void {
+    const book = this.books.find(b => b.id === Number(this.deskForm.bookId));
+    const member = this.members.find(m => m.id === this.deskForm.memberId);
 
     if (!book || book.available <= 0) {
       Swal.fire('Unavailable', 'No copies of this book are currently available in the rack.', 'error');
@@ -295,19 +295,18 @@ export class LibraryComponent implements OnInit {
       memberId: member.id,
       memberName: member.name,
       memberType: member.type,
-      issueDate: this.issueForm.issueDate,
-      dueDate: this.issueForm.dueDate,
+      issueDate: this.deskForm.issueDate,
+      dueDate: this.deskForm.dueDate,
       fine: 0,
       status: 'Issued'
     };
 
     this.issuedRecords.unshift(newRecord);
-    this.showIssueModal = false;
     this.activeTab = 'circulation';
 
     Swal.fire({
       title: 'Book Issued!',
-      text: `"${book.title}" has been issued to ${member.name}. Due on ${this.issueForm.dueDate}.`,
+      text: `"${book.title}" has been issued to ${member.name}. Due on ${this.deskForm.dueDate}.`,
       icon: 'success',
       confirmButtonColor: '#002B49'
     });
@@ -344,7 +343,7 @@ export class LibraryComponent implements OnInit {
     }
 
     this.categories.push({
-      id: this.categories.length + 1,
+      id: Date.now(),
       name: this.newCategory.name,
       code: this.newCategory.code.toUpperCase(),
       totalBooks: 0

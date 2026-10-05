@@ -356,10 +356,13 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['library']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['library']">
-        <li><a routerLink="/Library/AddBook" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Book</a></li>
-        <li><a routerLink="/Library/BookList" routerLinkActive="active" class="sub-nav-link">Book List & Categories</a></li>
-        <li><a routerLink="/Library/IssueBooks" routerLinkActive="active" class="sub-nav-link text-info">Issue & Return Books</a></li>
-        <li><a routerLink="/Library/Members" routerLinkActive="active" class="sub-nav-link">Library Members</a></li>
+        <li><a routerLink="/Library/CreateBook" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Book</a></li>
+        <li><a routerLink="/Library" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Book List</a></li>
+        <li><a routerLink="/Library/BookCategory" routerLinkActive="active" class="sub-nav-link">Book Categories</a></li>
+        <li><a routerLink="/Library/AddMember" routerLinkActive="active" class="sub-nav-link">Add Member</a></li>
+        <li><a routerLink="/Library/IssueBook" routerLinkActive="active" class="sub-nav-link text-info">Issue/Return Book</a></li>
+        <li><a routerLink="/Library/IssuedBooks" routerLinkActive="active" class="sub-nav-link">All Issued Books</a></li>
+        <li><a routerLink="/Library/Reports" routerLinkActive="active" class="sub-nav-link">Library Reports</a></li>
       </ul>
     </div>
 
