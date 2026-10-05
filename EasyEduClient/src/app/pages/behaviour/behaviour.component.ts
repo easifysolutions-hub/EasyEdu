@@ -83,30 +83,36 @@ export class BehaviourComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.syncActiveTabFromUrl();
+
+    this.route.url.subscribe(() => {
+      this.syncActiveTabFromUrl();
+    });
+
     this.route.queryParams.subscribe(params => {
       if (params['tab']) {
         this.activeTab = params['tab'];
       }
     });
+  }
 
-    this.route.url.subscribe(() => {
-      const path = this.router.url.toLowerCase();
-      if (path.includes('assignincident')) {
-        this.activeTab = 'assign';
-      } else if (path.includes('studentincidentreport')) {
-        this.activeTab = 'student-report';
-      } else if (path.includes('behaviourreport')) {
-        this.activeTab = 'behaviour-report';
-      } else if (path.includes('classsectionreport')) {
-        this.activeTab = 'class-section-report';
-      } else if (path.includes('incidentwisereport')) {
-        this.activeTab = 'incident-wise-report';
-      } else if (path.includes('behaviourrecords/settings') || path.includes('behaviour/settings')) {
-        this.activeTab = 'settings';
-      } else if (path.includes('incidents')) {
-        this.activeTab = 'incidents';
-      }
-    });
+  private syncActiveTabFromUrl(): void {
+    const path = this.router.url.toLowerCase();
+    if (path.includes('assignincident')) {
+      this.activeTab = 'assign';
+    } else if (path.includes('studentincidentreport')) {
+      this.activeTab = 'student-report';
+    } else if (path.includes('behaviourreport')) {
+      this.activeTab = 'behaviour-report';
+    } else if (path.includes('classsectionreport')) {
+      this.activeTab = 'class-section-report';
+    } else if (path.includes('incidentwisereport')) {
+      this.activeTab = 'incident-wise-report';
+    } else if (path.includes('behaviourrecords/settings') || path.includes('behaviour/settings')) {
+      this.activeTab = 'settings';
+    } else if (path.includes('incidents')) {
+      this.activeTab = 'incidents';
+    }
   }
 
   setTab(tab: any): void {
