@@ -83,6 +83,12 @@ export class BehaviourComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.activeTab = params['tab'];
+      }
+    });
+
     this.route.url.subscribe(() => {
       const path = this.router.url.toLowerCase();
       if (path.includes('assignincident')) {
