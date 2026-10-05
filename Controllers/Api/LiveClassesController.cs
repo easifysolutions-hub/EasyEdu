@@ -67,7 +67,7 @@ namespace EasyEdu.Controllers.Api
                     duration = 60,
                     description = "Join this live class to understand the base theory of Quantum entanglement.",
                     meetingId = "EasyEdu_Class_Physics_101",
-                    password = "",
+                    password = (string?)null,
                     status = "Live",
                     url = "https://meet.jit.si/EasyEdu_Class_Physics_101"
                 });
@@ -82,7 +82,7 @@ namespace EasyEdu.Controllers.Api
                     duration = 45,
                     description = "Calculus and integration theory.",
                     meetingId = "EasyEdu_Class_Math_202",
-                    password = "",
+                    password = (string?)null,
                     status = "Pending",
                     url = "https://meet.jit.si/EasyEdu_Class_Math_202"
                 });
