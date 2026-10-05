@@ -531,10 +531,18 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['systemSettings']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['systemSettings']">
-        <li><a routerLink="/settings" routerLinkActive="active" class="sub-nav-link text-primary">General Settings</a></li>
-        <li><a routerLink="/role-permission" routerLinkActive="active" class="sub-nav-link">Role & Permissions</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Payment Gateway</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Email & SMS Gateway</a></li>
+        <li><a routerLink="/Settings" routerLinkActive="active" class="sub-nav-link text-primary fw-bold"><i class="fas fa-gauge-high me-1"></i> Global Control Center</a></li>
+        <li><a routerLink="/GeneralSettings" routerLinkActive="active" class="sub-nav-link text-success"><i class="fas fa-landmark me-1"></i> Institutional Identity</a></li>
+        <li><a routerLink="/GeneralSettings/AcademicYear" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-calendar-days me-1"></i> Academic Year Cycle</a></li>
+        <li><a routerLink="/OptionalSubject/Assign" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-book-bookmark me-1"></i> Optional Subject Assignment</a></li>
+        <li><a routerLink="/Settings/Holiday" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-calendar-xmark me-1"></i> Holiday Master</a></li>
+        <li><a routerLink="/GeneralSettings/BaseSetup" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cubes-stacked me-1"></i> Environmental Setup</a></li>
+        <li><a routerLink="/RolePermission/Role" routerLinkActive="active" class="sub-nav-link text-purple"><i class="fas fa-shield-halved me-1"></i> Role Jurisdiction</a></li>
+        <li><a routerLink="/Administration/Users" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-users-gear me-1"></i> User Management Matrix</a></li>
+        <li><a routerLink="/RolePermission/ApiPermission" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-key me-1"></i> API Access Nexus</a></li>
+        <li><a routerLink="/CustomFields" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-sliders-simple me-1"></i> Field Customization</a></li>
+        <li><a routerLink="/GeneralSettings/Backup" routerLinkActive="active" class="sub-nav-link text-success"><i class="fas fa-cloud-arrow-up me-1"></i> Data Archive (Backup)</a></li>
+        <li><a routerLink="/Administration/Updates" routerLinkActive="active" class="sub-nav-link text-danger"><i class="fas fa-arrows-rotate me-1"></i> System Archive & Update</a></li>
       </ul>
     </div>
 
