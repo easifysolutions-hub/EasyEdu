@@ -86,10 +86,13 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['communicate']">
-        <li><a routerLink="/communication" routerLinkActive="active" class="sub-nav-link text-info">Notice Board</a></li>
-        <li><a routerLink="/communication" class="sub-nav-link">Send Email / SMS</a></li>
-        <li><a routerLink="/communication" class="sub-nav-link">Event Calendar</a></li>
-        <li><a routerLink="/chat" class="sub-nav-link">Live Chat Messenger</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'notice-board'}" class="sub-nav-link">Notice Board</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'send-email'}" class="sub-nav-link">Send Email / Sms</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'message-log'}" class="sub-nav-link">Email / Sms Log</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'event-list'}" class="sub-nav-link">Event</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'calendar'}" class="sub-nav-link">Calendar</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'email-templates'}" class="sub-nav-link">Email Template</a></li>
+        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'sms-templates'}" class="sub-nav-link">Sms Template</a></li>
       </ul>
     </div>
 

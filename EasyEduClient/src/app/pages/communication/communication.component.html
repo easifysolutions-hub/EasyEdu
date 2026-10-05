@@ -1,384 +1,475 @@
 <div class="container-fluid p-0 animate-fade-in">
-  <!-- Page Header -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+  <!-- Top Navigation Pill Header for 7 Communicate Submodules -->
+  <div class="page-header d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1 text-dark">Communication & Circular Bulletin</h3>
-      <p class="text-muted small mb-0">Publish official notices, broadcast SMS & WhatsApp campaigns, send newsletters, and schedule calendar events</p>
+      <h2 class="page-title mb-1 fw-bold text-dark d-flex align-items-center">
+        <i class="fas fa-bullhorn text-primary me-2"></i>
+        <span *ngIf="activeTab === 'notice-board'">Institutional Notice Board</span>
+        <span *ngIf="activeTab === 'send-email'">Send Broadcast (Email / SMS / WhatsApp)</span>
+        <span *ngIf="activeTab === 'message-log'">Communication Log & Deliverability</span>
+        <span *ngIf="activeTab === 'event-list'">Institutional Events</span>
+        <span *ngIf="activeTab === 'calendar'">Academic & Events Calendar</span>
+        <span *ngIf="activeTab === 'email-templates'">Email Architect & Templates</span>
+        <span *ngIf="activeTab === 'sms-templates'">SMS & DLT Gateway Templates</span>
+      </h2>
+      <p class="text-muted small mb-0">
+        <span *ngIf="activeTab === 'notice-board'">Centralized broadcast channel for official announcements across portals</span>
+        <span *ngIf="activeTab === 'send-email'">Multi-channel instant and scheduled transmission gateway</span>
+        <span *ngIf="activeTab === 'message-log'">Real-time delivery receipts, audit trail, and dispatch diagnostics</span>
+        <span *ngIf="activeTab === 'event-list'">Curriculum, sports, holidays and official institutional milestones</span>
+        <span *ngIf="activeTab === 'calendar'">Interactive monthly schedule of exams, holidays, and campus events</span>
+        <span *ngIf="activeTab === 'email-templates'">Standardized HTML email structures with dynamic personalization tokens</span>
+        <span *ngIf="activeTab === 'sms-templates'">DLT registered message layouts with live character counting</span>
+      </p>
     </div>
     <div class="d-flex flex-wrap gap-2">
-      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showAddEventModal = true">
-        <i class="fas fa-calendar-plus me-1"></i> Add Event
+      <button *ngIf="activeTab === 'notice-board'" class="btn btn-primary shadow-sm fw-bold" (click)="showNoticeModal = true">
+        <i class="fas fa-plus me-2"></i> POST BROADCAST
       </button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="showAddNoticeModal = true">
-        <i class="fas fa-bullhorn me-1"></i> Post New Notice
+      <button *ngIf="activeTab === 'event-list'" class="btn btn-primary shadow-sm fw-bold" (click)="showEventModal = true">
+        <i class="fas fa-plus me-2"></i> NEW EVENT
+      </button>
+      <button *ngIf="activeTab === 'email-templates'" class="btn btn-primary shadow-sm fw-bold" (click)="showTemplateModal = true">
+        <i class="fas fa-plus me-2"></i> NEW EMAIL TEMPLATE
+      </button>
+      <button *ngIf="activeTab === 'sms-templates'" class="btn btn-primary shadow-sm fw-bold" (click)="showTemplateModal = true">
+        <i class="fas fa-plus me-2"></i> NEW SMS TEMPLATE
       </button>
     </div>
   </div>
 
-  <!-- Metric Stat Cards -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fas fa-bullhorn fa-lg text-white"></i>
-          </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">BULLETIN</span>
-        </div>
-        <h2 class="fw-bold mb-1">{{ notices.length }} Active</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Official Notices & Circulars</p>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fab fa-whatsapp fa-lg text-white"></i>
-          </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">GATEWAY</span>
-        </div>
-        <h2 class="fw-bold mb-1">3,142 Sent</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">WhatsApp & SMS Delivered</p>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fas fa-calendar-alt fa-lg text-white"></i>
-          </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">CALENDAR</span>
-        </div>
-        <h2 class="fw-bold mb-1">{{ events.length }} Events</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Term Holidays & Activities</p>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
-            <i class="fas fa-shield-check fa-lg text-white"></i>
-          </div>
-          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">DELIVERY</span>
-        </div>
-        <h2 class="fw-bold mb-1">99.8%</h2>
-        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Communication Success Rate</p>
-      </div>
-    </div>
+  <!-- Submodule Navigation Badges / Tabs -->
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'notice-board'" [class.btn-light]="activeTab !== 'notice-board'" (click)="setTab('notice-board')">
+      <i class="fas fa-clipboard-list me-1"></i> Notice Board
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'send-email'" [class.btn-light]="activeTab !== 'send-email'" (click)="setTab('send-email')">
+      <i class="fas fa-paper-plane me-1"></i> Send Email / SMS
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'message-log'" [class.btn-light]="activeTab !== 'message-log'" (click)="setTab('message-log')">
+      <i class="fas fa-list-check me-1"></i> Email / SMS Log
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'event-list'" [class.btn-light]="activeTab !== 'event-list'" (click)="setTab('event-list')">
+      <i class="fas fa-calendar-star me-1"></i> Event
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'calendar'" [class.btn-light]="activeTab !== 'calendar'" (click)="setTab('calendar')">
+      <i class="fas fa-calendar-days me-1"></i> Calendar
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'email-templates'" [class.btn-light]="activeTab !== 'email-templates'" (click)="setTab('email-templates')">
+      <i class="fas fa-envelope-open-text me-1"></i> Email Template
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill fw-semibold" [class.btn-primary]="activeTab === 'sms-templates'" [class.btn-light]="activeTab !== 'sms-templates'" (click)="setTab('sms-templates')">
+      <i class="fas fa-comment-dots me-1"></i> SMS Template
+    </button>
   </div>
 
-  <!-- Navigation Pill Tabs -->
-  <div class="premium-card mb-4 p-2">
-    <ul class="nav nav-pills custom-pills">
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'notices'" (click)="activeTab = 'notices'">
-          <i class="fas fa-newspaper me-2"></i> Notice Board & Circulars
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'sms'" (click)="activeTab = 'sms'">
-          <i class="fas fa-comment-dots me-2"></i> Send SMS & WhatsApp
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'email'" (click)="activeTab = 'email'">
-          <i class="fas fa-envelope-open-text me-2"></i> Send Email Newsletter
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">
-          <i class="fas fa-calendar-check me-2"></i> Institutional Event Calendar
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'logs'" (click)="activeTab = 'logs'">
-          <i class="fas fa-list-check me-2"></i> Communication Logs
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <!-- TAB 1: Notice Board & Circulars -->
-  <div *ngIf="activeTab === 'notices'" class="animate-fade-in">
+  <!-- 1. NOTICE BOARD -->
+  <div *ngIf="activeTab === 'notice-board'">
     <div class="row g-4">
-      <div class="col-12 col-md-6" *ngFor="let n of notices">
-        <div class="card border rounded-16 p-4 shadow-sm bg-white h-100 hover-shadow position-relative">
-          <div class="d-flex justify-content-between align-items-start mb-2">
-            <div>
-              <span *ngIf="n.isPinned" class="badge bg-danger text-white me-1"><i class="fas fa-thumbtack me-1"></i> Pinned</span>
-              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ n.targetAudience }}</span>
+      <div class="col-xl-4 col-md-6" *ngFor="let notice of notices">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 transition-all hover-lift">
+          <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+            <span class="badge rounded-pill" [ngClass]="notice.isActive ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary'">
+              <i class="fas" [ngClass]="notice.isActive ? 'fa-signal me-1' : 'fa-ban me-1'"></i>
+              {{ notice.isActive ? 'LIVE BROADCAST' : 'ARCHIVED' }}
+            </span>
+            <small class="text-muted fw-semibold">{{ notice.publishDate }}</small>
+          </div>
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h5 class="fw-bold text-dark mb-2">{{ notice.title }}</h5>
+            <p class="text-muted small mb-4 flex-grow-1" style="line-height: 1.6;">{{ notice.content }}</p>
+            <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+              <span class="badge bg-primary-subtle text-primary">
+                <i class="fas fa-users me-1"></i> {{ notice.targetAudience }}
+              </span>
+              <small class="text-muted"><i class="fas fa-user-shield me-1"></i> {{ notice.author }}</small>
             </div>
-            <small class="text-muted"><i class="far fa-clock me-1"></i> Published: {{ n.publishDate }}</small>
-          </div>
-
-          <h5 class="fw-bold text-dark mt-2 mb-2">{{ n.title }}</h5>
-          <p class="text-muted small mb-3 flex-grow-1">{{ n.content }}</p>
-
-          <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto small">
-            <span class="text-secondary"><i class="fas fa-user-pen text-primary me-1"></i> Author: <strong>{{ n.author }}</strong></span>
-            <span class="text-muted">Notice Date: <strong>{{ n.noticeDate }}</strong></span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TAB 2: Send SMS & WhatsApp -->
-  <div *ngIf="activeTab === 'sms'" class="premium-card animate-fade-in" style="max-width: 800px;">
-    <h5 class="fw-bold text-dark mb-1">Dispatch SMS & WhatsApp Broadcast Campaign</h5>
-    <p class="text-muted small mb-4">Send instant text alerts directly to mobile phones using high-speed cloud gateways</p>
+  <!-- 2. SEND EMAIL / SMS / WHATSAPP -->
+  <div *ngIf="activeTab === 'send-email'">
+    <div class="row g-4">
+      <div class="col-xl-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <!-- Channel Selector Toggle -->
+          <div class="d-flex gap-2 mb-4 p-1 bg-light rounded-pill border" style="max-width: 420px;">
+            <button class="btn btn-sm px-3 rounded-pill flex-fill" [class.btn-primary]="sendChannel === 'email'" (click)="sendChannel = 'email'">
+              <i class="fas fa-envelope me-1"></i> Email
+            </button>
+            <button class="btn btn-sm px-3 rounded-pill flex-fill" [class.btn-primary]="sendChannel === 'sms'" (click)="sendChannel = 'sms'">
+              <i class="fas fa-comment-sms me-1"></i> SMS
+            </button>
+            <button class="btn btn-sm px-3 rounded-pill flex-fill" [class.btn-primary]="sendChannel === 'whatsapp'" (click)="sendChannel = 'whatsapp'">
+              <i class="fab fa-whatsapp me-1"></i> WhatsApp
+            </button>
+          </div>
 
-    <div class="row g-3">
-      <div class="col-12 col-md-6">
-        <label class="form-label small fw-bold">Target Recipient Audience *</label>
-        <select class="form-select modern-select" [(ngModel)]="smsForm.targetGroup">
-          <option value="All Parents">All Parents (Entire School - 1,248 numbers)</option>
-          <option value="Grade 10 Parents">Grade 10 Parents Only</option>
-          <option value="Grade 9 Parents">Grade 9 Parents Only</option>
-          <option value="All Faculty & Staff">All Faculty & Staff</option>
-          <option value="Fee Defaulters">Fee Defaulters Only</option>
-        </select>
-      </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark">Target Recipient Group</label>
+            <select class="form-select rounded-3 py-2" [(ngModel)]="broadcastForm.targetAudience">
+              <option>All Parents & Students</option>
+              <option>Primary School (Grade 1 - 5)</option>
+              <option>Middle & High School (Grade 6 - 10)</option>
+              <option>Senior Secondary (Grade 11 & 12)</option>
+              <option>Academic Staff & Teachers</option>
+              <option>Fee Defaulters (Term 1 Pending)</option>
+            </select>
+          </div>
 
-      <div class="col-12 col-md-6">
-        <label class="form-label small fw-bold">Template Preset</label>
-        <select class="form-select modern-select" [(ngModel)]="smsForm.template">
-          <option value="Custom Message">Custom Message Body</option>
-          <option value="Fee Reminder">Fee Reminder Notification</option>
-          <option value="Exam Schedule">Exam Schedule Alert</option>
-          <option value="Holiday Notice">Holiday Declaration</option>
-        </select>
-      </div>
+          <div class="mb-3" *ngIf="sendChannel === 'email'">
+            <label class="form-label small fw-bold text-dark">Email Subject Header</label>
+            <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="broadcastForm.subject" placeholder="e.g. Important Notice Regarding Academic Schedule">
+          </div>
 
-      <div class="col-12">
-        <label class="form-label small fw-bold">SMS Text Content (Max 160 Characters per SMS) *</label>
-        <textarea class="form-control modern-input" rows="4" [(ngModel)]="smsForm.message"></textarea>
-        <div class="d-flex justify-content-between small text-muted mt-1">
-          <span>Character count: <strong>{{ smsForm.message.length }}</strong> (1 SMS Credit)</span>
-          <span>Supported merge tags: <code>&#123;student_name&#125;</code>, <code>&#123;class&#125;</code></span>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label small fw-bold text-dark mb-0">Message Body</label>
+              <small class="text-muted">Insert Token: 
+                <a href="javascript:void(0)" class="badge bg-light text-primary border me-1" (click)="insertTag('student_name')">&#123;student_name&#125;</a>
+                <a href="javascript:void(0)" class="badge bg-light text-primary border me-1" (click)="insertTag('fee_amount')">&#123;fee_amount&#125;</a>
+                <a href="javascript:void(0)" class="badge bg-light text-primary border" (click)="insertTag('due_date')">&#123;due_date&#125;</a>
+              </small>
+            </div>
+            <textarea class="form-control rounded-3" rows="6" [(ngModel)]="broadcastForm.message" placeholder="Type your broadcast message content here..."></textarea>
+            <div class="d-flex justify-content-between mt-1" *ngIf="sendChannel === 'sms'">
+              <small class="text-muted">Characters: {{ broadcastForm.message.length }} / 160 (1 SMS Count)</small>
+              <small class="text-success"><i class="fas fa-shield-halved me-1"></i> DLT Header Verified</small>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="sendEmailCopy" [(ngModel)]="broadcastForm.sendSmsCopy">
+                <label class="form-check-label small" for="sendEmailCopy">Send SMS Copy</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="sendWaCopy" [(ngModel)]="broadcastForm.sendWhatsAppCopy">
+                <label class="form-check-label small" for="sendWaCopy">Send WhatsApp Copy</label>
+              </div>
+            </div>
+            <button class="btn btn-primary-gradient px-4 py-2 rounded-3 shadow-sm fw-bold" (click)="sendBroadcast()">
+              <i class="fas fa-paper-plane me-2"></i> DISPATCH BROADCAST
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-        <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="sendSmsBroadcast()">
-          <i class="fas fa-paper-plane me-1"></i> Broadcast SMS Campaign
-        </button>
+      <div class="col-xl-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+          <h6 class="fw-bold text-dark mb-3">Broadcast Gateway Telemetry</h6>
+          <div class="p-3 bg-light rounded-3 mb-3 border">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted">Email Credits Available</span>
+              <span class="badge bg-success-subtle text-success">Active</span>
+            </div>
+            <h4 class="fw-bold mb-0">84,500</h4>
+            <small class="text-muted">AWS SES & SendGrid Linked</small>
+          </div>
+          <div class="p-3 bg-light rounded-3 mb-3 border">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted">SMS Balance (DLT Verified)</span>
+              <span class="badge bg-primary-subtle text-primary">High Tier</span>
+            </div>
+            <h4 class="fw-bold mb-0">42,120</h4>
+            <small class="text-muted">Govt. DLT Header: EASYED</small>
+          </div>
+          <div class="p-3 bg-light rounded-3 border">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted">WhatsApp Cloud API</span>
+              <span class="badge bg-success-subtle text-success">Connected</span>
+            </div>
+            <h4 class="fw-bold mb-0">Tier 2 Enterprise</h4>
+            <small class="text-muted">Meta Cloud Business Verified</small>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- TAB 3: Send Email Newsletter -->
-  <div *ngIf="activeTab === 'email'" class="premium-card animate-fade-in" style="max-width: 850px;">
-    <h5 class="fw-bold text-dark mb-1">Email Newsletter & Announcement</h5>
-    <p class="text-muted small mb-4">Send HTML rich email newsletters and attachments to student and parent emails</p>
-
-    <div class="row g-3">
-      <div class="col-12 col-md-6">
-        <label class="form-label small fw-bold">Target Recipient Group *</label>
-        <select class="form-select modern-select" [(ngModel)]="emailForm.targetGroup">
-          <option value="All Parents & Students">All Parents & Students (1,450 Subscribers)</option>
-          <option value="Faculty & Staff">All Faculty & Staff</option>
-          <option value="Senior Secondary">Senior Secondary (Classes 11 & 12)</option>
-        </select>
+  <!-- 3. EMAIL / SMS LOG -->
+  <div *ngIf="activeTab === 'message-log'">
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card-clean border-blue">
+          <div class="stat-label">Total Dispatched</div>
+          <div class="stat-num text-dark">3,142</div>
+        </div>
       </div>
-
-      <div class="col-12 col-md-6">
-        <label class="form-label small fw-bold">Email Subject Title *</label>
-        <input type="text" class="form-control modern-input" [(ngModel)]="emailForm.subject" placeholder="e.g. Monthly Academic Digest - May 2025">
+      <div class="col-md-3">
+        <div class="stat-card-clean border-green">
+          <div class="stat-label">Delivered Success Rate</div>
+          <div class="stat-num text-green">99.4%</div>
+        </div>
       </div>
-
-      <div class="col-12">
-        <label class="form-label small fw-bold">Email Body / Message *</label>
-        <textarea class="form-control modern-input" rows="6" [(ngModel)]="emailForm.message" placeholder="Write rich email text or HTML announcement..."></textarea>
+      <div class="col-md-3">
+        <div class="stat-card-clean border-yellow">
+          <div class="stat-label">Pending Transmissions</div>
+          <div class="stat-num text-yellow">0</div>
+        </div>
       </div>
-
-      <div class="col-12">
-        <label class="form-label small fw-bold">Attach PDF Circular (Optional)</label>
-        <input type="file" class="form-control modern-input">
+      <div class="col-md-3">
+        <div class="stat-card-clean border-red">
+          <div class="stat-label">Failed / Bounced</div>
+          <div class="stat-num text-red">3</div>
+        </div>
       </div>
+    </div>
 
-      <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-        <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="sendEmailBroadcast()">
-          <i class="fas fa-envelope me-1"></i> Send Email Broadcast
-        </button>
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-4">LOG ID</th>
+              <th>CHANNEL</th>
+              <th>TRANSMISSION TITLE</th>
+              <th>RECIPIENT COUNT</th>
+              <th>DATE & TIME</th>
+              <th>STATUS</th>
+              <th class="text-end pe-4">ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of logs">
+              <td class="ps-4 fw-bold text-muted">{{ log.id }}</td>
+              <td>
+                <span class="badge" [ngClass]="{'bg-success-subtle text-success': log.channel==='WhatsApp', 'bg-primary-subtle text-primary': log.channel==='Email', 'bg-warning-subtle text-warning': log.channel==='SMS'}">
+                  <i class="fas" [ngClass]="{'fa-envelope': log.channel==='Email', 'fa-comment-sms': log.channel==='SMS', 'fab fa-whatsapp': log.channel==='WhatsApp'}"></i>
+                  {{ log.channel }}
+                </span>
+              </td>
+              <td><span class="fw-semibold text-dark">{{ log.title }}</span></td>
+              <td><span class="fw-bold">{{ log.recipientsCount }} contacts</span></td>
+              <td><small class="text-muted">{{ log.date }}</small></td>
+              <td><span class="badge bg-success-subtle text-success">{{ log.status }}</span></td>
+              <td class="text-end pe-4">
+                <button class="btn btn-sm btn-light border me-1"><i class="fas fa-eye text-primary"></i></button>
+                <button class="btn btn-sm btn-light border"><i class="fas fa-rotate text-muted"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <!-- TAB 4: Institutional Event Calendar -->
-  <div *ngIf="activeTab === 'events'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-1 text-dark">Institutional Event Calendar</h5>
-        <p class="text-muted small mb-0">Upcoming sports, academic exhibitions, ceremonies, and official holidays</p>
+  <!-- 4. INSTITUTIONAL EVENTS -->
+  <div *ngIf="activeTab === 'event-list'">
+    <div class="row g-4">
+      <div class="col-xl-3 col-md-6" *ngFor="let event of events">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 transition-all hover-lift">
+          <div class="p-3 border-bottom d-flex justify-content-between align-items-center" [ngClass]="{'bg-primary-subtle': event.category==='Academic', 'bg-warning-subtle': event.category==='Cultural', 'bg-danger-subtle': event.category==='Holiday'}">
+            <span class="badge rounded-pill fw-bold" [ngClass]="{'bg-primary text-white': event.category==='Academic', 'bg-warning text-dark': event.category==='Cultural', 'bg-danger text-white': event.category==='Holiday'}">
+              {{ event.category }}
+            </span>
+            <small class="fw-bold text-dark">{{ event.date }}</small>
+          </div>
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h5 class="fw-bold text-dark mb-2">{{ event.title }}</h5>
+            <p class="text-muted small mb-3 flex-grow-1">{{ event.description }}</p>
+            <div class="pt-2 border-top">
+              <div class="small text-muted mb-1"><i class="fas fa-clock text-primary me-2"></i>{{ event.time }}</div>
+              <div class="small text-muted"><i class="fas fa-location-dot text-danger me-2"></i>{{ event.venue }}</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <button class="btn btn-primary rounded-pill px-3" (click)="showAddEventModal = true">
-        <i class="fas fa-plus me-1"></i> Add Event
+    </div>
+  </div>
+
+  <!-- 5. CALENDAR -->
+  <div *ngIf="activeTab === 'calendar'">
+    <div class="card border-0 shadow-sm rounded-4 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold text-dark mb-0">{{ currentMonth }}</h4>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-chevron-left"></i> Previous</button>
+          <button class="btn btn-sm btn-light border rounded-pill px-3">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Calendar Day Names Header -->
+      <div class="calendar-grid-header">
+        <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+      </div>
+
+      <!-- Calendar 35 Cells Grid -->
+      <div class="calendar-grid-body">
+        <div class="calendar-day-cell" *ngFor="let cell of calendarDays" [class.other-month]="!cell.isCurrentMonth" [class.has-event]="cell.hasEvent" [class.is-holiday]="cell.isHoliday">
+          <div class="day-number">{{ cell.day }}</div>
+          <div class="calendar-event-pill" *ngIf="cell.eventTitle" [class.holiday-pill]="cell.isHoliday">
+            {{ cell.eventTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. EMAIL TEMPLATES -->
+  <div *ngIf="activeTab === 'email-templates'">
+    <div class="row g-4">
+      <div class="col-xl-4 col-md-6" *ngFor="let t of emailTemplates">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 transition-all hover-lift">
+          <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+            <span class="badge rounded-pill bg-success-subtle text-success fw-bold">ACTIVE STRUCTURE</span>
+            <i class="fas fa-envelope text-primary"></i>
+          </div>
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h5 class="fw-bold text-dark mb-1">{{ t.name }}</h5>
+            <small class="text-muted fw-semibold mb-3 d-block">Subject: {{ t.subject }}</small>
+            <p class="text-muted small mb-4 flex-grow-1" style="line-height: 1.5;">{{ t.body }}</p>
+            <div class="pt-3 border-top d-flex justify-content-end gap-2">
+              <button class="btn btn-sm btn-light border text-primary rounded-pill px-3 fw-bold"><i class="fas fa-edit me-1"></i> MODIFY</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. SMS TEMPLATES -->
+  <div *ngIf="activeTab === 'sms-templates'">
+    <div class="row g-4">
+      <div class="col-xl-4 col-md-6" *ngFor="let s of smsTemplates">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 transition-all hover-lift">
+          <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+            <span class="badge rounded-pill bg-success-subtle text-success fw-bold">DLT APPROVED</span>
+            <small class="text-muted font-monospace">{{ s.dltId }}</small>
+          </div>
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h5 class="fw-bold text-dark mb-2">{{ s.name }}</h5>
+            <p class="text-muted small mb-4 flex-grow-1" style="line-height: 1.5;">{{ s.body }}</p>
+            <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+              <small class="text-muted">Length: {{ s.body.length }} chars</small>
+              <button class="btn btn-sm btn-light border text-primary rounded-pill px-3 fw-bold"><i class="fas fa-edit me-1"></i> MODIFY</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Post Broadcast Notice -->
+<div class="custom-modal-backdrop" *ngIf="showNoticeModal">
+  <div class="custom-modal-dialog">
+    <div class="modal-content border-0 rounded-4 shadow-2xl p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">New Institutional Broadcast</h5>
+        <button class="btn-close" (click)="showNoticeModal = false"></button>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-dark">Broadcast Header / Title</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newNotice.title" placeholder="Primary title for the notice...">
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="form-label small fw-bold text-dark">Activation Date</label>
+          <input type="date" class="form-control rounded-3 py-2" [(ngModel)]="newNotice.publishDate">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold text-dark">Target Audience</label>
+          <select class="form-select rounded-3 py-2" [(ngModel)]="newNotice.targetAudience">
+            <option>All Stakeholders</option>
+            <option>Students Only</option>
+            <option>Academic Staff</option>
+            <option>Guardians / Parents</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-dark">Broadcast Body</label>
+        <textarea class="form-control rounded-3" rows="5" [(ngModel)]="newNotice.content" placeholder="Detailed content of the announcement..."></textarea>
+      </div>
+      <button class="btn btn-primary-gradient w-100 py-3 rounded-3 fw-bold" (click)="saveNotice()">
+        AUTHORIZE & BROADCAST
       </button>
     </div>
+  </div>
+</div>
 
-    <div class="row g-4">
-      <div class="col-12 col-md-6" *ngFor="let ev of events">
-        <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="badge" [ngClass]="{
-              'bg-primary': ev.category === 'Academic',
-              'bg-success': ev.category === 'Sports',
-              'bg-danger': ev.category === 'Holiday',
-              'bg-warning text-dark': ev.category === 'Cultural'
-            }">{{ ev.category }}</span>
-            <span class="small fw-bold text-dark"><i class="far fa-calendar-alt text-primary me-1"></i> {{ ev.date }}</span>
-          </div>
-
-          <h5 class="fw-bold text-dark mb-1">{{ ev.title }}</h5>
-          <p class="small text-muted mb-2">{{ ev.description }}</p>
-
-          <div class="d-flex justify-content-between align-items-center pt-2 border-top small text-secondary">
-            <span><i class="far fa-clock me-1"></i> {{ ev.time }}</span>
-            <span><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ ev.venue }}</span>
-          </div>
+<!-- Modal: New Event -->
+<div class="custom-modal-backdrop" *ngIf="showEventModal">
+  <div class="custom-modal-dialog">
+    <div class="modal-content border-0 rounded-4 shadow-2xl p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Schedule Institutional Event</h5>
+        <button class="btn-close" (click)="showEventModal = false"></button>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-dark">Event Title</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newEvent.title" placeholder="e.g. Science Fair">
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="form-label small fw-bold text-dark">Event Date</label>
+          <input type="date" class="form-control rounded-3 py-2" [(ngModel)]="newEvent.date">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold text-dark">Category</label>
+          <select class="form-select rounded-3 py-2" [(ngModel)]="newEvent.category">
+            <option>Academic</option>
+            <option>Cultural</option>
+            <option>Sports</option>
+            <option>Holiday</option>
+          </select>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- TAB 5: Communication Logs -->
-  <div *ngIf="activeTab === 'logs'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-1 text-dark">Communication Audit Log</h5>
-        <p class="text-muted small mb-0">Delivery history of SMS, WhatsApp alerts, and email campaigns</p>
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-dark">Venue Location</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newEvent.venue" placeholder="Auditorium...">
       </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Log ID</th>
-            <th>Channel</th>
-            <th>Broadcast Title / Campaign</th>
-            <th>Recipients</th>
-            <th>Timestamp</th>
-            <th>Sender</th>
-            <th>Delivery Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let l of logs">
-            <td><strong>{{ l.id }}</strong></td>
-            <td>
-              <span class="badge" [ngClass]="{
-                'bg-success': l.channel === 'WhatsApp',
-                'bg-info text-dark': l.channel === 'SMS',
-                'bg-primary': l.channel === 'Email'
-              }">{{ l.channel }}</span>
-            </td>
-            <td><strong class="text-dark">{{ l.title }}</strong></td>
-            <td><span class="badge bg-light text-dark border">{{ l.recipientsCount }} Numbers</span></td>
-            <td><small class="text-muted">{{ l.date }}</small></td>
-            <td><small class="text-secondary fw-semibold">{{ l.sender }}</small></td>
-            <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="fas fa-check me-1"></i> {{ l.status }}</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-dark">Description</label>
+        <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newEvent.description"></textarea>
+      </div>
+      <button class="btn btn-primary-gradient w-100 py-3 rounded-3 fw-bold" (click)="saveEvent()">
+        SAVE EVENT TO CALENDAR
+      </button>
     </div>
   </div>
 </div>
 
-<!-- ================= MODALS ================= -->
-
-<!-- 1. Post Notice Modal -->
-<div class="modal-backdrop-custom" *ngIf="showAddNoticeModal">
-  <div class="modal-content-custom" style="max-width: 540px;">
-    <div class="modal-header-custom d-flex justify-content-between align-items-center">
-      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-bullhorn text-primary me-2"></i> Publish Bulletin Notice</h5>
-      <button class="btn-close" (click)="showAddNoticeModal = false"></button>
-    </div>
-    <div class="modal-body-custom mt-3">
-      <div class="row g-3">
-        <div class="col-12">
-          <label class="form-label small fw-bold">Notice Title *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newNotice.title" placeholder="e.g. Mid-Term Examination Timetable Released">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Target Audience</label>
-          <select class="form-select modern-select" [(ngModel)]="newNotice.targetAudience">
-            <option value="All">All (School-Wide)</option>
-            <option value="Students">Students Only</option>
-            <option value="Parents">Parents Only</option>
-            <option value="Staff">Faculty & Staff</option>
-          </select>
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Notice Date</label>
-          <input type="date" class="form-control modern-input" [(ngModel)]="newNotice.noticeDate">
-        </div>
-        <div class="col-12">
-          <label class="form-label small fw-bold">Notice Content / Instructions *</label>
-          <textarea class="form-control modern-input" rows="4" [(ngModel)]="newNotice.content" placeholder="Type notice announcement body..."></textarea>
-        </div>
-        <div class="col-12">
-          <div class="form-check form-switch mt-2">
-            <input class="form-check-input" type="checkbox" id="pinSwitch" [(ngModel)]="newNotice.isPinned">
-            <label class="form-check-label small fw-semibold" for="pinSwitch">Pin this notice to top of Bulletin Board</label>
-          </div>
-        </div>
+<!-- Modal: New Template -->
+<div class="custom-modal-backdrop" *ngIf="showTemplateModal">
+  <div class="custom-modal-dialog">
+    <div class="modal-content border-0 rounded-4 shadow-2xl p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Create Architecture Template</h5>
+        <button class="btn-close" (click)="showTemplateModal = false"></button>
       </div>
-    </div>
-    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAddNoticeModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNotice()">Publish Notice</button>
-    </div>
-  </div>
-</div>
-
-<!-- 2. Add Event Modal -->
-<div class="modal-backdrop-custom" *ngIf="showAddEventModal">
-  <div class="modal-content-custom" style="max-width: 500px;">
-    <div class="modal-header-custom d-flex justify-content-between align-items-center">
-      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-calendar-plus text-primary me-2"></i> Schedule Calendar Event</h5>
-      <button class="btn-close" (click)="showAddEventModal = false"></button>
-    </div>
-    <div class="modal-body-custom mt-3">
-      <div class="row g-3">
-        <div class="col-12">
-          <label class="form-label small fw-bold">Event Title *</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newEvent.title" placeholder="e.g. Science & Tech Expo 2025">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Date *</label>
-          <input type="date" class="form-control modern-input" [(ngModel)]="newEvent.date">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Time</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newEvent.time">
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Category</label>
-          <select class="form-select modern-select" [(ngModel)]="newEvent.category">
-            <option value="Academic">Academic</option>
-            <option value="Sports">Sports</option>
-            <option value="Cultural">Cultural</option>
-            <option value="Holiday">Official Holiday</option>
-          </select>
-        </div>
-        <div class="col-6">
-          <label class="form-label small fw-bold">Venue</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newEvent.venue">
-        </div>
-        <div class="col-12">
-          <label class="form-label small fw-bold">Description</label>
-          <input type="text" class="form-control modern-input" [(ngModel)]="newEvent.description" placeholder="Brief event summary">
-        </div>
+      <div class="mb-3" *ngIf="activeTab === 'email-templates'">
+        <label class="form-label small fw-bold text-dark">Template Identifier</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newEmailTemplate.name" placeholder="e.g. Admission Confirmation">
       </div>
-    </div>
-    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAddEventModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveEvent()">Schedule Event</button>
+      <div class="mb-3" *ngIf="activeTab === 'email-templates'">
+        <label class="form-label small fw-bold text-dark">Default Subject</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newEmailTemplate.subject" placeholder="Welcome...">
+      </div>
+      <div class="mb-3" *ngIf="activeTab === 'sms-templates'">
+        <label class="form-label small fw-bold text-dark">SMS Template Name</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newSmsTemplate.name" placeholder="Absence Alert...">
+      </div>
+      <div class="mb-3" *ngIf="activeTab === 'sms-templates'">
+        <label class="form-label small fw-bold text-dark">DLT Registration ID</label>
+        <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="newSmsTemplate.dltId" placeholder="DLT-1107...">
+      </div>
+      <div class="mb-4" *ngIf="activeTab === 'email-templates'">
+        <label class="form-label small fw-bold text-dark">Template Body (HTML Supported)</label>
+        <textarea class="form-control rounded-3" rows="5" [(ngModel)]="newEmailTemplate.body" placeholder="Email content..."></textarea>
+      </div>
+      <div class="mb-4" *ngIf="activeTab === 'sms-templates'">
+        <label class="form-label small fw-bold text-dark">Template Body (Plain Text)</label>
+        <textarea class="form-control rounded-3" rows="5" [(ngModel)]="newSmsTemplate.body" placeholder="SMS content..."></textarea>
+      </div>
+      <button class="btn btn-primary-gradient w-100 py-3 rounded-3 fw-bold" (click)="activeTab === 'email-templates' ? saveEmailTemplate() : saveSmsTemplate()">
+        AUTHORIZE & STORE TEMPLATE
+      </button>
     </div>
   </div>
 </div>
