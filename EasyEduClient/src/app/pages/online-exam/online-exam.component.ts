@@ -36,6 +36,18 @@ export interface DigitalOnlineExam {
   isPublished: boolean;
 }
 
+export interface WrittenExamNode {
+  id: number;
+  examTitle: string;
+  className: string;
+  subject: string;
+  submissionDeadline: string;
+  totalSubmissions: number;
+  evaluatedCount: number;
+  maxScore: number;
+  status: 'Evaluating' | 'Completed' | 'Open for Submissions';
+}
+
 @Component({
   selector: 'app-online-exam',
   standalone: true,
@@ -47,7 +59,7 @@ export class OnlineExamComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  activeTab: 'group' | 'bank' | 'exam' = 'exam';
+  activeTab: 'exam' | 'add-exam' | 'group' | 'bank' | 'written' | 'settings' = 'exam';
 
   // 1. Groups
   groups: QuestionGroupItem[] = [
@@ -72,6 +84,25 @@ export class OnlineExamComponent implements OnInit {
     { id: 2, title: 'Mathematics Algebra Online Assessment', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', startDate: '2025-05-18', endDate: '2025-05-19', durationMinutes: 60, totalMarks: 50, isPublished: true },
     { id: 3, title: 'Python Programming Mock Exam', classId: 3, className: 'Class 12 - Science', subjectId: 4, subjectName: 'Computer Science', startDate: '2025-05-20', endDate: '2025-05-21', durationMinutes: 60, totalMarks: 40, isPublished: false }
   ];
+
+  // 4. Written Exam Nodes
+  writtenExams: WrittenExamNode[] = [
+    { id: 1, examTitle: 'English Essay & Creative Composition Midterm', className: 'Grade 10-A', subject: 'English', submissionDeadline: '2025-05-22 05:00 PM', totalSubmissions: 38, evaluatedCount: 26, maxScore: 50, status: 'Evaluating' },
+    { id: 2, examTitle: 'History & Civics Long Answer Descriptive Node', className: 'Grade 9-B', subject: 'Social Studies', submissionDeadline: '2025-05-24 11:59 PM', totalSubmissions: 42, evaluatedCount: 42, maxScore: 40, status: 'Completed' },
+    { id: 3, examTitle: 'Physics Circuit Diagram & Theory Proof Submission', className: 'Grade 11-Science', subject: 'Physics', submissionDeadline: '2025-05-28 06:00 PM', totalSubmissions: 15, evaluatedCount: 0, maxScore: 60, status: 'Open for Submissions' }
+  ];
+
+  // Settings
+  examSettings = {
+    enableAntiCheatingProctoring: true,
+    preventTabSwitching: true,
+    maxTabSwitchCount: 3,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    autoSubmitOnTimerExpiry: true,
+    showInstantResults: false,
+    watermarkStudentIdOnScreen: true
+  };
 
   // Modals
   showGroupModal = false;
@@ -102,22 +133,29 @@ export class OnlineExamComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['tab']) {
-        const t = params['tab'].toLowerCase();
-        if (t === 'group' || t === 'questiongroup') this.activeTab = 'group';
-        else if (t === 'bank' || t === 'questionbank') this.activeTab = 'bank';
-        else this.activeTab = 'exam';
-      }
-    });
-
-    const url = this.router.url.toLowerCase();
-    if (url.includes('/onlineexam/questiongroup')) this.activeTab = 'group';
-    else if (url.includes('/onlineexam/questionbank')) this.activeTab = 'bank';
-    else if (url.includes('/onlineexam')) this.activeTab = 'exam';
+    this.syncFromUrl();
+    this.route.url.subscribe(() => this.syncFromUrl());
+    this.route.queryParams.subscribe(() => this.syncFromUrl());
   }
 
-  setTab(tab: 'group' | 'bank' | 'exam'): void {
+  private syncFromUrl(): void {
+    const url = this.router.url.toLowerCase();
+    if (url.includes('addonlineexam')) {
+      this.activeTab = 'add-exam';
+    } else if (url.includes('questiongroup')) {
+      this.activeTab = 'group';
+    } else if (url.includes('questionbank')) {
+      this.activeTab = 'bank';
+    } else if (url.includes('writtenexam')) {
+      this.activeTab = 'written';
+    } else if (url.includes('settings')) {
+      this.activeTab = 'settings';
+    } else if (url.includes('onlineexam')) {
+      this.activeTab = 'exam';
+    }
+  }
+
+  setTab(tab: 'exam' | 'add-exam' | 'group' | 'bank' | 'written' | 'settings'): void {
     this.activeTab = tab;
   }
 
@@ -193,6 +231,7 @@ export class OnlineExamComponent implements OnInit {
     };
     this.exams.unshift(item);
     this.showExamModal = false;
+    this.activeTab = 'exam';
     this.newExam = { title: '', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', startDate: new Date().toISOString().substring(0, 10), endDate: new Date(Date.now() + 2 * 86400000).toISOString().substring(0, 10), durationMinutes: 45, totalMarks: 50, isPublished: true };
     Swal.fire({ icon: 'success', title: 'Evaluation Nexus Initialized', text: 'Online examination cycle published.', timer: 1500, showConfirmButton: false });
   }
@@ -200,5 +239,25 @@ export class OnlineExamComponent implements OnInit {
   deleteExam(ex: DigitalOnlineExam): void {
     this.exams = this.exams.filter(e => e.id !== ex.id);
     Swal.fire({ icon: 'success', title: 'Evaluation Node Terminated', timer: 1200, showConfirmButton: false });
+  }
+
+  saveExamSettings(): void {
+    Swal.fire('Proctoring Config Saved', 'Anti-cheating, randomizer, and live monitor rules updated.', 'success');
+  }
+
+  gradeWrittenSubmission(node: WrittenExamNode): void {
+    Swal.fire({
+      title: `Evaluate: ${node.examTitle}`,
+      html: `
+        <div class="text-start p-2 small">
+          <p class="mb-1"><strong>Class:</strong> ${node.className} &bull; <strong>Subject:</strong> ${node.subject}</p>
+          <p class="mb-1"><strong>Pending Evaluations:</strong> ${node.totalSubmissions - node.evaluatedCount} of ${node.totalSubmissions}</p>
+          <p class="mb-0 text-muted">Launching digital paper annotation interface...</p>
+        </div>
+      `,
+      icon: 'info',
+      confirmButtonColor: '#002B49',
+      confirmButtonText: 'Open Digital Evaluator'
+    });
   }
 }

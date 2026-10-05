@@ -1,281 +1,420 @@
 <div class="container-fluid p-0 animate-fade-in">
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Attendance Intelligence & Vigilance</h3>
-      <p class="text-muted small mb-0">Record, verify and analyze daily classroom, subject-wise, and faculty attendance rosters</p>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0">Smart Attendance & Access Security</h3>
+        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded-pill">
+          {{ viewMode | uppercase }} MODULE
+        </span>
+      </div>
+      <p class="text-muted small mb-0">Unified vigilance suite for Manual Registers, Subject-Wise Logs, Biometric Hardware Sync, and Dynamic QR Kiosks.</p>
     </div>
-    <div class="d-flex flex-wrap gap-2" *ngIf="viewMode !== 'report'">
-      <button class="btn btn-outline-success btn-sm px-3" (click)="markAll('Present')">
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-primary btn-sm px-3" *ngIf="viewMode === 'biometrics'" (click)="syncBiometricsNow()">
+        <i class="fas fa-sync-alt me-1"></i> Sync Hardware Terminals
+      </button>
+      <button class="btn btn-outline-success btn-sm px-3" *ngIf="viewMode === 'qr'" (click)="triggerQrSimulation()">
+        <i class="fas fa-qrcode me-1"></i> Scan Test Badge
+      </button>
+      <button class="btn btn-outline-success btn-sm px-3" *ngIf="viewMode === 'daily'" (click)="markAll('Present')">
         <i class="fas fa-check-double me-1"></i> Mark All Present
       </button>
-      <button class="btn btn-outline-danger btn-sm px-3" (click)="markAll('Absent')">
+      <button class="btn btn-outline-danger btn-sm px-3" *ngIf="viewMode === 'daily'" (click)="markAll('Absent')">
         <i class="fas fa-times me-1"></i> Mark All Absent
       </button>
-      <button class="btn btn-primary shadow-sm" (click)="saveAttendance()">
+      <button class="btn btn-primary shadow-sm" *ngIf="viewMode === 'daily' || viewMode === 'subject'" (click)="saveAttendance()">
         <i class="fas fa-save me-1"></i> Commit Attendance
       </button>
     </div>
   </div>
 
-  <!-- Switch between Daily, Subject Wise & Report -->
-  <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
-    <div class="card-body p-2 d-flex flex-wrap gap-2 justify-content-between align-items-center">
-      <div class="d-flex gap-2">
-        <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="viewMode === 'daily'" [class.btn-light]="viewMode !== 'daily'" (click)="viewMode = 'daily'">
-          <i class="fas fa-calendar-check me-1"></i> Student & Staff Daily Attendance
+  <!-- Main Navigation Mode Switcher -->
+  <div class="card border-0 shadow-sm rounded-16 mb-4 bg-white p-2">
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+      <div class="btn-group p-1 bg-light rounded-pill border flex-wrap">
+        <button class="btn rounded-pill px-3 py-1 btn-sm fw-bold" [ngClass]="viewMode === 'daily' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="viewMode = 'daily'">
+          <i class="fas fa-calendar-check me-1"></i> Daily Register
         </button>
-        <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="viewMode === 'subject'" [class.btn-light]="viewMode !== 'subject'" (click)="viewMode = 'subject'">
-          <i class="fas fa-book-reader me-1"></i> Subject Wise Attendance
+        <button class="btn rounded-pill px-3 py-1 btn-sm fw-bold" [ngClass]="viewMode === 'subject' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="viewMode = 'subject'">
+          <i class="fas fa-book-reader me-1"></i> Subject Wise
         </button>
-        <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="viewMode === 'report'" [class.btn-light]="viewMode !== 'report'" (click)="viewMode = 'report'">
-          <i class="fas fa-chart-line me-1"></i> Attendance Analytics & Reports
+        <button class="btn rounded-pill px-3 py-1 btn-sm fw-bold" [ngClass]="viewMode === 'biometrics' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="viewMode = 'biometrics'">
+          <i class="fas fa-fingerprint text-warning me-1"></i> Biometric Suite
+        </button>
+        <button class="btn rounded-pill px-3 py-1 btn-sm fw-bold" [ngClass]="viewMode === 'qr' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="viewMode = 'qr'">
+          <i class="fas fa-qrcode text-info me-1"></i> QR Attendance
+        </button>
+        <button class="btn rounded-pill px-3 py-1 btn-sm fw-bold" [ngClass]="viewMode === 'report' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="viewMode = 'report'">
+          <i class="fas fa-chart-pie me-1"></i> Reports & Audit
         </button>
       </div>
 
-      <div class="d-flex gap-2" *ngIf="viewMode === 'daily'">
+      <!-- Sub Navigation for Biometrics -->
+      <div class="d-flex gap-1" *ngIf="viewMode === 'biometrics'">
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="bioSubTab === 'dashboard' ? 'btn-dark' : 'btn-light'" (click)="bioSubTab = 'dashboard'">Nexus Dashboard</button>
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="bioSubTab === 'student-report' ? 'btn-dark' : 'btn-light'" (click)="bioSubTab = 'student-report'">Student Reports</button>
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="bioSubTab === 'staff-report' ? 'btn-dark' : 'btn-light'" (click)="bioSubTab = 'staff-report'">Staff Reports</button>
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="bioSubTab === 'settings' ? 'btn-dark' : 'btn-light'" (click)="bioSubTab = 'settings'"><i class="fas fa-cog me-1"></i> Infrastructure</button>
+      </div>
+
+      <!-- Sub Navigation for QR -->
+      <div class="d-flex gap-1" *ngIf="viewMode === 'qr'">
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="qrSubTab === 'dashboard' ? 'btn-dark' : 'btn-light'" (click)="qrSubTab = 'dashboard'">Nexus Dashboard</button>
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="qrSubTab === 'auto-submission' ? 'btn-dark' : 'btn-light'" (click)="qrSubTab = 'auto-submission'">Auto-Submission Stream</button>
+        <button class="btn btn-sm rounded-pill px-3" [ngClass]="qrSubTab === 'settings' ? 'btn-dark' : 'btn-light'" (click)="qrSubTab = 'settings'"><i class="fas fa-cog me-1"></i> Infrastructure</button>
+      </div>
+
+      <!-- Sub Navigation for Daily -->
+      <div class="d-flex gap-1" *ngIf="viewMode === 'daily'">
         <button class="btn btn-sm rounded-pill" [class.btn-dark]="attendanceType === 'student'" [class.btn-outline-secondary]="attendanceType !== 'student'" (click)="attendanceType = 'student'">
-          Students
+          Students ({{ attendanceRecords.length }})
         </button>
         <button class="btn btn-sm rounded-pill" [class.btn-dark]="attendanceType === 'staff'" [class.btn-outline-secondary]="attendanceType !== 'staff'" (click)="attendanceType = 'staff'">
-          Staff & Faculty
+          Staff & Faculty ({{ staffAttendanceRecords.length }})
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Live Attendance KPI Stats Cards -->
-  <div class="row g-3 mb-4" *ngIf="viewMode !== 'report'">
-    <div class="col-xl-3 col-md-6">
-      <div class="stat-premium-card border-start border-4 border-primary">
-        <div class="small fw-bold text-muted text-uppercase mb-1">Total Enrolled</div>
-        <div class="h3 fw-bold text-dark mb-0">{{ totalCount }}</div>
-        <div class="small text-primary fw-bold mt-2"><i class="fas fa-users me-1"></i> Active Roster</div>
+  <!-- BIOMETRIC SUITE VIEWS -->
+  <div *ngIf="viewMode === 'biometrics'" class="animate-fade-in mb-4">
+    <!-- Dashboard: Device Grid & Live Punch Feed -->
+    <div *ngIf="bioSubTab === 'dashboard'">
+      <div class="row g-4 mb-4">
+        <div class="col-md-6 col-xl-3" *ngFor="let dev of biometricDevices">
+          <div class="card border rounded-16 p-4 shadow-sm bg-white h-100 position-relative">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge" [ngClass]="dev.status === 'Online' ? 'bg-success' : 'bg-warning text-dark'">
+                <i class="fas fa-circle me-1 small"></i> {{ dev.status }}
+              </span>
+              <small class="text-muted">{{ dev.deviceType }}</small>
+            </div>
+            <h6 class="fw-bold text-dark mb-1">{{ dev.name }}</h6>
+            <div class="small text-muted mb-3"><i class="fas fa-map-marker-alt text-primary me-1"></i> {{ dev.location }}</div>
+            <div class="p-2 bg-light rounded-12 mb-3 border small">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">IP Address:</span>
+                <code>{{ dev.ipAddress }}:{{ dev.port }}</code>
+              </div>
+              <div class="d-flex justify-content-between mt-1">
+                <span class="text-muted">Today's Punches:</span>
+                <strong class="text-primary">{{ dev.totalLogsToday }} Logs</strong>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center small text-muted">
+              <span>Ping: {{ dev.lastPing }}</span>
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-2" (click)="syncBiometricsNow()">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Realtime Hardware Punch Stream -->
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-stream text-primary me-2"></i> Realtime Hardware Ingestion Log</h5>
+          <span class="badge bg-light text-dark border">TCP/IP Port 4370 Live</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Log ID</th>
+                <th>User / ID</th>
+                <th>Role & Group</th>
+                <th>Punch Time</th>
+                <th>Device Location</th>
+                <th>Verification Type</th>
+                <th>Audit Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let punch of punchLogs">
+                <td><code>{{ punch.id }}</code></td>
+                <td>
+                  <strong>{{ punch.name }}</strong>
+                  <div class="small text-muted">{{ punch.userId }}</div>
+                </td>
+                <td><span class="badge bg-light text-dark border">{{ punch.role }} - {{ punch.classOrDept }}</span></td>
+                <td class="fw-bold text-dark">{{ punch.punchTime }}</td>
+                <td><small class="text-muted">{{ punch.deviceLocation }}</small></td>
+                <td><i class="fas fa-fingerprint text-primary me-1"></i> {{ punch.verificationType }}</td>
+                <td>
+                  <span class="badge" [ngClass]="punch.status === 'Accepted' ? 'bg-success bg-opacity-10 text-success' : 'bg-warning text-dark'">
+                    {{ punch.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <div class="col-xl-3 col-md-6">
-      <div class="stat-premium-card border-start border-4 border-success">
-        <div class="small fw-bold text-muted text-uppercase mb-1">Present Today</div>
-        <div class="h3 fw-bold text-success mb-0">{{ presentCount }}</div>
-        <div class="small text-success fw-bold mt-2"><i class="fas fa-check-circle me-1"></i> {{ attendancePercent }}% Attendance</div>
+
+    <!-- Student / Staff Biometric Reports -->
+    <div *ngIf="bioSubTab === 'student-report' || bioSubTab === 'staff-report'">
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+          <h5 class="fw-bold text-dark mb-0">
+            <i class="fas fa-file-invoice text-primary me-2"></i>
+            {{ bioSubTab === 'student-report' ? 'Student Biometric Monthly Attendance Log' : 'Staff Biometric Payroll Clock-In Report' }}
+          </h5>
+          <button class="btn btn-sm btn-outline-dark rounded-pill px-3">
+            <i class="fas fa-download me-1"></i> Export Bio Report (CSV)
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>User ID</th>
+                <th>Full Name</th>
+                <th>Category</th>
+                <th>First In</th>
+                <th>Last Out</th>
+                <th>Total In-Campus Hours</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let punch of punchLogs">
+                <td><code>{{ punch.userId }}</code></td>
+                <td class="fw-bold">{{ punch.name }}</td>
+                <td>{{ punch.classOrDept }}</td>
+                <td>{{ punch.punchTime }}</td>
+                <td>04:30:00 PM</td>
+                <td class="fw-bold text-primary">8h 15m</td>
+                <td><span class="badge bg-success">Punched In</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <div class="col-xl-3 col-md-6">
-      <div class="stat-premium-card border-start border-4 border-danger">
-        <div class="small fw-bold text-muted text-uppercase mb-1">Absent</div>
-        <div class="h3 fw-bold text-danger mb-0">{{ absentCount }}</div>
-        <div class="small text-danger mt-2"><i class="fas fa-user-times me-1"></i> Unexcused Absence</div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-md-6">
-      <div class="stat-premium-card border-start border-4 border-warning">
-        <div class="small fw-bold text-muted text-uppercase mb-1">Late / Half Day</div>
-        <div class="h3 fw-bold text-warning mb-0">{{ lateCount }}</div>
-        <div class="small text-warning mt-2"><i class="fas fa-clock me-1"></i> Late Arrivals</div>
+
+    <!-- Biometric Settings -->
+    <div *ngIf="bioSubTab === 'settings'">
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+        <h5 class="fw-bold text-dark mb-3"><i class="fas fa-network-wired text-primary me-2"></i> Biometric Terminal Sync Engine</h5>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Auto-Poll Interval (Seconds)</label>
+            <input type="number" class="form-control" [(ngModel)]="bioSettings.autoPollIntervalSeconds">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Late Entry Grace Period (Minutes)</label>
+            <input type="number" class="form-control" [(ngModel)]="bioSettings.lateGracePeriodMinutes">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">ZKTeco Terminal Comm Key</label>
+            <input type="text" class="form-control" [(ngModel)]="bioSettings.zkTecoCommKey">
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="bioSettings.enableAutoAttendanceConversion" id="bioAuto">
+            <label class="form-check-label small fw-bold" for="bioAuto">Automatically convert first punch of the day into class register entry</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="bioSettings.pushSmsOnAbsence" id="bioSms">
+            <label class="form-check-label small fw-bold" for="bioSms">Auto-dispatch Absentee SMS to Guardians at 09:30 AM</label>
+          </div>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4" (click)="saveBioSettings()">
+          <i class="fas fa-save me-1"></i> Save Biometric Parameters
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- VIEW 1: DAILY ATTENDANCE -->
-  <div *ngIf="viewMode === 'daily'" class="premium-card mb-4 shadow-sm">
-    <div class="row g-3 align-items-end mb-4">
-      <div class="col-12 col-md-4" *ngIf="attendanceType === 'student'">
-        <label class="form-label small fw-bold text-muted">SELECT CLASS / GRADE</label>
-        <select class="form-select fw-bold" [(ngModel)]="selectedClass">
-          <option value="Grade 10">Grade 10 - Section A</option>
-          <option value="Grade 9">Grade 9 - Section A</option>
-          <option value="Grade 12">Grade 12 - Science</option>
-          <option value="Grade 8">Grade 8 - Section B</option>
-        </select>
-      </div>
+  <!-- QR ATTENDANCE SYSTEM VIEWS -->
+  <div *ngIf="viewMode === 'qr'" class="animate-fade-in mb-4">
+    <div *ngIf="qrSubTab === 'dashboard'">
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm rounded-16 p-4 bg-white text-center">
+            <span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-3 py-2 rounded-pill mx-auto mb-3">
+              DYNAMIC ROTATING QR KIOSK
+            </span>
+            <div class="p-3 bg-light rounded-16 border d-inline-block mx-auto mb-3">
+              <i class="fas fa-qrcode fa-8x text-dark"></i>
+            </div>
+            <h6 class="fw-bold mb-1">EasyEdu Secure QR Terminal 01</h6>
+            <p class="small text-muted mb-3">Refreshes every 15s with HMAC-SHA256 signature to prevent screenshot sharing</p>
+            <button class="btn btn-outline-primary rounded-pill px-4" (click)="triggerQrSimulation()">
+              <i class="fas fa-camera me-1"></i> Launch Kiosk Scanner Camera
+            </button>
+          </div>
+        </div>
 
-      <div class="col-12 col-md-4">
-        <label class="form-label small fw-bold text-muted">ATTENDANCE DATE</label>
-        <input type="date" class="form-control fw-bold text-primary" [(ngModel)]="selectedDate">
+        <div class="col-lg-7">
+          <div class="card border-0 shadow-sm rounded-16 p-4 bg-white h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold text-dark mb-0"><i class="fas fa-bolt text-warning me-2"></i> Live QR Auto-Submission Stream</h5>
+              <span class="badge bg-success bg-opacity-10 text-success">CONNECTED</span>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Scan Code</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Scan Time</th>
+                    <th>SMS Status</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let scan of qrScans">
+                    <td><code>{{ scan.id }}</code></td>
+                    <td class="fw-bold">{{ scan.studentName }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ scan.class }}</span></td>
+                    <td>{{ scan.scanTime }}</td>
+                    <td><span class="badge bg-success bg-opacity-10 text-success"><i class="fas fa-check me-1"></i> Dispatched</span></td>
+                    <td><span class="badge" [ngClass]="scan.status === 'Present' ? 'bg-success' : 'bg-warning text-dark'">{{ scan.status }}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QR Auto Submission Queue -->
+    <div *ngIf="qrSubTab === 'auto-submission'">
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="fas fa-sync-alt text-primary me-2"></i> Auto-Submission Queue & Real-time Verification</h5>
+        <p class="text-muted small">Every student ID card scan automatically registers attendance and fires parent SMS alert instantly.</p>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Admission No</th>
+                <th>Student Name</th>
+                <th>Class & Section</th>
+                <th>Terminal Location</th>
+                <th>Timestamp</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let scan of qrScans">
+                <td><strong>{{ scan.admissionNo }}</strong></td>
+                <td>{{ scan.studentName }}</td>
+                <td>{{ scan.class }}</td>
+                <td>{{ scan.gateLocation }}</td>
+                <td>{{ scan.scanTime }}</td>
+                <td><button class="btn btn-sm btn-outline-success rounded-pill px-3"><i class="fas fa-check me-1"></i> Verified</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QR Settings -->
+    <div *ngIf="qrSubTab === 'settings'">
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+        <h5 class="fw-bold text-dark mb-3"><i class="fas fa-cogs text-primary me-2"></i> QR Attendance Parameters</h5>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Dynamic QR Code Refresh Interval (Seconds)</label>
+            <input type="number" class="form-control" [(ngModel)]="qrSettings.codeRefreshSeconds">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Geo-Fencing Radius (Meters)</label>
+            <input type="number" class="form-control" [(ngModel)]="qrSettings.allowedRadiusMeters">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Kiosk Admin Override PIN</label>
+            <input type="password" class="form-control" [(ngModel)]="qrSettings.kioskModePin">
+          </div>
+        </div>
+        <div class="form-check form-switch mb-4">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="qrSettings.geoFencingEnabled" id="qrGeo">
+          <label class="form-check-label small fw-bold" for="qrGeo">Enforce Campus GPS Geo-Fencing for Student Mobile Check-ins</label>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4" (click)="saveQrSettings()">
+          <i class="fas fa-save me-1"></i> Save QR Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STANDARD REGULAR DAILY / SUBJECT ATTENDANCE -->
+  <div *ngIf="viewMode === 'daily' || viewMode === 'subject'" class="animate-fade-in">
+    <!-- Filter Bar -->
+    <div class="card border-0 shadow-sm rounded-16 p-3 mb-4 bg-white">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-muted">Select Date</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="selectedDate" (change)="loadStudentAttendance()">
+        </div>
+        <div class="col-md-3" *ngIf="attendanceType === 'student'">
+          <label class="form-label small fw-bold text-muted">Class / Grade</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedClass">
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+          </select>
+        </div>
+        <div class="col-md-3" *ngIf="attendanceType === 'student'">
+          <label class="form-label small fw-bold text-muted">Section</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedSection">
+            <option value="Section A">Section A</option>
+            <option value="Section B">Section B</option>
+          </select>
+        </div>
+        <div class="col-md-3" *ngIf="viewMode === 'subject'">
+          <label class="form-label small fw-bold text-muted">Subject</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedSubject">
+            <option *ngFor="let s of subjects" [value]="s">{{ s }}</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <!-- Attendance Table -->
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Roll / ID #</th>
-            <th>Name & Details</th>
-            <th>Status Selection</th>
-            <th>Notes / Remarks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let r of activeRecords">
-            <td><strong class="text-primary">{{ r.rollNo }}</strong></td>
-            <td>
-              <div class="d-flex align-items-center">
-                <div class="avatar-circle me-2" style="width: 34px; height: 34px; font-size: 0.85rem;">
-                  {{ (r.studentName || 'S').charAt(0) }}
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th># Roll</th>
+              <th>Full Name</th>
+              <th>Status Marker</th>
+              <th class="text-end">Quick Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of activeRecords">
+              <td><strong>{{ r.rollNo }}</strong></td>
+              <td class="fw-bold text-dark">{{ r.studentName }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-success': r.status === 'Present',
+                  'bg-danger': r.status === 'Absent',
+                  'bg-warning text-dark': r.status === 'Late',
+                  'bg-info text-dark': r.status === 'HalfDay'
+                }">{{ r.status }}</span>
+              </td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn" [ngClass]="r.status === 'Present' ? 'btn-success' : 'btn-outline-success'" (click)="setStatus(r, 'Present')">P</button>
+                  <button class="btn" [ngClass]="r.status === 'Late' ? 'btn-warning' : 'btn-outline-warning'" (click)="setStatus(r, 'Late')">L</button>
+                  <button class="btn" [ngClass]="r.status === 'Absent' ? 'btn-danger' : 'btn-outline-danger'" (click)="setStatus(r, 'Absent')">A</button>
+                  <button class="btn" [ngClass]="r.status === 'HalfDay' ? 'btn-info' : 'btn-outline-info'" (click)="setStatus(r, 'HalfDay')">H</button>
                 </div>
-                <div class="fw-bold">{{ r.studentName }}</div>
-              </div>
-            </td>
-            <td>
-              <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn" [class.btn-success]="r.status === 'Present'" [class.btn-outline-success]="r.status !== 'Present'" (click)="setStatus(r, 'Present')">
-                  <i class="fas fa-check me-1"></i> Present
-                </button>
-                <button type="button" class="btn" [class.btn-warning]="r.status === 'Late'" [class.btn-outline-warning]="r.status !== 'Late'" (click)="setStatus(r, 'Late')">
-                  <i class="fas fa-clock me-1"></i> Late
-                </button>
-                <button type="button" class="btn" [class.btn-danger]="r.status === 'Absent'" [class.btn-outline-danger]="r.status !== 'Absent'" (click)="setStatus(r, 'Absent')">
-                  <i class="fas fa-times me-1"></i> Absent
-                </button>
-                <button type="button" class="btn" [class.btn-info]="r.status === 'HalfDay'" [class.btn-outline-info]="r.status !== 'HalfDay'" (click)="setStatus(r, 'HalfDay')">
-                  Half Day
-                </button>
-              </div>
-            </td>
-            <td>
-              <input type="text" class="form-control form-control-sm" placeholder="Optional remark (e.g. Medical Pass)" style="max-width: 250px;">
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- VIEW 2: SUBJECT WISE ATTENDANCE -->
-  <div *ngIf="viewMode === 'subject'" class="premium-card mb-4 shadow-sm">
-    <div class="row g-3 align-items-end mb-4">
-      <div class="col-12 col-md-3">
-        <label class="form-label small fw-bold text-muted">CLASS</label>
-        <select class="form-select fw-bold" [(ngModel)]="selectedClass">
-          <option value="Grade 10">Grade 10</option>
-          <option value="Grade 9">Grade 9</option>
-          <option value="Grade 12">Grade 12</option>
-        </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <div class="col-12 col-md-3">
-        <label class="form-label small fw-bold text-muted">SECTION</label>
-        <select class="form-select fw-bold" [(ngModel)]="selectedSection">
-          <option value="Section A">Section A</option>
-          <option value="Section B">Section B</option>
-        </select>
-      </div>
-
-      <div class="col-12 col-md-3">
-        <label class="form-label small fw-bold text-muted">SUBJECT PERIOD</label>
-        <select class="form-select fw-bold text-primary" [(ngModel)]="selectedSubject">
-          <option *ngFor="let s of subjects" [value]="s">{{ s }}</option>
-        </select>
-      </div>
-
-      <div class="col-12 col-md-3">
-        <label class="form-label small fw-bold text-muted">DATE</label>
-        <input type="date" class="form-control fw-bold" [(ngModel)]="selectedDate">
-      </div>
-    </div>
-
-    <div class="alert alert-primary border-0 rounded-3 mb-4 d-flex justify-content-between align-items-center">
-      <div>
-        <i class="fas fa-chalkboard-teacher me-2"></i> Recording Period Attendance for <strong>{{ selectedSubject }}</strong> ({{ selectedClass }} - {{ selectedSection }})
-      </div>
-      <span class="badge bg-white text-primary fw-bold px-3 py-2">Period 3 (10:30 AM - 11:15 AM)</span>
-    </div>
-
-    <!-- Subject Table -->
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Roll #</th>
-            <th>Student Name</th>
-            <th>Subject Attendance</th>
-            <th>Lab / Class Remarks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let r of attendanceRecords">
-            <td><strong class="text-primary">{{ r.rollNo }}</strong></td>
-            <td>
-              <div class="fw-bold">{{ r.studentName }}</div>
-            </td>
-            <td>
-              <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn" [class.btn-success]="r.status === 'Present'" [class.btn-outline-success]="r.status !== 'Present'" (click)="setStatus(r, 'Present')">
-                  Present
-                </button>
-                <button type="button" class="btn" [class.btn-warning]="r.status === 'Late'" [class.btn-outline-warning]="r.status !== 'Late'" (click)="setStatus(r, 'Late')">
-                  Late
-                </button>
-                <button type="button" class="btn" [class.btn-danger]="r.status === 'Absent'" [class.btn-outline-danger]="r.status !== 'Absent'" (click)="setStatus(r, 'Absent')">
-                  Absent
-                </button>
-              </div>
-            </td>
-            <td>
-              <input type="text" class="form-control form-control-sm" placeholder="Subject remark (e.g. Lab experiment cleared)" style="max-width: 250px;">
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- VIEW 3: ATTENDANCE REPORTS & ANALYTICS -->
-  <div *ngIf="viewMode === 'report'" class="premium-card">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h5 class="fw-bold mb-0"><i class="fas fa-chart-pie text-primary me-2"></i>Monthly Attendance Ledger & Summary</h5>
-      <button class="btn btn-outline-primary btn-sm"><i class="fas fa-file-excel me-1"></i> Export Attendance Ledger</button>
-    </div>
-
-    <div class="row g-3 mb-4">
-      <div class="col-12 col-md-4">
-        <label class="form-label small fw-bold">Select Class</label>
-        <select class="form-select">
-          <option>Grade 10 - Section A</option>
-          <option>Grade 9 - Section A</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-4">
-        <label class="form-label small fw-bold">Month & Year</label>
-        <input type="month" class="form-control" value="2025-05">
-      </div>
-      <div class="col-12 col-md-4 d-flex align-items-end">
-        <button class="btn btn-primary w-100"><i class="fas fa-search me-1"></i> Generate Report</button>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Student Name</th>
-            <th>Roll #</th>
-            <th>Present Days</th>
-            <th>Absent Days</th>
-            <th>Late Days</th>
-            <th>Attendance %</th>
-            <th>Eligibility Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of attendanceRecords">
-            <td><strong>{{ s.studentName }}</strong></td>
-            <td>{{ s.rollNo }}</td>
-            <td><span class="text-success fw-bold">22</span></td>
-            <td><span class="text-danger fw-bold">2</span></td>
-            <td><span class="text-warning fw-bold">1</span></td>
-            <td>
-              <div class="d-flex align-items-center gap-2">
-                <div class="progress flex-grow-1" style="height: 6px;">
-                  <div class="progress-bar bg-success" style="width: 92%;"></div>
-                </div>
-                <small class="fw-bold">92%</small>
-              </div>
-            </td>
-            <td><span class="badge bg-success">Exam Eligible</span></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>

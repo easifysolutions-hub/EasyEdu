@@ -407,17 +407,154 @@
       </ul>
     </div>
 
-    <!-- 8. PLATFORM ADDONS & VIRTUAL CLASS -->
+    <!-- 8. PLATFORM ADDONS -->
     <div class="menu-category">PLATFORM ADDONS</div>
+
+    <!-- Virtual Classrooms -->
     <div class="nav-item-wrapper" id="virtualClassMenu">
       <a class="nav-link-premium" [class.open]="openMenus['virtualClass']" (click)="toggleMenu('virtualClass')">
         <span><i class="fas fa-video main-icon"></i> <span class="sidebar-label">Virtual Classrooms</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['virtualClass']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['virtualClass']">
-        <li><a routerLink="/virtual-class" routerLinkActive="active" class="sub-nav-link text-primary"><i class="fas fa-video me-1"></i> Zoom Live Class</a></li>
-        <li><a routerLink="/virtual-class" class="sub-nav-link text-warning"><i class="fab fa-google me-1"></i> Google Meet</a></li>
-        <li><a routerLink="/virtual-class" class="sub-nav-link text-info"><i class="fas fa-users me-1"></i> Jitsi Meeting</a></li>
+        <!-- Zoom Suite -->
+        <li id="zoomSub" class="fw-bold text-primary mt-1 small px-3">ZOOM SUITE</li>
+        <li><a routerLink="/Zoom" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-primary"><i class="fas fa-desktop me-1"></i> Dashboard</a></li>
+        <li><a routerLink="/Zoom/VirtualClass" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-video me-1"></i> Virtual Class</a></li>
+        <li><a routerLink="/Zoom/VirtualMeeting" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-handshake me-1"></i> Virtual Meeting</a></li>
+        <li><a routerLink="/Zoom/ClassReports" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-file-invoice me-1"></i> Class Reports</a></li>
+        <li><a routerLink="/Zoom/MeetingReports" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-chart-bar me-1"></i> Meeting Reports</a></li>
+        <li><a routerLink="/Zoom/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Settings</a></li>
+
+        <!-- Gmeet Suite -->
+        <li id="gmeetSub" class="fw-bold text-success mt-2 small px-3">GMEET SUITE</li>
+        <li><a routerLink="/Gmeet" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-success"><i class="fab fa-google me-1"></i> Dashboard</a></li>
+        <li><a routerLink="/Gmeet/VirtualClass" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-video me-1"></i> Virtual Class</a></li>
+        <li><a routerLink="/Gmeet/VirtualMeeting" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-users me-1"></i> Virtual Meeting</a></li>
+        <li><a routerLink="/Gmeet/ClassReports" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-file-alt me-1"></i> Class Reports</a></li>
+        <li><a routerLink="/Gmeet/MeetingReports" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-chart-pie me-1"></i> Meeting Reports</a></li>
+        <li><a routerLink="/Gmeet/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Settings</a></li>
+
+        <!-- Jitsi Addon & Relays -->
+        <li id="jitsiSub" class="fw-bold text-warning mt-2 small px-3">JITSI RELAYS</li>
+        <li><a routerLink="/Jitsi" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-warning"><i class="fas fa-shield-alt me-1"></i> Dashboard</a></li>
+        <li><a routerLink="/Jitsi/VirtualClass" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-graduation-cap me-1"></i> Virtual Classroom</a></li>
+        <li><a routerLink="/Jitsi/VirtualMeeting" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-network-wired me-1"></i> Assembly Nodes</a></li>
+        <li><a routerLink="/Jitsi/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Infrastructure</a></li>
+
+        <!-- BBB Suite -->
+        <li id="bbbSub" class="fw-bold text-danger mt-2 small px-3">BIGBLUEBUTTON SUITE</li>
+        <li><a routerLink="/BigBlueButton" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-danger"><i class="fas fa-chalkboard-teacher me-1"></i> Dashboard</a></li>
+        <li><a routerLink="/BigBlueButton/VirtualClass" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-video me-1"></i> Virtual Class</a></li>
+        <li><a routerLink="/BigBlueButton/VirtualMeeting" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-users-rectangle me-1"></i> Virtual Meeting</a></li>
+        <li><a routerLink="/BigBlueButton/ClassReports" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-file-contract me-1"></i> Class Reports</a></li>
+        <li><a routerLink="/BigBlueButton/MeetingReports" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-chart-line me-1"></i> Meeting Reports</a></li>
+        <li><a routerLink="/BigBlueButton/ClassRecordList" routerLinkActive="active" class="sub-nav-link text-danger"><i class="fas fa-film me-1"></i> Class Recordings</a></li>
+        <li><a routerLink="/BigBlueButton/MeetingRecordList" routerLinkActive="active" class="sub-nav-link text-danger"><i class="fas fa-play-circle me-1"></i> Meeting Recordings</a></li>
+        <li><a routerLink="/BigBlueButton/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Settings</a></li>
+
+        <!-- In App Live -->
+        <li class="mt-2"><a routerLink="/InAppLive" routerLinkActive="active" class="sub-nav-link text-primary fw-bold"><i class="fas fa-broadcast-tower me-1"></i> In App Live Studio</a></li>
+      </ul>
+    </div>
+
+    <!-- Smart Attendance -->
+    <div class="nav-item-wrapper" id="smartAttendanceMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['smartAttendanceMenu']" (click)="toggleMenu('smartAttendanceMenu')">
+        <span><i class="fas fa-fingerprint main-icon"></i> <span class="sidebar-label">Smart Attendance</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['smartAttendanceMenu']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['smartAttendanceMenu']">
+        <!-- Biometric Suite -->
+        <li id="bioSub" class="fw-bold text-primary mt-1 small px-3">BIOMETRIC SUITE</li>
+        <li><a routerLink="/Biometrics" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-primary"><i class="fas fa-fingerprint me-1"></i> Nexus Dashboard</a></li>
+        <li><a routerLink="/Biometrics/StudentReport" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-user-graduate me-1"></i> Student Reports</a></li>
+        <li><a routerLink="/Biometrics/StaffReport" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-user-tie me-1"></i> Staff Reports</a></li>
+        <li><a routerLink="/Biometrics/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cogs me-1"></i> Infrastructure</a></li>
+
+        <!-- QR Attendance -->
+        <li id="qrSub" class="fw-bold text-success mt-2 small px-3">QR ATTENDANCE</li>
+        <li><a routerLink="/QrAttendance" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-success"><i class="fas fa-qrcode me-1"></i> Nexus Dashboard</a></li>
+        <li><a routerLink="/QrAttendance/AutoSubmission" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-bolt me-1"></i> Auto-Submission</a></li>
+        <li><a routerLink="/QrAttendance/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cogs me-1"></i> Infrastructure</a></li>
+      </ul>
+    </div>
+
+    <!-- Advanced Academics -->
+    <div class="nav-item-wrapper" id="advancedAcademicMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['advancedAcademicMenu']" (click)="toggleMenu('advancedAcademicMenu')">
+        <span><i class="fas fa-brain main-icon"></i> <span class="sidebar-label">Advanced Academics</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['advancedAcademicMenu']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['advancedAcademicMenu']">
+        <!-- Online Exam Suite -->
+        <li id="onlineExamSub" class="fw-bold text-primary mt-1 small px-3">ONLINE EXAM SUITE</li>
+        <li><a routerLink="/OnlineExam/OnlineExam" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-laptop-code me-1"></i> Evaluation Hub</a></li>
+        <li><a routerLink="/OnlineExam/AddOnlineExam" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-plus-circle me-1"></i> Initialize Evaluation</a></li>
+        <li><a routerLink="/OnlineExam/QuestionGroup" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-layer-group me-1"></i> Question Domain</a></li>
+        <li><a routerLink="/OnlineExam/QuestionBank" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-database me-1"></i> Question Vault</a></li>
+        <li><a routerLink="/OnlineExam/WrittenExam" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-file-signature me-1"></i> Written Node</a></li>
+        <li><a routerLink="/OnlineExam/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Infrastructure</a></li>
+
+        <!-- CBSE Suite -->
+        <li id="cbseSub" class="fw-bold text-warning mt-2 small px-3">CBSE SUITE</li>
+        <li><a routerLink="/CbseExam" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-warning"><i class="fas fa-graduation-cap me-1"></i> Nexus Dashboard</a></li>
+        <li><a routerLink="/CbseExam/Terms" routerLinkActive="active" class="sub-nav-link">Academic Terms</a></li>
+        <li><a routerLink="/CbseExam/Exams" routerLinkActive="active" class="sub-nav-link">Exams</a></li>
+        <li><a routerLink="/CbseExam/ExamSchedule" routerLinkActive="active" class="sub-nav-link">Exam Schedule</a></li>
+        <li><a routerLink="/CbseExam/ExamGrade" routerLinkActive="active" class="sub-nav-link">Exam Grade</a></li>
+        <li><a routerLink="/CbseExam/Assessments" routerLinkActive="active" class="sub-nav-link">Assessments</a></li>
+        <li><a routerLink="/CbseExam/Observations" routerLinkActive="active" class="sub-nav-link">Observations</a></li>
+        <li><a routerLink="/CbseExam/ObservationParameters" routerLinkActive="active" class="sub-nav-link">Observation Parameters</a></li>
+        <li><a routerLink="/CbseExam/AssignObservations" routerLinkActive="active" class="sub-nav-link">Assign Observations</a></li>
+        <li><a routerLink="/CbseExam/Templates" routerLinkActive="active" class="sub-nav-link">Cert. Templates</a></li>
+        <li><a routerLink="/CbseExam/PrintMarksheet" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-print me-1"></i> Print Marksheet</a></li>
+        <li><a routerLink="/CbseExam/Reports" routerLinkActive="active" class="sub-nav-link">Reports</a></li>
+
+        <!-- LMS Suite -->
+        <li id="lmsSub" class="fw-bold text-info mt-2 small px-3">LMS SUITE</li>
+        <li><a routerLink="/Lms" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-info"><i class="fas fa-cubes me-1"></i> Intelligence Hub</a></li>
+        <li><a routerLink="/Lms/AllCourses" routerLinkActive="active" class="sub-nav-link">Course Registry</a></li>
+        <li><a routerLink="/Lms/AddCourse" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-upload me-1"></i> Deploy Course</a></li>
+        <li><a routerLink="/Lms/PendingCourse" routerLinkActive="active" class="sub-nav-link text-warning">Verification Queue</a></li>
+        <li><a routerLink="/Lms/CategoryList" routerLinkActive="active" class="sub-nav-link">Domain Classification</a></li>
+        <li><a routerLink="/Lms/CourseLevel" routerLinkActive="active" class="sub-nav-link">Proficiency Depth</a></li>
+        <li><a routerLink="/Lms/EnrollmentHistory" routerLinkActive="active" class="sub-nav-link">Progression Log</a></li>
+        <li><a routerLink="/Lms/PurchaseLog" routerLinkActive="active" class="sub-nav-link">E-Commerce Intel</a></li>
+        <li><a routerLink="/Lms/FeesInvoice" routerLinkActive="active" class="sub-nav-link">Fiscal Invoices</a></li>
+        <li><a routerLink="/Lms/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Infrastructure</a></li>
+      </ul>
+    </div>
+
+    <!-- AI Content Addon -->
+    <div class="nav-item-wrapper">
+      <a routerLink="/AiContent" routerLinkActive="active" class="nav-link-premium">
+        <span><i class="fas fa-sparkles text-warning main-icon"></i> <span class="sidebar-label">AI Content Addon</span></span>
+      </a>
+    </div>
+
+    <!-- Growth & Comms -->
+    <div class="nav-item-wrapper" id="commSubMenu">
+      <a class="nav-link-premium" [class.open]="openMenus['commSubMenu']" (click)="toggleMenu('commSubMenu')">
+        <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Growth & Comms</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['commSubMenu']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['commSubMenu']">
+        <!-- Admission Suite -->
+        <li id="regSub" class="fw-bold text-primary mt-1 small px-3">ADMISSION SUITE</li>
+        <li><a routerLink="/RegistrationAddon" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-primary"><i class="fas fa-user-plus me-1"></i> Dashboard</a></li>
+        <li><a routerLink="/RegistrationAddon/StudentList" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-list me-1"></i> Student List</a></li>
+        <li><a routerLink="/RegistrationAddon/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Portal Settings</a></li>
+
+        <!-- WhatsApp Suite -->
+        <li id="whatsAppSub" class="fw-bold text-success mt-2 small px-3">WHATSAPP SUITE</li>
+        <li><a routerLink="/WhatsApp" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-success"><i class="fab fa-whatsapp me-1"></i> WhatsApp Hub</a></li>
+        <li><a routerLink="/WhatsApp/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-network-wired me-1"></i> API Infrastructure</a></li>
+        <li><a routerLink="/WhatsApp/Agents" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-headset me-1"></i> Support Agents</a></li>
+        <li><a routerLink="/WhatsApp/Analytics" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-chart-line me-1"></i> Communication Intel</a></li>
+
+        <!-- Certificate Addon -->
+        <li class="mt-2"><a routerLink="/Certificates/Index" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-certificate me-1"></i> Certificate Addon</a></li>
       </ul>
     </div>
 

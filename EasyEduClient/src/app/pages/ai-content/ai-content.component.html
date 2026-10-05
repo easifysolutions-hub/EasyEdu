@@ -1,0 +1,66 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0 text-dark"><i class="fas fa-brain text-primary me-2"></i>AI Content Generator & Pedagogical Assistant</h3>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 rounded-pill">
+          AI CONTENT ADDON
+        </span>
+      </div>
+      <p class="text-muted small mb-0">Generate curriculum-aligned lesson plans, question banks, worksheets, and circular notices using Antigravity AI.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="fas fa-sliders-h text-primary me-2"></i> Generation Parameters</h5>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Select AI Generator Mode</label>
+          <div class="btn-group w-100 p-1 bg-light rounded-pill border">
+            <button class="btn btn-sm rounded-pill fw-bold" [ngClass]="activeGenerator === 'lesson-plan' ? 'btn-primary' : 'btn-light'" (click)="activeGenerator = 'lesson-plan'">Lesson Plan</button>
+            <button class="btn btn-sm rounded-pill fw-bold" [ngClass]="activeGenerator === 'exam-questions' ? 'btn-primary' : 'btn-light'" (click)="activeGenerator = 'exam-questions'">Question Bank</button>
+            <button class="btn btn-sm rounded-pill fw-bold" [ngClass]="activeGenerator === 'circular-notice' ? 'btn-primary' : 'btn-light'" (click)="activeGenerator = 'circular-notice'">Circular Notice</button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Subject</label>
+          <input type="text" class="form-control" [(ngModel)]="prompt.subject">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Class / Grade</label>
+          <input type="text" class="form-control" [(ngModel)]="prompt.grade">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Topic / Curriculum Concept</label>
+          <textarea class="form-control" [(ngModel)]="prompt.topic" rows="3"></textarea>
+        </div>
+
+        <button class="btn btn-primary rounded-pill w-100 fw-bold shadow-sm py-2" [disabled]="isGenerating" (click)="generateAI()">
+          <i class="fas fa-sparkles me-2" *ngIf="!isGenerating"></i>
+          <i class="fas fa-spinner fa-spin me-2" *ngIf="isGenerating"></i>
+          {{ isGenerating ? 'AI Synthesizing Content...' : 'Generate with EasyEdu AI' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm rounded-16 p-4 bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-file-alt text-primary me-2"></i> Generated Output</h5>
+          <button class="btn btn-sm btn-outline-primary rounded-pill px-3" *ngIf="prompt.generatedOutput" (click)="copyOutput()">
+            <i class="fas fa-copy me-1"></i> Copy Content
+          </button>
+        </div>
+        <div *ngIf="!prompt.generatedOutput" class="text-center text-muted my-auto py-5">
+          <i class="fas fa-robot fa-3x mb-3 text-primary opacity-50"></i>
+          <p class="mb-0">Configure parameters on the left and click "Generate with EasyEdu AI" to produce pedagogical content.</p>
+        </div>
+        <div *ngIf="prompt.generatedOutput" class="p-4 bg-light rounded-16 border overflow-auto" style="white-space: pre-line; max-height: 460px;">
+          {{ prompt.generatedOutput }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

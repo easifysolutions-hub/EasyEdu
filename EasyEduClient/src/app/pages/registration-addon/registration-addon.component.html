@@ -1,0 +1,145 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0 text-dark"><i class="fas fa-user-plus text-primary me-2"></i>Online Admission & Registration Suite</h3>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 rounded-pill">
+          ADMISSION ADDON
+        </span>
+      </div>
+      <p class="text-muted small mb-0">Public applicant intake pipeline, digital document verification, applicant shortlist, and entrance schedule.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-primary rounded-pill px-3" (click)="activeTab = 'student-list'">
+        <i class="fas fa-list me-1"></i> Applicant List
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'settings'">
+        <i class="fas fa-cog me-1"></i> Portal Settings
+      </button>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-16 p-2 mb-4 bg-white">
+    <div class="d-flex gap-2">
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'dashboard' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'dashboard'">Dashboard & Analytics</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'student-list' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'student-list'">Applicant Queue</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'settings' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'settings'">Portal Configuration</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div *ngIf="activeTab === 'dashboard'" class="animate-fade-in">
+    <div class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Total Submissions</div>
+          <h2 class="fw-bold mb-1">{{ applicants.length }} Applicants</h2>
+          <small class="text-white text-opacity-75">Academic Cycle 2025-26</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Approved for Entry</div>
+          <h2 class="fw-bold mb-1">1 Enrolled</h2>
+          <small class="text-white text-opacity-75">Final Fee Deposited</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Under Review</div>
+          <h2 class="fw-bold mb-1">2 Pending</h2>
+          <small class="text-white text-opacity-75">Document Verification</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Application Fees</div>
+          <h2 class="fw-bold mb-1">₹1,500</h2>
+          <small class="text-white text-opacity-75">Online Payment Gateway</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICANT QUEUE -->
+  <div *ngIf="activeTab === 'student-list' || activeTab === 'dashboard'" class="animate-fade-in mb-4">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-users-cog text-primary me-2"></i> Applicant Intake Matrix</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>App No</th>
+              <th>Applicant Name</th>
+              <th>Applied Class</th>
+              <th>Parent & Contact</th>
+              <th>Date</th>
+              <th>Fee</th>
+              <th>Status</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of applicants">
+              <td><code>{{ a.applicationNo }}</code></td>
+              <td class="fw-bold text-dark">{{ a.studentName }}</td>
+              <td><span class="badge bg-light text-dark border">{{ a.appliedClass }}</span></td>
+              <td>
+                <div class="small"><strong>{{ a.parentName }}</strong></div>
+                <div class="small text-muted">{{ a.phone }} &bull; {{ a.email }}</div>
+              </td>
+              <td><small class="text-muted">{{ a.appliedDate }}</small></td>
+              <td><span class="badge" [ngClass]="a.applicationFeeStatus === 'Paid' ? 'bg-success' : 'bg-danger'">{{ a.applicationFeeStatus }}</span></td>
+              <td>
+                <span class="badge" [ngClass]="a.admissionStatus === 'Approved' ? 'bg-success' : (a.admissionStatus === 'Under Review' ? 'bg-warning text-dark' : 'bg-primary')">
+                  {{ a.admissionStatus }}
+                </span>
+              </td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-success" (click)="updateStatus(a, 'Approved')"><i class="fas fa-check"></i></button>
+                  <button class="btn btn-outline-primary" (click)="updateStatus(a, 'Interview Scheduled')"><i class="fas fa-calendar-alt"></i></button>
+                  <button class="btn btn-outline-danger" (click)="updateStatus(a, 'Rejected')"><i class="fas fa-times"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTAL SETTINGS -->
+  <div *ngIf="activeTab === 'settings'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-cogs text-primary me-2"></i> Public Online Admission Portal Configuration</h5>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Admission Portal Public URL</label>
+        <input type="text" class="form-control" [(ngModel)]="portalSettings.portalUrl" readonly>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Application Fee Amount (₹)</label>
+          <input type="number" class="form-control" [(ngModel)]="portalSettings.applicationFeeAmount">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Target Academic Session</label>
+          <input type="text" class="form-control" [(ngModel)]="portalSettings.academicSession">
+        </div>
+      </div>
+      <div class="mb-4">
+        <div class="form-check form-switch mb-2">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="portalSettings.isOnlineAdmissionOpen" id="admOpen">
+          <label class="form-check-label small fw-bold" for="admOpen">Accept Public Online Admission Registrations</label>
+        </div>
+        <div class="form-check form-switch mb-2">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="portalSettings.autoSendSmsConfirmation" id="smsAuto">
+          <label class="form-check-label small fw-bold" for="smsAuto">Auto-Send SMS & Email Confirmation with Registration PDF</label>
+        </div>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="saveSettings()">
+        <i class="fas fa-save me-1"></i> Save Registration Settings
+      </button>
+    </div>
+  </div>
+</div>

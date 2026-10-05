@@ -18,6 +18,11 @@ import { FeesComponent } from './pages/fees/fees.component';
 import { AccountingComponent } from './pages/accounting/accounting.component';
 import { ExaminationsComponent } from './pages/examinations/examinations.component';
 import { OnlineExamComponent } from './pages/online-exam/online-exam.component';
+import { CbseExamComponent } from './pages/cbse-exam/cbse-exam.component';
+import { LmsComponent } from './pages/lms/lms.component';
+import { AiContentComponent } from './pages/ai-content/ai-content.component';
+import { RegistrationAddonComponent } from './pages/registration-addon/registration-addon.component';
+import { WhatsAppAddonComponent } from './pages/whatsapp-addon/whatsapp-addon.component';
 import { TeacherEvaluationComponent } from './pages/teacher-evaluation/teacher-evaluation.component';
 import { LibraryComponent } from './pages/library/library.component';
 import { TransportComponent } from './pages/transport/transport.component';
@@ -72,6 +77,7 @@ export const routes: Routes = [
       { path: 'AdminSection', component: AdministrationComponent },
       { path: 'Communicate', component: CommunicationComponent },
       { path: 'Academics', component: ClassesComponent },
+
       // Student Management
       { path: 'students', component: StudentListComponent },
       { path: 'Students', component: StudentListComponent },
@@ -87,11 +93,20 @@ export const routes: Routes = [
       { path: 'Students/SmsSendingTime', component: StudentListComponent },
       { path: 'Students/StudentSettings', component: StudentListComponent },
 
-      // Attendance
+      // Attendance & Smart Attendance
       { path: 'attendance', component: AttendanceComponent },
       { path: 'Attendance', component: AttendanceComponent },
       { path: 'Attendance/SubjectWiseAttendance', component: AttendanceComponent },
       { path: 'attendance/report', component: AttendanceComponent },
+      { path: 'smart-attendance', component: AttendanceComponent },
+      { path: 'SmartAttendance', component: AttendanceComponent },
+      { path: 'Biometrics', component: AttendanceComponent },
+      { path: 'Biometrics/StudentReport', component: AttendanceComponent },
+      { path: 'Biometrics/StaffReport', component: AttendanceComponent },
+      { path: 'Biometrics/Settings', component: AttendanceComponent },
+      { path: 'QrAttendance', component: AttendanceComponent },
+      { path: 'QrAttendance/Settings', component: AttendanceComponent },
+      { path: 'QrAttendance/AutoSubmission', component: AttendanceComponent },
 
       // Behaviour Records
       { path: 'behaviour', component: BehaviourComponent },
@@ -182,12 +197,89 @@ export const routes: Routes = [
       { path: 'ExamSettings/AdmitCardSetting', component: ExaminationsComponent },
       { path: 'ExamSettings/SeatPlanSetting', component: ExaminationsComponent },
 
-      // Online Exam
+      // Online Exam Suite
       { path: 'online-exam', component: OnlineExamComponent },
       { path: 'OnlineExam', component: OnlineExamComponent },
+      { path: 'OnlineExam/OnlineExam', component: OnlineExamComponent },
+      { path: 'OnlineExam/AddOnlineExam', component: OnlineExamComponent },
       { path: 'OnlineExam/QuestionGroup', component: OnlineExamComponent },
       { path: 'OnlineExam/QuestionBank', component: OnlineExamComponent },
-      { path: 'OnlineExam/OnlineExam', component: OnlineExamComponent },
+      { path: 'OnlineExam/WrittenExam', component: OnlineExamComponent },
+      { path: 'OnlineExam/Settings', component: OnlineExamComponent },
+
+      // CBSE Suite
+      { path: 'cbse-exam', component: CbseExamComponent },
+      { path: 'CbseExam', component: CbseExamComponent },
+      { path: 'CbseExam/Terms', component: CbseExamComponent },
+      { path: 'CbseExam/Exams', component: CbseExamComponent },
+      { path: 'CbseExam/ExamSchedule', component: CbseExamComponent },
+      { path: 'CbseExam/ExamGrade', component: CbseExamComponent },
+      { path: 'CbseExam/Assessments', component: CbseExamComponent },
+      { path: 'CbseExam/Observations', component: CbseExamComponent },
+      { path: 'CbseExam/ObservationParameters', component: CbseExamComponent },
+      { path: 'CbseExam/AssignObservations', component: CbseExamComponent },
+      { path: 'CbseExam/Templates', component: CbseExamComponent },
+      { path: 'CbseExam/PrintMarksheet', component: CbseExamComponent },
+      { path: 'CbseExam/Reports', component: CbseExamComponent },
+
+      // LMS Suite
+      { path: 'lms', component: LmsComponent },
+      { path: 'Lms', component: LmsComponent },
+      { path: 'Lms/AllCourses', component: LmsComponent },
+      { path: 'Lms/AddCourse', component: LmsComponent },
+      { path: 'Lms/PendingCourse', component: LmsComponent },
+      { path: 'Lms/CategoryList', component: LmsComponent },
+      { path: 'Lms/CourseLevel', component: LmsComponent },
+      { path: 'Lms/EnrollmentHistory', component: LmsComponent },
+      { path: 'Lms/PurchaseLog', component: LmsComponent },
+      { path: 'Lms/FeesInvoice', component: LmsComponent },
+      { path: 'Lms/Settings', component: LmsComponent },
+
+      // AI Content Addon
+      { path: 'ai-content', component: AiContentComponent },
+      { path: 'AiContent', component: AiContentComponent },
+
+      // Admission Suite
+      { path: 'registration-addon', component: RegistrationAddonComponent },
+      { path: 'RegistrationAddon', component: RegistrationAddonComponent },
+      { path: 'RegistrationAddon/StudentList', component: RegistrationAddonComponent },
+      { path: 'RegistrationAddon/Settings', component: RegistrationAddonComponent },
+
+      // WhatsApp Suite
+      { path: 'whatsapp', component: WhatsAppAddonComponent },
+      { path: 'WhatsApp', component: WhatsAppAddonComponent },
+      { path: 'WhatsApp/Settings', component: WhatsAppAddonComponent },
+      { path: 'WhatsApp/Agents', component: WhatsAppAddonComponent },
+      { path: 'WhatsApp/Analytics', component: WhatsAppAddonComponent },
+
+      // Virtual Classrooms (Zoom, Gmeet, Jitsi, BBB, InAppLive)
+      { path: 'virtual-class', component: VirtualClassComponent },
+      { path: 'VirtualClassrooms', component: VirtualClassComponent },
+      { path: 'Zoom', component: VirtualClassComponent },
+      { path: 'Zoom/VirtualClass', component: VirtualClassComponent },
+      { path: 'Zoom/VirtualMeeting', component: VirtualClassComponent },
+      { path: 'Zoom/ClassReports', component: VirtualClassComponent },
+      { path: 'Zoom/MeetingReports', component: VirtualClassComponent },
+      { path: 'Zoom/Settings', component: VirtualClassComponent },
+      { path: 'Gmeet', component: VirtualClassComponent },
+      { path: 'Gmeet/VirtualClass', component: VirtualClassComponent },
+      { path: 'Gmeet/VirtualMeeting', component: VirtualClassComponent },
+      { path: 'Gmeet/ClassReports', component: VirtualClassComponent },
+      { path: 'Gmeet/MeetingReports', component: VirtualClassComponent },
+      { path: 'Gmeet/Settings', component: VirtualClassComponent },
+      { path: 'Jitsi', component: VirtualClassComponent },
+      { path: 'Jitsi/VirtualClass', component: VirtualClassComponent },
+      { path: 'Jitsi/VirtualMeeting', component: VirtualClassComponent },
+      { path: 'Jitsi/Settings', component: VirtualClassComponent },
+      { path: 'BigBlueButton', component: VirtualClassComponent },
+      { path: 'BigBlueButton/VirtualClass', component: VirtualClassComponent },
+      { path: 'BigBlueButton/VirtualMeeting', component: VirtualClassComponent },
+      { path: 'BigBlueButton/ClassReports', component: VirtualClassComponent },
+      { path: 'BigBlueButton/MeetingReports', component: VirtualClassComponent },
+      { path: 'BigBlueButton/ClassRecordList', component: VirtualClassComponent },
+      { path: 'BigBlueButton/MeetingRecordList', component: VirtualClassComponent },
+      { path: 'BigBlueButton/Settings', component: VirtualClassComponent },
+      { path: 'InAppLive', component: VirtualClassComponent },
 
       // Teacher Evaluation
       { path: 'teacher-evaluation', component: TeacherEvaluationComponent },
@@ -199,6 +291,8 @@ export const routes: Routes = [
 
       // Operations & Finance
       { path: 'certificates', component: CertificatesComponent },
+      { path: 'Certificates', component: CertificatesComponent },
+      { path: 'Certificates/Index', component: CertificatesComponent },
       { path: 'fees', component: FeesComponent },
       { path: 'Fees', component: FeesComponent },
       { path: 'Finance', component: FeesComponent },
@@ -206,6 +300,7 @@ export const routes: Routes = [
       { path: 'Finance/FeesType', component: FeesComponent },
       { path: 'Finance/BulkInvoice', component: FeesComponent },
       { path: 'Finance/BulkInvoicePrint', component: FeesComponent },
+      { path: 'Finance/BulkInvoicePrintSettings', component: FeesComponent },
       { path: 'Finance/FeesInvoice', component: FeesComponent },
       { path: 'Finance/CollectFee', component: FeesComponent },
       { path: 'Finance/BankPayment', component: FeesComponent },
@@ -260,10 +355,6 @@ export const routes: Routes = [
       { path: 'Inventory/IssueItem', component: InventoryComponent },
       { path: 'Inventory/Transactions', component: InventoryComponent },
       { path: 'Inventory/Reports', component: InventoryComponent },
-      { path: 'virtual-class', component: VirtualClassComponent },
-      { path: 'VirtualClassrooms', component: VirtualClassComponent },
-      { path: 'smart-attendance', component: AttendanceComponent },
-      { path: 'SmartAttendance', component: AttendanceComponent },
       { path: 'advanced-academics', component: ClassesComponent },
       { path: 'AdvancedAcademics', component: ClassesComponent },
       { path: 'growth-comms', component: CommunicationComponent },

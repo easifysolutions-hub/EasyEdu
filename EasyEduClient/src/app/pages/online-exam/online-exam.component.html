@@ -2,52 +2,79 @@
   <!-- Top Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1"><i class="fas fa-laptop-code text-primary me-2"></i>Digital Evaluation Nexus & CBT Engine</h3>
-      <p class="text-muted small mb-0">Manage question classification domains, high-fidelity question vaults, and online examination cycles</p>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0 text-dark"><i class="fas fa-laptop-code text-primary me-2"></i>Online Exam Suite & Proctoring Nexus</h3>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 rounded-pill">
+          {{ activeTab | uppercase }}
+        </span>
+      </div>
+      <p class="text-muted small mb-0">Manage question classification domains, high-fidelity question vaults, CBT exams, written nodes, and proctoring settings.</p>
     </div>
     <div class="d-flex gap-2">
-      <button *ngIf="activeTab === 'group'" class="btn btn-primary shadow-sm" (click)="showGroupModal = true">
+      <button *ngIf="activeTab === 'group'" class="btn btn-primary shadow-sm rounded-pill px-3" (click)="showGroupModal = true">
         <i class="fas fa-plus me-1"></i> Add Domain Node
       </button>
-      <button *ngIf="activeTab === 'bank'" class="btn btn-primary shadow-sm" (click)="showQuestionModal = true">
+      <button *ngIf="activeTab === 'bank'" class="btn btn-primary shadow-sm rounded-pill px-3" (click)="showQuestionModal = true">
         <i class="fas fa-plus me-1"></i> Deposit Question
       </button>
-      <button *ngIf="activeTab === 'exam'" class="btn btn-primary shadow-sm" (click)="showExamModal = true">
-        <i class="fas fa-plus me-1"></i> Initialize Evaluation
+      <button class="btn btn-primary shadow-sm rounded-pill px-4" (click)="setTab('add-exam')">
+        <i class="fas fa-plus-circle me-1"></i> Initialize Evaluation
       </button>
     </div>
   </div>
 
   <!-- Submodule Tabs Navigation -->
   <div class="online-exam-tabs-wrapper mb-4">
-    <div class="d-flex flex-wrap gap-2 p-2 bg-white border rounded-12 shadow-sm">
+    <div class="d-flex flex-wrap gap-2 p-2 bg-white border rounded-16 shadow-sm">
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'exam'" [class.btn-light]="activeTab !== 'exam'" (click)="setTab('exam')">
+        <i class="fas fa-laptop-code me-1"></i> Evaluation Hub
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'add-exam'" [class.btn-light]="activeTab !== 'add-exam'" (click)="setTab('add-exam')">
+        <i class="fas fa-plus-circle me-1"></i> Initialize Evaluation
+      </button>
       <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'group'" [class.btn-light]="activeTab !== 'group'" (click)="setTab('group')">
-        <i class="fas fa-layer-group me-1"></i> Question Group
+        <i class="fas fa-layer-group me-1"></i> Question Domain
       </button>
       <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'bank'" [class.btn-light]="activeTab !== 'bank'" (click)="setTab('bank')">
-        <i class="fas fa-database me-1"></i> Question Bank
+        <i class="fas fa-database me-1"></i> Question Vault
       </button>
-      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'exam'" [class.btn-light]="activeTab !== 'exam'" (click)="setTab('exam')">
-        <i class="fas fa-laptop-code me-1"></i> Online Exam
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'written'" [class.btn-light]="activeTab !== 'written'" (click)="setTab('written')">
+        <i class="fas fa-file-signature me-1"></i> Written Node
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'settings'" [class.btn-light]="activeTab !== 'settings'" (click)="setTab('settings')">
+        <i class="fas fa-cog me-1"></i> Infrastructure
       </button>
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- SUBMODULE 1: QUESTION GROUP (/OnlineExam/QuestionGroup) -->
-  <!-- ========================================================================= -->
-  <div *ngIf="activeTab === 'group'" class="animate-fade-in">
+  <!-- EVALUATION HUB (/OnlineExam/OnlineExam) -->
+  <div *ngIf="activeTab === 'exam'" class="animate-fade-in">
     <div class="row g-4">
-      <div *ngFor="let g of groups" class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm rounded-12 p-4 text-center h-100 bg-white">
-          <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 64px; height: 64px;">
-            <i class="fas fa-layer-group text-primary fa-2x"></i>
+      <div *ngFor="let ex of exams" class="col-12 col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm rounded-16 p-4 bg-white h-100 position-relative">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge" [ngClass]="ex.isPublished ? 'bg-success bg-opacity-10 text-success' : 'bg-warning text-dark'">
+              <i class="fas fa-circle me-1 small"></i> {{ ex.isPublished ? 'PUBLISHED & ACTIVE' : 'DRAFT' }}
+            </span>
+            <small class="text-muted"><i class="fas fa-clock me-1"></i> {{ ex.durationMinutes }} Mins</small>
           </div>
-          <h5 class="fw-800 text-dark mb-1">{{ g.title }}</h5>
-          <p class="text-muted small fw-600 mb-3">{{ g.totalQuestions }} Question Nodes</p>
-          <hr class="my-3 opacity-10">
-          <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-sm btn-light-soft text-danger rounded-circle px-3 py-2" (click)="deleteGroup(g)" title="Delete Domain">
+          <h5 class="fw-bold text-dark mb-2">{{ ex.title }}</h5>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge bg-light text-dark border">{{ ex.className }}</span>
+            <span class="badge bg-light text-primary border">{{ ex.subjectName }}</span>
+            <span class="badge bg-primary text-white">{{ ex.totalMarks }} Marks</span>
+          </div>
+          <div class="p-3 bg-light rounded-12 mb-3 border small">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Window:</span>
+              <strong>{{ ex.startDate }} to {{ ex.endDate }}</strong>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="setTab('bank')">
+              <i class="fas fa-list me-1"></i> Manage Questions
+            </button>
+            <button class="btn btn-sm btn-light text-danger rounded-circle p-2" (click)="deleteExam(ex)">
               <i class="fas fa-trash"></i>
             </button>
           </div>
@@ -56,227 +83,257 @@
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- SUBMODULE 2: QUESTION BANK (/OnlineExam/QuestionBank) -->
-  <!-- ========================================================================= -->
+  <!-- INITIALIZE EVALUATION FORM (/OnlineExam/AddOnlineExam) -->
+  <div *ngIf="activeTab === 'add-exam'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-plus-circle text-primary me-2"></i> Initialize New Online Examination Cycle</h5>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Evaluation Title *</label>
+        <input type="text" class="form-control" [(ngModel)]="newExam.title" placeholder="e.g. Term 2 Computer Science Practical Assessment">
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Target Grade / Class</label>
+          <select class="form-select" [(ngModel)]="newExam.classId">
+            <option [ngValue]="1">Class 10</option>
+            <option [ngValue]="2">Class 9</option>
+            <option [ngValue]="3">Class 12 - Science</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Subject</label>
+          <input type="text" class="form-control" [(ngModel)]="newExam.subjectName" placeholder="e.g. Physics">
+        </div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Start Date</label>
+          <input type="date" class="form-control" [(ngModel)]="newExam.startDate">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">End Date</label>
+          <input type="date" class="form-control" [(ngModel)]="newExam.endDate">
+        </div>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Duration (Minutes)</label>
+          <input type="number" class="form-control" [(ngModel)]="newExam.durationMinutes">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Total Max Marks</label>
+          <input type="number" class="form-control" [(ngModel)]="newExam.totalMarks">
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-light rounded-pill px-4" (click)="setTab('exam')">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4" (click)="saveExam()"><i class="fas fa-check-circle me-1"></i> Publish Examination</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION DOMAIN (/OnlineExam/QuestionGroup) -->
+  <div *ngIf="activeTab === 'group'" class="animate-fade-in">
+    <div class="row g-4">
+      <div *ngFor="let g of groups" class="col-12 col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-16 p-4 text-center h-100 bg-white">
+          <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 64px; height: 64px;">
+            <i class="fas fa-layer-group text-primary fa-2x"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-1">{{ g.title }}</h5>
+          <p class="text-muted small mb-3">{{ g.totalQuestions }} Question Nodes</p>
+          <div class="d-flex justify-content-center gap-2 mt-auto">
+            <button class="btn btn-sm btn-light text-danger rounded-circle p-2" (click)="deleteGroup(g)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION VAULT (/OnlineExam/QuestionBank) -->
   <div *ngIf="activeTab === 'bank'" class="animate-fade-in">
-    <div class="card border-0 shadow-sm rounded-12 overflow-hidden">
+    <div class="card border-0 shadow-sm rounded-16 overflow-hidden bg-white">
       <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
         <div>
-          <h5 class="fw-800 text-dark m-0">Question Repository Vault</h5>
-          <small class="text-muted">Architect high-fidelity evaluation logic and persistent question nodes</small>
+          <h5 class="fw-bold text-dark m-0">Question Repository Vault</h5>
+          <small class="text-muted">High-fidelity question nodes and objective answer keys</small>
         </div>
-        <button class="btn btn-primary btn-sm fw-700 shadow-sm" (click)="showQuestionModal = true">
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showQuestionModal = true">
           <i class="fas fa-plus me-1"></i> Deposit Question
         </button>
       </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="bg-light text-muted small text-uppercase">
-              <tr>
-                <th class="px-4 py-3 fw-700">Question Architecture</th>
-                <th class="py-3 fw-700">Domain Node</th>
-                <th class="py-3 fw-700">Logic Type</th>
-                <th class="py-3 fw-700">Valuation</th>
-                <th class="text-end px-4 py-3 fw-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let q of questions">
-                <td class="px-4 py-3">
-                  <div class="fw-800 text-dark">{{ q.question }}</div>
-                  <small class="text-success fw-700">RESOLUTION: {{ q.correctAnswer }}</small>
-                </td>
-                <td>
-                  <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-800 small">{{ q.groupTitle }}</span>
-                </td>
-                <td>
-                  <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-700 small">{{ q.questionType }}</span>
-                </td>
-                <td>
-                  <span class="fw-800 text-primary">{{ q.marks }} Marks</span>
-                </td>
-                <td class="text-end px-4">
-                  <button class="btn btn-sm btn-light text-danger" (click)="deleteQuestion(q)" title="Delete Question">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Question Statement</th>
+              <th>Domain Node</th>
+              <th>Question Type</th>
+              <th>Marks</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let q of questions">
+              <td>
+                <div class="fw-bold text-dark">{{ q.question }}</div>
+                <small class="text-success fw-bold">KEY: {{ q.correctAnswer }}</small>
+              </td>
+              <td><span class="badge bg-light text-primary border">{{ q.groupTitle }}</span></td>
+              <td><span class="badge bg-light text-dark border">{{ q.questionType }}</span></td>
+              <td class="fw-bold text-primary">{{ q.marks }} Marks</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-light text-danger rounded-circle p-2" (click)="deleteQuestion(q)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- SUBMODULE 3: ONLINE EXAM (/OnlineExam/OnlineExam) -->
-  <!-- ========================================================================= -->
-  <div *ngIf="activeTab === 'exam'" class="animate-fade-in">
-    <div class="card border-0 shadow-sm rounded-12 overflow-hidden">
-      <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="fw-800 text-dark m-0">Digital Evaluation Nexus</h5>
-          <small class="text-muted">Coordinate and manage published online examination cycles across the institutional network</small>
-        </div>
-        <button class="btn btn-primary btn-sm fw-700 shadow-sm" (click)="showExamModal = true">
-          <i class="fas fa-plus me-1"></i> Initialize Evaluation
-        </button>
+  <!-- WRITTEN NODE (/OnlineExam/WrittenExam) -->
+  <div *ngIf="activeTab === 'written'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-file-signature text-primary me-2"></i> Written & Subjective Evaluation Node</h5>
+        <button class="btn btn-sm btn-outline-primary rounded-pill px-3"><i class="fas fa-plus me-1"></i> Create Written Assignment</button>
       </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="bg-light text-muted small text-uppercase">
-              <tr>
-                <th class="px-4 py-3 fw-700">Evaluation Identity</th>
-                <th class="py-3 fw-700">Curriculum Nodes</th>
-                <th class="py-3 fw-700">Temporal Log</th>
-                <th class="py-3 fw-700">Duration</th>
-                <th class="py-3 fw-700">Status</th>
-                <th class="text-end px-4 py-3 fw-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let ex of exams">
-                <td class="px-4 py-3">
-                  <div class="fw-800 text-dark">{{ ex.title }}</div>
-                  <small class="text-muted fw-600">Digital Evaluation Node</small>
-                </td>
-                <td>
-                  <span class="badge bg-light text-primary border me-1">{{ ex.className }}</span>
-                  <span class="badge bg-light text-dark border">{{ ex.subjectName }}</span>
-                </td>
-                <td>
-                  <div class="fw-700 text-dark">{{ ex.startDate }} - {{ ex.endDate }}</div>
-                </td>
-                <td>
-                  <span class="fw-800 text-primary">{{ ex.durationMinutes }} Min</span>
-                </td>
-                <td>
-                  <span *ngIf="ex.isPublished" class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-800 small">PUBLISHED</span>
-                  <span *ngIf="!ex.isPublished" class="badge bg-warning bg-opacity-10 text-dark px-3 py-1 rounded-pill fw-800 small">DRAFT</span>
-                </td>
-                <td class="text-end px-4">
-                  <button class="btn btn-sm btn-light text-danger" (click)="deleteExam(ex)" title="Delete Exam">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Exam Title</th>
+              <th>Class & Subject</th>
+              <th>Submission Deadline</th>
+              <th>Evaluated / Total</th>
+              <th>Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let w of writtenExams">
+              <td class="fw-bold text-dark">{{ w.examTitle }}</td>
+              <td><span class="badge bg-light text-dark border">{{ w.className }} - {{ w.subject }}</span></td>
+              <td><small class="text-muted">{{ w.submissionDeadline }}</small></td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-bold">{{ w.evaluatedCount }} / {{ w.totalSubmissions }}</span>
+                  <div class="progress flex-grow-1" style="height: 6px; width: 60px;">
+                    <div class="progress-bar bg-success" [style.width.%]="(w.evaluatedCount / (w.totalSubmissions || 1)) * 100"></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="w.status === 'Completed' ? 'bg-success' : (w.status === 'Evaluating' ? 'bg-warning text-dark' : 'bg-primary')">
+                  {{ w.status }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-primary rounded-pill px-3" (click)="gradeWrittenSubmission(w)">
+                  <i class="fas fa-pen me-1"></i> Grade Papers
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ========================================================================= -->
-<!-- MODALS -->
-<!-- ========================================================================= -->
-
-<!-- Add Group Modal -->
-<div class="modal-backdrop-custom" *ngIf="showGroupModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-folder-plus text-primary me-2"></i>Define Domain Node</h5>
-      <button class="btn-close" (click)="showGroupModal = false"></button>
-    </div>
-    <div class="mb-3">
-      <label class="form-label fw-700 small text-uppercase text-muted">Domain Title (e.g. Science Midterm) *</label>
-      <input type="text" class="form-control bg-light" [(ngModel)]="newGroupTitle" placeholder="e.g. Science Midterm Foundation" required>
-    </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showGroupModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveGroup()"><i class="fas fa-check me-1"></i>Synchronize Domain</button>
-    </div>
-  </div>
-</div>
-
-<!-- Deposit Question Modal -->
-<div class="modal-backdrop-custom" *ngIf="showQuestionModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-plus-circle text-primary me-2"></i>Deposit Question Node</h5>
-      <button class="btn-close" (click)="showQuestionModal = false"></button>
-    </div>
-    <div class="row g-3">
-      <div class="col-6">
-        <label class="form-label fw-700 small text-uppercase text-muted">Domain Node *</label>
-        <select class="form-select bg-light" [(ngModel)]="newQuestion.groupId">
-          <option *ngFor="let g of groups" [value]="g.id">{{ g.title }}</option>
-        </select>
-      </div>
-      <div class="col-6">
-        <label class="form-label fw-700 small text-uppercase text-muted">Logic Architecture</label>
-        <select class="form-select bg-light" [(ngModel)]="newQuestion.questionType">
-          <option value="MultipleChoice">Multiple Choice</option>
-          <option value="TrueFalse">True / False</option>
-          <option value="ShortAnswer">Short Answer</option>
-        </select>
-      </div>
-      <div class="col-12">
-        <label class="form-label fw-700 small text-uppercase text-muted">Question Statement *</label>
-        <textarea class="form-control bg-light" rows="3" [(ngModel)]="newQuestion.question" placeholder="Define the evaluation inquiry..."></textarea>
-      </div>
-      <div class="col-12" *ngIf="newQuestion.questionType === 'MultipleChoice'">
-        <label class="form-label fw-700 small text-uppercase text-muted">Option Nodes (Comma Separated)</label>
-        <input type="text" class="form-control bg-light" [(ngModel)]="newQuestion.options" placeholder="Option A, Option B, Option C, Option D">
-      </div>
-      <div class="col-8">
-        <label class="form-label fw-700 small text-uppercase text-muted">Correct Resolution Node *</label>
-        <input type="text" class="form-control bg-light" [(ngModel)]="newQuestion.correctAnswer" placeholder="e.g. Option A">
-      </div>
-      <div class="col-4">
-        <label class="form-label fw-700 small text-uppercase text-muted">Marks</label>
-        <input type="number" class="form-control bg-light" [(ngModel)]="newQuestion.marks">
-      </div>
-    </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showQuestionModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveQuestion()"><i class="fas fa-check me-1"></i>Deposit to Vault</button>
-    </div>
-  </div>
-</div>
-
-<!-- Initialize Exam Modal -->
-<div class="modal-backdrop-custom" *ngIf="showExamModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-laptop-code text-primary me-2"></i>Initialize Online Evaluation</h5>
-      <button class="btn-close" (click)="showExamModal = false"></button>
-    </div>
-    <div class="row g-3">
-      <div class="col-12">
-        <label class="form-label fw-700 small text-uppercase text-muted">Evaluation Title *</label>
-        <input type="text" class="form-control bg-light" [(ngModel)]="newExam.title" placeholder="e.g. Term 1 Science & Physics Quiz" required>
-      </div>
-      <div class="col-6">
-        <label class="form-label fw-700 small text-uppercase text-muted">Duration (Minutes)</label>
-        <input type="number" class="form-control bg-light" [(ngModel)]="newExam.durationMinutes">
-      </div>
-      <div class="col-6">
-        <label class="form-label fw-700 small text-uppercase text-muted">Total Marks</label>
-        <input type="number" class="form-control bg-light" [(ngModel)]="newExam.totalMarks">
-      </div>
-      <div class="col-6">
-        <label class="form-label fw-700 small text-uppercase text-muted">Start Date</label>
-        <input type="date" class="form-control bg-light" [(ngModel)]="newExam.startDate">
-      </div>
-      <div class="col-6">
-        <label class="form-label fw-700 small text-uppercase text-muted">End Date</label>
-        <input type="date" class="form-control bg-light" [(ngModel)]="newExam.endDate">
-      </div>
-      <div class="col-12">
-        <div class="form-check form-switch mt-2">
-          <input class="form-check-input" type="checkbox" id="pubSwitch" [(ngModel)]="newExam.isPublished">
-          <label class="form-check-label fw-700 text-dark" for="pubSwitch">Publish Immediately to Student Portal?</label>
+  <!-- INFRASTRUCTURE / SETTINGS (/OnlineExam/Settings) -->
+  <div *ngIf="activeTab === 'settings'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-shield-alt text-primary me-2"></i> CBT Engine & Proctoring Security</h5>
+      <div class="mb-4">
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="examSettings.enableAntiCheatingProctoring" id="proctor">
+          <label class="form-check-label small fw-bold" for="proctor">AI Webcam & Eye-Tracking Proctoring Active during Exam</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="examSettings.preventTabSwitching" id="tabSwitch">
+          <label class="form-check-label small fw-bold" for="tabSwitch">Prevent Browser Tab Switching (Auto-Submit after 3 Warnings)</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="examSettings.randomizeQuestions" id="randQ">
+          <label class="form-check-label small fw-bold" for="randQ">Randomize Question Sequence per Student</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="examSettings.watermarkStudentIdOnScreen" id="watermark">
+          <label class="form-check-label small fw-bold" for="watermark">Superimpose Transparent Student ID Watermark to prevent screen capture</label>
         </div>
       </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Proctoring Settings
+      </button>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showExamModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveExam()"><i class="fas fa-check me-1"></i>Publish Evaluation</button>
+  </div>
+
+  <!-- MODAL: ADD QUESTION -->
+  <div class="modal-backdrop-custom" *ngIf="showQuestionModal">
+    <div class="modal-content-custom" style="max-width: 550px;">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0">Deposit Question Node</h5>
+        <button class="btn-close-custom" (click)="showQuestionModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Domain Node</label>
+          <select class="form-select" [(ngModel)]="newQuestion.groupId">
+            <option *ngFor="let g of groups" [value]="g.id">{{ g.title }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Question Statement *</label>
+          <textarea class="form-control" [(ngModel)]="newQuestion.question" rows="3" placeholder="Enter question statement..."></textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Question Type</label>
+            <select class="form-select" [(ngModel)]="newQuestion.questionType">
+              <option value="MultipleChoice">Multiple Choice (MCQ)</option>
+              <option value="TrueFalse">True / False</option>
+              <option value="ShortAnswer">Short Answer</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Marks Valuation</label>
+            <input type="number" class="form-control" [(ngModel)]="newQuestion.marks">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Correct Resolution / Key *</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.correctAnswer" placeholder="e.g. Option A or keyword">
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showQuestionModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="saveQuestion()">Deposit Question</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD GROUP -->
+  <div class="modal-backdrop-custom" *ngIf="showGroupModal">
+    <div class="modal-content-custom" style="max-width: 500px;">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0">Add Question Domain</h5>
+        <button class="btn-close-custom" (click)="showGroupModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Domain Title *</label>
+          <input type="text" class="form-control" [(ngModel)]="newGroupTitle" placeholder="e.g. Organic Chemistry Aromatics">
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showGroupModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="saveGroup()">Save Domain</button>
+      </div>
     </div>
   </div>
 </div>

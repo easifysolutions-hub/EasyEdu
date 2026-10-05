@@ -1,0 +1,226 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0 text-dark"><i class="fas fa-graduation-cap text-primary me-2"></i>CBSE Exam & Assessment Framework</h3>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 rounded-pill">
+          {{ activeTab | uppercase }}
+        </span>
+      </div>
+      <p class="text-muted small mb-0">Affiliated CBSE grading structure, Internal Assessments (PT, MA, Portfolio, SE), Co-Scholastic observations, and automated marksheet generator.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-primary rounded-pill px-3" (click)="activeTab = 'print-marksheet'">
+        <i class="fas fa-print me-1"></i> Print Marksheets
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'assessments'">
+        <i class="fas fa-plus me-1"></i> Configure Rubric
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <div class="card border-0 shadow-sm rounded-16 p-2 mb-4 bg-white">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'dashboard' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'dashboard'">Nexus Dashboard</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'terms' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'terms'">Academic Terms</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'exams' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'exams'">Exams</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'schedule' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'schedule'">Exam Schedule</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'grade' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'grade'">Exam Grade</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'assessments' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'assessments'">Assessments</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'observations' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'observations'">Observations</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'observation-parameters' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'observation-parameters'">Observation Parameters</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'assign-observations' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'assign-observations'">Assign Observations</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'templates' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'templates'">Cert. Templates</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'print-marksheet' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'print-marksheet'">Print Marksheet</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'reports' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'reports'">Reports</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD / OVERVIEW -->
+  <div *ngIf="activeTab === 'dashboard'" class="animate-fade-in">
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
+          <h6 class="small text-white text-opacity-75 text-uppercase fw-bold mb-1">Active CBSE Cycle</h6>
+          <h3 class="fw-bold mb-1">Term 1 - 2025-26</h3>
+          <p class="small text-white text-opacity-75 mb-0">Periodic Tests (PT-1, PT-2) & Subject Enrichment</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+          <h6 class="small text-white text-opacity-75 text-uppercase fw-bold mb-1">Grading System</h6>
+          <h3 class="fw-bold mb-1">9-Point Scale (A1 - E)</h3>
+          <p class="small text-white text-opacity-75 mb-0">CBSE Continuous and Comprehensive Evaluation</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);">
+          <h6 class="small text-white text-opacity-75 text-uppercase fw-bold mb-1">Marksheets Ready</h6>
+          <h3 class="fw-bold mb-1">540 Students</h3>
+          <p class="small text-white text-opacity-75 mb-0">Digital CCE Report Cards with QR Verification</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACADEMIC TERMS -->
+  <div *ngIf="activeTab === 'terms'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3">CBSE Academic Terms Definition</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Term Name</th>
+              <th>Weightage</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of terms">
+              <td class="fw-bold">{{ t.name }}</td>
+              <td><span class="badge bg-primary">{{ t.weightagePercentage }}%</span></td>
+              <td>{{ t.startDate }}</td>
+              <td>{{ t.endDate }}</td>
+              <td><span class="badge" [ngClass]="t.status === 'Active' ? 'bg-success' : 'bg-secondary'">{{ t.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENTS -->
+  <div *ngIf="activeTab === 'assessments'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3">Internal Assessments & Rubrics</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Assessment Title</th>
+              <th>Category</th>
+              <th>Term</th>
+              <th>Max Marks</th>
+              <th>Weightage (Calculated)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of assessments">
+              <td class="fw-bold">{{ a.title }}</td>
+              <td><span class="badge bg-light text-dark border">{{ a.type }}</span></td>
+              <td>{{ a.termName }}</td>
+              <td class="fw-bold">{{ a.maxMarks }}</td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">{{ a.weightage }}%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBSERVATIONS -->
+  <div *ngIf="activeTab === 'observations' || activeTab === 'observation-parameters' || activeTab === 'assign-observations'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3">Co-Scholastic & Discipline Observation Matrix</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Domain</th>
+              <th>Parameter</th>
+              <th>Grading Scale</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of observations">
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ o.domain }}</span></td>
+              <td class="fw-bold">{{ o.parameterName }}</td>
+              <td>{{ o.gradeScale }}</td>
+              <td class="text-end"><button class="btn btn-sm btn-outline-primary rounded-pill px-3">Assign Grades</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINT MARKSHEET / CERT TEMPLATES -->
+  <div *ngIf="activeTab === 'print-marksheet' || activeTab === 'templates'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 850px;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-file-invoice text-primary me-2"></i> CBSE Official Progress Report Card Preview</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="printReportCard()">
+          <i class="fas fa-print me-1"></i> Print Official Report Card
+        </button>
+      </div>
+      <div class="p-4 border rounded-16 bg-white shadow-sm" id="cbse-marksheet">
+        <div class="text-center border-bottom pb-3 mb-3">
+          <h4 class="fw-bold text-primary mb-0">EASYEDU SENIOR SECONDARY SCHOOL</h4>
+          <small class="text-muted">CBSE Affiliated No: 2130892 &bull; New Delhi, India</small><br>
+          <span class="badge bg-dark mt-2 px-3 py-1">ACADEMIC PERFORMANCE REPORT CARD (2025-26)</span>
+        </div>
+        <div class="row g-3 mb-3 small">
+          <div class="col-6"><strong>Student Name:</strong> Aarav Sharma</div>
+          <div class="col-6 text-end"><strong>Roll No:</strong> 10101 (Class 10-A)</div>
+          <div class="col-6"><strong>Admission No:</strong> ADM-2024-001</div>
+          <div class="col-6 text-end"><strong>Date of Birth:</strong> 12-Aug-2010</div>
+        </div>
+        <table class="table table-bordered text-center small mb-3">
+          <thead class="table-light">
+            <tr>
+              <th>Subject</th>
+              <th>PT (10)</th>
+              <th>MA (5)</th>
+              <th>Port (5)</th>
+              <th>SE (5)</th>
+              <th>Term End (80)</th>
+              <th>Total (100)</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-start fw-bold">English Communicative</td>
+              <td>9</td>
+              <td>4.5</td>
+              <td>5</td>
+              <td>4.5</td>
+              <td>74</td>
+              <td class="fw-bold text-success">97</td>
+              <td><span class="badge bg-success">A1</span></td>
+            </tr>
+            <tr>
+              <td class="text-start fw-bold">Mathematics Standard</td>
+              <td>10</td>
+              <td>5</td>
+              <td>5</td>
+              <td>5</td>
+              <td>78</td>
+              <td class="fw-bold text-success">100</td>
+              <td><span class="badge bg-success">A1</span></td>
+            </tr>
+            <tr>
+              <td class="text-start fw-bold">Science & Technology</td>
+              <td>9.5</td>
+              <td>4.5</td>
+              <td>4.5</td>
+              <td>5</td>
+              <td>72</td>
+              <td class="fw-bold text-success">95.5</td>
+              <td><span class="badge bg-success">A1</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top small">
+          <div>Result: <strong class="text-success">PASSED WITH DISTINCTION (97.5%)</strong></div>
+          <div>Authorized Signatory / Principal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

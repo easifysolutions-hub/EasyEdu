@@ -1,0 +1,196 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0 text-dark"><i class="fas fa-cubes text-primary me-2"></i>LMS Intelligence Hub & Digital Academy</h3>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 rounded-pill">
+          {{ activeTab | uppercase }}
+        </span>
+      </div>
+      <p class="text-muted small mb-0">E-Learning course marketplace, video lecture authoring, progression tracking, and monetization billing.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-primary rounded-pill px-3" (click)="activeTab = 'enrollments'">
+        <i class="fas fa-history me-1"></i> Progression Log
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'add-course'">
+        <i class="fas fa-upload me-1"></i> Deploy Course
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <div class="card border-0 shadow-sm rounded-16 p-2 mb-4 bg-white">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'hub' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'hub'">Intelligence Hub</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'all-courses' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'all-courses'">Course Registry</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'add-course' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'add-course'">Deploy Course</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'pending' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'pending'">Verification Queue</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'category' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'category'">Domain Classification</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'level' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'level'">Proficiency Depth</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'enrollments' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'enrollments'">Progression Log</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'purchases' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'purchases'">E-Commerce Intel</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'invoices' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'invoices'">Fiscal Invoices</button>
+      <button class="btn btn-sm rounded-pill px-3" [ngClass]="activeTab === 'settings' ? 'btn-primary' : 'btn-light'" (click)="activeTab = 'settings'">Infrastructure</button>
+    </div>
+  </div>
+
+  <!-- INTELLIGENCE HUB OVERVIEW -->
+  <div *ngIf="activeTab === 'hub'" class="animate-fade-in">
+    <div class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Active Courses</div>
+          <h2 class="fw-bold mb-1">{{ courses.length }} Courses</h2>
+          <small class="text-white text-opacity-75">Published & Available</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Total Enrolled</div>
+          <h2 class="fw-bold mb-1">467 Students</h2>
+          <small class="text-white text-opacity-75">Across Grade 9 to 12</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">LMS Revenue</div>
+          <h2 class="fw-bold mb-1">₹4,82,500</h2>
+          <small class="text-white text-opacity-75">Digital Subscriptions</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);">
+          <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Avg Completion</div>
+          <h2 class="fw-bold mb-1">78.4%</h2>
+          <small class="text-white text-opacity-75">Interactive Video Modules</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COURSE REGISTRY -->
+  <div *ngIf="activeTab === 'all-courses' || activeTab === 'hub'" class="animate-fade-in mb-4">
+    <div class="row g-4">
+      <div *ngFor="let c of courses" class="col-12 col-md-6 col-xl-3">
+        <div class="card border rounded-16 overflow-hidden bg-white shadow-sm h-100 position-relative">
+          <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+            <span class="badge bg-primary bg-opacity-10 text-primary">{{ c.category }}</span>
+            <span class="badge" [ngClass]="c.status === 'Published' ? 'bg-success' : 'bg-warning text-dark'">{{ c.status }}</span>
+          </div>
+          <div class="p-4 d-flex flex-column h-100">
+            <h6 class="fw-bold text-dark mb-2">{{ c.title }}</h6>
+            <div class="small text-muted mb-2"><i class="fas fa-user-tie text-primary me-1"></i> {{ c.instructor }}</div>
+            <div class="d-flex justify-content-between align-items-center small text-muted mb-3">
+              <span><i class="fas fa-play-circle text-danger me-1"></i> {{ c.lessonsCount }} Lessons</span>
+              <span><i class="fas fa-star text-warning me-1"></i> {{ c.rating }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+              <span class="fw-bold text-success fs-5">₹{{ c.price }}</span>
+              <span class="small text-muted">{{ c.enrolledStudents }} Enrolled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPLOY COURSE -->
+  <div *ngIf="activeTab === 'add-course'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-cloud-upload-alt text-primary me-2"></i> Deploy New Digital Course</h5>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Course Title *</label>
+        <input type="text" class="form-control" [(ngModel)]="newCourse.title" placeholder="e.g. Advanced Robotics & IoT Embedded Systems">
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Category</label>
+          <select class="form-select" [(ngModel)]="newCourse.category">
+            <option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Proficiency Depth / Level</label>
+          <select class="form-select" [(ngModel)]="newCourse.level">
+            <option value="Beginner">Foundation / Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced Competitive</option>
+            <option value="Masterclass">Masterclass Capstone</option>
+          </select>
+        </div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Faculty / Instructor</label>
+          <input type="text" class="form-control" [(ngModel)]="newCourse.instructor">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Enrollment Price (₹)</label>
+          <input type="number" class="form-control" [(ngModel)]="newCourse.price">
+        </div>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="saveNewCourse()">
+        <i class="fas fa-rocket me-1"></i> Publish Course to LMS
+      </button>
+    </div>
+  </div>
+
+  <!-- ENROLLMENTS & PROGRESSION LOG -->
+  <div *ngIf="activeTab === 'enrollments' || activeTab === 'purchases' || activeTab === 'invoices'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-user-check text-primary me-2"></i> Student Course Progression & Fiscal Registry</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Course Title</th>
+              <th>Enrolled Date</th>
+              <th>Progress</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let enr of enrollments">
+              <td><code>{{ enr.id }}</code></td>
+              <td class="fw-bold">{{ enr.studentName }}</td>
+              <td>{{ enr.courseTitle }}</td>
+              <td>{{ enr.enrolledDate }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="small fw-bold">{{ enr.progressPercent }}%</span>
+                  <div class="progress flex-grow-1" style="height: 6px; width: 80px;">
+                    <div class="progress-bar bg-primary" [style.width.%]="enr.progressPercent"></div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge" [ngClass]="enr.status === 'Completed' ? 'bg-success' : 'bg-primary'">{{ enr.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div *ngIf="activeTab === 'settings'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-cogs text-primary me-2"></i> LMS Streaming & Delivery Settings</h5>
+      <div class="mb-4">
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="lmsSettings.allowSelfEnrollment" id="selfEnr">
+          <label class="form-check-label small fw-bold" for="selfEnr">Allow Student Self-Enrollment into Free Courses</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="lmsSettings.enableCourseCertificates" id="certLms">
+          <label class="form-check-label small fw-bold" for="certLms">Auto-Generate Completion Certificate upon 100% video completion</label>
+        </div>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="saveSettings()">
+        <i class="fas fa-save me-1"></i> Save LMS Settings
+      </button>
+    </div>
+  </div>
+</div>
