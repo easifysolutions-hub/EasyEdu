@@ -1,4 +1,37 @@
-.rounded-12 { border-radius: 12px; }
-.rounded-16 { border-radius: 16px; }
-.cursor-pointer { cursor: pointer; }
-.ls-1 { letter-spacing: 0.5px; }
+.letter-spacing-1 {
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.btn-primary-search {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  transition: 0.3s;
+}
+.btn-primary-search:hover {
+  background: #4338ca;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.empty-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table th {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 0.5px;
+  padding: 14px 16px;
+}
+.table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}

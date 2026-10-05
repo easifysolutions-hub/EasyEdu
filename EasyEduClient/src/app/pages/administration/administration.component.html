@@ -597,74 +597,76 @@
     </div>
   </div>
 
-  <!-- 6. TELEPHONY & COMMUNICATION LOG (Phone Call Log) -->
+  <!-- 6. TELEPHONY & COMMUNICATION LOG (Communication & Call Center) -->
   <div *ngIf="activeTab === 'calls'">
     <div class="page-header d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
-        <h2 class="page-title mb-1 fw-bold text-dark">Telephony & Communication Log</h2>
-        <p class="text-muted small mb-0">Call tracking, parent inquiries and counseling communication records</p>
+        <h2 class="page-title mb-1 fw-bold text-dark">Communication & Call Center</h2>
+        <p class="text-muted small mb-0">Unified tracking for institutional telephonic engagement and follow-ups</p>
       </div>
       <div>
         <button class="btn btn-primary shadow-sm" (click)="toggleForm()">
-          <i class="fas fa-phone-volume me-2"></i> Log Phone Call
+          <i class="fas fa-phone-volume me-2"></i> Log Institutional Call
         </button>
       </div>
     </div>
 
     <div class="row g-4">
+      <!-- Left Card: Record Communication -->
       <div class="col-xl-4" *ngIf="isFormOpen">
         <div class="card border-0 shadow-sm rounded-4 p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold mb-0">Record Call Details</h5>
+            <h5 class="fw-bold mb-0">Record Communication</h5>
             <button class="btn-close" (click)="toggleForm()"></button>
           </div>
           <div class="mb-3">
-            <label class="form-label small text-muted">Caller / Student Name</label>
-            <input type="text" class="form-control" [(ngModel)]="newCall.name" placeholder="e.g. Dr. Mohan Lal">
+            <label class="form-label small text-muted">Responder / Contact Name</label>
+            <input type="text" class="form-control" [(ngModel)]="newCall.responderName" placeholder="e.g. Parent of Student ID">
           </div>
           <div class="row g-2 mb-3">
             <div class="col-6">
-              <label class="form-label small text-muted">Phone Number</label>
-              <input type="text" class="form-control" [(ngModel)]="newCall.phone" placeholder="+91 98765 00000">
+              <label class="form-label small text-muted">Registered Phone</label>
+              <input type="text" class="form-control" [(ngModel)]="newCall.phone" placeholder="Primary number...">
             </div>
             <div class="col-6">
               <label class="form-label small text-muted">Call Type</label>
               <select class="form-select" [(ngModel)]="newCall.callType">
-                <option>Incoming</option>
-                <option>Outgoing</option>
+                <option>Incoming Flow</option>
+                <option>Outgoing Flow</option>
               </select>
             </div>
           </div>
           <div class="row g-2 mb-3">
             <div class="col-6">
-              <label class="form-label small text-muted">Call Duration</label>
-              <input type="text" class="form-control" [(ngModel)]="newCall.duration" value="03:15">
+              <label class="form-label small text-muted">Duration (Min)</label>
+              <input type="text" class="form-control" [(ngModel)]="newCall.duration" placeholder="e.g. 5:20">
             </div>
             <div class="col-6">
-              <label class="form-label small text-muted">Follow-up Status</label>
-              <input type="text" class="form-control" [(ngModel)]="newCall.followUp" placeholder="Scheduled...">
+              <label class="form-label small text-muted">Follow-up Call</label>
+              <input type="date" class="form-control" [(ngModel)]="newCall.followUpDate" placeholder="dd-mm-yyyy">
             </div>
           </div>
           <div class="mb-4">
-            <label class="form-label small text-muted">Conversation Notes</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="newCall.note" placeholder="Call discussion summary..."></textarea>
+            <label class="form-label small text-muted">Interaction Summary</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="newCall.summary" placeholder="Core discussion points..."></textarea>
           </div>
           <button class="btn btn-primary-gradient w-100 py-2 rounded-3 shadow-sm" (click)="saveCall()">
-            <i class="fas fa-check me-2"></i> Save Call Log
+            <i class="fas fa-headset me-2"></i> Commit Log Entry
           </button>
         </div>
       </div>
 
+      <!-- Right Table -->
       <div [class.col-xl-8]="isFormOpen" [class.col-12]="!isFormOpen">
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
           <div class="table-responsive">
             <table class="table align-middle mb-0">
               <thead class="table-light">
                 <tr>
-                  <th class="ps-4">Caller Identity</th>
-                  <th>Call Type & Phone</th>
-                  <th>Duration & Timestamp</th>
-                  <th>Follow-up / Notes</th>
+                  <th class="ps-4">Engagement Identity</th>
+                  <th>Call Metadata</th>
+                  <th>Interaction Brief</th>
+                  <th>Protocol</th>
                   <th class="text-end pe-4">Action</th>
                 </tr>
               </thead>
@@ -695,7 +697,7 @@
                       <div class="empty-icon mb-3">
                         <i class="fas fa-phone-slash text-dark" style="font-size: 3rem;"></i>
                       </div>
-                      <h6 class="fw-bold text-dark mb-0">No phone call logs recorded.</h6>
+                      <h6 class="fw-bold text-dark mb-0">No communication history archived.</h6>
                     </div>
                   </td>
                 </tr>
@@ -707,56 +709,64 @@
     </div>
   </div>
 
-  <!-- 7. ADMINISTRATION MASTERS & SETUP (Admin Setup) -->
+  <!-- 7. ADMINISTRATION CONFIGURATION (DROPDOWN MASTER) (Admin Setup) -->
   <div *ngIf="activeTab === 'setup'">
     <div class="page-header d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
-        <h2 class="page-title mb-1 fw-bold text-dark">Administration Masters & Setup</h2>
-        <p class="text-muted small mb-0">Master configuration for inquiry sources, reference channels, complaint types, and visit purposes</p>
+        <h2 class="page-title mb-1 fw-bold text-dark">Administration Configuration (Dropdown Master)</h2>
       </div>
     </div>
 
-    <!-- Category Tabs -->
-    <div class="d-flex flex-wrap gap-2 mb-4">
-      <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="setupCategory === 'sources'" (click)="setupCategory = 'sources'">Inquiry Sources</button>
-      <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="setupCategory === 'references'" (click)="setupCategory = 'references'">Reference Channels</button>
-      <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="setupCategory === 'complaint-types'" (click)="setupCategory = 'complaint-types'">Complaint Types</button>
-      <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="setupCategory === 'purposes'" (click)="setupCategory = 'purposes'">Visitor Purposes</button>
-    </div>
-
     <div class="row g-4">
+      <!-- Left Card: Add Setup Item -->
       <div class="col-xl-4">
         <div class="card border-0 shadow-sm rounded-4 p-4">
-          <h5 class="fw-bold mb-3">Add Master Option</h5>
+          <h5 class="fw-bold mb-3">Add Setup Item</h5>
           <div class="mb-3">
-            <label class="form-label small text-muted">Item Title / Option Name</label>
-            <input type="text" class="form-control" [(ngModel)]="newSetupItemName" placeholder="e.g. Educational Expo">
+            <label class="form-label small text-muted text-uppercase fw-bold">CATEGORY*</label>
+            <select class="form-select" [(ngModel)]="newSetupItem.category">
+              <option value="Source">Source</option>
+              <option value="Reference">Reference</option>
+              <option value="Purpose">Purpose</option>
+              <option value="ComplaintType">ComplaintType</option>
+            </select>
           </div>
-          <button class="btn btn-primary w-100 py-2 rounded-3 shadow-sm" (click)="addSetupMaster()">
-            <i class="fas fa-plus me-2"></i> Save Setup Option
+          <div class="mb-3">
+            <label class="form-label small text-muted text-uppercase fw-bold">NAME*</label>
+            <input type="text" class="form-control" [(ngModel)]="newSetupItem.name" placeholder="e.g. Website">
+          </div>
+          <div class="mb-4">
+            <label class="form-label small text-muted text-uppercase fw-bold">DESCRIPTION</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="newSetupItem.description"></textarea>
+          </div>
+          <button class="btn btn-primary-gradient w-100 py-2 rounded-3 shadow-sm text-uppercase fw-bold" (click)="addSetupMaster()">
+            SAVE ITEM
           </button>
         </div>
       </div>
 
+      <!-- Right Table: 15 Master Items -->
       <div class="col-xl-8">
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
           <div class="table-responsive">
             <table class="table align-middle mb-0">
               <thead class="table-light">
                 <tr>
-                  <th class="ps-4">#</th>
-                  <th>Master Configuration Option</th>
-                  <th>Active Status</th>
-                  <th class="text-end pe-4">Action</th>
+                  <th class="ps-4">NAME</th>
+                  <th>CATEGORY</th>
+                  <th>DESCRIPTION</th>
+                  <th class="text-end pe-4">ACTION</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of setupItems[setupCategory]; let i = index">
-                  <td class="ps-4 fw-bold text-muted">{{ i + 1 }}</td>
-                  <td><span class="fw-semibold text-dark">{{ item }}</span></td>
-                  <td><span class="badge bg-success-subtle text-success">Enabled</span></td>
+                <tr *ngFor="let item of setupMasterItems; let i = index">
+                  <td class="ps-4 fw-bold text-dark">{{ item.name }}</td>
+                  <td>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.12); color: #3b82f6; font-weight: 600; padding: 6px 12px; border-radius: 12px;">{{ item.category }}</span>
+                  </td>
+                  <td><span class="text-muted">{{ item.description || '' }}</span></td>
                   <td class="text-end pe-4">
-                    <button class="btn btn-sm btn-light border text-danger" (click)="deleteSetupItem(i)"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteSetupMasterItem(i)"><i class="fas fa-trash-can"></i></button>
                   </td>
                 </tr>
               </tbody>

@@ -98,15 +98,39 @@ export class AdministrationComponent implements OnInit {
   // Phone Logs
   phoneLogs: PhoneRecord[] = [];
 
-  // Setup Masters
-  setupCategory: 'sources' | 'references' | 'complaint-types' | 'purposes' = 'sources';
-  setupItems = {
-    sources: ['Online Web', 'Front Desk Walk-in', 'Alumni Referral', 'Social Media Campaign', 'Newspaper Ad'],
-    references: ['Campus Director', 'Faculty Member', 'Student Council', 'Direct Inquiry', 'Education Fair'],
-    'complaint-types': ['Transport Route Delay', 'Canteen Food Hygiene', 'Academic Curriculum', 'Facility Maintenance', 'Fee Discrepancy'],
-    purposes: ['Principal Meeting', 'Fee Submission', 'Admission Inquiry', 'Document Collection', 'Vendor / Maintenance']
+  // 15 Master Items from Screenshot Image 3
+  setupMasterItems = [
+    { name: 'Advertisement', category: 'Source', description: '' },
+    { name: 'Website', category: 'Source', description: '' },
+    { name: 'Direct Visit', category: 'Source', description: '' },
+    { name: 'Referral', category: 'Source', description: '' },
+    { name: 'Social Media', category: 'Source', description: '' },
+    { name: 'Newspaper', category: 'Reference', description: '' },
+    { name: 'Facebook', category: 'Reference', description: '' },
+    { name: 'Google', category: 'Reference', description: '' },
+    { name: 'Friend/Relative', category: 'Reference', description: '' },
+    { name: 'Admission Inquiry', category: 'Purpose', description: '' },
+    { name: 'Fees Payment', category: 'Purpose', description: '' },
+    { name: 'Meeting', category: 'Purpose', description: '' },
+    { name: 'Academic', category: 'ComplaintType', description: '' },
+    { name: 'Transport', category: 'ComplaintType', description: '' },
+    { name: 'Infrastructure', category: 'ComplaintType', description: '' }
+  ];
+
+  newSetupItem = {
+    category: 'Source',
+    name: '',
+    description: ''
   };
-  newSetupItemName = '';
+
+  newCall = {
+    responderName: '',
+    phone: '',
+    callType: 'Incoming Flow',
+    duration: '',
+    followUpDate: '',
+    summary: ''
+  };
 
   // Form Models
   newLead: Partial<AdmissionLead> = {
@@ -159,15 +183,6 @@ export class AdministrationComponent implements OnInit {
     notes: '',
     type: 'Receive',
     verifiedBy: 'Reception Desk'
-  };
-
-  newCall: Partial<PhoneRecord> = {
-    name: '',
-    phone: '',
-    callType: 'Incoming',
-    duration: '03:15',
-    followUp: 'Pending',
-    note: ''
   };
 
   // Metrics
@@ -320,26 +335,34 @@ export class AdministrationComponent implements OnInit {
   saveCall(): void {
     this.phoneLogs.unshift({
       id: Date.now(),
-      name: this.newCall.name || 'Caller Representative',
+      name: this.newCall.responderName || 'Caller Representative',
       phone: this.newCall.phone || '+91 98765 43210',
-      callType: this.newCall.callType || 'Incoming',
-      duration: this.newCall.duration || '03:15',
-      followUp: this.newCall.followUp || 'Follow-up Scheduled',
-      note: this.newCall.note || 'Inquiry discussed',
+      callType: this.newCall.callType === 'Incoming Flow' ? 'Incoming' : 'Outgoing',
+      duration: this.newCall.duration || '05:20',
+      followUp: this.newCall.followUpDate || '2026-10-06',
+      note: this.newCall.summary || 'General inquiry',
       date: new Date().toISOString().split('T')[0]
     });
     if (typeof Swal !== 'undefined') {
-      Swal.fire({ icon: 'success', title: 'Call Logged', text: 'Telephony log saved.', timer: 1500, showConfirmButton: false });
+      Swal.fire({ icon: 'success', title: 'Call Logged', text: 'Telephonic communication archived.', timer: 1500, showConfirmButton: false });
     }
   }
 
   addSetupMaster(): void {
-    if (!this.newSetupItemName) return;
-    this.setupItems[this.setupCategory].push(this.newSetupItemName);
-    this.newSetupItemName = '';
+    if (!this.newSetupItem.name) return;
+    this.setupMasterItems.push({
+      name: this.newSetupItem.name,
+      category: this.newSetupItem.category,
+      description: this.newSetupItem.description || ''
+    });
+    this.newSetupItem.name = '';
+    this.newSetupItem.description = '';
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({ icon: 'success', title: 'Item Saved', text: 'Configuration master updated.', timer: 1200, showConfirmButton: false });
+    }
   }
 
-  deleteSetupItem(index: number): void {
-    this.setupItems[this.setupCategory].splice(index, 1);
+  deleteSetupMasterItem(index: number): void {
+    this.setupMasterItems.splice(index, 1);
   }
 }

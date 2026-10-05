@@ -1,273 +1,83 @@
 <div class="container-fluid p-0 animate-fade-in">
-  <!-- Header -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-    <div>
-      <h3 class="fw-bold mb-1 text-dark">Utilities & Intelligent Campus Tools</h3>
-      <p class="text-muted small mb-0">Task manager, QR attendance gateway, WhatsApp campaigns, AI content assistant, and audit logs</p>
-    </div>
-  </div>
-
-  <!-- Navigation Tabs -->
-  <div class="premium-card mb-4 p-2">
-    <ul class="nav nav-pills custom-pills">
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'tasks'" (click)="activeTab = 'tasks'">
-          <i class="fas fa-tasks me-2"></i> Campus Tasks & To-Do
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'qr'" (click)="activeTab = 'qr'">
-          <i class="fas fa-qrcode me-2"></i> QR & Biometric Check-In
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'whatsapp'" (click)="activeTab = 'whatsapp'">
-          <i class="fab fa-whatsapp text-success me-2"></i> WhatsApp Cloud API
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'ai'" (click)="activeTab = 'ai'">
-          <i class="fas fa-wand-magic-sparkles text-warning me-2"></i> AI Academic Assistant
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'logs'" (click)="activeTab = 'logs'">
-          <i class="fas fa-shield-halved me-2"></i> Audit & Activity Logs
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <!-- TAB: TASKS -->
-  <div *ngIf="activeTab === 'tasks'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+  <!-- 1. USER AUDIT LOGS (User Log) matching Screenshot Image 5 -->
+  <div *ngIf="activeTab === 'user-log'">
+    <div class="page-header d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
-        <h5 class="fw-bold mb-0">Campus Task Planner</h5>
-        <small class="text-muted">Coordinate operational duties across administration, academic, and finance teams</small>
+        <h2 class="page-title mb-1 fw-bold text-dark d-flex align-items-center">
+          <i class="fas fa-clock-rotate-left text-primary me-2"></i> User Audit Logs
+        </h2>
+        <p class="text-muted small mb-0">Complete transparency trail of institutional user activities and operations</p>
+      </div>
+      <div>
+        <button class="btn btn-outline-secondary bg-white shadow-sm fw-bold px-3" (click)="exportAudit()">
+          <i class="fas fa-file-export me-2"></i> EXPORT AUDIT
+        </button>
       </div>
     </div>
 
-    <!-- Add Task Input -->
-    <div class="row g-3 mb-4 p-3 bg-light rounded-16 border">
-      <div class="col-md-6">
-        <input type="text" class="form-control" [(ngModel)]="newTaskTitle" placeholder="Enter new campus task or to-do item...">
-      </div>
-      <div class="col-md-3">
-        <select class="form-select" [(ngModel)]="newTaskAssignee">
-          <option value="System Admin">System Admin</option>
-          <option value="Accounts Dept.">Accounts Dept.</option>
-          <option value="Dr. Ramesh Sharma">Dr. Ramesh Sharma</option>
-          <option value="Transport Manager">Transport Manager</option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="newTaskPriority">
-          <option value="High">High Priority</option>
-          <option value="Medium">Medium Priority</option>
-          <option value="Low">Low Priority</option>
-        </select>
-      </div>
-      <div class="col-md-1">
-        <button class="btn btn-primary w-100" (click)="addTask()"><i class="fas fa-plus"></i></button>
-      </div>
-    </div>
-
-    <!-- Task List -->
-    <div class="list-group list-group-flush">
-      <div class="list-group-item px-3 py-3 border rounded-12 mb-2 bg-white shadow-sm d-flex justify-content-between align-items-center"
-           *ngFor="let t of tasks">
-        <div class="d-flex align-items-center">
-          <input type="checkbox" class="form-check-input me-3 p-2 cursor-pointer" [checked]="t.completed" (change)="toggleTask(t)">
-          <div>
-            <h6 class="fw-bold mb-0" [ngClass]="t.completed ? 'text-decoration-line-through text-muted' : 'text-dark'">{{ t.title }}</h6>
-            <small class="text-muted">Assigned to: <strong>{{ t.assignee }}</strong> &bull; Due: {{ t.dueDate }}</small>
-          </div>
+    <!-- Filter Row matching Image 5 -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-lg-5 col-md-6">
+          <label class="form-label small fw-bold text-dark">Search Activity</label>
+          <input type="text" [(ngModel)]="searchActivity" class="form-control rounded-3 py-2 bg-light border-0" placeholder="User Name or Action Details...">
         </div>
-        <div class="d-flex align-items-center gap-2">
-          <span class="badge" [ngClass]="t.priority === 'High' ? 'bg-danger bg-opacity-10 text-danger' : (t.priority === 'Medium' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-secondary bg-opacity-10 text-secondary')">
-            {{ t.priority }} Priority
-          </span>
-          <span class="badge" [ngClass]="t.completed ? 'bg-success' : 'bg-light text-dark border'">
-            {{ t.completed ? 'Completed' : 'Pending' }}
-          </span>
+        <div class="col-lg-3 col-md-6">
+          <label class="form-label small fw-bold text-dark">Target Module</label>
+          <input type="text" [(ngModel)]="searchModule" class="form-control rounded-3 py-2 bg-light border-0" placeholder="Module Name...">
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: QR ATTENDANCE -->
-  <div *ngIf="activeTab === 'qr'" class="premium-card animate-fade-in">
-    <div class="row g-4">
-      <div class="col-lg-6">
-        <h5 class="fw-bold mb-3"><i class="fas fa-qrcode text-primary me-2"></i> Fast QR Attendance Gateway</h5>
-        <p class="text-muted small mb-4">Simulate scanning student ID card barcode/QR code at campus turnstile or entry gate.</p>
-
-        <div class="p-4 bg-light rounded-16 border text-center mb-4">
-          <div class="p-4 bg-white rounded-16 border d-inline-block shadow-sm mb-3">
-            <i class="fas fa-qrcode fa-6x text-dark"></i>
-          </div>
-          <div class="mb-3" style="max-width: 350px; margin: 0 auto;">
-            <input type="text" class="form-control text-center fw-bold" [(ngModel)]="qrAdmissionNo" placeholder="Scan or enter Admission No (e.g. ADM-2024-001)">
-          </div>
-          <button class="btn btn-primary rounded-pill px-4" (click)="simulateQrScan()">
-            <i class="fas fa-camera me-1"></i> Simulate QR Scan
+        <div class="col-lg-2 col-md-6">
+          <button class="btn btn-primary-search w-100 py-2 rounded-3 fw-bold text-uppercase" (click)="onSearch()">
+            <i class="fas fa-search me-2"></i> SEARCH
+          </button>
+        </div>
+        <div class="col-lg-2 col-md-6">
+          <button class="btn btn-link text-muted text-decoration-none small d-flex align-items-center">
+            <i class="fas fa-filter me-1"></i> Quick filter...
           </button>
         </div>
       </div>
+    </div>
 
-      <div class="col-lg-6">
-        <h5 class="fw-bold mb-3">Last Scan Result</h5>
-        <div class="card border rounded-16 p-4 bg-white shadow-sm" *ngIf="qrScanResult">
-          <div class="d-flex align-items-center mb-3">
-            <div class="rounded-circle p-3 bg-success text-white fw-bold fs-4 me-3" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;">
-              {{ qrScanResult.avatar }}
-            </div>
-            <div>
-              <h5 class="fw-bold mb-0 text-dark">{{ qrScanResult.studentName }}</h5>
-              <div class="text-muted small">{{ qrScanResult.class }} &bull; {{ qrScanResult.admissionNo }}</div>
-            </div>
-            <span class="badge bg-success ms-auto px-3 py-2 fs-6">PRESENT</span>
-          </div>
-          <div class="p-3 bg-light rounded-12 border small">
-            <div class="d-flex justify-content-between mb-1">
-              <span class="text-muted">Gate Verified:</span>
-              <strong>Main Campus Turnstile #1</strong>
-            </div>
-            <div class="d-flex justify-content-between mb-1">
-              <span class="text-muted">Timestamp:</span>
-              <strong>{{ qrScanResult.scanTime }}</strong>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Parent SMS Notification:</span>
-              <span class="text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Dispatched</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="p-5 text-center text-muted bg-light rounded-16 border" *ngIf="!qrScanResult">
-          <i class="fas fa-id-badge fa-3x mb-2 opacity-50"></i>
-          <p class="mb-0">Awaiting QR scan from entrance terminal...</p>
-        </div>
+    <!-- Chronological Audit Trail Section & Table -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+      <div class="p-3 border-bottom bg-white">
+        <h6 class="fw-bold text-dark mb-0 letter-spacing-1">Chronological Audit Trail</h6>
       </div>
-    </div>
-  </div>
-
-  <!-- TAB: WHATSAPP CLOUD API -->
-  <div *ngIf="activeTab === 'whatsapp'" class="premium-card animate-fade-in" style="max-width: 750px; margin: 0 auto;">
-    <div class="d-flex align-items-center mb-3">
-      <i class="fab fa-whatsapp text-success fa-2x me-3"></i>
-      <div>
-        <h5 class="fw-bold mb-0">WhatsApp Official Business Cloud API</h5>
-        <small class="text-muted">Broadcast verified notifications, exam schedules, and fee receipts to parent smartphones</small>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-4">TIMESTAMP</th>
+              <th>USER</th>
+              <th>ACTION</th>
+              <th>MODULE</th>
+              <th>DESCRIPTION</th>
+              <th class="pe-4">IP ADDRESS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of auditLogs">
+              <td class="ps-4"><small class="text-muted">{{ log.timestamp }}</small></td>
+              <td><span class="fw-bold text-dark">{{ log.user }}</span></td>
+              <td><span class="badge bg-primary-subtle text-primary">{{ log.action }}</span></td>
+              <td><span class="badge bg-light text-dark border">{{ log.module }}</span></td>
+              <td><small class="text-muted">{{ log.description }}</small></td>
+              <td class="pe-4"><small class="text-muted font-monospace">{{ log.ipAddress }}</small></td>
+            </tr>
+            <tr *ngIf="auditLogs.length === 0">
+              <td colspan="6" class="text-center py-5">
+                <div class="empty-state-box">
+                  <div class="empty-audit-icon mb-3">
+                    <i class="fas fa-clipboard-list" style="font-size: 3rem; color: #cbd5e1;"></i>
+                  </div>
+                  <h6 class="fw-bold text-muted mb-0">No audit logs found for the current period.</h6>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Message Template</label>
-      <select class="form-select" [(ngModel)]="whatsAppForm.template">
-        <option value="Fee Due Reminder">Fee Due Reminder & Payment Link</option>
-        <option value="Absence Alert">Daily Student Absence Emergency Alert</option>
-        <option value="Exam Schedule">CBSE Term Examination Schedule & Admit Card</option>
-        <option value="Bus Telemetry">School Bus Arrival Geofence Notification</option>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Target Audience / Recipient Segment</label>
-      <input type="text" class="form-control" [(ngModel)]="whatsAppForm.recipientGroup">
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label small fw-bold">Message Content Payload</label>
-      <textarea class="form-control" [(ngModel)]="whatsAppForm.message" rows="5"></textarea>
-    </div>
-
-    <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="sendWhatsAppCampaign()">
-      <i class="fab fa-whatsapp me-2"></i> Launch Broadcast Campaign
-    </button>
-  </div>
-
-  <!-- TAB: AI ACADEMIC ASSISTANT -->
-  <div *ngIf="activeTab === 'ai'" class="premium-card animate-fade-in">
-    <div class="d-flex align-items-center mb-4">
-      <div class="rounded-circle p-3 bg-warning bg-opacity-10 text-warning me-3">
-        <i class="fas fa-wand-magic-sparkles fa-2x"></i>
-      </div>
-      <div>
-        <h5 class="fw-bold mb-0">AI Academic & Administrative Assistant</h5>
-        <small class="text-muted">Generate instant lesson plans, quiz question banks, and circular drafts using generative AI</small>
-      </div>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-lg-5">
-        <div class="mb-3">
-          <label class="form-label small fw-bold">Content Type</label>
-          <select class="form-select" [(ngModel)]="aiContentType">
-            <option value="Lesson Plan">Structured Syllabus Lesson Plan</option>
-            <option value="Exam Questions">Examination & Quiz Questions Builder</option>
-            <option value="Circular">Official School Notice / Circular Draft</option>
-          </select>
-        </div>
-
-        <div class="mb-4">
-          <label class="form-label small fw-bold">Topic / Subject Matter Prompt</label>
-          <textarea class="form-control" [(ngModel)]="aiPrompt" rows="4" placeholder="e.g. Newton's Laws of Motion with real world examples or Annual Sports Day notice..."></textarea>
-        </div>
-
-        <button class="btn btn-primary rounded-pill px-4 shadow-sm w-100" [disabled]="aiGenerating" (click)="generateAiContent()">
-          <i class="fas" [ngClass]="aiGenerating ? 'fa-spinner fa-spin' : 'fa-bolt me-1'"></i> 
-          {{ aiGenerating ? 'Generating Content...' : 'Generate with AI' }}
-        </button>
-      </div>
-
-      <div class="col-lg-7">
-        <div class="card border rounded-16 p-4 bg-light h-100" style="min-height: 300px;">
-          <h6 class="fw-bold text-dark mb-3"><i class="fas fa-file-lines text-primary me-2"></i> Generated Output</h6>
-          <div *ngIf="aiOutput" class="bg-white p-3 rounded-12 border shadow-sm font-monospace small" style="white-space: pre-wrap;">
-            {{ aiOutput }}
-          </div>
-          <div *ngIf="!aiOutput" class="text-center py-5 text-muted">
-            <i class="fas fa-robot fa-3x mb-2 opacity-50"></i>
-            <p class="mb-0">Enter a prompt on the left to generate pedagogical material instantly.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: AUDIT LOGS -->
-  <div *ngIf="activeTab === 'logs'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold mb-0">System Audit & User Activity Logs</h5>
-        <small class="text-muted">Real-time tracking of critical transactions, logins, and permission changes</small>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Log ID</th>
-            <th>User / Account</th>
-            <th>Role</th>
-            <th>Operation / Action</th>
-            <th>IP Address</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let l of logs">
-            <td><code>LOG-{{ l.id }}</code></td>
-            <td class="fw-bold text-dark">{{ l.user }}</td>
-            <td><span class="badge bg-primary bg-opacity-10 text-primary fw-bold">{{ l.role }}</span></td>
-            <td>{{ l.action }}</td>
-            <td><small class="font-monospace text-muted">{{ l.ip }}</small></td>
-            <td><small class="text-secondary">{{ l.timestamp }}</small></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>

@@ -70,11 +70,12 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['utilities']">
-        <li><a routerLink="/utilities" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Tasks & Tools</a></li>
-        <li><a routerLink="/chat" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-comments me-1"></i> Campus Chat</a></li>
-        <li><a routerLink="/utilities" class="sub-nav-link">QR Attendance Gateway</a></li>
-        <li><a routerLink="/utilities" class="sub-nav-link">WhatsApp Cloud API</a></li>
-        <li><a routerLink="/utilities" class="sub-nav-link">AI Assistant</a></li>
+        <li><a [routerLink]="['/utilities']" [queryParams]="{tab: 'user-log'}" class="sub-nav-link">User Log</a></li>
+        <li><a [routerLink]="['/chat']" [queryParams]="{tab: 'directory'}" class="sub-nav-link">Chat</a></li>
+        <li><a [routerLink]="['/chat']" [queryParams]="{tab: 'chat-box'}" class="sub-nav-link">Chat Box</a></li>
+        <li><a [routerLink]="['/chat']" [queryParams]="{tab: 'invitation'}" class="sub-nav-link">Invitation</a></li>
+        <li><a [routerLink]="['/chat']" [queryParams]="{tab: 'blocked'}" class="sub-nav-link">Blocked User</a></li>
+        <li><a [routerLink]="['/chat']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Chat Settings</a></li>
       </ul>
     </div>
 
