@@ -1,1 +1,112 @@
-/* Administration styles */
+.stat-card-clean {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f1f5f9;
+  height: 100%;
+}
+
+.border-blue { border-left: 4px solid #3b82f6 !important; }
+.border-green { border-left: 4px solid #10b981 !important; }
+.border-yellow { border-left: 4px solid #f59e0b !important; }
+.border-red { border-left: 4px solid #ef4444 !important; }
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.stat-num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.text-green { color: #10b981 !important; }
+.text-yellow { color: #f59e0b !important; }
+.text-red { color: #ef4444 !important; }
+
+.stat-sub {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.btn-purple {
+  background: #7c3aed;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 18px;
+  transition: 0.3s;
+}
+.btn-purple:hover {
+  background: #6d28d9;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-primary-gradient {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.btn-primary-gradient:hover {
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.empty-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+.empty-door-icon, .empty-icon {
+  margin: 0 auto;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.table th {
+  font-size: 0.82rem;
+  text-transform: capitalize;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.3px;
+  padding: 14px 16px;
+}
+.table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}

@@ -53,13 +53,13 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['adminSection']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['adminSection']">
-        <li><a routerLink="/administration" routerLinkActive="active" class="sub-nav-link">Admission Query</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Visitor Book</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Complaint</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Postal Receive</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Postal Dispatch</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Phone Call Log</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Admin Setup</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'queries'}" class="sub-nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">Admission Query</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'visitors'}" class="sub-nav-link">Visitor Book</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'complaints'}" class="sub-nav-link">Complaint</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'postal-receive'}" class="sub-nav-link">Postal Receive</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'postal-dispatch'}" class="sub-nav-link">Postal Dispatch</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'calls'}" class="sub-nav-link">Phone Call Log</a></li>
+        <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'setup'}" class="sub-nav-link">Admin Setup</a></li>
       </ul>
     </div>
 
