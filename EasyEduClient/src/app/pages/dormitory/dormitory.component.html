@@ -1,0 +1,354 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Hostel & Dormitory Administration</h3>
+      <p class="text-muted small mb-0">Manage boarding residential blocks, room & bed capacities, student allocations, and dietary mess schedules</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showAddRoomModal = true">
+        <i class="fas fa-door-open me-1"></i> Add Room
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="showAllocateBedModal = true">
+        <i class="fas fa-bed me-1"></i> Allocate Student Bed
+      </button>
+    </div>
+  </div>
+
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-building fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">BLOCKS</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ blocks.length }} Buildings</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Boys, Girls & Faculty Wings</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-bed fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">CAPACITY</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ totalBedsCapacity }} Beds</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Total Residential Sleeping Units</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-user-check fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">OCCUPIED</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ totalBedsOccupied }} Boarders</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">{{ ((totalBedsOccupied / totalBedsCapacity) * 100 | number:'1.0-0') }}% Occupancy Ratio</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-door-closed fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">VACANT</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ totalBedsCapacity - totalBedsOccupied }} Vacant</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Beds Ready For Fresh Intake</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'blocks'" (click)="activeTab = 'blocks'">
+          <i class="fas fa-hotel me-2"></i> Hostel Blocks & Wardens
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'rooms'" (click)="activeTab = 'rooms'">
+          <i class="fas fa-door-open me-2"></i> Rooms & Bed Inventory
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'allocations'" (click)="activeTab = 'allocations'">
+          <i class="fas fa-users-viewfinder me-2"></i> Student Bed Allocations
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'mess'" (click)="activeTab = 'mess'">
+          <i class="fas fa-utensils me-2"></i> Mess Food Menu
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Hostel Blocks & Wardens -->
+  <div *ngIf="activeTab === 'blocks'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-md-4" *ngFor="let b of blocks">
+      <div class="card border rounded-16 p-4 shadow-sm bg-white h-100 hover-shadow">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ b.type }}</span>
+          <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ b.status }}</span>
+        </div>
+
+        <h5 class="fw-bold text-dark mt-2 mb-1">{{ b.name }}</h5>
+        
+        <div class="p-3 bg-light rounded-12 my-3 small">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Chief Warden:</span>
+            <strong class="text-dark">{{ b.wardenName }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Emergency Phone:</span>
+            <strong>{{ b.wardenPhone }}</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">Rooms / Beds:</span>
+            <strong>{{ b.totalRooms }} Rooms ({{ b.occupiedBeds }}/{{ b.totalBeds }} Beds)</strong>
+          </div>
+        </div>
+
+        <div class="progress mb-3" style="height: 8px;">
+          <div class="progress-bar bg-success" [style.width.%]="(b.occupiedBeds / b.totalBeds) * 100"></div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center pt-2 border-top small text-muted">
+          <span>{{ b.totalBeds - b.occupiedBeds }} Beds Available</span>
+          <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="activeTab = 'rooms'">View Rooms</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Rooms & Bed Inventory -->
+  <div *ngIf="activeTab === 'rooms'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Hostel Rooms Master</h5>
+        <p class="text-muted small mb-0">Room numbers, AC/Non-AC tier, total bed slots, and fee per term</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="showAddRoomModal = true">
+        <i class="fas fa-plus me-1"></i> Add Room
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Room #</th>
+            <th>Building Block</th>
+            <th>Room Tier / Sharing</th>
+            <th>Floor</th>
+            <th>Total Beds</th>
+            <th>Available</th>
+            <th>Term Fee (₹)</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of rooms">
+            <td><strong class="text-primary">{{ r.roomNo }}</strong></td>
+            <td><strong class="text-dark">{{ r.blockName }}</strong></td>
+            <td><span class="badge bg-info bg-opacity-10 text-primary border border-info border-opacity-25">{{ r.roomType }}</span></td>
+            <td>{{ r.floor }}</td>
+            <td>{{ r.totalBeds }} Beds</td>
+            <td>
+              <span class="badge" [ngClass]="r.availableBeds > 0 ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' : 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25'">
+                {{ r.availableBeds }} Free
+              </span>
+            </td>
+            <td class="fw-bold text-success">₹{{ r.costPerTerm | number }}/term</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="fas fa-edit"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: Student Bed Allocations -->
+  <div *ngIf="activeTab === 'allocations'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Resident Boarders Manifest</h5>
+        <p class="text-muted small mb-0">Active student hostel room assignments and emergency guardian contacts</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="showAllocateBedModal = true">
+        <i class="fas fa-user-plus me-1"></i> Allocate Bed
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Admission #</th>
+            <th>Class</th>
+            <th>Hostel Block</th>
+            <th>Room & Bed #</th>
+            <th>Allocation Date</th>
+            <th>Parent Contact</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of allocations">
+            <td><strong class="text-dark">{{ a.studentName }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ a.admissionNo }}</span></td>
+            <td>{{ a.class }}</td>
+            <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ a.blockName }}</span></td>
+            <td><strong class="text-dark">{{ a.roomNo }} ({{ a.bedNo }})</strong></td>
+            <td><small class="text-muted">{{ a.allocationDate }}</small></td>
+            <td><small class="text-secondary fw-semibold">{{ a.guardianPhone }}</small></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger rounded-circle" title="Vacate Bed"><i class="fas fa-door-closed"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: Mess Food Menu -->
+  <div *ngIf="activeTab === 'mess'" class="premium-card animate-fade-in">
+    <h5 class="fw-bold text-dark mb-1">Hostel Dining & Mess Meal Schedule</h5>
+    <p class="text-muted small mb-4">Nutritionally balanced daily meal rotation for residential scholars</p>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <div class="card border rounded-16 p-3 bg-light shadow-sm">
+          <span class="badge bg-warning text-dark mb-2"><i class="fas fa-sun me-1"></i> Breakfast (07:30 - 08:30 AM)</span>
+          <p class="small text-dark mb-0">Idli Sambar, Masala Dosa, Fresh Fruits, Boiled Eggs, Milk, Tea & Coffee</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="card border rounded-16 p-3 bg-light shadow-sm">
+          <span class="badge bg-success text-white mb-2"><i class="fas fa-utensils me-1"></i> Lunch (12:30 - 02:00 PM)</span>
+          <p class="small text-dark mb-0">Steamed Rice, Roti, Dal Makhani, Paneer Butter Masala, Curd, Mixed Salad & Sweet</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="card border rounded-16 p-3 bg-light shadow-sm">
+          <span class="badge bg-primary text-white mb-2"><i class="fas fa-moon me-1"></i> Dinner (07:30 - 09:00 PM)</span>
+          <p class="small text-dark mb-0">Chapati, Veg Biryani / Chicken Curry, Dal Tadka, Raita, Ice Cream / Fruit Custard</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- 1. Add Room Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddRoomModal">
+  <div class="modal-content-custom" style="max-width: 500px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-door-open text-primary me-2"></i> Add Hostel Room</h5>
+      <button class="btn-close" (click)="showAddRoomModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Select Hostel Block *</label>
+          <select class="form-select modern-select" [(ngModel)]="newRoom.blockName">
+            <option *ngFor="let b of blocks" [value]="b.name">{{ b.name }}</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Room Number *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newRoom.roomNo" placeholder="e.g. T-104">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Floor</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newRoom.floor" placeholder="e.g. 1st Floor">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Room Tier</label>
+          <select class="form-select modern-select" [(ngModel)]="newRoom.roomType">
+            <option value="Single AC">Single AC</option>
+            <option value="Double Sharing">Double Sharing</option>
+            <option value="Triple Deluxe">Triple Deluxe</option>
+            <option value="4-Bed Dorm">4-Bed Dorm</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Total Beds</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="newRoom.totalBeds" min="1">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Cost Per Term (₹)</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="newRoom.costPerTerm">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAddRoomModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveRoom()">Save Room</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Allocate Bed Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAllocateBedModal">
+  <div class="modal-content-custom" style="max-width: 520px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-bed text-primary me-2"></i> Allocate Student Bed</h5>
+      <button class="btn-close" (click)="showAllocateBedModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Student Name *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.studentName" placeholder="Full name">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Admission #</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.admissionNo" placeholder="ADM-2025-...">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Class / Grade</label>
+          <select class="form-select modern-select" [(ngModel)]="newAllocation.class">
+            <option value="Grade 10-A">Grade 10-A</option>
+            <option value="Grade 10-B">Grade 10-B</option>
+            <option value="Grade 11-Science">Grade 11-Science</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Hostel Block</label>
+          <select class="form-select modern-select" [(ngModel)]="newAllocation.blockName">
+            <option *ngFor="let b of blocks" [value]="b.name">{{ b.name }}</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Room & Bed #</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.roomNo" placeholder="T-103 (Bed A)">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Guardian Emergency Phone</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newAllocation.guardianPhone" placeholder="+91 98450...">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAllocateBedModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveBedAllocation()">Confirm Bed Allocation</button>
+    </div>
+  </div>
+</div>

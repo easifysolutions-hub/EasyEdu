@@ -1,0 +1,420 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Certificates & Identity Card Desk</h3>
+      <p class="text-muted small mb-0">Issue Transfer Certificates (TC), Bonafide, Character Certificates, and design batch Student/Staff ID Badges</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="openIdCardPrint(students[0])">
+        <i class="fas fa-id-card me-1"></i> Preview ID Badge
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'generate'">
+        <i class="fas fa-certificate me-1"></i> Issue Certificate
+      </button>
+    </div>
+  </div>
+
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-certificate fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ISSUED</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ records.length }} Issued</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Official Verified Documents</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-id-badge fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">STUDENTS</span>
+        </div>
+        <h2 class="fw-bold mb-1">1,248 Cards</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Active Student Smart Badges</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-user-tie fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">FACULTY</span>
+        </div>
+        <h2 class="fw-bold mb-1">84 Badges</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Staff NFC/Barcode Passes</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-layer-group fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TEMPLATES</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ templates.length }} Formats</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Pre-Configured Certificate Layouts</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'issued'" (click)="activeTab = 'issued'">
+          <i class="fas fa-file-contract me-2"></i> Issued Certificates Log
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'generate'" (click)="activeTab = 'generate'">
+          <i class="fas fa-file-pen me-2"></i> Issue New Certificate
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'idcards'" (click)="activeTab = 'idcards'">
+          <i class="fas fa-id-card me-2"></i> Student ID Cards
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'staffcards'" (click)="activeTab = 'staffcards'">
+          <i class="fas fa-user-tag me-2"></i> Staff & Faculty Badges
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'templates'" (click)="activeTab = 'templates'">
+          <i class="fas fa-sliders-h me-2"></i> Certificate Templates Master
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Issued Certificates Log -->
+  <div *ngIf="activeTab === 'issued'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Issued Certificates Register</h5>
+        <p class="text-muted small mb-0">Permanent record of all school transfer, character, and bonafide credentials</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="activeTab = 'generate'">
+        <i class="fas fa-plus me-1"></i> Issue Certificate
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Certificate #</th>
+            <th>Document Type</th>
+            <th>Student Name</th>
+            <th>Admission #</th>
+            <th>Class</th>
+            <th>Issue Date</th>
+            <th>Purpose</th>
+            <th>Authorized By</th>
+            <th class="text-end">Print / Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of records">
+            <td><strong class="text-primary">{{ r.certificateNo }}</strong></td>
+            <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ r.type }}</span></td>
+            <td><strong class="text-dark">{{ r.studentName }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ r.admissionNo }}</span></td>
+            <td>{{ r.class }}</td>
+            <td><small class="text-muted">{{ r.issueDate }}</small></td>
+            <td><small class="text-secondary">{{ r.purpose }}</small></td>
+            <td><small class="fw-semibold text-dark">{{ r.issuedBy }}</small></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="openCertificatePrint(r)">
+                <i class="fas fa-print me-1"></i> Print / View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: Issue New Certificate -->
+  <div *ngIf="activeTab === 'generate'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold text-dark mb-3">Issue Student Certificate</h5>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label small fw-bold">Certificate Type *</label>
+            <select class="form-select modern-select" [(ngModel)]="generateForm.type">
+              <option value="Transfer Certificate (TC)">Transfer Certificate (TC)</option>
+              <option value="Bonafide Certificate">Bonafide Certificate</option>
+              <option value="Character Certificate">Character Certificate</option>
+              <option value="Sports Merit">Sports & Extracurricular Merit</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label small fw-bold">Student Full Name *</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="generateForm.studentName" placeholder="Student name">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Admission Number *</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="generateForm.admissionNo" placeholder="ADM-2024-001">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Class / Grade *</label>
+            <select class="form-select modern-select" [(ngModel)]="generateForm.class">
+              <option value="Grade 10-A">Grade 10-A</option>
+              <option value="Grade 10-B">Grade 10-B</option>
+              <option value="Grade 9-A">Grade 9-A</option>
+              <option value="Grade 11-Science">Grade 11-Science</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Purpose / Reason for Issuance *</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="generateForm.purpose" placeholder="e.g. Higher studies admission at University">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Conduct & Character Assessment</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="generateForm.conduct">
+          </div>
+          <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'issued'">Cancel</button>
+            <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="generateNewCertificate()">
+              <i class="fas fa-check-circle me-1"></i> Generate & Print Certificate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 rounded-16 p-4 text-white mb-4 shadow-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <h5 class="fw-bold mb-2"><i class="fas fa-shield-alt me-2"></i> Security Verification</h5>
+        <p class="small text-white text-opacity-90 mb-0">
+          Every generated certificate receives a unique serial number, digital watermark, and verification QR code recognized by board authorities.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Student ID Cards -->
+  <div *ngIf="activeTab === 'idcards'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Student Identity Badges</h5>
+        <p class="text-muted small mb-0">Batch print student smart ID cards formatted with barcode and blood group</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="printDocument()">
+        <i class="fas fa-print me-1"></i> Print Batch (All Cards)
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-lg-3" *ngFor="let s of students">
+        <!-- Vertical ID Card Mockup -->
+        <div class="card border rounded-16 shadow-sm overflow-hidden bg-white hover-shadow text-center p-0">
+          <div class="bg-primary text-white p-3" style="background: linear-gradient(135deg, #12403E 0%, #002B49 100%) !important;">
+            <h6 class="fw-bold mb-0 text-uppercase small ls-1">EASYEDU ACADEMY</h6>
+            <div style="font-size: 0.65rem; opacity: 0.85;">STUDENT IDENTITY CARD</div>
+          </div>
+          <div class="p-3">
+            <div class="avatar-circle mx-auto my-2 shadow-sm" style="width: 58px; height: 58px; font-size: 1.4rem; background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);">
+              {{ (s.name || 'S').charAt(0) }}
+            </div>
+            <h6 class="fw-bold text-dark mb-0">{{ s.name }}</h6>
+            <span class="badge bg-light text-primary border my-1">{{ s.identifier }}</span>
+            <div class="small text-muted mb-2">{{ s.roleOrClass }}</div>
+
+            <div class="p-2 bg-light rounded-12 text-start small mb-3">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Blood Group:</span>
+                <strong>{{ s.bloodGroup }}</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Emergency:</span>
+                <strong>{{ s.phone }}</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Valid Till:</span>
+                <strong>{{ s.validTill }}</strong>
+              </div>
+            </div>
+
+            <button class="btn btn-sm btn-outline-primary rounded-pill w-100" (click)="openIdCardPrint(s)">
+              <i class="fas fa-eye me-1"></i> Preview & Print
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Staff & Faculty Badges -->
+  <div *ngIf="activeTab === 'staffcards'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Faculty & Staff Identity Badges</h5>
+        <p class="text-muted small mb-0">Official institutional NFC/Barcode access cards for teaching and administrative personnel</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4" *ngFor="let st of staffCards">
+        <div class="card border rounded-16 shadow-sm overflow-hidden bg-white hover-shadow p-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar-circle shadow-sm" style="width: 52px; height: 52px; font-size: 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+              {{ (st.name || 'T').charAt(0) }}
+            </div>
+            <div>
+              <h6 class="fw-bold text-dark mb-0">{{ st.name }}</h6>
+              <span class="badge bg-light text-secondary border">{{ st.identifier }}</span>
+              <div class="small text-muted">{{ st.roleOrClass }}</div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-3 small">
+            <span class="text-muted">Blood Group: <strong>{{ st.bloodGroup }}</strong></span>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="openIdCardPrint(st)">
+              <i class="fas fa-print me-1"></i> Print Badge
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Certificate Templates Master -->
+  <div *ngIf="activeTab === 'templates'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Certificate Templates & Letterhead Standards</h5>
+        <p class="text-muted small mb-0">Standard wording, signatories, and watermark security parameters</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4" *ngFor="let t of templates">
+        <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow">
+          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 mb-2">{{ t.type }}</span>
+          <h6 class="fw-bold text-dark mb-2">{{ t.name }}</h6>
+          <p class="small text-muted mb-3">Header: <em>"{{ t.headerText }}"</em></p>
+          <div class="pt-2 border-top small text-secondary">
+            Signatory: <strong>{{ t.footerSignatory }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PRINT MODALS ================= -->
+
+<!-- 1. Certificate Print Modal -->
+<div class="modal-backdrop-custom" *ngIf="showCertificatePrintModal">
+  <div class="modal-content-custom" style="max-width: 720px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
+      <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-certificate text-primary me-2"></i> Official Document Verification</h6>
+      <button class="btn-close" (click)="showCertificatePrintModal = false"></button>
+    </div>
+    <div class="modal-body-custom p-4" *ngIf="selectedCertificate">
+      <div class="border border-3 rounded-16 p-5 bg-white shadow-sm position-relative" style="border-style: double !important; border-color: #002B49 !important;">
+        <div class="text-center border-bottom pb-3 mb-4">
+          <h3 class="fw-bold text-dark mb-1" style="letter-spacing: 2px;">EASYEDU INTERNATIONAL ACADEMY</h3>
+          <p class="small text-muted mb-0">Affiliated to Central Board of Secondary Education • School Code: EE-BLR-001</p>
+          <h5 class="fw-bold text-primary mt-3 text-uppercase" style="letter-spacing: 1.5px;">{{ selectedCertificate.type }}</h5>
+        </div>
+
+        <div class="text-end small text-muted mb-3">
+          <strong>Certificate Ref #:</strong> {{ selectedCertificate.certificateNo }} • <strong>Date:</strong> {{ selectedCertificate.issueDate }}
+        </div>
+
+        <div class="lh-lg mb-4 text-dark" style="font-size: 1.05rem;">
+          This is to certify that Master / Miss <strong>{{ selectedCertificate.studentName }}</strong>, bearing Admission Number <strong>{{ selectedCertificate.admissionNo }}</strong>, is / was a bona fide student of this institution in <strong>{{ selectedCertificate.class }}</strong> during the academic session.
+          <br><br>
+          This certificate is issued upon special request for the purpose of: <em>"{{ selectedCertificate.purpose }}"</em>.
+          To the best of our institutional knowledge, his / her conduct and moral character during the tenure at this academy have been <strong>Exemplary and Commendable</strong>.
+        </div>
+
+        <div class="row g-2 pt-5 text-center small text-dark mt-4">
+          <div class="col-4">
+            <div class="border-top pt-2" style="border-color: #002B49 !important;"><strong>Office Registrar</strong></div>
+          </div>
+          <div class="col-4">
+            <div class="border-top pt-2" style="border-color: #002B49 !important;"><strong>Institutional Seal</strong></div>
+          </div>
+          <div class="col-4">
+            <div class="border-top pt-2" style="border-color: #002B49 !important;"><strong>Principal Signatory</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showCertificatePrintModal = false">Close</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printDocument()">
+        <i class="fas fa-print me-1"></i> Print Certificate
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. ID Card Print Modal -->
+<div class="modal-backdrop-custom" *ngIf="showIdCardPrintModal">
+  <div class="modal-content-custom" style="max-width: 440px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
+      <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-id-card text-primary me-2"></i> ID Badge Print Preview</h6>
+      <button class="btn-close" (click)="showIdCardPrintModal = false"></button>
+    </div>
+    <div class="modal-body-custom p-4 d-flex justify-content-center" *ngIf="selectedIdCard">
+      <div class="card border rounded-16 shadow overflow-hidden bg-white text-center p-0" style="width: 280px;">
+        <div class="p-3 text-white" style="background: linear-gradient(135deg, #12403E 0%, #002B49 100%);">
+          <h6 class="fw-bold mb-0 text-uppercase small">EASYEDU ACADEMY</h6>
+          <div style="font-size: 0.65rem; opacity: 0.85;">{{ selectedIdCard.type === 'Staff' ? 'FACULTY BADGE' : 'STUDENT PASS' }}</div>
+        </div>
+        <div class="p-3">
+          <div class="avatar-circle mx-auto my-2 shadow-sm" style="width: 64px; height: 64px; font-size: 1.5rem; background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);">
+            {{ (selectedIdCard.name || 'S').charAt(0) }}
+          </div>
+          <h5 class="fw-bold text-dark mb-0">{{ selectedIdCard.name }}</h5>
+          <span class="badge bg-primary my-1">{{ selectedIdCard.identifier }}</span>
+          <div class="small text-muted mb-3">{{ selectedIdCard.roleOrClass }}</div>
+
+          <div class="p-2 bg-light rounded-12 text-start small mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">Blood Group:</span>
+              <strong>{{ selectedIdCard.bloodGroup }}</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">Emergency Phone:</span>
+              <strong>{{ selectedIdCard.phone }}</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Valid Period:</span>
+              <strong>{{ selectedIdCard.validTill }}</strong>
+            </div>
+          </div>
+
+          <div class="border-top pt-2">
+            <i class="fas fa-barcode fa-2x text-dark"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showIdCardPrintModal = false">Close</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printDocument()">
+        <i class="fas fa-print me-1"></i> Print Badge
+      </button>
+    </div>
+  </div>
+</div>

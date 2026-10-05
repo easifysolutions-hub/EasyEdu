@@ -1,0 +1,38 @@
+.hover-shadow {
+  transition: all 0.25s ease;
+}
+.hover-shadow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+.custom-pills .nav-link {
+  color: #4b5563;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.custom-pills .nav-link.active {
+  background-color: var(--sidebar-bg, #12403E);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(18, 64, 62, 0.25);
+}
+
+.custom-pills .nav-link:hover:not(.active) {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.rounded-16 {
+  border-radius: 16px;
+}
+
+.rounded-12 {
+  border-radius: 12px;
+}
+
+.ls-1 {
+  letter-spacing: 1px;
+}

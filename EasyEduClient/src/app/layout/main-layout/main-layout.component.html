@@ -85,10 +85,10 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['communicate']">
-        <li><a routerLink="/administration" class="sub-nav-link">Notice Board</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Send Email / SMS</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Email / SMS Log</a></li>
-        <li><a routerLink="/academic/timetable" class="sub-nav-link">Event Calendar</a></li>
+        <li><a routerLink="/communication" routerLinkActive="active" class="sub-nav-link text-info">Notice Board</a></li>
+        <li><a routerLink="/communication" class="sub-nav-link">Send Email / SMS</a></li>
+        <li><a routerLink="/communication" class="sub-nav-link">Event Calendar</a></li>
+        <li><a routerLink="/communication" class="sub-nav-link">Communication Log</a></li>
       </ul>
     </div>
 
@@ -128,9 +128,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['homework']">
-        <li><a routerLink="/academic/classes" class="sub-nav-link text-success fw-bold">Add Homework</a></li>
-        <li><a routerLink="/academic/classes" class="sub-nav-link">Homework List</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Homework Report</a></li>
+        <li><a routerLink="/homework" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Homework List</a></li>
+        <li><a routerLink="/homework" class="sub-nav-link">Add Homework</a></li>
+        <li><a routerLink="/homework" class="sub-nav-link">Submissions & Grading</a></li>
       </ul>
     </div>
 
@@ -266,6 +266,31 @@
         <li><a routerLink="/library" class="sub-nav-link">Book List & Categories</a></li>
         <li><a routerLink="/library" class="sub-nav-link text-info">Issue & Return Books</a></li>
         <li><a routerLink="/library" class="sub-nav-link">Library Members</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['dormitory']" (click)="toggleMenu('dormitory')">
+        <span><i class="fas fa-hotel main-icon"></i> <span class="sidebar-label">Dormitory & Hostel</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dormitory']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['dormitory']">
+        <li><a routerLink="/dormitory" routerLinkActive="active" class="sub-nav-link text-info">Hostel Blocks</a></li>
+        <li><a routerLink="/dormitory" class="sub-nav-link">Rooms & Bed Inventory</a></li>
+        <li><a routerLink="/dormitory" class="sub-nav-link text-success">Student Allocations</a></li>
+        <li><a routerLink="/dormitory" class="sub-nav-link">Mess Meal Menu</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['certificates']" (click)="toggleMenu('certificates')">
+        <span><i class="fas fa-certificate main-icon"></i> <span class="sidebar-label">Certificates & Badges</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['certificates']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['certificates']">
+        <li><a routerLink="/certificates" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-file-contract me-1"></i> Issue Certificate (TC)</a></li>
+        <li><a routerLink="/certificates" class="sub-nav-link text-info"><i class="fas fa-id-card me-1"></i> Student ID Cards</a></li>
+        <li><a routerLink="/certificates" class="sub-nav-link"><i class="fas fa-user-tag me-1"></i> Staff Passes</a></li>
       </ul>
     </div>
 

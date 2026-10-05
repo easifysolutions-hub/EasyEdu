@@ -16,6 +16,10 @@ import { TransportComponent } from './pages/transport/transport.component';
 import { VirtualClassComponent } from './pages/virtual-class/virtual-class.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { HomeworkComponent } from './pages/homework/homework.component';
+import { CommunicationComponent } from './pages/communication/communication.component';
+import { CertificatesComponent } from './pages/certificates/certificates.component';
+import { DormitoryComponent } from './pages/dormitory/dormitory.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -37,10 +41,14 @@ export const routes: Routes = [
       { path: 'academic/timetable', component: ClassesComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'attendance/report', component: AttendanceComponent },
-      { path: 'fees', component: FeesComponent },
+      { path: 'homework', component: HomeworkComponent },
+      { path: 'communication', component: CommunicationComponent },
       { path: 'examinations', component: ExaminationsComponent },
+      { path: 'certificates', component: CertificatesComponent },
+      { path: 'fees', component: FeesComponent },
       { path: 'library', component: LibraryComponent },
       { path: 'transport', component: TransportComponent },
+      { path: 'dormitory', component: DormitoryComponent },
       { path: 'virtual-class', component: VirtualClassComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'settings', component: SettingsComponent }

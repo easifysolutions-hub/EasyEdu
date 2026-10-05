@@ -1,0 +1,394 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Homework & Digital Assignments</h3>
+      <p class="text-muted small mb-0">Publish daily class tasks, track student file submissions, and conduct online grading and evaluation</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'create'">
+        <i class="fas fa-plus-circle me-1"></i> Add Homework
+      </button>
+    </div>
+  </div>
+
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-book fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">TOTAL TASKS</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ tasks.length }} Assigned</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Across All Grades & Subjects</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-file-upload fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">SUBMISSIONS</span>
+        </div>
+        <h2 class="fw-bold mb-1">123 Files</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Uploaded by Students Online</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-check-double fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">GRADED</span>
+        </div>
+        <h2 class="fw-bold mb-1">93 Evaluated</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">With Marks & Teacher Feedback</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-hourglass-half fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">PENDING</span>
+        </div>
+        <h2 class="fw-bold mb-1">30 Awaiting</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Submissions in Teacher Queue</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'list'" (click)="activeTab = 'list'">
+          <i class="fas fa-list-check me-2"></i> Homework List & Assignments
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'create'" (click)="activeTab = 'create'">
+          <i class="fas fa-plus-circle me-2"></i> Assign New Homework
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'evaluate'" (click)="activeTab = 'evaluate'">
+          <i class="fas fa-graduation-cap me-2"></i> Submissions & Grading Matrix
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'report'" (click)="activeTab = 'report'">
+          <i class="fas fa-chart-pie me-2"></i> Completion Analytics
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Homework List -->
+  <div *ngIf="activeTab === 'list'" class="premium-card animate-fade-in">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <div class="d-flex flex-wrap gap-2 align-items-center flex-grow-1" style="max-width: 600px;">
+        <div class="search-bar-modern flex-grow-1">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by title, subject, teacher...">
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <select class="form-select modern-select" style="width: 160px;" [(ngModel)]="selectedClassFilter">
+          <option value="All">All Grades</option>
+          <option value="Grade 10-A">Grade 10-A</option>
+          <option value="Grade 10-B">Grade 10-B</option>
+          <option value="Grade 9-A">Grade 9-A</option>
+          <option value="Grade 11-Science">Grade 11-Science</option>
+        </select>
+        <button class="btn btn-primary" (click)="activeTab = 'create'">
+          <i class="fas fa-plus"></i> New Task
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Homework Title & Subject</th>
+            <th>Class / Section</th>
+            <th>Assigned Date</th>
+            <th>Due Date</th>
+            <th>Max Marks</th>
+            <th>Submissions</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of filteredTasks">
+            <td>
+              <strong class="text-dark">{{ t.title }}</strong>
+              <div class="small text-muted">
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 me-1">{{ t.subject }}</span>
+                By: {{ t.teacher }}
+              </div>
+            </td>
+            <td><strong class="text-secondary">{{ t.class }}</strong></td>
+            <td><small class="text-muted">{{ t.assignDate }}</small></td>
+            <td><small class="fw-bold text-danger">{{ t.submissionDate }}</small></td>
+            <td><strong class="text-dark">{{ t.maxMarks }} M</strong></td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <span class="small fw-bold">{{ t.evaluatedCount }}/{{ t.totalSubmissions }} Evaluated</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="t.status === 'Active' ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' : 'bg-secondary'">
+                {{ t.status }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1" (click)="activeTab = 'evaluate'">
+                <i class="fas fa-check-double me-1"></i> Grade ({{ t.totalSubmissions }})
+              </button>
+              <button *ngIf="t.attachmentName" class="btn btn-sm btn-outline-secondary rounded-circle" (click)="downloadFile(t.attachmentName)" title="Download Attachment">
+                <i class="fas fa-paperclip"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: Add / Assign Homework -->
+  <div *ngIf="activeTab === 'create'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold text-dark mb-3">Assign New Homework Task</h5>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label small fw-bold">Homework Title *</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="newHomework.title" placeholder="e.g. Chapter 4 - Optics Numerical Problem Solving Set A">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Target Grade & Section *</label>
+            <select class="form-select modern-select" [(ngModel)]="newHomework.class">
+              <option value="Grade 10-A">Grade 10 - Section A</option>
+              <option value="Grade 10-B">Grade 10 - Section B</option>
+              <option value="Grade 9-A">Grade 9 - Section A</option>
+              <option value="Grade 11-Science">Grade 11 - Science Stream</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Subject Master *</label>
+            <select class="form-select modern-select" [(ngModel)]="newHomework.subject">
+              <option value="Mathematics">Mathematics</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="English">English Literature</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Assign Date</label>
+            <input type="date" class="form-control modern-input" [(ngModel)]="newHomework.assignDate">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Submission Due Date *</label>
+            <input type="date" class="form-control modern-input" [(ngModel)]="newHomework.submissionDate">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Maximum Marks</label>
+            <input type="number" class="form-control modern-input" [(ngModel)]="newHomework.maxMarks">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Upload Reference Material (PDF/Doc)</label>
+            <input type="file" class="form-control modern-input">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Detailed Instructions / Questions</label>
+            <textarea class="form-control modern-input" rows="4" [(ngModel)]="newHomework.description" placeholder="Specify instructions, rubric, and question numbers..."></textarea>
+          </div>
+          <div class="col-12">
+            <div class="form-check form-switch mt-2">
+              <input class="form-check-input" type="checkbox" id="hwAlert" [(ngModel)]="newHomework.notifyParents">
+              <label class="form-check-label small fw-semibold" for="hwAlert">Send instant mobile app alert & SMS to enrolled students and parents</label>
+            </div>
+          </div>
+          <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'list'">Cancel</button>
+            <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="saveHomework()">
+              <i class="fas fa-paper-plane me-1"></i> Publish Homework
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 rounded-16 p-4 text-white mb-4 shadow-sm" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);">
+        <h5 class="fw-bold mb-2"><i class="fas fa-lightbulb me-2"></i> Teacher Guidance</h5>
+        <p class="small text-white text-opacity-90 mb-0">
+          Once published, students can upload handwritten photos or PDFs directly through their student app portal. System automatically calculates on-time and late submissions.
+        </p>
+      </div>
+
+      <div class="premium-card p-4">
+        <h6 class="fw-bold text-dark mb-3">Recently Published</h6>
+        <div class="list-group list-group-flush small">
+          <div class="list-group-item px-0 py-2 border-light" *ngFor="let t of tasks.slice(0, 3)">
+            <strong>{{ t.title }}</strong>
+            <div class="text-muted">{{ t.class }} • Due: {{ t.submissionDate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Submissions & Evaluation Matrix -->
+  <div *ngIf="activeTab === 'evaluate'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Student File Submissions & Marking Desk</h5>
+        <p class="text-muted small mb-0">Review submitted answer papers, assign marks, and post teacher feedback</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Roll #</th>
+            <th>Student Name</th>
+            <th>Admission #</th>
+            <th>Submission Date</th>
+            <th>Attached Solution</th>
+            <th>Evaluation Status</th>
+            <th>Score (Out of 25)</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sub of submissions">
+            <td><strong>{{ sub.rollNo }}</strong></td>
+            <td><strong class="text-dark">{{ sub.studentName }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ sub.admissionNo }}</span></td>
+            <td><small class="text-muted">{{ sub.submissionDate }}</small></td>
+            <td>
+              <button class="btn btn-sm btn-light border rounded-pill px-2 py-1" (click)="downloadFile(sub.fileName)">
+                <i class="fas fa-file-pdf text-danger me-1"></i> {{ sub.fileName }} ({{ sub.fileSize }})
+              </button>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="sub.status === 'Evaluated' ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' : 'bg-warning text-dark'">
+                {{ sub.status }}
+              </span>
+            </td>
+            <td>
+              <strong *ngIf="sub.status === 'Evaluated'" class="text-success">{{ sub.marksObtained }} / 25</strong>
+              <span *ngIf="sub.status !== 'Evaluated'" class="text-muted">—</span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-primary rounded-pill px-3" (click)="openEvaluateModal(sub)">
+                <i class="fas fa-pen-to-square me-1"></i> Evaluate
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: Completion Analytics -->
+  <div *ngIf="activeTab === 'report'" class="premium-card animate-fade-in">
+    <h5 class="fw-bold text-dark mb-1">Homework Submission & Compliance Matrix</h5>
+    <p class="text-muted small mb-4">Grade-level homework completion rates and top performing submission turnarounds</p>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card border rounded-16 p-4 bg-light shadow-sm">
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Grade 10-A Submission Rate</h6>
+          <div class="d-flex justify-content-between mb-2">
+            <span>On-Time Turnaround</span>
+            <strong class="text-success">92.4%</strong>
+          </div>
+          <div class="progress mb-3" style="height: 10px;">
+            <div class="progress-bar bg-success" style="width: 92.4%;"></div>
+          </div>
+          <div class="d-flex justify-content-between small text-muted">
+            <span>Evaluated: 28</span>
+            <span>Pending: 6</span>
+            <span>Total Enrolled: 34</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card border rounded-16 p-4 bg-light shadow-sm">
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Grade 10-B Submission Rate</h6>
+          <div class="d-flex justify-content-between mb-2">
+            <span>On-Time Turnaround</span>
+            <strong class="text-primary">100% (All Graded)</strong>
+          </div>
+          <div class="progress mb-3" style="height: 10px;">
+            <div class="progress-bar bg-primary" style="width: 100%;"></div>
+          </div>
+          <div class="d-flex justify-content-between small text-muted">
+            <span>Evaluated: 38</span>
+            <span>Pending: 0</span>
+            <span>Total Enrolled: 38</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= EVALUATION MODAL ================= -->
+<div class="modal-backdrop-custom" *ngIf="showEvaluateModal">
+  <div class="modal-content-custom" style="max-width: 520px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-graduation-cap text-primary me-2"></i> Grade Student Submission</h5>
+      <button class="btn-close" (click)="showEvaluateModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3" *ngIf="selectedSubmission">
+      <div class="p-3 bg-light rounded-12 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <strong class="text-dark">{{ selectedSubmission.studentName }}</strong>
+          <span class="badge bg-primary">Roll #{{ selectedSubmission.rollNo }}</span>
+        </div>
+        <div class="small text-muted">Submitted: {{ selectedSubmission.submissionDate }}</div>
+        <div class="mt-2">
+          <button class="btn btn-sm btn-outline-dark rounded-pill px-3" (click)="downloadFile(selectedSubmission.fileName)">
+            <i class="fas fa-eye me-1"></i> Preview Solution ({{ selectedSubmission.fileName }})
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Marks Awarded (Out of 25) *</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="evalMarks" min="0" max="25">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Teacher Feedback & Correction Notes</label>
+          <textarea class="form-control modern-input" rows="3" [(ngModel)]="evalComment" placeholder="Write feedback for the student..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showEvaluateModal = false">Cancel</button>
+      <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="submitEvaluation()">
+        <i class="fas fa-check-circle me-1"></i> Save Grade & Publish
+      </button>
+    </div>
+  </div>
+</div>
