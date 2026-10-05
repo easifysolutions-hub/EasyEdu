@@ -47,7 +47,7 @@
 
     <!-- 2. ADMINISTRATION -->
     <div class="menu-category">ADMINISTRATION</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="adminSectionMenu">
       <a class="nav-link-premium" [class.open]="openMenus['adminSection']" (click)="toggleMenu('adminSection')">
         <span><i class="fas fa-shield-halved main-icon"></i> <span class="sidebar-label">Admin Section</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['adminSection']"></i>
@@ -60,13 +60,17 @@
         <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'postal-dispatch'}" class="sub-nav-link">Postal Dispatch</a></li>
         <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'calls'}" class="sub-nav-link">Phone Call Log</a></li>
         <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'setup'}" class="sub-nav-link">Admin Setup</a></li>
+        <li><a routerLink="/certificates" class="sub-nav-link">Student Certificate</a></li>
+        <li><a routerLink="/certificates" class="sub-nav-link">Generate Certificate</a></li>
+        <li><a routerLink="/certificates" class="sub-nav-link">Student ID Card</a></li>
+        <li><a routerLink="/certificates" class="sub-nav-link">Generate ID Card</a></li>
       </ul>
     </div>
 
     <!-- Utilities -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="utilitiesModule">
       <a class="nav-link-premium" [class.open]="openMenus['utilities']" (click)="toggleMenu('utilities')">
-        <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities & Tools</span></span>
+        <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['utilities']">
@@ -80,116 +84,116 @@
     </div>
 
     <!-- Communicate -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="communicateModule">
       <a class="nav-link-premium" [class.open]="openMenus['communicate']" (click)="toggleMenu('communicate')">
         <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Communicate</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['communicate']">
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'notice-board'}" class="sub-nav-link">Notice Board</a></li>
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'send-email'}" class="sub-nav-link">Send Email / Sms</a></li>
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'message-log'}" class="sub-nav-link">Email / Sms Log</a></li>
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'event-list'}" class="sub-nav-link">Event</a></li>
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'calendar'}" class="sub-nav-link">Calendar</a></li>
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'email-templates'}" class="sub-nav-link">Email Template</a></li>
-        <li><a [routerLink]="['/communication']" [queryParams]="{tab: 'sms-templates'}" class="sub-nav-link">Sms Template</a></li>
+        <li><a routerLink="/Communicate/NoticeBoard" routerLinkActive="active" class="sub-nav-link">Notice Board</a></li>
+        <li><a routerLink="/Communicate/SendEmail" routerLinkActive="active" class="sub-nav-link">Send Email / Sms</a></li>
+        <li><a routerLink="/Communicate/MessageLog" routerLinkActive="active" class="sub-nav-link">Email / Sms Log</a></li>
+        <li><a routerLink="/Communicate/EventList" routerLinkActive="active" class="sub-nav-link">Event</a></li>
+        <li><a routerLink="/Communicate/Calendar" routerLinkActive="active" class="sub-nav-link">Calendar</a></li>
+        <li><a routerLink="/Communicate/EmailTemplates" routerLinkActive="active" class="sub-nav-link">Email Template</a></li>
+        <li><a routerLink="/Communicate/SmsTemplates" routerLinkActive="active" class="sub-nav-link">Sms Template</a></li>
       </ul>
     </div>
 
     <!-- 3. ACADEMICS -->
     <div class="menu-category">ACADEMICS</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="academicsMenu">
       <a class="nav-link-premium" [class.open]="openMenus['academic']" (click)="toggleMenu('academic')">
         <span><i class="fas fa-graduation-cap main-icon"></i> <span class="sidebar-label">Academics</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['academic']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['academic']">
-        <li><a [routerLink]="['/academic/classes']" [queryParams]="{tab: 'classes'}" class="sub-nav-link">Class</a></li>
-        <li><a [routerLink]="['/academic/sections']" [queryParams]="{tab: 'sections'}" class="sub-nav-link">Section</a></li>
-        <li><a [routerLink]="['/academic/subjects']" [queryParams]="{tab: 'subjects'}" class="sub-nav-link">Subjects</a></li>
-        <li><a [routerLink]="['/academic/assign-teacher']" [queryParams]="{tab: 'assign-teacher'}" class="sub-nav-link">Assign Class Teacher</a></li>
-        <li><a [routerLink]="['/academic/assign-subject']" [queryParams]="{tab: 'assign-subject'}" class="sub-nav-link">Assign Subject</a></li>
-        <li><a [routerLink]="['/academic/class-room']" [queryParams]="{tab: 'class-rooms'}" class="sub-nav-link">Class Room</a></li>
-        <li><a [routerLink]="['/academic/timetable']" [queryParams]="{tab: 'routine'}" class="sub-nav-link">Class Routine</a></li>
-        <li><a [routerLink]="['/academic/optional-subject']" [queryParams]="{tab: 'optional-subject'}" class="sub-nav-link">Optional Subject</a></li>
+        <li><a routerLink="/Classes" routerLinkActive="active" class="sub-nav-link">Class</a></li>
+        <li><a routerLink="/Section" routerLinkActive="active" class="sub-nav-link">Section</a></li>
+        <li><a routerLink="/Subjects" routerLinkActive="active" class="sub-nav-link">Subjects</a></li>
+        <li><a routerLink="/AssignClassTeacher" routerLinkActive="active" class="sub-nav-link">Assign Class Teacher</a></li>
+        <li><a routerLink="/AssignSubject" routerLinkActive="active" class="sub-nav-link">Assign Subject</a></li>
+        <li><a routerLink="/ClassRoom" routerLinkActive="active" class="sub-nav-link">Class Room</a></li>
+        <li><a routerLink="/ClassRoutine" routerLinkActive="active" class="sub-nav-link">Class Routine</a></li>
+        <li><a routerLink="/OptionalSubject/Assign" routerLinkActive="active" class="sub-nav-link">Optional Subject</a></li>
       </ul>
     </div>
 
     <!-- Lesson Plan -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="lessonPlanMenu">
       <a class="nav-link-premium" [class.open]="openMenus['lessonPlan']" (click)="toggleMenu('lessonPlan')">
         <span><i class="fas fa-chalkboard-teacher main-icon"></i> <span class="sidebar-label">Lesson Plan</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['lessonPlan']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['lessonPlan']">
-        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'lesson'}" class="sub-nav-link">Lesson</a></li>
-        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'topic'}" class="sub-nav-link">Topic</a></li>
-        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'plan'}" class="sub-nav-link">Lesson Plan</a></li>
-        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'overview'}" class="sub-nav-link">Lesson Plan Overview</a></li>
-        <li><a [routerLink]="['/lesson-plan']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Settings</a></li>
+        <li><a routerLink="/LessonPlan/Lesson" routerLinkActive="active" class="sub-nav-link">Lesson</a></li>
+        <li><a routerLink="/LessonPlan/Topic" routerLinkActive="active" class="sub-nav-link">Topic</a></li>
+        <li><a routerLink="/LessonPlan" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Lesson Plan</a></li>
+        <li><a routerLink="/LessonPlan/LessonPlanOverview" routerLinkActive="active" class="sub-nav-link">Lesson Plan Overview</a></li>
+        <li><a routerLink="/LessonPlan/Settings" routerLinkActive="active" class="sub-nav-link">Settings</a></li>
       </ul>
     </div>
 
     <!-- Homework -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="homeworkMenu">
       <a class="nav-link-premium" [class.open]="openMenus['homework']" (click)="toggleMenu('homework')">
         <span><i class="fas fa-pen-fancy main-icon"></i> <span class="sidebar-label">Homework</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['homework']">
-        <li><a [routerLink]="['/homework']" [queryParams]="{tab: 'create'}" class="sub-nav-link">Add Homework</a></li>
-        <li><a [routerLink]="['/homework']" [queryParams]="{tab: 'list'}" class="sub-nav-link">Homework List</a></li>
-        <li><a [routerLink]="['/homework']" [queryParams]="{tab: 'report'}" class="sub-nav-link">Homework Report</a></li>
+        <li><a routerLink="/Homework/Create" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Homework</a></li>
+        <li><a routerLink="/Homework" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Homework List</a></li>
+        <li><a routerLink="/Homework/HomeworkReport" routerLinkActive="active" class="sub-nav-link">Homework Report</a></li>
       </ul>
     </div>
 
     <!-- Examinations -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="examSuiteMenu">
       <a class="nav-link-premium" [class.open]="openMenus['exams']" (click)="toggleMenu('exams')">
         <span><i class="fas fa-file-signature main-icon"></i> <span class="sidebar-label">Examination</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['exams']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['exams']">
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'type'}" class="sub-nav-link">Exam Type</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'setup'}" class="sub-nav-link">Exam Setup</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'schedule'}" class="sub-nav-link">Exam Schedule</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'attendance'}" class="sub-nav-link">Exam Attendance</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'marks'}" class="sub-nav-link">Marks Register</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'grade'}" class="sub-nav-link">Marks Grade</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'sms'}" class="sub-nav-link">Send Marks By SMS</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'format-settings'}" class="sub-nav-link">Format Settings</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'exam-rules'}" class="sub-nav-link">Exam Rules</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'positions'}" class="sub-nav-link">Merit Positions</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'signatures'}" class="sub-nav-link">Signatures</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'admit-card'}" class="sub-nav-link">Admit Card</a></li>
-        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'seat-plan'}" class="sub-nav-link">Seat Plan</a></li>
+        <li><a routerLink="/Examinations/ExamType" routerLinkActive="active" class="sub-nav-link">Exam Type</a></li>
+        <li><a routerLink="/Examinations" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Exam Setup</a></li>
+        <li><a routerLink="/Examinations/ExamSchedule" routerLinkActive="active" class="sub-nav-link">Exam Schedule</a></li>
+        <li><a routerLink="/Examinations/ExamAttendance" routerLinkActive="active" class="sub-nav-link">Exam Attendance</a></li>
+        <li><a routerLink="/Examinations/MarksRegister" routerLinkActive="active" class="sub-nav-link">Marks Register</a></li>
+        <li><a routerLink="/Examinations/MarksGrade" routerLinkActive="active" class="sub-nav-link">Marks Grade</a></li>
+        <li><a routerLink="/Examinations/SendMarksBySms" routerLinkActive="active" class="sub-nav-link">Send Marks By SMS</a></li>
+        <li><a routerLink="/ExamSettings/FormatSettings" routerLinkActive="active" class="sub-nav-link">Format Settings</a></li>
+        <li><a routerLink="/ExamSettings/SetupExamRule" routerLinkActive="active" class="sub-nav-link">Exam Rules</a></li>
+        <li><a routerLink="/ExamSettings/Position" routerLinkActive="active" class="sub-nav-link">Merit Positions</a></li>
+        <li><a routerLink="/ExamSettings/SignatureSettings" routerLinkActive="active" class="sub-nav-link">Signatures</a></li>
+        <li><a routerLink="/ExamSettings/AdmitCardSetting" routerLinkActive="active" class="sub-nav-link">Admit Card</a></li>
+        <li><a routerLink="/ExamSettings/SeatPlanSetting" routerLinkActive="active" class="sub-nav-link">Seat Plan</a></li>
       </ul>
     </div>
 
     <!-- Online Exam -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="onlineExamMenu">
       <a class="nav-link-premium" [class.open]="openMenus['onlineExam']" (click)="toggleMenu('onlineExam')">
         <span><i class="fas fa-laptop-code main-icon"></i> <span class="sidebar-label">Online Exam</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['onlineExam']">
-        <li><a [routerLink]="['/online-exam']" [queryParams]="{tab: 'group'}" class="sub-nav-link">Question Group</a></li>
-        <li><a [routerLink]="['/online-exam']" [queryParams]="{tab: 'bank'}" class="sub-nav-link">Question Bank</a></li>
-        <li><a [routerLink]="['/online-exam']" [queryParams]="{tab: 'exam'}" class="sub-nav-link">Online Exam</a></li>
+        <li><a routerLink="/OnlineExam/QuestionGroup" routerLinkActive="active" class="sub-nav-link">Question Group</a></li>
+        <li><a routerLink="/OnlineExam/QuestionBank" routerLinkActive="active" class="sub-nav-link">Question Bank</a></li>
+        <li><a routerLink="/OnlineExam" routerLinkActive="active" class="sub-nav-link">Online Exam</a></li>
       </ul>
     </div>
 
     <!-- Teacher Evaluation -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="evaluationMenu">
       <a class="nav-link-premium" [class.open]="openMenus['teacherEvaluation']" (click)="toggleMenu('teacherEvaluation')">
         <span><i class="fas fa-star-half-stroke main-icon"></i> <span class="sidebar-label">Teacher Evaluation</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['teacherEvaluation']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['teacherEvaluation']">
-        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'approved'}" class="sub-nav-link">Approved Report</a></li>
-        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'pending'}" class="sub-nav-link">Pending Report</a></li>
-        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'teacher-wise'}" class="sub-nav-link">Teacher Wise Report</a></li>
-        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Settings</a></li>
+        <li><a routerLink="/TeacherEvaluation/ApprovedReport" routerLinkActive="active" class="sub-nav-link">Approved Report</a></li>
+        <li><a routerLink="/TeacherEvaluation/PendingReport" routerLinkActive="active" class="sub-nav-link">Pending Report</a></li>
+        <li><a routerLink="/TeacherEvaluation/TeacherWiseReport" routerLinkActive="active" class="sub-nav-link">Teacher Wise Report</a></li>
+        <li><a routerLink="/TeacherEvaluation/Settings" routerLinkActive="active" class="sub-nav-link">Settings</a></li>
       </ul>
     </div>
 
@@ -288,7 +292,7 @@
     </div>
 
     <!-- Accounts Master & Vouchers -->
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="accountsMenu">
       <a class="nav-link-premium" [class.open]="openMenus['accounts']" (click)="toggleMenu('accounts')">
         <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts Ledger</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
@@ -304,7 +308,7 @@
 
     <!-- 7. OPERATIONS, TRANSPORT, LIBRARY -->
     <div class="menu-category">OPERATIONS & LOGISTICS</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="transportMenu">
       <a class="nav-link-premium" [class.open]="openMenus['transport']" (click)="toggleMenu('transport')">
         <span><i class="fas fa-bus main-icon"></i> <span class="sidebar-label">Transport</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['transport']"></i>
@@ -316,7 +320,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="libraryMenu">
       <a class="nav-link-premium" [class.open]="openMenus['library']" (click)="toggleMenu('library')">
         <span><i class="fas fa-book-reader main-icon"></i> <span class="sidebar-label">Library</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['library']"></i>
@@ -329,7 +333,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="inventoryMenu">
       <a class="nav-link-premium" [class.open]="openMenus['inventory']" (click)="toggleMenu('inventory')">
         <span><i class="fas fa-boxes-stacked main-icon"></i> <span class="sidebar-label">Inventory & Store</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['inventory']"></i>
@@ -341,7 +345,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="dormitoryMenu">
       <a class="nav-link-premium" [class.open]="openMenus['dormitory']" (click)="toggleMenu('dormitory')">
         <span><i class="fas fa-hotel main-icon"></i> <span class="sidebar-label">Dormitory & Hostel</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dormitory']"></i>
@@ -354,7 +358,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="certificatesMenu">
       <a class="nav-link-premium" [class.open]="openMenus['certificates']" (click)="toggleMenu('certificates')">
         <span><i class="fas fa-certificate main-icon"></i> <span class="sidebar-label">Certificates & Badges</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['certificates']"></i>
@@ -368,7 +372,7 @@
 
     <!-- 8. PLATFORM ADDONS & VIRTUAL CLASS -->
     <div class="menu-category">PLATFORM ADDONS</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="virtualClassMenu">
       <a class="nav-link-premium" [class.open]="openMenus['virtualClass']" (click)="toggleMenu('virtualClass')">
         <span><i class="fas fa-video main-icon"></i> <span class="sidebar-label">Virtual Classrooms</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['virtualClass']"></i>
