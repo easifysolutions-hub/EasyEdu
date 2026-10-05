@@ -36,6 +36,7 @@ import { DownloadCenterComponent } from './pages/download-center/download-center
 import { ChatComponent } from './pages/chat/chat.component';
 import { UtilitiesComponent } from './pages/utilities/utilities.component';
 import { RolePermissionComponent } from './pages/role-permission/role-permission.component';
+import { ImportExportComponent } from './pages/import-export/import-export.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -272,6 +273,11 @@ export const routes: Routes = [
       { path: 'DownloadCenter/ContentList', component: DownloadCenterComponent },
       { path: 'DownloadCenter/SharedContent', component: DownloadCenterComponent },
       { path: 'DownloadCenter/VideoList', component: DownloadCenterComponent },
+      { path: 'import-export', component: ImportExportComponent },
+      { path: 'ImportExport', component: ImportExportComponent },
+      { path: 'ImportExport/DownloadTemplate', component: ImportExportComponent },
+      { path: 'DataManagement', component: ImportExportComponent },
+      { path: 'DataManagement/ImportExport', component: ImportExportComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'utilities', component: UtilitiesComponent },
       { path: 'role-permission', component: RolePermissionComponent },

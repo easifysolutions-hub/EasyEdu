@@ -93,6 +93,7 @@ export class MainLayoutComponent implements OnInit {
     if (url.includes('certificates')) this.openMenus['certificates'] = true;
     if (url.includes('virtual')) this.openMenus['virtualClass'] = true;
     if (url.includes('download')) this.openMenus['downloadCenter'] = true;
+    if (url.includes('importexport') || url.includes('datamanagement')) this.openMenus['dataManagement'] = true;
     if (url.includes('report')) this.openMenus['reports'] = true;
     if (url.includes('setting') || url.includes('role')) this.openMenus['systemSettings'] = true;
   }

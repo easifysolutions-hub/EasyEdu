@@ -1,0 +1,497 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Data Management & Universal Import/Export Hub</h3>
+      <p class="text-muted small mb-0">Standardized Excel/CSV ingestion schemas, automated column validators, and backup exports</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-primary rounded-pill px-3 shadow-sm" (click)="activeTab = 'export-hub'">
+        <i class="fas fa-file-export me-1"></i> Universal Export Hub
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'templates'">
+        <i class="fas fa-file-excel me-1"></i> Schema Templates
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="import-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'templates'" (click)="activeTab = 'templates'">
+          <i class="fas fa-table-cells-large me-2"></i> Schema Templates
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'students-import'" (click)="activeTab = 'students-import'">
+          <i class="fas fa-user-graduate me-2 text-primary"></i> Students Template
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'staff-import'" (click)="activeTab = 'staff-import'">
+          <i class="fas fa-users-gear me-2 text-success"></i> Staff Template
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'fees-import'" (click)="activeTab = 'fees-import'">
+          <i class="fas fa-file-invoice-dollar me-2 text-warning"></i> Fee Template
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'vouchers-import'" (click)="activeTab = 'vouchers-import'">
+          <i class="fas fa-wallet me-2 text-info"></i> Vouchers Template
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'export-hub'" (click)="activeTab = 'export-hub'">
+          <i class="fas fa-cloud-arrow-down me-2 text-purple"></i> Export Hub
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'history'" (click)="activeTab = 'history'">
+          <i class="fas fa-clock-rotate-left me-2"></i> Ingestion History
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ================= TAB 1: ALL SCHEMA TEMPLATES ================= -->
+  <div *ngIf="activeTab === 'templates'" class="animate-fade-in mb-5">
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-xl-3" *ngFor="let t of templates">
+        <div class="card border rounded-16 p-4 shadow-sm bg-white hover-shadow h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="rounded-12 p-3 bg-primary bg-opacity-10 text-primary d-inline-flex">
+                <i class="fas {{ t.icon }} fa-xl"></i>
+              </div>
+              <span class="badge bg-light text-dark border fw-bold">{{ t.fileFormat }}</span>
+            </div>
+            <h5 class="fw-bold text-dark mb-1">{{ t.name }}</h5>
+            <div class="small text-muted mb-3">{{ t.category }}</div>
+            <p class="small text-secondary mb-3">{{ t.description }}</p>
+            <div class="p-2 bg-light rounded-8 mb-3">
+              <span class="small fw-bold text-dark"><i class="fas fa-columns me-1 text-primary"></i> {{ t.columnsCount }} Pre-configured Columns</span>
+            </div>
+          </div>
+          <div class="pt-3 border-top d-flex gap-2">
+            <button class="btn btn-sm btn-outline-primary flex-grow-1 rounded-pill" (click)="switchTabByTemplateType(t.id)">
+              <i class="fas fa-upload me-1"></i> Import
+            </button>
+            <button class="btn btn-sm btn-success rounded-pill px-3" (click)="downloadTemplate(t)" title="Download Template">
+              <i class="fas fa-download me-1"></i> Template
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 2: STUDENTS TEMPLATE & IMPORTER ================= -->
+  <div *ngIf="activeTab === 'students-import'" class="animate-fade-in mb-5">
+    <div class="import-card p-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1"><i class="fas fa-user-graduate text-primary me-2"></i> Students Bulk Ingestion & Master Template</h4>
+          <p class="text-muted small mb-0">Download verified schema, map student admission records, and batch ingest into database</p>
+        </div>
+        <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="downloadTemplate(templates[0])">
+          <i class="fas fa-file-excel me-1"></i> Download Students Template (.xlsx)
+        </button>
+      </div>
+
+      <!-- Dropzone -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-6">
+          <div class="upload-dropzone p-4 text-center border border-2 border-dashed rounded-16 bg-light d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 200px;">
+            <i class="fas fa-cloud-arrow-up fa-3x text-primary mb-2 opacity-75"></i>
+            <h6 class="fw-bold text-dark mb-1">Select or drop student Excel/CSV sheet</h6>
+            <p class="small text-muted mb-3">Strict schema validation: AdmissionNo, Name, Class, RollNo, Guardian Details</p>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="simulateFileUpload('Students')">
+              <i class="fas fa-folder-open me-1"></i> Choose File
+            </button>
+            <span *ngIf="selectedUploadFileName" class="badge bg-white text-success border mt-2 px-3 py-1">{{ selectedUploadFileName }}</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card border rounded-16 p-4 bg-light h-100">
+            <h6 class="fw-bold text-dark mb-2"><i class="fas fa-circle-info text-info me-2"></i> Ingestion Guidelines</h6>
+            <ul class="small text-secondary ps-3 mb-3">
+              <li>Do not rename header column titles in row 1.</li>
+              <li>Ensure <code>AdmissionNo</code> is unique for every enrolled student.</li>
+              <li>Date format should follow <code>YYYY-MM-DD</code>.</li>
+              <li>Duplicate mobile numbers and emails will be flagged automatically.</li>
+            </ul>
+            <div class="mt-auto">
+              <button class="btn btn-primary w-100 rounded-12 py-2 fw-bold" (click)="executeImport('Students')">
+                <i class="fas fa-circle-check me-1"></i> Parse & Ingest Student Records
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample Preview Grid -->
+      <h6 class="fw-bold text-dark mb-3"><i class="fas fa-table me-2 text-primary"></i> Standard Expected Schema Preview</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="ps-3">Admission #</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Class</th>
+              <th>Section</th>
+              <th>Roll #</th>
+              <th>Contact Phone</th>
+              <th>Guardian Name</th>
+              <th>Validation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of studentsPreviewData">
+              <td class="ps-3"><strong class="text-primary">{{ s.admissionNo }}</strong></td>
+              <td>{{ s.firstName }}</td>
+              <td>{{ s.lastName }}</td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ s.class }}</span></td>
+              <td>{{ s.section }}</td>
+              <td><strong>{{ s.rollNo }}</strong></td>
+              <td><small class="text-muted">{{ s.phone }}</small></td>
+              <td>{{ s.guardian }}</td>
+              <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ s.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 3: STAFF TEMPLATE & IMPORTER ================= -->
+  <div *ngIf="activeTab === 'staff-import'" class="animate-fade-in mb-5">
+    <div class="import-card p-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1"><i class="fas fa-users-gear text-success me-2"></i> Faculty & Staff Bulk Ingestion</h4>
+          <p class="text-muted small mb-0">Import faculty rosters, base salaries, department allocations, and contracts</p>
+        </div>
+        <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="downloadTemplate(templates[1])">
+          <i class="fas fa-file-excel me-1"></i> Download Staff Template (.xlsx)
+        </button>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-6">
+          <div class="upload-dropzone p-4 text-center border border-2 border-dashed rounded-16 bg-light d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 200px;">
+            <i class="fas fa-cloud-arrow-up fa-3x text-success mb-2 opacity-75"></i>
+            <h6 class="fw-bold text-dark mb-1">Select or drop faculty Excel/CSV sheet</h6>
+            <p class="small text-muted mb-3">Required: StaffNo, Name, Department, Designation, Email, BasicSalary</p>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3" (click)="simulateFileUpload('Staff')">
+              <i class="fas fa-folder-open me-1"></i> Choose File
+            </button>
+            <span *ngIf="selectedUploadFileName" class="badge bg-white text-success border mt-2 px-3 py-1">{{ selectedUploadFileName }}</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card border rounded-16 p-4 bg-light h-100">
+            <h6 class="fw-bold text-dark mb-2"><i class="fas fa-circle-info text-info me-2"></i> Payroll & Role Linking</h6>
+            <p class="small text-secondary mb-3">Staff numbers will automatically link with the Payroll Ledger and biometric attendance system.</p>
+            <div class="mt-auto">
+              <button class="btn btn-success w-100 rounded-12 py-2 fw-bold text-white" (click)="executeImport('Staff')">
+                <i class="fas fa-circle-check me-1"></i> Parse & Ingest Faculty Records
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="fw-bold text-dark mb-3"><i class="fas fa-table me-2 text-success"></i> Expected Staff Schema Preview</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="ps-3">Staff #</th>
+              <th>Faculty Name</th>
+              <th>Department</th>
+              <th>Designation</th>
+              <th>Email Address</th>
+              <th>Phone</th>
+              <th>Base Salary</th>
+              <th>Validation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let st of staffPreviewData">
+              <td class="ps-3"><strong class="text-primary">{{ st.staffNo }}</strong></td>
+              <td><strong class="text-dark">{{ st.name }}</strong></td>
+              <td><span class="badge bg-light text-dark border">{{ st.department }}</span></td>
+              <td>{{ st.designation }}</td>
+              <td><small class="text-info">{{ st.email }}</small></td>
+              <td><small class="text-muted">{{ st.phone }}</small></td>
+              <td><strong class="text-success">{{ st.salary }}</strong></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ st.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 4: FEE TEMPLATE & IMPORTER ================= -->
+  <div *ngIf="activeTab === 'fees-import'" class="animate-fade-in mb-5">
+    <div class="import-card p-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1"><i class="fas fa-file-invoice-dollar text-warning me-2"></i> Fee Invoices Bulk Ingestion</h4>
+          <p class="text-muted small mb-0">Generate bulk student fee demands, invoices, and concession credits from spreadsheet</p>
+        </div>
+        <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="downloadTemplate(templates[2])">
+          <i class="fas fa-file-excel me-1"></i> Download Fee Template (.xlsx)
+        </button>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-6">
+          <div class="upload-dropzone p-4 text-center border border-2 border-dashed rounded-16 bg-light d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 200px;">
+            <i class="fas fa-cloud-arrow-up fa-3x text-warning mb-2 opacity-75"></i>
+            <h6 class="fw-bold text-dark mb-1">Select or drop fee invoice sheet</h6>
+            <p class="small text-muted mb-3">Required: AdmissionNo, FeeGroup, FeeHead, Amount, DueDate</p>
+            <button class="btn btn-sm btn-outline-warning text-dark rounded-pill px-3" (click)="simulateFileUpload('Fees')">
+              <i class="fas fa-folder-open me-1"></i> Choose File
+            </button>
+            <span *ngIf="selectedUploadFileName" class="badge bg-white text-success border mt-2 px-3 py-1">{{ selectedUploadFileName }}</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card border rounded-16 p-4 bg-light h-100">
+            <h6 class="fw-bold text-dark mb-2"><i class="fas fa-circle-info text-info me-2"></i> General Ledger Automation</h6>
+            <p class="small text-secondary mb-3">Ingested invoices will immediately reflect in the Student Fee Voucher and Collect Fees desk.</p>
+            <div class="mt-auto">
+              <button class="btn btn-warning w-100 rounded-12 py-2 fw-bold text-dark" (click)="executeImport('Fees')">
+                <i class="fas fa-circle-check me-1"></i> Ingest & Post Fee Invoices
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="fw-bold text-dark mb-3"><i class="fas fa-table me-2 text-warning"></i> Expected Fee Schema Preview</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="ps-3">Admission #</th>
+              <th>Student Name</th>
+              <th>Fee Group</th>
+              <th>Fee Head</th>
+              <th>Billing Amount</th>
+              <th>Due Date</th>
+              <th>Validation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let f of feesPreviewData">
+              <td class="ps-3"><strong class="text-primary">{{ f.admissionNo }}</strong></td>
+              <td><strong class="text-dark">{{ f.studentName }}</strong></td>
+              <td><span class="badge bg-light text-dark border">{{ f.feeGroup }}</span></td>
+              <td>{{ f.feeHead }}</td>
+              <td><strong class="text-success">{{ f.amount }}</strong></td>
+              <td><small class="text-muted">{{ f.dueDate }}</small></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ f.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 5: VOUCHERS TEMPLATE & IMPORTER ================= -->
+  <div *ngIf="activeTab === 'vouchers-import'" class="animate-fade-in mb-5">
+    <div class="import-card p-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1"><i class="fas fa-wallet text-info me-2"></i> Accounting Vouchers Bulk Ingestion</h4>
+          <p class="text-muted small mb-0">Batch import historical journal entries, receipts, payments, and stock vouchers</p>
+        </div>
+        <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="downloadTemplate(templates[3])">
+          <i class="fas fa-file-excel me-1"></i> Download Vouchers Template (.xlsx)
+        </button>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-6">
+          <div class="upload-dropzone p-4 text-center border border-2 border-dashed rounded-16 bg-light d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 200px;">
+            <i class="fas fa-cloud-arrow-up fa-3x text-info mb-2 opacity-75"></i>
+            <h6 class="fw-bold text-dark mb-1">Select or drop financial vouchers sheet</h6>
+            <p class="small text-muted mb-3">Required: VoucherDate, VoucherType, DebitAccount, CreditAccount, Amount</p>
+            <button class="btn btn-sm btn-outline-info rounded-pill px-3" (click)="simulateFileUpload('Vouchers')">
+              <i class="fas fa-folder-open me-1"></i> Choose File
+            </button>
+            <span *ngIf="selectedUploadFileName" class="badge bg-white text-success border mt-2 px-3 py-1">{{ selectedUploadFileName }}</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card border rounded-16 p-4 bg-light h-100">
+            <h6 class="fw-bold text-dark mb-2"><i class="fas fa-circle-info text-info me-2"></i> Double-Entry Verification</h6>
+            <p class="small text-secondary mb-3">All transactions are validated for debit-credit equilibrium prior to committing to General Ledger.</p>
+            <div class="mt-auto">
+              <button class="btn btn-info w-100 rounded-12 py-2 fw-bold text-white" (click)="executeImport('Vouchers')">
+                <i class="fas fa-circle-check me-1"></i> Ingest & Post Vouchers to GL
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="fw-bold text-dark mb-3"><i class="fas fa-table me-2 text-info"></i> Expected Vouchers Schema Preview</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="ps-3">Date</th>
+              <th>Voucher Type</th>
+              <th>Debit Account (DR)</th>
+              <th>Credit Account (CR)</th>
+              <th>Amount ($)</th>
+              <th>Narration / Memo</th>
+              <th>Validation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let v of vouchersPreviewData">
+              <td class="ps-3"><small class="text-muted fw-bold">{{ v.date }}</small></td>
+              <td><span class="badge bg-light text-dark border">{{ v.type }}</span></td>
+              <td><strong class="text-primary">{{ v.debit }}</strong></td>
+              <td><strong class="text-secondary">{{ v.credit }}</strong></td>
+              <td><strong class="text-success">{{ v.amount }}</strong></td>
+              <td><small class="text-muted">{{ v.memo }}</small></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ v.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 6: UNIVERSAL EXPORT HUB ================= -->
+  <div *ngIf="activeTab === 'export-hub'" class="animate-fade-in mb-5">
+    <div class="import-card p-4">
+      <div class="mb-4">
+        <h4 class="fw-bold text-dark mb-1"><i class="fas fa-cloud-arrow-down text-primary me-2"></i> Universal Export Hub</h4>
+        <p class="text-muted small mb-0">Export full institutional databases in high-fidelity Excel (.xlsx), CSV, and PDF archives</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-primary text-white">STUDENT REPOSITORIES</span>
+              <i class="fas fa-user-graduate fa-lg text-primary"></i>
+            </div>
+            <h5 class="fw-bold text-dark mt-2 mb-1">Full Student Directory Export</h5>
+            <p class="small text-muted mb-3">Exports entire student roster including guardian contacts, admissions, and attendance.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-success rounded-pill px-3" (click)="exportDataset('Students Database', 'Excel (.xlsx)')"><i class="fas fa-file-excel me-1"></i> Excel (.xlsx)</button>
+              <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" (click)="exportDataset('Students Database', 'CSV (.csv)')"><i class="fas fa-file-csv me-1"></i> CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-success text-white">FINANCIAL BOOKS</span>
+              <i class="fas fa-file-invoice-dollar fa-lg text-success"></i>
+            </div>
+            <h5 class="fw-bold text-dark mt-2 mb-1">Financial Books & Vouchers Export</h5>
+            <p class="small text-muted mb-3">Exports full General Ledger, Voucher Register, Balance Sheet, and Trial Balance.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-success rounded-pill px-3" (click)="exportDataset('Financial Ledger', 'Excel (.xlsx)')"><i class="fas fa-file-excel me-1"></i> Excel (.xlsx)</button>
+              <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" (click)="exportDataset('Financial Ledger', 'CSV (.csv)')"><i class="fas fa-file-csv me-1"></i> CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-info text-white">HUMAN RESOURCE</span>
+              <i class="fas fa-users-gear fa-lg text-info"></i>
+            </div>
+            <h5 class="fw-bold text-dark mt-2 mb-1">Faculty & Payroll Records Export</h5>
+            <p class="small text-muted mb-3">Exports staff directory, designations, monthly salary disbursements, and tax deductions.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-success rounded-pill px-3" (click)="exportDataset('Staff & Payroll Master', 'Excel (.xlsx)')"><i class="fas fa-file-excel me-1"></i> Excel (.xlsx)</button>
+              <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" (click)="exportDataset('Staff & Payroll Master', 'CSV (.csv)')"><i class="fas fa-file-csv me-1"></i> CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-warning text-dark">OPERATIONS & ASSETS</span>
+              <i class="fas fa-boxes-stacked fa-lg text-warning"></i>
+            </div>
+            <h5 class="fw-bold text-dark mt-2 mb-1">Asset Inventory & Library Catalog</h5>
+            <p class="small text-muted mb-3">Exports complete warehouse assets, stock quantities, book catalog, and vehicle fleet registry.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-success rounded-pill px-3" (click)="exportDataset('Operations Asset Registry', 'Excel (.xlsx)')"><i class="fas fa-file-excel me-1"></i> Excel (.xlsx)</button>
+              <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" (click)="exportDataset('Operations Asset Registry', 'CSV (.csv)')"><i class="fas fa-file-csv me-1"></i> CSV</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 7: INGESTION HISTORY ================= -->
+  <div *ngIf="activeTab === 'history'" class="animate-fade-in mb-5">
+    <div class="import-card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h5 class="fw-bold mb-1 text-dark">Ingestion Audit Log & Job History</h5>
+          <p class="text-muted small mb-0">Record of all spreadsheet batch imports with success/failure statistics</p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="ps-3">Job ID</th>
+              <th>Module Category</th>
+              <th>File Name</th>
+              <th>Total Rows</th>
+              <th>Success Rate</th>
+              <th>Performed By</th>
+              <th>Timestamp</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of importLogs">
+              <td class="ps-3"><strong>#JOB-{{ log.id }}</strong></td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ log.moduleType }}</span></td>
+              <td><strong class="text-dark">{{ log.fileName }}</strong></td>
+              <td>{{ log.recordsCount }} Rows</td>
+              <td>
+                <span class="badge" [ngClass]="log.failedCount === 0 ? 'bg-success text-white' : 'bg-warning text-dark'">
+                  {{ log.successCount }} / {{ log.recordsCount }} Passed
+                </span>
+              </td>
+              <td><small class="text-dark fw-semibold">{{ log.importedBy }}</small></td>
+              <td><small class="text-muted">{{ log.importedAt }}</small></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ log.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

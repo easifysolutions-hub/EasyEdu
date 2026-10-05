@@ -443,8 +443,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dataManagement']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['dataManagement']">
-        <li><a routerLink="/settings" class="sub-nav-link">Backup & Restore</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Sample Data Import</a></li>
+        <li><a routerLink="/ImportExport" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-success fw-bold">Import & Export Center</a></li>
+        <li><a [routerLink]="['/ImportExport/DownloadTemplate']" [queryParams]="{type: 'students'}" routerLinkActive="active" class="sub-nav-link">Students Template</a></li>
+        <li><a [routerLink]="['/ImportExport/DownloadTemplate']" [queryParams]="{type: 'staff'}" routerLinkActive="active" class="sub-nav-link">Staff Template</a></li>
+        <li><a [routerLink]="['/ImportExport/DownloadTemplate']" [queryParams]="{type: 'fees'}" routerLinkActive="active" class="sub-nav-link text-warning">Fee Template</a></li>
+        <li><a [routerLink]="['/ImportExport/DownloadTemplate']" [queryParams]="{type: 'vouchers'}" routerLinkActive="active" class="sub-nav-link text-info">Vouchers Template</a></li>
       </ul>
     </div>
 
