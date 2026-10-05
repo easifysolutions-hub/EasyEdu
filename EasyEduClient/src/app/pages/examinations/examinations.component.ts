@@ -1,47 +1,79 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '../../core/services/api.service';
 
 declare const Swal: any;
 
-interface Examination {
+export interface ExamTypeItem {
   id: number;
-  title: string;
-  type: string;
-  session: string;
-  class: string;
-  startDate: string;
-  endDate: string;
-  status: 'Upcoming' | 'Ongoing' | 'Completed' | 'Published';
-  totalSubjects: number;
+  name: string;
+  isPaid: boolean;
 }
 
-interface StudentMarkEntry {
+export interface ExaminationModel {
+  id: number;
+  name: string;
+  typeId?: number;
+  typeName?: string;
+  startDate: string;
+  endDate: string;
+  academicYear: string;
+  status: 'Scheduled' | 'Concluded' | 'Draft';
+}
+
+export interface ExamScheduleEntry {
+  id: number;
+  examId: number;
+  examName: string;
+  classId: number;
+  className: string;
+  sectionId: number;
+  sectionName: string;
+  subjectId: number;
+  subjectName: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  classRoomId: number;
+  roomNo: string;
+  fullMarks: number;
+  passMarks: number;
+}
+
+export interface ExamAttendanceStudent {
+  studentId: number;
+  rollNumber: string;
+  admissionNumber: string;
+  studentName: string;
+  isPresent: boolean;
+}
+
+export interface MarkRegisterItem {
+  id: number;
   studentId: number;
   studentName: string;
   rollNo: string;
   admissionNo: string;
+  examId: number;
+  examName: string;
+  classId: number;
+  className: string;
+  subjectId: number;
+  subjectName: string;
   marksObtained: number;
   maxMarks: number;
-  remarks: string;
+  status: 'PASSED' | 'FAILED';
 }
 
-interface GradeScale {
+export interface MarkGradeItem {
   id: number;
-  grade: string;
-  minScore: number;
-  maxScore: number;
-  gradePoint: number;
-  remarks: string;
-}
-
-interface ExamScheduleItem {
-  id: number;
-  subject: string;
-  date: string;
-  time: string;
-  room: string;
-  maxMarks: number;
+  name: string;
+  minPercentage: number;
+  maxPercentage: number;
+  gpa: number;
+  isActive: boolean;
 }
 
 @Component({
@@ -52,145 +84,335 @@ interface ExamScheduleItem {
   styleUrls: ['./examinations.component.css']
 })
 export class ExaminationsComponent implements OnInit {
-  activeTab: 'schedules' | 'marks' | 'grades' | 'admit' | 'reportcard' = 'schedules';
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private api = inject(ApiService);
 
-  exams: Examination[] = [
-    { id: 1, title: 'Term 1 Mid-Semester Examination', type: 'Term Exam', session: '2025-26', class: 'Grade 10-A', startDate: '2025-10-15', endDate: '2025-10-24', status: 'Ongoing', totalSubjects: 6 },
-    { id: 2, title: 'Quarterly Assessment Test (Unit 2)', type: 'Unit Test', session: '2025-26', class: 'Grade 9-A', startDate: '2025-08-10', endDate: '2025-08-18', status: 'Completed', totalSubjects: 5 },
-    { id: 3, title: 'Annual CBSE Final Board Mock', type: 'Annual Board', session: '2025-26', class: 'Grade 10-A', startDate: '2026-02-15', endDate: '2026-03-02', status: 'Upcoming', totalSubjects: 6 },
-    { id: 4, title: 'Formative Assessment - 1', type: 'Class Test', session: '2025-26', class: 'Grade 8-B', startDate: '2025-07-05', endDate: '2025-07-12', status: 'Published', totalSubjects: 4 }
+  activeTab: 'type' | 'setup' | 'schedule' | 'attendance' | 'marks' | 'grade' | 'sms' = 'setup';
+
+  // Master Data Lists
+  classes = [
+    { id: 1, name: 'Class 10', sections: [{ id: 1, name: 'Section A' }, { id: 2, name: 'Section B' }] },
+    { id: 2, name: 'Class 9', sections: [{ id: 1, name: 'Section A' }, { id: 2, name: 'Section B' }] },
+    { id: 3, name: 'Class 12 - Science', sections: [{ id: 5, name: 'Section PCM' }, { id: 6, name: 'Section PCB' }] },
+    { id: 4, name: 'Class 11 - Commerce', sections: [{ id: 7, name: 'Section Commerce' }] }
   ];
 
-  selectedExamForMarks = 1;
-  selectedSubjectForMarks = 'Mathematics';
-  selectedClassForMarks = 'Grade 10-A';
-
-  marksList: StudentMarkEntry[] = [
-    { studentId: 1, studentName: 'Aarav Sharma', rollNo: '1001', admissionNo: 'ADM-2024-001', marksObtained: 94, maxMarks: 100, remarks: 'Outstanding conceptual clarity' },
-    { studentId: 2, studentName: 'Diya Patel', rollNo: '1002', admissionNo: 'ADM-2024-002', marksObtained: 88, maxMarks: 100, remarks: 'Very good analytical skills' },
-    { studentId: 3, studentName: 'Rohan Gupta', rollNo: '1003', admissionNo: 'ADM-2024-003', marksObtained: 76, maxMarks: 100, remarks: 'Needs practice in geometry' },
-    { studentId: 4, studentName: 'Ananya Verma', rollNo: '1004', admissionNo: 'ADM-2024-004', marksObtained: 98, maxMarks: 100, remarks: 'Class Topper - Exemplary' },
-    { studentId: 5, studentName: 'Kabir Singh', rollNo: '1005', admissionNo: 'ADM-2024-005', marksObtained: 68, maxMarks: 100, remarks: 'Scope for improvement' },
-    { studentId: 6, studentName: 'Meera Nair', rollNo: '1006', admissionNo: 'ADM-2024-006', marksObtained: 85, maxMarks: 100, remarks: 'Consistent good performance' }
+  subjects = [
+    { id: 1, name: 'Mathematics - Calculus & Algebra' },
+    { id: 2, name: 'Physics & Experimental Lab' },
+    { id: 3, name: 'Chemistry - Organic & Inorganic' },
+    { id: 4, name: 'Computer Science & Python' },
+    { id: 5, name: 'English Literature & Grammar' }
   ];
 
-  gradeScales: GradeScale[] = [
-    { id: 1, grade: 'A+', minScore: 90, maxScore: 100, gradePoint: 10.0, remarks: 'Outstanding / Distinction' },
-    { id: 2, grade: 'A', minScore: 80, maxScore: 89.9, gradePoint: 9.0, remarks: 'Excellent' },
-    { id: 3, grade: 'B+', minScore: 70, maxScore: 79.9, gradePoint: 8.0, remarks: 'Very Good' },
-    { id: 4, grade: 'B', minScore: 60, maxScore: 69.9, gradePoint: 7.0, remarks: 'Good' },
-    { id: 5, grade: 'C', minScore: 50, maxScore: 59.9, gradePoint: 6.0, remarks: 'Above Average' },
-    { id: 6, grade: 'D', minScore: 35, maxScore: 49.9, gradePoint: 4.0, remarks: 'Pass / Marginal' },
-    { id: 7, grade: 'F', minScore: 0, maxScore: 34.9, gradePoint: 0.0, remarks: 'Needs Re-examination (Fail)' }
+  classRooms = [
+    { id: 1, roomNo: 'Room 101' },
+    { id: 2, roomNo: 'Room 102' },
+    { id: 3, roomNo: 'Physics Lab 201' },
+    { id: 4, roomNo: 'Chemistry Lab 202' },
+    { id: 5, roomNo: 'Hall A' }
   ];
 
-  examSchedule: ExamScheduleItem[] = [
-    { id: 1, subject: 'Mathematics', date: '2025-10-15', time: '09:00 AM - 12:00 PM', room: 'Hall 101', maxMarks: 100 },
-    { id: 2, subject: 'Physics & Chemistry', date: '2025-10-17', time: '09:00 AM - 12:00 PM', room: 'Hall 101', maxMarks: 100 },
-    { id: 3, subject: 'English Literature', date: '2025-10-19', time: '09:00 AM - 12:00 PM', room: 'Hall 102', maxMarks: 100 },
-    { id: 4, subject: 'Computer Science', date: '2025-10-21', time: '09:00 AM - 12:00 PM', room: 'IT Lab 2', maxMarks: 100 },
-    { id: 5, subject: 'Social Studies', date: '2025-10-24', time: '09:00 AM - 12:00 PM', room: 'Hall 101', maxMarks: 100 }
+  // 1. Exam Types
+  examTypes: ExamTypeItem[] = [
+    { id: 1, name: 'Unit Test / Formative Assessment', isPaid: false },
+    { id: 2, name: 'Mid-Semester Examination', isPaid: false },
+    { id: 3, name: 'Annual Board Examination Mock', isPaid: true },
+    { id: 4, name: 'Competitive Scholarship Olympiad', isPaid: true }
   ];
 
-  // Modals state
-  showCreateExamModal = false;
+  // 2. Examination Setup
+  exams: ExaminationModel[] = [
+    { id: 1, name: 'Term 1 Mid-Semester Examination', typeName: 'Mid-Semester Examination', startDate: '2025-10-15', endDate: '2025-10-24', academicYear: '2025-26 Academic Session', status: 'Concluded' },
+    { id: 2, name: 'Quarterly Assessment Test (Unit 2)', typeName: 'Unit Test', startDate: '2025-08-10', endDate: '2025-08-18', academicYear: '2025-26 Academic Session', status: 'Concluded' },
+    { id: 3, name: 'Annual CBSE Final Board Mock', typeName: 'Annual Board', startDate: '2026-02-15', endDate: '2026-03-02', academicYear: '2025-26 Academic Session', status: 'Scheduled' }
+  ];
+
+  // 3. Exam Schedules
+  schedules: ExamScheduleEntry[] = [
+    { id: 1, examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', sectionId: 1, sectionName: 'Section A', subjectId: 1, subjectName: 'Mathematics', examDate: '2025-10-15', startTime: '09:00', endTime: '12:00', classRoomId: 1, roomNo: 'Room 101', fullMarks: 100, passMarks: 33 },
+    { id: 2, examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', sectionId: 1, sectionName: 'Section A', subjectId: 2, subjectName: 'Physics', examDate: '2025-10-17', startTime: '09:00', endTime: '12:00', classRoomId: 3, roomNo: 'Physics Lab 201', fullMarks: 100, passMarks: 33 },
+    { id: 3, examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', sectionId: 1, sectionName: 'Section A', subjectId: 3, subjectName: 'Chemistry', examDate: '2025-10-19', startTime: '09:00', endTime: '12:00', classRoomId: 4, roomNo: 'Chemistry Lab 202', fullMarks: 100, passMarks: 33 },
+    { id: 4, examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', sectionId: 1, sectionName: 'Section A', subjectId: 4, subjectName: 'Computer Science', examDate: '2025-10-21', startTime: '09:00', endTime: '12:00', classRoomId: 5, roomNo: 'Hall A', fullMarks: 100, passMarks: 33 }
+  ];
+
+  // 4. Exam Attendance
+  attendanceScheduleId: number = 1;
+  attendanceStudents: ExamAttendanceStudent[] = [
+    { studentId: 101, rollNumber: '1001', admissionNumber: 'ADM-2025-001', studentName: 'Aarav Sharma', isPresent: true },
+    { studentId: 102, rollNumber: '1002', admissionNumber: 'ADM-2025-002', studentName: 'Diya Patel', isPresent: true },
+    { studentId: 103, rollNumber: '1003', admissionNumber: 'ADM-2025-003', studentName: 'Rohan Mehra', isPresent: false },
+    { studentId: 104, rollNumber: '1004', admissionNumber: 'ADM-2025-004', studentName: 'Ananya Iyer', isPresent: true },
+    { studentId: 105, rollNumber: '1005', admissionNumber: 'ADM-2025-005', studentName: 'Vikramaditya Rao', isPresent: true }
+  ];
+
+  // 5. Marks Register
+  marksRegister: MarkRegisterItem[] = [
+    { id: 1, studentId: 101, studentName: 'Aarav Sharma', rollNo: '1001', admissionNo: 'ADM-2025-001', examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', marksObtained: 94, maxMarks: 100, status: 'PASSED' },
+    { id: 2, studentId: 102, studentName: 'Diya Patel', rollNo: '1002', admissionNo: 'ADM-2025-002', examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', marksObtained: 88, maxMarks: 100, status: 'PASSED' },
+    { id: 3, studentId: 103, studentName: 'Rohan Mehra', rollNo: '1003', admissionNo: 'ADM-2025-003', examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', marksObtained: 28, maxMarks: 100, status: 'FAILED' },
+    { id: 4, studentId: 104, studentName: 'Ananya Iyer', rollNo: '1004', admissionNo: 'ADM-2025-004', examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', marksObtained: 97, maxMarks: 100, status: 'PASSED' },
+    { id: 5, studentId: 105, studentName: 'Vikramaditya Rao', rollNo: '1005', admissionNo: 'ADM-2025-005', examId: 1, examName: 'Term 1 Mid-Semester Examination', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', marksObtained: 76, maxMarks: 100, status: 'PASSED' }
+  ];
+
+  // 6. Marks Grade
+  grades: MarkGradeItem[] = [
+    { id: 1, name: 'A+', minPercentage: 90.0, maxPercentage: 100.0, gpa: 4.0, isActive: true },
+    { id: 2, name: 'A', minPercentage: 80.0, maxPercentage: 89.99, gpa: 3.75, isActive: true },
+    { id: 3, name: 'B+', minPercentage: 70.0, maxPercentage: 79.99, gpa: 3.5, isActive: true },
+    { id: 4, name: 'B', minPercentage: 60.0, maxPercentage: 69.99, gpa: 3.0, isActive: true },
+    { id: 5, name: 'C', minPercentage: 40.0, maxPercentage: 59.99, gpa: 2.0, isActive: true },
+    { id: 6, name: 'F', minPercentage: 0.0, maxPercentage: 39.99, gpa: 0.0, isActive: true }
+  ];
+
+  // Form Models - Exam Type
+  newExamType = { name: '', isPaid: false };
+
+  // Form Models - Propose Exam
+  showAddExamModal = false;
   newExam = {
-    title: '',
-    type: 'Term Exam',
-    session: '2025-26',
-    class: 'Grade 10-A',
-    startDate: '',
-    endDate: ''
+    name: '',
+    startDate: new Date().toISOString().substring(0, 10),
+    endDate: new Date(Date.now() + 10 * 86400000).toISOString().substring(0, 10),
+    academicYear: '2025-26 Academic Session'
   };
 
-  showAdmitCardModal = false;
-  selectedStudentForAdmit: any = null;
+  // Form Models - Add Schedule
+  showAddScheduleModal = false;
+  newSchedule = {
+    examId: 1,
+    classId: 1,
+    sectionId: 1,
+    subjectId: 1,
+    examDate: new Date().toISOString().substring(0, 10),
+    startTime: '09:00',
+    endTime: '12:00',
+    classRoomId: 1,
+    fullMarks: 100,
+    passMarks: 33
+  };
+  scheduleSections: { id: number; name: string }[] = [{ id: 1, name: 'Section A' }, { id: 2, name: 'Section B' }];
 
-  showReportCardModal = false;
-  selectedStudentForReport: any = null;
+  // Form Models - Add Grade
+  newGrade = { name: '', minPercentage: 80, maxPercentage: 90, gpa: 3.5 };
+
+  // Form Models - SMS Result Broadcast
+  smsBroadcast = { examId: 1, classId: 0 };
+
+  // Filters & Search
+  scheduleFilter = { examId: '', classId: '' };
+  marksFilter = { examId: 1, classId: 1 };
+  searchExamQuery = '';
 
   ngOnInit(): void {
-    this.selectedStudentForAdmit = this.marksList[0];
-    this.selectedStudentForReport = this.marksList[3]; // Ananya Verma (98%)
-  }
-
-  getGrade(score: number): { grade: string; point: number; color: string } {
-    for (const scale of this.gradeScales) {
-      if (score >= scale.minScore && score <= scale.maxScore) {
-        let color = '#10B981'; // Green
-        if (scale.grade === 'F') color = '#EF4444';
-        else if (scale.grade === 'D' || scale.grade === 'C') color = '#F59E0B';
-        return { grade: scale.grade, point: scale.gradePoint, color };
-      }
-    }
-    return { grade: 'N/A', point: 0, color: '#6B7280' };
-  }
-
-  saveMarks(): void {
-    Swal.fire({
-      title: 'Publish Marks?',
-      text: `Save and publish marks for ${this.selectedSubjectForMarks} (${this.selectedClassForMarks})?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#002B49',
-      confirmButtonText: 'Yes, Save & Publish'
-    }).then((res: any) => {
-      if (res.isConfirmed) {
-        Swal.fire({
-          title: 'Marks Saved!',
-          text: `Marks register for ${this.selectedSubjectForMarks} has been saved and updated successfully.`,
-          icon: 'success',
-          confirmButtonColor: '#002B49'
-        });
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        const t = params['tab'].toLowerCase();
+        if (t === 'type' || t === 'examtype') this.activeTab = 'type';
+        else if (t === 'schedule' || t === 'examschedule') this.activeTab = 'schedule';
+        else if (t === 'attendance' || t === 'examattendance') this.activeTab = 'attendance';
+        else if (t === 'marks' || t === 'marksregister') this.activeTab = 'marks';
+        else if (t === 'grade' || t === 'marksgrade') this.activeTab = 'grade';
+        else if (t === 'sms' || t === 'sendmarksbysms') this.activeTab = 'sms';
+        else this.activeTab = 'setup';
       }
     });
+
+    const url = this.router.url.toLowerCase();
+    if (url.includes('/examinations/examtype')) this.activeTab = 'type';
+    else if (url.includes('/examinations/examschedule')) this.activeTab = 'schedule';
+    else if (url.includes('/examinations/examattendance')) this.activeTab = 'attendance';
+    else if (url.includes('/examinations/marksregister')) this.activeTab = 'marks';
+    else if (url.includes('/examinations/marksgrade')) this.activeTab = 'grade';
+    else if (url.includes('/examinations/sendmarksbysms')) this.activeTab = 'sms';
+    else if (url.includes('/examinations')) this.activeTab = 'setup';
   }
 
-  openCreateExamModal(): void {
-    this.newExam = {
-      title: '',
-      type: 'Term Exam',
-      session: '2025-26',
-      class: 'Grade 10-A',
-      startDate: '',
-      endDate: ''
+  setTab(tab: 'type' | 'setup' | 'schedule' | 'attendance' | 'marks' | 'grade' | 'sms'): void {
+    this.activeTab = tab;
+  }
+
+  // --- SUBMODULE 1: EXAM TYPE ---
+  saveExamType(): void {
+    if (!this.newExamType.name.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Name Required', text: 'Please enter exam type name.' });
+      return;
+    }
+    const item: ExamTypeItem = {
+      id: Date.now(),
+      name: this.newExamType.name.trim(),
+      isPaid: this.newExamType.isPaid
     };
-    this.showCreateExamModal = true;
+    this.examTypes.unshift(item);
+    this.newExamType = { name: '', isPaid: false };
+    Swal.fire({ icon: 'success', title: 'Exam Type Saved', text: `${item.name} has been added.`, timer: 1500, showConfirmButton: false });
+  }
+
+  deleteExamType(item: ExamTypeItem): void {
+    this.examTypes = this.examTypes.filter(t => t.id !== item.id);
+    Swal.fire({ icon: 'success', title: 'Exam Type Removed', timer: 1200, showConfirmButton: false });
+  }
+
+  // --- SUBMODULE 2: EXAM SETUP ---
+  openAddExam(): void {
+    this.showAddExamModal = true;
   }
 
   saveExam(): void {
-    if (!this.newExam.title || !this.newExam.startDate) {
-      Swal.fire('Missing Details', 'Please specify Exam Title and Start Date.', 'warning');
+    if (!this.newExam.name.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Title Required', text: 'Please enter assessment title.' });
       return;
     }
-
-    this.exams.unshift({
-      id: this.exams.length + 1,
-      title: this.newExam.title,
-      type: this.newExam.type,
-      session: this.newExam.session,
-      class: this.newExam.class,
+    const item: ExaminationModel = {
+      id: Date.now(),
+      name: this.newExam.name.trim(),
+      typeName: 'Standard Assessment',
       startDate: this.newExam.startDate,
-      endDate: this.newExam.endDate || this.newExam.startDate,
-      status: 'Upcoming',
-      totalSubjects: 5
+      endDate: this.newExam.endDate,
+      academicYear: this.newExam.academicYear,
+      status: 'Scheduled'
+    };
+    this.exams.unshift(item);
+    this.showAddExamModal = false;
+    this.newExam = { name: '', startDate: new Date().toISOString().substring(0, 10), endDate: new Date(Date.now() + 10 * 86400000).toISOString().substring(0, 10), academicYear: '2025-26 Academic Session' };
+    Swal.fire({ icon: 'success', title: 'Examination Proposed', text: 'New assessment calendar initialized.', timer: 1500, showConfirmButton: false });
+  }
+
+  deleteExam(item: ExaminationModel): void {
+    Swal.fire({
+      title: 'Terminate Exam?',
+      text: `Remove ${item.name} assessment registry?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Terminate',
+      confirmButtonColor: '#ef4444'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        this.exams = this.exams.filter(e => e.id !== item.id);
+        Swal.fire({ icon: 'success', title: 'Assessment Terminated', timer: 1200, showConfirmButton: false });
+      }
     });
-
-    this.showCreateExamModal = false;
-    Swal.fire('Exam Scheduled', 'New examination has been scheduled.', 'success');
   }
 
-  viewAdmitCard(student: StudentMarkEntry): void {
-    this.selectedStudentForAdmit = student;
-    this.showAdmitCardModal = true;
+  // --- SUBMODULE 3: EXAM SCHEDULE ---
+  onScheduleClassChange(): void {
+    const cls = this.classes.find(c => c.id === Number(this.newSchedule.classId));
+    this.scheduleSections = cls ? cls.sections : [];
+    this.newSchedule.sectionId = this.scheduleSections.length > 0 ? this.scheduleSections[0].id : 1;
   }
 
-  viewReportCard(student: StudentMarkEntry): void {
-    this.selectedStudentForReport = student;
-    this.showReportCardModal = true;
+  openAddSchedule(): void {
+    this.showAddScheduleModal = true;
   }
 
-  printDocument(): void {
-    window.print();
+  saveSchedule(): void {
+    const exam = this.exams.find(e => e.id === Number(this.newSchedule.examId));
+    const cls = this.classes.find(c => c.id === Number(this.newSchedule.classId));
+    const sec = cls?.sections.find(s => s.id === Number(this.newSchedule.sectionId));
+    const sub = this.subjects.find(sb => sb.id === Number(this.newSchedule.subjectId));
+    const room = this.classRooms.find(r => r.id === Number(this.newSchedule.classRoomId));
+
+    if (!exam || !cls || !sec || !sub || !room) return;
+
+    const item: ExamScheduleEntry = {
+      id: Date.now(),
+      examId: exam.id,
+      examName: exam.name,
+      classId: cls.id,
+      className: cls.name,
+      sectionId: sec.id,
+      sectionName: sec.name,
+      subjectId: sub.id,
+      subjectName: sub.name,
+      examDate: this.newSchedule.examDate,
+      startTime: this.newSchedule.startTime,
+      endTime: this.newSchedule.endTime,
+      classRoomId: room.id,
+      roomNo: room.roomNo,
+      fullMarks: this.newSchedule.fullMarks || 100,
+      passMarks: this.newSchedule.passMarks || 33
+    };
+    this.schedules.unshift(item);
+    this.showAddScheduleModal = false;
+    Swal.fire({ icon: 'success', title: 'Schedule Added', text: `${sub.name} exam scheduled on ${item.examDate}.`, timer: 1500, showConfirmButton: false });
+  }
+
+  // --- SUBMODULE 4: ATTENDANCE ---
+  saveAttendance(): void {
+    Swal.fire({
+      icon: 'success',
+      title: 'Attendance Saved',
+      text: 'Examination student attendance recorded successfully.',
+      timer: 1500,
+      showConfirmButton: false
+    });
+  }
+
+  // --- SUBMODULE 5: MARKS REGISTER ---
+  getFilteredMarks(): MarkRegisterItem[] {
+    return this.marksRegister.filter(m => 
+      m.examId === Number(this.marksFilter.examId) && 
+      m.classId === Number(this.marksFilter.classId)
+    );
+  }
+
+  editMark(item: MarkRegisterItem): void {
+    Swal.fire({
+      title: `Update Marks for ${item.studentName}`,
+      input: 'number',
+      inputValue: item.marksObtained,
+      showCancelButton: true,
+      confirmButtonText: 'Save Score',
+      confirmButtonColor: '#002B49'
+    }).then((res: any) => {
+      if (res.isConfirmed && res.value !== undefined) {
+        const val = Number(res.value);
+        item.marksObtained = val;
+        item.status = val >= 33 ? 'PASSED' : 'FAILED';
+        Swal.fire({ icon: 'success', title: 'Score Updated', timer: 1200, showConfirmButton: false });
+      }
+    });
+  }
+
+  // --- SUBMODULE 6: MARKS GRADE ---
+  saveGrade(): void {
+    if (!this.newGrade.name.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Grade Name Required', text: 'e.g. A+, B, C' });
+      return;
+    }
+    const item: MarkGradeItem = {
+      id: Date.now(),
+      name: this.newGrade.name.trim(),
+      minPercentage: Number(this.newGrade.minPercentage),
+      maxPercentage: Number(this.newGrade.maxPercentage),
+      gpa: Number(this.newGrade.gpa),
+      isActive: true
+    };
+    this.grades.push(item);
+    this.newGrade = { name: '', minPercentage: 70, maxPercentage: 80, gpa: 3.0 };
+    Swal.fire({ icon: 'success', title: 'Grade Configured', text: `Grade ${item.name} added.`, timer: 1500, showConfirmButton: false });
+  }
+
+  // --- SUBMODULE 7: SEND MARKS BY SMS ---
+  broadcastSms(): void {
+    Swal.fire({
+      title: 'Initiate SMS Broadcast?',
+      text: 'Results will be transmitted to primary guardian mobile numbers across the selected cohort.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Broadcast Now',
+      confirmButtonColor: '#002B49'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Broadcast Dispatched',
+          text: 'SMS Result Gateway queued 42 SMS dispatches successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
+    });
   }
 }

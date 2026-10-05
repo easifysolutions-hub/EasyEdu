@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare const Swal: any;
 
@@ -42,6 +43,9 @@ interface StudentSubmission {
   styleUrls: ['./homework.component.css']
 })
 export class HomeworkComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   activeTab: 'list' | 'create' | 'evaluate' | 'report' = 'list';
   searchTerm = '';
   selectedClassFilter = 'All';
@@ -78,7 +82,25 @@ export class HomeworkComponent implements OnInit {
   evalMarks = 20;
   evalComment = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        if (params['tab'] === 'add' || params['tab'] === 'create') this.activeTab = 'create';
+        else if (params['tab'] === 'report') this.activeTab = 'report';
+        else if (params['tab'] === 'evaluate') this.activeTab = 'evaluate';
+        else this.activeTab = 'list';
+      }
+    });
+
+    const url = this.router.url.toLowerCase();
+    if (url.includes('/homework/create')) {
+      this.activeTab = 'create';
+    } else if (url.includes('/homework/homeworkreport') || url.includes('/report')) {
+      this.activeTab = 'report';
+    } else if (url.includes('/homework')) {
+      this.activeTab = 'list';
+    }
+  }
 
   get filteredTasks(): HomeworkTask[] {
     return this.tasks.filter(t => {

@@ -137,9 +137,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['homework']">
-        <li><a routerLink="/homework" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Homework List</a></li>
-        <li><a routerLink="/homework" class="sub-nav-link">Add Homework</a></li>
-        <li><a routerLink="/homework" class="sub-nav-link">Submissions & Grading</a></li>
+        <li><a [routerLink]="['/homework']" [queryParams]="{tab: 'create'}" class="sub-nav-link">Add Homework</a></li>
+        <li><a [routerLink]="['/homework']" [queryParams]="{tab: 'list'}" class="sub-nav-link">Homework List</a></li>
+        <li><a [routerLink]="['/homework']" [queryParams]="{tab: 'report'}" class="sub-nav-link">Homework Report</a></li>
       </ul>
     </div>
 
@@ -150,12 +150,13 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['exams']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['exams']">
-        <li><a routerLink="/examinations" routerLinkActive="active" class="sub-nav-link text-info">Exam Type & Setup</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link text-primary">Exam Schedule</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link">Exam Attendance</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link">Marks Register</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link">Marks Grade</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link text-warning fw-bold">Admit Card & Seat Plan</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'type'}" class="sub-nav-link">Exam Type</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'setup'}" class="sub-nav-link">Exam Setup</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'schedule'}" class="sub-nav-link">Exam Schedule</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'attendance'}" class="sub-nav-link">Exam Attendance</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'marks'}" class="sub-nav-link">Marks Register</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'grade'}" class="sub-nav-link">Marks Grade</a></li>
+        <li><a [routerLink]="['/examinations']" [queryParams]="{tab: 'sms'}" class="sub-nav-link">Send Marks By SMS</a></li>
       </ul>
     </div>
 
@@ -166,9 +167,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['onlineExam']">
-        <li><a routerLink="/online-exam" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Active CBT Exams</a></li>
-        <li><a routerLink="/online-exam" class="sub-nav-link">Question Bank</a></li>
-        <li><a routerLink="/online-exam" class="sub-nav-link">Question Groups</a></li>
+        <li><a [routerLink]="['/online-exam']" [queryParams]="{tab: 'group'}" class="sub-nav-link">Question Group</a></li>
+        <li><a [routerLink]="['/online-exam']" [queryParams]="{tab: 'bank'}" class="sub-nav-link">Question Bank</a></li>
+        <li><a [routerLink]="['/online-exam']" [queryParams]="{tab: 'exam'}" class="sub-nav-link">Online Exam</a></li>
       </ul>
     </div>
 
@@ -179,9 +180,10 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['teacherEvaluation']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['teacherEvaluation']">
-        <li><a routerLink="/teacher-evaluation" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Performance Scorecards</a></li>
-        <li><a routerLink="/teacher-evaluation" class="sub-nav-link">Student Feedback</a></li>
-        <li><a routerLink="/teacher-evaluation" class="sub-nav-link">Submit Review</a></li>
+        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'approved'}" class="sub-nav-link">Approved Report</a></li>
+        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'pending'}" class="sub-nav-link">Pending Report</a></li>
+        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'teacher-wise'}" class="sub-nav-link">Teacher Wise Report</a></li>
+        <li><a [routerLink]="['/teacher-evaluation']" [queryParams]="{tab: 'settings'}" class="sub-nav-link">Settings</a></li>
       </ul>
     </div>
 
