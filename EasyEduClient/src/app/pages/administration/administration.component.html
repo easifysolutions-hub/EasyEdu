@@ -1,370 +1,569 @@
 <div class="container-fluid p-0 animate-fade-in">
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+  <!-- Page Header & Action Bar -->
+  <div class="page-header d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Office Administration & Front Desk</h3>
-      <p class="text-muted small mb-0">Admission queries, visitor registers, complaints, and dispatch records</p>
+      <h2 class="page-title mb-1 fw-bold text-dark">
+        <span *ngIf="activeTab === 'queries'">Enquiry & Lead Center</span>
+        <span *ngIf="activeTab === 'visitors'">Reception & Visitor Log</span>
+        <span *ngIf="activeTab === 'complaints'">Complaint Redressal Cell</span>
+        <span *ngIf="activeTab === 'postal'">Postal Dispatch & Receive Hub</span>
+        <span *ngIf="activeTab === 'calls'">Telephony & Communication Log</span>
+        <span *ngIf="activeTab === 'setup'">Administration Masters & Setup</span>
+      </h2>
+      <p class="text-muted small mb-0">
+        <span *ngIf="activeTab === 'queries'">Nurture prospective students and track admission conversion funnel</span>
+        <span *ngIf="activeTab === 'visitors'">Secure entry management and digital vigilance for institutional visitors</span>
+        <span *ngIf="activeTab === 'complaints'">Grievance resolution and escalation tracking for parents and students</span>
+        <span *ngIf="activeTab === 'postal'">Official institutional correspondence and documentation logistics</span>
+        <span *ngIf="activeTab === 'calls'">Call tracking, parent inquiries and counseling communication records</span>
+        <span *ngIf="activeTab === 'setup'">Master configuration for inquiry sources, reference channels, and visit purposes</span>
+      </p>
     </div>
-    <div class="btn-group">
-      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'queries'" [class.btn-light]="activeTab !== 'queries'" (click)="activeTab = 'queries'">
-        <i class="fas fa-clipboard-question me-1"></i> Admission Queries
+    <div class="d-flex flex-wrap gap-2">
+      <button *ngIf="activeTab === 'queries'" class="btn btn-outline-primary" (click)="showPublicModal = true">
+        <i class="fas fa-link me-2"></i> Public Form Link
       </button>
-      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'visitors'" [class.btn-light]="activeTab !== 'visitors'" (click)="activeTab = 'visitors'">
-        <i class="fas fa-book-open me-1"></i> Visitor Book
-      </button>
-      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'complaints'" [class.btn-light]="activeTab !== 'complaints'" (click)="activeTab = 'complaints'">
-        <i class="fas fa-bullhorn me-1"></i> Complaints
-      </button>
-      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'postal'" [class.btn-light]="activeTab !== 'postal'" (click)="activeTab = 'postal'">
-        <i class="fas fa-envelope-open me-1"></i> Postal Logs
-      </button>
-      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'calls'" [class.btn-light]="activeTab !== 'calls'" (click)="activeTab = 'calls'">
-        <i class="fas fa-phone-volume me-1"></i> Phone Logs
+      <button class="btn btn-primary shadow-sm" (click)="toggleForm()">
+        <i class="fas fa-plus me-1"></i>
+        <span *ngIf="activeTab === 'queries'">New Potential Enrollment</span>
+        <span *ngIf="activeTab === 'visitors'">Authenticate Entry</span>
+        <span *ngIf="activeTab === 'complaints'">Lodge Ticket</span>
+        <span *ngIf="activeTab === 'postal'">Dispatch / Receive Entry</span>
+        <span *ngIf="activeTab === 'calls'">Log Phone Call</span>
+        <span *ngIf="activeTab === 'setup'">Add Setup Master</span>
       </button>
     </div>
   </div>
 
-  <!-- Tab 1: Admission Queries -->
-  <div *ngIf="activeTab === 'queries'" class="premium-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Admission Inquiries</h5>
-      <button class="btn btn-sm btn-primary" (click)="showQueryModal = true"><i class="fas fa-plus"></i> New Query</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Applicant Name</th>
-            <th>Phone</th>
-            <th>Source</th>
-            <th>Target Class</th>
-            <th>Query Date</th>
-            <th>Status</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let q of queries">
-            <td><strong>{{ q.name }}</strong></td>
-            <td>{{ q.phone }}</td>
-            <td><span class="badge bg-light text-dark border">{{ q.source }}</span></td>
-            <td><strong class="text-primary">{{ q.class }}</strong></td>
-            <td>{{ q.date }}</td>
-            <td>
-              <span class="badge-status" [ngClass]="{'badge-paid': q.status === 'Converted', 'badge-pending': q.status === 'Follow Up', 'badge-unpaid': q.status === 'Pending'}">
-                {{ q.status }}
-              </span>
-            </td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('queries', q.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Navigation Pill Tabs -->
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'queries'" [class.btn-light]="activeTab !== 'queries'" (click)="activeTab = 'queries'">
+      <i class="fas fa-clipboard-question me-1"></i> Admission Queries
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'visitors'" [class.btn-light]="activeTab !== 'visitors'" (click)="activeTab = 'visitors'">
+      <i class="fas fa-id-card-clip me-1"></i> Visitor Book
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'complaints'" [class.btn-light]="activeTab !== 'complaints'" (click)="activeTab = 'complaints'">
+      <i class="fas fa-bullhorn me-1"></i> Complaints
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'postal'" [class.btn-light]="activeTab !== 'postal'" (click)="activeTab = 'postal'">
+      <i class="fas fa-envelope-open me-1"></i> Postal Log
+    </button>
+    <button class="btn btn-sm px-3 rounded-pill" [class.btn-primary]="activeTab === 'calls'" [class.btn-light]="activeTab !== 'calls'" (click)="activeTab = 'calls'">
+      <i class="fas fa-phone-volume me-1"></i> Phone Call Log
+    </button>
   </div>
 
-  <!-- Tab 2: Visitor Book -->
-  <div *ngIf="activeTab === 'visitors'" class="premium-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Visitor Registry</h5>
-      <button class="btn btn-sm btn-primary" (click)="showVisitorModal = true"><i class="fas fa-plus"></i> Add Visitor</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Visitor ID</th>
-            <th>Visitor Name</th>
-            <th>Meeting Purpose</th>
-            <th>In Time</th>
-            <th>Out Time</th>
-            <th>Date</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let v of visitors">
-            <td><strong class="text-primary">{{ v.visitorId }}</strong></td>
-            <td>{{ v.name }}</td>
-            <td>{{ v.purpose }}</td>
-            <td><span class="badge bg-success text-white">{{ v.inTime }}</span></td>
-            <td><span class="badge bg-secondary text-white">{{ v.outTime }}</span></td>
-            <td>{{ v.date }}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('visitors', v.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Tab 3: Complaints -->
-  <div *ngIf="activeTab === 'complaints'" class="premium-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Complaint Redressal</h5>
-      <button class="btn btn-sm btn-primary" (click)="showComplaintModal = true"><i class="fas fa-plus"></i> Lodge Complaint</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Complainant</th>
-            <th>Category / Type</th>
-            <th>Assigned Department</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let c of complaints">
-            <td><strong>{{ c.by }}</strong></td>
-            <td>{{ c.type }}</td>
-            <td>{{ c.assignedTo }}</td>
-            <td>{{ c.date }}</td>
-            <td>
-              <span class="badge-status" [class.badge-paid]="c.status === 'Resolved'" [class.badge-pending]="c.status !== 'Resolved'">{{ c.status }}</span>
-            </td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('complaints', c.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Tab 4: Postal Logs -->
-  <div *ngIf="activeTab === 'postal'" class="premium-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Postal Receive & Dispatch</h5>
-      <button class="btn btn-sm btn-primary" (click)="showPostalModal = true"><i class="fas fa-plus"></i> Add Record</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Ref #</th>
-            <th>Type</th>
-            <th>Sender Name</th>
-            <th>Receiver</th>
-            <th>Date</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let p of postalLogs">
-            <td><strong>{{ p.refNo }}</strong></td>
-            <td>
-              <span class="badge" [class.bg-success]="p.type === 'Receive'" [class.bg-info]="p.type === 'Dispatch'">{{ p.type }}</span>
-            </td>
-            <td>{{ p.sender }}</td>
-            <td>{{ p.receiver }}</td>
-            <td>{{ p.date }}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('postal', p.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Tab 5: Phone Logs -->
-  <div *ngIf="activeTab === 'calls'" class="premium-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Phone Call Logs</h5>
-      <button class="btn btn-sm btn-primary" (click)="showCallModal = true"><i class="fas fa-plus"></i> Log Call</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Caller Name</th>
-            <th>Phone</th>
-            <th>Type</th>
-            <th>Duration</th>
-            <th>Follow Up</th>
-            <th>Notes</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let call of phoneLogs">
-            <td><strong>{{ call.name }}</strong></td>
-            <td>{{ call.phone }}</td>
-            <td><span class="badge bg-light text-dark border">{{ call.callType }}</span></td>
-            <td>{{ call.duration }}</td>
-            <td>{{ call.followUp }}</td>
-            <td>{{ call.note }}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('calls', call.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- Modal 1: Query Modal -->
-<div class="modal-backdrop-custom" *ngIf="showQueryModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-clipboard-question text-primary me-2"></i>New Admission Inquiry</h5>
-      <button class="btn-close" (click)="showQueryModal = false"></button>
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Applicant / Student Name</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newQuery.name" placeholder="e.g. Ramesh K">
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Contact Phone</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newQuery.phone" placeholder="+91 98765 00000">
-    </div>
-    <div class="row g-2 mb-3">
-      <div class="col-6">
-        <label class="form-label small fw-bold">Target Grade</label>
-        <select class="form-select form-select-sm" [(ngModel)]="newQuery.class">
-          <option>Grade 8</option>
-          <option>Grade 9</option>
-          <option>Grade 10</option>
-          <option>Grade 11 - Science</option>
-          <option>Grade 12 - Commerce</option>
-        </select>
-      </div>
-      <div class="col-6">
-        <label class="form-label small fw-bold">Source</label>
-        <select class="form-select form-select-sm" [(ngModel)]="newQuery.source">
-          <option>Online Web</option>
-          <option>Front Desk</option>
-          <option>Referral</option>
-          <option>Advertisement</option>
-        </select>
+  <!-- 4 Colored Summary Cards for Lead Funnel -->
+  <div class="row g-3 mb-4" *ngIf="activeTab === 'queries'">
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-premium-card border-start border-4 border-primary">
+        <div class="small fw-bold text-muted text-uppercase mb-1">Total Enquiries</div>
+        <div class="h3 fw-bold text-dark mb-0">{{ totalQueries }}</div>
+        <div class="small text-primary fw-bold mt-2"><i class="fas fa-arrow-up me-1"></i> Global Pool</div>
       </div>
     </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showQueryModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="addQuery()"><i class="fas fa-check me-1"></i>Save Inquiry</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal 2: Visitor Modal -->
-<div class="modal-backdrop-custom" *ngIf="showVisitorModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-book-open text-primary me-2"></i>Add Visitor Entry</h5>
-      <button class="btn-close" (click)="showVisitorModal = false"></button>
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Visitor Full Name</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.name" placeholder="e.g. Amit Verma">
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Meeting Purpose</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.purpose" placeholder="e.g. Principal Discussion">
-    </div>
-    <div class="row g-2 mb-3">
-      <div class="col-6">
-        <label class="form-label small fw-bold">In Time</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.inTime">
-      </div>
-      <div class="col-6">
-        <label class="form-label small fw-bold">Out Time</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.outTime">
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-premium-card border-start border-4 border-success">
+        <div class="small fw-bold text-muted text-uppercase mb-1">Converted (Won)</div>
+        <div class="h3 fw-bold text-success mb-0">{{ wonQueries }}</div>
+        <div class="small text-muted mt-2"><i class="fas fa-check-circle text-success me-1"></i> Enrolled Students</div>
       </div>
     </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showVisitorModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="addVisitor()"><i class="fas fa-check me-1"></i>Record Entry</button>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-premium-card border-start border-4 border-warning">
+        <div class="small fw-bold text-muted text-uppercase mb-1">Pending Follow-ups</div>
+        <div class="h3 fw-bold text-warning mb-0">{{ pendingQueries }}</div>
+        <div class="small text-muted mt-2"><i class="fas fa-clock text-warning me-1"></i> Awaiting Decision</div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-premium-card border-start border-4 border-danger">
+        <div class="small fw-bold text-muted text-uppercase mb-1">Lead Drop-out</div>
+        <div class="h3 fw-bold text-danger mb-0">{{ lostQueries }}</div>
+        <div class="small text-muted mt-2"><i class="fas fa-times-circle text-danger me-1"></i> Lost Conversions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Grid with Sliding Drawer Layout -->
+  <div class="row g-4">
+    <!-- Sliding Sidebar Form for All Tabs -->
+    <div class="col-xl-4" *ngIf="isFormOpen">
+      <!-- 1. Admission Form -->
+      <div class="premium-card shadow-lg animate-fade-in" *ngIf="activeTab === 'queries'">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light rounded-top">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-user-plus text-primary me-2"></i> Register Lead</h5>
+          <button class="btn btn-sm btn-light rounded-circle" (click)="toggleForm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Full Name / Student Name</label>
+            <input type="text" class="form-control" [(ngModel)]="newLead.name" placeholder="e.g. Jonathan Doe" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Primary Phone</label>
+              <input type="text" class="form-control" [(ngModel)]="newLead.phone" placeholder="+91 98765 00000" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="newLead.email" placeholder="student@email.com">
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Target Class</label>
+              <select class="form-select" [(ngModel)]="newLead.className">
+                <option>Grade 8</option>
+                <option>Grade 9</option>
+                <option>Grade 10</option>
+                <option>Grade 11 - Science</option>
+                <option>Grade 12 - Commerce</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Lead Source</label>
+              <select class="form-select" [(ngModel)]="newLead.source">
+                <option>Direct / Web</option>
+                <option>Front Desk</option>
+                <option>Referral</option>
+                <option>Online Ad</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Follow-up Schedule</label>
+            <input type="date" class="form-control fw-bold text-primary" [(ngModel)]="newLead.nextFollowUpDate">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Counselor Notes</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="newLead.notes" placeholder="Remarks & parent requirements..."></textarea>
+          </div>
+          <button class="btn btn-primary w-100 py-2 shadow-sm" (click)="saveLead()">
+            <i class="fas fa-paper-plane me-2"></i> Log & Dispatch Lead
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Visitor Form -->
+      <div class="premium-card shadow-lg animate-fade-in" *ngIf="activeTab === 'visitors'">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light rounded-top">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-door-open text-primary me-2"></i> Entry Protocol</h5>
+          <button class="btn btn-sm btn-light rounded-circle" (click)="toggleForm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Visitor Full Name</label>
+            <input type="text" class="form-control" [(ngModel)]="newVisitor.name" placeholder="e.g. Robert Smith" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Mobile Contact</label>
+              <input type="text" class="form-control" [(ngModel)]="newVisitor.phone" placeholder="+91 98860 00000">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Visitor ID #</label>
+              <input type="text" class="form-control" [(ngModel)]="newVisitor.visitorId">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Purpose of Visit</label>
+            <select class="form-select" [(ngModel)]="newVisitor.purpose">
+              <option>Principal Meeting</option>
+              <option>Fee Submission</option>
+              <option>Admission Inquiry</option>
+              <option>Vendor / Maintenance</option>
+            </select>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Check-in Time</label>
+              <input type="text" class="form-control" [(ngModel)]="newVisitor.inTime">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">No. of Persons</label>
+              <input type="number" class="form-control" [(ngModel)]="newVisitor.numberOfPersons">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Observation / Remarks</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="newVisitor.notes" placeholder="Meeting room, badge reference..."></textarea>
+          </div>
+          <button class="btn btn-primary w-100 py-2 shadow-sm" (click)="saveVisitor()">
+            <i class="fas fa-fingerprint me-2"></i> Authorize Passage & Generate Badge
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Complaint Form -->
+      <div class="premium-card shadow-lg animate-fade-in" *ngIf="activeTab === 'complaints'">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light rounded-top">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-bullhorn text-danger me-2"></i> Register Grievance</h5>
+          <button class="btn btn-sm btn-light rounded-circle" (click)="toggleForm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Complainant Name & Relation</label>
+            <input type="text" class="form-control" [(ngModel)]="newComplaint.by" placeholder="e.g. Mrs. Sunita Iyer (Parent)" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Category</label>
+              <select class="form-select" [(ngModel)]="newComplaint.type">
+                <option>Transport Route Delay</option>
+                <option>Canteen Food Hygiene</option>
+                <option>Academic Curriculum</option>
+                <option>Disciplinary Issue</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Assigned Cell</label>
+              <select class="form-select" [(ngModel)]="newComplaint.assignedTo">
+                <option>Transport Cell</option>
+                <option>Admin Section</option>
+                <option>Academic Head</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Incident Description</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="newComplaint.description" placeholder="Provide full details of the grievance..."></textarea>
+          </div>
+          <button class="btn btn-danger w-100 py-2 shadow-sm" (click)="saveComplaint()">
+            <i class="fas fa-paper-plane me-2"></i> Dispatch Grievance Ticket
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Postal Form -->
+      <div class="premium-card shadow-lg animate-fade-in" *ngIf="activeTab === 'postal'">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light rounded-top">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-envelope-open text-info me-2"></i> New Postal Record</h5>
+          <button class="btn btn-sm btn-light rounded-circle" (click)="toggleForm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Tracking Ref #</label>
+            <input type="text" class="form-control" [(ngModel)]="newPostal.refNo">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Sender Institution / Person</label>
+            <input type="text" class="form-control" [(ngModel)]="newPostal.sender" placeholder="e.g. CBSE Regional Office">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Receiver Destination</label>
+            <input type="text" class="form-control" [(ngModel)]="newPostal.receiver" placeholder="e.g. Principal Desk">
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Type</label>
+              <select class="form-select" [(ngModel)]="newPostal.type">
+                <option>Receive</option>
+                <option>Dispatch</option>
+              </select>
+            </div>
+            <div class="col-6 d-flex align-items-center pt-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="newPostal.confidential" id="confCheck">
+                <label class="form-check-label small fw-bold" for="confCheck">Confidential</label>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-info text-white w-100 py-2 shadow-sm" (click)="savePostal()">
+            <i class="fas fa-check me-2"></i> Save Logistics Record
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Phone Log Form -->
+      <div class="premium-card shadow-lg animate-fade-in" *ngIf="activeTab === 'calls'">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light rounded-top">
+          <h5 class="fw-bold text-dark mb-0"><i class="fas fa-phone-volume text-success me-2"></i> Log Phone Call</h5>
+          <button class="btn btn-sm btn-light rounded-circle" (click)="toggleForm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Caller / Contact Person</label>
+            <input type="text" class="form-control" [(ngModel)]="newCall.name" placeholder="e.g. Dr. Mohan Lal">
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Phone</label>
+              <input type="text" class="form-control" [(ngModel)]="newCall.phone" placeholder="+91 98860 00000">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Direction</label>
+              <select class="form-select" [(ngModel)]="newCall.callType">
+                <option>Incoming</option>
+                <option>Outgoing</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Duration</label>
+              <input type="text" class="form-control" [(ngModel)]="newCall.duration" placeholder="e.g. 3m 45s">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted text-uppercase">Next Action</label>
+              <input type="text" class="form-control" [(ngModel)]="newCall.followUp" placeholder="Follow-up Date / Status">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase">Call Discussion Summary</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="newCall.note" placeholder="Summary notes..."></textarea>
+          </div>
+          <button class="btn btn-success w-100 py-2 shadow-sm" (click)="saveCall()">
+            <i class="fas fa-save me-2"></i> Commit Call Record
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Tables Column -->
+    <div [class.col-xl-8]="isFormOpen" [class.col-xl-12]="!isFormOpen">
+      <!-- 1. Admission Table -->
+      <div *ngIf="activeTab === 'queries'" class="premium-card shadow-sm">
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Prospective Member</th>
+                <th>Origin & Channel</th>
+                <th>Target Grade</th>
+                <th>Status</th>
+                <th>Next Step</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let q of queries">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar-circle me-2" style="width: 38px; height: 38px; font-weight: 800;">
+                      {{ q.name.charAt(0) }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark">{{ q.name }}</div>
+                      <small class="text-muted">{{ q.phone }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="fw-bold">{{ q.source }}</div>
+                  <small class="text-primary fw-bold">Ref: {{ q.reference }}</small>
+                </td>
+                <td>
+                  <span class="badge bg-light text-primary border px-3 py-2 rounded-pill fw-bold">{{ q.className }}</span>
+                </td>
+                <td>
+                  <span *ngIf="q.status === 'Won'" class="badge bg-success text-white px-3 py-2 rounded-pill"><i class="fas fa-check-circle me-1"></i> ENROLLED</span>
+                  <span *ngIf="q.status === 'Pending'" class="badge bg-warning text-dark px-3 py-2 rounded-pill"><i class="fas fa-clock me-1"></i> NURTURING</span>
+                  <span *ngIf="q.status === 'Lost'" class="badge bg-danger text-white px-3 py-2 rounded-pill"><i class="fas fa-times-circle me-1"></i> DROPPED</span>
+                </td>
+                <td>
+                  <div *ngIf="q.nextFollowUpDate" class="fw-bold text-primary">{{ q.nextFollowUpDate }}</div>
+                  <small class="text-muted">Follow-up Call</small>
+                </td>
+                <td class="text-end">
+                  <button *ngIf="q.status !== 'Won'" class="btn btn-sm btn-outline-success me-1" (click)="convertLead(q)" title="Convert & Enroll Student">
+                    <i class="fas fa-user-check"></i> Enroll
+                  </button>
+                  <button *ngIf="q.status !== 'Lost'" class="btn btn-sm btn-outline-secondary me-1" (click)="dropLead(q)" title="Mark as Dropped">
+                    <i class="fas fa-ban"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('queries', q.id)" title="Delete Lead">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. Visitor Book Table -->
+      <div *ngIf="activeTab === 'visitors'" class="premium-card shadow-sm">
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Visitor Identity</th>
+                <th>Purpose of Visit</th>
+                <th>Check-in Details</th>
+                <th>Pass Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let v of visitors">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar-circle me-2" style="width: 38px; height: 38px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                      <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark">{{ v.name }}</div>
+                      <small class="text-muted fw-bold">ID: {{ v.visitorId }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="fw-bold">{{ v.purpose }}</div>
+                  <small class="text-muted">{{ v.notes }}</small>
+                </td>
+                <td>
+                  <div><span class="badge bg-soft-success text-success fw-bold">{{ v.inTime }}</span> - <span class="badge bg-soft-secondary text-dark">{{ v.outTime }}</span></div>
+                  <small class="text-muted">{{ v.date }} ({{ v.numberOfPersons }} Person)</small>
+                </td>
+                <td>
+                  <span class="badge bg-success text-white px-3 py-1 rounded-pill"><i class="fas fa-shield-check me-1"></i> Authorized</span>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('visitors', v.id)"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. Complaints Table -->
+      <div *ngIf="activeTab === 'complaints'" class="premium-card shadow-sm">
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Complainant & Phone</th>
+                <th>Grievance Nature</th>
+                <th>Assigned Cell</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of complaints">
+                <td>
+                  <div class="fw-bold">{{ c.by }}</div>
+                  <small class="text-muted">{{ c.phone }}</small>
+                </td>
+                <td>
+                  <div class="fw-bold text-dark">{{ c.type }}</div>
+                  <small class="text-muted">{{ c.description }}</small>
+                </td>
+                <td>
+                  <span class="badge bg-light text-dark border">{{ c.assignedTo }}</span>
+                </td>
+                <td>
+                  <span *ngIf="c.status === 'Resolved'" class="badge bg-success text-white px-3 py-1 rounded-pill"><i class="fas fa-check-circle me-1"></i> Resolved</span>
+                  <span *ngIf="c.status !== 'Resolved'" class="badge bg-warning text-dark px-3 py-1 rounded-pill"><i class="fas fa-spinner fa-spin me-1"></i> In Progress</span>
+                </td>
+                <td class="text-end">
+                  <button *ngIf="c.status !== 'Resolved'" class="btn btn-sm btn-outline-success me-1" (click)="resolveComplaint(c)" title="Mark Resolved">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('complaints', c.id)"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. Postal Table -->
+      <div *ngIf="activeTab === 'postal'" class="premium-card shadow-sm">
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Log Ref #</th>
+                <th>Category</th>
+                <th>Sender</th>
+                <th>Receiver</th>
+                <th>Date</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of postalLogs">
+                <td><strong class="text-primary">{{ p.refNo }}</strong></td>
+                <td>
+                  <span class="badge" [class.bg-success]="p.type === 'Receive'" [class.bg-info]="p.type === 'Dispatch'">{{ p.type }}</span>
+                  <span *ngIf="p.confidential" class="badge bg-danger ms-1">Confidential</span>
+                </td>
+                <td>{{ p.sender }}</td>
+                <td>{{ p.receiver }}</td>
+                <td>{{ p.date }}</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('postal', p.id)"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. Phone Log Table -->
+      <div *ngIf="activeTab === 'calls'" class="premium-card shadow-sm">
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Caller Contact</th>
+                <th>Direction & Duration</th>
+                <th>Follow Up Action</th>
+                <th>Summary Notes</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let call of phoneLogs">
+                <td>
+                  <div class="fw-bold">{{ call.name }}</div>
+                  <small class="text-muted">{{ call.phone }}</small>
+                </td>
+                <td>
+                  <span class="badge bg-light text-dark border">{{ call.callType }}</span>
+                  <span class="ms-2 small text-muted">{{ call.duration }}</span>
+                </td>
+                <td>
+                  <span class="badge bg-soft-primary text-primary fw-bold">{{ call.followUp }}</span>
+                </td>
+                <td>{{ call.note }}</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('calls', call.id)"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Modal 3: Complaint Modal -->
-<div class="modal-backdrop-custom" *ngIf="showComplaintModal">
+<!-- Public Form Settings Modal -->
+<div class="modal-backdrop-custom" *ngIf="showPublicModal">
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-bullhorn text-danger me-2"></i>Lodge Complaint</h5>
-      <button class="btn-close" (click)="showComplaintModal = false"></button>
+      <h5 class="fw-bold m-0"><i class="fas fa-globe text-primary me-2"></i>Public Admission Portal Integration</h5>
+      <button class="btn-close" (click)="showPublicModal = false"></button>
     </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Complainant Name & Relation</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newComplaint.by" placeholder="e.g. Anand Kumar (Parent)">
+    <p class="text-muted small">Share this direct link on your official website or social media to let parents and prospective students submit online admission inquiries.</p>
+    
+    <div class="input-group mb-3">
+      <input type="text" class="form-control fw-bold bg-light" [value]="publicAdmissionUrl" readonly>
+      <button class="btn btn-primary" (click)="copyPublicLink()"><i class="fas fa-copy me-1"></i>Copy URL</button>
     </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Complaint Nature</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newComplaint.type" placeholder="e.g. Bus Timing Issue">
-    </div>
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Assigned Department</label>
-      <select class="form-select form-select-sm" [(ngModel)]="newComplaint.assignedTo">
-        <option>Admin Desk</option>
-        <option>Transport Manager</option>
-        <option>Academic Head</option>
-        <option>Finance Cell</option>
-      </select>
-    </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showComplaintModal = false">Cancel</button>
-      <button class="btn btn-sm btn-danger" (click)="addComplaint()"><i class="fas fa-paper-plane me-1"></i>Submit Ticket</button>
-    </div>
-  </div>
-</div>
 
-<!-- Modal 4: Postal Modal -->
-<div class="modal-backdrop-custom" *ngIf="showPostalModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-envelope-open text-info me-2"></i>New Postal Entry</h5>
-      <button class="btn-close" (click)="showPostalModal = false"></button>
+    <div class="p-3 bg-light rounded-3 mb-3 text-center">
+      <div class="mb-2"><i class="fas fa-qrcode fs-1 text-dark"></i></div>
+      <small class="text-muted d-block">Scan to open digital application form directly on mobile.</small>
     </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Sender Organization / Person</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newPostal.sender" placeholder="e.g. University Board">
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Receiver Section</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newPostal.receiver" placeholder="e.g. Principal Office">
-    </div>
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Postal Type</label>
-      <select class="form-select form-select-sm" [(ngModel)]="newPostal.type">
-        <option>Receive</option>
-        <option>Dispatch</option>
-      </select>
-    </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showPostalModal = false">Cancel</button>
-      <button class="btn btn-sm btn-info text-white" (click)="addPostal()"><i class="fas fa-check me-1"></i>Save Record</button>
-    </div>
-  </div>
-</div>
 
-<!-- Modal 5: Call Modal -->
-<div class="modal-backdrop-custom" *ngIf="showCallModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-phone-volume text-success me-2"></i>Log Phone Call</h5>
-      <button class="btn-close" (click)="showCallModal = false"></button>
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Caller Name</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newCall.name" placeholder="e.g. Sunita Nair">
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Phone Number</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newCall.phone" placeholder="+91 98800 00000">
-    </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Call Summary Notes</label>
-      <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="newCall.note" placeholder="Call discussion points..."></textarea>
-    </div>
-    <div class="d-flex justify-content-end gap-2 mt-3">
-      <button class="btn btn-sm btn-light" (click)="showCallModal = false">Cancel</button>
-      <button class="btn btn-sm btn-success" (click)="addCall()"><i class="fas fa-save me-1"></i>Save Log</button>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-sm btn-light" (click)="showPublicModal = false">Close</button>
     </div>
   </div>
 </div>
