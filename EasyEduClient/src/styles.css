@@ -236,6 +236,16 @@ body {
   border-right: 4px solid var(--gold-accent);
 }
 
+.sidebar-sub-heading {
+  color: #ffffff !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  padding: 6px 18px 4px 28px;
+  display: block;
+}
+
 /* --- Topbar --- */
 .topbar {
   height: var(--topbar-height);
