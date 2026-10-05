@@ -39,6 +39,24 @@
       <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'sms'" [class.btn-light]="activeTab !== 'sms'" (click)="setTab('sms')">
         <i class="fas fa-sms me-1"></i> Send Marks By SMS
       </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'format-settings'" [class.btn-light]="activeTab !== 'format-settings'" (click)="setTab('format-settings')">
+        <i class="fas fa-file-lines me-1"></i> Format Settings
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'exam-rules'" [class.btn-light]="activeTab !== 'exam-rules'" (click)="setTab('exam-rules')">
+        <i class="fas fa-gavel me-1"></i> Exam Rules
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'positions'" [class.btn-light]="activeTab !== 'positions'" (click)="setTab('positions')">
+        <i class="fas fa-trophy me-1"></i> Merit Positions
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'signatures'" [class.btn-light]="activeTab !== 'signatures'" (click)="setTab('signatures')">
+        <i class="fas fa-signature me-1"></i> Signatures
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'admit-card'" [class.btn-light]="activeTab !== 'admit-card'" (click)="setTab('admit-card')">
+        <i class="fas fa-id-card-clip me-1"></i> Admit Card
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'seat-plan'" [class.btn-light]="activeTab !== 'seat-plan'" (click)="setTab('seat-plan')">
+        <i class="fas fa-chair me-1"></i> Seat Plan
+      </button>
     </div>
   </div>
 
@@ -495,6 +513,290 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 8: FORMAT SETTINGS (/ExamSettings/FormatSettings) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'format-settings'" class="card border-0 shadow-sm rounded-12 p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-file-lines me-2"></i>Report Card & Marksheet Format Settings</h5>
+        <p class="text-muted small mb-0">Configure layout tokens, watermark visibility, date formats, and evaluation rubrics on mark cards</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Format Configurations
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Marksheet Layout Template</label>
+        <select class="form-select bg-light mb-3" [(ngModel)]="formatSettings.marksheetLayout">
+          <option value="Standard Tabulation with Grading Scale">Standard Tabulation with Grading Scale</option>
+          <option value="CBSE Dual Term CCE Cumulative Assessment">CBSE Dual Term CCE Cumulative Assessment</option>
+          <option value="GPA Points with Performance Radar">GPA Points with Performance Radar</option>
+        </select>
+
+        <label class="form-label small fw-bold">Result Publishing Date Format</label>
+        <input type="text" class="form-control bg-light mb-3" [(ngModel)]="formatSettings.resultDateFormat">
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="f1" [(ngModel)]="formatSettings.headerWatermark">
+          <label class="form-check-label fw-bold" for="f1">Display Institutional Emblem Watermark in Background</label>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="f2" [(ngModel)]="formatSettings.showPositionRank">
+          <label class="form-check-label fw-bold" for="f2">Print Merit Position Rank on Marksheet</label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="f3" [(ngModel)]="formatSettings.showParentSignature">
+          <label class="form-check-label fw-bold" for="f3">Include Guardian / Parent Signature Acknowledgement Box</label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="f4" [(ngModel)]="formatSettings.showTeacherRemarks">
+          <label class="form-check-label fw-bold" for="f4">Show Class Teacher Holistic Remark & Attendance %</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 9: EXAM RULES (/ExamSettings/SetupExamRule) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'exam-rules'" class="card border-0 shadow-sm rounded-12 p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-gavel me-2"></i>Examination Clearance & Promotion Rules</h5>
+        <p class="text-muted small mb-0">Define minimum attendance percentage for hall ticket clearance, grace marks policies, and pass thresholds</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Exam Rules
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Minimum Attendance % for Admit Card Eligibility</label>
+        <div class="input-group mb-3">
+          <input type="number" class="form-control bg-light" [(ngModel)]="examRules.minAttendancePercent">
+          <span class="input-group-text">% Required</span>
+        </div>
+
+        <label class="form-label small fw-bold">Maximum Allowed Failed Subjects for Compartment / Retest</label>
+        <input type="number" class="form-control bg-light mb-3" [(ngModel)]="examRules.maxFailedSubjectsAllowed">
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Grace Marks Limit per Student</label>
+        <div class="input-group mb-3">
+          <input type="number" class="form-control bg-light" [(ngModel)]="examRules.graceMarksLimit">
+          <span class="input-group-text">Marks Max</span>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="r1" [(ngModel)]="examRules.retestEligibility">
+          <label class="form-check-label fw-bold" for="r1">Enable Supplementary Examination Retest Eligibility</label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="r2" [(ngModel)]="examRules.practicalTheoryCombinedPass">
+          <label class="form-check-label fw-bold" for="r2">Require Separate Passing in Theory and Practical Labs</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 10: MERIT POSITIONS (/ExamSettings/Position) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'positions'" class="card border-0 shadow-sm rounded-12 p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-trophy me-2"></i>Merit Positions & Rank Calculation Algorithm</h5>
+        <p class="text-muted small mb-0">Configure scholastic ranking parameters, tie-breaker order, and award tiers</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Merit Rules
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Rank Determination Criteria</label>
+        <select class="form-select bg-light mb-3" [(ngModel)]="meritPositions.rankingCriteria">
+          <option value="Total Aggregate Marks">Total Aggregate Marks</option>
+          <option value="Overall Percentage (%)">Overall Percentage (%)</option>
+          <option value="Cumulative GPA Score">Cumulative GPA Score</option>
+        </select>
+
+        <label class="form-label small fw-bold">Tie-Breaker Rule Hierarchy</label>
+        <input type="text" class="form-control bg-light mb-3" [(ngModel)]="meritPositions.tieBreakerRule">
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Ranking Scope</label>
+        <select class="form-select bg-light mb-3" [(ngModel)]="meritPositions.scope">
+          <option value="Class Wise and Section Wise">Class Wise and Section Wise</option>
+          <option value="Class Wide Cumulative Only">Class Wide Cumulative Only</option>
+          <option value="Institution Wide Overall Standing">Institution Wide Overall Standing</option>
+        </select>
+
+        <label class="form-label small fw-bold">Top Positions Awarded Honor Ribbons</label>
+        <input type="number" class="form-control bg-light mb-3" [(ngModel)]="meritPositions.topPositionsAwarded">
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 11: SIGNATURES (/ExamSettings/SignatureSettings) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'signatures'" class="card border-0 shadow-sm rounded-12 p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-signature me-2"></i>Signatory Authority & Digital Stamp Governance</h5>
+        <p class="text-muted small mb-0">Upload official signatures for Marksheets, Admit Cards, and Tabulation Sheets</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Signatory Setup
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <div class="p-3 border rounded-12 bg-light text-center">
+          <i class="fas fa-user-tie fs-2 text-primary mb-2"></i>
+          <h6 class="fw-bold">Head of Institution / Principal</h6>
+          <input type="text" class="form-control bg-white mb-2" [(ngModel)]="signatureSettings.principalSignTitle">
+          <input type="file" class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="p-3 border rounded-12 bg-light text-center">
+          <i class="fas fa-stamp fs-2 text-success mb-2"></i>
+          <h6 class="fw-bold">Controller of Examinations</h6>
+          <input type="text" class="form-control bg-white mb-2" [(ngModel)]="signatureSettings.controllerSignTitle">
+          <input type="file" class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="p-3 border rounded-12 bg-light text-center">
+          <i class="fas fa-chalkboard-teacher fs-2 text-info mb-2"></i>
+          <h6 class="fw-bold">Class Teacher Signature</h6>
+          <input type="text" class="form-control bg-white mb-2" [(ngModel)]="signatureSettings.teacherSignTitle">
+          <input type="file" class="form-control form-control-sm">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 12: ADMIT CARD SETTING (/ExamSettings/AdmitCardSetting) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'admit-card'" class="card border-0 shadow-sm rounded-12 p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-id-card-clip me-2"></i>Admit Card & Hall Ticket Layout Architect</h5>
+        <p class="text-muted small mb-0">Format candidate instructions, student photographs, security QR verification, and timetable matrix</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Admit Card Settings
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Admit Card Document Title</label>
+        <input type="text" class="form-control bg-light mb-3" [(ngModel)]="admitCardSettings.templateTitle">
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="ac1" [(ngModel)]="admitCardSettings.candidatePhotoEnabled">
+          <label class="form-check-label fw-bold" for="ac1">Print Student Passport Photograph</label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="ac2" [(ngModel)]="admitCardSettings.qrCodeVerification">
+          <label class="form-check-label fw-bold" for="ac2">Embed Encrypted QR Code for Invigilator Scanning</label>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Candidate Rules & Examination Instructions</label>
+        <textarea class="form-control bg-light" rows="5" [(ngModel)]="admitCardSettings.candidateInstructions"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 13: SEAT PLAN SETTING (/ExamSettings/SeatPlanSetting) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'seat-plan'" class="card border-0 shadow-sm rounded-12 p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-800 text-primary m-0"><i class="fas fa-chair me-2"></i>Examination Hall Seating Plan & Roll Matrix</h5>
+        <p class="text-muted small mb-0">Configure room capacity, alternate cohort distribution, and generate printable door charts</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExamSettings()">
+        <i class="fas fa-save me-1"></i> Save Seating Plan
+      </button>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Students Allocated per Desk</label>
+        <input type="number" class="form-control bg-light" [(ngModel)]="seatPlanSettings.studentsPerDesk">
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Cohort Distribution Style</label>
+        <select class="form-select bg-light" [(ngModel)]="seatPlanSettings.arrangementType">
+          <option value="Alternate Class (Grade 10 & Grade 9)">Alternate Class (Grade 10 & Grade 9)</option>
+          <option value="Single Class Sequential">Single Class Sequential</option>
+          <option value="Randomized Anti-Cheating Dispersion">Randomized Anti-Cheating Dispersion</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Roll Number Sequencing</label>
+        <select class="form-select bg-light" [(ngModel)]="seatPlanSettings.orderDirection">
+          <option value="Ascending Roll Numbers">Ascending Roll Numbers</option>
+          <option value="Zigzag Snake Pattern">Zigzag Snake Pattern</option>
+        </select>
+      </div>
+    </div>
+
+    <h6 class="fw-bold mb-3">Room Wise Allocation Schedule</h6>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle border">
+        <thead class="table-light">
+          <tr>
+            <th>Examination Room</th>
+            <th>Seating Capacity</th>
+            <th>Allocated Classes & Cohorts</th>
+            <th>Assigned Chief Invigilator</th>
+            <th class="text-end">Print Chart</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let room of seatPlanSettings.roomAllocations">
+            <td><strong>{{ room.room }}</strong></td>
+            <td><span class="badge bg-primary rounded-pill px-3">{{ room.capacity }} Seats</span></td>
+            <td><span class="badge bg-light text-dark border">{{ room.assignedClasses }}</span></td>
+            <td>{{ room.invigilator }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary" onclick="window.print()">
+                <i class="fas fa-print me-1"></i> Door Chart
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -88,7 +88,7 @@ export class ExaminationsComponent implements OnInit {
   private router = inject(Router);
   private api = inject(ApiService);
 
-  activeTab: 'type' | 'setup' | 'schedule' | 'attendance' | 'marks' | 'grade' | 'sms' = 'setup';
+  activeTab: 'type' | 'setup' | 'schedule' | 'attendance' | 'marks' | 'grade' | 'sms' | 'format-settings' | 'exam-rules' | 'positions' | 'signatures' | 'admit-card' | 'seat-plan' = 'setup';
 
   // Master Data Lists
   classes = [
@@ -159,12 +159,65 @@ export class ExaminationsComponent implements OnInit {
   // 6. Marks Grade
   grades: MarkGradeItem[] = [
     { id: 1, name: 'A+', minPercentage: 90.0, maxPercentage: 100.0, gpa: 4.0, isActive: true },
-    { id: 2, name: 'A', minPercentage: 80.0, maxPercentage: 89.99, gpa: 3.75, isActive: true },
-    { id: 3, name: 'B+', minPercentage: 70.0, maxPercentage: 79.99, gpa: 3.5, isActive: true },
+    { id: 2, name: 'A', minPercentage: 80.0, maxPercentage: 89.99, gpa: 3.7, isActive: true },
+    { id: 3, name: 'B+', minPercentage: 70.0, maxPercentage: 79.99, gpa: 3.3, isActive: true },
     { id: 4, name: 'B', minPercentage: 60.0, maxPercentage: 69.99, gpa: 3.0, isActive: true },
     { id: 5, name: 'C', minPercentage: 40.0, maxPercentage: 59.99, gpa: 2.0, isActive: true },
     { id: 6, name: 'F', minPercentage: 0.0, maxPercentage: 39.99, gpa: 0.0, isActive: true }
   ];
+
+  // 7. Exam Settings Models
+  formatSettings = {
+    marksheetLayout: 'Standard Tabulation with Grading Scale',
+    headerWatermark: true,
+    showPositionRank: true,
+    showParentSignature: true,
+    showTeacherRemarks: true,
+    resultDateFormat: 'DD/MM/YYYY',
+    showAttendanceSummary: true
+  };
+
+  examRules = {
+    minAttendancePercent: 75,
+    maxFailedSubjectsAllowed: 1,
+    graceMarksLimit: 5,
+    retestEligibility: true,
+    practicalTheoryCombinedPass: false
+  };
+
+  meritPositions = {
+    rankingCriteria: 'Total Aggregate Marks',
+    tieBreakerRule: 'Higher marks in Mathematics/Science',
+    scope: 'Class Wise and Section Wise',
+    topPositionsAwarded: 3
+  };
+
+  signatureSettings = {
+    principalSignTitle: 'Principal / Head of Institution',
+    controllerSignTitle: 'Controller of Examinations',
+    teacherSignTitle: 'Class Teacher Signature',
+    showDigitalSignStamp: true
+  };
+
+  admitCardSettings = {
+    templateTitle: 'OFFICIAL EXAMINATION ADMIT CARD & HALL TICKET',
+    candidatePhotoEnabled: true,
+    qrCodeVerification: true,
+    candidateInstructions: '1. Candidate must report to exam hall 15 minutes before scheduled start time.\n2. Electronic devices, smartwatches, and unauthorized notes are strictly prohibited.\n3. Admit card and institutional student ID card must be placed on the desk throughout examination.',
+    showRoomNumber: true
+  };
+
+  seatPlanSettings = {
+    desksPerRow: 5,
+    studentsPerDesk: 2,
+    arrangementType: 'Alternate Class (Grade 10 & Grade 9)',
+    orderDirection: 'Ascending Roll Numbers',
+    roomAllocations: [
+      { room: 'Room 101', capacity: 40, assignedClasses: 'Class 10-A & Class 9-A', invigilator: 'Dr. Ramesh Sharma' },
+      { room: 'Room 102', capacity: 40, assignedClasses: 'Class 10-B & Class 9-B', invigilator: 'Sunita Nair' },
+      { room: 'Hall A', capacity: 80, assignedClasses: 'Class 12-PCM & Class 11-Commerce', invigilator: 'Pooja Hegde' }
+    ]
+  };
 
   // Form Models - Exam Type
   newExamType = { name: '', isPaid: false };
@@ -206,6 +259,23 @@ export class ExaminationsComponent implements OnInit {
   searchExamQuery = '';
 
   ngOnInit(): void {
+    this.route.url.subscribe(() => {
+      const path = this.router.url.toLowerCase();
+      if (path.includes('formatsettings')) {
+        this.activeTab = 'format-settings';
+      } else if (path.includes('setupexamrule')) {
+        this.activeTab = 'exam-rules';
+      } else if (path.includes('position')) {
+        this.activeTab = 'positions';
+      } else if (path.includes('signaturesettings')) {
+        this.activeTab = 'signatures';
+      } else if (path.includes('admitcardsetting')) {
+        this.activeTab = 'admit-card';
+      } else if (path.includes('seatplansetting')) {
+        this.activeTab = 'seat-plan';
+      }
+    });
+
     this.route.queryParams.subscribe(params => {
       if (params['tab']) {
         const t = params['tab'].toLowerCase();
@@ -215,6 +285,12 @@ export class ExaminationsComponent implements OnInit {
         else if (t === 'marks' || t === 'marksregister') this.activeTab = 'marks';
         else if (t === 'grade' || t === 'marksgrade') this.activeTab = 'grade';
         else if (t === 'sms' || t === 'sendmarksbysms') this.activeTab = 'sms';
+        else if (t === 'format-settings' || t === 'formatsettings') this.activeTab = 'format-settings';
+        else if (t === 'exam-rules' || t === 'setupexamrule') this.activeTab = 'exam-rules';
+        else if (t === 'positions' || t === 'position') this.activeTab = 'positions';
+        else if (t === 'signatures' || t === 'signaturesettings') this.activeTab = 'signatures';
+        else if (t === 'admit-card' || t === 'admitcardsetting') this.activeTab = 'admit-card';
+        else if (t === 'seat-plan' || t === 'seatplansetting') this.activeTab = 'seat-plan';
         else this.activeTab = 'setup';
       }
     });
@@ -226,11 +302,26 @@ export class ExaminationsComponent implements OnInit {
     else if (url.includes('/examinations/marksregister')) this.activeTab = 'marks';
     else if (url.includes('/examinations/marksgrade')) this.activeTab = 'grade';
     else if (url.includes('/examinations/sendmarksbysms')) this.activeTab = 'sms';
-    else if (url.includes('/examinations')) this.activeTab = 'setup';
+    else if (url.includes('/examsettings/formatsettings')) this.activeTab = 'format-settings';
+    else if (url.includes('/examsettings/setupexamrule')) this.activeTab = 'exam-rules';
+    else if (url.includes('/examsettings/position')) this.activeTab = 'positions';
+    else if (url.includes('/examsettings/signaturesettings')) this.activeTab = 'signatures';
+    else if (url.includes('/examsettings/admitcardsetting')) this.activeTab = 'admit-card';
+    else if (url.includes('/examsettings/seatplansetting')) this.activeTab = 'seat-plan';
   }
 
-  setTab(tab: 'type' | 'setup' | 'schedule' | 'attendance' | 'marks' | 'grade' | 'sms'): void {
+  setTab(tab: any): void {
     this.activeTab = tab;
+  }
+
+  saveExamSettings(): void {
+    Swal.fire({
+      icon: 'success',
+      title: 'Settings Saved',
+      text: 'Examination policy configurations updated successfully.',
+      timer: 1500,
+      showConfirmButton: false
+    });
   }
 
   // --- SUBMODULE 1: EXAM TYPE ---

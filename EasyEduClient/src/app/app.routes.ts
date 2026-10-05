@@ -158,7 +158,7 @@ export const routes: Routes = [
       { path: 'Communicate/EmailTemplates', component: CommunicationComponent },
       { path: 'Communicate/SmsTemplates', component: CommunicationComponent },
 
-      // Examinations
+      // Examinations & Exam Settings
       { path: 'examinations', component: ExaminationsComponent },
       { path: 'Examinations', component: ExaminationsComponent },
       { path: 'Examinations/ExamType', component: ExaminationsComponent },
@@ -167,6 +167,12 @@ export const routes: Routes = [
       { path: 'Examinations/MarksRegister', component: ExaminationsComponent },
       { path: 'Examinations/MarksGrade', component: ExaminationsComponent },
       { path: 'Examinations/SendMarksBySms', component: ExaminationsComponent },
+      { path: 'ExamSettings/FormatSettings', component: ExaminationsComponent },
+      { path: 'ExamSettings/SetupExamRule', component: ExaminationsComponent },
+      { path: 'ExamSettings/Position', component: ExaminationsComponent },
+      { path: 'ExamSettings/SignatureSettings', component: ExaminationsComponent },
+      { path: 'ExamSettings/AdmitCardSetting', component: ExaminationsComponent },
+      { path: 'ExamSettings/SeatPlanSetting', component: ExaminationsComponent },
 
       // Online Exam
       { path: 'online-exam', component: OnlineExamComponent },
