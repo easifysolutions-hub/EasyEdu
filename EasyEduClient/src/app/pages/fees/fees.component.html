@@ -349,53 +349,123 @@
     </div>
   </div>
 
-  <!-- TAB: TRANSACTIONS & CASHIER JOURNAL -->
-  <div *ngIf="activeTab === 'collect'" class="premium-card animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- TAB: FEES RECEIVED VOUCHER (MATCHING EXACT SCREENSHOT 3 UX) -->
+  <div *ngIf="activeTab === 'collect'" class="animate-fade-in mb-4">
+    <!-- Header matching screenshot 3 -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
-        <h5 class="fw-bold mb-0">Transactions Journal</h5>
-        <small class="text-muted">Real-time payment logs, bank receipts, and cashier books</small>
+        <h3 class="fw-bold mb-1 text-dark" style="font-size: 1.5rem;">Fees Received Voucher</h3>
+        <p class="text-muted small mb-0 d-flex align-items-center gap-1">
+          <i class="fas fa-receipt text-warning"></i> Record student fee payments against invoices
+        </p>
       </div>
-      <button class="btn btn-success" (click)="openCollectModal()">
-        <i class="fas fa-plus me-1"></i> Collect Payment
+      <button class="btn btn-outline-secondary rounded-8 px-3 py-2 fw-bold" style="font-size: 0.8rem;" (click)="activeTab = 'invoices'">
+        <i class="fas fa-arrow-left me-1"></i> BACK TO INVOICES
       </button>
     </div>
 
-    <div class="table-responsive">
-      <table class="table-premium">
-        <thead>
-          <tr>
-            <th>Txn ID</th>
-            <th>Invoice No</th>
-            <th>Student</th>
-            <th>Admission No</th>
-            <th>Mode</th>
-            <th>Ref / UTR No</th>
-            <th>Date & Time</th>
-            <th>Collected By</th>
-            <th class="text-end">Amount Paid</th>
-            <th class="text-end">Receipt</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let txn of recentTransactions">
-            <td><strong class="text-dark">{{ txn.id }}</strong></td>
-            <td><span class="badge bg-light text-primary border">{{ txn.invoiceNo }}</span></td>
-            <td class="fw-bold">{{ txn.studentName }}</td>
-            <td><small class="text-muted">{{ txn.admissionNo }}</small></td>
-            <td><span class="badge bg-light text-dark border">{{ txn.paymentMode }}</span></td>
-            <td><small class="font-monospace text-muted">{{ txn.referenceNo }}</small></td>
-            <td><small class="text-muted">{{ txn.date }}</small></td>
-            <td><small class="text-secondary">{{ txn.collectedBy }}</small></td>
-            <td class="text-end fw-bold text-success">₹{{ txn.amount | number }}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary rounded-pill px-2" (click)="openReceiptModal({ id: 1, studentId: 1, studentName: txn.studentName, admissionNo: txn.admissionNo, feeGroup: 'Tuition Fee', amount: txn.amount, paidAmount: txn.amount, balanceAmount: 0, dueDate: '2025-05-15', status: 'Paid' })">
-                <i class="fas fa-print"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Payment Entry Window Card matching screenshot 3 -->
+    <div class="card border-0 shadow-sm rounded-20 bg-white overflow-hidden" style="max-width: 960px; margin: 0 auto;">
+      <!-- Purple Header Bar -->
+      <div class="p-4 text-white" style="background: #4f46e5;">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-circle p-2 bg-white bg-opacity-20 d-inline-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="fas fa-wallet fs-5"></i>
+          </div>
+          <div>
+            <h4 class="fw-bold mb-0">Payment Entry Window</h4>
+            <small class="text-white text-opacity-80">Admission Record: {{ currentSelectedInvoice?.studentName || 'Select Student' }} ({{ currentSelectedInvoice?.admissionNo || 'No ID' }})</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Body Form -->
+      <div class="p-4">
+        <!-- Student & Invoice Selectors -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-6">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #475569; display: block; margin-bottom: 0.35rem;">1. STUDENT ADMISSION</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="selectedAdmission" (change)="onAdmissionChange()" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="" disabled>Search Admission No...</option>
+              <option *ngFor="let inv of invoices" [value]="inv.admissionNo">
+                {{ inv.admissionNo }} - {{ inv.studentName }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #475569; display: block; margin-bottom: 0.35rem;">2. SELECT PENDING INVOICE</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="selectedInvoiceId" (change)="onAdmissionChange()" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="" disabled>Select Invoice to Pay</option>
+              <option *ngFor="let inv of invoices" [value]="inv.id">
+                INV-00{{ inv.id }} • {{ inv.feeGroup }} (Due: ₹{{ inv.balanceAmount | number }})
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3 Stat Badges matching screenshot 3 -->
+        <div class="row g-3 mb-4">
+          <!-- 1. Total Due -->
+          <div class="col-12 col-md-4">
+            <div class="p-3 rounded-16 border bg-light h-100">
+              <span class="badge mb-2" style="background: #e0f2fe; color: #0284c7; font-size: 0.7rem; font-weight: 700;">TOTAL DUE</span>
+              <h3 class="fw-bold text-dark mb-0">₹ {{ feeTotalDue | number:'1.2-2' }}</h3>
+            </div>
+          </div>
+
+          <!-- 2. Cash Received (Highlighted Green) -->
+          <div class="col-12 col-md-4">
+            <div class="p-3 rounded-16 h-100" style="background: #f0fdf4; border: 2px solid #86efac;">
+              <span class="badge mb-2" style="background: #dcfce7; color: #16a34a; font-size: 0.7rem; font-weight: 700;">CASH RECEIVED</span>
+              <div class="d-flex align-items-center">
+                <span class="fs-4 fw-bold text-success me-2">₹</span>
+                <input type="number" min="0" class="border-0 bg-transparent fs-4 fw-bold text-success w-100 outline-none" [(ngModel)]="cashReceived">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Balance Unpaid (Pink/Red) -->
+          <div class="col-12 col-md-4">
+            <div class="p-3 rounded-16 h-100" style="background: #fef2f2; border: 1px solid #fecaca;">
+              <span class="badge mb-2" style="background: #fee2e2; color: #dc2626; font-size: 0.7rem; font-weight: 700;">BALANCE UNPAID</span>
+              <h3 class="fw-bold text-danger mb-0">₹ {{ feeBalanceUnpaid | number:'1.2-2' }}</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Mode, Date, Reference Note Row -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-4">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #475569; display: block; margin-bottom: 0.35rem;">PAYMENT MODE</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="paymentMode" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="Cash Currency">Cash Currency</option>
+              <option value="Online UPI / QR">Online UPI / QR</option>
+              <option value="Net Banking / NEFT">Net Banking / NEFT</option>
+              <option value="Debit / Credit Card">Debit / Credit Card</option>
+              <option value="Cheque / DD">Cheque / Demand Draft</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #475569; display: block; margin-bottom: 0.35rem;">TRANSACTION DATE</label>
+            <input type="date" class="form-control" [(ngModel)]="transactionDate" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #475569; display: block; margin-bottom: 0.35rem;">REFERENCE / RECEIPT NOTE</label>
+            <input type="text" class="form-control" [(ngModel)]="referenceNote" placeholder="e.g. Check #, Transaction ID..." style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top gap-3">
+          <small class="text-muted">Financial Record: Payment will be posted to General Ledger.</small>
+          <button type="button" class="btn text-white px-4 py-2 rounded-12 fw-bold" style="background: #2563eb; font-size: 0.9rem;" (click)="postFeePayment()">
+            <i class="fas fa-check-circle me-1"></i> POST PAYMENT
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

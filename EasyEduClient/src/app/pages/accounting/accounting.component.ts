@@ -116,6 +116,14 @@ export class AccountingComponent implements OnInit {
     balance: 0
   };
 
+  // Stock Voucher State (Sales & Purchase Vouchers)
+  stockVoucherItems: Array<{ item: string; qty: number; rate: number; amount: number }> = [];
+  selectedStockItem = '';
+  stockItemQty = 1;
+  stockItemRate = 0;
+  stockDrAccount = '';
+  stockCrAccount = '';
+
   // Add Item Account Modal
   showAddItemModal = false;
   newItemAccount: ItemAccount = {
@@ -354,6 +362,76 @@ export class AccountingComponent implements OnInit {
       { type: 'BY (DR)', accountHead: '', balance: 'Awaiting...', debit: 0, credit: 0, remarks: '' },
       { type: 'TO (CR)', accountHead: '', balance: 'Awaiting...', debit: 0, credit: 0, remarks: '' }
     ];
+  }
+
+  // Stock Voucher Management (Sales & Purchase Vouchers)
+  onStockItemSelect(): void {
+    const itm = this.itemAccounts.find(i => i.name === this.selectedStockItem);
+    if (itm) {
+      this.stockItemRate = itm.rate;
+    }
+  }
+
+  addStockItem(): void {
+    if (!this.selectedStockItem) {
+      Swal.fire('Select Item', 'Please select an item from catalog.', 'warning');
+      return;
+    }
+    const qty = Number(this.stockItemQty) || 1;
+    const rate = Number(this.stockItemRate) || 0;
+    this.stockVoucherItems.push({
+      item: this.selectedStockItem,
+      qty: qty,
+      rate: rate,
+      amount: qty * rate
+    });
+    this.selectedStockItem = '';
+    this.stockItemQty = 1;
+    this.stockItemRate = 0;
+  }
+
+  removeStockItem(index: number): void {
+    this.stockVoucherItems.splice(index, 1);
+  }
+
+  get totalStockAmount(): number {
+    return this.stockVoucherItems.reduce((s, i) => s + i.amount, 0);
+  }
+
+  saveStockVoucher(): void {
+    const total = this.totalStockAmount;
+    if (total <= 0) {
+      Swal.fire('Empty Voucher', 'Please add at least one item to this voucher.', 'warning');
+      return;
+    }
+    const isSales = this.voucherCategory === 'Sales';
+    const dr = isSales ? this.stockDrAccount || 'Cash in Hand (Cashier Desk)' : this.stockDrAccount || 'Science Labs Consumables & Reagents';
+    const cr = isSales ? this.stockCrAccount || 'Tuition Fees Collection' : this.stockCrAccount || 'HDFC Bank Campus Current A/c';
+
+    const prefix = isSales ? 'SV' : 'PUV';
+    const vNo = `${prefix}-2026-${(this.vouchers.length + 1).toString().padStart(3, '0')}`;
+
+    this.vouchers.unshift({
+      id: (this.vouchers.length + 1).toString(),
+      voucherNo: vNo,
+      type: this.voucherCategory,
+      date: this.fiscalDate,
+      accountHead: dr,
+      debit: isSales ? total : 0,
+      credit: isSales ? 0 : total,
+      narration: this.officialNarration || `${this.voucherCategory} stock voucher for ${this.stockVoucherItems.length} items`,
+      status: 'Approved'
+    });
+
+    Swal.fire({
+      title: `${this.voucherCategory} Voucher Saved!`,
+      text: `${vNo} recorded successfully for total $${total.toFixed(2)}. Stock quantities updated.`,
+      icon: 'success',
+      confirmButtonColor: isSales ? '#0f766e' : '#7c3aed'
+    });
+
+    this.stockVoucherItems = [];
+    this.officialNarration = '';
   }
 
   // Account Ledger Calculations

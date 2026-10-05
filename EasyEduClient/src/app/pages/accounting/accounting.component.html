@@ -7,8 +7,18 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
       <ul class="nav nav-pills custom-pills">
         <li class="nav-item">
-          <button class="nav-link" [class.active]="activeTab === 'entry'" (click)="navigateToTab('entry')">
+          <button class="nav-link" [class.active]="activeTab === 'entry' && voucherCategory !== 'Sales' && voucherCategory !== 'Purchase'" (click)="voucherCategory = 'Payment'; navigateToTab('entry')">
             <i class="fas fa-pen-to-square me-2"></i> Financial Entry
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'entry' && voucherCategory === 'Sales'" (click)="voucherCategory = 'Sales'; navigateToTab('entry')">
+            <i class="fas fa-cart-shopping me-2"></i> Sales Voucher
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'entry' && voucherCategory === 'Purchase'" (click)="voucherCategory = 'Purchase'; navigateToTab('entry')">
+            <i class="fas fa-bag-shopping me-2"></i> Purchase Voucher
           </button>
         </li>
         <li class="nav-item">
@@ -61,9 +71,9 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 1. FINANCIAL ENTRY MODULE (MATCHING EXACT USER SCREENSHOT UX)  -->
+  <!-- 1. FINANCIAL ENTRY MODULE (PAYMENT, RECEIPT, JOURNAL, CONTRA)  -->
   <!-- ============================================================== -->
-  <div *ngIf="activeTab === 'entry'" class="mb-4">
+  <div *ngIf="activeTab === 'entry' && voucherCategory !== 'Sales' && voucherCategory !== 'Purchase'" class="mb-4">
     <!-- Top Header matching screenshot -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
@@ -146,7 +156,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of entryRows; let i = index">
-              <!-- TYPE BUTTON (BY DR / TO CR) -->
               <td>
                 <button type="button" 
                   [ngClass]="row.type === 'BY (DR)' ? 'badge-type-dr' : 'badge-type-cr'"
@@ -157,7 +166,6 @@
                 </button>
               </td>
 
-              <!-- ACCOUNT HEAD / LEDGER SELECT -->
               <td>
                 <select class="table-select" [(ngModel)]="row.accountHead" (change)="onAccountSelect(row)">
                   <option value="" disabled selected>Search account...</option>
@@ -167,12 +175,10 @@
                 </select>
               </td>
 
-              <!-- BALANCE BADGE -->
               <td>
                 <span class="balance-badge">{{ row.balance }}</span>
               </td>
 
-              <!-- DEBIT ($) INPUT -->
               <td>
                 <div class="currency-input-box">
                   <span class="currency-symbol">$</span>
@@ -180,7 +186,6 @@
                 </div>
               </td>
 
-              <!-- CREDIT ($) INPUT -->
               <td>
                 <div class="currency-input-box">
                   <span class="currency-symbol">$</span>
@@ -188,12 +193,10 @@
                 </div>
               </td>
 
-              <!-- REMARKS INPUT -->
               <td>
                 <input type="text" class="table-input" [(ngModel)]="row.remarks" placeholder="Reference note...">
               </td>
 
-              <!-- DELETE ROW ACTION -->
               <td class="text-center">
                 <button type="button" class="btn btn-link text-danger p-0 border-0" (click)="removeEntryRow(i)" title="Remove line">
                   <i class="fas fa-trash-can"></i>
@@ -204,9 +207,8 @@
         </table>
       </div>
 
-      <!-- Action Footer matching screenshot: Left ADD buttons, Right Accumulated Total + POST VOUCHER -->
+      <!-- Action Footer -->
       <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top gap-3">
-        <!-- Add Line Buttons -->
         <div class="d-flex gap-2">
           <button type="button" class="btn-add-dr" (click)="addDrRow()">
             <i class="fas fa-plus-circle"></i> ADD DR
@@ -216,9 +218,7 @@
           </button>
         </div>
 
-        <!-- Totals & Post Voucher -->
         <div class="d-flex flex-wrap align-items-center gap-4">
-          <!-- ACCUMULATED TOTAL -->
           <div class="text-end">
             <div class="field-label mb-1" style="font-size: 0.68rem;">ACCUMULATED TOTAL</div>
             <div class="d-flex gap-4">
@@ -233,7 +233,6 @@
             </div>
           </div>
 
-          <!-- POST VOUCHER BUTTON -->
           <button type="button" class="btn-post-voucher" (click)="postFinancialVoucher()">
             <i class="fas fa-cloud-arrow-up"></i> POST VOUCHER
           </button>
@@ -244,7 +243,315 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 2. ACCOUNT MASTER / CHART OF ACCOUNTS                          -->
+  <!-- 2. SALES VOUCHER (MATCHING EXACT SCREENSHOT 2 UX)              -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'entry' && voucherCategory === 'Sales'" class="mb-4 animate-fade-in">
+    <!-- Header matching screenshot 2 -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="rounded-circle p-2 d-inline-flex align-items-center justify-content-center" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; width: 38px; height: 38px;">
+            <i class="fas fa-cart-shopping fs-5"></i>
+          </div>
+          <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Sales Voucher</h3>
+        </div>
+        <p class="text-muted small mb-0 ms-5 ps-1">→ Sell items & update stock levels</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary rounded-8 px-3 py-2 fw-bold" style="font-size: 0.8rem;" (click)="navigateToTab('vouchers')">
+          <i class="fas fa-list me-1"></i> Sales List
+        </button>
+        <button class="btn btn-outline-secondary rounded-8 px-3 py-2 fw-bold" style="font-size: 0.8rem;" (click)="navigateToTab('dashboard')">
+          <i class="fas fa-arrow-left me-1"></i> Dashboard
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Card: Item Details -->
+      <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm rounded-20 bg-white p-4 h-100">
+          <div class="d-flex align-items-center gap-2 mb-3 fw-bold" style="color: #0f766e;">
+            <i class="fas fa-box-open" style="color: #0d9488;"></i> Item Details
+          </div>
+          <!-- Date & Memo -->
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-md-5">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">TRANSACTION DATE</label>
+              <div class="custom-input-group">
+                <i class="far fa-calendar-alt me-2"></i>
+                <input type="date" [(ngModel)]="fiscalDate">
+              </div>
+            </div>
+            <div class="col-12 col-md-7">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">NARRATION / MEMO</label>
+              <div class="custom-input-group">
+                <i class="fas fa-feather-pointed me-2"></i>
+                <input type="text" [(ngModel)]="officialNarration" placeholder="Describe the transaction...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Select Item, Qty, Rate, Add Button -->
+          <div class="row g-2 align-items-end mb-4">
+            <div class="col-12 col-md-5">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">SELECT ITEM</label>
+              <select class="form-select modern-select w-100" [(ngModel)]="selectedStockItem" (change)="onStockItemSelect()" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 0.8rem;">
+                <option value="" disabled selected>-- Choose Inventory Item --</option>
+                <option *ngFor="let itm of itemAccounts" [value]="itm.name">{{ itm.name }}</option>
+              </select>
+            </div>
+            <div class="col-4 col-md-2">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">QTY</label>
+              <input type="number" min="1" class="form-control text-center" [(ngModel)]="stockItemQty" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem;">
+            </div>
+            <div class="col-4 col-md-2">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">RATE</label>
+              <input type="number" class="form-control text-center" [(ngModel)]="stockItemRate" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem;">
+            </div>
+            <div class="col-4 col-md-3">
+              <button class="btn text-white w-100 py-2 rounded-10 fw-bold" style="background: #0f766e;" (click)="addStockItem()">
+                <i class="fas fa-plus me-1"></i> Add Item
+              </button>
+            </div>
+          </div>
+
+          <!-- Item Table -->
+          <div class="table-responsive mb-3" style="min-height: 120px;">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>ITEM</th>
+                  <th>QTY</th>
+                  <th>RATE</th>
+                  <th class="text-end">AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let itm of stockVoucherItems; let idx = index">
+                  <td class="fw-bold">{{ itm.item }}</td>
+                  <td>{{ itm.qty }}</td>
+                  <td>${{ itm.rate | number:'1.2-2' }}</td>
+                  <td class="text-end fw-bold text-dark">${{ itm.amount | number:'1.2-2' }}</td>
+                </tr>
+                <tr *ngIf="stockVoucherItems.length === 0">
+                  <td colspan="4" class="text-center text-muted py-3">No items added to invoice yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+            <span class="fw-bold text-dark">Total Item Amount:</span>
+            <h4 class="fw-bold text-primary mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Card: Accounting Entry -->
+      <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-20 bg-white p-4 h-100">
+          <div class="d-flex align-items-center gap-2 mb-1 text-primary fw-bold">
+            <i class="fas fa-scale-balanced fs-5"></i> Accounting Entry
+          </div>
+          <p class="text-muted small mb-4" style="font-size: 0.78rem;">Debit: Cash/Bank • Credit: Sales/Item ledger</p>
+
+          <div class="mb-3">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">RECEIPT ACCOUNT (DR)</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="stockDrAccount" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="" disabled selected>-- Select Account --</option>
+              <option *ngFor="let a of accounts" [value]="a.name">{{ a.name }} ({{ a.code }})</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">SALES ACCOUNT (CR)</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="stockCrAccount" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="" disabled selected>-- Select Account --</option>
+              <option *ngFor="let a of accounts" [value]="a.name">{{ a.name }} ({{ a.code }})</option>
+            </select>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <div class="p-3 rounded-12 text-center" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #16a34a;">TOTAL DEBIT</div>
+                <h4 class="fw-bold text-success mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 rounded-12 text-center" style="background: #fef2f2; border: 1px solid #fecaca;">
+                <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #dc2626;">TOTAL CREDIT</div>
+                <h4 class="fw-bold text-danger mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn text-white w-100 py-3 rounded-12 fw-bold mb-2" style="background: #0f766e;" (click)="saveStockVoucher()">
+            <i class="fas fa-floppy-disk me-2"></i> Save Sales Voucher
+          </button>
+          <p class="text-center text-muted small mb-0" style="font-size: 0.75rem;">Stock will be decremented automatically</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 3. PURCHASE VOUCHER (MATCHING EXACT SCREENSHOT 5 UX)            -->
+  <!-- ============================================================== -->
+  <div *ngIf="activeTab === 'entry' && voucherCategory === 'Purchase'" class="mb-4 animate-fade-in">
+    <!-- Header matching screenshot 5 -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="rounded-circle p-2 d-inline-flex align-items-center justify-content-center" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed; width: 38px; height: 38px;">
+            <i class="fas fa-bag-shopping fs-5"></i>
+          </div>
+          <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Purchase Voucher</h3>
+        </div>
+        <p class="text-muted small mb-0 ms-5 ps-1">← Purchase items & increase stock levels</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary rounded-8 px-3 py-2 fw-bold" style="font-size: 0.8rem;" (click)="navigateToTab('vouchers')">
+          <i class="fas fa-list me-1"></i> Purchase List
+        </button>
+        <button class="btn btn-outline-secondary rounded-8 px-3 py-2 fw-bold" style="font-size: 0.8rem;" (click)="navigateToTab('dashboard')">
+          <i class="fas fa-arrow-left me-1"></i> Dashboard
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Card: Item Details -->
+      <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm rounded-20 bg-white p-4 h-100">
+          <div class="d-flex align-items-center gap-2 mb-3 fw-bold" style="color: #7c3aed;">
+            <i class="fas fa-bag-shopping" style="color: #7c3aed;"></i> Item Details
+          </div>
+          <!-- Date & Memo -->
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-md-5">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">TRANSACTION DATE</label>
+              <div class="custom-input-group">
+                <i class="far fa-calendar-alt me-2"></i>
+                <input type="date" [(ngModel)]="fiscalDate">
+              </div>
+            </div>
+            <div class="col-12 col-md-7">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">NARRATION / MEMO</label>
+              <div class="custom-input-group">
+                <i class="fas fa-feather-pointed me-2"></i>
+                <input type="text" [(ngModel)]="officialNarration" placeholder="Describe the transaction...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Select Item, Qty, Rate, Add Button -->
+          <div class="row g-2 align-items-end mb-4">
+            <div class="col-12 col-md-5">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">SELECT ITEM</label>
+              <select class="form-select modern-select w-100" [(ngModel)]="selectedStockItem" (change)="onStockItemSelect()" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 0.8rem;">
+                <option value="" disabled selected>-- Choose Inventory Item --</option>
+                <option *ngFor="let itm of itemAccounts" [value]="itm.name">{{ itm.name }}</option>
+              </select>
+            </div>
+            <div class="col-4 col-md-2">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">QTY</label>
+              <input type="number" min="1" class="form-control text-center" [(ngModel)]="stockItemQty" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem;">
+            </div>
+            <div class="col-4 col-md-2">
+              <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">RATE</label>
+              <input type="number" class="form-control text-center" [(ngModel)]="stockItemRate" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem;">
+            </div>
+            <div class="col-4 col-md-3">
+              <button class="btn text-white w-100 py-2 rounded-10 fw-bold" style="background: #7c3aed;" (click)="addStockItem()">
+                <i class="fas fa-plus me-1"></i> Add Item
+              </button>
+            </div>
+          </div>
+
+          <!-- Item Table -->
+          <div class="table-responsive mb-3" style="min-height: 120px;">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>ITEM</th>
+                  <th>QTY</th>
+                  <th>RATE</th>
+                  <th class="text-end">AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let itm of stockVoucherItems; let idx = index">
+                  <td class="fw-bold">{{ itm.item }}</td>
+                  <td>{{ itm.qty }}</td>
+                  <td>${{ itm.rate | number:'1.2-2' }}</td>
+                  <td class="text-end fw-bold text-dark">${{ itm.amount | number:'1.2-2' }}</td>
+                </tr>
+                <tr *ngIf="stockVoucherItems.length === 0">
+                  <td colspan="4" class="text-center text-muted py-3">No items added to invoice yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+            <span class="fw-bold text-dark">Total Item Amount:</span>
+            <h4 class="fw-bold text-primary mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Card: Accounting Entry -->
+      <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-20 bg-white p-4 h-100">
+          <div class="d-flex align-items-center gap-2 mb-1 text-primary fw-bold">
+            <i class="fas fa-scale-balanced fs-5"></i> Accounting Entry
+          </div>
+          <p class="text-muted small mb-4" style="font-size: 0.78rem;">Debit: Purchase/Item ledger • Credit: Cash/Bank</p>
+
+          <div class="mb-3">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">PAYMENT ACCOUNT (CR)</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="stockCrAccount" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="" disabled selected>-- Select Account --</option>
+              <option *ngFor="let a of accounts" [value]="a.name">{{ a.name }} ({{ a.code }})</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="field-label-sm" style="font-size: 0.72rem; font-weight: 700; color: #475569;">PURCHASE ACCOUNT (DR)</label>
+            <select class="form-select modern-select w-100" [(ngModel)]="stockDrAccount" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.9rem;">
+              <option value="" disabled selected>-- Select Account --</option>
+              <option *ngFor="let a of accounts" [value]="a.name">{{ a.name }} ({{ a.code }})</option>
+            </select>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <div class="p-3 rounded-12 text-center" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #16a34a;">TOTAL DEBIT</div>
+                <h4 class="fw-bold text-success mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 rounded-12 text-center" style="background: #fef2f2; border: 1px solid #fecaca;">
+                <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #dc2626;">TOTAL CREDIT</div>
+                <h4 class="fw-bold text-danger mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn text-white w-100 py-3 rounded-12 fw-bold mb-2" style="background: #7c3aed;" (click)="saveStockVoucher()">
+            <i class="fas fa-floppy-disk me-2"></i> Save Purchase Voucher
+          </button>
+          <p class="text-center text-muted small mb-0" style="font-size: 0.75rem;">Stock will be incremented automatically</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 4. ACCOUNT MASTER / CHART OF ACCOUNTS                          -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'chart'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -259,15 +566,6 @@
         <button class="btn btn-primary btn-sm rounded-8" (click)="showAddAccountModal = true">
           <i class="fas fa-plus me-1"></i> Add Account Head
         </button>
-      </div>
-    </div>
-
-    <div class="row g-3 mb-4">
-      <div class="col-12 col-md-4">
-        <div class="search-bar-modern w-100">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" [(ngModel)]="searchTerm" placeholder="Search accounts by code or name...">
-        </div>
       </div>
     </div>
 
@@ -310,7 +608,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 3. ITEM ACCOUNT MASTER                                         -->
+  <!-- 5. ITEM ACCOUNT MASTER                                         -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'item-chart'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -359,7 +657,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 4. VOUCHER REGISTER / VOUCHER LIST                             -->
+  <!-- 6. VOUCHER REGISTER / VOUCHER LIST                             -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'vouchers'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -434,7 +732,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 5. ACCOUNT LEDGER (INDIVIDUAL STATEMENT)                       -->
+  <!-- 7. ACCOUNT LEDGER (INDIVIDUAL STATEMENT)                       -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'ledger'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -527,7 +825,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 6. TRIAL BALANCE                                               -->
+  <!-- 8. TRIAL BALANCE                                               -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'trial'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -582,7 +880,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 7. RECEIPT & PAYMENT STATEMENT                                 -->
+  <!-- 9. RECEIPT & PAYMENT STATEMENT                                 -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'receipt-payment'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -669,7 +967,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 8. INCOME & EXPENDITURE STATEMENT (P&L)                        -->
+  <!-- 10. INCOME & EXPENDITURE STATEMENT (P&L)                       -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'profit-loss'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -751,7 +1049,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 9. BALANCE SHEET                                               -->
+  <!-- 11. BALANCE SHEET                                              -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'balance-sheet'" class="premium-card animate-fade-in shadow-sm">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -846,7 +1144,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 10. DASHBOARD / FINANCIAL CENTER                               -->
+  <!-- 12. DASHBOARD / FINANCIAL CENTER                               -->
   <!-- ============================================================== -->
   <div *ngIf="activeTab === 'dashboard'" class="animate-fade-in">
     <!-- Header -->
@@ -864,7 +1162,6 @@
 
     <!-- 4 Stat Cards -->
     <div class="row g-4 mb-4">
-      <!-- Total Receipts -->
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden" style="background: #10b981; min-height: 140px;">
           <div class="d-flex justify-content-between align-items-start mb-2">
@@ -881,7 +1178,6 @@
         </div>
       </div>
 
-      <!-- Total Payments -->
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden" style="background: #ef4444; min-height: 140px;">
           <div class="d-flex justify-content-between align-items-start mb-2">
@@ -898,7 +1194,6 @@
         </div>
       </div>
 
-      <!-- Net Liquidity -->
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden" style="background: #4f46e5; min-height: 140px;">
           <div class="d-flex justify-content-between align-items-start mb-2">
@@ -915,7 +1210,6 @@
         </div>
       </div>
 
-      <!-- Total Vouchers -->
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden" style="background: #f59e0b; min-height: 140px;">
           <div class="d-flex justify-content-between align-items-start mb-2">
@@ -932,129 +1226,11 @@
         </div>
       </div>
     </div>
-
-    <!-- Financial Trends & Instant Accounting Grid -->
-    <div class="row g-4 mb-4">
-      <!-- Financial Trends Chart Box -->
-      <div class="col-12 col-lg-8">
-        <div class="card border-0 rounded-20 shadow-sm p-4 bg-white h-100">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold text-dark m-0 d-flex align-items-center">
-              <i class="fas fa-chart-line text-primary me-2"></i> Financial Trends
-            </h5>
-            <div class="btn-group btn-group-sm bg-light p-1 rounded-pill">
-              <button class="btn btn-sm rounded-pill px-3" [class.btn-white]="trendPeriod === 'yearly'" [class.shadow-sm]="trendPeriod === 'yearly'" (click)="trendPeriod = 'yearly'">Yearly</button>
-              <button class="btn btn-sm rounded-pill px-3" [class.btn-white]="trendPeriod === 'monthly'" [class.shadow-sm]="trendPeriod === 'monthly'" (click)="trendPeriod = 'monthly'">Monthly</button>
-            </div>
-          </div>
-
-          <!-- SVG Trends Chart with Dual Waves -->
-          <div class="chart-box position-relative mt-4" style="height: 280px;">
-            <svg viewBox="0 0 700 240" class="w-100 h-100" preserveAspectRatio="none">
-              <line x1="40" y1="20" x2="680" y2="20" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="40" y1="60" x2="680" y2="60" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="40" y1="100" x2="680" y2="100" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="40" y1="140" x2="680" y2="140" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="40" y1="180" x2="680" y2="180" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="40" y1="220" x2="680" y2="220" stroke="#f1f5f9" stroke-width="1" />
-
-              <text x="15" y="25" fill="#94a3b8" font-size="11">60</text>
-              <text x="15" y="65" fill="#94a3b8" font-size="11">50</text>
-              <text x="15" y="105" fill="#94a3b8" font-size="11">40</text>
-              <text x="15" y="145" fill="#94a3b8" font-size="11">30</text>
-              <text x="15" y="185" fill="#94a3b8" font-size="11">20</text>
-              <text x="15" y="225" fill="#94a3b8" font-size="11">10</text>
-              <text x="20" y="240" fill="#94a3b8" font-size="11">0</text>
-
-              <defs>
-                <linearGradient id="fillReceipts" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
-                  <stop offset="100%" stop-color="#10b981" stop-opacity="0.02"/>
-                </linearGradient>
-              </defs>
-              <path d="M50,210 C100,180 150,195 210,160 C270,170 330,150 390,160 C450,130 510,70 570,85 C630,40 680,20 680,20 L680,240 L50,240 Z" fill="url(#fillReceipts)" />
-              <path d="M50,210 C100,180 150,195 210,160 C270,170 330,150 390,160 C450,130 510,70 570,85 C630,40 680,20 680,20" fill="none" stroke="#10b981" stroke-width="3" />
-              <path d="M50,215 C100,195 150,210 210,180 C270,190 330,165 390,175 C450,150 510,135 570,145 C630,130 680,115 680,115" fill="none" stroke="#ef4444" stroke-width="2.5" />
-            </svg>
-
-            <div class="d-flex justify-content-between text-muted px-4 mt-2" style="font-size: 0.75rem;">
-              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Instant Accounting Action Grid -->
-      <div class="col-12 col-lg-4">
-        <div class="card border-0 rounded-20 shadow-sm p-4 bg-white h-100">
-          <h5 class="fw-bold text-dark mb-4 d-flex align-items-center">
-            <span class="rounded-circle me-2" style="width: 8px; height: 8px; background: #2563eb; display: inline-block;"></span> Instant Accounting
-          </h5>
-
-          <div class="row g-3">
-            <div class="col-6">
-              <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #fef2f2;" (click)="openVoucher('Payment')">
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #ef4444;">
-                  <i class="fas fa-minus" style="font-size: 0.8rem;"></i>
-                </div>
-                <div class="fw-bold text-uppercase" style="font-size: 0.78rem; color: #ef4444; letter-spacing: 0.5px;">PAYMENT</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #f0fdf4;" (click)="openVoucher('Receipt')">
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #10b981;">
-                  <i class="fas fa-plus" style="font-size: 0.8rem;"></i>
-                </div>
-                <div class="fw-bold text-uppercase" style="font-size: 0.78rem; color: #10b981; letter-spacing: 0.5px;">RECEIPT</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #f5f3ff;" (click)="openVoucher('Journal')">
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #8b5cf6;">
-                  <i class="fas fa-arrow-right-arrow-left" style="font-size: 0.75rem;"></i>
-                </div>
-                <div class="fw-bold text-uppercase" style="font-size: 0.78rem; color: #8b5cf6; letter-spacing: 0.5px;">JOURNAL</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #fffbeb;" (click)="openVoucher('Contra')">
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #f59e0b;">
-                  <i class="fas fa-landmark" style="font-size: 0.75rem;"></i>
-                </div>
-                <div class="fw-bold text-uppercase" style="font-size: 0.78rem; color: #f59e0b; letter-spacing: 0.5px;">CONTRA</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #ecfeff;" (click)="openVoucher('Sales')">
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #06b6d4;">
-                  <i class="fas fa-shopping-cart" style="font-size: 0.75rem;"></i>
-                </div>
-                <div class="fw-bold text-uppercase" style="font-size: 0.78rem; color: #06b6d4; letter-spacing: 0.5px;">SALES</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="p-3 text-center rounded-16 cursor-pointer hover-scale transition-all" style="background: #fdf2f8;" (click)="openVoucher('Purchase')">
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #ec4899;">
-                  <i class="fas fa-bag-shopping" style="font-size: 0.75rem;"></i>
-                </div>
-                <div class="fw-bold text-uppercase" style="font-size: 0.78rem; color: #ec4899; letter-spacing: 0.5px;">PURCHASE</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- ============================================================== -->
   <!-- MODALS: ADD ACCOUNT MASTER & ADD ITEM MASTER                   -->
   <!-- ============================================================== -->
-  <!-- Modal: Add Account Head -->
   <div class="modal-backdrop-custom" *ngIf="showAddAccountModal">
     <div class="modal-content-custom" style="max-width: 520px;">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -1092,7 +1268,6 @@
     </div>
   </div>
 
-  <!-- Modal: Add Item Account -->
   <div class="modal-backdrop-custom" *ngIf="showAddItemModal">
     <div class="modal-content-custom" style="max-width: 550px;">
       <div class="d-flex justify-content-between align-items-center mb-3">

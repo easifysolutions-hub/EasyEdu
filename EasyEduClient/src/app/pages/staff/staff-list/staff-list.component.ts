@@ -103,13 +103,19 @@ export class StaffListComponent implements OnInit {
     staffNo: 'STF-' + Math.floor(100 + Math.random() * 900),
     firstName: '',
     lastName: '',
-    department: 'Academics',
-    designation: 'Senior Teacher',
+    department: '',
+    designation: '',
     email: '',
     phone: '',
+    residentialAddress: '',
+    joiningDate: '2026-10-05',
+    retireDate: '',
+    academicTitle: '',
     basicSalary: 50000,
+    professionalBiography: '',
     contractType: 'Permanent',
-    isActive: true
+    isActive: true,
+    provisionAccess: true
   };
 
   ngOnInit(): void {
@@ -184,13 +190,19 @@ export class StaffListComponent implements OnInit {
       staffNo: 'STF-' + Math.floor(100 + Math.random() * 900),
       firstName: '',
       lastName: '',
-      department: 'Academics',
-      designation: 'Senior Teacher',
+      department: '',
+      designation: '',
       email: '',
       phone: '',
+      residentialAddress: '',
+      joiningDate: '2026-10-05',
+      retireDate: '',
+      academicTitle: '',
       basicSalary: 50000,
+      professionalBiography: '',
       contractType: 'Permanent',
-      isActive: true
+      isActive: true,
+      provisionAccess: true
     };
     Swal.fire({
       icon: 'success',
@@ -249,6 +261,29 @@ export class StaffListComponent implements OnInit {
       confirmButtonText: 'Print Slip',
       confirmButtonColor: '#002B49'
     });
+  }
+
+  initiatePayrollBatch(): void {
+    Swal.fire({
+      title: 'Initiate Payroll Disbursement Cycle?',
+      text: `Process automatic salary computation for ${this.staffList.length} active institutional personnel.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Disburse Batch',
+      confirmButtonColor: '#7c3aed'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        this.payrollRecords.forEach(p => {
+          p.status = 'Paid';
+          p.paymentDate = '2026-10-05';
+        });
+        Swal.fire('Disbursement Complete', 'Payroll ledger updated and notification batch queued.', 'success');
+      }
+    });
+  }
+
+  exportPayrollLedger(): void {
+    window.print();
   }
 
   saveSettings(): void {

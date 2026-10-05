@@ -135,6 +135,64 @@ export class FeesComponent implements OnInit {
     fine: 0
   };
 
+  // Fees Received Voucher Window state matching screenshot 3
+  selectedAdmission = 'ADM-2024-002';
+  selectedInvoiceId: number = 2;
+  cashReceived = 16000;
+  paymentMode = 'Cash Currency';
+  transactionDate = '2026-10-05';
+  referenceNote = '';
+
+  get currentSelectedInvoice(): FeeInvoice | undefined {
+    return this.invoices.find(i => i.id === Number(this.selectedInvoiceId));
+  }
+
+  get feeTotalDue(): number {
+    return this.currentSelectedInvoice ? this.currentSelectedInvoice.amount : 0;
+  }
+
+  get feeBalanceUnpaid(): number {
+    const due = this.currentSelectedInvoice ? this.currentSelectedInvoice.balanceAmount : 0;
+    return Math.max(0, due - (Number(this.cashReceived) || 0));
+  }
+
+  onAdmissionChange(): void {
+    const inv = this.invoices.find(i => i.admissionNo === this.selectedAdmission);
+    if (inv) {
+      this.selectedInvoiceId = inv.id;
+      this.cashReceived = inv.balanceAmount;
+    }
+  }
+
+  postFeePayment(): void {
+    const amt = Number(this.cashReceived) || 0;
+    if (amt <= 0) {
+      Swal.fire('Invalid Amount', 'Please enter a valid cash received amount.', 'warning');
+      return;
+    }
+
+    const inv = this.currentSelectedInvoice;
+    if (inv) {
+      inv.paidAmount += amt;
+      inv.balanceAmount = Math.max(0, inv.amount - inv.paidAmount);
+      if (inv.balanceAmount === 0) {
+        inv.status = 'Paid';
+      } else {
+        inv.status = 'Partial';
+      }
+    }
+
+    Swal.fire({
+      title: 'Payment Posted Successfully!',
+      text: `Receipt recorded for ₹${amt.toLocaleString()} against ${inv?.studentName || 'Student'} (${inv?.admissionNo}). Posted to General Ledger.`,
+      icon: 'success',
+      confirmButtonColor: '#2563eb'
+    });
+
+    this.cashReceived = 0;
+    this.referenceNote = '';
+  }
+
   showReceiptModal = false;
   receiptData: any = null;
 
