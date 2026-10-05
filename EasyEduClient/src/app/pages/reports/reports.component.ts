@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare const Swal: any;
 
@@ -23,6 +24,9 @@ interface ReportModule {
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   selectedCategory = 'All';
   searchTerm = '';
 
@@ -53,7 +57,22 @@ export class ReportsComponent implements OnInit {
 
   previewRows: any[] = [];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.url.subscribe(() => {
+      const path = this.router.url.toLowerCase();
+      if (path.includes('staffattendance')) {
+        this.selectedCategory = 'Human Resource';
+        const r = this.reports.find(x => x.id === 'RPT-08');
+        if (r) this.generateReport(r);
+      } else if (path.includes('payrollreport')) {
+        this.selectedCategory = 'Human Resource';
+        const r = this.reports.find(x => x.id === 'RPT-09');
+        if (r) this.generateReport(r);
+      } else if (path.includes('staffreport')) {
+        this.selectedCategory = 'Human Resource';
+      }
+    });
+  }
 
   get filteredReports(): ReportModule[] {
     return this.reports.filter(r => {

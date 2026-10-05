@@ -256,7 +256,15 @@
         <li><a routerLink="/Leave/ApproveLeaveRequest" routerLinkActive="active" class="sub-nav-link">Approve Leave Request</a></li>
         <li><a routerLink="/Leave/LeaveDefine" routerLinkActive="active" class="sub-nav-link">Leave Define</a></li>
         <li><a routerLink="/Leave/LeaveType" routerLinkActive="active" class="sub-nav-link">Leave Type</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Staff Reports</a></li>
+        
+        <!-- Staff Reports Nested / Sub Group -->
+        <li class="mt-2 pt-2 border-top border-secondary border-opacity-25" id="staffReportsMenu">
+          <div class="text-uppercase fw-bold text-muted px-3 py-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Staff Reports</div>
+        </li>
+        <li><a routerLink="/Reports/StaffReport" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-file-lines me-2 text-primary"></i>Staff Report</a></li>
+        <li><a routerLink="/Reports/StaffAttendanceReport" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-clipboard-user me-2 text-success"></i>Staff Attendance Report</a></li>
+        <li><a routerLink="/Reports/PayrollReport" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-money-check-dollar me-2 text-warning"></i>Payroll Report</a></li>
+        <li><a routerLink="/HumanResource/StaffDirectory" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-address-book me-2 text-info"></i>Staff Directory</a></li>
       </ul>
     </div>
 
