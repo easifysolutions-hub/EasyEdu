@@ -35,14 +35,20 @@ export class AttendanceComponent implements OnInit {
     this.loadStudentAttendance();
     this.loadStaffAttendance();
 
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        if (params['tab'] === 'subject') this.viewMode = 'subject';
+        else if (params['tab'] === 'report') this.viewMode = 'report';
+        else this.viewMode = 'daily';
+      }
+    });
+
     this.route.url.subscribe(() => {
       const path = this.router.url.toLowerCase();
       if (path.includes('subjectwiseattendance')) {
         this.viewMode = 'subject';
       } else if (path.includes('attendance/report')) {
         this.viewMode = 'report';
-      } else {
-        this.viewMode = 'daily';
       }
     });
   }
