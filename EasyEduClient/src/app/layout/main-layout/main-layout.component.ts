@@ -94,6 +94,8 @@ export class MainLayoutComponent implements OnInit {
     if (url.includes('virtual')) this.openMenus['virtualClass'] = true;
     if (url.includes('download')) this.openMenus['downloadCenter'] = true;
     if (url.includes('importexport') || url.includes('datamanagement')) this.openMenus['dataManagement'] = true;
+    if (url.includes('frontsettings') || url.includes('frontend-cms') || url.includes('frontendcms')) this.openMenus['frontendCms'] = true;
+    if (url.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
     if (url.includes('report')) this.openMenus['reports'] = true;
     if (url.includes('setting') || url.includes('role')) this.openMenus['systemSettings'] = true;
   }
@@ -118,6 +120,9 @@ export class MainLayoutComponent implements OnInit {
     else if (f.includes('transport')) this.openMenus['transport'] = true;
     else if (f.includes('library')) this.openMenus['library'] = true;
     else if (f.includes('download')) this.openMenus['downloadCenter'] = true;
+    else if (f.includes('datamanagement') || f.includes('importexport')) this.openMenus['dataManagement'] = true;
+    else if (f.includes('frontendcms') || f.includes('frontsettings')) this.openMenus['frontendCms'] = true;
+    else if (f.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
     else if (f.includes('report')) this.openMenus['reports'] = true;
     else if (f.includes('system') || f.includes('setting')) this.openMenus['systemSettings'] = true;
     else if (f.includes('virtual')) this.openMenus['virtualClass'] = true;

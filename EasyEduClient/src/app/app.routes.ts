@@ -37,6 +37,7 @@ import { ChatComponent } from './pages/chat/chat.component';
 import { UtilitiesComponent } from './pages/utilities/utilities.component';
 import { RolePermissionComponent } from './pages/role-permission/role-permission.component';
 import { ImportExportComponent } from './pages/import-export/import-export.component';
+import { FrontendCmsComponent } from './pages/frontend-cms/frontend-cms.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -278,6 +279,18 @@ export const routes: Routes = [
       { path: 'ImportExport/DownloadTemplate', component: ImportExportComponent },
       { path: 'DataManagement', component: ImportExportComponent },
       { path: 'DataManagement/ImportExport', component: ImportExportComponent },
+      { path: 'frontend-cms', component: FrontendCmsComponent },
+      { path: 'FrontendCMS', component: FrontendCmsComponent },
+      { path: 'FrontSettings', component: FrontendCmsComponent },
+      { path: 'FrontSettings/ManageTheme', component: FrontendCmsComponent },
+      { path: 'FrontSettings/Slider', component: FrontendCmsComponent },
+      { path: 'FrontSettings/PageList', component: FrontendCmsComponent },
+      { path: 'FrontSettings/ExpertTeachers', component: FrontendCmsComponent },
+      { path: 'FrontSettings/Gallery', component: FrontendCmsComponent },
+      { path: 'FrontSettings/NewsList', component: FrontendCmsComponent },
+      { path: 'FrontSettings/Testimonials', component: FrontendCmsComponent },
+      { path: 'FrontSettings/FormDownloads', component: FrontendCmsComponent },
+      { path: 'FrontSettings/ContactMessages', component: FrontendCmsComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'utilities', component: UtilitiesComponent },
       { path: 'role-permission', component: RolePermissionComponent },

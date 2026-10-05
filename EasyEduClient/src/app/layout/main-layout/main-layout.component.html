@@ -457,9 +457,15 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['frontendCms']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['frontendCms']">
-        <li><a routerLink="/settings" class="sub-nav-link">Pages Management</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">News & Notices</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Photo Gallery</a></li>
+        <li><a routerLink="/FrontSettings/ManageTheme" routerLinkActive="active" class="sub-nav-link text-primary fw-bold"><i class="fas fa-swatchbook me-1"></i> Global Website Theme</a></li>
+        <li><a routerLink="/FrontSettings/Slider" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-images me-1"></i> Home Header Slider</a></li>
+        <li><a routerLink="/FrontSettings/PageList" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-file-lines me-1"></i> Dynamic CMS Pages</a></li>
+        <li><a routerLink="/FrontSettings/ExpertTeachers" routerLinkActive="active" class="sub-nav-link text-success"><i class="fas fa-user-tie me-1"></i> Expert Faculty List</a></li>
+        <li><a routerLink="/FrontSettings/Gallery" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-photo-film me-1"></i> Institutional Gallery</a></li>
+        <li><a routerLink="/FrontSettings/NewsList" routerLinkActive="active" class="sub-nav-link text-danger"><i class="fas fa-newspaper me-1"></i> News & Press Feed</a></li>
+        <li><a routerLink="/FrontSettings/Testimonials" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-comment-dots me-1"></i> Public Testimonials</a></li>
+        <li><a routerLink="/FrontSettings/FormDownloads" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-file-arrow-down me-1"></i> Resource Downloads</a></li>
+        <li><a routerLink="/FrontSettings/ContactMessages" routerLinkActive="active" class="sub-nav-link text-primary"><i class="fas fa-envelope-open-text me-1"></i> Public Inquiries</a></li>
       </ul>
     </div>
 

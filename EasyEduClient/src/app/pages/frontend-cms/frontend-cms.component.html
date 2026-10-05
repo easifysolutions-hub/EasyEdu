@@ -1,0 +1,996 @@
+<div class="cms-wrapper">
+  <!-- Top Glass Header -->
+  <div class="cms-header-card">
+    <div class="header-left">
+      <div class="header-icon-pill">
+        <i class="fas fa-desktop"></i>
+      </div>
+      <div>
+        <h1 class="cms-title">Frontend CMS & Institutional Portal Studio</h1>
+        <p class="cms-subtitle">Manage public-facing web architecture, dynamic pages, faculty showcases, photo galleries, news feeds, and public inquiries.</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="https://easyedu.easifysolutions.com" target="_blank" class="btn-preview-portal">
+        <i class="fas fa-arrow-up-right-from-square me-2"></i> Live Website
+      </a>
+    </div>
+  </div>
+
+  <!-- Tab Navigation Strip -->
+  <div class="cms-tabs-container">
+    <button class="cms-tab-btn" [class.active]="activeTab === 'theme'" (click)="setTab('theme')">
+      <i class="fas fa-palette"></i> <span>Theme Studio</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'slider'" (click)="setTab('slider')">
+      <i class="fas fa-images"></i> <span>Header Slider</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'pages'" (click)="setTab('pages')">
+      <i class="fas fa-file-lines"></i> <span>Dynamic Pages</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'faculty'" (click)="setTab('faculty')">
+      <i class="fas fa-user-tie"></i> <span>Expert Faculty</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'gallery'" (click)="setTab('gallery')">
+      <i class="fas fa-photo-film"></i> <span>Gallery</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'news'" (click)="setTab('news')">
+      <i class="fas fa-newspaper"></i> <span>News & Press</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'testimonials'" (click)="setTab('testimonials')">
+      <i class="fas fa-comment-dots"></i> <span>Testimonials</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'downloads'" (click)="setTab('downloads')">
+      <i class="fas fa-file-arrow-down"></i> <span>Public Downloads</span>
+    </button>
+    <button class="cms-tab-btn" [class.active]="activeTab === 'messages'" (click)="setTab('messages')">
+      <i class="fas fa-envelope-open-text"></i> <span>Inquiries Inbox</span>
+      <span class="badge-count" *ngIf="contactMessages.length > 0">{{ contactMessages.length }}</span>
+    </button>
+  </div>
+
+  <!-- TAB 1: THEME STUDIO -->
+  <div class="tab-content-area" *ngIf="activeTab === 'theme'">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card-glass h-100">
+          <div class="card-header-clean">
+            <h3 class="card-title"><i class="fas fa-swatchbook text-primary me-2"></i> Global Website Theme & Styling</h3>
+            <span class="badge-status-active">Active Engine</span>
+          </div>
+
+          <!-- Quick Theme Presets -->
+          <div class="presets-section mb-4">
+            <label class="form-label-bold mb-2">Curated Institutional Presets</label>
+            <div class="d-flex flex-wrap gap-2">
+              <button 
+                *ngFor="let p of presetThemes" 
+                class="btn-preset-chip" 
+                (click)="applyPresetTheme(p)"
+              >
+                <span class="color-dot" [style.background]="p.primary"></span>
+                <span>{{ p.name }}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label-sm">Primary Brand Color</label>
+              <div class="color-picker-wrap">
+                <input type="color" [(ngModel)]="themeConfig.primaryColor" class="input-color" />
+                <input type="text" [(ngModel)]="themeConfig.primaryColor" class="input-text-code" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label-sm">Secondary Color</label>
+              <div class="color-picker-wrap">
+                <input type="color" [(ngModel)]="themeConfig.secondaryColor" class="input-color" />
+                <input type="text" [(ngModel)]="themeConfig.secondaryColor" class="input-text-code" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label-sm">Accent Highlight</label>
+              <div class="color-picker-wrap">
+                <input type="color" [(ngModel)]="themeConfig.accentColor" class="input-color" />
+                <input type="text" [(ngModel)]="themeConfig.accentColor" class="input-text-code" />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label-sm">Typography (Font Family)</label>
+              <select [(ngModel)]="themeConfig.fontFamily" class="form-select-dark">
+                <option value="Inter, sans-serif">Inter (Modern & Clean)</option>
+                <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Executive)</option>
+                <option value="'Poppins', sans-serif">Poppins (Friendly & Rounded)</option>
+                <option value="'Outfit', sans-serif">Outfit (Futuristic)</option>
+                <option value="'Roboto', sans-serif">Roboto (Classic Material)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label-sm">Header Layout Style</label>
+              <select [(ngModel)]="themeConfig.headerStyle" class="form-select-dark">
+                <option value="Floating Glassmorphism">Floating Glassmorphism</option>
+                <option value="Classic Top Bar + Nav">Classic Top Bar + Nav</option>
+                <option value="Minimal Solid Light">Minimal Solid Light</option>
+                <option value="Dark Gradient Glow">Dark Gradient Glow</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label-sm">Hero Banner Archetype</label>
+              <select [(ngModel)]="themeConfig.heroStyle" class="form-select-dark">
+                <option value="Full Interactive Slider">Full Interactive Slider</option>
+                <option value="Split Screen Hero with Form">Split Screen Hero with Form</option>
+                <option value="Background Video Loop">Background Video Loop</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label-sm">Footer Layout</label>
+              <select [(ngModel)]="themeConfig.footerLayout" class="form-select-dark">
+                <option value="4-Column Comprehensive">4-Column Comprehensive</option>
+                <option value="3-Column Minimal">3-Column Minimal</option>
+                <option value="Mega Footer with Quick Links">Mega Footer with Quick Links</option>
+              </select>
+            </div>
+
+            <div class="col-12 mt-4 pt-3 border-top border-secondary border-opacity-25">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="darkDefault" [(ngModel)]="themeConfig.isDarkModeDefault">
+                    <label class="form-check-label" for="darkDefault">Dark Mode Default</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="stickyNav" [(ngModel)]="themeConfig.isStickyNavbar">
+                    <label class="form-check-label" for="stickyNav">Sticky Header Navbar</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="rtlToggle" [(ngModel)]="themeConfig.isRtlSupported">
+                    <label class="form-check-label" for="rtlToggle">RTL Language Support</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 d-flex justify-content-end gap-3">
+            <button class="btn-primary-glow" (click)="saveThemeSettings()">
+              <i class="fas fa-floppy-disk me-2"></i> Save & Apply Theme
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Mock Preview Pane -->
+      <div class="col-lg-5">
+        <div class="card-glass h-100">
+          <div class="card-header-clean">
+            <h4 class="card-title-sm"><i class="fas fa-eye text-info me-2"></i> Real-Time Theme Preview</h4>
+            <span class="preview-tag">Instant Simulation</span>
+          </div>
+
+          <div class="mock-device-frame" [style.fontFamily]="themeConfig.fontFamily">
+            <!-- Simulated Nav -->
+            <div class="mock-nav" [style.borderBottomColor]="themeConfig.primaryColor">
+              <div class="mock-logo">
+                <span class="dot" [style.background]="themeConfig.primaryColor"></span>
+                <strong>EasyEdu Academy</strong>
+              </div>
+              <div class="mock-nav-links">
+                <span class="active-mock-link" [style.color]="themeConfig.primaryColor">Home</span>
+                <span>Academics</span>
+                <span>Admissions</span>
+                <button class="mock-cta-btn" [style.background]="themeConfig.primaryColor">Apply Now</button>
+              </div>
+            </div>
+
+            <!-- Simulated Hero -->
+            <div class="mock-hero" [style.background]="'linear-gradient(135deg, ' + themeConfig.primaryColor + '22, ' + themeConfig.secondaryColor + '33)'">
+              <span class="mock-pill" [style.background]="themeConfig.accentColor + '33'" [style.color]="themeConfig.accentColor">★ Admissions 2026 Open</span>
+              <h4 class="mock-hero-title">Shaping Future Leaders with Innovation</h4>
+              <p class="mock-hero-desc">Experience world-class STEM labs, robotics facilities, and holistic curriculum.</p>
+              <div class="d-flex gap-2">
+                <button class="mock-btn-pri" [style.background]="themeConfig.primaryColor">Explore Programs</button>
+                <button class="mock-btn-sec" [style.borderColor]="themeConfig.secondaryColor" [style.color]="themeConfig.secondaryColor">Virtual Tour</button>
+              </div>
+            </div>
+
+            <!-- Simulated Feature Cards -->
+            <div class="mock-features mt-3">
+              <div class="mock-feature-card" [style.borderTopColor]="themeConfig.primaryColor">
+                <i class="fas fa-graduation-cap" [style.color]="themeConfig.primaryColor"></i>
+                <h6>Academic Glory</h6>
+              </div>
+              <div class="mock-feature-card" [style.borderTopColor]="themeConfig.secondaryColor">
+                <i class="fas fa-robot" [style.color]="themeConfig.secondaryColor"></i>
+                <h6>AI Research</h6>
+              </div>
+              <div class="mock-feature-card" [style.borderTopColor]="themeConfig.accentColor">
+                <i class="fas fa-trophy" [style.color]="themeConfig.accentColor"></i>
+                <h6>Global Sports</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: HEADER SLIDER -->
+  <div class="tab-content-area" *ngIf="activeTab === 'slider'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-images text-warning me-2"></i> Home Header Sliders</h3>
+          <p class="text-muted-sm">Manage dynamic hero banners, promotional carousels, and CTA callouts shown on the landing page.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddSlideModal = true">
+          <i class="fas fa-plus me-2"></i> Add New Slide
+        </button>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-lg-4 col-md-6" *ngFor="let slide of sliders">
+          <div class="slide-card">
+            <div class="slide-image-wrap">
+              <img [src]="slide.imageUrl" [alt]="slide.title" class="slide-img" />
+              <div class="slide-badge-order">#{{ slide.order }}</div>
+              <div class="slide-status-toggle">
+                <span class="badge" [ngClass]="slide.isActive ? 'bg-success' : 'bg-secondary'">
+                  {{ slide.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+            </div>
+            <div class="slide-body">
+              <h5 class="slide-title">{{ slide.title }}</h5>
+              <p class="slide-subtitle">{{ slide.subtitle }}</p>
+              
+              <div class="slide-meta">
+                <span class="meta-tag"><i class="fas fa-link me-1"></i> {{ slide.buttonText }} &rarr; {{ slide.buttonLink }}</span>
+                <span class="meta-tag"><i class="fas fa-wand-magic-sparkles me-1"></i> {{ slide.animation }}</span>
+              </div>
+
+              <div class="slide-actions mt-3">
+                <button class="btn-action-icon" (click)="toggleSliderStatus(slide)" title="Toggle Visibility">
+                  <i class="fas" [ngClass]="slide.isActive ? 'fa-eye-slash text-warning' : 'fa-eye text-success'"></i>
+                </button>
+                <button class="btn-action-icon text-danger" (click)="deleteSlider(slide.id)" title="Delete Slide">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: DYNAMIC CMS PAGES -->
+  <div class="tab-content-area" *ngIf="activeTab === 'pages'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-file-lines text-info me-2"></i> Dynamic CMS Pages Manager</h3>
+          <p class="text-muted-sm">Create, publish, and structure SEO-optimized landing pages and policy documents.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddPageModal = true">
+          <i class="fas fa-plus me-2"></i> Create CMS Page
+        </button>
+      </div>
+
+      <div class="table-responsive mt-3">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Page Title</th>
+              <th>URL Slug</th>
+              <th>Layout Template</th>
+              <th>SEO Meta Title</th>
+              <th>Nav / Footer</th>
+              <th>Status</th>
+              <th>Last Modified</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let page of cmsPages">
+              <td class="fw-bold text-light">{{ page.title }}</td>
+              <td><code class="slug-tag">/page/{{ page.slug }}</code></td>
+              <td><span class="badge bg-dark border border-secondary">{{ page.template }}</span></td>
+              <td class="text-muted-sm text-truncate" style="max-width: 200px;">{{ page.metaTitle }}</td>
+              <td>
+                <span class="badge-mini me-1" *ngIf="page.showInNavbar"><i class="fas fa-compass me-1"></i> Nav</span>
+                <span class="badge-mini" *ngIf="page.showInFooter"><i class="fas fa-shoe-prints me-1"></i> Footer</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="page.status === 'Published' ? 'bg-success' : 'bg-warning text-dark'">
+                  {{ page.status }}
+                </span>
+              </td>
+              <td class="text-muted-sm">{{ page.lastModified }}</td>
+              <td class="text-end">
+                <a [href]="'https://easyedu.easifysolutions.com/page/' + page.slug" target="_blank" class="btn-action-icon text-info me-1" title="View Page">
+                  <i class="fas fa-arrow-up-right-from-square"></i>
+                </a>
+                <button class="btn-action-icon text-danger" (click)="deletePage(page.id)" title="Delete Page">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: EXPERT FACULTY -->
+  <div class="tab-content-area" *ngIf="activeTab === 'faculty'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-user-tie text-success me-2"></i> Expert Faculty Directory</h3>
+          <p class="text-muted-sm">Spotlight professors, deans, and mentors on the public institutional homepage.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddFacultyModal = true">
+          <i class="fas fa-plus me-2"></i> Add Faculty Profile
+        </button>
+      </div>
+
+      <div class="row g-4 mt-2">
+        <div class="col-lg-3 col-md-6" *ngFor="let member of facultyList">
+          <div class="faculty-card">
+            <div class="faculty-img-wrap">
+              <img [src]="member.photoUrl" [alt]="member.name" class="faculty-img" />
+              <div class="featured-badge" *ngIf="member.isFeatured">
+                <i class="fas fa-star text-warning"></i> Featured
+              </div>
+            </div>
+            <div class="faculty-body">
+              <h5 class="faculty-name">{{ member.name }}</h5>
+              <div class="faculty-designation">{{ member.designation }}</div>
+              <div class="faculty-dept text-muted-sm mb-2"><i class="fas fa-building me-1"></i> {{ member.department }}</div>
+
+              <div class="faculty-specs">
+                <div class="spec-item"><i class="fas fa-graduation-cap me-1"></i> {{ member.qualification }}</div>
+                <div class="spec-item"><i class="fas fa-briefcase me-1"></i> {{ member.experience }}</div>
+              </div>
+
+              <div class="faculty-contact mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <a [href]="'mailto:' + member.email" class="contact-pill"><i class="fas fa-envelope"></i></a>
+                <a [href]="'tel:' + member.phone" class="contact-pill"><i class="fas fa-phone"></i></a>
+                <button class="contact-pill text-danger ms-auto" (click)="deleteFaculty(member.id)"><i class="fas fa-trash-can"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: INSTITUTIONAL GALLERY -->
+  <div class="tab-content-area" *ngIf="activeTab === 'gallery'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-photo-film text-purple me-2"></i> Institutional Photo & Video Gallery</h3>
+          <p class="text-muted-sm">Categorize campus events, athletic championships, lab exhibitions, and convocation albums.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddMediaModal = true">
+          <i class="fas fa-upload me-2"></i> Upload Media
+        </button>
+      </div>
+
+      <!-- Album Category Filter Bar -->
+      <div class="gallery-filter-bar mt-3">
+        <button 
+          *ngFor="let album of galleryAlbums" 
+          class="btn-album-tab" 
+          [class.active]="selectedGalleryAlbum === album"
+          (click)="selectedGalleryAlbum = album"
+        >
+          {{ album }}
+        </button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="row g-4 mt-2">
+        <div class="col-lg-4 col-md-6" *ngFor="let item of filteredGallery">
+          <div class="gallery-card">
+            <div class="gallery-thumb-wrap">
+              <img [src]="item.thumbnailUrl" [alt]="item.title" class="gallery-thumb" />
+              <span class="album-tag">{{ item.album }}</span>
+            </div>
+            <div class="gallery-info">
+              <h6 class="gallery-title">{{ item.title }}</h6>
+              <div class="d-flex justify-content-between text-muted-sm mt-2">
+                <span><i class="fas fa-calendar me-1"></i> {{ item.uploadDate }}</span>
+                <span><i class="fas fa-eye me-1"></i> {{ item.views }} Views</span>
+                <button class="text-danger bg-transparent border-0" (click)="deleteMedia(item.id)"><i class="fas fa-trash-can"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: NEWS & PRESS FEED -->
+  <div class="tab-content-area" *ngIf="activeTab === 'news'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-newspaper text-danger me-2"></i> News, Notices & Press Feed</h3>
+          <p class="text-muted-sm">Publish official announcements, academic circulars, press releases, and campus milestones.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddNewsModal = true">
+          <i class="fas fa-plus me-2"></i> Post News Article
+        </button>
+      </div>
+
+      <div class="row g-4 mt-2">
+        <div class="col-lg-4 col-md-6" *ngFor="let news of newsList">
+          <div class="news-card">
+            <div class="news-img-wrap">
+              <img [src]="news.imageUrl" [alt]="news.headline" class="news-img" />
+              <span class="news-category-badge">{{ news.category }}</span>
+              <span class="pinned-badge" *ngIf="news.isPinned"><i class="fas fa-thumbtack"></i> Pinned</span>
+            </div>
+            <div class="news-body">
+              <div class="news-meta">
+                <span><i class="fas fa-user-pen me-1"></i> {{ news.author }}</span>
+                <span><i class="fas fa-clock me-1"></i> {{ news.date }}</span>
+              </div>
+              <h5 class="news-headline">{{ news.headline }}</h5>
+              <p class="news-summary">{{ news.summary }}</p>
+
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <span class="badge bg-success">{{ news.status }}</span>
+                <button class="btn-action-icon text-danger" (click)="deleteNews(news.id)" title="Delete Article">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: TESTIMONIALS -->
+  <div class="tab-content-area" *ngIf="activeTab === 'testimonials'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-comment-dots text-warning me-2"></i> Public Testimonials & Reviews</h3>
+          <p class="text-muted-sm">Curate quotes and feedback from parents, alumni, visiting dignitaries, and top performers.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddTestimonialModal = true">
+          <i class="fas fa-plus me-2"></i> Add Testimonial
+        </button>
+      </div>
+
+      <div class="row g-4 mt-2">
+        <div class="col-lg-4 col-md-6" *ngFor="let t of testimonials">
+          <div class="testimonial-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <img [src]="t.avatarUrl" [alt]="t.authorName" class="author-avatar" />
+              <div>
+                <h5 class="author-name">{{ t.authorName }}</h5>
+                <div class="author-role">{{ t.role }}</div>
+              </div>
+            </div>
+
+            <div class="star-rating mb-2">
+              <i class="fas fa-star text-warning" *ngFor="let s of [1,2,3,4,5]"></i>
+            </div>
+
+            <p class="quote-text">“{{ t.quote }}”</p>
+
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary border-opacity-25 text-muted-sm">
+              <span><i class="fas fa-check-circle text-success me-1"></i> Verified Review</span>
+              <button class="btn-action-icon text-danger" (click)="deleteTestimonial(t.id)"><i class="fas fa-trash-can"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: RESOURCE DOWNLOADS -->
+  <div class="tab-content-area" *ngIf="activeTab === 'downloads'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-file-arrow-down text-info me-2"></i> Public Resource Downloads</h3>
+          <p class="text-muted-sm">Provide downloadable brochures, admission prospectus, scholarship forms, and route maps.</p>
+        </div>
+        <button class="btn-primary-glow" (click)="showAddDownloadModal = true">
+          <i class="fas fa-upload me-2"></i> Upload Public Form
+        </button>
+      </div>
+
+      <div class="table-responsive mt-3">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Document Title</th>
+              <th>Category</th>
+              <th>Format</th>
+              <th>File Size</th>
+              <th>Audience</th>
+              <th>Downloads</th>
+              <th>Date</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of downloads">
+              <td class="fw-bold text-light"><i class="fas fa-file-pdf text-danger me-2"></i> {{ item.title }}</td>
+              <td><span class="badge bg-dark border border-secondary">{{ item.category }}</span></td>
+              <td><span class="badge-mini">{{ item.fileFormat }}</span></td>
+              <td>{{ item.fileSize }}</td>
+              <td>{{ item.audience }}</td>
+              <td class="fw-bold text-success">{{ item.downloadCount }}</td>
+              <td class="text-muted-sm">{{ item.uploadDate }}</td>
+              <td class="text-end">
+                <button class="btn-action-icon text-info me-1" (click)="showToast('Downloading ' + item.title)"><i class="fas fa-download"></i></button>
+                <button class="btn-action-icon text-danger" (click)="deleteDownload(item.id)"><i class="fas fa-trash-can"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: PUBLIC INQUIRIES & MESSAGES -->
+  <div class="tab-content-area" *ngIf="activeTab === 'messages'">
+    <div class="card-glass">
+      <div class="card-header-clean">
+        <div>
+          <h3 class="card-title"><i class="fas fa-envelope-open-text text-primary me-2"></i> Public Inquiries & Contact Submissions</h3>
+          <p class="text-muted-sm">Manage admission inquiries, sponsorship offers, campus visit requests, and parent messages.</p>
+        </div>
+      </div>
+
+      <div class="table-responsive mt-3">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Sender</th>
+              <th>Contact Details</th>
+              <th>Subject / Inquiry Topic</th>
+              <th>Received Date</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let msg of contactMessages">
+              <td class="fw-bold text-light">{{ msg.name }}</td>
+              <td class="text-muted-sm">
+                <div><i class="fas fa-envelope me-1"></i> {{ msg.email }}</div>
+                <div><i class="fas fa-phone me-1"></i> {{ msg.phone }}</div>
+              </td>
+              <td>
+                <div class="fw-semibold text-light">{{ msg.subject }}</div>
+                <div class="text-muted-sm text-truncate" style="max-width: 320px;">{{ msg.message }}</div>
+              </td>
+              <td class="text-muted-sm">{{ msg.date }}</td>
+              <td>
+                <span class="badge" [ngClass]="msg.priority === 'Urgent' ? 'bg-danger' : 'bg-secondary'">
+                  {{ msg.priority }}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="msg.status === 'New' ? 'bg-primary' : (msg.status === 'In Progress' ? 'bg-warning text-dark' : 'bg-success')">
+                  {{ msg.status }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn-primary-sm" (click)="openMessage(msg)">
+                  <i class="fas fa-reply me-1"></i> View & Reply
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD HEADER SLIDE -->
+  <div class="modal-backdrop-custom" *ngIf="showAddSlideModal">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-plus-circle me-2 text-primary"></i> Add Home Header Slide</h5>
+        <button class="btn-close-custom" (click)="showAddSlideModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label-sm">Slide Main Title</label>
+          <input type="text" [(ngModel)]="newSlide.title" placeholder="e.g. Inspiring Excellence in Global Education" class="form-control-dark" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Subtitle / Description</label>
+          <textarea [(ngModel)]="newSlide.subtitle" rows="2" placeholder="Brief supporting narrative..." class="form-control-dark"></textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Primary Button Label</label>
+            <input type="text" [(ngModel)]="newSlide.buttonText" placeholder="Apply Now" class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Primary Button Link</label>
+            <input type="text" [(ngModel)]="newSlide.buttonLink" placeholder="/admissions" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Transition Effect</label>
+            <select [(ngModel)]="newSlide.animation" class="form-select-dark">
+              <option value="Zoom In">Zoom In</option>
+              <option value="Slide Left">Slide Left</option>
+              <option value="Fade">Smooth Fade</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Background Image URL</label>
+            <input type="text" [(ngModel)]="newSlide.imageUrl" class="form-control-dark" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddSlideModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addSlide()"><i class="fas fa-check me-1"></i> Publish Slide</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CMS PAGE -->
+  <div class="modal-backdrop-custom" *ngIf="showAddPageModal">
+    <div class="modal-dialog-custom modal-lg">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-file-circle-plus me-2 text-info"></i> Create Dynamic CMS Page</h5>
+        <button class="btn-close-custom" (click)="showAddPageModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="row g-3 mb-3">
+          <div class="col-md-7">
+            <label class="form-label-sm">Page Title</label>
+            <input type="text" [(ngModel)]="newPage.title" (ngModelChange)="generateSlug()" placeholder="e.g. Science Robotics Club" class="form-control-dark" />
+          </div>
+          <div class="col-md-5">
+            <label class="form-label-sm">URL Slug</label>
+            <input type="text" [(ngModel)]="newPage.slug" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Layout Template</label>
+            <select [(ngModel)]="newPage.template" class="form-select-dark">
+              <option value="Standard Informative">Standard Informative</option>
+              <option value="Executive Profile">Executive Profile</option>
+              <option value="Application Process">Application Process</option>
+              <option value="Policy Document">Policy Document</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Publishing Status</label>
+            <select [(ngModel)]="newPage.status" class="form-select-dark">
+              <option value="Published">Published Live</option>
+              <option value="Draft">Save as Draft</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Page Body Content (Markdown / HTML)</label>
+          <textarea [(ngModel)]="newPage.content" rows="4" placeholder="Enter rich textual content for this page..." class="form-control-dark font-monospace"></textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">SEO Meta Title</label>
+            <input type="text" [(ngModel)]="newPage.metaTitle" placeholder="Meta title for Google index..." class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">SEO Meta Description</label>
+            <input type="text" [(ngModel)]="newPage.metaDescription" placeholder="Meta snippet..." class="form-control-dark" />
+          </div>
+        </div>
+        <div class="d-flex gap-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="navCheck" [(ngModel)]="newPage.showInNavbar">
+            <label class="form-check-label" for="navCheck">Show in Header Navbar</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="footerCheck" [(ngModel)]="newPage.showInFooter">
+            <label class="form-check-label" for="footerCheck">Show in Footer Links</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddPageModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addPage()"><i class="fas fa-check me-1"></i> Save & Publish Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD FACULTY -->
+  <div class="modal-backdrop-custom" *ngIf="showAddFacultyModal">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-user-plus me-2 text-success"></i> Add Faculty Profile</h5>
+        <button class="btn-close-custom" (click)="showAddFacultyModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label-sm">Full Name & Title</label>
+          <input type="text" [(ngModel)]="newFaculty.name" placeholder="e.g. Dr. Eleanor Vance, Ph.D." class="form-control-dark" />
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Designation</label>
+            <input type="text" [(ngModel)]="newFaculty.designation" placeholder="e.g. Head of Sciences" class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Department</label>
+            <input type="text" [(ngModel)]="newFaculty.department" placeholder="e.g. Physics & Robotics" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Qualification</label>
+            <input type="text" [(ngModel)]="newFaculty.qualification" placeholder="e.g. Ph.D., MIT" class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Experience</label>
+            <input type="text" [(ngModel)]="newFaculty.experience" placeholder="e.g. 15 Years" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Email Address</label>
+            <input type="email" [(ngModel)]="newFaculty.email" placeholder="faculty@easyedu.org" class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Phone Number</label>
+            <input type="text" [(ngModel)]="newFaculty.phone" placeholder="+1 (555) 000-0000" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Profile Avatar Image URL</label>
+          <input type="text" [(ngModel)]="newFaculty.photoUrl" class="form-control-dark" />
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="featuredFac" [(ngModel)]="newFaculty.isFeatured">
+          <label class="form-check-label" for="featuredFac">Feature prominently on Homepage</label>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddFacultyModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addFaculty()"><i class="fas fa-check me-1"></i> Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD MEDIA GALLERY -->
+  <div class="modal-backdrop-custom" *ngIf="showAddMediaModal">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-upload me-2 text-purple"></i> Upload Gallery Media</h5>
+        <button class="btn-close-custom" (click)="showAddMediaModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label-sm">Event / Caption Title</label>
+          <input type="text" [(ngModel)]="newMedia.title" placeholder="e.g. Robotics Championship Final 2026" class="form-control-dark" />
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Album Category</label>
+            <select [(ngModel)]="newMedia.album" class="form-select-dark">
+              <option value="Science & Innovation">Science & Innovation</option>
+              <option value="Campus Facilities">Campus Facilities</option>
+              <option value="Cultural Arts">Cultural Arts</option>
+              <option value="Ceremonies">Ceremonies</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Media Type</label>
+            <select [(ngModel)]="newMedia.mediaType" class="form-select-dark">
+              <option value="image">High-Res Image</option>
+              <option value="video">Video Stream</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Thumbnail / Media URL</label>
+          <input type="text" [(ngModel)]="newMedia.thumbnailUrl" class="form-control-dark" />
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddMediaModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addMedia()"><i class="fas fa-check me-1"></i> Upload to Album</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD NEWS -->
+  <div class="modal-backdrop-custom" *ngIf="showAddNewsModal">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-newspaper me-2 text-danger"></i> Publish News & Press Story</h5>
+        <button class="btn-close-custom" (click)="showAddNewsModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label-sm">Headline</label>
+          <input type="text" [(ngModel)]="newNews.headline" placeholder="e.g. Science Olympiad Gold Medals" class="form-control-dark" />
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Category</label>
+            <select [(ngModel)]="newNews.category" class="form-select-dark">
+              <option value="Student Achievements">Student Achievements</option>
+              <option value="Campus Expansion">Campus Expansion</option>
+              <option value="Official Notice">Official Notice</option>
+              <option value="Press Release">Press Release</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Author / Desk</label>
+            <input type="text" [(ngModel)]="newNews.author" placeholder="Editorial Bureau" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Story Summary</label>
+          <textarea [(ngModel)]="newNews.summary" rows="3" placeholder="Overview of the news item..." class="form-control-dark"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Cover Image URL</label>
+          <input type="text" [(ngModel)]="newNews.imageUrl" class="form-control-dark" />
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="pinnedNews" [(ngModel)]="newNews.isPinned">
+          <label class="form-check-label" for="pinnedNews">Pin to Top of News Feed</label>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddNewsModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addNews()"><i class="fas fa-paper-plane me-1"></i> Broadcast Story</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD TESTIMONIAL -->
+  <div class="modal-backdrop-custom" *ngIf="showAddTestimonialModal">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-comment-dots me-2 text-warning"></i> Add Testimonial</h5>
+        <button class="btn-close-custom" (click)="showAddTestimonialModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Author Name</label>
+            <input type="text" [(ngModel)]="newTestimonial.authorName" placeholder="Dr. John Doe" class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Affiliation / Role</label>
+            <input type="text" [(ngModel)]="newTestimonial.role" placeholder="Parent / Alumnus" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Testimonial Quote</label>
+          <textarea [(ngModel)]="newTestimonial.quote" rows="3" placeholder="Enter sincere feedback..." class="form-control-dark"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">Avatar Image URL</label>
+          <input type="text" [(ngModel)]="newTestimonial.avatarUrl" class="form-control-dark" />
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddTestimonialModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addTestimonial()"><i class="fas fa-check me-1"></i> Save Testimonial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD DOWNLOAD -->
+  <div class="modal-backdrop-custom" *ngIf="showAddDownloadModal">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-file-arrow-down me-2 text-info"></i> Upload Public Download Resource</h5>
+        <button class="btn-close-custom" (click)="showAddDownloadModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label-sm">Document Title</label>
+          <input type="text" [(ngModel)]="newDownload.title" placeholder="e.g. Admission Prospectus 2026-27" class="form-control-dark" />
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">Category</label>
+            <input type="text" [(ngModel)]="newDownload.category" placeholder="e.g. Admissions" class="form-control-dark" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">Target Audience</label>
+            <input type="text" [(ngModel)]="newDownload.audience" placeholder="e.g. Prospective Parents" class="form-control-dark" />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-sm">File Format</label>
+            <select [(ngModel)]="newDownload.fileFormat" class="form-select-dark">
+              <option value="PDF Document">PDF Document</option>
+              <option value="DOCX Form">DOCX Form</option>
+              <option value="XLSX Spreadsheet">XLSX Spreadsheet</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-sm">File Size</label>
+            <input type="text" [(ngModel)]="newDownload.fileSize" placeholder="2.4 MB" class="form-control-dark" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showAddDownloadModal = false">Cancel</button>
+        <button class="btn-primary-glow" (click)="addDownload()"><i class="fas fa-check me-1"></i> Upload Resource</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: VIEW & REPLY INQUIRY -->
+  <div class="modal-backdrop-custom" *ngIf="showMessageModal && selectedMessage">
+    <div class="modal-dialog-custom modal-lg">
+      <div class="modal-header-custom">
+        <h5><i class="fas fa-envelope-open-text me-2 text-primary"></i> Public Inquiry Details</h5>
+        <button class="btn-close-custom" (click)="showMessageModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="inquiry-sender-header mb-3">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="mb-1 text-light">{{ selectedMessage.name }}</h5>
+              <div class="text-muted-sm">{{ selectedMessage.email }} | {{ selectedMessage.phone }}</div>
+            </div>
+            <div>
+              <span class="badge" [ngClass]="selectedMessage.priority === 'Urgent' ? 'bg-danger' : 'bg-secondary'">
+                {{ selectedMessage.priority }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inquiry-box mb-4">
+          <div class="inquiry-topic">{{ selectedMessage.subject }}</div>
+          <p class="inquiry-body">{{ selectedMessage.message }}</p>
+          <div class="inquiry-date"><i class="fas fa-clock me-1"></i> Submitted on {{ selectedMessage.date }}</div>
+        </div>
+
+        <div class="reply-section">
+          <label class="form-label-bold mb-2"><i class="fas fa-reply me-1 text-info"></i> Dispatch Email Response to {{ selectedMessage.email }}</label>
+          <textarea [(ngModel)]="messageReplyText" rows="4" placeholder="Type official response from EasyEdu Admissions & Administration..." class="form-control-dark"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn-secondary-dark" (click)="showMessageModal = false">Close</button>
+        <button class="btn-primary-glow" (click)="sendReply()"><i class="fas fa-paper-plane me-1"></i> Send Reply & Resolve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-notification" *ngIf="showSuccessToast">
+    <i class="fas fa-circle-check text-success me-2"></i>
+    <span>{{ toastMessage }}</span>
+  </div>
+</div>
