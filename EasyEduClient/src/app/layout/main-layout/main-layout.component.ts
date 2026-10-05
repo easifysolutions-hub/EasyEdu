@@ -34,6 +34,8 @@ export class MainLayoutComponent {
     accounts: false,
     inventory: false,
     transport: false,
+    dormitory: false,
+    certificates: false,
     library: false,
     downloadCenter: false,
     dataManagement: false,
