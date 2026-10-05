@@ -1,0 +1,330 @@
+<div class="content-wrapper pt-0 animate-fade-in">
+  <!-- 1. Instant Operations Quick Action Bar -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="premium-card p-4 shadow-sm border-0">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="fw-bold text-dark m-0 d-flex align-items-center">
+            <span class="pulse-status-green me-2"></span> Instant Operations
+          </h5>
+          <div class="dashboard-controls">
+            <span class="badge bg-soft-primary text-primary fw-bold px-3 py-2 rounded-pill">14 Ready Actions</span>
+          </div>
+        </div>
+
+        <div class="professional-grid">
+          <!-- Accounting Vouchers -->
+          <div class="grid-item">
+            <a routerLink="/fees" class="action-btn">
+              <div class="icon-circle receipt"><i class="fas fa-plus-circle"></i></div>
+              <span class="btn-label">Receipt</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/fees" class="action-btn">
+              <div class="icon-circle payment"><i class="fas fa-minus-circle"></i></div>
+              <span class="btn-label">Payment</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/fees" class="action-btn">
+              <div class="icon-circle journal"><i class="fas fa-exchange-alt"></i></div>
+              <span class="btn-label">Journal</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/fees" class="action-btn">
+              <div class="icon-circle contra"><i class="fas fa-university"></i></div>
+              <span class="btn-label">Contra</span>
+            </a>
+          </div>
+
+          <!-- Core School Management -->
+          <div class="grid-item">
+            <a routerLink="/students/admission" class="action-btn">
+              <div class="icon-circle student"><i class="fas fa-user-plus"></i></div>
+              <span class="btn-label">Student</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/attendance" class="action-btn">
+              <div class="icon-circle attendance"><i class="fas fa-calendar-check"></i></div>
+              <span class="btn-label">Attendance</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/fees" class="action-btn">
+              <div class="icon-circle fees"><i class="fas fa-file-invoice-dollar"></i></div>
+              <span class="btn-label">Fees</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/fees" class="action-btn">
+              <div class="icon-circle accounts"><i class="fas fa-list-ul"></i></div>
+              <span class="btn-label">A/c Master</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/dashboard" class="action-btn">
+              <div class="icon-circle visitor"><i class="fas fa-book-open"></i></div>
+              <span class="btn-label">Visitors</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/dashboard" class="action-btn">
+              <div class="icon-circle homework"><i class="fas fa-book-reader"></i></div>
+              <span class="btn-label">Homework</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/dashboard" class="action-btn">
+              <div class="icon-circle transport"><i class="fas fa-shuttle-van"></i></div>
+              <span class="btn-label">Transport</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/staff" class="action-btn">
+              <div class="icon-circle staff"><i class="fas fa-user-tie"></i></div>
+              <span class="btn-label">Add Staff</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/dashboard" class="action-btn">
+              <div class="icon-circle sms"><i class="fas fa-sms"></i></div>
+              <span class="btn-label">Send SMS</span>
+            </a>
+          </div>
+          <div class="grid-item">
+            <a routerLink="/settings" class="action-btn">
+              <div class="icon-circle settings"><i class="fas fa-cog"></i></div>
+              <span class="btn-label">Settings</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Main Statistics Overview Cards (stat-blue, stat-indigo, stat-emerald, stat-rose) -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="stat-premium-card stat-blue">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-label">Total Students</div>
+            <div class="stat-value">{{ (stats?.totalStudents || 1250) | number }}</div>
+          </div>
+          <div class="stat-icon-bg"><i class="fas fa-user-graduate"></i></div>
+        </div>
+        <div class="stat-footer mt-3"><i class="fas fa-arrow-up me-1"></i> 4.5% Since last month</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="stat-premium-card stat-indigo">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-label">Total Teachers</div>
+            <div class="stat-value">{{ (stats?.totalTeachers || 84) | number }}</div>
+          </div>
+          <div class="stat-icon-bg"><i class="fas fa-chalkboard-teacher"></i></div>
+        </div>
+        <div class="stat-footer mt-3"><i class="fas fa-check-circle me-1"></i> Active Status Verified</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="stat-premium-card stat-emerald">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-label">Total Parents</div>
+            <div class="stat-value">{{ (stats?.totalParents || 1120) | number }}</div>
+          </div>
+          <div class="stat-icon-bg"><i class="fas fa-users"></i></div>
+        </div>
+        <div class="stat-footer mt-3"><i class="fas fa-link me-1"></i> 92% Portal Active</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="stat-premium-card stat-rose">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value">₹{{ (stats?.totalEarnings || 845000) | number }}</div>
+          </div>
+          <div class="stat-icon-bg"><i class="fas fa-money-bill-trend-up"></i></div>
+        </div>
+        <div class="stat-footer mt-3"><i class="fas fa-chart-line me-1"></i> 845K Target Achieved</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Survey & Student Admissions Charts Row -->
+  <div class="row g-4 mb-4">
+    <!-- Finance Survey -->
+    <div class="col-12 col-lg-8">
+      <div class="premium-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold text-dark m-0">Finance Survey</h5>
+            <p class="text-muted small m-0">Income vs Expenses Overview (2026-27)</p>
+          </div>
+          <div class="btn-group btn-group-sm">
+            <button class="btn" [class.btn-primary]="surveyFilter === 'year'" [class.btn-light]="surveyFilter !== 'year'" (click)="setSurveyFilter('year')">This Year</button>
+            <button class="btn" [class.btn-primary]="surveyFilter === 'month'" [class.btn-light]="surveyFilter !== 'month'" (click)="setSurveyFilter('month')">This Month</button>
+          </div>
+        </div>
+
+        <div class="row text-center mb-4 pt-2">
+          <div class="col">
+            <div class="text-muted small fw-bold">INCOME</div>
+            <div class="fw-bold text-success fs-5">₹{{ (stats?.totalEarnings || 845000) | number }}</div>
+          </div>
+          <div class="col">
+            <div class="text-muted small fw-bold">EXPENSES</div>
+            <div class="fw-bold text-danger fs-5">₹{{ (stats?.totalExpenses || 320000) | number }}</div>
+          </div>
+          <div class="col border-start">
+            <div class="text-muted small fw-bold">PROFIT</div>
+            <div class="fw-bold text-primary fs-5">₹{{ ((stats?.totalEarnings || 845000) - (stats?.totalExpenses || 320000)) | number }}</div>
+          </div>
+        </div>
+
+        <!-- Simulated Visual Line Chart Graphic -->
+        <div class="chart-visual-box p-3 rounded-12 bg-light-subtle position-relative overflow-hidden" style="height: 220px;">
+          <svg viewBox="0 0 500 150" class="w-100 h-100" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradIncome" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,120 Q80,80 150,90 T300,50 T450,20 L500,10 L500,150 L0,150 Z" fill="url(#gradIncome)" />
+            <path d="M0,120 Q80,80 150,90 T300,50 T450,20 L500,10" fill="none" stroke="#6366f1" stroke-width="3" />
+            <path d="M0,135 Q100,110 200,115 T350,85 T500,60" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4" />
+          </svg>
+          <div class="d-flex justify-content-between text-muted small mt-2 px-1">
+            <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Admissions Breakdown -->
+    <div class="col-12 col-lg-4">
+      <div class="premium-card h-100 d-flex flex-column justify-content-between">
+        <div>
+          <h5 class="fw-bold text-dark m-0">Student Admissions</h5>
+          <p class="text-muted small m-0 mb-4">Current Session Distribution</p>
+        </div>
+
+        <div class="text-center my-3">
+          <div class="donut-chart-box position-relative d-inline-block">
+            <svg width="150" height="150" viewBox="0 0 36 36" class="circular-chart">
+              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3.8"/>
+              <path class="circle" stroke-dasharray="45, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#7c3aed" stroke-width="3.8"/>
+              <path class="circle" stroke-dasharray="35, 100" stroke-dashoffset="-45" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#3b82f6" stroke-width="3.8"/>
+              <path class="circle" stroke-dasharray="20, 100" stroke-dashoffset="-80" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ec4899" stroke-width="3.8"/>
+            </svg>
+            <div class="position-absolute top-50 start-50 translate-middle text-center">
+              <h4 class="fw-bold m-0 text-dark">1,250</h4>
+              <small class="text-muted" style="font-size: 0.7rem;">Students</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-100 pt-3 border-top">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="small fw-bold text-muted"><i class="fas fa-circle me-2" style="color: #7c3aed;"></i> Primary</span>
+            <span class="small fw-bold">45% (562)</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="small fw-bold text-muted"><i class="fas fa-circle me-2" style="color: #3b82f6;"></i> Secondary</span>
+            <span class="small fw-bold">35% (438)</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="small fw-bold text-muted"><i class="fas fa-circle me-2" style="color: #ec4899;"></i> Higher Secondary</span>
+            <span class="small fw-bold">20% (250)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Notice Board, Event Calendar & Tasks Section -->
+  <div class="row g-4 mb-4">
+    <!-- Notice Board -->
+    <div class="col-12 col-lg-5">
+      <div class="premium-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark m-0">Notice Board</h5>
+          <button class="btn btn-sm btn-outline-primary">VIEW ALL</button>
+        </div>
+
+        <div class="notice-list">
+          <div *ngFor="let n of notices" class="notice-item d-flex gap-3 mb-3 p-3 rounded-12 border-start border-4 border-primary bg-light">
+            <div class="notice-date text-center" style="min-width: 48px;">
+              <h5 class="fw-bold m-0 text-primary">{{ n.day }}</h5>
+              <div class="small fw-bold text-muted">{{ n.month }}</div>
+            </div>
+            <div class="notice-content">
+              <h6 class="fw-bold text-dark mb-1">{{ n.title }}</h6>
+              <p class="small text-muted m-0">{{ n.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Calendar -->
+    <div class="col-12 col-lg-4">
+      <div class="premium-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark m-0">Event Calendar</h5>
+          <h6 class="fw-bold m-0 small text-primary">October 2026</h6>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="calendar-header-day" *ngFor="let h of ['S','M','T','W','T','F','S']">{{ h }}</div>
+          <div 
+            *ngFor="let c of calendarDays" 
+            class="calendar-cell"
+            [class.empty-cell]="!c.day"
+            [class.today-cell]="c.isToday"
+          >
+            <span *ngIf="c.day">{{ c.day }}</span>
+            <div *ngIf="c.hasEvent" class="dot-event"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks & To-Do -->
+    <div class="col-12 col-lg-3">
+      <div class="premium-card h-100 d-flex flex-column justify-content-between">
+        <div>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-dark m-0">Tasks & To-Do</h5>
+            <span class="badge bg-primary">{{ todos.length }}</span>
+          </div>
+
+          <div class="todo-list mb-3">
+            <div *ngFor="let t of todos" class="d-flex align-items-center justify-content-between p-2 rounded mb-2 bg-light border-start border-3" [class.border-success]="t.isCompleted" [class.border-warning]="!t.isCompleted">
+              <div class="d-flex align-items-center gap-2">
+                <input type="checkbox" class="form-check-input" [checked]="t.isCompleted" (change)="toggleTodo(t)">
+                <span class="small" [class.text-decoration-line-through]="t.isCompleted" [class.text-muted]="t.isCompleted">{{ t.title }}</span>
+              </div>
+              <button class="btn btn-sm text-danger p-0" (click)="deleteTodo(t.id)"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <input type="text" class="form-control form-control-premium py-1 small" placeholder="New task..." [(ngModel)]="newTodoTitle" (keyup.enter)="addTodo()">
+          <button class="btn btn-primary btn-sm" (click)="addTodo()"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

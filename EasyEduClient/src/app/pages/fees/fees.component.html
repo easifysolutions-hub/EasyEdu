@@ -1,0 +1,78 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Fee Invoices & Collections</h3>
+      <p class="text-muted small mb-0">Track tuition fees, installment balances, and payments</p>
+    </div>
+    <div>
+      <button class="btn btn-primary">
+        <i class="fas fa-file-invoice-dollar"></i> Generate Fee Invoices
+      </button>
+    </div>
+  </div>
+
+  <div class="premium-card">
+    <div class="row g-3 align-items-center mb-3">
+      <div class="col-12 col-md-5">
+        <div class="search-bar-modern w-100">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by student name, admission #...">
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Invoice ID</th>
+            <th>Student Name</th>
+            <th>Admission No</th>
+            <th>Fee Category</th>
+            <th>Total Amount</th>
+            <th>Paid Amount</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inv of filteredInvoices">
+            <td><strong>INV-00{{ inv.id }}</strong></td>
+            <td>
+              <div class="fw-bold">{{ inv.studentName }}</div>
+            </td>
+            <td>{{ inv.admissionNo }}</td>
+            <td>{{ inv.feeGroup }}</td>
+            <td class="fw-bold">₹{{ inv.amount | number }}</td>
+            <td class="text-success fw-bold">₹{{ inv.paidAmount | number }}</td>
+            <td class="text-danger fw-bold">₹{{ inv.balanceAmount | number }}</td>
+            <td>
+              <span class="badge-status" [ngClass]="{
+                'badge-paid': inv.status === 'Paid',
+                'badge-unpaid': inv.status === 'Unpaid',
+                'badge-partial': inv.status === 'Partial'
+              }">{{ inv.status }}</span>
+            </td>
+            <td class="text-end">
+              <button 
+                *ngIf="inv.status !== 'Paid'" 
+                class="btn btn-sm btn-success" 
+                (click)="collectFee(inv)"
+              >
+                <i class="fas fa-hand-holding-usd"></i> Collect
+              </button>
+              <button 
+                *ngIf="inv.status === 'Paid'" 
+                class="btn btn-sm btn-outline-secondary" 
+                title="Print Receipt"
+              >
+                <i class="fas fa-print"></i> Receipt
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

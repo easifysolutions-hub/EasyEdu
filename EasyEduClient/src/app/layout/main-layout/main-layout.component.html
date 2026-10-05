@@ -1,0 +1,349 @@
+<!-- Global Education Background -->
+<div class="fixed-global-bg">
+  <div class="bg-overlay"></div>
+  <div class="edu-background">
+    <div class="floating-tool" style="top: 15%; left: 5%; animation-duration: 25s;"><i class="fas fa-graduation-cap"></i></div>
+    <div class="floating-tool" style="top: 25%; left: 95%; animation-duration: 30s;"><i class="fas fa-book"></i></div>
+    <div class="floating-tool" style="top: 50%; left: 8%; animation-duration: 20s;"><i class="fas fa-pencil-alt"></i></div>
+    <div class="floating-tool" style="top: 80%; left: 92%; animation-duration: 35s;"><i class="fas fa-flask"></i></div>
+    <div class="floating-tool" style="top: 40%; left: 88%; animation-duration: 28s;"><i class="fas fa-calculator"></i></div>
+    <div class="floating-tool" style="top: 70%; left: 15%; animation-duration: 32s;"><i class="fas fa-atom"></i></div>
+    <div class="floating-tool" style="top: 10%; left: 80%; animation-duration: 22s;"><i class="fas fa-globe"></i></div>
+    <div class="floating-tool" style="top: 20%; left: 50%; animation-duration: 40s;"><i class="fas fa-microscope"></i></div>
+  </div>
+</div>
+
+<!-- Mobile Drawer Backdrop -->
+<div 
+  class="sidebar-overlay" 
+  [class.active]="themeService.isMobileSidebarOpen()"
+  (click)="themeService.closeMobileSidebar()"
+></div>
+
+<!-- Full Multi-Tier Sidebar Matching Original Layout -->
+<aside 
+  class="sidebar sidebar-premium" 
+  [class.sidebar-collapsed]="themeService.isSidebarCollapsed()"
+  [class.mobile-open]="themeService.isMobileSidebarOpen()"
+>
+  <div class="sidebar-brand">
+    <a routerLink="/" class="brand-link-hub">
+      <div class="brand-logo-fallback">
+        <i class="fas fa-graduation-cap text-warning"></i>
+        <span>EasyEdu<span class="text-info">.</span></span>
+      </div>
+    </a>
+    <div class="sidebar-hide-btn d-none d-xl-flex" (click)="themeService.toggleSidebar()">
+      <i class="fas fa-bars-staggered"></i>
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+    <!-- 1. MAIN -->
+    <div class="menu-category">MAIN</div>
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link-premium">
+      <i class="fas fa-th-large main-icon"></i>
+      <span class="sidebar-label">Dashboard</span>
+    </a>
+
+    <!-- 2. ADMINISTRATION -->
+    <div class="menu-category">ADMINISTRATION</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['adminSection']" (click)="toggleMenu('adminSection')">
+        <span><i class="fas fa-shield-halved main-icon"></i> <span class="sidebar-label">Admin Section</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['adminSection']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['adminSection']">
+        <li><a routerLink="/dashboard" class="sub-nav-link">Admission Query</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Visitor Book</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Complaint</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Postal Receive</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Postal Dispatch</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Phone Call Log</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Admin Setup</a></li>
+      </ul>
+    </div>
+
+    <!-- Utilities -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['utilities']" (click)="toggleMenu('utilities')">
+        <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities & Chat</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['utilities']">
+        <li><a routerLink="/dashboard" class="sub-nav-link">User Log</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Chat Box</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Invitations</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Chat Settings</a></li>
+      </ul>
+    </div>
+
+    <!-- Communicate -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['communicate']" (click)="toggleMenu('communicate')">
+        <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Communicate</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['communicate']">
+        <li><a routerLink="/dashboard" class="sub-nav-link">Notice Board</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Send Email / SMS</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Email / SMS Log</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Event Calendar</a></li>
+      </ul>
+    </div>
+
+    <!-- 3. ACADEMICS -->
+    <div class="menu-category">ACADEMICS</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['academic']" (click)="toggleMenu('academic')">
+        <span><i class="fas fa-graduation-cap main-icon"></i> <span class="sidebar-label">Academics</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['academic']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['academic']">
+        <li><a routerLink="/academic/classes" routerLinkActive="active" class="sub-nav-link">Class & Sections</a></li>
+        <li><a routerLink="/academic/subjects" routerLinkActive="active" class="sub-nav-link">Subjects Master</a></li>
+        <li><a routerLink="/academic/classes" class="sub-nav-link">Assign Class Teacher</a></li>
+        <li><a routerLink="/academic/classes" class="sub-nav-link">Assign Subject</a></li>
+        <li><a routerLink="/academic/classes" class="sub-nav-link">Class Room</a></li>
+        <li><a routerLink="/academic/timetable" routerLinkActive="active" class="sub-nav-link">Class Routine / Timetable</a></li>
+      </ul>
+    </div>
+
+    <!-- Lesson Plan -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['lessonPlan']" (click)="toggleMenu('lessonPlan')">
+        <span><i class="fas fa-chalkboard-teacher main-icon"></i> <span class="sidebar-label">Lesson Plan</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['lessonPlan']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['lessonPlan']">
+        <li><a routerLink="/academic/classes" class="sub-nav-link">Lesson & Topic</a></li>
+        <li><a routerLink="/academic/classes" class="sub-nav-link">Lesson Plan Overview</a></li>
+      </ul>
+    </div>
+
+    <!-- Homework -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['homework']" (click)="toggleMenu('homework')">
+        <span><i class="fas fa-pen-fancy main-icon"></i> <span class="sidebar-label">Homework</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['homework']">
+        <li><a routerLink="/dashboard" class="sub-nav-link text-success fw-bold">Add Homework</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Homework List</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Homework Report</a></li>
+      </ul>
+    </div>
+
+    <!-- Examinations -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['exams']" (click)="toggleMenu('exams')">
+        <span><i class="fas fa-file-signature main-icon"></i> <span class="sidebar-label">Examination</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['exams']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['exams']">
+        <li><a routerLink="/examinations" routerLinkActive="active" class="sub-nav-link text-info">Exam Type & Setup</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link text-primary">Exam Schedule</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link">Exam Attendance</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link">Marks Register</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link">Marks Grade</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link text-warning fw-bold">Admit Card & Seat Plan</a></li>
+      </ul>
+    </div>
+
+    <!-- Online Exam -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['onlineExam']" (click)="toggleMenu('onlineExam')">
+        <span><i class="fas fa-laptop-code main-icon"></i> <span class="sidebar-label">Online Exam</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['onlineExam']">
+        <li><a routerLink="/examinations" class="sub-nav-link text-info">Question Group</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link">Question Bank</a></li>
+        <li><a routerLink="/examinations" class="sub-nav-link text-success fw-bold">Active Online Exams</a></li>
+      </ul>
+    </div>
+
+    <!-- 4. STUDENT MANAGEMENT -->
+    <div class="menu-category">STUDENT MANAGEMENT</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['students']" (click)="toggleMenu('students')">
+        <span><i class="fas fa-user-graduate main-icon"></i> <span class="sidebar-label">Student Info</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['students']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['students']">
+        <li><a routerLink="/students" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-info fw-bold">Student Directory</a></li>
+        <li><a routerLink="/students/admission" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Student / Admission</a></li>
+        <li><a routerLink="/attendance" routerLinkActive="active" class="sub-nav-link">Student Attendance</a></li>
+        <li><a routerLink="/attendance/report" class="sub-nav-link">Attendance Reports</a></li>
+        <li><a routerLink="/students" class="sub-nav-link">Student Group & Promote</a></li>
+        <li><a routerLink="/students" class="sub-nav-link">Student Export / Import</a></li>
+      </ul>
+    </div>
+
+    <!-- Behaviour Records -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['behaviour']" (click)="toggleMenu('behaviour')">
+        <span><i class="fas fa-hand-sparkles main-icon"></i> <span class="sidebar-label">Behaviour Records</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['behaviour']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['behaviour']">
+        <li><a routerLink="/students" class="sub-nav-link text-info">Incidents</a></li>
+        <li><a routerLink="/students" class="sub-nav-link text-success">Assign Incident</a></li>
+        <li><a routerLink="/students" class="sub-nav-link">Student Incident Report</a></li>
+      </ul>
+    </div>
+
+    <!-- 5. HUMAN RESOURCE -->
+    <div class="menu-category">HUMAN RESOURCE</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['hr']" (click)="toggleMenu('hr')">
+        <span><i class="fas fa-users-gear main-icon"></i> <span class="sidebar-label">Human Resource</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['hr']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['hr']">
+        <li><a routerLink="/staff" routerLinkActive="active" class="sub-nav-link text-info">Staff Directory</a></li>
+        <li><a routerLink="/staff" class="sub-nav-link text-success fw-bold">Add Staff Member</a></li>
+        <li><a routerLink="/staff" class="sub-nav-link">Designation & Department</a></li>
+        <li><a routerLink="/staff" class="sub-nav-link">Staff Attendance</a></li>
+        <li><a routerLink="/staff" class="sub-nav-link">Payroll Processing</a></li>
+        <li><a routerLink="/staff" class="sub-nav-link text-success">Apply Leave</a></li>
+        <li><a routerLink="/staff" class="sub-nav-link text-warning">Leave Management</a></li>
+      </ul>
+    </div>
+
+    <!-- 6. FINANCE & ACCOUNTS -->
+    <div class="menu-category">FINANCE & ACCOUNTS</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['fees']" (click)="toggleMenu('fees')">
+        <span><i class="fas fa-file-invoice-dollar main-icon"></i> <span class="sidebar-label">Fees & Invoices</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['fees']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['fees']">
+        <li><a routerLink="/fees" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Collect Fees</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Fees Group & Heads</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Bulk Invoice Generation</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link text-warning"><i class="fas fa-print me-1"></i> Bulk Invoice Print</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Bank Payments & Due Report</a></li>
+      </ul>
+    </div>
+
+    <!-- Accounts Master & Vouchers -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['accounts']" (click)="toggleMenu('accounts')">
+        <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts Ledger</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['accounts']">
+        <li><a routerLink="/fees" class="sub-nav-link">Payment Voucher</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Receipt Voucher</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Journal Voucher</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Chart of Accounts</a></li>
+        <li><a routerLink="/fees" class="sub-nav-link">Trial Balance & Balance Sheet</a></li>
+      </ul>
+    </div>
+
+    <!-- 7. OPERATIONS, TRANSPORT, LIBRARY -->
+    <div class="menu-category">OPERATIONS & LOGISTICS</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['transport']" (click)="toggleMenu('transport')">
+        <span><i class="fas fa-bus main-icon"></i> <span class="sidebar-label">Transport</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['transport']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['transport']">
+        <li><a routerLink="/dashboard" class="sub-nav-link">Routes & Vehicles</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Student Bus Allocation</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Transport Reports</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['library']" (click)="toggleMenu('library')">
+        <span><i class="fas fa-book-reader main-icon"></i> <span class="sidebar-label">Library</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['library']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['library']">
+        <li><a routerLink="/dashboard" class="sub-nav-link text-success fw-bold">Add Book</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Book List & Categories</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link text-info">Issue & Return Books</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link">Library Members</a></li>
+      </ul>
+    </div>
+
+    <!-- 8. PLATFORM ADDONS & VIRTUAL CLASS -->
+    <div class="menu-category">PLATFORM ADDONS</div>
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['virtualClass']" (click)="toggleMenu('virtualClass')">
+        <span><i class="fas fa-video main-icon"></i> <span class="sidebar-label">Virtual Classrooms</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['virtualClass']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['virtualClass']">
+        <li><a routerLink="/dashboard" class="sub-nav-link text-primary"><i class="fas fa-video me-1"></i> Zoom Live Class</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link text-warning"><i class="fab fa-google me-1"></i> Google Meet</a></li>
+        <li><a routerLink="/dashboard" class="sub-nav-link text-info"><i class="fas fa-users me-1"></i> Jitsi Meeting</a></li>
+      </ul>
+    </div>
+
+    <!-- 9. SYSTEM & SETTINGS -->
+    <div class="menu-category">SYSTEM & SETTINGS</div>
+    <a routerLink="/settings" routerLinkActive="active" class="nav-link-premium">
+      <i class="fas fa-cogs main-icon"></i>
+      <span class="sidebar-label">Global Control Center</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Topbar Navigation -->
+<header class="topbar" [class.sidebar-collapsed]="themeService.isSidebarCollapsed()">
+  <div class="d-flex align-items-center">
+    <button class="toggle-btn d-none d-lg-flex" (click)="themeService.toggleSidebar()" title="Toggle Sidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+    <button class="toggle-btn d-flex d-lg-none" (click)="themeService.toggleMobileSidebar()" title="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="search-bar-modern d-none d-sm-block">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" placeholder="Search students, staff, fees, records...">
+    </div>
+  </div>
+
+  <div class="topbar-icons">
+    <!-- Public Home Link -->
+    <a routerLink="/" class="btn btn-sm btn-outline-primary d-none d-md-inline-flex" title="Go to Public Landing Page">
+      <i class="fas fa-globe"></i> Website
+    </a>
+
+    <!-- Theme Mode Switch -->
+    <button 
+      class="icon-wrapper" 
+      (click)="themeService.toggleTheme()" 
+      [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+    >
+      <i [class]="themeService.isDarkMode() ? 'fas fa-sun text-warning' : 'fas fa-moon'"></i>
+    </button>
+
+    <!-- Notifications -->
+    <button class="icon-wrapper" title="Notifications">
+      <i class="far fa-bell"></i>
+      <span class="notification-badge">3</span>
+    </button>
+
+    <!-- User Profile Dropdown -->
+    <div class="user-profile-badge" (click)="logout()" title="Click to Logout">
+      <div class="avatar-circle">
+        {{ authService.currentUser()?.fullName?.charAt(0) || 'A' }}
+      </div>
+      <div class="d-none d-md-block text-start">
+        <div class="fw-bold fs-7 lh-1">{{ authService.currentUser()?.fullName || 'Administrator' }}</div>
+        <small class="text-muted" style="font-size: 0.72rem;">SuperAdmin</small>
+      </div>
+      <i class="fas fa-sign-out-alt text-muted ms-2 me-1"></i>
+    </div>
+  </div>
+</header>
+
+<!-- Main Routed Content -->
+<main class="main-content" [class.sidebar-collapsed]="themeService.isSidebarCollapsed()">
+  <router-outlet></router-outlet>
+</main>

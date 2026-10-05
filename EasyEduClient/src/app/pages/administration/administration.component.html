@@ -1,0 +1,193 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Office Administration & Front Desk</h3>
+      <p class="text-muted small mb-0">Admission queries, visitor registers, complaints, and dispatch records</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'queries'" [class.btn-light]="activeTab !== 'queries'" (click)="activeTab = 'queries'">
+        <i class="fas fa-clipboard-question me-1"></i> Admission Queries
+      </button>
+      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'visitors'" [class.btn-light]="activeTab !== 'visitors'" (click)="activeTab = 'visitors'">
+        <i class="fas fa-book-open me-1"></i> Visitor Book
+      </button>
+      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'complaints'" [class.btn-light]="activeTab !== 'complaints'" (click)="activeTab = 'complaints'">
+        <i class="fas fa-bullhorn me-1"></i> Complaints
+      </button>
+      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'postal'" [class.btn-light]="activeTab !== 'postal'" (click)="activeTab = 'postal'">
+        <i class="fas fa-envelope-open me-1"></i> Postal Logs
+      </button>
+      <button class="btn btn-sm" [class.btn-primary]="activeTab === 'calls'" [class.btn-light]="activeTab !== 'calls'" (click)="activeTab = 'calls'">
+        <i class="fas fa-phone-volume me-1"></i> Phone Logs
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab 1: Admission Queries -->
+  <div *ngIf="activeTab === 'queries'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Admission Inquiries</h5>
+      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> New Query</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Applicant Name</th>
+            <th>Phone</th>
+            <th>Source</th>
+            <th>Target Class</th>
+            <th>Query Date</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let q of queries">
+            <td><strong>{{ q.name }}</strong></td>
+            <td>{{ q.phone }}</td>
+            <td><span class="badge bg-light text-dark border">{{ q.source }}</span></td>
+            <td><strong class="text-primary">{{ q.class }}</strong></td>
+            <td>{{ q.date }}</td>
+            <td>
+              <span class="badge-status" [ngClass]="{'badge-paid': q.status === 'Converted', 'badge-pending': q.status === 'Follow Up', 'badge-unpaid': q.status === 'Pending'}">
+                {{ q.status }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary"><i class="fas fa-pencil-alt"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 2: Visitor Book -->
+  <div *ngIf="activeTab === 'visitors'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Visitor Registry</h5>
+      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Add Visitor</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Visitor ID</th>
+            <th>Visitor Name</th>
+            <th>Meeting Purpose</th>
+            <th>In Time</th>
+            <th>Out Time</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of visitors">
+            <td><strong class="text-primary">{{ v.visitorId }}</strong></td>
+            <td>{{ v.name }}</td>
+            <td>{{ v.purpose }}</td>
+            <td><span class="badge bg-success text-white">{{ v.inTime }}</span></td>
+            <td><span class="badge bg-secondary text-white">{{ v.outTime }}</span></td>
+            <td>{{ v.date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 3: Complaints -->
+  <div *ngIf="activeTab === 'complaints'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Complaint Redressal</h5>
+      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Lodge Complaint</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Complainant</th>
+            <th>Category / Type</th>
+            <th>Assigned Department</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of complaints">
+            <td><strong>{{ c.by }}</strong></td>
+            <td>{{ c.type }}</td>
+            <td>{{ c.assignedTo }}</td>
+            <td>{{ c.date }}</td>
+            <td>
+              <span class="badge-status" [class.badge-paid]="c.status === 'Resolved'" [class.badge-pending]="c.status !== 'Resolved'">{{ c.status }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 4: Postal Logs -->
+  <div *ngIf="activeTab === 'postal'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Postal Receive & Dispatch</h5>
+      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Add Record</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Ref #</th>
+            <th>Type</th>
+            <th>Sender Name</th>
+            <th>Receiver</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of postalLogs">
+            <td><strong>{{ p.refNo }}</strong></td>
+            <td>
+              <span class="badge" [class.bg-success]="p.type === 'Receive'" [class.bg-info]="p.type === 'Dispatch'">{{ p.type }}</span>
+            </td>
+            <td>{{ p.sender }}</td>
+            <td>{{ p.receiver }}</td>
+            <td>{{ p.date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 5: Phone Logs -->
+  <div *ngIf="activeTab === 'calls'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Phone Call Logs</h5>
+      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Log Call</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Caller Name</th>
+            <th>Phone</th>
+            <th>Type</th>
+            <th>Duration</th>
+            <th>Follow Up</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let call of phoneLogs">
+            <td><strong>{{ call.name }}</strong></td>
+            <td>{{ call.phone }}</td>
+            <td><span class="badge bg-light text-dark border">{{ call.callType }}</span></td>
+            <td>{{ call.duration }}</td>
+            <td>{{ call.followUp }}</td>
+            <td>{{ call.note }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

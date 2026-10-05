@@ -1,0 +1,130 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Student Admission Form</h3>
+      <p class="text-muted small mb-0">Enter student personal, academic and guardian details</p>
+    </div>
+    <div>
+      <a routerLink="/students" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Student Directory
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show">
+    <i class="fas fa-check-circle me-2"></i> {{ successMessage }}
+  </div>
+
+  <div class="premium-card">
+    <form [formGroup]="admissionForm" (ngSubmit)="onSubmit()">
+      <!-- Academic Information -->
+      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+        <i class="fas fa-school me-2"></i> Academic Details
+      </h5>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">ADMISSION NO *</label>
+          <input type="text" class="form-control form-control-premium" formControlName="admissionNo" readonly>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">CLASS / GRADE *</label>
+          <select class="form-select form-control-premium" formControlName="classId">
+            <option [value]="1">Grade 10</option>
+            <option [value]="2">Grade 9</option>
+            <option [value]="3">Grade 12</option>
+            <option [value]="4">Grade 8</option>
+            <option [value]="5">Grade 11</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">SECTION *</label>
+          <select class="form-select form-control-premium" formControlName="sectionId">
+            <option [value]="1">Section A</option>
+            <option [value]="2">Section B</option>
+            <option [value]="3">Section C</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">ROLL NUMBER *</label>
+          <input type="text" class="form-control form-control-premium" formControlName="rollNo" placeholder="e.g. 101">
+        </div>
+      </div>
+
+      <!-- Student Personal Information -->
+      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+        <i class="fas fa-user me-2"></i> Student Personal Information
+      </h5>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">FIRST NAME *</label>
+          <input type="text" class="form-control form-control-premium" formControlName="firstName" placeholder="First Name">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">LAST NAME *</label>
+          <input type="text" class="form-control form-control-premium" formControlName="lastName" placeholder="Last Name">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">GENDER *</label>
+          <select class="form-select form-control-premium" formControlName="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">DATE OF BIRTH *</label>
+          <input type="date" class="form-control form-control-premium" formControlName="dateOfBirth">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">EMAIL ADDRESS</label>
+          <input type="email" class="form-control form-control-premium" formControlName="email" placeholder="student@email.com">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-bold text-muted">PHONE NUMBER</label>
+          <input type="tel" class="form-control form-control-premium" formControlName="phone" placeholder="+91 XXXXX XXXXX">
+        </div>
+      </div>
+
+      <!-- Guardian Details -->
+      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+        <i class="fas fa-user-shield me-2"></i> Parent / Guardian Details
+      </h5>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-bold text-muted">GUARDIAN NAME *</label>
+          <input type="text" class="form-control form-control-premium" formControlName="parentName" placeholder="Father / Mother Name">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-bold text-muted">GUARDIAN PHONE *</label>
+          <input type="tel" class="form-control form-control-premium" formControlName="parentPhone" placeholder="Contact number">
+        </div>
+
+        <div class="col-12">
+          <label class="form-label small fw-bold text-muted">RESIDENTIAL ADDRESS</label>
+          <textarea class="form-control form-control-premium" rows="2" formControlName="address" placeholder="Full residential address..."></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Actions -->
+      <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+        <button type="reset" class="btn btn-light">Reset</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || admissionForm.invalid">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+          <i class="fas fa-check me-1" *ngIf="!isSubmitting"></i> Complete Admission
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Library Information System</h3>
+      <p class="text-muted small mb-0">Book registry, categorisation, catalog lookup, and issue/return ledger</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary"><i class="fas fa-plus"></i> Add New Book</button>
+      <button class="btn btn-success"><i class="fas fa-hand-holding-hand"></i> Issue Book</button>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <!-- Books Catalog -->
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3">Book Catalog</h5>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Title / Subject</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Rack #</th>
+                <th>Total</th>
+                <th>Available</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of books">
+                <td><strong class="text-primary">{{ b.title }}</strong></td>
+                <td>{{ b.author }}</td>
+                <td><small class="text-muted">{{ b.isbn }}</small></td>
+                <td><span class="badge bg-light text-dark border">{{ b.rackNo }}</span></td>
+                <td>{{ b.quantity }}</td>
+                <td><span class="badge bg-success text-white">{{ b.available }}</span></td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Issued Books -->
+    <div class="col-12 col-lg-4">
+      <div class="premium-card h-100">
+        <h5 class="fw-bold mb-3">Active Issues</h5>
+        <div *ngFor="let ib of issuedBooks" class="p-3 mb-2 rounded bg-light border-start border-3 border-primary">
+          <div class="fw-bold text-dark">{{ ib.bookTitle }}</div>
+          <div class="small text-muted">{{ ib.studentName }} (Roll: {{ ib.rollNo }})</div>
+          <div class="d-flex justify-content-between align-items-center mt-2 small">
+            <span class="text-muted">Due: {{ ib.returnDate }}</span>
+            <span class="badge bg-warning text-dark">{{ ib.status }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

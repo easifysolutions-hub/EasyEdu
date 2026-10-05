@@ -1,0 +1,100 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Student Directory</h3>
+      <p class="text-muted small mb-0">Manage enrolled students, academic records and profiles</p>
+    </div>
+    <div>
+      <a routerLink="/students/admission" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Student
+      </a>
+    </div>
+  </div>
+
+  <div class="premium-card mb-4">
+    <!-- Filter Bar -->
+    <div class="row g-3 align-items-center mb-3">
+      <div class="col-12 col-md-5">
+        <div class="search-bar-modern w-100">
+          <i class="fas fa-search search-icon"></i>
+          <input 
+            type="text" 
+            class="w-100" 
+            [(ngModel)]="searchTerm" 
+            (ngModelChange)="applyFilter()" 
+            placeholder="Search by name, roll no, admission no..."
+          >
+        </div>
+      </div>
+      <div class="col-12 col-md-3">
+        <select class="form-select form-control-premium" [(ngModel)]="selectedClass" (ngModelChange)="applyFilter()">
+          <option value="all">All Grades</option>
+          <option value="Grade 10">Grade 10</option>
+          <option value="Grade 9">Grade 9</option>
+          <option value="Grade 12">Grade 12</option>
+          <option value="Grade 8">Grade 8</option>
+          <option value="Grade 11">Grade 11</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4 text-md-end">
+        <span class="text-muted small">Showing <strong>{{ filteredStudents.length }}</strong> of {{ students.length }} students</span>
+      </div>
+    </div>
+
+    <!-- Student Table -->
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Admission No</th>
+            <th>Full Name</th>
+            <th>Class / Section</th>
+            <th>Roll No</th>
+            <th>Gender</th>
+            <th>Contact Phone</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of filteredStudents">
+            <td><strong class="text-primary">{{ s.admissionNo }}</strong></td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-circle" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                  {{ s.firstName.charAt(0) }}
+                </div>
+                <div>
+                  <div class="fw-bold">{{ s.firstName }} {{ s.lastName }}</div>
+                  <small class="text-muted">{{ s.email || 'student@easyedu.com' }}</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge bg-light text-dark border">{{ s.className || 'Grade 10' }}</span></td>
+            <td><strong>{{ s.rollNo || '-' }}</strong></td>
+            <td>{{ s.gender }}</td>
+            <td>{{ s.phone || '-' }}</td>
+            <td>
+              <span class="badge-status badge-active" *ngIf="s.isActive">Active</span>
+              <span class="badge-status badge-inactive" *ngIf="!s.isActive">Inactive</span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" title="View Profile">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" title="Edit">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredStudents.length === 0">
+            <td colspan="8" class="text-center py-4 text-muted">
+              <i class="fas fa-inbox fs-3 mb-2 d-block"></i>
+              No student records match the search filter.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

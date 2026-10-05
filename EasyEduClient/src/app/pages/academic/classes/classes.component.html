@@ -1,0 +1,58 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Class & Section Management</h3>
+      <p class="text-muted small mb-0">Configure academic grades, classes and division sections</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Add Class Box -->
+    <div class="col-12 col-lg-4">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3">Add New Class</h5>
+        <div class="mb-3">
+          <label class="form-label small fw-bold text-muted">CLASS NAME *</label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newClassName" placeholder="e.g. Grade 11">
+        </div>
+        <button class="btn btn-primary w-100 justify-content-center" (click)="addClass()" [disabled]="!newClassName.trim()">
+          <i class="fas fa-plus"></i> Save Class
+        </button>
+      </div>
+    </div>
+
+    <!-- Class List -->
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3">Active Classes & Sections</h5>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Class Name</th>
+                <th>Associated Sections</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of classes; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td><strong class="text-primary">{{ c.name }}</strong></td>
+                <td>
+                  <span *ngFor="let sec of c.sections" class="badge bg-light text-dark border me-1">
+                    {{ sec.name }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-plus"></i> Add Section</button>
+                  <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

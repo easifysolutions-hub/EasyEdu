@@ -1,0 +1,35 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Virtual Classrooms & Live Meetings</h3>
+      <p class="text-muted small mb-0">Integrated Zoom, Google Meet, and Jitsi relays for remote education</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary"><i class="fas fa-video"></i> Schedule Zoom Class</button>
+      <button class="btn btn-success"><i class="fab fa-google"></i> Launch GMeet</button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12" *ngFor="let m of meetings">
+      <div class="premium-card d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="avatar-circle" [style.background]="m.provider === 'Zoom' ? '#2563eb' : (m.provider === 'Google Meet' ? '#059669' : '#7c3aed')">
+            <i [class]="m.provider === 'Zoom' ? 'fas fa-video' : (m.provider === 'Google Meet' ? 'fab fa-google' : 'fas fa-users')"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">{{ m.topic }}</h5>
+            <div class="text-muted small">
+              <span class="me-3"><i class="far fa-clock me-1"></i> {{ m.time }} ({{ m.duration }})</span>
+              <span><i class="far fa-user me-1"></i> Host: {{ m.host }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-warning text-dark">{{ m.status }}</span>
+          <button class="btn btn-primary"><i class="fas fa-play me-1"></i> Join Class</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
