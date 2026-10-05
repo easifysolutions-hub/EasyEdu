@@ -1,0 +1,97 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <div class="card border-0 rounded-16 shadow-sm overflow-hidden bg-white" style="height: calc(100vh - 160px);">
+    <div class="row g-0 h-100">
+      <!-- Left Sidebar: Channels & Contacts -->
+      <div class="col-md-4 col-lg-3 border-end d-flex flex-column h-100 bg-light">
+        <div class="p-3 border-bottom bg-white">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-comments text-primary me-2"></i> Campus Chat</h5>
+            <span class="badge bg-success bg-opacity-10 text-success fw-bold">ONLINE</span>
+          </div>
+          <div class="search-bar-modern w-100 mt-2">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search discussions...">
+          </div>
+        </div>
+
+        <div class="overflow-auto flex-grow-1">
+          <div class="p-2 text-muted small fw-bold text-uppercase ls-1">Channels & Groups</div>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item list-group-item-action border-0 px-3 py-3 cursor-pointer"
+                 *ngFor="let ch of channels"
+                 [ngClass]="activeChannel.id === ch.id ? 'bg-white shadow-sm border-start border-primary border-4 fw-bold' : 'bg-transparent'"
+                 (click)="selectChannel(ch)">
+              <div class="d-flex align-items-center">
+                <div class="rounded-circle p-2 bg-primary bg-opacity-10 text-primary me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                  <i class="fas fa-{{ ch.avatarIcon || 'comment' }}"></i>
+                </div>
+                <div class="flex-grow-1 overflow-hidden">
+                  <div class="d-flex justify-content-between">
+                    <span class="text-truncate text-dark small fw-bold">{{ ch.name }}</span>
+                    <small class="text-muted">{{ ch.time }}</small>
+                  </div>
+                  <div class="d-flex justify-content-between mt-1">
+                    <small class="text-truncate text-muted" style="max-width: 140px;">{{ ch.lastMessage }}</small>
+                    <span class="badge bg-danger rounded-pill" *ngIf="ch.unread > 0">{{ ch.unread }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Area: Chat Conversation Thread -->
+      <div class="col-md-8 col-lg-9 d-flex flex-column h-100 bg-white">
+        <!-- Top Chat Header -->
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-white shadow-sm">
+          <div class="d-flex align-items-center">
+            <div class="rounded-circle p-2 bg-primary bg-opacity-10 text-primary me-3">
+              <i class="fas fa-{{ activeChannel.avatarIcon || 'comment' }} fa-lg"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-0 text-dark">{{ activeChannel.name }}</h6>
+              <small class="text-success"><i class="fas fa-circle fa-2xs me-1"></i> Active campus network</small>
+            </div>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-phone me-1"></i> Audio Call</button>
+            <button class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-video me-1"></i> Video</button>
+          </div>
+        </div>
+
+        <!-- Messages Flow -->
+        <div class="p-4 overflow-auto flex-grow-1 d-flex flex-column gap-3 bg-light bg-opacity-25">
+          <div *ngFor="let msg of messages" class="d-flex" [ngClass]="msg.isSelf ? 'justify-content-end' : 'justify-content-start'">
+            <div class="d-flex align-items-end gap-2" [ngClass]="msg.isSelf ? 'flex-row-reverse' : 'flex-row'" style="max-width: 70%;">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold small flex-shrink-0" style="width: 34px; height: 34px;">
+                {{ msg.avatar }}
+              </div>
+              <div>
+                <div class="small text-muted mb-1" [ngClass]="msg.isSelf ? 'text-end' : 'text-start'">
+                  <strong>{{ msg.sender }}</strong> &bull; {{ msg.time }}
+                </div>
+                <div class="p-3 rounded-16 shadow-sm" [ngClass]="msg.isSelf ? 'bg-primary text-white' : 'bg-white text-dark border'">
+                  {{ msg.text }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Compose Box -->
+        <div class="p-3 border-top bg-white">
+          <form (ngSubmit)="sendMessage()" class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-light rounded-circle border p-2" style="width: 40px; height: 40px;">
+              <i class="fas fa-paperclip text-muted"></i>
+            </button>
+            <input type="text" class="form-control rounded-pill px-4 py-2 border" [(ngModel)]="messageText" name="messageText" placeholder="Write a message to {{ activeChannel.name }}...">
+            <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm d-flex align-items-center">
+              <i class="fas fa-paper-plane me-1"></i> Send
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

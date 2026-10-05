@@ -1,0 +1,13 @@
+.rounded-8 { border-radius: 8px; }
+.rounded-12 { border-radius: 12px; }
+.rounded-16 { border-radius: 16px; }
+.hover-shadow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+}
+.transition-all {
+  transition: all 0.25s ease-in-out;
+}
+.cursor-pointer {
+  cursor: pointer;
+}

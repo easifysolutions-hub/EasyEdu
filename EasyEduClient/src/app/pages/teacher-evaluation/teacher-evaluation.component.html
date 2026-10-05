@@ -1,0 +1,248 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Teacher Evaluation & 360° Feedback</h3>
+      <p class="text-muted small mb-0">Track pedagogy quality, student satisfaction, peer reviews, and performance KPI analytics</p>
+    </div>
+    <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'submit'">
+      <i class="fas fa-star me-1"></i> Submit Evaluation
+    </button>
+  </div>
+
+  <!-- KPI Metrics -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #042954 0%, #0c4a91 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-star-half-stroke fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">CAMPUS AVERAGE</span>
+        </div>
+        <h2 class="fw-bold mb-1">4.72 / 5.0</h2>
+        <p class="small text-white text-opacity-75 mb-0">Overall Faculty Rating</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-comments fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">REVIEWS</span>
+        </div>
+        <h2 class="fw-bold mb-1">509</h2>
+        <p class="small text-white text-opacity-75 mb-0">Total Student Evaluations</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-hourglass-half fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">MODERATION</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ pendingFeedbacks.length }}</h2>
+        <p class="small text-white text-opacity-75 mb-0">Pending Approvals</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-award fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">DISTINCTION</span>
+        </div>
+        <h2 class="fw-bold mb-1">88%</h2>
+        <p class="small text-white text-opacity-75 mb-0">Scored Above 4.5 Stars</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'teachers'" (click)="activeTab = 'teachers'">
+          <i class="fas fa-chalkboard-teacher me-2"></i> Faculty Performance Scorecard
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'approved'" (click)="activeTab = 'approved'">
+          <i class="fas fa-comment-dots me-2"></i> Approved Reviews ({{ approvedFeedbacks.length }})
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'pending'" (click)="activeTab = 'pending'">
+          <i class="fas fa-shield-halved me-2"></i> Pending Moderation ({{ pendingFeedbacks.length }})
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'submit'" (click)="activeTab = 'submit'">
+          <i class="fas fa-star text-warning me-2"></i> Submit Feedback Form
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB: TEACHERS SCORECARDS -->
+  <div *ngIf="activeTab === 'teachers'" class="animate-fade-in">
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4" *ngFor="let t of teachers">
+        <div class="card border rounded-16 shadow-sm p-4 bg-white h-100 hover-shadow transition-all">
+          <div class="d-flex align-items-center mb-3">
+            <div class="rounded-circle p-3 bg-primary bg-opacity-10 text-primary fw-bold fs-5 me-3" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;">
+              {{ (t.teacherName || 'T').charAt(0) }}
+            </div>
+            <div>
+              <h6 class="fw-bold text-dark mb-0">{{ t.teacherName }}</h6>
+              <small class="text-muted">{{ t.designation }} &bull; {{ t.department }}</small>
+            </div>
+            <span class="badge ms-auto" [ngClass]="t.avgRating >= 4.7 ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning'">
+              {{ t.status }}
+            </span>
+          </div>
+
+          <!-- Overall Star Rating -->
+          <div class="d-flex align-items-center justify-content-between p-3 rounded-12 bg-light mb-3">
+            <div>
+              <span class="fs-4 fw-bold text-dark me-2">{{ t.avgRating }}</span>
+              <span class="text-warning">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </span>
+            </div>
+            <span class="small text-muted fw-bold">{{ t.totalReviews }} Reviews</span>
+          </div>
+
+          <!-- Criteria Progress Bars -->
+          <div class="space-y-2 mb-3">
+            <div class="mb-2">
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Concept Clarity</span>
+                <span class="fw-bold text-dark">{{ t.clarity }} / 5.0</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-success" [style.width.%]="(t.clarity / 5) * 100"></div>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Punctuality & Discipline</span>
+                <span class="fw-bold text-dark">{{ t.punctuality }} / 5.0</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-info" [style.width.%]="(t.punctuality / 5) * 100"></div>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Student Engagement</span>
+                <span class="fw-bold text-dark">{{ t.studentInteraction }} / 5.0</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-warning" [style.width.%]="(t.studentInteraction / 5) * 100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: APPROVED FEEDBACKS -->
+  <div *ngIf="activeTab === 'approved'" class="premium-card animate-fade-in">
+    <h5 class="fw-bold mb-3">Published Student Feedback</h5>
+    <div class="list-group list-group-flush">
+      <div class="list-group-item px-0 py-3 border-light" *ngFor="let fb of approvedFeedbacks">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <span class="fw-bold text-dark me-2">{{ fb.studentName }}</span>
+            <span class="badge bg-light text-primary border me-2">{{ fb.className }}</span>
+            <span class="text-muted small">for <strong class="text-dark">{{ fb.teacherName }}</strong> ({{ fb.subject }})</span>
+          </div>
+          <div class="text-warning">
+            <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5].slice(0, fb.rating)"></i>
+            <small class="text-muted ms-2">{{ fb.date }}</small>
+          </div>
+        </div>
+        <p class="mb-0 text-secondary bg-light p-3 rounded-12 border">"{{ fb.comment }}"</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PENDING APPROVAL MODERATION -->
+  <div *ngIf="activeTab === 'pending'" class="premium-card animate-fade-in">
+    <h5 class="fw-bold mb-3">Pending Moderation Desk</h5>
+    <div class="list-group list-group-flush" *ngIf="pendingFeedbacks.length > 0">
+      <div class="list-group-item px-0 py-3 border-light" *ngFor="let fb of pendingFeedbacks">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <span class="fw-bold text-dark me-2">{{ fb.studentName }}</span>
+            <span class="badge bg-light text-primary border me-2">{{ fb.className }}</span>
+            <span class="text-muted small">Review for <strong class="text-dark">{{ fb.teacherName }}</strong></span>
+          </div>
+          <div class="text-warning">
+            <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5].slice(0, fb.rating)"></i>
+            <small class="text-muted ms-2">{{ fb.date }}</small>
+          </div>
+        </div>
+        <p class="mb-3 text-secondary bg-light p-3 rounded-12 border">"{{ fb.comment }}"</p>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-success rounded-pill px-3" (click)="approveFeedback(fb)">
+            <i class="fas fa-check me-1"></i> Approve & Publish
+          </button>
+          <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="rejectFeedback(fb)">
+            <i class="fas fa-times me-1"></i> Reject
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center py-5 text-muted" *ngIf="pendingFeedbacks.length === 0">
+      <i class="fas fa-check-double fa-3x text-success mb-2"></i>
+      <p class="mb-0">All feedback entries have been moderated and published.</p>
+    </div>
+  </div>
+
+  <!-- TAB: SUBMIT FEEDBACK FORM -->
+  <div *ngIf="activeTab === 'submit'" class="premium-card animate-fade-in" style="max-width: 700px; margin: 0 auto;">
+    <h5 class="fw-bold mb-3"><i class="fas fa-star text-warning me-2"></i> Student / Parent Evaluation Form</h5>
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Select Teacher *</label>
+      <select class="form-select" [(ngModel)]="newFeedback.teacherName">
+        <option *ngFor="let t of teachers" [value]="t.teacherName">{{ t.teacherName }} ({{ t.department }})</option>
+      </select>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label small fw-bold">Student Name</label>
+        <input type="text" class="form-control" [(ngModel)]="newFeedback.studentName">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-bold">Class / Grade</label>
+        <input type="text" class="form-control" [(ngModel)]="newFeedback.className">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Overall Star Rating (1 to 5)</label>
+      <select class="form-select" [(ngModel)]="newFeedback.rating">
+        <option [value]="5">⭐⭐⭐⭐⭐ 5 Stars - Outstanding</option>
+        <option [value]="4">⭐⭐⭐⭐ 4 Stars - Very Good</option>
+        <option [value]="3">⭐⭐⭐ 3 Stars - Average</option>
+        <option [value]="2">⭐⭐ 2 Stars - Needs Improvement</option>
+        <option [value]="1">⭐ 1 Star - Poor</option>
+      </select>
+    </div>
+    <div class="mb-4">
+      <label class="form-label small fw-bold">Detailed Review / Constructive Feedback *</label>
+      <textarea class="form-control" [(ngModel)]="newFeedback.comment" rows="4" placeholder="Mention classroom experiences, clarity of lectures, and suggestions..."></textarea>
+    </div>
+    <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="submitNewFeedback()">
+      <i class="fas fa-paper-plane me-1"></i> Submit Feedback
+    </button>
+  </div>
+</div>

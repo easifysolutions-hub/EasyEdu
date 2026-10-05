@@ -1,0 +1,421 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Online Examination & CBT Portal</h3>
+      <p class="text-muted small mb-0">Manage computer-based tests, question banks, automated grading, and live student quizzes</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-primary rounded-pill px-3" (click)="showAddQuestionModal = true">
+        <i class="fas fa-plus me-1"></i> Add Question
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="showAddExamModal = true">
+        <i class="fas fa-laptop-code me-1"></i> Create Online Exam
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Metrics -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #042954 0%, #0c4a91 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-laptop-code fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">ACTIVE CBT</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ exams.length }}</h2>
+        <p class="small text-white text-opacity-75 mb-0">Scheduled Online Exams</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-database fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">QUESTION BANK</span>
+        </div>
+        <h2 class="fw-bold mb-1">195</h2>
+        <p class="small text-white text-opacity-75 mb-0">Total Bank Questions</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-check-circle fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">AUTO EVALUATE</span>
+        </div>
+        <h2 class="fw-bold mb-1">94.8%</h2>
+        <p class="small text-white text-opacity-75 mb-0">Instant Grading Rate</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <i class="fas fa-user-graduate fa-2x opacity-75"></i>
+          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">PARTICIPATION</span>
+        </div>
+        <h2 class="fw-bold mb-1">840</h2>
+        <p class="small text-white text-opacity-75 mb-0">Completed Attempts</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'exams'" (click)="activeTab = 'exams'">
+          <i class="fas fa-list-check me-2"></i> Online Exams List
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'questions'" (click)="activeTab = 'questions'">
+          <i class="fas fa-question-circle me-2"></i> Question Bank Master
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'groups'" (click)="activeTab = 'groups'">
+          <i class="fas fa-layer-group me-2"></i> Question Groups
+        </button>
+      </li>
+      <li class="nav-item" *ngIf="activeExam">
+        <button class="nav-link" [class.active]="activeTab === 'simulator'" (click)="activeTab = 'simulator'">
+          <i class="fas fa-play-circle text-warning me-2"></i> Live Exam Simulator
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB: EXAMS LIST -->
+  <div *ngIf="activeTab === 'exams'" class="premium-card animate-fade-in">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <div class="search-bar-modern flex-grow-1" style="max-width: 400px;">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search exams by title or subject...">
+      </div>
+      <div class="d-flex gap-2">
+        <select class="form-select modern-select" style="width: 160px;" [(ngModel)]="selectedSubject">
+          <option value="All">All Subjects</option>
+          <option value="Science">Science</option>
+          <option value="Mathematics">Mathematics</option>
+          <option value="English">English</option>
+          <option value="Computer">Computer</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Exam Title</th>
+            <th>Class / Subject</th>
+            <th>Schedule Date</th>
+            <th>Duration</th>
+            <th>Total Marks</th>
+            <th>Questions</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ex of filteredExams">
+            <td>
+              <strong class="text-dark">{{ ex.title }}</strong>
+              <div class="small text-muted" *ngIf="ex.autoEvaluate"><i class="fas fa-bolt text-warning me-1"></i> Auto-grading enabled</div>
+            </td>
+            <td>
+              <span class="badge bg-light text-primary border me-1">{{ ex.className }}</span>
+              <span class="text-secondary fw-semibold">{{ ex.subject }}</span>
+            </td>
+            <td>
+              <div class="fw-bold">{{ ex.date }}</div>
+              <small class="text-muted">{{ ex.startTime }}</small>
+            </td>
+            <td><span class="badge bg-light text-dark border">{{ ex.durationMinutes }} Mins</span></td>
+            <td>
+              <div class="fw-bold text-success">{{ ex.totalMarks }} Pts</div>
+              <small class="text-muted">Pass: {{ ex.passingMarks }}</small>
+            </td>
+            <td><span class="badge bg-info bg-opacity-10 text-info fw-bold">{{ ex.totalQuestions }} Questions</span></td>
+            <td>
+              <span class="badge-status" [ngClass]="{
+                'badge-paid': ex.status === 'Published',
+                'badge-partial': ex.status === 'In Progress',
+                'badge-unpaid': ex.status === 'Draft'
+              }">{{ ex.status }}</span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-primary rounded-pill px-3 me-1" (click)="startQuizSimulator(ex)" title="Launch CBT Simulator">
+                <i class="fas fa-play me-1"></i> Test Quiz
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: QUESTION BANK -->
+  <div *ngIf="activeTab === 'questions'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-0">Question Bank Repository</h5>
+        <small class="text-muted">Manage categorized MCQ, True/False, Multiple-select, and Fill-in questions</small>
+      </div>
+      <button class="btn btn-primary" (click)="showAddQuestionModal = true">
+        <i class="fas fa-plus me-1"></i> Add Question
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6" *ngFor="let q of questions">
+        <div class="card border rounded-16 shadow-sm p-4 bg-white h-100">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-primary bg-opacity-10 text-primary fw-bold">{{ q.type }}</span>
+            <div class="d-flex gap-2">
+              <span class="badge bg-light text-dark border">{{ q.subject }} &bull; {{ q.group }}</span>
+              <span class="badge" [ngClass]="q.level === 'Easy' ? 'bg-success bg-opacity-10 text-success' : (q.level === 'Medium' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-danger bg-opacity-10 text-danger')">
+                {{ q.level }}
+              </span>
+            </div>
+          </div>
+          <h6 class="fw-bold text-dark mb-3">Q: {{ q.questionText }}</h6>
+          
+          <div class="list-group list-group-flush mb-3" *ngIf="q.options && q.options.length > 0">
+            <div class="list-group-item px-3 py-2 small border-light rounded-8 mb-1" 
+                 *ngFor="let opt of q.options; let idx = index"
+                 [ngClass]="idx === q.correctAnswer ? 'bg-success bg-opacity-10 text-success fw-bold border-success' : 'bg-light'">
+              <span class="me-2 fw-bold">{{ idx + 1 }}.</span> {{ opt }}
+              <i class="fas fa-check-circle text-success ms-auto" *ngIf="idx === q.correctAnswer"></i>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto small">
+            <span class="text-muted">Assigned Value:</span>
+            <strong class="text-primary">{{ q.marks }} Marks</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: QUESTION GROUPS -->
+  <div *ngIf="activeTab === 'groups'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-0">Question Groups & Domains</h5>
+        <small class="text-muted">Hierarchical taxonomy for subject syllabus banks</small>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3" *ngFor="let grp of questionGroups">
+        <div class="card border rounded-16 shadow-sm p-4 bg-white h-100">
+          <div class="rounded-circle p-3 bg-primary bg-opacity-10 text-primary d-inline-flex mb-3" style="width: 50px; height: 50px;">
+            <i class="fas fa-folder-open fa-lg"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-1">{{ grp.name }}</h5>
+          <span class="badge bg-light text-primary border mb-2">{{ grp.subject }}</span>
+          <p class="small text-muted mb-3">{{ grp.description }}</p>
+          <div class="pt-2 border-top mt-auto fw-bold text-success small">
+            {{ grp.questionCount }} Questions Indexed
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: LIVE EXAM SIMULATOR (CBT Test Runner) -->
+  <div *ngIf="activeTab === 'simulator' && activeExam" class="animate-fade-in">
+    <div class="card border-0 rounded-16 shadow-lg overflow-hidden bg-white">
+      <div class="card-header bg-dark text-white p-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h4 class="fw-bold mb-1">{{ activeExam.title }}</h4>
+          <small class="text-white text-opacity-75">{{ activeExam.subject }} &bull; {{ activeExam.className }} &bull; Passing: {{ activeExam.passingMarks }} Marks</small>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger text-white px-3 py-2 rounded-12 fw-bold d-flex align-items-center">
+            <i class="fas fa-stopwatch fa-lg me-2"></i> 44:30 REMAINING
+          </div>
+          <button class="btn btn-outline-light btn-sm" (click)="activeTab = 'exams'">Exit Quiz</button>
+        </div>
+      </div>
+
+      <div class="card-body p-4 p-md-5" *ngIf="!examSubmitted">
+        <div class="row g-4">
+          <!-- Question Navigation Column -->
+          <div class="col-lg-3 border-end">
+            <h6 class="fw-bold text-dark mb-3">Question Palette</h6>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <button class="btn btn-sm rounded-8 px-3 py-2 fw-bold" 
+                      *ngFor="let q of questions; let i = index"
+                      [ngClass]="i === currentQuestionIndex ? 'btn-primary' : (selectedAnswers[i] !== undefined ? 'btn-success' : 'btn-light border')"
+                      (click)="currentQuestionIndex = i">
+                {{ i + 1 }}
+              </button>
+            </div>
+            <div class="small text-muted">
+              <div><span class="badge bg-success p-1 me-1"> </span> Answered: {{ (selectedAnswers | keyvalue).length }}</div>
+              <div class="mt-1"><span class="badge bg-light text-dark border p-1 me-1"> </span> Remaining: {{ questions.length - (selectedAnswers | keyvalue).length }}</div>
+            </div>
+          </div>
+
+          <!-- Active Question Area -->
+          <div class="col-lg-9 ps-lg-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <span class="badge bg-primary px-3 py-2 fs-6">Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</span>
+              <span class="badge bg-light text-dark border px-3 py-2">{{ questions[currentQuestionIndex].marks }} Marks</span>
+            </div>
+
+            <h4 class="fw-bold text-dark mb-4">{{ questions[currentQuestionIndex].questionText }}</h4>
+
+            <!-- Options (MCQ / True False) -->
+            <div class="d-flex flex-column gap-3 mb-5" *ngIf="questions[currentQuestionIndex].options">
+              <div class="p-3 rounded-12 border cursor-pointer transition-all d-flex align-items-center"
+                   *ngFor="let opt of questions[currentQuestionIndex].options; let optIdx = index"
+                   [ngClass]="selectedAnswers[currentQuestionIndex] === optIdx ? 'bg-primary bg-opacity-10 border-primary text-primary fw-bold' : 'bg-light hover-shadow'"
+                   (click)="selectOption(currentQuestionIndex, optIdx)">
+                <div class="rounded-circle p-2 border me-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                  {{ ['A', 'B', 'C', 'D', 'E'][optIdx] }}
+                </div>
+                <span>{{ opt }}</span>
+              </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+              <button class="btn btn-outline-secondary rounded-pill px-4" 
+                      [disabled]="currentQuestionIndex === 0"
+                      (click)="currentQuestionIndex = currentQuestionIndex - 1">
+                &larr; Previous Question
+              </button>
+
+              <button class="btn btn-primary rounded-pill px-4" 
+                      *ngIf="currentQuestionIndex < questions.length - 1"
+                      (click)="currentQuestionIndex = currentQuestionIndex + 1">
+                Next Question &rarr;
+              </button>
+
+              <button class="btn btn-success rounded-pill px-5 shadow" 
+                      *ngIf="currentQuestionIndex === questions.length - 1"
+                      (click)="submitExam()">
+                <i class="fas fa-check-circle me-1"></i> Submit Examination
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card upon Submission -->
+      <div class="card-body p-5 text-center" *ngIf="examSubmitted">
+        <div class="rounded-circle p-4 bg-success bg-opacity-10 text-success d-inline-flex mb-3">
+          <i class="fas fa-trophy fa-4x"></i>
+        </div>
+        <h2 class="fw-bold text-dark">Examination Completed!</h2>
+        <p class="text-muted">Your online test was automatically scored by the EasyEdu CBT Engine.</p>
+        
+        <div class="d-inline-flex gap-4 p-4 bg-light rounded-16 border my-3">
+          <div>
+            <small class="text-muted fw-bold">TOTAL SCORE</small>
+            <h3 class="fw-bold text-success mb-0">{{ quizScore }} / 10 Pts</h3>
+          </div>
+          <div class="border-start ps-4">
+            <small class="text-muted fw-bold">RESULT STATUS</small>
+            <h3 class="fw-bold text-primary mb-0">{{ quizScore >= 4 ? 'PASSED' : 'NEEDS REVISION' }}</h3>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button class="btn btn-primary rounded-pill px-4" (click)="activeTab = 'exams'">Back to Exams</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD ONLINE EXAM -->
+  <div class="modal-backdrop-custom" *ngIf="showAddExamModal">
+    <div class="modal-content-custom" style="max-width: 550px;">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0"><i class="fas fa-laptop-code text-primary me-2"></i> Schedule Online Exam</h5>
+        <button class="btn-close-custom" (click)="showAddExamModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Exam Title *</label>
+          <input type="text" class="form-control" [(ngModel)]="newExamForm.title" placeholder="e.g. Term 1 Physics CBT">
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Subject</label>
+            <select class="form-select" [(ngModel)]="newExamForm.subject">
+              <option value="Science">Science</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="English">English</option>
+              <option value="Computer">Computer</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Target Class</label>
+            <select class="form-select" [(ngModel)]="newExamForm.className">
+              <option value="Grade 10-A">Grade 10-A</option>
+              <option value="Grade 10-B">Grade 10-B</option>
+              <option value="Grade 9-A">Grade 9-A</option>
+            </select>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Duration (Minutes)</label>
+            <input type="number" class="form-control" [(ngModel)]="newExamForm.durationMinutes">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Total Marks</label>
+            <input type="number" class="form-control" [(ngModel)]="newExamForm.totalMarks">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showAddExamModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createExam()">Publish Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD QUESTION -->
+  <div class="modal-backdrop-custom" *ngIf="showAddQuestionModal">
+    <div class="modal-content-custom" style="max-width: 550px;">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0">Add Question to Bank</h5>
+        <button class="btn-close-custom" (click)="showAddQuestionModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Question Prompt *</label>
+          <textarea class="form-control" [(ngModel)]="newQuestionForm.questionText" rows="3" placeholder="Enter question text..."></textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Question Type</label>
+            <select class="form-select" [(ngModel)]="newQuestionForm.type">
+              <option value="MCQ">Multiple Choice (MCQ)</option>
+              <option value="TrueFalse">True / False</option>
+              <option value="MultipleSelect">Multiple Correct</option>
+              <option value="FillBlank">Fill in the Blanks</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Marks</label>
+            <input type="number" class="form-control" [(ngModel)]="newQuestionForm.marks">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showAddQuestionModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="saveQuestion()">Save Question</button>
+      </div>
+    </div>
+  </div>
+</div>

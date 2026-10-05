@@ -23,6 +23,16 @@ interface FeeGroup {
   headCount: number;
 }
 
+interface FeeStructureItem {
+  id: number;
+  className: string;
+  groupName: string;
+  totalFee: number;
+  installments: number;
+  dueDate: string;
+  assignedStudents: number;
+}
+
 interface PaymentTransaction {
   id: string;
   invoiceNo: string;
@@ -34,6 +44,19 @@ interface PaymentTransaction {
   referenceNo: string;
   date: string;
   collectedBy: string;
+  type?: 'Income' | 'Expense';
+}
+
+interface VoucherItem {
+  id: string;
+  voucherNo: string;
+  type: 'Payment' | 'Receipt' | 'Journal' | 'Contra' | 'Sales' | 'Purchase';
+  date: string;
+  accountHead: string;
+  debit: number;
+  credit: number;
+  narration: string;
+  status: 'Approved' | 'Pending' | 'Draft';
 }
 
 @Component({
@@ -46,7 +69,7 @@ interface PaymentTransaction {
 export class FeesComponent implements OnInit {
   private api = inject(ApiService);
 
-  activeTab: 'invoices' | 'collect' | 'heads' | 'groups' | 'bulk' | 'ledger' = 'invoices';
+  activeTab: 'dashboard' | 'invoices' | 'collect' | 'heads' | 'groups' | 'structure' | 'ledger' | 'accounting' = 'dashboard';
   searchTerm = '';
   statusFilter = 'All';
   classFilter = 'All';
@@ -77,11 +100,26 @@ export class FeesComponent implements OnInit {
     { id: 5, name: 'Activities & Extracurricular', description: 'Clubs, tournaments, debate and annual functions', headCount: 6 }
   ];
 
+  feeStructures: FeeStructureItem[] = [
+    { id: 1, className: 'Grade 10 - Section A', groupName: 'Academic Tuition + Labs', totalFee: 31000, installments: 4, dueDate: '15th of Every Quarter', assignedStudents: 42 },
+    { id: 2, className: 'Grade 9 - Section A', groupName: 'Academic Tuition + Labs', totalFee: 28000, installments: 4, dueDate: '15th of Every Quarter', assignedStudents: 38 },
+    { id: 3, className: 'Grade 11 - Science', groupName: 'Senior Science + Lab + Hostel', totalFee: 72000, installments: 2, dueDate: '30th June / 30th Nov', assignedStudents: 35 },
+    { id: 4, className: 'Grade 12 - Commerce', groupName: 'Senior Commerce Tuition', totalFee: 26000, installments: 4, dueDate: '15th of Every Quarter', assignedStudents: 40 },
+    { id: 5, className: 'Grade 5 - Primary', groupName: 'Primary Composite Fee', totalFee: 21500, installments: 4, dueDate: '10th of Every Quarter', assignedStudents: 30 }
+  ];
+
   recentTransactions: PaymentTransaction[] = [
-    { id: 'TXN-9901', invoiceNo: 'INV-001', studentName: 'Aarav Sharma', admissionNo: 'ADM-2024-001', class: 'Grade 10-A', amount: 25000, paymentMode: 'UPI / Online', referenceNo: 'UPI98234710', date: 'Today, 11:30 AM', collectedBy: 'Cashier (Deepak S.)' },
-    { id: 'TXN-9902', invoiceNo: 'INV-002', studentName: 'Diya Patel', admissionNo: 'ADM-2024-002', class: 'Grade 10-B', amount: 16000, paymentMode: 'Net Banking', referenceNo: 'HDFC6629104', date: 'Yesterday, 03:45 PM', collectedBy: 'Accounts Dept.' },
-    { id: 'TXN-9903', invoiceNo: 'INV-004', studentName: 'Ananya Verma', admissionNo: 'ADM-2024-004', class: 'Grade 9-A', amount: 25000, paymentMode: 'Cash', referenceNo: 'CSH-0912', date: '03 May 2025', collectedBy: 'Cashier (Deepak S.)' },
-    { id: 'TXN-9904', invoiceNo: 'INV-005', studentName: 'Kabir Singh', admissionNo: 'ADM-2024-005', class: 'Grade 11-Science', amount: 24000, paymentMode: 'Debit Card', referenceNo: 'POS-882194', date: '02 May 2025', collectedBy: 'Cashier (Deepak S.)' }
+    { id: 'TXN-9901', invoiceNo: 'INV-001', studentName: 'Aarav Sharma', admissionNo: 'ADM-2024-001', class: 'Grade 10-A', amount: 25000, paymentMode: 'UPI / Online', referenceNo: 'UPI98234710', date: 'Today, 11:30 AM', collectedBy: 'Cashier (Deepak S.)', type: 'Income' },
+    { id: 'TXN-9902', invoiceNo: 'INV-002', studentName: 'Diya Patel', admissionNo: 'ADM-2024-002', class: 'Grade 10-B', amount: 16000, paymentMode: 'Net Banking', referenceNo: 'HDFC6629104', date: 'Yesterday, 03:45 PM', collectedBy: 'Accounts Dept.', type: 'Income' },
+    { id: 'TXN-9903', invoiceNo: 'INV-004', studentName: 'Ananya Verma', admissionNo: 'ADM-2024-004', class: 'Grade 9-A', amount: 25000, paymentMode: 'Cash', referenceNo: 'CSH-0912', date: '03 May 2025', collectedBy: 'Cashier (Deepak S.)', type: 'Income' },
+    { id: 'TXN-9904', invoiceNo: 'INV-005', studentName: 'Kabir Singh', admissionNo: 'ADM-2024-005', class: 'Grade 11-Science', amount: 24000, paymentMode: 'Debit Card', referenceNo: 'POS-882194', date: '02 May 2025', collectedBy: 'Cashier (Deepak S.)', type: 'Income' }
+  ];
+
+  vouchers: VoucherItem[] = [
+    { id: 'VCH-101', voucherNo: 'JV-2025-001', type: 'Receipt', date: '2025-05-10', accountHead: 'Tuition Fees Collection', debit: 90000, credit: 0, narration: 'Quarterly tuition fees collected from Grade 10 students', status: 'Approved' },
+    { id: 'VCH-102', voucherNo: 'PV-2025-002', type: 'Payment', date: '2025-05-09', accountHead: 'Campus Electric & Water Utilities', debit: 0, credit: 28400, narration: 'Monthly electrical bill paid via NEFT to Power Corp', status: 'Approved' },
+    { id: 'VCH-103', voucherNo: 'JV-2025-003', type: 'Journal', date: '2025-05-08', accountHead: 'Depreciation on Lab Equipment', debit: 15000, credit: 15000, narration: 'Monthly accumulated depreciation for Physics & STEM Labs', status: 'Approved' },
+    { id: 'VCH-104', voucherNo: 'PV-2025-004', type: 'Payment', date: '2025-05-07', accountHead: 'Staff Monthly Payroll & Allowances', debit: 0, credit: 485000, narration: 'Faculty & Administrative Staff salaries for April 2025', status: 'Approved' }
   ];
 
   // Modals state
@@ -124,6 +162,25 @@ export class FeesComponent implements OnInit {
     notifyParents: true
   };
 
+  showCreateInvoiceModal = false;
+  newInvoiceForm = {
+    studentName: '',
+    admissionNo: '',
+    feeGroup: 'Quarter 1 Tuition',
+    amount: 25000,
+    dueDate: '2025-05-30',
+    remarks: ''
+  };
+
+  showVoucherModal = false;
+  newVoucherForm = {
+    type: 'Payment',
+    accountHead: 'Campus Maintenance & Supplies',
+    amount: 5000,
+    narration: '',
+    paymentMode: 'Bank Transfer'
+  };
+
   ngOnInit(): void {
     this.api.getFeeInvoices().subscribe({
       next: (res) => {
@@ -132,7 +189,7 @@ export class FeesComponent implements OnInit {
         }
       },
       error: () => {
-        // Keep fallback data
+        // Keep initial fallback data
       }
     });
   }
@@ -162,13 +219,14 @@ export class FeesComponent implements OnInit {
     });
   }
 
-  openCollectModal(inv: FeeInvoice): void {
-    this.selectedInvoice = inv;
+  openCollectModal(inv?: FeeInvoice): void {
+    const target = inv || this.invoices[0];
+    this.selectedInvoice = target;
     this.collectForm = {
-      amount: inv.balanceAmount > 0 ? inv.balanceAmount : inv.amount,
+      amount: target ? (target.balanceAmount > 0 ? target.balanceAmount : target.amount) : 5000,
       paymentMode: 'Cash',
       referenceNo: '',
-      note: 'Payment received towards ' + inv.feeGroup,
+      note: 'Payment received towards ' + (target ? target.feeGroup : 'Fees'),
       discount: 0,
       fine: 0
     };
@@ -213,7 +271,8 @@ export class FeesComponent implements OnInit {
       paymentMode: this.collectForm.paymentMode,
       referenceNo: this.collectForm.referenceNo || 'REF-' + Date.now().toString().slice(-6),
       date: 'Just Now',
-      collectedBy: 'Logged-in Cashier'
+      collectedBy: 'Cashier (System Administrator)',
+      type: 'Income'
     };
 
     this.recentTransactions.unshift(newTxn);
@@ -268,6 +327,37 @@ export class FeesComponent implements OnInit {
     window.print();
   }
 
+  saveNewInvoice(): void {
+    if (!this.newInvoiceForm.studentName || !this.newInvoiceForm.amount) {
+      Swal.fire('Missing Information', 'Please provide student name and invoice amount.', 'warning');
+      return;
+    }
+
+    const newInv: FeeInvoice = {
+      id: this.invoices.length + 1,
+      studentId: 100 + this.invoices.length,
+      studentName: this.newInvoiceForm.studentName,
+      admissionNo: this.newInvoiceForm.admissionNo || `ADM-2025-0${this.invoices.length + 1}`,
+      feeGroup: this.newInvoiceForm.feeGroup,
+      amount: Number(this.newInvoiceForm.amount),
+      paidAmount: 0,
+      balanceAmount: Number(this.newInvoiceForm.amount),
+      dueDate: this.newInvoiceForm.dueDate,
+      status: 'Unpaid'
+    };
+
+    this.invoices.unshift(newInv);
+    this.showCreateInvoiceModal = false;
+    this.activeTab = 'invoices';
+
+    Swal.fire({
+      title: 'Invoice Created!',
+      text: `Invoice INV-00${newInv.id} for ₹${newInv.amount.toLocaleString()} generated successfully.`,
+      icon: 'success',
+      confirmButtonColor: '#002B49'
+    });
+  }
+
   saveNewHead(): void {
     if (!this.newHead.name || !this.newHead.code) {
       Swal.fire('Missing Details', 'Please provide Fee Head Name and Code.', 'warning');
@@ -319,7 +409,6 @@ export class FeesComponent implements OnInit {
       confirmButtonText: 'Yes, Generate Invoices'
     }).then((res: any) => {
       if (res.isConfirmed) {
-        // Add mock bulk invoices
         const dummyNames = ['Isha Chawla', 'Varun Dhawan', 'Kritika Sen', 'Devansh Joshi'];
         dummyNames.forEach((name, idx) => {
           this.invoices.unshift({
@@ -347,5 +436,31 @@ export class FeesComponent implements OnInit {
         });
       }
     });
+  }
+
+  saveVoucher(): void {
+    const amount = Number(this.newVoucherForm.amount) || 0;
+    if (amount <= 0) {
+      Swal.fire('Invalid Amount', 'Please enter a valid amount.', 'warning');
+      return;
+    }
+
+    const newV: VoucherItem = {
+      id: 'VCH-' + (100 + this.vouchers.length + 1),
+      voucherNo: `${this.newVoucherForm.type.substring(0, 2).toUpperCase()}V-2025-${(this.vouchers.length + 1).toString().padStart(3, '0')}`,
+      type: this.newVoucherForm.type as any,
+      date: new Date().toISOString().split('T')[0],
+      accountHead: this.newVoucherForm.accountHead,
+      debit: this.newVoucherForm.type === 'Receipt' ? amount : 0,
+      credit: this.newVoucherForm.type === 'Payment' ? amount : (this.newVoucherForm.type === 'Journal' ? amount : 0),
+      narration: this.newVoucherForm.narration || 'General accounting transaction',
+      status: 'Approved'
+    };
+
+    this.vouchers.unshift(newV);
+    this.showVoucherModal = false;
+    this.newVoucherForm = { type: 'Payment', accountHead: 'Campus Maintenance & Supplies', amount: 5000, narration: '', paymentMode: 'Bank Transfer' };
+
+    Swal.fire('Voucher Posted', `Voucher ${newV.voucherNo} has been posted to general ledger.`, 'success');
   }
 }

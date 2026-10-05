@@ -1,0 +1,4 @@
+.rounded-12 { border-radius: 12px; }
+.rounded-16 { border-radius: 16px; }
+.cursor-pointer { cursor: pointer; }
+.transition-all { transition: all 0.25s ease-in-out; }

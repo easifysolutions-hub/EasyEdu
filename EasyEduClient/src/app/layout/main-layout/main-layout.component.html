@@ -67,14 +67,15 @@
     <!-- Utilities -->
     <div class="nav-item-wrapper">
       <a class="nav-link-premium" [class.open]="openMenus['utilities']" (click)="toggleMenu('utilities')">
-        <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities & Chat</span></span>
+        <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities & Tools</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['utilities']">
-        <li><a routerLink="/reports" class="sub-nav-link">User Log</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Chat Box</a></li>
-        <li><a routerLink="/administration" class="sub-nav-link">Invitations</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Chat Settings</a></li>
+        <li><a routerLink="/utilities" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Tasks & Tools</a></li>
+        <li><a routerLink="/chat" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-comments me-1"></i> Campus Chat</a></li>
+        <li><a routerLink="/utilities" class="sub-nav-link">QR Attendance Gateway</a></li>
+        <li><a routerLink="/utilities" class="sub-nav-link">WhatsApp Cloud API</a></li>
+        <li><a routerLink="/utilities" class="sub-nav-link">AI Assistant</a></li>
       </ul>
     </div>
 
@@ -88,7 +89,7 @@
         <li><a routerLink="/communication" routerLinkActive="active" class="sub-nav-link text-info">Notice Board</a></li>
         <li><a routerLink="/communication" class="sub-nav-link">Send Email / SMS</a></li>
         <li><a routerLink="/communication" class="sub-nav-link">Event Calendar</a></li>
-        <li><a routerLink="/communication" class="sub-nav-link">Communication Log</a></li>
+        <li><a routerLink="/chat" class="sub-nav-link">Live Chat Messenger</a></li>
       </ul>
     </div>
 
@@ -157,9 +158,22 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['onlineExam']">
-        <li><a routerLink="/examinations" class="sub-nav-link text-info">Question Group</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link">Question Bank</a></li>
-        <li><a routerLink="/examinations" class="sub-nav-link text-success fw-bold">Active Online Exams</a></li>
+        <li><a routerLink="/online-exam" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Active CBT Exams</a></li>
+        <li><a routerLink="/online-exam" class="sub-nav-link">Question Bank</a></li>
+        <li><a routerLink="/online-exam" class="sub-nav-link">Question Groups</a></li>
+      </ul>
+    </div>
+
+    <!-- Teacher Evaluation -->
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['teacherEvaluation']" (click)="toggleMenu('teacherEvaluation')">
+        <span><i class="fas fa-star-half-stroke main-icon"></i> <span class="sidebar-label">Teacher Evaluation</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['teacherEvaluation']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['teacherEvaluation']">
+        <li><a routerLink="/teacher-evaluation" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Performance Scorecards</a></li>
+        <li><a routerLink="/teacher-evaluation" class="sub-nav-link">Student Feedback</a></li>
+        <li><a routerLink="/teacher-evaluation" class="sub-nav-link">Submit Review</a></li>
       </ul>
     </div>
 
@@ -232,11 +246,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['accounts']">
-        <li><a routerLink="/fees" class="sub-nav-link">Payment Voucher</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Receipt Voucher</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Journal Voucher</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Chart of Accounts</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Trial Balance & Balance Sheet</a></li>
+        <li><a routerLink="/accounting" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Accounting Dashboard</a></li>
+        <li><a routerLink="/accounting" class="sub-nav-link">Voucher Entry (PV/RV/JV)</a></li>
+        <li><a routerLink="/accounting" class="sub-nav-link">Chart of Accounts</a></li>
+        <li><a routerLink="/accounting" class="sub-nav-link">Trial Balance</a></li>
+        <li><a routerLink="/accounting" class="sub-nav-link">Balance Sheet & P&L</a></li>
       </ul>
     </div>
 
@@ -323,6 +337,10 @@
     <a routerLink="/reports" routerLinkActive="active" class="nav-link-premium">
       <i class="fas fa-chart-line main-icon"></i>
       <span class="sidebar-label">Reports Center</span>
+    </a>
+    <a routerLink="/role-permission" routerLinkActive="active" class="nav-link-premium">
+      <i class="fas fa-user-shield main-icon"></i>
+      <span class="sidebar-label">Role & Permissions</span>
     </a>
     <a routerLink="/settings" routerLinkActive="active" class="nav-link-premium">
       <i class="fas fa-cogs main-icon"></i>
