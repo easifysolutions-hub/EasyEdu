@@ -1171,64 +1171,68 @@
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); min-height: 140px; cursor: pointer;" (click)="navigateToTab('receipt-payment')">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="stat-icon-square bg-white bg-opacity-20 rounded-12 p-2">
-              <i class="fas fa-file-invoice-dollar fs-4"></i>
+            <div class="stat-icon-square">
+              <i class="fa-solid fa-file-invoice-dollar fs-5"></i>
             </div>
             <span class="badge bg-white bg-opacity-25 rounded-pill px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">+14.8%</span>
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">TOTAL RECEIPTS / INCOME</div>
             <h2 class="fw-bold my-1">₹1,770,000</h2>
-            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fas fa-clock me-1"></i> Updated Current Quarter</div>
+            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-regular fa-clock me-1"></i> Updated Current Quarter</div>
           </div>
+          <div class="stat-icon-bg"><i class="fa-solid fa-file-invoice-dollar"></i></div>
         </div>
       </div>
 
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden shadow-sm" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); min-height: 140px; cursor: pointer;" (click)="navigateToTab('profit-loss')">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="stat-icon-square bg-white bg-opacity-20 rounded-12 p-2">
-              <i class="fas fa-money-bill-wave fs-4"></i>
+            <div class="stat-icon-square">
+              <i class="fa-solid fa-money-bill-wave fs-5"></i>
             </div>
             <span class="badge bg-white bg-opacity-25 rounded-pill px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">-4.2%</span>
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">TOTAL PAYMENTS / EXPENSES</div>
             <h2 class="fw-bold my-1">₹581,000</h2>
-            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fas fa-rotate-left me-1"></i> Last 30 Days Outflow</div>
+            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-solid fa-rotate-left me-1"></i> Last 30 Days Outflow</div>
           </div>
+          <div class="stat-icon-bg"><i class="fa-solid fa-money-bill-wave"></i></div>
         </div>
       </div>
 
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden shadow-sm" style="background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); min-height: 140px; cursor: pointer;" (click)="navigateToTab('balance-sheet')">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="stat-icon-square bg-white bg-opacity-20 rounded-12 p-2">
-              <i class="fas fa-wallet fs-4"></i>
+            <div class="stat-icon-square">
+              <i class="fa-solid fa-wallet fs-5"></i>
             </div>
             <span class="badge bg-white bg-opacity-25 rounded-pill px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">Surplus</span>
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">NET OPERATING SURPLUS</div>
             <h2 class="fw-bold my-1">₹1,189,000</h2>
-            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fas fa-check-circle me-1"></i> 100% Balanced Ledger</div>
+            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-solid fa-check-circle me-1"></i> 100% Balanced Ledger</div>
           </div>
+          <div class="stat-icon-bg"><i class="fa-solid fa-wallet"></i></div>
         </div>
       </div>
 
       <div class="col-12 col-sm-6 col-xl-3">
         <div class="card border-0 rounded-20 text-white h-100 p-4 position-relative overflow-hidden shadow-sm" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); min-height: 140px; cursor: pointer;" (click)="navigateToTab('vouchers')">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="stat-icon-square bg-white bg-opacity-20 rounded-12 p-2">
-              <i class="fas fa-file-lines fs-4"></i>
+            <div class="stat-icon-square">
+              <i class="fa-solid fa-receipt fs-5"></i>
             </div>
             <span class="badge bg-white bg-opacity-25 rounded-pill px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">Active</span>
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">RECORDED VOUCHERS</div>
             <h2 class="fw-bold my-1">{{ vouchers.length }} Vouchers</h2>
-            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fas fa-receipt me-1"></i> Click to Open Register</div>
+            <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-solid fa-receipt me-1"></i> Click to Open Register</div>
           </div>
+          <div class="stat-icon-bg"><i class="fa-solid fa-receipt"></i></div>
         </div>
       </div>
     </div>

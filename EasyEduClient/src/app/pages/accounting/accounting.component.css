@@ -277,6 +277,93 @@
   border-color: #cbd5e1;
 }
 
+/* Stat Cards & Financial Center Dashboard Elements */
+.stat-icon-square {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+.stat-icon-bg {
+  position: absolute;
+  right: -10px;
+  top: 15px;
+  font-size: 4rem;
+  opacity: 0.15;
+  transform: rotate(-15deg);
+  pointer-events: none;
+  color: #ffffff;
+}
+
+.transition-card {
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.transition-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  border-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Premium Tables */
+.table-premium {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-premium thead th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table-premium tbody td {
+  padding: 0.9rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.85rem;
+}
+
+.table-premium tbody tr:hover td {
+  background: #f8fafc;
+}
+
+/* Custom Nav Pills */
+.custom-pills .nav-link {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.custom-pills .nav-link:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+.custom-pills .nav-link.active {
+  color: #ffffff;
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
 /* Modals & Backdrops */
 .modal-backdrop-custom {
   position: fixed;
