@@ -401,6 +401,7 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['certificates']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['certificates']">
+        <li><a routerLink="/Certificates/Index" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-certificate me-1"></i> Certificate Addon</a></li>
         <li><a routerLink="/certificates" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-file-contract me-1"></i> Issue Certificate (TC)</a></li>
         <li><a routerLink="/certificates" class="sub-nav-link text-info"><i class="fas fa-id-card me-1"></i> Student ID Cards</a></li>
         <li><a routerLink="/certificates" class="sub-nav-link"><i class="fas fa-user-tag me-1"></i> Staff Passes</a></li>
