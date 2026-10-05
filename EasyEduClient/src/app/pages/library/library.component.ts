@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 declare const Swal: any;
 
-interface Book {
+export interface Book {
   id: number;
   title: string;
   author: string;
@@ -15,9 +17,14 @@ interface Book {
   available: number;
   publisher: string;
   price: number;
+  edition?: string;
+  language?: string;
+  subjectTag?: string;
+  condition?: string;
+  pubYear?: string;
 }
 
-interface IssuedRecord {
+export interface IssuedRecord {
   id: number;
   bookId: number;
   bookTitle: string;
@@ -31,7 +38,7 @@ interface IssuedRecord {
   status: 'Issued' | 'Returned' | 'Overdue';
 }
 
-interface LibraryMember {
+export interface LibraryMember {
   id: string;
   name: string;
   type: 'Student' | 'Staff';
@@ -42,7 +49,7 @@ interface LibraryMember {
   status: 'Active' | 'Blocked';
 }
 
-interface BookCategory {
+export interface BookCategory {
   id: number;
   name: string;
   code: string;
@@ -57,17 +64,53 @@ interface BookCategory {
   styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit {
-  activeTab: 'catalog' | 'circulation' | 'members' | 'categories' = 'catalog';
+  activeTab: 'add-book' | 'catalog' | 'circulation' | 'members' | 'categories' = 'add-book';
   searchTerm = '';
   categoryFilter = 'All';
 
+  // Metadata Entry Logic Model
+  metadataEntry = {
+    bookTitle: '',
+    originatingAuthor: '',
+    isbn: '',
+    academicDiscipline: 'General Class',
+    publicationEntity: '',
+    intellectualValue: 0.00,
+    subjectTag: '',
+    edition: '',
+    language: 'English',
+    rackLocation: '',
+    physicalCondition: 'Good / Used',
+    totalUnits: 1,
+    publicationYear: '2026'
+  };
+
+  disciplines = [
+    'General Class',
+    'Science & Physics',
+    'Mathematics & Calculus',
+    'Humanities & Social Sciences',
+    'Information Technology & CS',
+    'Language & Literature',
+    'Commerce & Accountancy',
+    'Arts & Architecture'
+  ];
+
+  conditions = [
+    'Good / Used',
+    'Brand New / Mint',
+    'Fair / Readable',
+    'Archival Reference Only',
+    'Damaged / Restoration Needed'
+  ];
+
   books: Book[] = [
-    { id: 1, title: 'Concepts of Physics (Vol 1)', author: 'H.C. Verma', isbn: '978-8177091878', category: 'Science & Physics', rackNo: 'RK-102', quantity: 15, available: 11, publisher: 'Bharati Bhawan', price: 450 },
-    { id: 2, title: 'Higher Algebra & Coordinate Geometry', author: 'Hall & Knight', isbn: '978-9351441632', category: 'Mathematics', rackNo: 'RK-204', quantity: 20, available: 18, publisher: 'Arihant Publications', price: 380 },
-    { id: 3, title: 'Modern Indian History & Polity', author: 'Bipan Chandra', isbn: '978-8125036845', category: 'Social Science', rackNo: 'RK-305', quantity: 12, available: 8, publisher: 'Orient BlackSwan', price: 520 },
-    { id: 4, title: 'Computer Science with Python (Class 11 & 12)', author: 'Sumita Arora', isbn: '978-8177002447', category: 'Information Tech', rackNo: 'RK-401', quantity: 25, available: 20, publisher: 'Dhanpat Rai & Co.', price: 650 },
-    { id: 5, title: 'Organic Chemistry Structure & Reactivity', author: 'Morrison & Boyd', isbn: '978-0136436690', category: 'Science & Physics', rackNo: 'RK-108', quantity: 10, available: 6, publisher: 'Pearson Education', price: 890 },
-    { id: 6, title: 'Wings of Fire - An Autobiography', author: 'Dr. A.P.J. Abdul Kalam', isbn: '978-8173711466', category: 'Biographies & Lit', rackNo: 'RK-502', quantity: 30, available: 24, publisher: 'Universities Press', price: 320 }
+    { id: 1, title: 'Concepts of Physics (Vol 1)', author: 'H.C. Verma', isbn: '978-8177091878', category: 'Science & Physics', rackNo: 'RK-102', quantity: 15, available: 11, publisher: 'Bharati Bhawan', price: 450, edition: '3rd', language: 'English', subjectTag: 'Physics, Mechanics', condition: 'Good / Used', pubYear: '2023' },
+    { id: 2, title: 'Higher Algebra & Coordinate Geometry', author: 'Hall & Knight', isbn: '978-9351441632', category: 'Mathematics & Calculus', rackNo: 'RK-204', quantity: 20, available: 18, publisher: 'Arihant Publications', price: 380, edition: '1st', language: 'English', subjectTag: 'Algebra, Geometry', condition: 'Brand New / Mint', pubYear: '2024' },
+    { id: 3, title: 'Modern Indian History & Polity', author: 'Bipan Chandra', isbn: '978-8125036845', category: 'Humanities & Social Sciences', rackNo: 'RK-305', quantity: 12, available: 8, publisher: 'Orient BlackSwan', price: 520, edition: '4th', language: 'English', subjectTag: 'History, Polity', condition: 'Good / Used', pubYear: '2022' },
+    { id: 4, title: 'Computer Science with Python (Class 11 & 12)', author: 'Sumita Arora', isbn: '978-8177002447', category: 'Information Technology & CS', rackNo: 'RK-401', quantity: 25, available: 20, publisher: 'Dhanpat Rai & Co.', price: 650, edition: '2nd', language: 'English', subjectTag: 'Python, Programming', condition: 'Good / Used', pubYear: '2025' },
+    { id: 5, title: 'Organic Chemistry Structure & Reactivity', author: 'Morrison & Boyd', isbn: '978-0136436690', category: 'Science & Physics', rackNo: 'RK-108', quantity: 10, available: 6, publisher: 'Pearson Education', price: 890, edition: '7th', language: 'English', subjectTag: 'Chemistry', condition: 'Good / Used', pubYear: '2021' },
+    { id: 6, title: 'Wings of Fire - An Autobiography', author: 'Dr. A.P.J. Abdul Kalam', isbn: '978-8173711466', category: 'Language & Literature', rackNo: 'RK-502', quantity: 30, available: 24, publisher: 'Universities Press', price: 320, edition: 'Special Edition', language: 'English', subjectTag: 'Biography, Inspiration', condition: 'Brand New / Mint', pubYear: '2020' }
   ];
 
   issuedRecords: IssuedRecord[] = [
@@ -86,26 +129,15 @@ export class LibraryComponent implements OnInit {
   ];
 
   categories: BookCategory[] = [
-    { id: 1, name: 'Science & Physics', code: 'SCI', totalBooks: 25 },
-    { id: 2, name: 'Mathematics', code: 'MATH', totalBooks: 20 },
-    { id: 3, name: 'Social Science', code: 'SOC', totalBooks: 12 },
-    { id: 4, name: 'Information Tech', code: 'IT', totalBooks: 25 },
-    { id: 5, name: 'Biographies & Lit', code: 'LIT', totalBooks: 30 }
+    { id: 1, name: 'General Class', code: 'GEN', totalBooks: 15 },
+    { id: 2, name: 'Science & Physics', code: 'SCI', totalBooks: 25 },
+    { id: 3, name: 'Mathematics & Calculus', code: 'MATH', totalBooks: 20 },
+    { id: 4, name: 'Humanities & Social Sciences', code: 'SOC', totalBooks: 12 },
+    { id: 5, name: 'Information Technology & CS', code: 'IT', totalBooks: 25 },
+    { id: 6, name: 'Language & Literature', code: 'LIT', totalBooks: 30 }
   ];
 
   // Modals state
-  showAddBookModal = false;
-  newBook: Partial<Book> = {
-    title: '',
-    author: '',
-    isbn: '',
-    category: 'Science & Physics',
-    rackNo: '',
-    quantity: 5,
-    publisher: '',
-    price: 300
-  };
-
   showIssueModal = false;
   issueForm = {
     memberId: 'ADM-2024-001',
@@ -127,7 +159,31 @@ export class LibraryComponent implements OnInit {
     booksAllowed: 3
   };
 
-  ngOnInit(): void {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.syncActiveTabFromUrl();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.syncActiveTabFromUrl();
+    });
+  }
+
+  private syncActiveTabFromUrl(): void {
+    const url = this.router.url.toLowerCase();
+    if (url.includes('addbook') || url.endsWith('/library') || url.endsWith('/library/')) {
+      this.activeTab = 'add-book';
+    } else if (url.includes('booklist')) {
+      this.activeTab = 'catalog';
+    } else if (url.includes('issuebooks')) {
+      this.activeTab = 'circulation';
+    } else if (url.includes('members')) {
+      this.activeTab = 'members';
+    } else if (url.includes('categories')) {
+      this.activeTab = 'categories';
+    }
+  }
 
   get totalBooksCount(): number {
     return this.books.reduce((acc, b) => acc + b.quantity, 0);
@@ -153,30 +209,59 @@ export class LibraryComponent implements OnInit {
     });
   }
 
-  saveBook(): void {
-    if (!this.newBook.title || !this.newBook.author) {
-      Swal.fire('Required Fields', 'Please enter Book Title and Author Name.', 'warning');
+  saveMetadataEntry(): void {
+    if (!this.metadataEntry.bookTitle.trim()) {
+      Swal.fire('Required Field', 'Please provide the Full Resource Title.', 'warning');
       return;
     }
 
-    const book: Book = {
-      id: this.books.length + 1,
-      title: this.newBook.title!,
-      author: this.newBook.author!,
-      isbn: this.newBook.isbn || `978-81-${Math.floor(1000000 + Math.random() * 9000000)}`,
-      category: this.newBook.category || 'General',
-      rackNo: this.newBook.rackNo || 'RK-101',
-      quantity: Number(this.newBook.quantity) || 5,
-      available: Number(this.newBook.quantity) || 5,
-      publisher: this.newBook.publisher || 'National Publishers',
-      price: Number(this.newBook.price) || 350
+    const newBookItem: Book = {
+      id: Date.now(),
+      title: this.metadataEntry.bookTitle,
+      author: this.metadataEntry.originatingAuthor || 'Unknown Author',
+      isbn: this.metadataEntry.isbn || `978-0-${Math.floor(1000000 + Math.random() * 9000000)}`,
+      category: this.metadataEntry.academicDiscipline,
+      rackNo: this.metadataEntry.rackLocation || 'R-01',
+      quantity: Number(this.metadataEntry.totalUnits) || 1,
+      available: Number(this.metadataEntry.totalUnits) || 1,
+      publisher: this.metadataEntry.publicationEntity || 'Institutional Press',
+      price: Number(this.metadataEntry.intellectualValue) || 0,
+      edition: this.metadataEntry.edition || '1st',
+      language: this.metadataEntry.language || 'English',
+      subjectTag: this.metadataEntry.subjectTag,
+      condition: this.metadataEntry.physicalCondition,
+      pubYear: this.metadataEntry.publicationYear
     };
 
-    this.books.unshift(book);
-    this.showAddBookModal = false;
-    this.newBook = { title: '', author: '', isbn: '', category: 'Science & Physics', rackNo: '', quantity: 5, publisher: '', price: 300 };
+    this.books.unshift(newBookItem);
 
-    Swal.fire('Book Cataloged', 'New book title added to library repository.', 'success');
+    Swal.fire({
+      title: 'Indexed into Registry!',
+      text: `"${newBookItem.title}" has been successfully indexed in the Library Catalog with ${newBookItem.quantity} copies.`,
+      icon: 'success',
+      confirmButtonColor: '#4f46e5'
+    });
+
+    this.resetMetadataForm();
+    this.activeTab = 'catalog';
+  }
+
+  resetMetadataForm(): void {
+    this.metadataEntry = {
+      bookTitle: '',
+      originatingAuthor: '',
+      isbn: '',
+      academicDiscipline: 'General Class',
+      publicationEntity: '',
+      intellectualValue: 0.00,
+      subjectTag: '',
+      edition: '',
+      language: 'English',
+      rackLocation: '',
+      physicalCondition: 'Good / Used',
+      totalUnits: 1,
+      publicationYear: '2026'
+    };
   }
 
   openIssueModal(book?: Book): void {
