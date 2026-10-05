@@ -1,34 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare const Swal: any;
 
-interface Question {
-  id: number;
-  questionText: string;
-  type: 'MCQ' | 'TrueFalse' | 'MultipleSelect' | 'FillBlank';
-  subject: string;
-  group: string;
-  level: 'Easy' | 'Medium' | 'Hard';
-  marks: number;
-  options?: string[];
-  correctAnswer: string | number | number[];
-}
-
-interface OnlineExam {
+export interface QuestionGroupItem {
   id: number;
   title: string;
-  subject: string;
+  totalQuestions: number;
+}
+
+export interface QuestionBankItem {
+  id: number;
+  groupId: number;
+  groupTitle: string;
+  questionType: 'MultipleChoice' | 'TrueFalse' | 'ShortAnswer';
+  question: string;
+  options?: string;
+  correctAnswer: string;
+  marks: number;
+}
+
+export interface DigitalOnlineExam {
+  id: number;
+  title: string;
+  classId: number;
   className: string;
-  date: string;
-  startTime: string;
+  subjectId: number;
+  subjectName: string;
+  startDate: string;
+  endDate: string;
   durationMinutes: number;
   totalMarks: number;
-  passingMarks: number;
-  totalQuestions: number;
-  status: 'Published' | 'In Progress' | 'Completed' | 'Draft';
-  autoEvaluate: boolean;
+  isPublished: boolean;
 }
 
 @Component({
@@ -38,168 +43,162 @@ interface OnlineExam {
   templateUrl: './online-exam.component.html',
   styleUrls: ['./online-exam.component.css']
 })
-export class OnlineExamComponent {
-  activeTab: 'exams' | 'questions' | 'groups' | 'grading' | 'simulator' = 'exams';
-  searchTerm = '';
-  selectedSubject = 'All';
+export class OnlineExamComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  exams: OnlineExam[] = [
-    { id: 1, title: 'Term 1 Science & Physics Quiz', subject: 'Science', className: 'Grade 10-A', date: '2025-05-15', startTime: '10:00 AM', durationMinutes: 45, totalMarks: 50, passingMarks: 20, totalQuestions: 25, status: 'Published', autoEvaluate: true },
-    { id: 2, title: 'Mathematics Algebra & Geometry Test', subject: 'Mathematics', className: 'Grade 10-B', date: '2025-05-18', startTime: '11:30 AM', durationMinutes: 60, totalMarks: 50, passingMarks: 20, totalQuestions: 20, status: 'Published', autoEvaluate: true },
-    { id: 3, title: 'English Literature & Comprehension', subject: 'English', className: 'Grade 9-A', date: '2025-05-12', startTime: '09:00 AM', durationMinutes: 40, totalMarks: 40, passingMarks: 16, totalQuestions: 20, status: 'Completed', autoEvaluate: false },
-    { id: 4, title: 'Computer Science Python Basics', subject: 'Computer', className: 'Grade 11-Science', date: '2025-05-20', startTime: '02:00 PM', durationMinutes: 60, totalMarks: 50, passingMarks: 25, totalQuestions: 30, status: 'Draft', autoEvaluate: true }
+  activeTab: 'group' | 'bank' | 'exam' = 'exam';
+
+  // 1. Groups
+  groups: QuestionGroupItem[] = [
+    { id: 1, title: 'Science Midterm Foundation', totalQuestions: 15 },
+    { id: 2, title: 'Mathematics Algebra & Geometry 2026', totalQuestions: 20 },
+    { id: 3, title: 'Computer Science Python Basics', totalQuestions: 12 },
+    { id: 4, title: 'General Knowledge & Aptitude', totalQuestions: 25 }
   ];
 
-  questions: Question[] = [
-    { id: 1, questionText: 'What is the SI unit of electric current?', type: 'MCQ', subject: 'Science', group: 'Physics Foundation', level: 'Easy', marks: 2, options: ['Volt', 'Ampere', 'Ohm', 'Watt'], correctAnswer: 1 },
-    { id: 2, questionText: 'Light travels faster in water than in a vacuum.', type: 'TrueFalse', subject: 'Science', group: 'Optics', level: 'Easy', marks: 1, options: ['True', 'False'], correctAnswer: 1 },
-    { id: 3, questionText: 'Which of the following are prime numbers?', type: 'MultipleSelect', subject: 'Mathematics', group: 'Number Theory', level: 'Medium', marks: 3, options: ['2', '9', '17', '21', '29'], correctAnswer: '2, 17, 29' },
-    { id: 4, questionText: 'The chemical formula for table salt is _______.', type: 'FillBlank', subject: 'Science', group: 'Chemistry', level: 'Easy', marks: 2, correctAnswer: 'NaCl' },
-    { id: 5, questionText: 'Solve for x: 3x + 15 = 45', type: 'MCQ', subject: 'Mathematics', group: 'Algebra', level: 'Medium', marks: 2, options: ['x = 8', 'x = 10', 'x = 12', 'x = 15'], correctAnswer: 1 }
+  // 2. Question Bank
+  questions: QuestionBankItem[] = [
+    { id: 1, groupId: 1, groupTitle: 'Science Midterm Foundation', questionType: 'MultipleChoice', question: 'What is the SI unit of electric current in standard physics?', options: 'Volt, Ampere, Ohm, Watt', correctAnswer: 'Ampere', marks: 2 },
+    { id: 2, groupId: 1, groupTitle: 'Science Midterm Foundation', questionType: 'TrueFalse', question: 'Light travels faster in water than in a vacuum.', options: 'True, False', correctAnswer: 'False', marks: 1 },
+    { id: 3, groupId: 2, groupTitle: 'Mathematics Algebra & Geometry 2026', questionType: 'MultipleChoice', question: 'What is the root of the quadratic equation x^2 - 5x + 6 = 0?', options: 'x=2 or 3, x=1 or 6, x=-2 or -3, x=0', correctAnswer: 'x=2 or 3', marks: 2 },
+    { id: 4, groupId: 3, groupTitle: 'Computer Science Python Basics', questionType: 'ShortAnswer', question: 'Which keyword is used to define a function in Python?', correctAnswer: 'def', marks: 2 },
+    { id: 5, groupId: 4, groupTitle: 'General Knowledge & Aptitude', questionType: 'MultipleChoice', question: 'Which planet is known as the Red Planet in our solar system?', options: 'Venus, Mars, Jupiter, Saturn', correctAnswer: 'Mars', marks: 1 }
   ];
 
-  questionGroups = [
-    { id: 1, name: 'Physics Foundation', subject: 'Science', questionCount: 42, description: 'Mechanics, Optics, Electricity' },
-    { id: 2, name: 'Algebra & Matrices', subject: 'Mathematics', questionCount: 65, description: 'Linear equations, polynomials, quadratic formulas' },
-    { id: 3, name: 'Organic Chemistry', subject: 'Science', questionCount: 38, description: 'Hydrocarbons, functional groups, reactions' },
-    { id: 4, name: 'Python Programming', subject: 'Computer', questionCount: 50, description: 'Syntax, loops, functions, OOP concepts' }
+  // 3. Online Exams
+  exams: DigitalOnlineExam[] = [
+    { id: 1, title: 'Term 1 Science & Physics CBT Quiz', classId: 1, className: 'Class 10', subjectId: 2, subjectName: 'Physics', startDate: '2025-05-15', endDate: '2025-05-16', durationMinutes: 45, totalMarks: 50, isPublished: true },
+    { id: 2, title: 'Mathematics Algebra Online Assessment', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', startDate: '2025-05-18', endDate: '2025-05-19', durationMinutes: 60, totalMarks: 50, isPublished: true },
+    { id: 3, title: 'Python Programming Mock Exam', classId: 3, className: 'Class 12 - Science', subjectId: 4, subjectName: 'Computer Science', startDate: '2025-05-20', endDate: '2025-05-21', durationMinutes: 60, totalMarks: 40, isPublished: false }
   ];
 
-  // Modals & Quiz Simulator
-  showAddExamModal = false;
-  newExamForm: Partial<OnlineExam> = {
+  // Modals
+  showGroupModal = false;
+  newGroupTitle = '';
+
+  showQuestionModal = false;
+  newQuestion = {
+    groupId: 1,
+    questionType: 'MultipleChoice' as 'MultipleChoice' | 'TrueFalse' | 'ShortAnswer',
+    question: '',
+    options: '',
+    correctAnswer: '',
+    marks: 1
+  };
+
+  showExamModal = false;
+  newExam = {
     title: '',
-    subject: 'Science',
-    className: 'Grade 10-A',
-    date: '2025-05-25',
-    startTime: '10:00 AM',
+    classId: 1,
+    className: 'Class 10',
+    subjectId: 1,
+    subjectName: 'Mathematics',
+    startDate: new Date().toISOString().substring(0, 10),
+    endDate: new Date(Date.now() + 2 * 86400000).toISOString().substring(0, 10),
     durationMinutes: 45,
     totalMarks: 50,
-    passingMarks: 20,
-    status: 'Published',
-    autoEvaluate: true
+    isPublished: true
   };
 
-  showAddQuestionModal = false;
-  newQuestionForm: Partial<Question> = {
-    questionText: '',
-    type: 'MCQ',
-    subject: 'Science',
-    group: 'Physics Foundation',
-    level: 'Medium',
-    marks: 2,
-    options: ['', '', '', ''],
-    correctAnswer: 0
-  };
-
-  // Simulator state
-  activeExam: OnlineExam | null = null;
-  currentQuestionIndex = 0;
-  selectedAnswers: { [key: number]: any } = {};
-  examSubmitted = false;
-  quizScore = 0;
-
-  get filteredExams(): OnlineExam[] {
-    return this.exams.filter(e => {
-      const matchSearch = !this.searchTerm || e.title.toLowerCase().includes(this.searchTerm.toLowerCase()) || e.subject.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchSub = this.selectedSubject === 'All' || e.subject === this.selectedSubject;
-      return matchSearch && matchSub;
-    });
-  }
-
-  createExam(): void {
-    if (!this.newExamForm.title) {
-      Swal.fire('Missing Information', 'Please enter Exam Title.', 'warning');
-      return;
-    }
-
-    const exam: OnlineExam = {
-      id: this.exams.length + 1,
-      title: this.newExamForm.title!,
-      subject: this.newExamForm.subject || 'General',
-      className: this.newExamForm.className || 'Grade 10-A',
-      date: this.newExamForm.date || '2025-06-01',
-      startTime: this.newExamForm.startTime || '10:00 AM',
-      durationMinutes: Number(this.newExamForm.durationMinutes) || 45,
-      totalMarks: Number(this.newExamForm.totalMarks) || 50,
-      passingMarks: Number(this.newExamForm.passingMarks) || 20,
-      totalQuestions: 15,
-      status: 'Published',
-      autoEvaluate: true
-    };
-
-    this.exams.unshift(exam);
-    this.showAddExamModal = false;
-    this.newExamForm = { title: '', subject: 'Science', className: 'Grade 10-A', date: '2025-05-25', startTime: '10:00 AM', durationMinutes: 45, totalMarks: 50, passingMarks: 20, status: 'Published', autoEvaluate: true };
-
-    Swal.fire('Exam Created!', `Online Exam "${exam.title}" has been published.`, 'success');
-  }
-
-  saveQuestion(): void {
-    if (!this.newQuestionForm.questionText) {
-      Swal.fire('Missing Details', 'Please enter Question prompt text.', 'warning');
-      return;
-    }
-
-    const q: Question = {
-      id: this.questions.length + 1,
-      questionText: this.newQuestionForm.questionText!,
-      type: this.newQuestionForm.type || 'MCQ',
-      subject: this.newQuestionForm.subject || 'Science',
-      group: this.newQuestionForm.group || 'General',
-      level: this.newQuestionForm.level || 'Medium',
-      marks: Number(this.newQuestionForm.marks) || 2,
-      options: this.newQuestionForm.options?.filter(o => o.trim() !== '') || ['Option A', 'Option B', 'Option C', 'Option D'],
-      correctAnswer: this.newQuestionForm.correctAnswer ?? 0
-    };
-
-    this.questions.unshift(q);
-    this.showAddQuestionModal = false;
-    this.newQuestionForm = { questionText: '', type: 'MCQ', subject: 'Science', group: 'Physics Foundation', level: 'Medium', marks: 2, options: ['', '', '', ''], correctAnswer: 0 };
-
-    Swal.fire('Question Added', 'Question has been added to Question Bank.', 'success');
-  }
-
-  startQuizSimulator(exam: OnlineExam): void {
-    this.activeExam = exam;
-    this.currentQuestionIndex = 0;
-    this.selectedAnswers = {};
-    this.examSubmitted = false;
-    this.quizScore = 0;
-    this.activeTab = 'simulator';
-  }
-
-  selectOption(qIndex: number, optIndex: number): void {
-    this.selectedAnswers[qIndex] = optIndex;
-  }
-
-  submitExam(): void {
-    Swal.fire({
-      title: 'Submit Online Exam?',
-      text: `You have answered ${Object.keys(this.selectedAnswers).length} out of ${this.questions.length} questions.`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#002B49',
-      confirmButtonText: 'Yes, Submit Now'
-    }).then((res: any) => {
-      if (res.isConfirmed) {
-        let earned = 0;
-        this.questions.forEach((q, idx) => {
-          if (this.selectedAnswers[idx] === q.correctAnswer) {
-            earned += q.marks;
-          }
-        });
-
-        this.quizScore = earned;
-        this.examSubmitted = true;
-
-        Swal.fire({
-          title: 'Exam Evaluated!',
-          text: `Score: ${earned} / 10 marks (${(earned / 10) * 100}%). Result saved!`,
-          icon: earned >= 4 ? 'success' : 'warning',
-          confirmButtonColor: '#002B49'
-        });
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        const t = params['tab'].toLowerCase();
+        if (t === 'group' || t === 'questiongroup') this.activeTab = 'group';
+        else if (t === 'bank' || t === 'questionbank') this.activeTab = 'bank';
+        else this.activeTab = 'exam';
       }
     });
+
+    const url = this.router.url.toLowerCase();
+    if (url.includes('/onlineexam/questiongroup')) this.activeTab = 'group';
+    else if (url.includes('/onlineexam/questionbank')) this.activeTab = 'bank';
+    else if (url.includes('/onlineexam')) this.activeTab = 'exam';
+  }
+
+  setTab(tab: 'group' | 'bank' | 'exam'): void {
+    this.activeTab = tab;
+  }
+
+  // --- QUESTION GROUP ---
+  saveGroup(): void {
+    if (!this.newGroupTitle.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Domain Title Required' });
+      return;
+    }
+    const item: QuestionGroupItem = {
+      id: Date.now(),
+      title: this.newGroupTitle.trim(),
+      totalQuestions: 0
+    };
+    this.groups.push(item);
+    this.showGroupModal = false;
+    this.newGroupTitle = '';
+    Swal.fire({ icon: 'success', title: 'Domain Node Synchronized', text: `${item.title} created.`, timer: 1500, showConfirmButton: false });
+  }
+
+  deleteGroup(g: QuestionGroupItem): void {
+    this.groups = this.groups.filter(item => item.id !== g.id);
+    Swal.fire({ icon: 'success', title: 'Domain Node Removed', timer: 1200, showConfirmButton: false });
+  }
+
+  // --- QUESTION BANK ---
+  saveQuestion(): void {
+    if (!this.newQuestion.question.trim() || !this.newQuestion.correctAnswer.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Details Required', text: 'Please fill question statement and correct resolution.' });
+      return;
+    }
+    const grp = this.groups.find(g => g.id === Number(this.newQuestion.groupId));
+    const item: QuestionBankItem = {
+      id: Date.now(),
+      groupId: Number(this.newQuestion.groupId),
+      groupTitle: grp ? grp.title : 'General Knowledge',
+      questionType: this.newQuestion.questionType,
+      question: this.newQuestion.question.trim(),
+      options: this.newQuestion.options.trim(),
+      correctAnswer: this.newQuestion.correctAnswer.trim(),
+      marks: Number(this.newQuestion.marks) || 1
+    };
+    this.questions.unshift(item);
+    if (grp) grp.totalQuestions++;
+    this.showQuestionModal = false;
+    this.newQuestion = { groupId: 1, questionType: 'MultipleChoice', question: '', options: '', correctAnswer: '', marks: 1 };
+    Swal.fire({ icon: 'success', title: 'Question Deposited', text: 'Question node deposited to vault.', timer: 1500, showConfirmButton: false });
+  }
+
+  deleteQuestion(q: QuestionBankItem): void {
+    this.questions = this.questions.filter(item => item.id !== q.id);
+    Swal.fire({ icon: 'success', title: 'Question Node Deleted', timer: 1200, showConfirmButton: false });
+  }
+
+  // --- ONLINE EXAM ---
+  saveExam(): void {
+    if (!this.newExam.title.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Title Required' });
+      return;
+    }
+    const item: DigitalOnlineExam = {
+      id: Date.now(),
+      title: this.newExam.title.trim(),
+      classId: this.newExam.classId,
+      className: this.newExam.classId === 1 ? 'Class 10' : 'Class 12',
+      subjectId: this.newExam.subjectId,
+      subjectName: 'Mathematics',
+      startDate: this.newExam.startDate,
+      endDate: this.newExam.endDate,
+      durationMinutes: Number(this.newExam.durationMinutes) || 45,
+      totalMarks: Number(this.newExam.totalMarks) || 50,
+      isPublished: this.newExam.isPublished
+    };
+    this.exams.unshift(item);
+    this.showExamModal = false;
+    this.newExam = { title: '', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', startDate: new Date().toISOString().substring(0, 10), endDate: new Date(Date.now() + 2 * 86400000).toISOString().substring(0, 10), durationMinutes: 45, totalMarks: 50, isPublished: true };
+    Swal.fire({ icon: 'success', title: 'Evaluation Nexus Initialized', text: 'Online examination cycle published.', timer: 1500, showConfirmButton: false });
+  }
+
+  deleteExam(ex: DigitalOnlineExam): void {
+    this.exams = this.exams.filter(e => e.id !== ex.id);
+    Swal.fire({ icon: 'success', title: 'Evaluation Node Terminated', timer: 1200, showConfirmButton: false });
   }
 }

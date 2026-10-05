@@ -1,33 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare const Swal: any;
 
-interface TeacherRating {
+export interface TeacherEvaluationRecord {
   id: number;
+  teacherId: number;
   teacherName: string;
-  department: string;
-  designation: string;
-  totalReviews: number;
-  avgRating: number;
-  clarity: number;
-  punctuality: number;
-  subjectMastery: number;
-  studentInteraction: number;
-  status: 'Top Rated' | 'Satisfactory' | 'Needs Improvement';
+  employeeNo: string;
+  avatarInitial: string;
+  evaluationDate: string;
+  totalRating: number;
+  remarks: string;
+  status: 'Approved' | 'Pending';
 }
 
-interface FeedbackEntry {
+export interface EvaluationCriterionItem {
   id: number;
-  studentName: string;
-  className: string;
-  teacherName: string;
-  subject: string;
-  date: string;
-  rating: number;
-  comment: string;
-  status: 'Pending' | 'Approved' | 'Rejected';
+  title: string;
+  maxPoint: number;
+  weight: number;
+  isActive: boolean;
 }
 
 @Component({
@@ -37,77 +32,98 @@ interface FeedbackEntry {
   templateUrl: './teacher-evaluation.component.html',
   styleUrls: ['./teacher-evaluation.component.css']
 })
-export class TeacherEvaluationComponent {
-  activeTab: 'teachers' | 'approved' | 'pending' | 'submit' | 'settings' = 'teachers';
-  searchTerm = '';
+export class TeacherEvaluationComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  teachers: TeacherRating[] = [
-    { id: 1, teacherName: 'Dr. Ramesh Sharma', department: 'Science & Physics', designation: 'Senior Faculty', totalReviews: 128, avgRating: 4.9, clarity: 4.9, punctuality: 4.8, subjectMastery: 5.0, studentInteraction: 4.8, status: 'Top Rated' },
-    { id: 2, teacherName: 'Prof. Ananya Iyer', department: 'Mathematics', designation: 'Head of Dept', totalReviews: 142, avgRating: 4.8, clarity: 4.7, punctuality: 5.0, subjectMastery: 4.9, studentInteraction: 4.6, status: 'Top Rated' },
-    { id: 3, teacherName: 'Mr. Vikram Malhotra', department: 'Computer Science', designation: 'Assistant Professor', totalReviews: 95, avgRating: 4.7, clarity: 4.8, punctuality: 4.6, subjectMastery: 4.8, studentInteraction: 4.7, status: 'Top Rated' },
-    { id: 4, teacherName: 'Mrs. Sunita Rao', department: 'English & Literature', designation: 'Senior Lecturer', totalReviews: 84, avgRating: 4.5, clarity: 4.6, punctuality: 4.4, subjectMastery: 4.7, studentInteraction: 4.3, status: 'Satisfactory' },
-    { id: 5, teacherName: 'Mr. Suresh Menon', department: 'Social Studies', designation: 'Lecturer', totalReviews: 60, avgRating: 3.9, clarity: 3.8, punctuality: 4.0, subjectMastery: 4.1, studentInteraction: 3.7, status: 'Needs Improvement' }
+  activeTab: 'approved' | 'pending' | 'teacher-wise' | 'settings' = 'approved';
+
+  // Faculty Directory
+  teachers = [
+    { id: 1, name: 'Dr. Abdul Hakeem', employeeNo: 'FAC-1001', dept: 'Mathematics' },
+    { id: 2, name: 'Prof. Sharief Abdull', employeeNo: 'FAC-1002', dept: 'Physics' },
+    { id: 3, name: 'Mrs. Priya Nair', employeeNo: 'FAC-1003', dept: 'Chemistry' },
+    { id: 4, name: 'Mr. Arvind Rao', employeeNo: 'FAC-1004', dept: 'Computer Science' },
+    { id: 5, name: 'Ms. Sunita Joshi', employeeNo: 'FAC-1005', dept: 'English Literature' }
   ];
 
-  feedbacks: FeedbackEntry[] = [
-    { id: 1, studentName: 'Aarav Sharma', className: 'Grade 10-A', teacherName: 'Dr. Ramesh Sharma', subject: 'Physics', date: 'Yesterday', rating: 5, comment: 'Exceptional explanations of electromagnetic induction. Lab demonstrations make concepts crystal clear!', status: 'Approved' },
-    { id: 2, studentName: 'Diya Patel', className: 'Grade 10-B', teacherName: 'Prof. Ananya Iyer', subject: 'Mathematics', date: '02 May 2025', rating: 5, comment: 'Always patient during doubt-clearing sessions. Great shortcut methods for solving quadratic equations.', status: 'Approved' },
-    { id: 3, studentName: 'Rohan Gupta', className: 'Grade 9-A', teacherName: 'Mr. Vikram Malhotra', subject: 'Python CS', date: '03 May 2025', rating: 5, comment: 'Hands-on coding exercises help us build real software projects.', status: 'Approved' },
-    { id: 4, studentName: 'Kabir Singh', className: 'Grade 11-Science', teacherName: 'Mr. Suresh Menon', subject: 'History', date: 'Today, 09:15 AM', rating: 3, comment: 'Lectures feel a bit fast-paced. More multimedia presentations would make the timeline easier to follow.', status: 'Pending' },
-    { id: 5, studentName: 'Meera Nair', className: 'Grade 10-A', teacherName: 'Mrs. Sunita Rao', subject: 'English', date: 'Today, 10:45 AM', rating: 4, comment: 'Grammar practice and essay writing critiques are very helpful.', status: 'Pending' }
+  // Evaluations
+  evaluations: TeacherEvaluationRecord[] = [
+    { id: 1, teacherId: 1, teacherName: 'Dr. Abdul Hakeem', employeeNo: 'FAC-1001', avatarInitial: 'A', evaluationDate: 'May 02, 2025', totalRating: 4.8, remarks: 'Flawless pedagogical delivery and exceptional mentorship in advanced mathematics.', status: 'Approved' },
+    { id: 2, teacherId: 2, teacherName: 'Prof. Sharief Abdull', employeeNo: 'FAC-1002', avatarInitial: 'S', evaluationDate: 'May 04, 2025', totalRating: 4.6, remarks: 'High engagement during laboratory practicals with deep conceptual demonstrations.', status: 'Approved' },
+    { id: 3, teacherId: 3, teacherName: 'Mrs. Priya Nair', employeeNo: 'FAC-1003', avatarInitial: 'P', evaluationDate: 'May 05, 2025', totalRating: 4.2, remarks: 'Timely grading of internal chemistry assignments and strong rapport with students.', status: 'Pending' },
+    { id: 4, teacherId: 4, teacherName: 'Mr. Arvind Rao', employeeNo: 'FAC-1004', avatarInitial: 'A', evaluationDate: 'May 06, 2025', totalRating: 4.9, remarks: 'Outstanding curriculum design in Python OOP and AI content delivery.', status: 'Approved' },
+    { id: 5, teacherId: 5, teacherName: 'Ms. Sunita Joshi', employeeNo: 'FAC-1005', avatarInitial: 'S', evaluationDate: 'May 08, 2025', totalRating: 4.0, remarks: 'Effective English communicative workshop and grammar reinforcement sessions.', status: 'Pending' }
   ];
 
-  newFeedback = {
-    teacherName: 'Dr. Ramesh Sharma',
-    subject: 'Physics',
-    studentName: 'Aarav Sharma',
-    className: 'Grade 10-A',
-    rating: 5,
-    clarity: 5,
-    punctuality: 5,
-    interaction: 5,
-    comment: ''
-  };
+  // Evaluation Matrix Criteria
+  criteria: EvaluationCriterionItem[] = [
+    { id: 1, title: 'Classroom Delivery & Communication Clarity', maxPoint: 5, weight: 1, isActive: true },
+    { id: 2, title: 'Punctuality & Session Attendance Regularity', maxPoint: 5, weight: 1, isActive: true },
+    { id: 3, title: 'Subject Matter Mastery & Curriculum Pacing', maxPoint: 5, weight: 2, isActive: true },
+    { id: 4, title: 'Student Interaction, Mentorship & Doubt Resolution', maxPoint: 5, weight: 1, isActive: true }
+  ];
 
-  get pendingFeedbacks(): FeedbackEntry[] {
-    return this.feedbacks.filter(f => f.status === 'Pending');
-  }
+  // Submodule 3: Teacher-wise report
+  selectedTeacherIdForReport: number | null = 1;
 
-  get approvedFeedbacks(): FeedbackEntry[] {
-    return this.feedbacks.filter(f => f.status === 'Approved');
-  }
+  // Submodule 4: Add criterion
+  newCriterion = { title: '', maxPoint: 5, weight: 1 };
 
-  approveFeedback(fb: FeedbackEntry): void {
-    fb.status = 'Approved';
-    Swal.fire('Feedback Approved', 'Student feedback has been published to evaluation report.', 'success');
-  }
-
-  rejectFeedback(fb: FeedbackEntry): void {
-    fb.status = 'Rejected';
-    Swal.fire('Feedback Moderated', 'Feedback has been archived/rejected.', 'info');
-  }
-
-  submitNewFeedback(): void {
-    if (!this.newFeedback.comment) {
-      Swal.fire('Missing Feedback', 'Please provide descriptive comments on teacher performance.', 'warning');
-      return;
-    }
-
-    this.feedbacks.unshift({
-      id: this.feedbacks.length + 1,
-      studentName: this.newFeedback.studentName,
-      className: this.newFeedback.className,
-      teacherName: this.newFeedback.teacherName,
-      subject: this.newFeedback.subject,
-      date: 'Just Now',
-      rating: Number(this.newFeedback.rating),
-      comment: this.newFeedback.comment,
-      status: 'Approved'
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        const t = params['tab'].toLowerCase();
+        if (t === 'pending' || t === 'pendingreport') this.activeTab = 'pending';
+        else if (t === 'teacher-wise' || t === 'teacherwisereport') this.activeTab = 'teacher-wise';
+        else if (t === 'settings') this.activeTab = 'settings';
+        else this.activeTab = 'approved';
+      }
     });
 
-    this.newFeedback.comment = '';
-    this.activeTab = 'approved';
+    const url = this.router.url.toLowerCase();
+    if (url.includes('/teacherevaluation/pendingreport')) this.activeTab = 'pending';
+    else if (url.includes('/teacherevaluation/teacherwisereport')) this.activeTab = 'teacher-wise';
+    else if (url.includes('/teacherevaluation/settings')) this.activeTab = 'settings';
+    else if (url.includes('/teacherevaluation')) this.activeTab = 'approved';
+  }
 
-    Swal.fire('Evaluation Submitted!', 'Thank you! Your teacher evaluation has been recorded.', 'success');
+  setTab(tab: 'approved' | 'pending' | 'teacher-wise' | 'settings'): void {
+    this.activeTab = tab;
+  }
+
+  get approvedEvaluations(): TeacherEvaluationRecord[] {
+    return this.evaluations.filter(e => e.status === 'Approved');
+  }
+
+  get pendingEvaluations(): TeacherEvaluationRecord[] {
+    return this.evaluations.filter(e => e.status === 'Pending');
+  }
+
+  get teacherWiseEvaluations(): TeacherEvaluationRecord[] {
+    if (!this.selectedTeacherIdForReport) return [];
+    return this.evaluations.filter(e => e.teacherId === Number(this.selectedTeacherIdForReport));
+  }
+
+  approveEvaluation(item: TeacherEvaluationRecord): void {
+    item.status = 'Approved';
+    Swal.fire({ icon: 'success', title: 'Evaluation Verified', text: `Performance appraisal for ${item.teacherName} authorized.`, timer: 1500, showConfirmButton: false });
+  }
+
+  saveCriterion(): void {
+    if (!this.newCriterion.title.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Criterion Title Required' });
+      return;
+    }
+    const item: EvaluationCriterionItem = {
+      id: Date.now(),
+      title: this.newCriterion.title.trim(),
+      maxPoint: Number(this.newCriterion.maxPoint) || 5,
+      weight: Number(this.newCriterion.weight) || 1,
+      isActive: true
+    };
+    this.criteria.push(item);
+    this.newCriterion = { title: '', maxPoint: 5, weight: 1 };
+    Swal.fire({ icon: 'success', title: 'Criterion Deployed', text: `${item.title} added to matrix.`, timer: 1500, showConfirmButton: false });
   }
 }

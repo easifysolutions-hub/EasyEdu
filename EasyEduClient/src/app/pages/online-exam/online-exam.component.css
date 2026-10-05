@@ -1,13 +1,85 @@
-.rounded-8 { border-radius: 8px; }
-.rounded-12 { border-radius: 12px; }
-.rounded-16 { border-radius: 16px; }
-.hover-shadow:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+/* Online Exam Styles */
+.rounded-12 {
+  border-radius: 12px;
 }
-.transition-all {
-  transition: all 0.25s ease-in-out;
+
+.fw-700 {
+  font-weight: 700;
 }
+
+.fw-800 {
+  font-weight: 800;
+}
+
+.fw-900 {
+  font-weight: 900;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.bg-soft-primary {
+  background-color: rgba(78, 115, 223, 0.12);
+  color: #4e73df;
+}
+
 .cursor-pointer {
   cursor: pointer;
+}
+
+/* Tabs */
+.online-exam-tabs-wrapper {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.online-exam-tabs-wrapper button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.online-exam-tabs-wrapper button:hover {
+  transform: translateY(-1px);
+}
+
+/* Modal */
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content-custom {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  width: 92%;
+  max-width: 580px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
 }

@@ -1,9 +1,51 @@
-.rounded-12 { border-radius: 12px; }
-.rounded-16 { border-radius: 16px; }
-.hover-shadow:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+/* Teacher Evaluation Styles */
+.rounded-12 {
+  border-radius: 12px;
 }
-.transition-all {
-  transition: all 0.25s ease-in-out;
+
+.rounded-8 {
+  border-radius: 8px;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+.fw-900 {
+  font-weight: 900;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.bg-soft-primary {
+  background-color: rgba(78, 115, 223, 0.12);
+  color: #4e73df;
+}
+
+.eval-tabs-wrapper {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.eval-tabs-wrapper button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eval-tabs-wrapper button:hover {
+  transform: translateY(-1px);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

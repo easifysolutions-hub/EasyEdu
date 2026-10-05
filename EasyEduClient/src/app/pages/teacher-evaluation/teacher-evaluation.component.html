@@ -1,248 +1,318 @@
 <div class="container-fluid p-0 animate-fade-in">
-  <!-- Header -->
+  <!-- Top Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1 text-dark">Teacher Evaluation & 360° Feedback</h3>
-      <p class="text-muted small mb-0">Track pedagogy quality, student satisfaction, peer reviews, and performance KPI analytics</p>
-    </div>
-    <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'submit'">
-      <i class="fas fa-star me-1"></i> Submit Evaluation
-    </button>
-  </div>
-
-  <!-- KPI Metrics -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #042954 0%, #0c4a91 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <i class="fas fa-star-half-stroke fa-2x opacity-75"></i>
-          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">CAMPUS AVERAGE</span>
-        </div>
-        <h2 class="fw-bold mb-1">4.72 / 5.0</h2>
-        <p class="small text-white text-opacity-75 mb-0">Overall Faculty Rating</p>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <i class="fas fa-comments fa-2x opacity-75"></i>
-          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">REVIEWS</span>
-        </div>
-        <h2 class="fw-bold mb-1">509</h2>
-        <p class="small text-white text-opacity-75 mb-0">Total Student Evaluations</p>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <i class="fas fa-hourglass-half fa-2x opacity-75"></i>
-          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">MODERATION</span>
-        </div>
-        <h2 class="fw-bold mb-1">{{ pendingFeedbacks.length }}</h2>
-        <p class="small text-white text-opacity-75 mb-0">Pending Approvals</p>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="card border-0 rounded-16 text-white h-100 p-4" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <i class="fas fa-award fa-2x opacity-75"></i>
-          <span class="badge bg-white bg-opacity-25 rounded-pill px-2">DISTINCTION</span>
-        </div>
-        <h2 class="fw-bold mb-1">88%</h2>
-        <p class="small text-white text-opacity-75 mb-0">Scored Above 4.5 Stars</p>
-      </div>
+      <h3 class="fw-bold mb-1"><i class="fas fa-star-half-stroke text-primary me-2"></i>Teacher Appraisal & Evaluation Governance</h3>
+      <p class="text-muted small mb-0">Verified institutional faculty appraisals, pending ledger, individual trait diagnostics & matrix criteria</p>
     </div>
   </div>
 
-  <!-- Tabs Navigation -->
-  <div class="premium-card mb-4 p-2">
-    <ul class="nav nav-pills custom-pills">
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'teachers'" (click)="activeTab = 'teachers'">
-          <i class="fas fa-chalkboard-teacher me-2"></i> Faculty Performance Scorecard
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'approved'" (click)="activeTab = 'approved'">
-          <i class="fas fa-comment-dots me-2"></i> Approved Reviews ({{ approvedFeedbacks.length }})
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'pending'" (click)="activeTab = 'pending'">
-          <i class="fas fa-shield-halved me-2"></i> Pending Moderation ({{ pendingFeedbacks.length }})
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'submit'" (click)="activeTab = 'submit'">
-          <i class="fas fa-star text-warning me-2"></i> Submit Feedback Form
-        </button>
-      </li>
-    </ul>
+  <!-- Submodule Navigation Tabs -->
+  <div class="eval-tabs-wrapper mb-4">
+    <div class="d-flex flex-wrap gap-2 p-2 bg-white border rounded-12 shadow-sm">
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'approved'" [class.btn-light]="activeTab !== 'approved'" (click)="setTab('approved')">
+        <i class="fas fa-certificate me-1"></i> Approved Report
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'pending'" [class.btn-light]="activeTab !== 'pending'" (click)="setTab('pending')">
+        <i class="fas fa-clock me-1"></i> Pending Report
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'teacher-wise'" [class.btn-light]="activeTab !== 'teacher-wise'" (click)="setTab('teacher-wise')">
+        <i class="fas fa-user-check me-1"></i> Teacher Wise Report
+      </button>
+      <button class="btn btn-sm px-3 rounded-pill fw-bold" [class.btn-primary]="activeTab === 'settings'" [class.btn-light]="activeTab !== 'settings'" (click)="setTab('settings')">
+        <i class="fas fa-sliders-h me-1"></i> Settings
+      </button>
+    </div>
   </div>
 
-  <!-- TAB: TEACHERS SCORECARDS -->
-  <div *ngIf="activeTab === 'teachers'" class="animate-fade-in">
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-4" *ngFor="let t of teachers">
-        <div class="card border rounded-16 shadow-sm p-4 bg-white h-100 hover-shadow transition-all">
-          <div class="d-flex align-items-center mb-3">
-            <div class="rounded-circle p-3 bg-primary bg-opacity-10 text-primary fw-bold fs-5 me-3" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;">
-              {{ (t.teacherName || 'T').charAt(0) }}
-            </div>
-            <div>
-              <h6 class="fw-bold text-dark mb-0">{{ t.teacherName }}</h6>
-              <small class="text-muted">{{ t.designation }} &bull; {{ t.department }}</small>
-            </div>
-            <span class="badge ms-auto" [ngClass]="t.avgRating >= 4.7 ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning'">
-              {{ t.status }}
-            </span>
-          </div>
-
-          <!-- Overall Star Rating -->
-          <div class="d-flex align-items-center justify-content-between p-3 rounded-12 bg-light mb-3">
-            <div>
-              <span class="fs-4 fw-bold text-dark me-2">{{ t.avgRating }}</span>
-              <span class="text-warning">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </span>
-            </div>
-            <span class="small text-muted fw-bold">{{ t.totalReviews }} Reviews</span>
-          </div>
-
-          <!-- Criteria Progress Bars -->
-          <div class="space-y-2 mb-3">
-            <div class="mb-2">
-              <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>Concept Clarity</span>
-                <span class="fw-bold text-dark">{{ t.clarity }} / 5.0</span>
-              </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-success" [style.width.%]="(t.clarity / 5) * 100"></div>
-              </div>
-            </div>
-
-            <div class="mb-2">
-              <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>Punctuality & Discipline</span>
-                <span class="fw-bold text-dark">{{ t.punctuality }} / 5.0</span>
-              </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-info" [style.width.%]="(t.punctuality / 5) * 100"></div>
-              </div>
-            </div>
-
-            <div class="mb-2">
-              <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>Student Engagement</span>
-                <span class="fw-bold text-dark">{{ t.studentInteraction }} / 5.0</span>
-              </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-warning" [style.width.%]="(t.studentInteraction / 5) * 100"></div>
-              </div>
-            </div>
-          </div>
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 1: APPROVED REPORT (/TeacherEvaluation/ApprovedReport) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'approved'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-12 overflow-hidden">
+      <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="fw-800 text-dark m-0">Performance Archive</h5>
+          <small class="text-muted">Verified institutional faculty appraisals and rankings</small>
+        </div>
+        <span class="badge bg-soft-primary text-primary fw-bold">{{ approvedEvaluations.length }} Verified Records</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+              <tr>
+                <th class="px-4 py-3 fw-700">Faculty Member</th>
+                <th class="py-3 fw-700">Completion Date</th>
+                <th class="py-3 fw-700">Performance Index</th>
+                <th class="py-3 fw-700">Remarks</th>
+                <th class="text-end px-4 py-3 fw-700">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of approvedEvaluations">
+                <td class="px-4 py-3">
+                  <div class="d-flex align-items-center">
+                    <div class="rounded-circle bg-soft-primary text-primary fw-bold d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                      {{ item.avatarInitial }}
+                    </div>
+                    <div>
+                      <div class="fw-800 text-dark">{{ item.teacherName }}</div>
+                      <small class="text-muted fw-600">{{ item.employeeNo }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td class="fw-700 text-muted">{{ item.evaluationDate }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <span class="fw-900 text-success me-2">{{ item.totalRating }}</span>
+                    <div class="progress" style="height: 6px; width: 100px;">
+                      <div class="progress-bar bg-success" [style.width.%]="item.totalRating * 20"></div>
+                    </div>
+                  </div>
+                </td>
+                <td class="small text-muted">{{ item.remarks }}</td>
+                <td class="text-end px-4">
+                  <span class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-800">
+                    <i class="fas fa-certificate me-1"></i> VERIFIED
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TAB: APPROVED FEEDBACKS -->
-  <div *ngIf="activeTab === 'approved'" class="premium-card animate-fade-in">
-    <h5 class="fw-bold mb-3">Published Student Feedback</h5>
-    <div class="list-group list-group-flush">
-      <div class="list-group-item px-0 py-3 border-light" *ngFor="let fb of approvedFeedbacks">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <div>
-            <span class="fw-bold text-dark me-2">{{ fb.studentName }}</span>
-            <span class="badge bg-light text-primary border me-2">{{ fb.className }}</span>
-            <span class="text-muted small">for <strong class="text-dark">{{ fb.teacherName }}</strong> ({{ fb.subject }})</span>
-          </div>
-          <div class="text-warning">
-            <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5].slice(0, fb.rating)"></i>
-            <small class="text-muted ms-2">{{ fb.date }}</small>
-          </div>
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 2: PENDING REPORT (/TeacherEvaluation/PendingReport) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'pending'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-12 overflow-hidden">
+      <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="fw-800 text-dark m-0">Verification Ledger</h5>
+          <small class="text-muted">Review and authorize pending faculty performance appraisals</small>
         </div>
-        <p class="mb-0 text-secondary bg-light p-3 rounded-12 border">"{{ fb.comment }}"</p>
+        <span class="badge bg-warning bg-opacity-10 text-dark fw-bold">{{ pendingEvaluations.length }} Pending Authorization</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+              <tr>
+                <th class="px-4 py-3 fw-700">Faculty Member</th>
+                <th class="py-3 fw-700">Evaluation Date</th>
+                <th class="py-3 fw-700">Rating Index</th>
+                <th class="py-3 fw-700">Status</th>
+                <th class="text-end px-4 py-3 fw-700">Authorization</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pendingEvaluations">
+                <td class="px-4 py-3">
+                  <div class="d-flex align-items-center">
+                    <div class="rounded-circle bg-soft-primary text-primary fw-bold d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                      {{ item.avatarInitial }}
+                    </div>
+                    <div>
+                      <div class="fw-800 text-dark">{{ item.teacherName }}</div>
+                      <small class="text-muted fw-600">{{ item.employeeNo }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td class="fw-700 text-muted">{{ item.evaluationDate }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <span class="fw-900 text-primary me-2">{{ item.totalRating }}</span>
+                    <div class="progress" style="height: 6px; width: 100px;">
+                      <div class="progress-bar bg-primary" [style.width.%]="item.totalRating * 20"></div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge bg-warning bg-opacity-10 text-dark fw-900">PENDING_REVIEW</span></td>
+                <td class="text-end px-4">
+                  <button class="btn btn-sm btn-success fw-800 px-3 shadow-sm rounded-8" (click)="approveEvaluation(item)">
+                    <i class="fas fa-check-double me-1"></i> VERIFY
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="pendingEvaluations.length === 0">
+                <td colspan="5" class="text-center py-5 text-muted fw-600">No pending evaluations found for verification.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- TAB: PENDING APPROVAL MODERATION -->
-  <div *ngIf="activeTab === 'pending'" class="premium-card animate-fade-in">
-    <h5 class="fw-bold mb-3">Pending Moderation Desk</h5>
-    <div class="list-group list-group-flush" *ngIf="pendingFeedbacks.length > 0">
-      <div class="list-group-item px-0 py-3 border-light" *ngFor="let fb of pendingFeedbacks">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <div>
-            <span class="fw-bold text-dark me-2">{{ fb.studentName }}</span>
-            <span class="badge bg-light text-primary border me-2">{{ fb.className }}</span>
-            <span class="text-muted small">Review for <strong class="text-dark">{{ fb.teacherName }}</strong></span>
-          </div>
-          <div class="text-warning">
-            <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5].slice(0, fb.rating)"></i>
-            <small class="text-muted ms-2">{{ fb.date }}</small>
-          </div>
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 3: TEACHER WISE REPORT (/TeacherEvaluation/TeacherWiseReport) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'teacher-wise'" class="animate-fade-in">
+    <!-- Selector Card -->
+    <div class="card border-0 shadow-sm rounded-12 p-4 mb-4 bg-white">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-8">
+          <label class="form-label small fw-800 text-uppercase text-muted">Select Faculty Member</label>
+          <select class="form-select bg-light fw-bold" [(ngModel)]="selectedTeacherIdForReport">
+            <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }} ({{ t.employeeNo }} - {{ t.dept }})</option>
+          </select>
         </div>
-        <p class="mb-3 text-secondary bg-light p-3 rounded-12 border">"{{ fb.comment }}"</p>
-        <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-success rounded-pill px-3" (click)="approveFeedback(fb)">
-            <i class="fas fa-check me-1"></i> Approve & Publish
-          </button>
-          <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="rejectFeedback(fb)">
-            <i class="fas fa-times me-1"></i> Reject
+        <div class="col-md-4">
+          <button class="btn btn-primary w-100 py-2 fw-800 shadow-sm">
+            <i class="fas fa-chart-line me-2"></i> FETCH ANALYTICS
           </button>
         </div>
       </div>
     </div>
 
-    <div class="text-center py-5 text-muted" *ngIf="pendingFeedbacks.length === 0">
-      <i class="fas fa-check-double fa-3x text-success mb-2"></i>
-      <p class="mb-0">All feedback entries have been moderated and published.</p>
+    <!-- Details Row -->
+    <div class="row g-4" *ngIf="selectedTeacherIdForReport">
+      <div class="col-12 col-xl-8">
+        <div class="card border-0 shadow-sm rounded-12 overflow-hidden bg-white">
+          <div class="card-header bg-primary text-white p-3">
+            <h5 class="fw-800 mb-0"><i class="fas fa-history me-2"></i>Evaluation History</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-muted small text-uppercase">
+                  <tr>
+                    <th class="px-4 py-3 fw-700">Date</th>
+                    <th class="py-3 fw-700">Rating</th>
+                    <th class="py-3 fw-700">Remarks</th>
+                    <th class="text-end px-4 py-3 fw-700">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let r of teacherWiseEvaluations">
+                    <td class="px-4 fw-700 text-dark">{{ r.evaluationDate }}</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="badge bg-soft-primary text-primary fw-900 me-2">{{ r.totalRating }}</span>
+                        <div class="text-warning small">
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star-half-alt"></i>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="small text-muted">{{ r.remarks }}</td>
+                    <td class="text-end px-4">
+                      <span *ngIf="r.status === 'Approved'" class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-800">VERIFIED</span>
+                      <span *ngIf="r.status === 'Pending'" class="badge bg-warning bg-opacity-10 text-dark px-3 py-1 rounded-pill fw-800">PENDING</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card border-0 shadow-sm rounded-12 p-4 bg-white">
+          <h6 class="fw-800 text-primary mb-3 text-uppercase">Trait Distribution Analytics</h6>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small fw-700 mb-1">
+              <span>Punctuality & Session Regularity</span>
+              <span class="text-success">96%</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar bg-success" style="width: 96%"></div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small fw-700 mb-1">
+              <span>Curriculum & Syllabus Delivery</span>
+              <span class="text-info">90%</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar bg-info" style="width: 90%"></div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small fw-700 mb-1">
+              <span>Student Interaction & Doubt Resolution</span>
+              <span class="text-warning">88%</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar bg-warning" style="width: 88%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- TAB: SUBMIT FEEDBACK FORM -->
-  <div *ngIf="activeTab === 'submit'" class="premium-card animate-fade-in" style="max-width: 700px; margin: 0 auto;">
-    <h5 class="fw-bold mb-3"><i class="fas fa-star text-warning me-2"></i> Student / Parent Evaluation Form</h5>
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Select Teacher *</label>
-      <select class="form-select" [(ngModel)]="newFeedback.teacherName">
-        <option *ngFor="let t of teachers" [value]="t.teacherName">{{ t.teacherName }} ({{ t.department }})</option>
-      </select>
-    </div>
-    <div class="row g-3 mb-3">
-      <div class="col-md-6">
-        <label class="form-label small fw-bold">Student Name</label>
-        <input type="text" class="form-control" [(ngModel)]="newFeedback.studentName">
+  <!-- ========================================================================= -->
+  <!-- SUBMODULE 4: SETTINGS (/TeacherEvaluation/Settings) -->
+  <!-- ========================================================================= -->
+  <div *ngIf="activeTab === 'settings'" class="row g-4 animate-fade-in">
+    <!-- Left: New Criterion Form -->
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-12 h-100 bg-white">
+        <div class="card-header bg-primary text-white p-3">
+          <h5 class="fw-800 mb-0"><i class="fas fa-plus-circle me-2"></i>New Criterion</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-800 text-muted small text-uppercase">Criterion Title *</label>
+            <input type="text" class="form-control bg-light" [(ngModel)]="newCriterion.title" placeholder="e.g. Communication Skills" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label fw-800 text-muted small text-uppercase">Max Points</label>
+              <input type="number" class="form-control bg-light" [(ngModel)]="newCriterion.maxPoint">
+            </div>
+            <div class="col-6">
+              <label class="form-label fw-800 text-muted small text-uppercase">Weight</label>
+              <input type="number" class="form-control bg-light" [(ngModel)]="newCriterion.weight">
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary w-100 fw-800 py-2 shadow-sm rounded-8" (click)="saveCriterion()">
+            DEPLOY CRITERION
+          </button>
+        </div>
       </div>
-      <div class="col-md-6">
-        <label class="form-label small fw-bold">Class / Grade</label>
-        <input type="text" class="form-control" [(ngModel)]="newFeedback.className">
+    </div>
+
+    <!-- Right: Evaluation Matrix Table -->
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm rounded-12 overflow-hidden bg-white">
+        <div class="card-header bg-info text-white p-3">
+          <h5 class="fw-800 mb-0"><i class="fas fa-list-check me-2"></i>Evaluation Matrix</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                  <th class="px-4 py-3 fw-700">Criterion</th>
+                  <th class="py-3 fw-700">Max Points</th>
+                  <th class="py-3 fw-700">Weight</th>
+                  <th class="text-end px-4 py-3 fw-700">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let c of criteria">
+                  <td class="px-4 fw-800 text-dark">{{ c.title }}</td>
+                  <td><span class="badge bg-light text-primary fw-900 border">{{ c.maxPoint }} PTS</span></td>
+                  <td><span class="badge bg-light text-info fw-900 border">x {{ c.weight }}</span></td>
+                  <td class="text-end px-4">
+                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-800">ACTIVE</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Overall Star Rating (1 to 5)</label>
-      <select class="form-select" [(ngModel)]="newFeedback.rating">
-        <option [value]="5">⭐⭐⭐⭐⭐ 5 Stars - Outstanding</option>
-        <option [value]="4">⭐⭐⭐⭐ 4 Stars - Very Good</option>
-        <option [value]="3">⭐⭐⭐ 3 Stars - Average</option>
-        <option [value]="2">⭐⭐ 2 Stars - Needs Improvement</option>
-        <option [value]="1">⭐ 1 Star - Poor</option>
-      </select>
-    </div>
-    <div class="mb-4">
-      <label class="form-label small fw-bold">Detailed Review / Constructive Feedback *</label>
-      <textarea class="form-control" [(ngModel)]="newFeedback.comment" rows="4" placeholder="Mention classroom experiences, clarity of lectures, and suggestions..."></textarea>
-    </div>
-    <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="submitNewFeedback()">
-      <i class="fas fa-paper-plane me-1"></i> Submit Feedback
-    </button>
   </div>
 </div>
