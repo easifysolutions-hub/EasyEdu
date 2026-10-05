@@ -2,9 +2,9 @@
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
       <h3 class="fw-bold mb-1">Attendance Intelligence & Vigilance</h3>
-      <p class="text-muted small mb-0">Record, verify and analyze daily classroom and staff attendance logs</p>
+      <p class="text-muted small mb-0">Record, verify and analyze daily classroom, subject-wise, and faculty attendance rosters</p>
     </div>
-    <div class="d-flex flex-wrap gap-2">
+    <div class="d-flex flex-wrap gap-2" *ngIf="viewMode !== 'report'">
       <button class="btn btn-outline-success btn-sm px-3" (click)="markAll('Present')">
         <i class="fas fa-check-double me-1"></i> Mark All Present
       </button>
@@ -17,18 +17,34 @@
     </div>
   </div>
 
-  <!-- Switch between Student & Staff attendance -->
-  <div class="d-flex gap-2 mb-4">
-    <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="attendanceType === 'student'" [class.btn-light]="attendanceType !== 'student'" (click)="attendanceType = 'student'">
-      <i class="fas fa-user-graduate me-1"></i> Student Attendance
-    </button>
-    <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="attendanceType === 'staff'" [class.btn-light]="attendanceType !== 'staff'" (click)="attendanceType = 'staff'">
-      <i class="fas fa-user-tie me-1"></i> Staff & Faculty Attendance
-    </button>
+  <!-- Switch between Daily, Subject Wise & Report -->
+  <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+    <div class="card-body p-2 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="viewMode === 'daily'" [class.btn-light]="viewMode !== 'daily'" (click)="viewMode = 'daily'">
+          <i class="fas fa-calendar-check me-1"></i> Student & Staff Daily Attendance
+        </button>
+        <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="viewMode === 'subject'" [class.btn-light]="viewMode !== 'subject'" (click)="viewMode = 'subject'">
+          <i class="fas fa-book-reader me-1"></i> Subject Wise Attendance
+        </button>
+        <button class="btn btn-sm px-4 rounded-pill" [class.btn-primary]="viewMode === 'report'" [class.btn-light]="viewMode !== 'report'" (click)="viewMode = 'report'">
+          <i class="fas fa-chart-line me-1"></i> Attendance Analytics & Reports
+        </button>
+      </div>
+
+      <div class="d-flex gap-2" *ngIf="viewMode === 'daily'">
+        <button class="btn btn-sm rounded-pill" [class.btn-dark]="attendanceType === 'student'" [class.btn-outline-secondary]="attendanceType !== 'student'" (click)="attendanceType = 'student'">
+          Students
+        </button>
+        <button class="btn btn-sm rounded-pill" [class.btn-dark]="attendanceType === 'staff'" [class.btn-outline-secondary]="attendanceType !== 'staff'" (click)="attendanceType = 'staff'">
+          Staff & Faculty
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Live Attendance KPI Stats Cards -->
-  <div class="row g-3 mb-4">
+  <div class="row g-3 mb-4" *ngIf="viewMode !== 'report'">
     <div class="col-xl-3 col-md-6">
       <div class="stat-premium-card border-start border-4 border-primary">
         <div class="small fw-bold text-muted text-uppercase mb-1">Total Enrolled</div>
@@ -47,7 +63,7 @@
       <div class="stat-premium-card border-start border-4 border-danger">
         <div class="small fw-bold text-muted text-uppercase mb-1">Absent</div>
         <div class="h3 fw-bold text-danger mb-0">{{ absentCount }}</div>
-        <div class="small text-danger mt-2"><i class="fas fa-user-xmark me-1"></i> Unexcused Absence</div>
+        <div class="small text-danger mt-2"><i class="fas fa-user-times me-1"></i> Unexcused Absence</div>
       </div>
     </div>
     <div class="col-xl-3 col-md-6">
@@ -59,7 +75,8 @@
     </div>
   </div>
 
-  <div class="premium-card mb-4 shadow-sm">
+  <!-- VIEW 1: DAILY ATTENDANCE -->
+  <div *ngIf="viewMode === 'daily'" class="premium-card mb-4 shadow-sm">
     <div class="row g-3 align-items-end mb-4">
       <div class="col-12 col-md-4" *ngIf="attendanceType === 'student'">
         <label class="form-label small fw-bold text-muted">SELECT CLASS / GRADE</label>
@@ -101,47 +118,161 @@
             </td>
             <td>
               <div class="btn-group btn-group-sm" role="group">
-                <button 
-                  type="button" 
-                  class="btn" 
-                  [class.btn-success]="r.status === 'Present'"
-                  [class.btn-outline-success]="r.status !== 'Present'"
-                  (click)="setStatus(r, 'Present')"
-                >
-                  <i class="fas fa-check"></i> Present
+                <button type="button" class="btn" [class.btn-success]="r.status === 'Present'" [class.btn-outline-success]="r.status !== 'Present'" (click)="setStatus(r, 'Present')">
+                  <i class="fas fa-check me-1"></i> Present
                 </button>
-                <button 
-                  type="button" 
-                  class="btn" 
-                  [class.btn-danger]="r.status === 'Absent'"
-                  [class.btn-outline-danger]="r.status !== 'Absent'"
-                  (click)="setStatus(r, 'Absent')"
-                >
-                  <i class="fas fa-times"></i> Absent
+                <button type="button" class="btn" [class.btn-warning]="r.status === 'Late'" [class.btn-outline-warning]="r.status !== 'Late'" (click)="setStatus(r, 'Late')">
+                  <i class="fas fa-clock me-1"></i> Late
                 </button>
-                <button 
-                  type="button" 
-                  class="btn" 
-                  [class.btn-warning]="r.status === 'Late'"
-                  [class.btn-outline-warning]="r.status !== 'Late'"
-                  (click)="setStatus(r, 'Late')"
-                >
-                  <i class="fas fa-clock"></i> Late
+                <button type="button" class="btn" [class.btn-danger]="r.status === 'Absent'" [class.btn-outline-danger]="r.status !== 'Absent'" (click)="setStatus(r, 'Absent')">
+                  <i class="fas fa-times me-1"></i> Absent
                 </button>
-                <button 
-                  type="button" 
-                  class="btn" 
-                  [class.btn-info]="r.status === 'HalfDay'"
-                  [class.btn-outline-info]="r.status !== 'HalfDay'"
-                  (click)="setStatus(r, 'HalfDay')"
-                >
+                <button type="button" class="btn" [class.btn-info]="r.status === 'HalfDay'" [class.btn-outline-info]="r.status !== 'HalfDay'" (click)="setStatus(r, 'HalfDay')">
                   Half Day
                 </button>
               </div>
             </td>
             <td>
-              <input type="text" class="form-control form-control-sm" placeholder="Optional remark..." [(ngModel)]="r.note">
+              <input type="text" class="form-control form-control-sm" placeholder="Optional remark (e.g. Medical Pass)" style="max-width: 250px;">
             </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VIEW 2: SUBJECT WISE ATTENDANCE -->
+  <div *ngIf="viewMode === 'subject'" class="premium-card mb-4 shadow-sm">
+    <div class="row g-3 align-items-end mb-4">
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted">CLASS</label>
+        <select class="form-select fw-bold" [(ngModel)]="selectedClass">
+          <option value="Grade 10">Grade 10</option>
+          <option value="Grade 9">Grade 9</option>
+          <option value="Grade 12">Grade 12</option>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted">SECTION</label>
+        <select class="form-select fw-bold" [(ngModel)]="selectedSection">
+          <option value="Section A">Section A</option>
+          <option value="Section B">Section B</option>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted">SUBJECT PERIOD</label>
+        <select class="form-select fw-bold text-primary" [(ngModel)]="selectedSubject">
+          <option *ngFor="let s of subjects" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold text-muted">DATE</label>
+        <input type="date" class="form-control fw-bold" [(ngModel)]="selectedDate">
+      </div>
+    </div>
+
+    <div class="alert alert-primary border-0 rounded-3 mb-4 d-flex justify-content-between align-items-center">
+      <div>
+        <i class="fas fa-chalkboard-teacher me-2"></i> Recording Period Attendance for <strong>{{ selectedSubject }}</strong> ({{ selectedClass }} - {{ selectedSection }})
+      </div>
+      <span class="badge bg-white text-primary fw-bold px-3 py-2">Period 3 (10:30 AM - 11:15 AM)</span>
+    </div>
+
+    <!-- Subject Table -->
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Roll #</th>
+            <th>Student Name</th>
+            <th>Subject Attendance</th>
+            <th>Lab / Class Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of attendanceRecords">
+            <td><strong class="text-primary">{{ r.rollNo }}</strong></td>
+            <td>
+              <div class="fw-bold">{{ r.studentName }}</div>
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn" [class.btn-success]="r.status === 'Present'" [class.btn-outline-success]="r.status !== 'Present'" (click)="setStatus(r, 'Present')">
+                  Present
+                </button>
+                <button type="button" class="btn" [class.btn-warning]="r.status === 'Late'" [class.btn-outline-warning]="r.status !== 'Late'" (click)="setStatus(r, 'Late')">
+                  Late
+                </button>
+                <button type="button" class="btn" [class.btn-danger]="r.status === 'Absent'" [class.btn-outline-danger]="r.status !== 'Absent'" (click)="setStatus(r, 'Absent')">
+                  Absent
+                </button>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control form-control-sm" placeholder="Subject remark (e.g. Lab experiment cleared)" style="max-width: 250px;">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VIEW 3: ATTENDANCE REPORTS & ANALYTICS -->
+  <div *ngIf="viewMode === 'report'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="fw-bold mb-0"><i class="fas fa-chart-pie text-primary me-2"></i>Monthly Attendance Ledger & Summary</h5>
+      <button class="btn btn-outline-primary btn-sm"><i class="fas fa-file-excel me-1"></i> Export Attendance Ledger</button>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Select Class</label>
+        <select class="form-select">
+          <option>Grade 10 - Section A</option>
+          <option>Grade 9 - Section A</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Month & Year</label>
+        <input type="month" class="form-control" value="2025-05">
+      </div>
+      <div class="col-12 col-md-4 d-flex align-items-end">
+        <button class="btn btn-primary w-100"><i class="fas fa-search me-1"></i> Generate Report</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Roll #</th>
+            <th>Present Days</th>
+            <th>Absent Days</th>
+            <th>Late Days</th>
+            <th>Attendance %</th>
+            <th>Eligibility Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of attendanceRecords">
+            <td><strong>{{ s.studentName }}</strong></td>
+            <td>{{ s.rollNo }}</td>
+            <td><span class="text-success fw-bold">22</span></td>
+            <td><span class="text-danger fw-bold">2</span></td>
+            <td><span class="text-warning fw-bold">1</span></td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="progress flex-grow-1" style="height: 6px;">
+                  <div class="progress-bar bg-success" style="width: 92%;"></div>
+                </div>
+                <small class="fw-bold">92%</small>
+              </div>
+            </td>
+            <td><span class="badge bg-success">Exam Eligible</span></td>
           </tr>
         </tbody>
       </table>

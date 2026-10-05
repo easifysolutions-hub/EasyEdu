@@ -1,20 +1,83 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Header with Page Title and Direct Actions -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Student Directory</h3>
-      <p class="text-muted small mb-0">Manage enrolled students, academic records and profiles</p>
+      <h3 class="fw-bold mb-1">Student Management Hub</h3>
+      <p class="text-muted small mb-0">Unified student directory, batch promotion, categories, and enrolment records</p>
     </div>
-    <div>
+    <div class="d-flex gap-2">
       <a routerLink="/students/admission" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add New Student
+        <i class="fas fa-user-plus me-1"></i> Add New Student
       </a>
+      <button class="btn btn-outline-primary" (click)="exportData('excel')">
+        <i class="fas fa-file-excel me-1"></i> Export Master List
+      </button>
     </div>
   </div>
 
-  <div class="premium-card mb-4">
+  <!-- Navigation Pill Tabs -->
+  <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+    <div class="card-body p-2">
+      <ul class="nav nav-pills custom-pills flex-nowrap overflow-auto gap-1">
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'list'" (click)="setTab('list')">
+            <i class="fas fa-user-graduate me-1"></i> Student List
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'category'" (click)="setTab('category')">
+            <i class="fas fa-tags me-1"></i> Student Category
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'multiclass'" (click)="setTab('multiclass')">
+            <i class="fas fa-layer-group me-1"></i> Multi Class Student
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'unassigned'" (click)="setTab('unassigned')">
+            <i class="fas fa-user-slash me-1"></i> Unassigned Students
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'group'" (click)="setTab('group')">
+            <i class="fas fa-users me-1"></i> Student Group
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'promote'" (click)="setTab('promote')">
+            <i class="fas fa-graduation-cap me-1"></i> Student Promote
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'disabled'" (click)="setTab('disabled')">
+            <i class="fas fa-user-times me-1"></i> Disabled / Alumni
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'export'" (click)="setTab('export')">
+            <i class="fas fa-file-export me-1"></i> Student Export
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'sms-time'" (click)="setTab('sms-time')">
+            <i class="fas fa-clock me-1"></i> SMS Sending Time
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'settings'" (click)="setTab('settings')">
+            <i class="fas fa-sliders-h me-1"></i> Settings
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB 1: STUDENT LIST -->
+  <div *ngIf="activeTab === 'list'" class="premium-card mb-4">
     <!-- Filter Bar -->
-    <div class="row g-3 align-items-center mb-3">
-      <div class="col-12 col-md-5">
+    <div class="row g-3 align-items-center mb-4">
+      <div class="col-12 col-md-4">
         <div class="search-bar-modern w-100">
           <i class="fas fa-search search-icon"></i>
           <input 
@@ -22,7 +85,7 @@
             class="w-100" 
             [(ngModel)]="searchTerm" 
             (ngModelChange)="applyFilter()" 
-            placeholder="Search by name, roll no, admission no..."
+            placeholder="Search by name, admission no, roll..."
           >
         </div>
       </div>
@@ -36,8 +99,16 @@
           <option value="Grade 11">Grade 11</option>
         </select>
       </div>
-      <div class="col-12 col-md-4 text-md-end">
-        <span class="text-muted small">Showing <strong>{{ filteredStudents.length }}</strong> of {{ students.length }} students</span>
+      <div class="col-12 col-md-2">
+        <select class="form-select form-control-premium" [(ngModel)]="selectedSection" (ngModelChange)="applyFilter()">
+          <option value="all">All Sections</option>
+          <option value="A">Section A</option>
+          <option value="B">Section B</option>
+          <option value="C">Section C</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3 text-md-end">
+        <span class="text-muted small">Showing <strong>{{ filteredStudents.length }}</strong> of {{ students.length }} records</span>
       </div>
     </div>
 
@@ -51,7 +122,7 @@
             <th>Class / Section</th>
             <th>Roll No</th>
             <th>Gender</th>
-            <th>Contact Phone</th>
+            <th>Parent / Mobile</th>
             <th>Status</th>
             <th class="text-end">Actions</th>
           </tr>
@@ -61,7 +132,7 @@
             <td><strong class="text-primary">{{ s.admissionNo }}</strong></td>
             <td>
               <div class="d-flex align-items-center gap-2">
-                <div class="avatar-circle" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                <div class="avatar-circle" style="width: 34px; height: 34px; font-size: 0.85rem;">
                   {{ (s.firstName || 'S').charAt(0) }}
                 </div>
                 <div>
@@ -70,13 +141,16 @@
                 </div>
               </div>
             </td>
-            <td><span class="badge bg-light text-dark border">{{ s.className || 'Grade 10' }}</span></td>
+            <td><span class="badge bg-light text-dark border">{{ s.className || 'Grade 10-A' }}</span></td>
             <td><strong>{{ s.rollNo || '-' }}</strong></td>
             <td>{{ s.gender }}</td>
-            <td>{{ s.phone || '-' }}</td>
+            <td>
+              <div>{{ s.phone || '+91 98765 43210' }}</div>
+              <small class="text-muted">{{ s.guardianName || 'Guardian' }}</small>
+            </td>
             <td>
               <span class="badge-status badge-active" *ngIf="s.isActive">Active</span>
-              <span class="badge-status badge-inactive" *ngIf="!s.isActive">Inactive</span>
+              <span class="badge-status badge-inactive" *ngIf="!s.isActive">Disabled</span>
             </td>
             <td class="text-end">
               <button class="btn btn-sm btn-outline-primary me-1" (click)="viewProfile(s)" title="View Profile">
@@ -91,8 +165,8 @@
             </td>
           </tr>
           <tr *ngIf="filteredStudents.length === 0">
-            <td colspan="8" class="text-center py-4 text-muted">
-              <i class="fas fa-inbox fs-3 mb-2 d-block"></i>
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="fas fa-user-graduate fs-2 mb-2 text-secondary d-block"></i>
               No student records match the search filter.
             </td>
           </tr>
@@ -100,57 +174,520 @@
       </table>
     </div>
   </div>
-</div>
 
-<!-- Student Profile Modal -->
-<div class="modal-backdrop-custom" *ngIf="showProfileModal && selectedStudent">
-  <div class="modal-content-custom" style="max-width: 600px;">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-id-card text-primary me-2"></i>Student Details Profile</h5>
-      <button class="btn-close" (click)="showProfileModal = false"></button>
-    </div>
-    
-    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 mb-3">
-      <div class="avatar-circle" style="width: 56px; height: 56px; font-size: 1.4rem;">
-        {{ (selectedStudent.firstName || 'S').charAt(0) }}
+  <!-- TAB 2: STUDENT CATEGORY -->
+  <div *ngIf="activeTab === 'category'" class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Add Category</h5>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Category Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newCategory.categoryName" placeholder="e.g. Merit Scholar">
+        </div>
+        <div class="mb-4">
+          <label class="form-label small fw-bold">Category Code <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newCategory.code" placeholder="e.g. SCH-01">
+        </div>
+        <button class="btn btn-primary w-100" (click)="addCategory()">
+          <i class="fas fa-save me-1"></i> Save Category
+        </button>
       </div>
+    </div>
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-tags text-primary me-2"></i>Student Category Directory</h5>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Category Code</th>
+                <th>Enrolled Students</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cat of categories">
+                <td><strong>{{ cat.categoryName }}</strong></td>
+                <td><span class="badge bg-secondary">{{ cat.code }}</span></td>
+                <td><span class="badge bg-primary rounded-pill px-3">{{ cat.studentCount }} Students</span></td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="categories.splice(categories.indexOf(cat), 1)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: MULTI CLASS STUDENT -->
+  <div *ngIf="activeTab === 'multiclass'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h5 class="fw-bold mb-0">{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h5>
-        <span class="text-muted small">Admission No: <strong class="text-primary">{{ selectedStudent.admissionNo }}</strong></span>
-        <div><span class="badge bg-soft-primary text-primary mt-1">{{ selectedStudent.className || 'Grade 10' }}</span></div>
+        <h5 class="fw-bold mb-1"><i class="fas fa-layer-group text-primary me-2"></i>Multi-Class Enrolment Management</h5>
+        <p class="text-muted small mb-0">Assign students to additional secondary cohorts, elective laboratories or specialized bridge batches</p>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th>Primary Class</th>
+            <th>Secondary Class / Cohort</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong class="text-primary">ADM-2024-001</strong></td>
+            <td>Aarav Sharma</td>
+            <td><span class="badge bg-light text-dark border">Grade 10 - Section A</span></td>
+            <td><span class="badge bg-info text-dark">Robotics Olympiad Cohort</span></td>
+            <td><span class="badge-status badge-active">Active</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i> Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong class="text-primary">ADM-2024-004</strong></td>
+            <td>Ananya Verma</td>
+            <td><span class="badge bg-light text-dark border">Grade 9 - Section A</span></td>
+            <td><span class="badge bg-info text-dark">Advanced Mathematics FastTrack</span></td>
+            <td><span class="badge-status badge-active">Active</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i> Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: UNASSIGNED STUDENTS -->
+  <div *ngIf="activeTab === 'unassigned'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-user-slash text-warning me-2"></i>Unassigned Students (Pending Section Allotment)</h5>
+    <div class="alert alert-info border-0 rounded-3 mb-4">
+      <i class="fas fa-info-circle me-2"></i> The following admitted students have not yet been assigned to a classroom section or roll number.
+    </div>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th>Enrolled Grade</th>
+            <th>Admission Date</th>
+            <th>Assign To Section</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong class="text-primary">ADM-2024-099</strong></td>
+            <td>Kabir Malhotra</td>
+            <td>Grade 10</td>
+            <td>2025-05-01</td>
+            <td>
+              <select class="form-select form-select-sm" style="max-width: 160px;">
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+              </select>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-primary"><i class="fas fa-check me-1"></i> Allot Section</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong class="text-primary">ADM-2024-100</strong></td>
+            <td>Mira Sen</td>
+            <td>Grade 9</td>
+            <td>2025-05-02</td>
+            <td>
+              <select class="form-select form-select-sm" style="max-width: 160px;">
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+              </select>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-primary"><i class="fas fa-check me-1"></i> Allot Section</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 5: STUDENT GROUP -->
+  <div *ngIf="activeTab === 'group'" class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Create Student Group / House</h5>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Group / House Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newGroup.groupName" placeholder="e.g. Red House (Phoenix)">
+        </div>
+        <div class="mb-4">
+          <label class="form-label small fw-bold">Description</label>
+          <textarea class="form-control form-control-premium" [(ngModel)]="newGroup.description" rows="3" placeholder="Group activities, mandates and inter-house roster..."></textarea>
+        </div>
+        <button class="btn btn-primary w-100" (click)="addGroup()">
+          <i class="fas fa-save me-1"></i> Save Group
+        </button>
+      </div>
+    </div>
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-users text-primary me-2"></i>Institutional Student Groups & Houses</h5>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Group Name</th>
+                <th>Description</th>
+                <th>Enrolled Members</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let g of groups">
+                <td><strong>{{ g.groupName }}</strong></td>
+                <td><small class="text-muted">{{ g.description }}</small></td>
+                <td><span class="badge bg-primary rounded-pill px-3">{{ g.memberCount }} Students</span></td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="groups.splice(groups.indexOf(g), 1)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: STUDENT PROMOTE -->
+  <div *ngIf="activeTab === 'promote'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-graduation-cap text-primary me-2"></i>Annual Academic Session Promotion</h5>
+    <p class="text-muted small mb-4">Promote cohorts from current academic session to the succeeding class level based on annual exam clearance.</p>
+
+    <div class="row g-3 p-3 bg-light rounded-4 mb-4">
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold">Current Session</label>
+        <select class="form-select form-control-premium" [(ngModel)]="promoteState.currentSession">
+          <option value="2024-2025">2024 - 2025</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold">Current Class & Section</label>
+        <select class="form-select form-control-premium" [(ngModel)]="promoteState.currentClass">
+          <option value="Grade 10">Grade 10 - Section A</option>
+          <option value="Grade 9">Grade 9 - Section A</option>
+          <option value="Grade 8">Grade 8 - Section A</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold">Promote To Session</label>
+        <select class="form-select form-control-premium" [(ngModel)]="promoteState.targetSession">
+          <option value="2025-2026">2025 - 2026 (Next Academic Year)</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-bold">Promote To Class</label>
+        <select class="form-select form-control-premium" [(ngModel)]="promoteState.targetClass">
+          <option value="Grade 11">Grade 11 - Section A</option>
+          <option value="Grade 10">Grade 10 - Section A</option>
+          <option value="Grade 9">Grade 9 - Section A</option>
+        </select>
       </div>
     </div>
 
-    <div class="row g-2 mb-3">
-      <div class="col-6">
-        <div class="p-2 border rounded">
-          <small class="text-muted d-block">Roll Number</small>
-          <strong>{{ selectedStudent.rollNo || '101' }}</strong>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="fw-bold mb-0">Candidate Roster for Promotion ({{ students.length }} Students)</h6>
+      <button class="btn btn-success" (click)="executePromotion()">
+        <i class="fas fa-check-double me-1"></i> Execute Batch Promotion
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th>Current Roll</th>
+            <th>Annual Exam Result</th>
+            <th>Next Session Roll</th>
+            <th>Promote Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of students.slice(0, 6); let i = index">
+            <td><strong>{{ s.admissionNo }}</strong></td>
+            <td>{{ s.firstName }} {{ s.lastName }}</td>
+            <td>{{ s.rollNo }}</td>
+            <td><span class="badge bg-success">Passed (Grade A)</span></td>
+            <td><input type="text" class="form-control form-control-sm" [value]="'10' + (i + 1)" style="max-width: 100px;"></td>
+            <td>
+              <span class="badge bg-primary">Ready for Promotion</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 7: DISABLED / ALUMNI STUDENTS -->
+  <div *ngIf="activeTab === 'disabled'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-user-times text-danger me-2"></i>Disabled & Inactive Student Records</h5>
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th>Last Class</th>
+            <th>Disabled Reason</th>
+            <th>Deactivation Date</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of disabledStudents">
+            <td><strong>{{ s.admissionNo }}</strong></td>
+            <td>{{ s.firstName }} {{ s.lastName }}</td>
+            <td>{{ s.className }}</td>
+            <td>Transfer Certificate Issued</td>
+            <td>2025-04-15</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-success me-1" (click)="toggleStatus(s)">
+                <i class="fas fa-redo me-1"></i> Re-Activate
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="disabledStudents.length === 0">
+            <td colspan="6" class="text-center py-4 text-muted">
+              No deactivated or disabled student records found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 8: STUDENT EXPORT -->
+  <div *ngIf="activeTab === 'export'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-file-export text-primary me-2"></i>Data Export & Archive Wizard</h5>
+    <p class="text-muted small mb-4">Export complete student database rosters with customized fields for state reporting and audit.</p>
+
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-md-4">
+        <div class="card h-100 p-4 border rounded-4 text-center hover-card">
+          <i class="fas fa-file-excel fs-1 text-success mb-3"></i>
+          <h6 class="fw-bold">Excel Spreadsheet (.xlsx)</h6>
+          <p class="text-muted small mb-4">Standard MS Excel sheet with full column headers and metadata.</p>
+          <button class="btn btn-outline-success mt-auto" (click)="exportData('excel')">
+            <i class="fas fa-download me-1"></i> Download Excel
+          </button>
         </div>
       </div>
-      <div class="col-6">
-        <div class="p-2 border rounded">
-          <small class="text-muted d-block">Gender</small>
-          <strong>{{ selectedStudent.gender }}</strong>
+      <div class="col-12 col-md-4">
+        <div class="card h-100 p-4 border rounded-4 text-center hover-card">
+          <i class="fas fa-file-csv fs-1 text-info mb-3"></i>
+          <h6 class="fw-bold">CSV Delimited (.csv)</h6>
+          <p class="text-muted small mb-4">Comma-separated values format for database import and analysis.</p>
+          <button class="btn btn-outline-info mt-auto" (click)="exportData('csv')">
+            <i class="fas fa-download me-1"></i> Download CSV
+          </button>
         </div>
       </div>
-      <div class="col-6">
-        <div class="p-2 border rounded">
-          <small class="text-muted d-block">Contact Phone</small>
-          <strong>{{ selectedStudent.phone || '+91 98765 43210' }}</strong>
+      <div class="col-12 col-md-4">
+        <div class="card h-100 p-4 border rounded-4 text-center hover-card">
+          <i class="fas fa-file-pdf fs-1 text-danger mb-3"></i>
+          <h6 class="fw-bold">PDF Master Record (.pdf)</h6>
+          <p class="text-muted small mb-4">Official printable student ledger with institution logo and signature footer.</p>
+          <button class="btn btn-outline-danger mt-auto" (click)="exportData('pdf')">
+            <i class="fas fa-download me-1"></i> Download PDF
+          </button>
         </div>
       </div>
-      <div class="col-6">
-        <div class="p-2 border rounded">
-          <small class="text-muted d-block">Guardian Email</small>
-          <strong>{{ selectedStudent.email || 'guardian@easyedu.com' }}</strong>
+    </div>
+  </div>
+
+  <!-- TAB 9: SMS SENDING TIME -->
+  <div *ngIf="activeTab === 'sms-time'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-clock text-primary me-2"></i>Automated SMS Dispatch Schedule</h5>
+    <p class="text-muted small mb-4">Configure scheduled automated SMS broadcast triggers for parent communications.</p>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <div class="p-3 border rounded-3 bg-light">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="morningSms" [(ngModel)]="smsSettings.morningSmsEnabled">
+            <label class="form-check-label fw-bold" for="morningSms">Morning Arrival Broadcast</label>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Trigger Time</label>
+            <input type="time" class="form-control form-control-premium" [(ngModel)]="smsSettings.morningArrivalSmsTime">
+          </div>
+          <small class="text-muted">Sends confirmation SMS to parents once smart gate attendance registers student arrival.</small>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="p-3 border rounded-3 bg-light">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="absentSms" [(ngModel)]="smsSettings.absentAlertEnabled">
+            <label class="form-check-label fw-bold" for="absentSms">Absentee Alert Notification</label>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Trigger Time</label>
+            <input type="time" class="form-control form-control-premium" [(ngModel)]="smsSettings.absentAlertTime">
+          </div>
+          <small class="text-muted">Dispatches instant alert to parents if student is marked absent during morning roll call.</small>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="p-3 border rounded-3 bg-light">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="eveningSms" [(ngModel)]="smsSettings.eveningSmsEnabled">
+            <label class="form-check-label fw-bold" for="eveningSms">Evening Departure Broadcast</label>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Trigger Time</label>
+            <input type="time" class="form-control form-control-premium" [(ngModel)]="smsSettings.eveningDepartureSmsTime">
+          </div>
+          <small class="text-muted">Notifies parent on bus dispatch or campus checkout.</small>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="p-3 border rounded-3 bg-light">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="hwSms" [(ngModel)]="smsSettings.homeworkAlertEnabled">
+            <label class="form-check-label fw-bold" for="hwSms">Daily Homework Digest</label>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Trigger Time</label>
+            <input type="time" class="form-control form-control-premium" [(ngModel)]="smsSettings.homeworkAlertTime">
+          </div>
+          <small class="text-muted">Broadcasts consolidated subject assignments to parents every evening.</small>
         </div>
       </div>
     </div>
 
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showProfileModal = false">Close</button>
-      <a routerLink="/attendance" class="btn btn-sm btn-primary" (click)="showProfileModal = false"><i class="fas fa-calendar-check me-1"></i>Check Attendance</a>
+    <div class="text-end mt-4">
+      <button class="btn btn-primary" (click)="saveSmsTime()">
+        <i class="fas fa-save me-1"></i> Save SMS Schedule
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 10: STUDENT SETTINGS -->
+  <div *ngIf="activeTab === 'settings'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-sliders-h text-primary me-2"></i>Student Management Configurations</h5>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Admission Number Prefix</label>
+        <input type="text" class="form-control form-control-premium mb-3" [(ngModel)]="studentSettings.admissionNoPrefix">
+
+        <label class="form-label small fw-bold">Admission Number Digit Padding</label>
+        <input type="number" class="form-control form-control-premium mb-3" [(ngModel)]="studentSettings.admissionNoDigits">
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="autoRoll" [(ngModel)]="studentSettings.autoGenerateRoll">
+          <label class="form-check-label fw-bold" for="autoRoll">Auto Generate Roll Number on Admission</label>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Default Category for New Admissions</label>
+        <select class="form-select form-control-premium mb-3" [(ngModel)]="studentSettings.defaultCategoryId">
+          <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.categoryName }} ({{ cat.code }})</option>
+        </select>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="reqGuardian" [(ngModel)]="studentSettings.requireGuardianApproval">
+          <label class="form-check-label fw-bold" for="reqGuardian">Require Guardian Identity Verification</label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="selfReg" [(ngModel)]="studentSettings.allowOnlineSelfRegistration">
+          <label class="form-check-label fw-bold" for="selfReg">Allow Online Self-Registration on Portal</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end mt-4">
+      <button class="btn btn-primary" (click)="saveStudentSettings()">
+        <i class="fas fa-save me-1"></i> Save Student Configurations
+      </button>
+    </div>
+  </div>
+
+  <!-- Student Profile Modal -->
+  <div class="modal fade show d-block" *ngIf="showProfileModal" style="background: rgba(0,0,0,0.6);" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden" *ngIf="selectedStudent">
+        <div class="modal-header bg-primary text-white border-0 py-3">
+          <h5 class="modal-title fw-bold">
+            <i class="fas fa-id-card me-2"></i>Student Academic Profile
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="showProfileModal = false"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="d-flex align-items-center gap-4 mb-4 pb-3 border-bottom">
+            <div class="avatar-circle" style="width: 70px; height: 70px; font-size: 1.8rem;">
+              {{ (selectedStudent.firstName || 'S').charAt(0) }}
+            </div>
+            <div>
+              <h4 class="fw-bold mb-1">{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h4>
+              <p class="text-muted mb-0">Admission No: <strong class="text-primary">{{ selectedStudent.admissionNo }}</strong> | Roll: <strong>{{ selectedStudent.rollNo || '-' }}</strong></p>
+              <span class="badge bg-light text-dark border mt-2">{{ selectedStudent.className || 'Grade 10-A' }}</span>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-6 col-md-4">
+              <label class="text-muted small d-block">Gender</label>
+              <strong>{{ selectedStudent.gender }}</strong>
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="text-muted small d-block">Date of Birth</label>
+              <strong>{{ selectedStudent.dateOfBirth || '2010-05-15' }}</strong>
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="text-muted small d-block">Blood Group</label>
+              <strong>{{ selectedStudent.bloodGroup || 'O+' }}</strong>
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="text-muted small d-block">Contact Phone</label>
+              <strong>{{ selectedStudent.phone || '+91 98765 43210' }}</strong>
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="text-muted small d-block">Official Email</label>
+              <strong>{{ selectedStudent.email || 'student@easyedu.com' }}</strong>
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="text-muted small d-block">Status</label>
+              <span class="badge-status" [ngClass]="selectedStudent.isActive ? 'badge-active' : 'badge-inactive'">
+                {{ selectedStudent.isActive ? 'Active' : 'Disabled' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 bg-light">
+          <button type="button" class="btn btn-secondary" (click)="showProfileModal = false">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

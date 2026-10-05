@@ -35,6 +35,16 @@
           <i class="fas fa-database me-2"></i> Database Backup & Security
         </button>
       </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'style'" (click)="activeTab = 'style'">
+          <i class="fas fa-palette me-2"></i> Style Architect
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'module-manager'" (click)="activeTab = 'module-manager'">
+          <i class="fas fa-cubes me-2"></i> Module Manager CORE
+        </button>
+      </li>
     </ul>
   </div>
 
@@ -342,6 +352,101 @@
             <td class="text-end">
               <button class="btn btn-sm btn-outline-primary rounded-circle" title="Download SQL Dump">
                 <i class="fas fa-download"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 6: STYLE ARCHITECT -->
+  <div *ngIf="activeTab === 'style'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark"><i class="fas fa-palette text-primary me-2"></i>Style Architect & Theme Engine</h5>
+        <p class="text-muted small mb-0">Customize institutional color palette, dark mode contrast, and typography tokens</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <div class="p-4 border rounded-4 bg-light">
+          <h6 class="fw-bold mb-3">Primary Theme Colors</h6>
+          <div class="d-flex gap-3 mb-4">
+            <div class="text-center">
+              <div style="width: 50px; height: 50px; background: #002B49; border-radius: 12px; cursor: pointer; border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.15);"></div>
+              <small class="d-block mt-1 fw-bold">Deep Navy</small>
+            </div>
+            <div class="text-center">
+              <div style="width: 50px; height: 50px; background: #2563eb; border-radius: 12px; cursor: pointer; border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.15);"></div>
+              <small class="d-block mt-1 fw-bold">Electric Blue</small>
+            </div>
+            <div class="text-center">
+              <div style="width: 50px; height: 50px; background: #7c3aed; border-radius: 12px; cursor: pointer; border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.15);"></div>
+              <small class="d-block mt-1 fw-bold">Royal Purple</small>
+            </div>
+            <div class="text-center">
+              <div style="width: 50px; height: 50px; background: #059669; border-radius: 12px; cursor: pointer; border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.15);"></div>
+              <small class="d-block mt-1 fw-bold">Emerald</small>
+            </div>
+          </div>
+          <button class="btn btn-primary" (click)="themeService.toggleTheme()">
+            <i class="fas fa-moon me-1"></i> Toggle Dark / Light Mode
+          </button>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="p-4 border rounded-4 bg-light">
+          <h6 class="fw-bold mb-3">Typography & Font Family</h6>
+          <p class="small text-muted mb-3">The application uses <strong>Plus Jakarta Sans & Outfit</strong> typography for modern readability and high contrast.</p>
+          <div class="p-3 bg-white rounded-3 border">
+            <span class="fs-4 fw-bold d-block text-primary">EasyEdu Pro ERP</span>
+            <span class="text-muted small">The quick brown fox jumps over the lazy dog. 1234567890</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: MODULE MANAGER CORE -->
+  <div *ngIf="activeTab === 'module-manager'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark"><i class="fas fa-cubes text-primary me-2"></i>Module Manager CORE</h5>
+        <p class="text-muted small mb-0">Enable or disable institutional modules and platform addons dynamically</p>
+      </div>
+      <span class="badge bg-primary rounded-pill px-3 py-2">{{ modules.length }} Modules Configured</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Module Name</th>
+            <th>Category</th>
+            <th>Version</th>
+            <th>Status</th>
+            <th>Toggle State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of modules">
+            <td>
+              <div class="fw-bold">{{ m.name }}</div>
+              <small class="text-muted">{{ m.description }}</small>
+            </td>
+            <td><span class="badge bg-light text-dark border">{{ m.category }}</span></td>
+            <td><span class="badge bg-secondary">{{ m.version }}</span></td>
+            <td>
+              <span class="badge" [ngClass]="m.isEnabled ? 'bg-success' : 'bg-danger'">
+                {{ m.isEnabled ? 'Active' : 'Disabled' }}
+              </span>
+              <span class="badge bg-info text-dark ms-1" *ngIf="m.isCore">CORE</span>
+            </td>
+            <td>
+              <button class="btn btn-sm" [ngClass]="m.isEnabled ? 'btn-outline-danger' : 'btn-outline-success'" (click)="toggleModule(m)">
+                {{ m.isEnabled ? 'Disable' : 'Enable' }}
               </button>
             </td>
           </tr>

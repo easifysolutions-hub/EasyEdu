@@ -64,11 +64,58 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'administration', component: AdministrationComponent },
+      // Student Management
       { path: 'students', component: StudentListComponent },
+      { path: 'Students', component: StudentListComponent },
+      { path: 'StudentCategory', component: StudentListComponent },
+      { path: 'Students/Create', component: StudentAdmissionComponent },
       { path: 'students/admission', component: StudentAdmissionComponent },
-      { path: 'staff', component: StaffListComponent },
-      { path: 'leave', component: LeaveComponent },
+      { path: 'Students/MultiClassStudent', component: StudentListComponent },
+      { path: 'Students/UnassignedStudent', component: StudentListComponent },
+      { path: 'Students/StudentGroup', component: StudentListComponent },
+      { path: 'Students/StudentPromote', component: StudentListComponent },
+      { path: 'Students/DisabledStudents', component: StudentListComponent },
+      { path: 'Students/StudentExport', component: StudentListComponent },
+      { path: 'Students/SmsSendingTime', component: StudentListComponent },
+      { path: 'Students/StudentSettings', component: StudentListComponent },
+
+      // Attendance
+      { path: 'attendance', component: AttendanceComponent },
+      { path: 'Attendance', component: AttendanceComponent },
+      { path: 'Attendance/SubjectWiseAttendance', component: AttendanceComponent },
+      { path: 'attendance/report', component: AttendanceComponent },
+
+      // Behaviour Records
       { path: 'behaviour', component: BehaviourComponent },
+      { path: 'BehaviourRecords/Incidents', component: BehaviourComponent },
+      { path: 'BehaviourRecords/AssignIncident', component: BehaviourComponent },
+      { path: 'BehaviourRecords/StudentIncidentReport', component: BehaviourComponent },
+      { path: 'BehaviourRecords/BehaviourReport', component: BehaviourComponent },
+      { path: 'BehaviourRecords/ClassSectionReport', component: BehaviourComponent },
+      { path: 'BehaviourRecords/IncidentWiseReport', component: BehaviourComponent },
+      { path: 'BehaviourRecords/Settings', component: BehaviourComponent },
+
+      // Human Resource & Staff
+      { path: 'staff', component: StaffListComponent },
+      { path: 'HumanResource/StaffDirectory', component: StaffListComponent },
+      { path: 'HumanResource/AddStaff', component: StaffListComponent },
+      { path: 'HumanResource/Designation', component: StaffListComponent },
+      { path: 'HumanResource/Department', component: StaffListComponent },
+      { path: 'HumanResource/StaffAttendance', component: StaffListComponent },
+      { path: 'HumanResource/Payroll', component: StaffListComponent },
+      { path: 'HumanResource/StaffSettings', component: StaffListComponent },
+      { path: 'HumanResource/BulkPayrollPrint', component: StaffListComponent },
+
+      // Leave
+      { path: 'leave', component: LeaveComponent },
+      { path: 'Leave', component: LeaveComponent },
+      { path: 'api/Leave', component: LeaveComponent },
+      { path: 'Leave/PendingLeaveRequest', component: LeaveComponent },
+      { path: 'Leave/ApproveLeaveRequest', component: LeaveComponent },
+      { path: 'Leave/LeaveDefine', component: LeaveComponent },
+      { path: 'Leave/LeaveType', component: LeaveComponent },
+
+      // Academic & Classes
       { path: 'academic/classes', component: ClassesComponent },
       { path: 'academic/sections', component: ClassesComponent },
       { path: 'academic/subjects', component: ClassesComponent },
@@ -86,18 +133,22 @@ export const routes: Routes = [
       { path: 'ClassRoutine', component: ClassesComponent },
       { path: 'OptionalSubject/Assign', component: ClassesComponent },
       { path: 'OptionalSubject', component: ClassesComponent },
+
+      // Lesson Plan
       { path: 'lesson-plan', component: LessonPlanComponent },
       { path: 'LessonPlan', component: LessonPlanComponent },
       { path: 'LessonPlan/Lesson', component: LessonPlanComponent },
       { path: 'LessonPlan/Topic', component: LessonPlanComponent },
       { path: 'LessonPlan/LessonPlanOverview', component: LessonPlanComponent },
       { path: 'LessonPlan/Settings', component: LessonPlanComponent },
-      { path: 'attendance', component: AttendanceComponent },
-      { path: 'attendance/report', component: AttendanceComponent },
+
+      // Homework
       { path: 'homework', component: HomeworkComponent },
       { path: 'Homework', component: HomeworkComponent },
       { path: 'Homework/Create', component: HomeworkComponent },
       { path: 'Homework/HomeworkReport', component: HomeworkComponent },
+
+      // Communication
       { path: 'communication', component: CommunicationComponent },
       { path: 'Communicate/NoticeBoard', component: CommunicationComponent },
       { path: 'Communicate/SendEmail', component: CommunicationComponent },
@@ -106,7 +157,8 @@ export const routes: Routes = [
       { path: 'Communicate/Calendar', component: CommunicationComponent },
       { path: 'Communicate/EmailTemplates', component: CommunicationComponent },
       { path: 'Communicate/SmsTemplates', component: CommunicationComponent },
-      { path: 'download-center', component: DownloadCenterComponent },
+
+      // Examinations
       { path: 'examinations', component: ExaminationsComponent },
       { path: 'Examinations', component: ExaminationsComponent },
       { path: 'Examinations/ExamType', component: ExaminationsComponent },
@@ -115,30 +167,56 @@ export const routes: Routes = [
       { path: 'Examinations/MarksRegister', component: ExaminationsComponent },
       { path: 'Examinations/MarksGrade', component: ExaminationsComponent },
       { path: 'Examinations/SendMarksBySms', component: ExaminationsComponent },
+
+      // Online Exam
       { path: 'online-exam', component: OnlineExamComponent },
       { path: 'OnlineExam', component: OnlineExamComponent },
       { path: 'OnlineExam/QuestionGroup', component: OnlineExamComponent },
       { path: 'OnlineExam/QuestionBank', component: OnlineExamComponent },
       { path: 'OnlineExam/OnlineExam', component: OnlineExamComponent },
+
+      // Teacher Evaluation
       { path: 'teacher-evaluation', component: TeacherEvaluationComponent },
       { path: 'TeacherEvaluation', component: TeacherEvaluationComponent },
       { path: 'TeacherEvaluation/ApprovedReport', component: TeacherEvaluationComponent },
       { path: 'TeacherEvaluation/PendingReport', component: TeacherEvaluationComponent },
       { path: 'TeacherEvaluation/TeacherWiseReport', component: TeacherEvaluationComponent },
       { path: 'TeacherEvaluation/Settings', component: TeacherEvaluationComponent },
+
+      // Operations & Finance
       { path: 'certificates', component: CertificatesComponent },
       { path: 'fees', component: FeesComponent },
+      { path: 'Fees', component: FeesComponent },
       { path: 'accounting', component: AccountingComponent },
+      { path: 'Accounts', component: AccountingComponent },
       { path: 'library', component: LibraryComponent },
+      { path: 'Library', component: LibraryComponent },
       { path: 'transport', component: TransportComponent },
+      { path: 'Transport', component: TransportComponent },
       { path: 'dormitory', component: DormitoryComponent },
+      { path: 'Dormitory', component: DormitoryComponent },
       { path: 'inventory', component: InventoryComponent },
+      { path: 'Inventory', component: InventoryComponent },
       { path: 'virtual-class', component: VirtualClassComponent },
+      { path: 'VirtualClassrooms', component: VirtualClassComponent },
+      { path: 'smart-attendance', component: AttendanceComponent },
+      { path: 'SmartAttendance', component: AttendanceComponent },
+      { path: 'advanced-academics', component: ClassesComponent },
+      { path: 'AdvancedAcademics', component: ClassesComponent },
+      { path: 'growth-comms', component: CommunicationComponent },
+      { path: 'GrowthComms', component: CommunicationComponent },
+      { path: 'download-center', component: DownloadCenterComponent },
+      { path: 'DownloadCenter', component: DownloadCenterComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'utilities', component: UtilitiesComponent },
       { path: 'role-permission', component: RolePermissionComponent },
       { path: 'reports', component: ReportsComponent },
-      { path: 'settings', component: SettingsComponent }
+      { path: 'Reports', component: ReportsComponent },
+      { path: 'ExamReports', component: ReportsComponent },
+      { path: 'settings', component: SettingsComponent },
+      { path: 'SystemSettings', component: SettingsComponent },
+      { path: 'Style', component: SettingsComponent },
+      { path: 'System/ModuleManager', component: SettingsComponent }
     ]
   },
   { path: '**', redirectTo: '' }

@@ -1,26 +1,93 @@
 <div class="container-fluid p-0 animate-fade-in">
+  <!-- Header -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h3 class="fw-bold mb-1">Teachers & Staff Directory</h3>
-      <p class="text-muted small mb-0">Manage teaching faculty, admin departments, and contact profiles</p>
+      <h3 class="fw-bold mb-1">Human Resource & Faculty Hub</h3>
+      <p class="text-muted small mb-0">Manage staff directory, designations, departments, payroll processing and attendance</p>
     </div>
-    <div>
-      <button class="btn btn-primary" (click)="showAddModal = true">
-        <i class="fas fa-user-plus"></i> Add New Staff
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" (click)="setTab('add-staff')">
+        <i class="fas fa-user-plus me-1"></i> Add New Staff Member
+      </button>
+      <button class="btn btn-outline-primary" (click)="setTab('payroll')">
+        <i class="fas fa-money-check-alt me-1"></i> Process Monthly Payroll
       </button>
     </div>
   </div>
 
-  <div class="premium-card">
-    <div class="row g-3 align-items-center mb-3">
+  <!-- Navigation Pill Tabs -->
+  <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+    <div class="card-body p-2">
+      <ul class="nav nav-pills custom-pills flex-nowrap overflow-auto gap-1">
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'directory'" (click)="setTab('directory')">
+            <i class="fas fa-users-cog me-1"></i> Staff Directory
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'add-staff'" (click)="setTab('add-staff')">
+            <i class="fas fa-user-plus me-1"></i> Add Staff
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'designation'" (click)="setTab('designation')">
+            <i class="fas fa-id-badge me-1"></i> Designation
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'department'" (click)="setTab('department')">
+            <i class="fas fa-sitemap me-1"></i> Department
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'attendance'" (click)="setTab('attendance')">
+            <i class="fas fa-user-check me-1"></i> Staff Attendance
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'payroll'" (click)="setTab('payroll')">
+            <i class="fas fa-file-invoice-dollar me-1"></i> Payroll
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'bulk-payroll'" (click)="setTab('bulk-payroll')">
+            <i class="fas fa-print me-1"></i> Bulk Payroll Print
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'settings'" (click)="setTab('settings')">
+            <i class="fas fa-sliders-h me-1"></i> Staff Settings
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB 1: STAFF DIRECTORY -->
+  <div *ngIf="activeTab === 'directory'" class="premium-card">
+    <div class="row g-3 align-items-center mb-4">
       <div class="col-12 col-md-5">
         <div class="search-bar-modern w-100">
           <i class="fas fa-search search-icon"></i>
-          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search by name, department, designation...">
+          <input 
+            type="text" 
+            class="w-100" 
+            [(ngModel)]="searchTerm" 
+            placeholder="Search by name, role, department..."
+          >
         </div>
       </div>
-      <div class="col-12 col-md-7 text-md-end">
-        <span class="text-muted small">Total Staff: <strong>{{ filteredStaff.length }}</strong></span>
+      <div class="col-12 col-md-4">
+        <select class="form-select form-control-premium" [(ngModel)]="selectedDepartment">
+          <option value="all">All Departments</option>
+          <option value="Academics">Academics</option>
+          <option value="Science">Science & Laboratories</option>
+          <option value="Finance">Finance & Accounts</option>
+          <option value="Transport">Transport & Logistics</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3 text-md-end">
+        <span class="text-muted small">Active Personnel: <strong>{{ filteredStaff.length }}</strong></span>
       </div>
     </div>
 
@@ -29,10 +96,10 @@
         <thead>
           <tr>
             <th>Staff ID</th>
-            <th>Name</th>
+            <th>Name & Details</th>
             <th>Department</th>
             <th>Designation</th>
-            <th>Email</th>
+            <th>Official Email</th>
             <th>Phone</th>
             <th>Status</th>
             <th class="text-end">Actions</th>
@@ -40,76 +107,344 @@
         </thead>
         <tbody>
           <tr *ngFor="let s of filteredStaff">
-            <td><strong>{{ s.staffNo }}</strong></td>
+            <td><strong class="text-primary">{{ s.staffNo }}</strong></td>
             <td>
               <div class="d-flex align-items-center gap-2">
-                <div class="avatar-circle" style="width: 32px; height: 32px; font-size: 0.8rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                  {{ (s.firstName || 'T').charAt(0) }}
+                <div class="avatar-circle" style="width: 34px; height: 34px; font-size: 0.85rem;">
+                  {{ (s.firstName || 'S').charAt(0) }}
                 </div>
-                <div class="fw-bold">{{ s.firstName }} {{ s.lastName }}</div>
+                <div>
+                  <div class="fw-bold">{{ s.firstName }} {{ s.lastName }}</div>
+                  <small class="text-muted">{{ s.department }}</small>
+                </div>
               </div>
             </td>
             <td><span class="badge bg-light text-dark border">{{ s.department }}</span></td>
-            <td>{{ s.designation }}</td>
+            <td><strong>{{ s.designation }}</strong></td>
             <td>{{ s.email }}</td>
-            <td>{{ s.phone }}</td>
+            <td>{{ s.phone || '+91 98765 01234' }}</td>
             <td>
-              <span class="badge-status badge-active">Active</span>
+              <span class="badge-status badge-active" *ngIf="s.isActive">Active</span>
+              <span class="badge-status badge-inactive" *ngIf="!s.isActive">On Leave</span>
             </td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteStaff(s)" title="Delete Staff"><i class="fas fa-trash"></i></button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteStaff(s)">
+                <i class="fas fa-trash"></i>
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-</div>
 
-<!-- Add Staff Modal -->
-<div class="modal-backdrop-custom" *ngIf="showAddModal">
-  <div class="modal-content-custom">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold m-0"><i class="fas fa-user-tie text-primary me-2"></i>Onboard Faculty / Staff</h5>
-      <button class="btn-close" (click)="showAddModal = false"></button>
-    </div>
-    <div class="row g-2 mb-2">
-      <div class="col-6">
-        <label class="form-label small fw-bold">First Name</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.firstName" placeholder="e.g. Ramesh">
+  <!-- TAB 2: ADD STAFF ONBOARDING FORM -->
+  <div *ngIf="activeTab === 'add-staff'" class="premium-card">
+    <h5 class="fw-bold mb-4"><i class="fas fa-user-plus text-primary me-2"></i>Staff Onboarding Master Form</h5>
+
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Staff ID # <span class="text-danger">*</span></label>
+        <input type="text" class="form-control form-control-premium" [(ngModel)]="newStaff.staffNo">
       </div>
-      <div class="col-6">
-        <label class="form-label small fw-bold">Last Name</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.lastName" placeholder="e.g. Rao">
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">First Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control form-control-premium" [(ngModel)]="newStaff.firstName" placeholder="e.g. Vikram">
       </div>
-    </div>
-    <div class="row g-2 mb-2">
-      <div class="col-6">
-        <label class="form-label small fw-bold">Department</label>
-        <select class="form-select form-select-sm" [(ngModel)]="newStaff.department">
-          <option>Academics</option>
-          <option>Administration</option>
-          <option>Science & Labs</option>
-          <option>Sports & Physical Edu</option>
-          <option>Library</option>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Last Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control form-control-premium" [(ngModel)]="newStaff.lastName" placeholder="e.g. Joshi">
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Department <span class="text-danger">*</span></label>
+        <select class="form-select form-control-premium" [(ngModel)]="newStaff.department">
+          <option *ngFor="let d of departments" [value]="d.name">{{ d.name }}</option>
         </select>
       </div>
-      <div class="col-6">
-        <label class="form-label small fw-bold">Designation</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.designation" placeholder="e.g. Math Faculty">
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Designation <span class="text-danger">*</span></label>
+        <select class="form-select form-control-premium" [(ngModel)]="newStaff.designation">
+          <option *ngFor="let des of designations" [value]="des.title">{{ des.title }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Official Email <span class="text-danger">*</span></label>
+        <input type="email" class="form-control form-control-premium" [(ngModel)]="newStaff.email" placeholder="faculty@easyedu.com">
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Contact Phone</label>
+        <input type="text" class="form-control form-control-premium" [(ngModel)]="newStaff.phone" placeholder="+91 98765 00000">
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Basic Monthly Salary (₹)</label>
+        <input type="number" class="form-control form-control-premium" [(ngModel)]="newStaff.basicSalary">
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label small fw-bold">Employment Contract Type</label>
+        <select class="form-select form-control-premium" [(ngModel)]="newStaff.contractType">
+          <option value="Permanent">Permanent / Full-Time</option>
+          <option value="Probation">Probationary (6 Months)</option>
+          <option value="Contractual">Contractual Faculty</option>
+        </select>
       </div>
     </div>
-    <div class="mb-2">
-      <label class="form-label small fw-bold">Official Email</label>
-      <input type="email" class="form-control form-control-sm" [(ngModel)]="newStaff.email" placeholder="faculty@easyedu.com">
+
+    <div class="text-end">
+      <button class="btn btn-secondary me-2" (click)="setTab('directory')">Cancel</button>
+      <button class="btn btn-primary px-4" (click)="addStaff()">
+        <i class="fas fa-save me-1"></i> Complete Onboarding & Save Staff Record
+      </button>
     </div>
-    <div class="mb-3">
-      <label class="form-label small fw-bold">Contact Phone</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.phone" placeholder="+91 98765 00000">
+  </div>
+
+  <!-- TAB 3: DESIGNATION -->
+  <div *ngIf="activeTab === 'designation'" class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Add Designation</h5>
+        <div class="mb-4">
+          <label class="form-label small fw-bold">Designation Title <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newDesignation" placeholder="e.g. Senior Faculty">
+        </div>
+        <button class="btn btn-primary w-100" (click)="addDesignation()">
+          <i class="fas fa-save me-1"></i> Save Designation
+        </button>
+      </div>
     </div>
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-sm btn-light" (click)="showAddModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="addStaff()"><i class="fas fa-check me-1"></i>Save Staff Profile</button>
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-id-badge text-primary me-2"></i>Designation Directory</h5>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Designation Title</th>
+                <th>Staff Count</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let des of designations">
+                <td><strong>{{ des.title }}</strong></td>
+                <td><span class="badge bg-primary rounded-pill px-3">{{ des.staffCount }} Active</span></td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="designations.splice(designations.indexOf(des), 1)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: DEPARTMENT -->
+  <div *ngIf="activeTab === 'department'" class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Add Department</h5>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Department Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newDept.name" placeholder="e.g. Physical Education">
+        </div>
+        <div class="mb-4">
+          <label class="form-label small fw-bold">Head of Department (HOD)</label>
+          <input type="text" class="form-control form-control-premium" [(ngModel)]="newDept.headOfDepartment" placeholder="e.g. Dr. Ramesh Sharma">
+        </div>
+        <button class="btn btn-primary w-100" (click)="addDepartment()">
+          <i class="fas fa-save me-1"></i> Save Department
+        </button>
+      </div>
+    </div>
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold mb-3"><i class="fas fa-sitemap text-primary me-2"></i>Department Directory</h5>
+        <div class="table-responsive">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Department Name</th>
+                <th>Head of Department</th>
+                <th>Staff Count</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of departments">
+                <td><strong>{{ d.name }}</strong></td>
+                <td>{{ d.headOfDepartment }}</td>
+                <td><span class="badge bg-primary rounded-pill px-3">{{ d.staffCount }} Staff</span></td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="departments.splice(departments.indexOf(d), 1)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: STAFF ATTENDANCE -->
+  <div *ngIf="activeTab === 'attendance'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="fw-bold mb-0"><i class="fas fa-user-check text-primary me-2"></i>Staff & Faculty Daily Attendance</h5>
+      <a routerLink="/attendance" class="btn btn-outline-primary btn-sm"><i class="fas fa-external-link-alt me-1"></i> Full Attendance Hub</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Staff ID</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Attendance Status</th>
+            <th>Biometric Punch Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of staffList">
+            <td><strong>{{ s.staffNo }}</strong></td>
+            <td>{{ s.firstName }} {{ s.lastName }}</td>
+            <td><span class="badge bg-light text-dark border">{{ s.designation }}</span></td>
+            <td><span class="badge bg-success">Present (On-Time)</span></td>
+            <td>08:24 AM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 6: PAYROLL -->
+  <div *ngIf="activeTab === 'payroll'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold mb-1"><i class="fas fa-file-invoice-dollar text-primary me-2"></i>Monthly Staff Payroll Processing</h5>
+        <p class="text-muted small mb-0">Compute gross compensation, allowances, statutory deductions, and issue salary vouchers</p>
+      </div>
+      <div class="d-flex gap-2">
+        <input type="month" class="form-control form-control-sm" [(ngModel)]="selectedPayrollMonth">
+        <button class="btn btn-primary btn-sm px-3"><i class="fas fa-calculator me-1"></i> Run Calculations</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Staff ID</th>
+            <th>Staff Name</th>
+            <th>Department</th>
+            <th>Basic Pay</th>
+            <th>Allowances</th>
+            <th>Deductions</th>
+            <th>Net Salary</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pr of payrollRecords">
+            <td><strong>{{ pr.staffNo }}</strong></td>
+            <td>{{ pr.staffName }}</td>
+            <td><span class="badge bg-light text-dark border">{{ pr.department }}</span></td>
+            <td>₹{{ pr.basicSalary.toLocaleString() }}</td>
+            <td class="text-success">+₹{{ pr.allowances.toLocaleString() }}</td>
+            <td class="text-danger">-₹{{ pr.deductions.toLocaleString() }}</td>
+            <td><strong class="text-primary">₹{{ pr.netSalary.toLocaleString() }}</strong></td>
+            <td>
+              <span class="badge" [ngClass]="pr.status === 'Paid' ? 'bg-success' : 'bg-warning text-dark'">
+                {{ pr.status }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-info me-1" (click)="generatePayslip(pr)" title="View Slip">
+                <i class="fas fa-file-invoice"></i>
+              </button>
+              <button class="btn btn-sm btn-success" *ngIf="pr.status === 'Generated'" (click)="processPayment(pr)" title="Disburse">
+                <i class="fas fa-check"></i> Pay
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 7: BULK PAYROLL PRINT -->
+  <div *ngIf="activeTab === 'bulk-payroll'" class="premium-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="fw-bold mb-0"><i class="fas fa-print text-primary me-2"></i>Batch Payroll Slips Print Wizard</h5>
+      <button class="btn btn-primary" onclick="window.print()">
+        <i class="fas fa-print me-1"></i> Print All Payroll Slips
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6" *ngFor="let pr of payrollRecords">
+        <div class="p-4 border rounded-4 bg-light">
+          <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+            <div>
+              <h6 class="fw-bold text-primary mb-0">EASYVIDYA INSTITUTION</h6>
+              <small class="text-muted">Salary Slip for Month: {{ selectedPayrollMonth }}</small>
+            </div>
+            <span class="badge bg-success">{{ pr.status }}</span>
+          </div>
+          <div class="row g-2 small mb-3">
+            <div class="col-6"><strong>Staff Name:</strong> {{ pr.staffName }}</div>
+            <div class="col-6"><strong>Staff ID:</strong> {{ pr.staffNo }}</div>
+            <div class="col-6"><strong>Department:</strong> {{ pr.department }}</div>
+            <div class="col-6"><strong>Role:</strong> {{ pr.role }}</div>
+          </div>
+          <div class="d-flex justify-content-between pt-2 border-top">
+            <span>Net Payable Amount:</span>
+            <strong class="text-primary fs-5">₹{{ pr.netSalary.toLocaleString() }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: STAFF SETTINGS -->
+  <div *ngIf="activeTab === 'settings'" class="premium-card">
+    <h5 class="fw-bold mb-3"><i class="fas fa-sliders-h text-primary me-2"></i>Human Resource & Payroll Configurations</h5>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Staff ID Code Prefix</label>
+        <input type="text" class="form-control form-control-premium mb-3" [(ngModel)]="staffSettings.staffIdPrefix">
+
+        <label class="form-label small fw-bold">Standard Weekly Working Hours</label>
+        <input type="number" class="form-control form-control-premium mb-3" [(ngModel)]="staffSettings.defaultWorkingHours">
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="autoStaffNo" [(ngModel)]="staffSettings.autoGenerateStaffNo">
+          <label class="form-check-label fw-bold" for="autoStaffNo">Auto-Generate Staff ID upon Onboarding</label>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-bold">Standard Probation Period (Months)</label>
+        <input type="number" class="form-control form-control-premium mb-3" [(ngModel)]="staffSettings.probationMonths">
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="bioReq" [(ngModel)]="staffSettings.requireBiometricId">
+          <label class="form-check-label fw-bold" for="bioReq">Require Biometric Device Enrolment for Attendance</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end mt-4">
+      <button class="btn btn-primary" (click)="saveSettings()">
+        <i class="fas fa-save me-1"></i> Save Staff Configurations
+      </button>
     </div>
   </div>
 </div>

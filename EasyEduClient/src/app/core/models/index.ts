@@ -42,6 +42,9 @@ export interface Student {
   rollNo?: string;
   photoUrl?: string;
   isActive: boolean;
+  guardianName?: string;
+  fatherName?: string;
+  motherName?: string;
 }
 
 export interface Staff {

@@ -1,29 +1,50 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
-import { AttendanceRecord, Student } from '../../core/models';
+import { AttendanceRecord } from '../../core/models';
 
 declare const Swal: any;
 
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './attendance.component.html',
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
   private api = inject(ApiService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  viewMode: 'daily' | 'subject' | 'report' = 'daily';
   attendanceType: 'student' | 'staff' = 'student';
   selectedDate: string = new Date().toISOString().split('T')[0];
   selectedClass: string = 'Grade 10';
+  selectedSection: string = 'Section A';
+  selectedSubject: string = 'Physics';
+
   attendanceRecords: AttendanceRecord[] = [];
   staffAttendanceRecords: AttendanceRecord[] = [];
+
+  subjects = ['Physics', 'Mathematics', 'Chemistry', 'English Literature', 'Biology', 'Computer Science'];
 
   ngOnInit(): void {
     this.loadStudentAttendance();
     this.loadStaffAttendance();
+
+    this.route.url.subscribe(() => {
+      const path = this.router.url.toLowerCase();
+      if (path.includes('subjectwiseattendance')) {
+        this.viewMode = 'subject';
+      } else if (path.includes('attendance/report')) {
+        this.viewMode = 'report';
+      } else {
+        this.viewMode = 'daily';
+      }
+    });
   }
 
   loadStudentAttendance(): void {
@@ -40,7 +61,7 @@ export class AttendanceComponent implements OnInit {
 
   loadStaffAttendance(): void {
     this.api.getStaff().subscribe(staff => {
-      this.staffAttendanceRecords = staff.map((st, index) => ({
+      this.staffAttendanceRecords = staff.map((st) => ({
         studentId: st.id,
         studentName: `${st.firstName} ${st.lastName} (${st.designation})`,
         rollNo: st.staffNo,
@@ -81,3 +102,4 @@ export class AttendanceComponent implements OnInit {
     });
   }
 }
+

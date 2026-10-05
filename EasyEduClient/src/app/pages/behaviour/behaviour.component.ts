@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 declare const Swal: any;
 
-interface Incident {
+export interface Incident {
   id: number;
   title: string;
   type: 'Positive Merit (+)' | 'Negative Infraction (-)';
@@ -12,7 +13,7 @@ interface Incident {
   description: string;
 }
 
-interface AssignedIncident {
+export interface AssignedIncident {
   id: number;
   studentName: string;
   admissionNo: string;
@@ -28,12 +29,15 @@ interface AssignedIncident {
 @Component({
   selector: 'app-behaviour',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './behaviour.component.html',
   styleUrls: ['./behaviour.component.css']
 })
 export class BehaviourComponent implements OnInit {
-  activeTab: 'log' | 'assign' | 'incidents' | 'reports' = 'log';
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  activeTab: 'incidents' | 'assign' | 'student-report' | 'behaviour-report' | 'class-section-report' | 'incident-wise-report' | 'settings' | 'log' = 'incidents';
 
   incidentsMaster: Incident[] = [
     { id: 1, title: 'Exemplary Leadership in School Event', type: 'Positive Merit (+)', point: 10, description: 'Demonstrated proactive leadership and team coordination in inter-house competitions.' },
@@ -47,7 +51,8 @@ export class BehaviourComponent implements OnInit {
   assignedList: AssignedIncident[] = [
     { id: 1, studentName: 'Aarav Sharma', admissionNo: 'ADM-2024-001', class: 'Grade 10-A', incidentTitle: 'Exemplary Leadership in School Event', type: 'Positive Merit (+)', point: 10, assignedDate: '2025-05-02', assignedBy: 'Dr. Ramesh Sharma', remarks: 'Led science fair team to victory.' },
     { id: 2, studentName: 'Ananya Verma', admissionNo: 'ADM-2024-004', class: 'Grade 9-A', incidentTitle: 'Outstanding Academic Scholastic Effort', type: 'Positive Merit (+)', point: 8, assignedDate: '2025-05-01', assignedBy: 'Pooja Hegde', remarks: 'Highest score in term essay.' },
-    { id: 3, studentName: 'Rohan Gupta', admissionNo: 'ADM-2024-003', class: 'Grade 10-A', incidentTitle: 'Unexcused Classroom Disruption / Late Arrival', type: 'Negative Infraction (-)', point: -3, assignedDate: '2025-04-29', assignedBy: 'Sunita Nair', remarks: 'Arrived 20 mins late for chemistry practicals.' }
+    { id: 3, studentName: 'Rohan Gupta', admissionNo: 'ADM-2024-003', class: 'Grade 10-A', incidentTitle: 'Unexcused Classroom Disruption / Late Arrival', type: 'Negative Infraction (-)', point: -3, assignedDate: '2025-04-29', assignedBy: 'Sunita Nair', remarks: 'Arrived 20 mins late for chemistry practicals.' },
+    { id: 4, studentName: 'Aditi Rao', admissionNo: 'ADM-2024-002', class: 'Grade 10-A', incidentTitle: 'Civic Duty & Campus Cleanliness Champion', type: 'Positive Merit (+)', point: 5, assignedDate: '2025-05-03', assignedBy: 'Admin Team', remarks: 'Tree plantation drive coordinator.' }
   ];
 
   // Assign Modal / Form
@@ -68,7 +73,39 @@ export class BehaviourComponent implements OnInit {
     description: ''
   };
 
-  ngOnInit(): void {}
+  // Settings
+  behaviourSettings = {
+    warningThresholdPoints: -10,
+    commendationThresholdPoints: 25,
+    sendSmsOnNegativeIncident: true,
+    sendSmsOnPositiveIncident: true,
+    allowTeacherDirectAssign: true
+  };
+
+  ngOnInit(): void {
+    this.route.url.subscribe(() => {
+      const path = this.router.url.toLowerCase();
+      if (path.includes('assignincident')) {
+        this.activeTab = 'assign';
+      } else if (path.includes('studentincidentreport')) {
+        this.activeTab = 'student-report';
+      } else if (path.includes('behaviourreport')) {
+        this.activeTab = 'behaviour-report';
+      } else if (path.includes('classsectionreport')) {
+        this.activeTab = 'class-section-report';
+      } else if (path.includes('incidentwisereport')) {
+        this.activeTab = 'incident-wise-report';
+      } else if (path.includes('behaviourrecords/settings') || path.includes('behaviour/settings')) {
+        this.activeTab = 'settings';
+      } else if (path.includes('incidents')) {
+        this.activeTab = 'incidents';
+      }
+    });
+  }
+
+  setTab(tab: any): void {
+    this.activeTab = tab;
+  }
 
   saveAssignedIncident(): void {
     const inc = this.incidentsMaster.find(i => i.id === Number(this.assignForm.incidentId));
@@ -118,4 +155,9 @@ export class BehaviourComponent implements OnInit {
 
     Swal.fire('Incident Rule Saved', 'New behavioral incident metric registered.', 'success');
   }
+
+  saveSettings(): void {
+    Swal.fire('Settings Saved', 'Disciplinary policy configurations updated.', 'success');
+  }
 }
+
