@@ -219,12 +219,22 @@
       </div>
       <div class="row g-3 mb-4">
         <div class="col-md-4">
-          <label class="form-label small fw-bold">Currency Symbol / Code</label>
-          <input type="text" class="form-control" [(ngModel)]="profile.currency">
+          <label class="form-label small fw-bold d-flex align-items-center justify-content-between">
+            <span><i class="fas fa-indian-rupee-sign text-success me-1"></i> System Currency Standard *</span>
+            <span class="badge bg-success bg-opacity-10 text-success" style="font-size: 0.7rem;">Default: INR (₹)</span>
+          </label>
+          <select class="form-select modern-select" [(ngModel)]="profile.currency" style="border-radius: 10px; padding: 0.65rem 0.9rem; font-weight: 600;">
+            <option *ngFor="let curr of currencies" [value]="curr.label">
+              {{ curr.label }}
+            </option>
+          </select>
+          <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
+            <i class="fas fa-circle-info text-primary me-1"></i> Formats all fees, payroll, vouchers & ledger balances
+          </small>
         </div>
         <div class="col-md-4">
           <label class="form-label small fw-bold">Date Format</label>
-          <select class="form-select" [(ngModel)]="profile.dateFormat">
+          <select class="form-select" [(ngModel)]="profile.dateFormat" style="border-radius: 10px; padding: 0.65rem 0.9rem;">
             <option value="DD/MM/YYYY">DD/MM/YYYY (e.g. 15/08/2026)</option>
             <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
             <option value="MM/DD/YYYY">MM/DD/YYYY</option>
@@ -232,7 +242,7 @@
         </div>
         <div class="col-md-4">
           <label class="form-label small fw-bold">System Timezone</label>
-          <select class="form-select" [(ngModel)]="profile.timeZone">
+          <select class="form-select" [(ngModel)]="profile.timeZone" style="border-radius: 10px; padding: 0.65rem 0.9rem;">
             <option value="Asia/Kolkata (IST +5:30)">Asia/Kolkata (IST +5:30)</option>
             <option value="UTC">UTC Universal</option>
             <option value="America/New_York (EST)">America/New_York (EST)</option>

@@ -148,8 +148,8 @@
               <th style="width: 140px;">TYPE</th>
               <th style="width: 320px;">ACCOUNT HEAD / LEDGER</th>
               <th style="width: 150px;">BALANCE</th>
-              <th style="width: 170px;">DEBIT ($)</th>
-              <th style="width: 170px;">CREDIT ($)</th>
+              <th style="width: 170px;">DEBIT (₹)</th>
+              <th style="width: 170px;">CREDIT (₹)</th>
               <th>REMARKS</th>
               <th style="width: 40px;"></th>
             </tr>
@@ -181,14 +181,14 @@
 
               <td>
                 <div class="currency-input-box">
-                  <span class="currency-symbol">$</span>
+                  <span class="currency-symbol">₹</span>
                   <input type="number" min="0" step="any" [(ngModel)]="row.debit" placeholder="0">
                 </div>
               </td>
 
               <td>
                 <div class="currency-input-box">
-                  <span class="currency-symbol">$</span>
+                  <span class="currency-symbol">₹</span>
                   <input type="number" min="0" step="any" [(ngModel)]="row.credit" placeholder="0">
                 </div>
               </td>
@@ -576,7 +576,7 @@
             <th>Account Code</th>
             <th>Account Title</th>
             <th>Category</th>
-            <th class="text-end">Current Balance ($)</th>
+            <th class="text-end">Current Balance (₹)</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -594,7 +594,7 @@
               }">{{ a.category }}</span>
             </td>
             <td class="text-end fw-bold" [ngClass]="a.category === 'Expense' ? 'text-danger' : 'text-dark'">
-              ${{ a.balance | number:'1.2-2' }}
+              ₹{{ a.balance | number:'1.2-2' }}
             </td>
             <td class="text-center">
               <button class="btn btn-sm btn-light rounded-8 px-2 py-1 me-1 text-primary" (click)="selectedLedgerHead = a.name; navigateToTab('ledger')" title="View Account Ledger">
@@ -1099,7 +1099,7 @@
 
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <h6 class="fw-bold mb-0">Total Assets:</h6>
-            <h5 class="fw-bold text-primary mb-0">$3,814,000.00</h5>
+            <h5 class="fw-bold text-primary mb-0">₹3,814,000.00</h5>
           </div>
         </div>
       </div>
@@ -1113,11 +1113,11 @@
           <ul class="list-group list-group-flush bg-transparent mb-3">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Institutional Capital Fund</span>
-              <strong class="text-dark">$2,500,000.00</strong>
+              <strong class="text-dark">₹2,500,000.00</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Current Year Operating Surplus</span>
-              <strong class="text-success">$1,239,000.00</strong>
+              <strong class="text-success">₹1,239,000.00</strong>
             </li>
           </ul>
 
@@ -1125,13 +1125,13 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Vendor & Supplier Payables</span>
-              <strong class="text-dark">$75,000.00</strong>
+              <strong class="text-dark">₹75,000.00</strong>
             </li>
           </ul>
 
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <h6 class="fw-bold mb-0">Total Liabilities & Equity:</h6>
-            <h5 class="fw-bold text-dark mb-0">$3,814,000.00</h5>
+            <h5 class="fw-bold text-dark mb-0">₹3,814,000.00</h5>
           </div>
         </div>
       </div>
@@ -1139,7 +1139,7 @@
 
     <div class="alert alert-primary d-flex align-items-center gap-2 rounded-12 mb-0">
       <i class="fas fa-circle-check fs-5"></i>
-      <span><strong>Balance Sheet Equilibrium:</strong> Assets ($3,814,000.00) = Liabilities ($75,000.00) + Capital Fund & Reserves ($3,739,000.00).</span>
+      <span><strong>Balance Sheet Equilibrium:</strong> Assets (₹3,814,000.00) = Liabilities (₹75,000.00) + Capital Fund & Reserves (₹3,739,000.00).</span>
     </div>
   </div>
 
@@ -1472,7 +1472,7 @@
           <input type="text" class="form-control" [(ngModel)]="newAccount.name" placeholder="e.g. Sports & Fitness Equipment">
         </div>
         <div class="col-12">
-          <label class="form-label small fw-bold">Opening Balance ($)</label>
+          <label class="form-label small fw-bold">Opening Balance (₹)</label>
           <input type="number" class="form-control" [(ngModel)]="newAccount.balance" placeholder="0.00">
         </div>
       </div>
@@ -1517,7 +1517,7 @@
           <input type="text" class="form-control" [(ngModel)]="newItemAccount.unit" placeholder="Pcs / Box">
         </div>
         <div class="col-md-4">
-          <label class="form-label small fw-bold">Unit Rate ($)</label>
+          <label class="form-label small fw-bold">Unit Rate (₹)</label>
           <input type="number" class="form-control" [(ngModel)]="newItemAccount.rate" placeholder="0.00">
         </div>
       </div>

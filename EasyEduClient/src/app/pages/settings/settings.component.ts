@@ -123,6 +123,25 @@ export class SettingsComponent implements OnInit {
     licenseExpiry: '31 Dec 2027'
   };
 
+  // Currencies list with Indian Rupee (INR) as the default standard
+  currencies = [
+    { code: 'INR', symbol: '₹', name: 'Indian Rupee', label: 'INR (₹) - Indian Rupee (Default)' },
+    { code: 'USD', symbol: '$', name: 'US Dollar', label: 'USD ($) - United States Dollar' },
+    { code: 'EUR', symbol: '€', name: 'Euro', label: 'EUR (€) - European Union Euro' },
+    { code: 'GBP', symbol: '£', name: 'British Pound', label: 'GBP (£) - British Pound Sterling' },
+    { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', label: 'AED (د.إ) - UAE Dirham' },
+    { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal', label: 'SAR (﷼) - Saudi Arabian Riyal' },
+    { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', label: 'CAD (C$) - Canadian Dollar' },
+    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', label: 'AUD (A$) - Australian Dollar' },
+    { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', label: 'SGD (S$) - Singapore Dollar' },
+    { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', label: 'BDT (৳) - Bangladeshi Taka' },
+    { code: 'NPR', symbol: 'रू', name: 'Nepalese Rupee', label: 'NPR (रू) - Nepalese Rupee' },
+    { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', label: 'LKR (Rs) - Sri Lankan Rupee' },
+    { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit', label: 'MYR (RM) - Malaysian Ringgit' },
+    { code: 'QAR', symbol: 'QR', name: 'Qatari Riyal', label: 'QAR (QR) - Qatari Riyal' },
+    { code: 'KWD', symbol: 'KD', name: 'Kuwaiti Dinar', label: 'KWD (KD) - Kuwaiti Dinar' }
+  ];
+
   // 2. Institutional Identity (General Settings)
   profile = {
     schoolName: 'EasyEdu International Academy',
@@ -296,6 +315,16 @@ export class SettingsComponent implements OnInit {
   showNewFieldModal = false;
 
   ngOnInit(): void {
+    // Load persisted institutional profile from localStorage if present
+    const savedProfile = localStorage.getItem('easyedu_settings_profile');
+    if (savedProfile) {
+      try {
+        this.profile = { ...this.profile, ...JSON.parse(savedProfile) };
+      } catch (e) {
+        console.warn('Failed to parse saved profile', e);
+      }
+    }
+
     this.route.url.subscribe(segments => {
       const path = segments.map(s => s.path).join('/').toLowerCase();
       this.detectTabFromUrl(path);
@@ -328,9 +357,10 @@ export class SettingsComponent implements OnInit {
   }
 
   saveIdentity(): void {
+    localStorage.setItem('easyedu_settings_profile', JSON.stringify(this.profile));
     Swal.fire({
       title: 'Institutional Profile Updated',
-      text: 'Institutional legal identity and letterhead configurations saved.',
+      text: `Institutional settings saved. Primary currency set to: ${this.profile.currency}`,
       icon: 'success',
       confirmButtonColor: '#002B49'
     });
