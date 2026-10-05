@@ -82,6 +82,14 @@
   overflow: hidden;
   color: white;
   transition: all 0.3s ease;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+.stat-premium-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  color: white;
 }
 
 .stat-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }

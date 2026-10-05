@@ -15,25 +15,25 @@
         <div class="professional-grid">
           <!-- Accounting Vouchers -->
           <div class="grid-item">
-            <a routerLink="/fees" class="action-btn">
+            <a routerLink="/Accounting/ReceiptVoucher" class="action-btn" title="Create Receipt Voucher">
               <div class="icon-circle receipt"><i class="fas fa-plus-circle"></i></div>
               <span class="btn-label">Receipt</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/fees" class="action-btn">
+            <a routerLink="/Accounting/PaymentVoucher" class="action-btn" title="Create Payment Voucher">
               <div class="icon-circle payment"><i class="fas fa-minus-circle"></i></div>
               <span class="btn-label">Payment</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/fees" class="action-btn">
+            <a routerLink="/Accounting/JournalVoucher" class="action-btn" title="Create Journal Voucher">
               <div class="icon-circle journal"><i class="fas fa-exchange-alt"></i></div>
               <span class="btn-label">Journal</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/fees" class="action-btn">
+            <a routerLink="/Accounting/ContraVoucher" class="action-btn" title="Create Contra Entry">
               <div class="icon-circle contra"><i class="fas fa-university"></i></div>
               <span class="btn-label">Contra</span>
             </a>
@@ -41,61 +41,61 @@
 
           <!-- Core School Management -->
           <div class="grid-item">
-            <a routerLink="/students/admission" class="action-btn">
+            <a routerLink="/students/admission" class="action-btn" title="Register New Student">
               <div class="icon-circle student"><i class="fas fa-user-plus"></i></div>
               <span class="btn-label">Student</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/attendance" class="action-btn">
+            <a routerLink="/attendance" class="action-btn" title="Mark Student Attendance">
               <div class="icon-circle attendance"><i class="fas fa-calendar-check"></i></div>
               <span class="btn-label">Attendance</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/fees" class="action-btn">
+            <a routerLink="/Finance/CollectFee" class="action-btn" title="Collect Fees & Invoices">
               <div class="icon-circle fees"><i class="fas fa-file-invoice-dollar"></i></div>
               <span class="btn-label">Fees</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/fees" class="action-btn">
+            <a routerLink="/Accounting/ChartOfAccounts" class="action-btn" title="Chart of Accounts Master">
               <div class="icon-circle accounts"><i class="fas fa-list-ul"></i></div>
               <span class="btn-label">A/c Master</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/administration" class="action-btn">
+            <a [routerLink]="['/administration']" [queryParams]="{tab: 'visitors'}" class="action-btn" title="Front Desk Visitor Book">
               <div class="icon-circle visitor"><i class="fas fa-book-open"></i></div>
               <span class="btn-label">Visitors</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/academic/classes" class="action-btn">
+            <a routerLink="/homework" class="action-btn" title="Assign & Evaluate Homework">
               <div class="icon-circle homework"><i class="fas fa-book-reader"></i></div>
               <span class="btn-label">Homework</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/transport" class="action-btn">
+            <a routerLink="/transport" class="action-btn" title="Transport & Fleet Logistics">
               <div class="icon-circle transport"><i class="fas fa-shuttle-van"></i></div>
               <span class="btn-label">Transport</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/staff" class="action-btn">
+            <a routerLink="/HumanResource/AddStaff" class="action-btn" title="Recruit & Add Staff Member">
               <div class="icon-circle staff"><i class="fas fa-user-tie"></i></div>
               <span class="btn-label">Add Staff</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/administration" class="action-btn">
+            <a routerLink="/Communicate/SendEmail" class="action-btn" title="Send Broadcast SMS & Email">
               <div class="icon-circle sms"><i class="fas fa-sms"></i></div>
               <span class="btn-label">Send SMS</span>
             </a>
           </div>
           <div class="grid-item">
-            <a routerLink="/settings" class="action-btn">
+            <a routerLink="/settings" class="action-btn" title="System & Global Settings">
               <div class="icon-circle settings"><i class="fas fa-cog"></i></div>
               <span class="btn-label">Settings</span>
             </a>
@@ -108,7 +108,7 @@
   <!-- 2. Main Statistics Overview Cards (stat-blue, stat-indigo, stat-emerald, stat-rose) -->
   <div class="row g-3 mb-4">
     <div class="col-12 col-sm-6 col-xl-3">
-      <div class="stat-premium-card stat-blue">
+      <a routerLink="/students" class="stat-premium-card stat-blue">
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Students</div>
@@ -116,12 +116,12 @@
           </div>
           <div class="stat-icon-bg"><i class="fas fa-user-graduate"></i></div>
         </div>
-        <div class="stat-footer mt-3"><i class="fas fa-arrow-up me-1"></i> 4.5% Since last month</div>
-      </div>
+        <div class="stat-footer mt-3"><i class="fas fa-arrow-up me-1"></i> 4.5% Since last month • Click to View</div>
+      </a>
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
-      <div class="stat-premium-card stat-indigo">
+      <a routerLink="/HumanResource/StaffDirectory" class="stat-premium-card stat-indigo">
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Teachers</div>
@@ -129,12 +129,12 @@
           </div>
           <div class="stat-icon-bg"><i class="fas fa-chalkboard-teacher"></i></div>
         </div>
-        <div class="stat-footer mt-3"><i class="fas fa-check-circle me-1"></i> Active Status Verified</div>
-      </div>
+        <div class="stat-footer mt-3"><i class="fas fa-check-circle me-1"></i> Active Status Verified • Staff Directory</div>
+      </a>
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
-      <div class="stat-premium-card stat-emerald">
+      <a routerLink="/students" class="stat-premium-card stat-emerald">
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Parents</div>
@@ -142,12 +142,12 @@
           </div>
           <div class="stat-icon-bg"><i class="fas fa-users"></i></div>
         </div>
-        <div class="stat-footer mt-3"><i class="fas fa-link me-1"></i> 92% Portal Active</div>
-      </div>
+        <div class="stat-footer mt-3"><i class="fas fa-link me-1"></i> 92% Portal Active • Student Directory</div>
+      </a>
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
-      <div class="stat-premium-card stat-rose">
+      <a routerLink="/Accounting" class="stat-premium-card stat-rose">
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Revenue</div>
@@ -155,8 +155,8 @@
           </div>
           <div class="stat-icon-bg"><i class="fas fa-money-bill-trend-up"></i></div>
         </div>
-        <div class="stat-footer mt-3"><i class="fas fa-chart-line me-1"></i> 0.0K Target Achieved</div>
-      </div>
+        <div class="stat-footer mt-3"><i class="fas fa-chart-line me-1"></i> Financial Center Dashboard</div>
+      </a>
     </div>
   </div>
 
@@ -170,9 +170,14 @@
             <h5 class="fw-bold text-dark m-0">Finance Survey</h5>
             <p class="text-muted small m-0">Income vs Expenses Overview (2026-27)</p>
           </div>
-          <div class="btn-group btn-group-sm">
-            <button class="btn" [class.btn-primary]="surveyFilter === 'year'" [class.btn-light]="surveyFilter !== 'year'" (click)="setSurveyFilter('year')">This Year</button>
-            <button class="btn" [class.btn-primary]="surveyFilter === 'month'" [class.btn-light]="surveyFilter !== 'month'" (click)="setSurveyFilter('month')">This Month</button>
+          <div class="d-flex align-items-center gap-2">
+            <div class="btn-group btn-group-sm">
+              <button class="btn" [class.btn-primary]="surveyFilter === 'year'" [class.btn-light]="surveyFilter !== 'year'" (click)="setSurveyFilter('year')">This Year</button>
+              <button class="btn" [class.btn-primary]="surveyFilter === 'month'" [class.btn-light]="surveyFilter !== 'month'" (click)="setSurveyFilter('month')">This Month</button>
+            </div>
+            <a routerLink="/Accounting" class="btn btn-sm btn-outline-primary fw-bold" title="Open Financial Center">
+              <i class="fas fa-arrow-up-right-from-square me-1"></i> Full Center
+            </a>
           </div>
         </div>
 
@@ -192,46 +197,55 @@
         </div>
 
         <!-- Simulated Visual Line Chart Graphic -->
-        <div class="chart-visual-box p-3 rounded-12 bg-light-subtle position-relative overflow-hidden" style="height: 220px;">
-          <svg viewBox="0 0 500 150" class="w-100 h-100" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="gradIncome" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
-                <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path d="M0,120 Q80,80 150,90 T300,50 T450,20 L500,10 L500,150 L0,150 Z" fill="url(#gradIncome)" />
-            <path d="M0,120 Q80,80 150,90 T300,50 T450,20 L500,10" fill="none" stroke="#6366f1" stroke-width="3" />
-            <path d="M0,135 Q100,110 200,115 T350,85 T500,60" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4" />
-          </svg>
-          <div class="d-flex justify-content-between text-muted small mt-2 px-1">
-            <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+        <a routerLink="/Accounting" class="d-block text-decoration-none" title="View Detailed Financial Reports">
+          <div class="chart-visual-box p-3 rounded-12 bg-light-subtle position-relative overflow-hidden" style="height: 220px; cursor: pointer;">
+            <svg viewBox="0 0 500 150" class="w-100 h-100" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="gradIncome" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,120 Q80,80 150,90 T300,50 T450,20 L500,10 L500,150 L0,150 Z" fill="url(#gradIncome)" />
+              <path d="M0,120 Q80,80 150,90 T300,50 T450,20 L500,10" fill="none" stroke="#6366f1" stroke-width="3" />
+              <path d="M0,135 Q100,110 200,115 T350,85 T500,60" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4" />
+            </svg>
+            <div class="d-flex justify-content-between text-muted small mt-2 px-1">
+              <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
     <!-- Student Admissions Breakdown -->
     <div class="col-12 col-lg-4">
       <div class="premium-card h-100 d-flex flex-column justify-content-between">
-        <div>
-          <h5 class="fw-bold text-dark m-0">Student Admissions</h5>
-          <p class="text-muted small m-0 mb-4">Current Session Distribution</p>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <div>
+            <h5 class="fw-bold text-dark m-0">Student Admissions</h5>
+            <p class="text-muted small m-0">Current Session Distribution</p>
+          </div>
+          <a routerLink="/students" class="btn btn-sm btn-outline-secondary" title="View Students">
+            <i class="fas fa-users"></i>
+          </a>
         </div>
 
         <div class="text-center my-3">
-          <div class="donut-chart-box position-relative d-inline-block">
-            <svg width="150" height="150" viewBox="0 0 36 36" class="circular-chart">
-              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3.8"/>
-              <path class="circle" stroke-dasharray="45, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#7c3aed" stroke-width="3.8"/>
-              <path class="circle" stroke-dasharray="35, 100" stroke-dashoffset="-45" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#3b82f6" stroke-width="3.8"/>
-              <path class="circle" stroke-dasharray="20, 100" stroke-dashoffset="-80" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ec4899" stroke-width="3.8"/>
-            </svg>
-            <div class="position-absolute top-50 start-50 translate-middle text-center">
-              <h4 class="fw-bold m-0 text-dark">1,250</h4>
-              <small class="text-muted" style="font-size: 0.7rem;">Students</small>
+          <a routerLink="/students" class="text-decoration-none">
+            <div class="donut-chart-box position-relative d-inline-block" style="cursor: pointer;">
+              <svg width="150" height="150" viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3.8"/>
+                <path class="circle" stroke-dasharray="45, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#7c3aed" stroke-width="3.8"/>
+                <path class="circle" stroke-dasharray="35, 100" stroke-dashoffset="-45" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#3b82f6" stroke-width="3.8"/>
+                <path class="circle" stroke-dasharray="20, 100" stroke-dashoffset="-80" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ec4899" stroke-width="3.8"/>
+              </svg>
+              <div class="position-absolute top-50 start-50 translate-middle text-center">
+                <h4 class="fw-bold m-0 text-dark">1,250</h4>
+                <small class="text-muted" style="font-size: 0.7rem;">Students</small>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
 
         <div class="w-100 pt-3 border-top">
@@ -259,11 +273,11 @@
       <div class="premium-card h-100">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="fw-bold text-dark m-0">Notice Board</h5>
-          <button class="btn btn-sm btn-outline-primary">VIEW ALL</button>
+          <a routerLink="/Communicate/NoticeBoard" class="btn btn-sm btn-outline-primary">VIEW ALL</a>
         </div>
 
         <div class="notice-list">
-          <div *ngFor="let n of notices" class="notice-item d-flex gap-3 mb-3 p-3 rounded-12 border-start border-4 border-primary bg-light">
+          <div *ngFor="let n of notices" class="notice-item d-flex gap-3 mb-3 p-3 rounded-12 border-start border-4 border-primary bg-light" routerLink="/Communicate/NoticeBoard" style="cursor: pointer;">
             <div class="notice-date text-center" style="min-width: 48px;">
               <h5 class="fw-bold m-0 text-primary">{{ n.day }}</h5>
               <div class="small fw-bold text-muted">{{ n.month }}</div>
@@ -282,7 +296,7 @@
       <div class="premium-card h-100">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="fw-bold text-dark m-0">Event Calendar</h5>
-          <h6 class="fw-bold m-0 small text-primary">October 2026</h6>
+          <a routerLink="/Communicate/Calendar" class="fw-bold m-0 small text-primary text-decoration-none">October 2026 <i class="fas fa-chevron-right ms-1"></i></a>
         </div>
 
         <div class="calendar-grid">
@@ -292,6 +306,7 @@
             class="calendar-cell"
             [class.empty-cell]="!c.day"
             [class.today-cell]="c.isToday"
+            routerLink="/Communicate/Calendar"
           >
             <span *ngIf="c.day">{{ c.day }}</span>
             <div *ngIf="c.hasEvent" class="dot-event"></div>

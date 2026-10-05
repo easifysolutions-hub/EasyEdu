@@ -27,7 +27,7 @@
   [class.mobile-open]="themeService.isMobileSidebarOpen()"
 >
   <div class="sidebar-brand">
-    <a routerLink="/" class="brand-link-hub">
+    <a routerLink="/dashboard" class="brand-link-hub" title="Go to Dashboard">
       <div class="brand-brand-easyedu">
         <img src="/images/easyedu_full_logo.png" alt="EasyEdu Logo" class="brand-logo-img" style="height: 48px; width: auto; object-fit: contain;" />
       </div>
@@ -298,8 +298,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['accounts']">
+        <!-- Dashboard Section -->
+        <li><a routerLink="/Accounting" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-primary fw-bold"><i class="fas fa-gauge me-2"></i> Accounting Dashboard</a></li>
+
         <!-- Vouchers Section -->
-        <li class="pt-1">
+        <li class="pt-2 border-top border-secondary border-opacity-25">
           <div class="sidebar-sub-heading">Vouchers</div>
         </li>
         <li><a routerLink="/Accounting/PaymentVoucher" routerLinkActive="active" class="sub-nav-link ps-4 text-danger fw-bold">Payment Voucher</a></li>

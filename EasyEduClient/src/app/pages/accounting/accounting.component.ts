@@ -56,7 +56,7 @@ export class AccountingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  activeTab: 'entry' | 'dashboard' | 'vouchers' | 'chart' | 'item-chart' | 'ledger' | 'trial' | 'receipt-payment' | 'profit-loss' | 'balance-sheet' = 'entry';
+  activeTab: 'entry' | 'dashboard' | 'vouchers' | 'chart' | 'item-chart' | 'ledger' | 'trial' | 'receipt-payment' | 'profit-loss' | 'balance-sheet' = 'dashboard';
   trendPeriod: 'yearly' | 'monthly' = 'yearly';
   searchTerm = '';
   selectedType = 'All';
@@ -192,10 +192,9 @@ export class AccountingComponent implements OnInit {
       this.activeTab = 'balance-sheet';
     } else if (path.includes('voucherlist')) {
       this.activeTab = 'vouchers';
-    } else if (path.includes('dashboard') || path.includes('financialcenter')) {
+    } else {
+      // Default to Financial Command Center / Accounting Dashboard for /Accounting or /accounts
       this.activeTab = 'dashboard';
-    } else if (path.includes('accounting') || path.includes('accounts')) {
-      this.activeTab = 'entry';
     }
   }
 
@@ -506,6 +505,22 @@ export class AccountingComponent implements OnInit {
     }).then((res: any) => {
       if (res.isConfirmed) {
         Swal.fire('Data Seeded!', 'Fiscal chart & sample records loaded successfully.', 'success');
+      }
+    });
+  }
+
+  deleteVoucher(id: string): void {
+    Swal.fire({
+      title: 'Delete Voucher Entry?',
+      text: 'Are you sure you want to delete this recorded voucher entry?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      confirmButtonColor: '#ef4444'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        this.vouchers = this.vouchers.filter(v => v.id !== id);
+        Swal.fire('Deleted', 'Voucher entry removed successfully.', 'success');
       }
     });
   }
