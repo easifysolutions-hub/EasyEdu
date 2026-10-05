@@ -1,0 +1,326 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Inventory & Institutional Asset Stores</h3>
+      <p class="text-muted small mb-0">Manage stock procurement, item issuance to staff/students, store rooms, and supplier directories</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showIssueModal = true">
+        <i class="fas fa-hand-holding me-1"></i> Issue Item
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="showAddItemModal = true">
+        <i class="fas fa-plus-circle me-1"></i> Add Inventory Item
+      </button>
+    </div>
+  </div>
+
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-boxes-stacked fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">CATALOG</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ items.length }} Item Types</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">{{ totalItemsCount }} Units in Stock</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-share-from-square fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ISSUED</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ issuedItems.length }} Issued</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">To Faculty, Labs & Students</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-truck-field fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">VENDORS</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ suppliers.length }} Suppliers</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Contracted Procurement</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-triangle-exclamation fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ALERT</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ lowStockCount }} Low Stock</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Items Below Reorder Threshold</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'items'" (click)="activeTab = 'items'">
+          <i class="fas fa-boxes-stacked me-2"></i> Inventory Item Catalog
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'issue'" (click)="activeTab = 'issue'">
+          <i class="fas fa-hand-holding-box me-2"></i> Item Issuance Desk
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'suppliers'" (click)="activeTab = 'suppliers'">
+          <i class="fas fa-truck-field me-2"></i> Suppliers & Vendors
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Item Catalog -->
+  <div *ngIf="activeTab === 'items'" class="premium-card animate-fade-in">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <div class="d-flex flex-wrap gap-2 align-items-center flex-grow-1" style="max-width: 600px;">
+        <div class="search-bar-modern flex-grow-1">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="w-100" [(ngModel)]="searchTerm" placeholder="Search item name, store, category...">
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <select class="form-select modern-select" style="width: 180px;" [(ngModel)]="categoryFilter">
+          <option value="All">All Categories</option>
+          <option value="Stationery & Office">Stationery & Office</option>
+          <option value="Classroom Supplies">Classroom Supplies</option>
+          <option value="Sports Goods">Sports Goods</option>
+          <option value="Science Laboratory">Science Laboratory</option>
+          <option value="Uniforms & Apparel">Uniforms & Apparel</option>
+        </select>
+        <button class="btn btn-primary" (click)="showAddItemModal = true">
+          <i class="fas fa-plus"></i> Add Item
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Item Description</th>
+            <th>Category</th>
+            <th>Store Room</th>
+            <th>Unit</th>
+            <th>In Stock</th>
+            <th>Unit Price</th>
+            <th>Supplier</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredItems">
+            <td><strong class="text-dark">{{ item.name }}</strong></td>
+            <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ item.category }}</span></td>
+            <td><span class="badge bg-light text-dark border">{{ item.store }}</span></td>
+            <td>{{ item.unit }}</td>
+            <td>
+              <strong [ngClass]="item.inStock <= item.minimumStock ? 'text-danger' : 'text-success'">
+                {{ item.inStock }} {{ item.unit }}
+              </strong>
+              <span *ngIf="item.inStock <= item.minimumStock" class="badge bg-danger ms-1">Low</span>
+            </td>
+            <td class="fw-bold">₹{{ item.unitPrice | number }}</td>
+            <td><small class="text-muted">{{ item.supplier }}</small></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-success rounded-pill px-3" (click)="issueForm.itemName = item.name; showIssueModal = true">
+                <i class="fas fa-share me-1"></i> Issue
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: Item Issuance Desk -->
+  <div *ngIf="activeTab === 'issue'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Item Issuance Audit Register</h5>
+        <p class="text-muted small mb-0">Track issued lab instruments, sports balls, stationery reams, and return dates</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-3" (click)="showIssueModal = true">
+        <i class="fas fa-plus me-1"></i> Issue Item
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Issue #</th>
+            <th>Item Name</th>
+            <th>Issued To</th>
+            <th>Type</th>
+            <th>Quantity</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of issuedItems">
+            <td><strong>#ISU-{{ r.id }}</strong></td>
+            <td><strong class="text-dark">{{ r.itemName }}</strong></td>
+            <td><strong class="text-primary">{{ r.issuedToName }}</strong></td>
+            <td><span class="badge bg-light text-dark border">{{ r.issuedToType }}</span></td>
+            <td><strong>{{ r.quantity }}</strong></td>
+            <td><small class="text-muted">{{ r.issueDate }}</small></td>
+            <td><small class="text-secondary">{{ r.returnDueDate || 'Permanent Consumable' }}</small></td>
+            <td>
+              <span class="badge" [ngClass]="r.status === 'Issued' ? 'bg-warning text-dark' : 'bg-success text-white'">
+                {{ r.status }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button *ngIf="r.status === 'Issued'" class="btn btn-sm btn-success rounded-pill px-3" (click)="returnIssuedItem(r)">
+                <i class="fas fa-undo me-1"></i> Return
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: Suppliers & Vendors -->
+  <div *ngIf="activeTab === 'suppliers'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-md-4" *ngFor="let s of suppliers">
+      <div class="card border rounded-16 p-4 shadow-sm bg-white hover-shadow h-100">
+        <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+          <i class="fas fa-building fa-lg"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-1">{{ s.name }}</h5>
+        <div class="small text-muted mb-3">Contact: <strong>{{ s.contactPerson }}</strong></div>
+
+        <div class="p-3 bg-light rounded-12 small mb-3">
+          <div class="mb-1"><i class="fas fa-phone text-primary me-2"></i> {{ s.phone }}</div>
+          <div class="mb-1"><i class="fas fa-envelope text-info me-2"></i> {{ s.email }}</div>
+          <div><i class="fas fa-map-marker-alt text-danger me-2"></i> {{ s.address }}</div>
+        </div>
+
+        <button class="btn btn-sm btn-outline-primary rounded-pill w-100 mt-auto">
+          <i class="fas fa-cart-shopping me-1"></i> Place Purchase Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- 1. Add Item Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddItemModal">
+  <div class="modal-content-custom" style="max-width: 540px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-box-archive text-primary me-2"></i> Add Inventory Item</h5>
+      <button class="btn-close" (click)="showAddItemModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Item Name *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newItem.name" placeholder="e.g. A4 Copy Papers 75 GSM">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Category</label>
+          <select class="form-select modern-select" [(ngModel)]="newItem.category">
+            <option value="Stationery & Office">Stationery & Office</option>
+            <option value="Classroom Supplies">Classroom Supplies</option>
+            <option value="Sports Goods">Sports Goods</option>
+            <option value="Science Laboratory">Science Laboratory</option>
+            <option value="Uniforms & Apparel">Uniforms & Apparel</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Store Room</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newItem.store" placeholder="Main Admin Store">
+        </div>
+        <div class="col-4">
+          <label class="form-label small fw-bold">Unit</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="newItem.unit" placeholder="Ream, Box, Piece">
+        </div>
+        <div class="col-4">
+          <label class="form-label small fw-bold">Initial Stock</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="newItem.inStock">
+        </div>
+        <div class="col-4">
+          <label class="form-label small fw-bold">Unit Price (₹)</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="newItem.unitPrice">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showAddItemModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Issue Item Modal -->
+<div class="modal-backdrop-custom" *ngIf="showIssueModal">
+  <div class="modal-content-custom" style="max-width: 500px;">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-hand-holding text-success me-2"></i> Issue Inventory Item</h5>
+      <button class="btn-close" (click)="showIssueModal = false"></button>
+    </div>
+    <div class="modal-body-custom mt-3">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Select Item *</label>
+          <select class="form-select modern-select" [(ngModel)]="issueForm.itemName">
+            <option *ngFor="let i of items" [value]="i.name">{{ i.name }} ({{ i.inStock }} in stock)</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Recipient Type</label>
+          <select class="form-select modern-select" [(ngModel)]="issueForm.issuedToType">
+            <option value="Staff">Faculty / Staff</option>
+            <option value="Student">Student</option>
+            <option value="Department">Department / Cell</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Recipient Name *</label>
+          <input type="text" class="form-control modern-input" [(ngModel)]="issueForm.issuedToName" placeholder="Full name / Dept">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Quantity</label>
+          <input type="number" class="form-control modern-input" [(ngModel)]="issueForm.quantity" min="1">
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Return Due Date</label>
+          <input type="date" class="form-control modern-input" [(ngModel)]="issueForm.returnDueDate">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-light rounded-pill px-4" (click)="showIssueModal = false">Cancel</button>
+      <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="submitIssueItem()">Issue Item</button>
+    </div>
+  </div>
+</div>

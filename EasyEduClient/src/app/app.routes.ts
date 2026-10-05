@@ -20,6 +20,11 @@ import { HomeworkComponent } from './pages/homework/homework.component';
 import { CommunicationComponent } from './pages/communication/communication.component';
 import { CertificatesComponent } from './pages/certificates/certificates.component';
 import { DormitoryComponent } from './pages/dormitory/dormitory.component';
+import { InventoryComponent } from './pages/inventory/inventory.component';
+import { LeaveComponent } from './pages/leave/leave.component';
+import { BehaviourComponent } from './pages/behaviour/behaviour.component';
+import { LessonPlanComponent } from './pages/lesson-plan/lesson-plan.component';
+import { DownloadCenterComponent } from './pages/download-center/download-center.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -36,19 +41,24 @@ export const routes: Routes = [
       { path: 'students', component: StudentListComponent },
       { path: 'students/admission', component: StudentAdmissionComponent },
       { path: 'staff', component: StaffListComponent },
+      { path: 'leave', component: LeaveComponent },
+      { path: 'behaviour', component: BehaviourComponent },
       { path: 'academic/classes', component: ClassesComponent },
       { path: 'academic/subjects', component: ClassesComponent },
       { path: 'academic/timetable', component: ClassesComponent },
+      { path: 'lesson-plan', component: LessonPlanComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'attendance/report', component: AttendanceComponent },
       { path: 'homework', component: HomeworkComponent },
       { path: 'communication', component: CommunicationComponent },
+      { path: 'download-center', component: DownloadCenterComponent },
       { path: 'examinations', component: ExaminationsComponent },
       { path: 'certificates', component: CertificatesComponent },
       { path: 'fees', component: FeesComponent },
       { path: 'library', component: LibraryComponent },
       { path: 'transport', component: TransportComponent },
       { path: 'dormitory', component: DormitoryComponent },
+      { path: 'inventory', component: InventoryComponent },
       { path: 'virtual-class', component: VirtualClassComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'settings', component: SettingsComponent }

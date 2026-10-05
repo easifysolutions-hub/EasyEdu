@@ -1,0 +1,281 @@
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1 text-dark">Staff Leave Management & Approvals</h3>
+      <p class="text-muted small mb-0">Apply for faculty leave, manage approval workflows, track leave quotas, and view attendance adjustments</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="activeTab = 'apply'">
+        <i class="fas fa-calendar-plus me-1"></i> Apply for Leave
+      </button>
+    </div>
+  </div>
+
+  <!-- Metric Stat Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-clock fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">PENDING</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ pendingCount }} Requests</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Awaiting Management Approval</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-calendar-check fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">APPROVED</span>
+        </div>
+        <h2 class="fw-bold mb-1">{{ approvedCount }} Sanctioned</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Approved Leave Records</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-user-clock fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">CL BALANCE</span>
+        </div>
+        <h2 class="fw-bold mb-1">8 Days Left</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Casual Leave Quota Remaining</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 rounded-16 text-white h-100 overflow-hidden position-relative p-4" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: rgba(255,255,255,0.15);">
+            <i class="fas fa-notes-medical fa-lg text-white"></i>
+          </div>
+          <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">ML QUOTA</span>
+        </div>
+        <h2 class="fw-bold mb-1">8 Days Left</h2>
+        <p class="small text-white text-opacity-75 mb-0 fw-semibold">Medical Leave Remaining</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Pill Tabs -->
+  <div class="premium-card mb-4 p-2">
+    <ul class="nav nav-pills custom-pills">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'pending'" (click)="activeTab = 'pending'">
+          <i class="fas fa-inbox me-2"></i> Pending Leave Requests ({{ pendingCount }})
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'apply'" (click)="activeTab = 'apply'">
+          <i class="fas fa-file-signature me-2"></i> Apply for Leave
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'history'" (click)="activeTab = 'history'">
+          <i class="fas fa-history me-2"></i> All Leave History
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'types'" (click)="activeTab = 'types'">
+          <i class="fas fa-sliders-h me-2"></i> Leave Quotas & Types Master
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TAB 1: Pending Leave Requests -->
+  <div *ngIf="activeTab === 'pending'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Pending Leave Approvals</h5>
+        <p class="text-muted small mb-0">Review teacher and support staff leave requests and sanction approvals</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Applicant Name</th>
+            <th>Designation & Dept</th>
+            <th>Leave Type</th>
+            <th>Dates & Duration</th>
+            <th>Applied Date</th>
+            <th>Reason / Note</th>
+            <th>Status</th>
+            <th class="text-end">Decision Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of requests">
+            <td>
+              <div class="fw-bold text-dark">{{ req.applicantName }}</div>
+            </td>
+            <td>
+              <div class="small fw-semibold">{{ req.applicantRole }}</div>
+              <small class="text-muted">{{ req.department }}</small>
+            </td>
+            <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">{{ req.leaveType }}</span></td>
+            <td>
+              <strong>{{ req.totalDays }} Day(s)</strong>
+              <div class="small text-muted">{{ req.fromDate }} to {{ req.toDate }}</div>
+            </td>
+            <td><small class="text-muted">{{ req.applyDate }}</small></td>
+            <td><small class="text-secondary">{{ req.reason }}</small></td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'bg-warning text-dark': req.status === 'Pending',
+                'bg-success text-white': req.status === 'Approved',
+                'bg-danger text-white': req.status === 'Rejected'
+              }">{{ req.status }}</span>
+            </td>
+            <td class="text-end">
+              <div class="d-flex justify-content-end gap-1" *ngIf="req.status === 'Pending'">
+                <button class="btn btn-sm btn-success rounded-pill px-3 py-1" (click)="approveLeave(req)">
+                  <i class="fas fa-check me-1"></i> Approve
+                </button>
+                <button class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1" (click)="rejectLeave(req)">
+                  <i class="fas fa-times me-1"></i> Reject
+                </button>
+              </div>
+              <span *ngIf="req.status !== 'Pending'" class="small text-muted">
+                Sanctioned by {{ req.approvedBy }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: Apply for Leave -->
+  <div *ngIf="activeTab === 'apply'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-lg-8">
+      <div class="premium-card">
+        <h5 class="fw-bold text-dark mb-3">Submit Staff Leave Application</h5>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label small fw-bold">Applicant Faculty *</label>
+            <input type="text" class="form-control modern-input" [(ngModel)]="applyForm.applicantName" readonly>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label small fw-bold">Leave Type *</label>
+            <select class="form-select modern-select" [(ngModel)]="applyForm.leaveType">
+              <option value="Casual Leave (CL)">Casual Leave (CL) - 8 Days Available</option>
+              <option value="Medical Leave (ML)">Medical Leave (ML) - 8 Days Available</option>
+              <option value="Duty Leave (OD)">Duty Leave (OD) - 4 Days Available</option>
+              <option value="Maternity / Paternity">Maternity / Paternity Leave</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Leave From Date *</label>
+            <input type="date" class="form-control modern-input" [(ngModel)]="applyForm.fromDate">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Leave To Date *</label>
+            <input type="date" class="form-control modern-input" [(ngModel)]="applyForm.toDate">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Total Days</label>
+            <input type="number" class="form-control modern-input" [(ngModel)]="applyForm.totalDays" min="1">
+          </div>
+          <div class="col-6">
+            <label class="form-label small fw-bold">Attach Supporting Doctor Slip (If ML)</label>
+            <input type="file" class="form-control modern-input">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Reason for Leave *</label>
+            <textarea class="form-control modern-input" rows="4" [(ngModel)]="applyForm.reason" placeholder="State reason for absence..."></textarea>
+          </div>
+          <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'pending'">Cancel</button>
+            <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="submitLeaveApplication()">
+              <i class="fas fa-paper-plane me-1"></i> Submit Application
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 rounded-16 p-4 text-white mb-4 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <h5 class="fw-bold mb-2"><i class="fas fa-circle-info me-2"></i> Leave Policy Note</h5>
+        <p class="small text-white text-opacity-90 mb-0">
+          Faculty members are requested to apply for Casual Leave at least 48 hours in advance so alternate lecture substitution can be assigned.
+        </p>
+      </div>
+
+      <div class="premium-card p-4">
+        <h6 class="fw-bold text-dark mb-3">Your Leave Balances</h6>
+        <div class="list-group list-group-flush small">
+          <div class="list-group-item px-0 py-2 border-light d-flex justify-content-between" *ngFor="let q of quotas">
+            <span>{{ q.type }}</span>
+            <strong class="text-primary">{{ q.balance }} Days</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: History & Reports -->
+  <div *ngIf="activeTab === 'history'" class="premium-card animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="fw-bold mb-1 text-dark">Staff Leave Historical Record</h5>
+        <p class="text-muted small mb-0">Complete academic year leave audits and sanction certificates</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-premium">
+        <thead>
+          <tr>
+            <th>Applicant</th>
+            <th>Leave Type</th>
+            <th>Duration</th>
+            <th>Reason</th>
+            <th>Sanction State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of requests">
+            <td><strong>{{ req.applicantName }}</strong> ({{ req.department }})</td>
+            <td><span class="badge bg-light text-dark border">{{ req.leaveType }}</span></td>
+            <td>{{ req.fromDate }} to {{ req.toDate }} ({{ req.totalDays }} Days)</td>
+            <td><small class="text-muted">{{ req.reason }}</small></td>
+            <td>
+              <span class="badge" [ngClass]="req.status === 'Approved' ? 'bg-success' : req.status === 'Rejected' ? 'bg-danger' : 'bg-warning text-dark'">
+                {{ req.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: Types Master -->
+  <div *ngIf="activeTab === 'types'" class="row g-4 animate-fade-in">
+    <div class="col-12 col-md-3" *ngFor="let q of quotas">
+      <div class="card border rounded-16 p-4 shadow-sm bg-light hover-shadow text-center">
+        <h6 class="fw-bold text-dark mb-2">{{ q.type }}</h6>
+        <div class="display-6 fw-bold text-primary mb-1">{{ q.totalAllowed }}</div>
+        <p class="small text-muted mb-0">Annual Allowed Entitlement</p>
+        <div class="d-flex justify-content-between pt-3 border-top mt-3 small">
+          <span class="text-muted">Utilized: {{ q.used }}</span>
+          <span class="text-success fw-bold">Balance: {{ q.balance }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

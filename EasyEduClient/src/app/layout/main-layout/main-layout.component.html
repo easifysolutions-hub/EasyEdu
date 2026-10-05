@@ -116,8 +116,8 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['lessonPlan']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['lessonPlan']">
-        <li><a routerLink="/academic/classes" class="sub-nav-link">Lesson & Topic</a></li>
-        <li><a routerLink="/academic/classes" class="sub-nav-link">Lesson Plan Overview</a></li>
+        <li><a routerLink="/lesson-plan" routerLinkActive="active" class="sub-nav-link text-info">Syllabus Tracker</a></li>
+        <li><a routerLink="/lesson-plan" class="sub-nav-link">Lesson Topics Checklist</a></li>
       </ul>
     </div>
 
@@ -175,8 +175,7 @@
         <li><a routerLink="/students/admission" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Student / Admission</a></li>
         <li><a routerLink="/attendance" routerLinkActive="active" class="sub-nav-link">Student Attendance</a></li>
         <li><a routerLink="/attendance/report" class="sub-nav-link">Attendance Reports</a></li>
-        <li><a routerLink="/students" class="sub-nav-link">Student Group & Promote</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Student Export / Import</a></li>
+        <li><a routerLink="/download-center" class="sub-nav-link text-primary"><i class="fas fa-download me-1"></i> Download Center</a></li>
       </ul>
     </div>
 
@@ -187,9 +186,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['behaviour']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['behaviour']">
-        <li><a routerLink="/students" class="sub-nav-link text-info">Incidents</a></li>
-        <li><a routerLink="/students" class="sub-nav-link text-success">Assign Incident</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Student Incident Report</a></li>
+        <li><a routerLink="/behaviour" routerLinkActive="active" class="sub-nav-link text-info">Behaviour Log</a></li>
+        <li><a routerLink="/behaviour" class="sub-nav-link text-success">Assign Incident / Award</a></li>
+        <li><a routerLink="/behaviour" class="sub-nav-link">Point Metric Rules</a></li>
       </ul>
     </div>
 
@@ -205,9 +204,8 @@
         <li><a routerLink="/staff" class="sub-nav-link text-success fw-bold">Add Staff Member</a></li>
         <li><a routerLink="/staff" class="sub-nav-link">Designation & Department</a></li>
         <li><a routerLink="/attendance" class="sub-nav-link">Staff Attendance</a></li>
+        <li><a routerLink="/leave" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-calendar-check me-1"></i> Leave Management</a></li>
         <li><a routerLink="/reports" class="sub-nav-link">Payroll Processing</a></li>
-        <li><a routerLink="/staff" class="sub-nav-link text-success">Apply Leave</a></li>
-        <li><a routerLink="/staff" class="sub-nav-link text-warning">Leave Management</a></li>
       </ul>
     </div>
 
@@ -266,6 +264,18 @@
         <li><a routerLink="/library" class="sub-nav-link">Book List & Categories</a></li>
         <li><a routerLink="/library" class="sub-nav-link text-info">Issue & Return Books</a></li>
         <li><a routerLink="/library" class="sub-nav-link">Library Members</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-item-wrapper">
+      <a class="nav-link-premium" [class.open]="openMenus['inventory']" (click)="toggleMenu('inventory')">
+        <span><i class="fas fa-boxes-stacked main-icon"></i> <span class="sidebar-label">Inventory & Store</span></span>
+        <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['inventory']"></i>
+      </a>
+      <ul class="sub-menu" *ngIf="openMenus['inventory']">
+        <li><a routerLink="/inventory" routerLinkActive="active" class="sub-nav-link text-info">Item Catalog</a></li>
+        <li><a routerLink="/inventory" class="sub-nav-link text-success">Issue Item</a></li>
+        <li><a routerLink="/inventory" class="sub-nav-link">Suppliers Directory</a></li>
       </ul>
     </div>
 
