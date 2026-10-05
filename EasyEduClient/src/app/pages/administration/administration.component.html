@@ -27,7 +27,7 @@
   <div *ngIf="activeTab === 'queries'" class="premium-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold mb-0">Admission Inquiries</h5>
-      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> New Query</button>
+      <button class="btn btn-sm btn-primary" (click)="showQueryModal = true"><i class="fas fa-plus"></i> New Query</button>
     </div>
     <div class="table-responsive">
       <table class="table-premium">
@@ -55,7 +55,7 @@
               </span>
             </td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('queries', q.id)"><i class="fas fa-trash"></i></button>
             </td>
           </tr>
         </tbody>
@@ -67,7 +67,7 @@
   <div *ngIf="activeTab === 'visitors'" class="premium-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold mb-0">Visitor Registry</h5>
-      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Add Visitor</button>
+      <button class="btn btn-sm btn-primary" (click)="showVisitorModal = true"><i class="fas fa-plus"></i> Add Visitor</button>
     </div>
     <div class="table-responsive">
       <table class="table-premium">
@@ -79,6 +79,7 @@
             <th>In Time</th>
             <th>Out Time</th>
             <th>Date</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -89,6 +90,9 @@
             <td><span class="badge bg-success text-white">{{ v.inTime }}</span></td>
             <td><span class="badge bg-secondary text-white">{{ v.outTime }}</span></td>
             <td>{{ v.date }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('visitors', v.id)"><i class="fas fa-trash"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -99,7 +103,7 @@
   <div *ngIf="activeTab === 'complaints'" class="premium-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold mb-0">Complaint Redressal</h5>
-      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Lodge Complaint</button>
+      <button class="btn btn-sm btn-primary" (click)="showComplaintModal = true"><i class="fas fa-plus"></i> Lodge Complaint</button>
     </div>
     <div class="table-responsive">
       <table class="table-premium">
@@ -110,6 +114,7 @@
             <th>Assigned Department</th>
             <th>Date</th>
             <th>Status</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -121,6 +126,9 @@
             <td>
               <span class="badge-status" [class.badge-paid]="c.status === 'Resolved'" [class.badge-pending]="c.status !== 'Resolved'">{{ c.status }}</span>
             </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('complaints', c.id)"><i class="fas fa-trash"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -131,7 +139,7 @@
   <div *ngIf="activeTab === 'postal'" class="premium-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold mb-0">Postal Receive & Dispatch</h5>
-      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Add Record</button>
+      <button class="btn btn-sm btn-primary" (click)="showPostalModal = true"><i class="fas fa-plus"></i> Add Record</button>
     </div>
     <div class="table-responsive">
       <table class="table-premium">
@@ -142,6 +150,7 @@
             <th>Sender Name</th>
             <th>Receiver</th>
             <th>Date</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -153,6 +162,9 @@
             <td>{{ p.sender }}</td>
             <td>{{ p.receiver }}</td>
             <td>{{ p.date }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('postal', p.id)"><i class="fas fa-trash"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -163,7 +175,7 @@
   <div *ngIf="activeTab === 'calls'" class="premium-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold mb-0">Phone Call Logs</h5>
-      <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Log Call</button>
+      <button class="btn btn-sm btn-primary" (click)="showCallModal = true"><i class="fas fa-plus"></i> Log Call</button>
     </div>
     <div class="table-responsive">
       <table class="table-premium">
@@ -175,6 +187,7 @@
             <th>Duration</th>
             <th>Follow Up</th>
             <th>Notes</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -185,9 +198,173 @@
             <td>{{ call.duration }}</td>
             <td>{{ call.followUp }}</td>
             <td>{{ call.note }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem('calls', call.id)"><i class="fas fa-trash"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 1: Query Modal -->
+<div class="modal-backdrop-custom" *ngIf="showQueryModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-clipboard-question text-primary me-2"></i>New Admission Inquiry</h5>
+      <button class="btn-close" (click)="showQueryModal = false"></button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Applicant / Student Name</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newQuery.name" placeholder="e.g. Ramesh K">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Contact Phone</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newQuery.phone" placeholder="+91 98765 00000">
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-6">
+        <label class="form-label small fw-bold">Target Grade</label>
+        <select class="form-select form-select-sm" [(ngModel)]="newQuery.class">
+          <option>Grade 8</option>
+          <option>Grade 9</option>
+          <option>Grade 10</option>
+          <option>Grade 11 - Science</option>
+          <option>Grade 12 - Commerce</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label class="form-label small fw-bold">Source</label>
+        <select class="form-select form-select-sm" [(ngModel)]="newQuery.source">
+          <option>Online Web</option>
+          <option>Front Desk</option>
+          <option>Referral</option>
+          <option>Advertisement</option>
+        </select>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showQueryModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="addQuery()"><i class="fas fa-check me-1"></i>Save Inquiry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Visitor Modal -->
+<div class="modal-backdrop-custom" *ngIf="showVisitorModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-book-open text-primary me-2"></i>Add Visitor Entry</h5>
+      <button class="btn-close" (click)="showVisitorModal = false"></button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Visitor Full Name</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.name" placeholder="e.g. Amit Verma">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Meeting Purpose</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.purpose" placeholder="e.g. Principal Discussion">
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-6">
+        <label class="form-label small fw-bold">In Time</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.inTime">
+      </div>
+      <div class="col-6">
+        <label class="form-label small fw-bold">Out Time</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="newVisitor.outTime">
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showVisitorModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="addVisitor()"><i class="fas fa-check me-1"></i>Record Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3: Complaint Modal -->
+<div class="modal-backdrop-custom" *ngIf="showComplaintModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-bullhorn text-danger me-2"></i>Lodge Complaint</h5>
+      <button class="btn-close" (click)="showComplaintModal = false"></button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Complainant Name & Relation</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newComplaint.by" placeholder="e.g. Anand Kumar (Parent)">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Complaint Nature</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newComplaint.type" placeholder="e.g. Bus Timing Issue">
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Assigned Department</label>
+      <select class="form-select form-select-sm" [(ngModel)]="newComplaint.assignedTo">
+        <option>Admin Desk</option>
+        <option>Transport Manager</option>
+        <option>Academic Head</option>
+        <option>Finance Cell</option>
+      </select>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showComplaintModal = false">Cancel</button>
+      <button class="btn btn-sm btn-danger" (click)="addComplaint()"><i class="fas fa-paper-plane me-1"></i>Submit Ticket</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 4: Postal Modal -->
+<div class="modal-backdrop-custom" *ngIf="showPostalModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-envelope-open text-info me-2"></i>New Postal Entry</h5>
+      <button class="btn-close" (click)="showPostalModal = false"></button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Sender Organization / Person</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newPostal.sender" placeholder="e.g. University Board">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Receiver Section</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newPostal.receiver" placeholder="e.g. Principal Office">
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Postal Type</label>
+      <select class="form-select form-select-sm" [(ngModel)]="newPostal.type">
+        <option>Receive</option>
+        <option>Dispatch</option>
+      </select>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showPostalModal = false">Cancel</button>
+      <button class="btn btn-sm btn-info text-white" (click)="addPostal()"><i class="fas fa-check me-1"></i>Save Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 5: Call Modal -->
+<div class="modal-backdrop-custom" *ngIf="showCallModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-phone-volume text-success me-2"></i>Log Phone Call</h5>
+      <button class="btn-close" (click)="showCallModal = false"></button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Caller Name</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newCall.name" placeholder="e.g. Sunita Nair">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Phone Number</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newCall.phone" placeholder="+91 98800 00000">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Call Summary Notes</label>
+      <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="newCall.note" placeholder="Call discussion points..."></textarea>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button class="btn btn-sm btn-light" (click)="showCallModal = false">Cancel</button>
+      <button class="btn btn-sm btn-success" (click)="addCall()"><i class="fas fa-save me-1"></i>Save Log</button>
     </div>
   </div>
 </div>

@@ -79,11 +79,14 @@
               <span class="badge-status badge-inactive" *ngIf="!s.isActive">Inactive</span>
             </td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary me-1" title="View Profile">
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="viewProfile(s)" title="View Profile">
                 <i class="fas fa-eye"></i>
               </button>
-              <button class="btn btn-sm btn-outline-secondary" title="Edit">
-                <i class="fas fa-pencil-alt"></i>
+              <button class="btn btn-sm btn-outline-warning me-1" (click)="toggleStatus(s)" title="Toggle Status">
+                <i class="fas fa-toggle-on"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteStudent(s)" title="Delete Student">
+                <i class="fas fa-trash"></i>
               </button>
             </td>
           </tr>
@@ -95,6 +98,59 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<!-- Student Profile Modal -->
+<div class="modal-backdrop-custom" *ngIf="showProfileModal && selectedStudent">
+  <div class="modal-content-custom" style="max-width: 600px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-id-card text-primary me-2"></i>Student Details Profile</h5>
+      <button class="btn-close" (click)="showProfileModal = false"></button>
+    </div>
+    
+    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 mb-3">
+      <div class="avatar-circle" style="width: 56px; height: 56px; font-size: 1.4rem;">
+        {{ selectedStudent.firstName.charAt(0) }}
+      </div>
+      <div>
+        <h5 class="fw-bold mb-0">{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h5>
+        <span class="text-muted small">Admission No: <strong class="text-primary">{{ selectedStudent.admissionNo }}</strong></span>
+        <div><span class="badge bg-soft-primary text-primary mt-1">{{ selectedStudent.className || 'Grade 10' }}</span></div>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-6">
+        <div class="p-2 border rounded">
+          <small class="text-muted d-block">Roll Number</small>
+          <strong>{{ selectedStudent.rollNo || '101' }}</strong>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-2 border rounded">
+          <small class="text-muted d-block">Gender</small>
+          <strong>{{ selectedStudent.gender }}</strong>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-2 border rounded">
+          <small class="text-muted d-block">Contact Phone</small>
+          <strong>{{ selectedStudent.phone || '+91 98765 43210' }}</strong>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-2 border rounded">
+          <small class="text-muted d-block">Guardian Email</small>
+          <strong>{{ selectedStudent.email || 'guardian@easyedu.com' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showProfileModal = false">Close</button>
+      <a routerLink="/attendance" class="btn btn-sm btn-primary" (click)="showProfileModal = false"><i class="fas fa-calendar-check me-1"></i>Check Attendance</a>
     </div>
   </div>
 </div>

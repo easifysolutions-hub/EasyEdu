@@ -54,12 +54,12 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['adminSection']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['adminSection']">
-        <li><a routerLink="/dashboard" class="sub-nav-link">Admission Query</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Visitor Book</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Complaint</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Postal Receive</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Postal Dispatch</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Phone Call Log</a></li>
+        <li><a routerLink="/administration" routerLinkActive="active" class="sub-nav-link">Admission Query</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Visitor Book</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Complaint</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Postal Receive</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Postal Dispatch</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Phone Call Log</a></li>
         <li><a routerLink="/settings" class="sub-nav-link">Admin Setup</a></li>
       </ul>
     </div>
@@ -71,10 +71,10 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['utilities']">
-        <li><a routerLink="/dashboard" class="sub-nav-link">User Log</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Chat Box</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Invitations</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Chat Settings</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">User Log</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Chat Box</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Invitations</a></li>
+        <li><a routerLink="/settings" class="sub-nav-link">Chat Settings</a></li>
       </ul>
     </div>
 
@@ -85,10 +85,10 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['communicate']">
-        <li><a routerLink="/dashboard" class="sub-nav-link">Notice Board</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Send Email / SMS</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Email / SMS Log</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Event Calendar</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Notice Board</a></li>
+        <li><a routerLink="/administration" class="sub-nav-link">Send Email / SMS</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Email / SMS Log</a></li>
+        <li><a routerLink="/academic/timetable" class="sub-nav-link">Event Calendar</a></li>
       </ul>
     </div>
 
@@ -128,9 +128,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['homework']">
-        <li><a routerLink="/dashboard" class="sub-nav-link text-success fw-bold">Add Homework</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Homework List</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Homework Report</a></li>
+        <li><a routerLink="/academic/classes" class="sub-nav-link text-success fw-bold">Add Homework</a></li>
+        <li><a routerLink="/academic/classes" class="sub-nav-link">Homework List</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Homework Report</a></li>
       </ul>
     </div>
 
@@ -176,7 +176,7 @@
         <li><a routerLink="/attendance" routerLinkActive="active" class="sub-nav-link">Student Attendance</a></li>
         <li><a routerLink="/attendance/report" class="sub-nav-link">Attendance Reports</a></li>
         <li><a routerLink="/students" class="sub-nav-link">Student Group & Promote</a></li>
-        <li><a routerLink="/students" class="sub-nav-link">Student Export / Import</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Student Export / Import</a></li>
       </ul>
     </div>
 
@@ -189,7 +189,7 @@
       <ul class="sub-menu" *ngIf="openMenus['behaviour']">
         <li><a routerLink="/students" class="sub-nav-link text-info">Incidents</a></li>
         <li><a routerLink="/students" class="sub-nav-link text-success">Assign Incident</a></li>
-        <li><a routerLink="/students" class="sub-nav-link">Student Incident Report</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Student Incident Report</a></li>
       </ul>
     </div>
 
@@ -204,8 +204,8 @@
         <li><a routerLink="/staff" routerLinkActive="active" class="sub-nav-link text-info">Staff Directory</a></li>
         <li><a routerLink="/staff" class="sub-nav-link text-success fw-bold">Add Staff Member</a></li>
         <li><a routerLink="/staff" class="sub-nav-link">Designation & Department</a></li>
-        <li><a routerLink="/staff" class="sub-nav-link">Staff Attendance</a></li>
-        <li><a routerLink="/staff" class="sub-nav-link">Payroll Processing</a></li>
+        <li><a routerLink="/attendance" class="sub-nav-link">Staff Attendance</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Payroll Processing</a></li>
         <li><a routerLink="/staff" class="sub-nav-link text-success">Apply Leave</a></li>
         <li><a routerLink="/staff" class="sub-nav-link text-warning">Leave Management</a></li>
       </ul>
@@ -223,7 +223,7 @@
         <li><a routerLink="/fees" class="sub-nav-link">Fees Group & Heads</a></li>
         <li><a routerLink="/fees" class="sub-nav-link">Bulk Invoice Generation</a></li>
         <li><a routerLink="/fees" class="sub-nav-link text-warning"><i class="fas fa-print me-1"></i> Bulk Invoice Print</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Bank Payments & Due Report</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Bank Payments & Due Report</a></li>
       </ul>
     </div>
 
@@ -238,7 +238,7 @@
         <li><a routerLink="/fees" class="sub-nav-link">Receipt Voucher</a></li>
         <li><a routerLink="/fees" class="sub-nav-link">Journal Voucher</a></li>
         <li><a routerLink="/fees" class="sub-nav-link">Chart of Accounts</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Trial Balance & Balance Sheet</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Trial Balance & Balance Sheet</a></li>
       </ul>
     </div>
 
@@ -250,9 +250,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['transport']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['transport']">
-        <li><a routerLink="/dashboard" class="sub-nav-link">Routes & Vehicles</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Student Bus Allocation</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Transport Reports</a></li>
+        <li><a routerLink="/transport" routerLinkActive="active" class="sub-nav-link">Routes & Vehicles</a></li>
+        <li><a routerLink="/transport" class="sub-nav-link">Student Bus Allocation</a></li>
+        <li><a routerLink="/reports" class="sub-nav-link">Transport Reports</a></li>
       </ul>
     </div>
 
@@ -262,10 +262,10 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['library']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['library']">
-        <li><a routerLink="/dashboard" class="sub-nav-link text-success fw-bold">Add Book</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Book List & Categories</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link text-info">Issue & Return Books</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link">Library Members</a></li>
+        <li><a routerLink="/library" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Book</a></li>
+        <li><a routerLink="/library" class="sub-nav-link">Book List & Categories</a></li>
+        <li><a routerLink="/library" class="sub-nav-link text-info">Issue & Return Books</a></li>
+        <li><a routerLink="/library" class="sub-nav-link">Library Members</a></li>
       </ul>
     </div>
 
@@ -277,14 +277,18 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['virtualClass']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['virtualClass']">
-        <li><a routerLink="/dashboard" class="sub-nav-link text-primary"><i class="fas fa-video me-1"></i> Zoom Live Class</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link text-warning"><i class="fab fa-google me-1"></i> Google Meet</a></li>
-        <li><a routerLink="/dashboard" class="sub-nav-link text-info"><i class="fas fa-users me-1"></i> Jitsi Meeting</a></li>
+        <li><a routerLink="/virtual-class" routerLinkActive="active" class="sub-nav-link text-primary"><i class="fas fa-video me-1"></i> Zoom Live Class</a></li>
+        <li><a routerLink="/virtual-class" class="sub-nav-link text-warning"><i class="fab fa-google me-1"></i> Google Meet</a></li>
+        <li><a routerLink="/virtual-class" class="sub-nav-link text-info"><i class="fas fa-users me-1"></i> Jitsi Meeting</a></li>
       </ul>
     </div>
 
     <!-- 9. SYSTEM & SETTINGS -->
-    <div class="menu-category">SYSTEM & SETTINGS</div>
+    <div class="menu-category">REPORTS & SYSTEM</div>
+    <a routerLink="/reports" routerLinkActive="active" class="nav-link-premium">
+      <i class="fas fa-chart-line main-icon"></i>
+      <span class="sidebar-label">Reports Center</span>
+    </a>
     <a routerLink="/settings" routerLinkActive="active" class="nav-link-premium">
       <i class="fas fa-cogs main-icon"></i>
       <span class="sidebar-label">Global Control Center</span>

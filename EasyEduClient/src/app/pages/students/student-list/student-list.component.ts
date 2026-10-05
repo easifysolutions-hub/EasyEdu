@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
 import { Student } from '../../../core/models';
 
+declare const Swal: any;
+
 @Component({
   selector: 'app-student-list',
   standalone: true,
@@ -18,6 +20,9 @@ export class StudentListComponent implements OnInit {
   filteredStudents: Student[] = [];
   searchTerm = '';
   selectedClass = 'all';
+
+  selectedStudent: Student | null = null;
+  showProfileModal = false;
 
   ngOnInit(): void {
     this.loadStudents();
@@ -40,6 +45,46 @@ export class StudentListComponent implements OnInit {
       const matchClass = this.selectedClass === 'all' || s.className?.toLowerCase().includes(this.selectedClass.toLowerCase());
 
       return matchSearch && matchClass;
+    });
+  }
+
+  viewProfile(student: Student): void {
+    this.selectedStudent = student;
+    this.showProfileModal = true;
+  }
+
+  toggleStatus(student: Student): void {
+    student.isActive = !student.isActive;
+    Swal.fire({
+      icon: 'info',
+      title: 'Status Updated',
+      text: `${student.firstName}'s status changed to ${student.isActive ? 'Active' : 'Inactive'}.`,
+      timer: 1500,
+      showConfirmButton: false
+    });
+  }
+
+  deleteStudent(student: Student): void {
+    Swal.fire({
+      title: 'Delete Student Record?',
+      text: `Are you sure you want to remove ${student.firstName} ${student.lastName}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, remove',
+      confirmButtonColor: '#ef4444',
+      cancelButtonText: 'Cancel'
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.students = this.students.filter(s => s.id !== student.id);
+        this.applyFilter();
+        Swal.fire({
+          icon: 'success',
+          title: 'Removed',
+          text: 'Student profile removed successfully.',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
     });
   }
 }

@@ -5,7 +5,7 @@
       <p class="text-muted small mb-0">Manage teaching faculty, admin departments, and contact profiles</p>
     </div>
     <div>
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" (click)="showAddModal = true">
         <i class="fas fa-user-plus"></i> Add New Staff
       </button>
     </div>
@@ -57,12 +57,59 @@
               <span class="badge-status badge-active">Active</span>
             </td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
-              <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteStaff(s)" title="Delete Staff"><i class="fas fa-trash"></i></button>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Staff Modal -->
+<div class="modal-backdrop-custom" *ngIf="showAddModal">
+  <div class="modal-content-custom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold m-0"><i class="fas fa-user-tie text-primary me-2"></i>Onboard Faculty / Staff</h5>
+      <button class="btn-close" (click)="showAddModal = false"></button>
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label small fw-bold">First Name</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.firstName" placeholder="e.g. Ramesh">
+      </div>
+      <div class="col-6">
+        <label class="form-label small fw-bold">Last Name</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.lastName" placeholder="e.g. Rao">
+      </div>
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label small fw-bold">Department</label>
+        <select class="form-select form-select-sm" [(ngModel)]="newStaff.department">
+          <option>Academics</option>
+          <option>Administration</option>
+          <option>Science & Labs</option>
+          <option>Sports & Physical Edu</option>
+          <option>Library</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label class="form-label small fw-bold">Designation</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.designation" placeholder="e.g. Math Faculty">
+      </div>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Official Email</label>
+      <input type="email" class="form-control form-control-sm" [(ngModel)]="newStaff.email" placeholder="faculty@easyedu.com">
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Contact Phone</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="newStaff.phone" placeholder="+91 98765 00000">
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-light" (click)="showAddModal = false">Cancel</button>
+      <button class="btn btn-sm btn-primary" (click)="addStaff()"><i class="fas fa-check me-1"></i>Save Staff Profile</button>
     </div>
   </div>
 </div>
