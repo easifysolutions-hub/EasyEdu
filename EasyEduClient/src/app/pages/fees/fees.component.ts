@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { FeeInvoice } from '../../core/models';
 
@@ -181,6 +182,9 @@ export class FeesComponent implements OnInit {
     paymentMode: 'Bank Transfer'
   };
 
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   ngOnInit(): void {
     this.api.getFeeInvoices().subscribe({
       next: (res) => {
@@ -192,6 +196,42 @@ export class FeesComponent implements OnInit {
         // Keep initial fallback data
       }
     });
+
+    this.syncActiveTabFromUrl();
+
+    this.route.url.subscribe(() => {
+      this.syncActiveTabFromUrl();
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.activeTab = params['tab'];
+      }
+    });
+  }
+
+  private syncActiveTabFromUrl(): void {
+    const path = this.router.url.toLowerCase();
+    if (path.includes('feesgroup')) {
+      this.activeTab = 'groups';
+    } else if (path.includes('feestype')) {
+      this.activeTab = 'heads';
+    } else if (path.includes('bulkinvoiceprint')) {
+      this.activeTab = 'invoices';
+      Swal.fire('Bulk Print Ready', 'Invoice print spooler prepared for batch generation.', 'info');
+    } else if (path.includes('bulkinvoice')) {
+      this.activeTab = 'invoices';
+      this.showBulkInvoiceModal = true;
+    } else if (path.includes('feesinvoice')) {
+      this.activeTab = 'invoices';
+    } else if (path.includes('collectfee')) {
+      this.activeTab = 'collect';
+    } else if (path.includes('bankpayment')) {
+      this.activeTab = 'ledger';
+    } else if (path.includes('feesduereport')) {
+      this.activeTab = 'invoices';
+      this.statusFilter = 'Unpaid';
+    }
   }
 
   get totalInvoiced(): number {

@@ -270,17 +270,20 @@
 
     <!-- 6. FINANCE & ACCOUNTS -->
     <div class="menu-category">FINANCE & ACCOUNTS</div>
-    <div class="nav-item-wrapper">
+    <div class="nav-item-wrapper" id="feesMenu">
       <a class="nav-link-premium" [class.open]="openMenus['fees']" (click)="toggleMenu('fees')">
-        <span><i class="fas fa-file-invoice-dollar main-icon"></i> <span class="sidebar-label">Fees & Invoices</span></span>
+        <span><i class="fas fa-file-invoice-dollar main-icon"></i> <span class="sidebar-label">Fees Received</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['fees']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['fees']">
-        <li><a routerLink="/fees" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Collect Fees</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Fees Group & Heads</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link">Bulk Invoice Generation</a></li>
-        <li><a routerLink="/fees" class="sub-nav-link text-warning"><i class="fas fa-print me-1"></i> Bulk Invoice Print</a></li>
-        <li><a routerLink="/reports" class="sub-nav-link">Bank Payments & Due Report</a></li>
+        <li><a routerLink="/Finance/FeesGroup" routerLinkActive="active" class="sub-nav-link">Fees Group</a></li>
+        <li><a routerLink="/Finance/FeesType" routerLinkActive="active" class="sub-nav-link">Fees Head</a></li>
+        <li><a routerLink="/Finance/BulkInvoice" routerLinkActive="active" class="sub-nav-link">Bulk Invoice</a></li>
+        <li><a routerLink="/Finance/BulkInvoicePrint" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-print me-1"></i> Bulk Invoice Print</a></li>
+        <li><a routerLink="/Finance/FeesInvoice" routerLinkActive="active" class="sub-nav-link">Fees Invoice</a></li>
+        <li><a routerLink="/Finance/CollectFee" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Collect Fees</a></li>
+        <li><a routerLink="/Finance/BankPayment" routerLinkActive="active" class="sub-nav-link">Bank Payment</a></li>
+        <li><a routerLink="/Reports" routerLinkActive="active" class="sub-nav-link">Fees Due Report</a></li>
       </ul>
     </div>
 
