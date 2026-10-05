@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 
+declare const Swal: any;
+
 export interface AcademicSession {
   id: number;
   yearName: string;
@@ -148,8 +150,8 @@ export class SettingsComponent implements OnInit {
 
   newSession = {
     yearName: '',
-    startDate: '',
-    endDate: ''
+    startDate: '2026-04-01',
+    endDate: '2027-03-31'
   };
 
   // 4. Optional Subject Assignment
@@ -203,8 +205,6 @@ export class SettingsComponent implements OnInit {
     { id: 8, category: 'Document Type', codeName: 'Birth Certificate', description: 'Primary Age Proof', status: 'Active' },
     { id: 9, category: 'Document Type', codeName: 'Transfer Certificate (TC)', description: 'Previous School Clearance', status: 'Active' }
   ];
-
-  selectedBaseCategory = 'All';
 
   // 7. Role Jurisdiction
   roles: RolePermissionItem[] = [
@@ -288,27 +288,12 @@ export class SettingsComponent implements OnInit {
     { id: 'BKP-03', fileName: 'EasyEdu_Enterprise_Full_2026_09_25.sql.gz', size: '45.8 MB', date: '2026-09-25 02:00 AM', destination: 'Local Storage Archive', type: 'Manual Admin Snapshot' }
   ];
 
-  // 12. Updates & Diagnostics
-  systemUpdateInfo = {
-    currentVersion: 'EasyEdu Enterprise Core v4.2.0-LTS (Build 2026.10)',
-    frameworks: '.NET 9.0 Web API • Angular 19 SPA • PostgreSQL 16',
-    latestAvailable: 'v4.2.0-LTS (Up to Date)',
-    lastChecked: 'Today, 00:40 AM',
-    changelog: [
-      { version: 'v4.2.0', date: 'Oct 2026', notes: 'Integrated full BI Reporting suite, 20 specialized reports, and glassmorphic UI overhaul.' },
-      { version: 'v4.1.5', date: 'Sept 2026', notes: 'Enhanced biometric RFID sync latency down to 12ms; improved payment gateway reconciliations.' },
-      { version: 'v4.1.0', date: 'Aug 2026', notes: 'Added Frontend CMS module, dynamic page editor, and custom holiday scheduler.' }
-    ]
-  };
-
   // Modals state
-  showAddSessionModal = false;
-  showAddHolidayModal = false;
-  showAddUserModal = false;
-  showAddApiKeyModal = false;
-  showAddCustomFieldModal = false;
-  showSuccessToast = false;
-  toastMessage = '';
+  showNewSessionModal = false;
+  showNewHolidayModal = false;
+  showNewUserModal = false;
+  showNewApiTokenModal = false;
+  showNewFieldModal = false;
 
   ngOnInit(): void {
     this.route.url.subscribe(segments => {
@@ -342,34 +327,53 @@ export class SettingsComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  saveProfile(): void {
-    this.showToast('Institutional identity & letterhead settings saved live!');
+  saveIdentity(): void {
+    Swal.fire({
+      title: 'Institutional Profile Updated',
+      text: 'Institutional legal identity and letterhead configurations saved.',
+      icon: 'success',
+      confirmButtonColor: '#002B49'
+    });
   }
 
-  addSession(): void {
-    if (!this.newSession.yearName) return;
+  saveProfile(): void {
+    this.saveIdentity();
+  }
+
+  createSession(): void {
+    if (!this.newSession.yearName) {
+      Swal.fire('Session Name Required', 'Please enter Academic Year session name (e.g. 2026-2027).', 'warning');
+      return;
+    }
     const session: AcademicSession = {
       id: Date.now(),
       yearName: this.newSession.yearName,
-      startDate: this.newSession.startDate || '2027-04-01',
-      endDate: this.newSession.endDate || '2028-03-31',
+      startDate: this.newSession.startDate || '2026-04-01',
+      endDate: this.newSession.endDate || '2027-03-31',
       isCurrent: false,
       status: 'Upcoming Planning'
     };
     this.sessions.push(session);
-    this.showAddSessionModal = false;
-    this.showToast(`Academic Year "${session.yearName}" registered!`);
+    this.showNewSessionModal = false;
+    this.newSession = { yearName: '', startDate: '2026-04-01', endDate: '2027-03-31' };
+    Swal.fire('Academic Session Created', `Session ${session.yearName} registered.`, 'success');
   }
 
   setCurrentSession(s: AcademicSession): void {
-    this.sessions.forEach(x => x.isCurrent = false);
+    this.sessions.forEach(x => {
+      x.isCurrent = false;
+      x.status = 'Archived';
+    });
     s.isCurrent = true;
     s.status = 'Active (Current)';
-    this.showToast(`Active Institutional Session switched to "${s.yearName}".`);
+    Swal.fire('Active Session Updated', `Current active academic cycle switched to "${s.yearName}".`, 'success');
   }
 
-  addHoliday(): void {
-    if (!this.newHoliday.name) return;
+  createHoliday(): void {
+    if (!this.newHoliday.name) {
+      Swal.fire('Holiday Title Required', 'Please provide a title for the holiday.', 'warning');
+      return;
+    }
     const h: HolidayItem = {
       id: Date.now(),
       name: this.newHoliday.name || '',
@@ -381,37 +385,68 @@ export class SettingsComponent implements OnInit {
       status: 'Published'
     };
     this.holidays.unshift(h);
-    this.showAddHolidayModal = false;
-    this.showToast(`Holiday "${h.name}" scheduled & published to calendar!`);
+    this.showNewHolidayModal = false;
+    this.newHoliday = { name: '', type: 'Festival', startDate: '', endDate: '', durationDays: 1, applicableTo: 'All', status: 'Published' };
+    Swal.fire('Holiday Registered', `Holiday "${h.name}" added to master calendar.`, 'success');
   }
 
-  deleteHoliday(id: number): void {
-    this.holidays = this.holidays.filter(h => h.id !== id);
-    this.showToast('Holiday entry removed from calendar.');
+  toggleUserStatus(u: SystemUserItem): void {
+    u.status = u.status === 'Active' ? 'Suspended' : 'Active';
+    Swal.fire('User Status Updated', `Account for ${u.name} is now ${u.status}.`, 'info');
   }
 
-  triggerImmediateBackup(): void {
-    const backup: BackupItem = {
-      id: `BKP-${Date.now().toString().slice(-4)}`,
-      fileName: `EasyEdu_Enterprise_Manual_${new Date().toISOString().split('T')[0].replace(/-/g, '_')}.sql.gz`,
-      size: '49.1 MB',
-      date: 'Just Now',
-      destination: 'AWS S3 Glacier Vault',
-      type: 'Immediate Full Snapshot'
-    };
-    this.backups.unshift(backup);
-    this.showToast('Full Institutional Database Snapshot created and secured to Cloud Vault!');
+  revokeToken(tok: ApiTokenItem): void {
+    tok.status = tok.status === 'Active' ? 'Revoked' : 'Active';
+    Swal.fire('API Key Updated', `Access Token ${tok.name} is now ${tok.status}.`, 'info');
   }
 
-  runDiagnosticCheck(): void {
-    this.showToast('Running live system diagnostic... All 12 microservices and database engines are healthy!');
+  triggerBackup(): void {
+    Swal.fire({
+      title: 'Initiate Database Backup?',
+      text: 'Create a full SQL dump snapshot and upload to cloud archive.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#002B49',
+      confirmButtonText: 'Yes, Snapshot Now'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        const backup: BackupItem = {
+          id: `BKP-${Date.now().toString().slice(-4)}`,
+          fileName: `EasyEdu_Enterprise_Manual_${new Date().toISOString().split('T')[0].replace(/-/g, '_')}.sql.gz`,
+          size: '49.1 MB',
+          date: 'Just Now',
+          destination: 'AWS S3 Glacier Vault',
+          type: 'Manual Admin Snapshot'
+        };
+        this.backups.unshift(backup);
+        Swal.fire('Database Snapshot Completed', 'Secure backup compressed and stored to S3 vault.', 'success');
+      }
+    });
   }
 
-  showToast(msg: string): void {
-    this.toastMessage = msg;
-    this.showSuccessToast = true;
-    setTimeout(() => {
-      this.showSuccessToast = false;
-    }, 3500);
+  restoreBackup(bk: BackupItem): void {
+    Swal.fire({
+      title: `Restore from ${bk.fileName}?`,
+      text: 'Warning: This will restore database tables to the selected state.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      confirmButtonText: 'Confirm Restore'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        Swal.fire('Database Restored', 'Database state verified and synchronized.', 'success');
+      }
+    });
+  }
+
+  checkForUpdates(): void {
+    Swal.fire({
+      title: 'Checking for Cloud Updates...',
+      html: '<div class="text-center p-2"><i class="fas fa-spinner fa-spin fa-2x text-primary mb-2"></i><p class="small text-muted mb-0">Querying release repository...</p></div>',
+      timer: 1500,
+      showConfirmButton: false
+    }).then(() => {
+      Swal.fire('Platform Up to Date', 'EasyEdu Enterprise Core v4.2.0 is running the latest stable release.', 'success');
+    });
   }
 }

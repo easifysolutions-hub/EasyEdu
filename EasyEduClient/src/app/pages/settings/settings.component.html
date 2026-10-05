@@ -1,148 +1,152 @@
-<div class="settings-wrapper">
-  <!-- Top Glass Header -->
-  <div class="settings-header-card">
-    <div class="header-left">
-      <div class="header-icon-pill">
-        <i class="fas fa-sliders"></i>
+<div class="container-fluid p-0 animate-fade-in">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h3 class="fw-bold mb-0 text-dark"><i class="fas fa-sliders text-primary me-2"></i>System & Settings Governance Nexus</h3>
+        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded-pill">
+          CORE ACTIVE &bull; v4.2.0
+        </span>
       </div>
-      <div>
-        <h1 class="settings-title">System & Institutional Governance Nexus</h1>
-        <p class="settings-subtitle">Manage global control parameters, legal identity, academic cycles, role jurisdictions, API access keys, custom fields, and automated cloud backups.</p>
-      </div>
+      <p class="text-muted small mb-0">Global control parameters, institutional identity, academic cycles, role jurisdictions, user matrix, API nexus, custom fields, and automated cloud backups.</p>
     </div>
-    <div class="header-right">
-      <div class="system-status-chip">
-        <span class="pulse-indicator"></span>
-        <span>Platform Core v4.2.0 • Online</span>
-      </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="setTab('backup')">
+        <i class="fas fa-cloud-arrow-up me-1"></i> Trigger Cloud Backup
+      </button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveIdentity()">
+        <i class="fas fa-save me-1"></i> Save Changes
+      </button>
     </div>
   </div>
 
-  <!-- Tab Navigation Strip (All 12 Modules) -->
-  <div class="settings-tabs-container">
-    <button class="settings-tab-btn" [class.active]="activeTab === 'overview'" (click)="setTab('overview')">
-      <i class="fas fa-gauge-high"></i> <span>Control Center</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">
-      <i class="fas fa-landmark"></i> <span>Institutional Identity</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'academicYear'" (click)="setTab('academicYear')">
-      <i class="fas fa-calendar-days"></i> <span>Academic Year Cycle</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'optionalSubject'" (click)="setTab('optionalSubject')">
-      <i class="fas fa-book-bookmark"></i> <span>Optional Subjects</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'holiday'" (click)="setTab('holiday')">
-      <i class="fas fa-calendar-xmark"></i> <span>Holiday Master</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'baseSetup'" (click)="setTab('baseSetup')">
-      <i class="fas fa-cubes-stacked"></i> <span>Environmental Setup</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'role'" (click)="setTab('role')">
-      <i class="fas fa-shield-halved"></i> <span>Role Jurisdiction</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'users'" (click)="setTab('users')">
-      <i class="fas fa-users-gear"></i> <span>User Management</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'apiPermission'" (click)="setTab('apiPermission')">
-      <i class="fas fa-key"></i> <span>API Access Nexus</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'customFields'" (click)="setTab('customFields')">
-      <i class="fas fa-sliders-simple"></i> <span>Field Customization</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'backup'" (click)="setTab('backup')">
-      <i class="fas fa-cloud-arrow-up"></i> <span>Data Archive (Backup)</span>
-    </button>
-    <button class="settings-tab-btn" [class.active]="activeTab === 'updates'" (click)="setTab('updates')">
-      <i class="fas fa-arrows-rotate"></i> <span>Archive & Updates</span>
-    </button>
+  <!-- Navigation Pill Tabs Bar -->
+  <div class="card border-0 shadow-sm rounded-16 p-2 mb-4 bg-white">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'overview' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('overview')">
+        <i class="fas fa-gauge-high me-1"></i> Control Center
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'profile' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('profile')">
+        <i class="fas fa-landmark me-1"></i> Institutional Identity
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'academicYear' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('academicYear')">
+        <i class="fas fa-calendar-days me-1"></i> Academic Year Cycle
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'optionalSubject' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('optionalSubject')">
+        <i class="fas fa-book-bookmark me-1"></i> Optional Subjects
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'holiday' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('holiday')">
+        <i class="fas fa-calendar-xmark me-1"></i> Holiday Master
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'baseSetup' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('baseSetup')">
+        <i class="fas fa-cubes-stacked me-1"></i> Environmental Setup
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'role' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('role')">
+        <i class="fas fa-shield-halved me-1"></i> Role Jurisdiction
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'users' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('users')">
+        <i class="fas fa-users-gear me-1"></i> User Matrix
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'apiPermission' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('apiPermission')">
+        <i class="fas fa-key me-1"></i> API Access Nexus
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'customFields' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('customFields')">
+        <i class="fas fa-sliders-simple me-1"></i> Custom Fields
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'backup' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('backup')">
+        <i class="fas fa-cloud-arrow-up me-1"></i> Data Archive (Backup)
+      </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'updates' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('updates')">
+        <i class="fas fa-arrows-rotate me-1"></i> Updates & Archive
+      </button>
+    </div>
   </div>
 
-  <!-- ================= TAB 1: GLOBAL CONTROL CENTER ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'overview'">
-    <!-- System Health Metric Cards -->
+  <!-- TAB 1: GLOBAL CONTROL CENTER (/Settings) -->
+  <div *ngIf="activeTab === 'overview'" class="animate-fade-in">
+    <!-- Stat Cards -->
     <div class="row g-4 mb-4">
-      <div class="col-lg-3 col-md-6">
-        <div class="metric-card">
-          <div class="metric-icon-wrap text-success"><i class="fas fa-server"></i></div>
-          <div>
-            <div class="metric-label">Server Uptime</div>
-            <div class="metric-value">{{ systemHealth.uptime }}</div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small text-white text-opacity-75 fw-bold text-uppercase">SERVER UPTIME</span>
+            <i class="fas fa-server fa-lg text-white text-opacity-75"></i>
           </div>
+          <h3 class="fw-bold mb-1">{{ systemHealth.uptime }}</h3>
+          <small class="text-white text-opacity-75">Zero downtime cluster</small>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="metric-card">
-          <div class="metric-icon-wrap text-info"><i class="fas fa-database"></i></div>
-          <div>
-            <div class="metric-label">Database Connection</div>
-            <div class="metric-value">{{ systemHealth.dbLatency }}</div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small text-white text-opacity-75 fw-bold text-uppercase">DATABASE LATENCY</span>
+            <i class="fas fa-database fa-lg text-white text-opacity-75"></i>
           </div>
+          <h3 class="fw-bold mb-1">{{ systemHealth.dbLatency }}</h3>
+          <small class="text-white text-opacity-75">SQL Server 2022 Core Engine</small>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="metric-card">
-          <div class="metric-icon-wrap text-primary"><i class="fas fa-users"></i></div>
-          <div>
-            <div class="metric-label">Active Concurrent Users</div>
-            <div class="metric-value">{{ systemHealth.activeSessions }} Sessions</div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small text-white text-opacity-75 fw-bold text-uppercase">CONCURRENT SESSIONS</span>
+            <i class="fas fa-users fa-lg text-white text-opacity-75"></i>
           </div>
+          <h3 class="fw-bold mb-1">{{ systemHealth.activeSessions }} Active</h3>
+          <small class="text-white text-opacity-75">Students, Staff & Guardians</small>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="metric-card">
-          <div class="metric-icon-wrap text-warning"><i class="fas fa-hard-drive"></i></div>
-          <div>
-            <div class="metric-label">Storage Utilized</div>
-            <div class="metric-value">{{ systemHealth.storageUsed }}</div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small text-white text-opacity-75 fw-bold text-uppercase">STORAGE POOL</span>
+            <i class="fas fa-hard-drive fa-lg text-white text-opacity-75"></i>
           </div>
+          <h3 class="fw-bold mb-1">{{ systemHealth.storageUsed }}</h3>
+          <small class="text-white text-opacity-75">{{ systemHealth.storagePercent }}% of 500GB SSD allocated</small>
         </div>
       </div>
     </div>
 
-    <!-- Quick Governance Shortcuts & License Info -->
+    <!-- Quick Shortcuts Grid -->
     <div class="row g-4">
       <div class="col-lg-8">
-        <div class="card-glass h-100">
-          <div class="card-header-clean">
-            <h3 class="card-title"><i class="fas fa-bolt text-warning me-2"></i> System Quick Administration Hub</h3>
-            <span class="badge-status-active">Operational</span>
-          </div>
-
+        <div class="card border-0 shadow-sm rounded-16 p-4 bg-white h-100">
+          <h5 class="fw-bold text-dark mb-3"><i class="fas fa-bolt text-warning me-2"></i> Global Administration Shortcuts</h5>
           <div class="row g-3">
             <div class="col-md-6">
-              <div class="shortcut-box" (click)="setTab('profile')">
-                <i class="fas fa-landmark text-primary"></i>
+              <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('profile')">
+                <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-12"><i class="fas fa-landmark fa-lg"></i></div>
                 <div>
-                  <h6 class="mb-1 text-light">Configure Institutional Identity</h6>
-                  <p class="text-muted-sm mb-0">Update school logo, letterhead, and timezone defaults.</p>
+                  <h6 class="fw-bold mb-1 text-dark">Institutional Identity</h6>
+                  <p class="small text-muted mb-0">Legal title, logos, affiliation numbers, and letterheads.</p>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="shortcut-box" (click)="setTab('academicYear')">
-                <i class="fas fa-calendar-days text-success"></i>
+              <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('academicYear')">
+                <div class="p-3 bg-success bg-opacity-10 text-success rounded-12"><i class="fas fa-calendar-days fa-lg"></i></div>
                 <div>
-                  <h6 class="mb-1 text-light">Manage Academic Sessions</h6>
-                  <p class="text-muted-sm mb-0">Switch current session or plan upcoming academic year.</p>
+                  <h6 class="fw-bold mb-1 text-dark">Academic Sessions</h6>
+                  <p class="small text-muted mb-0">Manage current and upcoming financial academic cycles.</p>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="shortcut-box" (click)="setTab('role')">
-                <i class="fas fa-shield-halved text-purple"></i>
+              <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('role')">
+                <div class="p-3 bg-info bg-opacity-10 text-info rounded-12"><i class="fas fa-shield-halved fa-lg"></i></div>
                 <div>
-                  <h6 class="mb-1 text-light">Role Permissions Matrix</h6>
-                  <p class="text-muted-sm mb-0">Audit faculty, accountant, and parent access tiers.</p>
+                  <h6 class="fw-bold mb-1 text-dark">Role Jurisdictions</h6>
+                  <p class="small text-muted mb-0">Configure granular module permissions and security roles.</p>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="shortcut-box" (click)="setTab('backup')">
-                <i class="fas fa-cloud-arrow-up text-info"></i>
+              <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('backup')">
+                <div class="p-3 bg-warning bg-opacity-10 text-warning rounded-12"><i class="fas fa-cloud-arrow-up fa-lg"></i></div>
                 <div>
-                  <h6 class="mb-1 text-light">Database Disaster Recovery</h6>
-                  <p class="text-muted-sm mb-0">Trigger cloud automated snapshot or download archive.</p>
+                  <h6 class="fw-bold mb-1 text-dark">Data Backup & Recovery</h6>
+                  <p class="small text-muted mb-0">Trigger cloud automated snapshots or download SQL dump.</p>
                 </div>
               </div>
             </div>
@@ -151,148 +155,128 @@
       </div>
 
       <div class="col-lg-4">
-        <div class="card-glass h-100">
-          <div class="card-header-clean">
-            <h3 class="card-title"><i class="fas fa-certificate text-warning me-2"></i> Active Enterprise License</h3>
+        <div class="card border-0 shadow-sm rounded-16 p-4 bg-white h-100">
+          <h5 class="fw-bold text-dark mb-3"><i class="fas fa-award text-warning me-2"></i> Platform License</h5>
+          <div class="p-3 bg-light rounded-16 border mb-3">
+            <span class="badge bg-success bg-opacity-10 text-success mb-2">VERIFIED ACTIVE</span>
+            <h6 class="fw-bold mb-1">{{ systemHealth.licenseType }}</h6>
+            <small class="text-muted">Valid until: {{ systemHealth.licenseExpiry }}</small>
           </div>
-          <div class="license-badge-box">
-            <div class="license-type">{{ systemHealth.licenseType }}</div>
-            <div class="license-expiry"><i class="fas fa-clock me-1"></i> Valid Through: {{ systemHealth.licenseExpiry }}</div>
-            <div class="license-specs mt-3">
-              <div><i class="fas fa-check-circle text-success me-2"></i> Multi-Branch & Campus Enabled</div>
-              <div><i class="fas fa-check-circle text-success me-2"></i> Unlimited Students & Staff Accounts</div>
-              <div><i class="fas fa-check-circle text-success me-2"></i> Automated Daily Cloud Vault Sync</div>
-            </div>
-          </div>
+          <ul class="list-unstyled small mb-0">
+            <li class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted">Core Engine:</span>
+              <strong>v4.2.0 (Release)</strong>
+            </li>
+            <li class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted">API Framework:</span>
+              <strong>.NET 8.0 Minimal APIs</strong>
+            </li>
+            <li class="d-flex justify-content-between py-2">
+              <span class="text-muted">SPA Client:</span>
+              <strong>Angular 19 Standalone</strong>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= TAB 2: INSTITUTIONAL IDENTITY ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'profile'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-landmark text-primary me-2"></i> Institutional Identity & Branding</h3>
-          <p class="text-muted-sm">Configure legal organization name, accreditation codes, letterhead footers, and localization parameters.</p>
-        </div>
-        <button class="btn-primary-glow" (click)="saveProfile()">
-          <i class="fas fa-floppy-disk me-2"></i> Save Profile
-        </button>
-      </div>
-
-      <div class="row g-4 mt-2">
+  <!-- TAB 2: INSTITUTIONAL IDENTITY (/GeneralSettings) -->
+  <div *ngIf="activeTab === 'profile'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-landmark text-primary me-2"></i> Institutional Profile & Legal Identity</h5>
+      <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label-sm">Institution Legal Name</label>
-          <input type="text" [(ngModel)]="profile.schoolName" class="form-control-dark" />
+          <label class="form-label small fw-bold">Institution / School Legal Name *</label>
+          <input type="text" class="form-control" [(ngModel)]="profile.schoolName">
         </div>
         <div class="col-md-3">
-          <label class="form-label-sm">Institution School Code</label>
-          <input type="text" [(ngModel)]="profile.schoolCode" class="form-control-dark" />
+          <label class="form-label small fw-bold">School Code</label>
+          <input type="text" class="form-control" [(ngModel)]="profile.schoolCode">
         </div>
         <div class="col-md-3">
-          <label class="form-label-sm">Accreditation / Affiliation</label>
-          <input type="text" [(ngModel)]="profile.affiliation" class="form-control-dark" />
+          <label class="form-label small fw-bold">Affiliation / Board Code</label>
+          <input type="text" class="form-control" [(ngModel)]="profile.affiliation">
         </div>
-
+      </div>
+      <div class="row g-3 mb-3">
         <div class="col-md-4">
-          <label class="form-label-sm">Official Email</label>
-          <input type="email" [(ngModel)]="profile.email" class="form-control-dark" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label-sm">Phone Number</label>
-          <input type="text" [(ngModel)]="profile.phone" class="form-control-dark" />
+          <label class="form-label small fw-bold">Official Email</label>
+          <input type="email" class="form-control" [(ngModel)]="profile.email">
         </div>
         <div class="col-md-4">
-          <label class="form-label-sm">Toll-Free Helpline</label>
-          <input type="text" [(ngModel)]="profile.tollFree" class="form-control-dark" />
+          <label class="form-label small fw-bold">Phone Number</label>
+          <input type="text" class="form-control" [(ngModel)]="profile.phone">
         </div>
-
-        <div class="col-12">
-          <label class="form-label-sm">Campus Physical Address</label>
-          <textarea rows="2" [(ngModel)]="profile.address" class="form-control-dark"></textarea>
-        </div>
-
         <div class="col-md-4">
-          <label class="form-label-sm">Base Operating Currency</label>
-          <select [(ngModel)]="profile.currency" class="form-select-dark">
-            <option value="INR (₹)">Indian Rupee (INR ₹)</option>
-            <option value="USD ($)">US Dollar (USD $)</option>
-            <option value="EUR (€)">Euro (EUR €)</option>
-            <option value="GBP (£)">British Pound (GBP £)</option>
+          <label class="form-label small fw-bold">Website URL</label>
+          <input type="text" class="form-control" [(ngModel)]="profile.website">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Full Campus Physical Address</label>
+        <textarea class="form-control" [(ngModel)]="profile.address" rows="2"></textarea>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <label class="form-label small fw-bold">Currency Symbol / Code</label>
+          <input type="text" class="form-control" [(ngModel)]="profile.currency">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-bold">Date Format</label>
+          <select class="form-select" [(ngModel)]="profile.dateFormat">
+            <option value="DD/MM/YYYY">DD/MM/YYYY (e.g. 15/08/2026)</option>
+            <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
+            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
           </select>
         </div>
         <div class="col-md-4">
-          <label class="form-label-sm">Date Display Format</label>
-          <select [(ngModel)]="profile.dateFormat" class="form-select-dark">
-            <option value="DD/MM/YYYY">DD/MM/YYYY (31/12/2026)</option>
-            <option value="MM/DD/YYYY">MM/DD/YYYY (12/31/2026)</option>
-            <option value="YYYY-MM-DD">YYYY-MM-DD (2026-12-31)</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label-sm">Timezone</label>
-          <select [(ngModel)]="profile.timeZone" class="form-select-dark">
+          <label class="form-label small fw-bold">System Timezone</label>
+          <select class="form-select" [(ngModel)]="profile.timeZone">
             <option value="Asia/Kolkata (IST +5:30)">Asia/Kolkata (IST +5:30)</option>
-            <option value="America/New_York (EST -5:00)">America/New_York (EST -5:00)</option>
-            <option value="Europe/London (GMT +0:00)">Europe/London (GMT +0:00)</option>
+            <option value="UTC">UTC Universal</option>
+            <option value="America/New_York (EST)">America/New_York (EST)</option>
             <option value="Asia/Dubai (GST +4:00)">Asia/Dubai (GST +4:00)</option>
           </select>
         </div>
-
-        <div class="col-md-6">
-          <label class="form-label-sm">Letterhead Header Slogan / Motto</label>
-          <input type="text" [(ngModel)]="profile.headerNote" class="form-control-dark" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label-sm">Document Footer Notice</label>
-          <input type="text" [(ngModel)]="profile.footerNote" class="form-control-dark" />
-        </div>
       </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="saveIdentity()">
+        <i class="fas fa-save me-1"></i> Update Institutional Profile
+      </button>
     </div>
   </div>
 
-  <!-- ================= TAB 3: ACADEMIC YEAR CYCLE ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'academicYear'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-calendar-days text-success me-2"></i> Academic Year Cycles & Sessions</h3>
-          <p class="text-muted-sm">Define institutional academic calendar years, active current terms, and batch roll-over schedules.</p>
-        </div>
-        <button class="btn-primary-glow" (click)="showAddSessionModal = true">
-          <i class="fas fa-plus me-2"></i> Add Academic Session
+  <!-- TAB 3: ACADEMIC YEAR CYCLE (/GeneralSettings/AcademicYear) -->
+  <div *ngIf="activeTab === 'academicYear'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-calendar-days text-primary me-2"></i> Academic Year Sessions</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewSessionModal = true">
+          <i class="fas fa-plus me-1"></i> Add Academic Session
         </button>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
-              <th>Session / Year Name</th>
+              <th>Session Name</th>
               <th>Start Date</th>
               <th>End Date</th>
               <th>Status</th>
-              <th>Active Indicator</th>
-              <th class="text-end">Action</th>
+              <th class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let s of sessions">
-              <td class="fw-bold text-light">{{ s.yearName }}</td>
+              <td class="fw-bold text-dark">{{ s.yearName }}</td>
               <td>{{ s.startDate }}</td>
               <td>{{ s.endDate }}</td>
               <td>
                 <span class="badge" [ngClass]="s.isCurrent ? 'bg-success' : 'bg-secondary'">{{ s.status }}</span>
               </td>
-              <td>
-                <span class="badge-mini bg-primary" *ngIf="s.isCurrent"><i class="fas fa-check-circle me-1"></i> Current Operating Session</span>
-                <span class="text-muted-sm" *ngIf="!s.isCurrent">Inactive</span>
-              </td>
               <td class="text-end">
-                <button class="btn-action-icon text-success me-1" *ngIf="!s.isCurrent" (click)="setCurrentSession(s)" title="Set as Current Active Session">
-                  <i class="fas fa-toggle-on"></i>
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3" *ngIf="!s.isCurrent" (click)="setCurrentSession(s)">
+                  Set as Current
                 </button>
               </td>
             </tr>
@@ -302,40 +286,36 @@
     </div>
   </div>
 
-  <!-- ================= TAB 4: OPTIONAL SUBJECT ASSIGNMENT ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'optionalSubject'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-book-bookmark text-info me-2"></i> Optional & Elective Subject Assignments</h3>
-          <p class="text-muted-sm">Allocate elective subjects (Robotics, Languages, Music, Arts) to senior secondary students.</p>
+  <!-- TAB 4: OPTIONAL SUBJECT ASSIGNMENT (/OptionalSubject/Assign) -->
+  <div *ngIf="activeTab === 'optionalSubject'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-book-bookmark text-primary me-2"></i> Student Optional & Elective Subject Assignments</h5>
+        <div class="d-flex gap-2">
+          <select class="form-select form-select-sm" [(ngModel)]="selectedElectiveFilter">
+            <option value="All">All Electives</option>
+            <option *ngFor="let el of availableElectives" [value]="el">{{ el }}</option>
+          </select>
         </div>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
               <th>Admission No</th>
               <th>Student Name</th>
               <th>Class</th>
-              <th>Assigned Elective Subject</th>
-              <th>Assignment Date</th>
+              <th>Elective / Optional Subject</th>
               <th>Status</th>
-              <th class="text-end">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let a of optionalAssignments">
-              <td class="fw-bold text-light">{{ a.admissionNo }}</td>
-              <td>{{ a.studentName }}</td>
-              <td><span class="badge-mini">{{ a.class }}</span></td>
-              <td class="fw-bold text-info">{{ a.electiveSubject }}</td>
-              <td class="text-muted-sm">{{ a.assignedDate }}</td>
-              <td><span class="badge bg-success">{{ a.status }}</span></td>
-              <td class="text-end">
-                <button class="btn-action-icon text-danger"><i class="fas fa-trash-can"></i></button>
-              </td>
+            <tr *ngFor="let opt of optionalAssignments">
+              <td><code>{{ opt.admissionNo }}</code></td>
+              <td class="fw-bold text-dark">{{ opt.studentName }}</td>
+              <td><span class="badge bg-light text-dark border">{{ opt.class }}</span></td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ opt.electiveSubject }}</span></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success"><i class="fas fa-check me-1"></i> {{ opt.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -343,45 +323,35 @@
     </div>
   </div>
 
-  <!-- ================= TAB 5: HOLIDAY MASTER ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'holiday'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-calendar-xmark text-danger me-2"></i> Annual Holiday Master Calendar</h3>
-          <p class="text-muted-sm">Maintain national holidays, festive breaks, and academic vacation dates automatically broadcasted to the portal.</p>
-        </div>
-        <button class="btn-primary-glow" (click)="showAddHolidayModal = true">
-          <i class="fas fa-plus me-2"></i> Add Holiday
+  <!-- TAB 5: HOLIDAY MASTER (/Settings/Holiday) -->
+  <div *ngIf="activeTab === 'holiday'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-calendar-xmark text-primary me-2"></i> Academic Holiday Master Calendar</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewHolidayModal = true">
+          <i class="fas fa-plus me-1"></i> Register Holiday
         </button>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
               <th>Holiday Name</th>
               <th>Category</th>
               <th>Start Date</th>
               <th>End Date</th>
               <th>Duration</th>
-              <th>Applicable Scope</th>
-              <th>Status</th>
-              <th class="text-end">Actions</th>
+              <th>Applicable For</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let h of holidays">
-              <td class="fw-bold text-light">{{ h.name }}</td>
-              <td><span class="badge bg-dark border border-secondary">{{ h.type }}</span></td>
+              <td class="fw-bold text-dark">{{ h.name }}</td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ h.type }}</span></td>
               <td>{{ h.startDate }}</td>
               <td>{{ h.endDate }}</td>
-              <td class="fw-bold text-warning">{{ h.durationDays }} Days</td>
-              <td><span class="badge-mini">{{ h.applicableTo }}</span></td>
-              <td><span class="badge bg-success">{{ h.status }}</span></td>
-              <td class="text-end">
-                <button class="btn-action-icon text-danger" (click)="deleteHoliday(h.id)"><i class="fas fa-trash-can"></i></button>
-              </td>
+              <td><span class="badge bg-light text-dark border">{{ h.durationDays }} Day(s)</span></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">{{ h.applicableTo }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -389,32 +359,26 @@
     </div>
   </div>
 
-  <!-- ================= TAB 6: ENVIRONMENTAL / BASE SETUP ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'baseSetup'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-cubes-stacked text-purple me-2"></i> Environmental Master Lookups</h3>
-          <p class="text-muted-sm">Configure standard lookup values for Blood Groups, Religions, Caste Quotas, and Document checklists.</p>
-        </div>
-      </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+  <!-- TAB 6: ENVIRONMENTAL SETUP (/GeneralSettings/BaseSetup) -->
+  <div *ngIf="activeTab === 'baseSetup'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-cubes-stacked text-primary me-2"></i> Environmental Lookups & Base Parameters</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
-              <th>Category</th>
-              <th>Code / Value</th>
-              <th>Description / Purpose</th>
+              <th>Lookup Category</th>
+              <th>Code Name</th>
+              <th>Description</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let b of baseLookups">
-              <td><span class="badge-mini bg-primary">{{ b.category }}</span></td>
-              <td class="fw-bold text-light">{{ b.codeName }}</td>
-              <td class="text-muted-sm">{{ b.description }}</td>
-              <td><span class="badge bg-success">{{ b.status }}</span></td>
+              <td><span class="badge bg-light text-dark border">{{ b.category }}</span></td>
+              <td class="fw-bold text-primary">{{ b.codeName }}</td>
+              <td>{{ b.description }}</td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">{{ b.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -422,32 +386,24 @@
     </div>
   </div>
 
-  <!-- ================= TAB 7: ROLE JURISDICTION ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'role'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-shield-halved text-warning me-2"></i> Role Jurisdiction & Permissions Matrix</h3>
-          <p class="text-muted-sm">Define role hierarchy, access tiers, and granular module CRUD permissions.</p>
-        </div>
-      </div>
-
-      <div class="row g-4 mt-2">
-        <div class="col-lg-6" *ngFor="let r of roles">
-          <div class="role-card">
+  <!-- TAB 7: ROLE JURISDICTION (/RolePermission/Role) -->
+  <div *ngIf="activeTab === 'role'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-shield-halved text-primary me-2"></i> Role Jurisdiction & Granular Permissions</h5>
+      <div class="row g-4">
+        <div *ngFor="let r of roles" class="col-12 col-md-6 col-xl-4">
+          <div class="card border rounded-16 p-3 bg-light h-100">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="role-title">{{ r.roleName }}</h5>
-              <span class="badge-count">{{ r.usersCount }} Users Assigned</span>
+              <h6 class="fw-bold text-dark mb-0">{{ r.roleName }}</h6>
+              <span class="badge bg-primary">{{ r.usersCount }} Users</span>
             </div>
-            <p class="role-desc">{{ r.description }}</p>
-
-            <div class="permission-grid mt-3">
-              <div class="perm-row" *ngFor="let mod of ['Students', 'Academics', 'Finance', 'System']">
-                <span class="perm-mod">{{ mod }}</span>
-                <span class="badge-mini" [ngClass]="r.permissions[mod].view ? 'bg-success' : 'bg-secondary'">View</span>
-                <span class="badge-mini" [ngClass]="r.permissions[mod].create ? 'bg-success' : 'bg-secondary'">Create</span>
-                <span class="badge-mini" [ngClass]="r.permissions[mod].edit ? 'bg-success' : 'bg-secondary'">Edit</span>
-                <span class="badge-mini" [ngClass]="r.permissions[mod].delete ? 'bg-danger' : 'bg-secondary'">Delete</span>
+            <p class="small text-muted mb-3">{{ r.description }}</p>
+            <div class="p-2 bg-white rounded-12 border small">
+              <div class="d-flex justify-content-between py-1 border-bottom" *ngFor="let mod of ['Students', 'Academics', 'Finance', 'System']">
+                <span class="text-muted">{{ mod }}:</span>
+                <span class="badge" [ngClass]="r.permissions[mod].view ? 'bg-success' : 'bg-secondary'">
+                  {{ r.permissions[mod].view ? 'Full Access' : 'Restricted' }}
+                </span>
               </div>
             </div>
           </div>
@@ -456,47 +412,50 @@
     </div>
   </div>
 
-  <!-- ================= TAB 8: USER MANAGEMENT MATRIX ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'users'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-users-gear text-info me-2"></i> System User Accounts Directory</h3>
-          <p class="text-muted-sm">Manage administrative credentials, staff login accounts, linked entities, and 2FA authentication.</p>
-        </div>
+  <!-- TAB 8: USER MANAGEMENT MATRIX (/Administration/Users) -->
+  <div *ngIf="activeTab === 'users'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-users-gear text-primary me-2"></i> System User Matrix & Credentials</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewUserModal = true">
+          <i class="fas fa-user-plus me-1"></i> Provision New User
+        </button>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
               <th>User Name</th>
-              <th>Username</th>
+              <th>Username / Email</th>
               <th>Assigned Role</th>
-              <th>Linked Entity</th>
-              <th>2FA Security</th>
+              <th>2FA Status</th>
               <th>Last Active</th>
-              <th>Status</th>
+              <th>Account Status</th>
+              <th class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let u of users">
-              <td class="fw-bold text-light">
-                <div class="d-flex align-items-center gap-2">
-                  <img [src]="u.avatarUrl" class="user-avatar-mini" />
-                  <span>{{ u.name }}</span>
-                </div>
-              </td>
-              <td><code>{{ u.username }}</code></td>
-              <td><span class="badge-mini bg-primary">{{ u.role }}</span></td>
-              <td class="text-muted-sm">{{ u.linkedEntity }}</td>
+              <td class="fw-bold text-dark">{{ u.name }}</td>
               <td>
-                <span class="badge" [ngClass]="u.isTwoFactorEnabled ? 'bg-success' : 'bg-secondary'">
+                <div>{{ u.username }}</div>
+                <small class="text-muted">{{ u.email }}</small>
+              </td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ u.role }}</span></td>
+              <td>
+                <span class="badge" [ngClass]="u.isTwoFactorEnabled ? 'bg-success' : 'bg-warning text-dark'">
                   {{ u.isTwoFactorEnabled ? '2FA Enabled' : 'Disabled' }}
                 </span>
               </td>
-              <td class="text-muted-sm">{{ u.lastLogin }}</td>
-              <td><span class="badge bg-success">{{ u.status }}</span></td>
+              <td><small class="text-muted">{{ u.lastLogin }}</small></td>
+              <td>
+                <span class="badge" [ngClass]="u.status === 'Active' ? 'bg-success' : 'bg-danger'">{{ u.status }}</span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-light text-primary rounded-circle p-2 me-1" (click)="toggleUserStatus(u)">
+                  <i class="fas fa-power-off"></i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -504,40 +463,39 @@
     </div>
   </div>
 
-  <!-- ================= TAB 9: API ACCESS NEXUS ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'apiPermission'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-key text-warning me-2"></i> REST API Access Nexus & Webhooks</h3>
-          <p class="text-muted-sm">Generate authenticated tokens for mobile apps, biometric hardware sync, and external LMS integrations.</p>
-        </div>
+  <!-- TAB 9: API ACCESS NEXUS (/RolePermission/ApiPermission) -->
+  <div *ngIf="activeTab === 'apiPermission'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-key text-primary me-2"></i> REST API Access Tokens & Webhook Gateway</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewApiTokenModal = true">
+          <i class="fas fa-plus me-1"></i> Generate API Key
+        </button>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
               <th>Token Name</th>
-              <th>API Key Prefix</th>
-              <th>Authorized Scopes</th>
+              <th>Key Prefix</th>
               <th>Rate Limit</th>
-              <th>Created</th>
+              <th>Scopes</th>
               <th>Expiry</th>
               <th>Status</th>
+              <th class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let tok of apiTokens">
-              <td class="fw-bold text-light">{{ tok.name }}</td>
-              <td><code>{{ tok.keyPrefix }}</code></td>
-              <td>
-                <span class="badge-mini me-1" *ngFor="let sc of tok.scopes">{{ sc }}</span>
+              <td class="fw-bold text-dark">{{ tok.name }}</td>
+              <td><code>{{ tok.keyPrefix }}••••••••</code></td>
+              <td><span class="badge bg-light text-dark border">{{ tok.rateLimit }}</span></td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ tok.scopes.join(', ') }}</span></td>
+              <td><small class="text-muted">{{ tok.expiryDate }}</small></td>
+              <td><span class="badge" [ngClass]="tok.status === 'Active' ? 'bg-success' : 'bg-danger'">{{ tok.status }}</span></td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="revokeToken(tok)">Revoke</button>
               </td>
-              <td class="text-success fw-bold">{{ tok.rateLimit }}</td>
-              <td class="text-muted-sm">{{ tok.createdDate }}</td>
-              <td class="text-muted-sm">{{ tok.expiryDate }}</td>
-              <td><span class="badge bg-success">{{ tok.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -545,40 +503,37 @@
     </div>
   </div>
 
-  <!-- ================= TAB 10: FIELD CUSTOMIZATION ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'customFields'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-sliders-simple text-primary me-2"></i> Custom Dynamic Fields Builder</h3>
-          <p class="text-muted-sm">Inject custom form fields into Student Admission, Staff Onboarding, and Fee Invoices.</p>
-        </div>
+  <!-- TAB 10: CUSTOM FIELDS (/CustomFields) -->
+  <div *ngIf="activeTab === 'customFields'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-sliders-simple text-primary me-2"></i> Dynamic Field Customization Engine</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewFieldModal = true">
+          <i class="fas fa-plus me-1"></i> Add Custom Field
+        </button>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
-              <th>Target Form Module</th>
+              <th>Target Module</th>
               <th>Field Label</th>
-              <th>Data Type</th>
+              <th>Field Type</th>
               <th>Mandatory</th>
-              <th>Public Form</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let f of customFields">
-              <td><span class="badge-mini bg-primary">{{ f.moduleTarget }}</span></td>
-              <td class="fw-bold text-light">{{ f.fieldLabel }}</td>
-              <td><span class="badge bg-dark border border-secondary">{{ f.fieldType }}</span></td>
+              <td><span class="badge bg-light text-dark border">{{ f.moduleTarget }}</span></td>
+              <td class="fw-bold text-dark">{{ f.fieldLabel }}</td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ f.fieldType }}</span></td>
               <td>
-                <span class="badge" [ngClass]="f.isRequired ? 'bg-danger' : 'bg-secondary'">{{ f.isRequired ? 'Required' : 'Optional' }}</span>
+                <span class="badge" [ngClass]="f.isRequired ? 'bg-danger bg-opacity-10 text-danger' : 'bg-light text-muted'">
+                  {{ f.isRequired ? 'Required *' : 'Optional' }}
+                </span>
               </td>
-              <td>
-                <span class="badge" [ngClass]="f.showOnPublicPortal ? 'bg-info text-dark' : 'bg-secondary'">{{ f.showOnPublicPortal ? 'Yes' : 'Internal Only' }}</span>
-              </td>
-              <td><span class="badge bg-success">{{ f.status }}</span></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">{{ f.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -586,40 +541,35 @@
     </div>
   </div>
 
-  <!-- ================= TAB 11: DATA ARCHIVE & BACKUP ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'backup'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-cloud-arrow-up text-info me-2"></i> Data Archive & Cloud Vault Backup</h3>
-          <p class="text-muted-sm">Automated disaster recovery backups, S3 cloud storage archives, and manual snapshot triggers.</p>
-        </div>
-        <button class="btn-primary-glow" (click)="triggerImmediateBackup()">
-          <i class="fas fa-camera me-2"></i> Immediate Database Snapshot
+  <!-- TAB 11: DATA ARCHIVE (BACKUP) (/GeneralSettings/Backup) -->
+  <div *ngIf="activeTab === 'backup'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-cloud-arrow-up text-primary me-2"></i> Database Snapshots & Automated Cloud Archives</h5>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="triggerBackup()">
+          <i class="fas fa-database me-1"></i> Snapshot Database Now
         </button>
       </div>
-
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
-              <th>Archive File Name</th>
-              <th>Snapshot Size</th>
-              <th>Timestamp</th>
-              <th>Storage Vault Destination</th>
-              <th>Backup Type</th>
+              <th>Archive Name</th>
+              <th>Size</th>
+              <th>Created Timestamp</th>
+              <th>Destination</th>
               <th class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let b of backups">
-              <td class="fw-bold text-light"><i class="fas fa-file-zipper text-warning me-2"></i>{{ b.fileName }}</td>
-              <td class="fw-bold text-success">{{ b.size }}</td>
-              <td class="text-muted-sm">{{ b.date }}</td>
-              <td><span class="badge-mini">{{ b.destination }}</span></td>
-              <td><span class="badge bg-dark border border-secondary">{{ b.type }}</span></td>
+            <tr *ngFor="let bk of backups">
+              <td class="fw-bold text-dark"><code>{{ bk.fileName }}</code></td>
+              <td><span class="badge bg-light text-dark border">{{ bk.size }}</span></td>
+              <td>{{ bk.date }}</td>
+              <td><span class="badge bg-info bg-opacity-10 text-info">{{ bk.destination }}</span></td>
               <td class="text-end">
-                <button class="btn-action-icon text-info me-1" (click)="showToast('Downloading snapshot ' + b.fileName)"><i class="fas fa-download"></i></button>
+                <button class="btn btn-sm btn-outline-success rounded-pill px-3 me-1" (click)="restoreBackup(bk)">Restore</button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-2"><i class="fas fa-download"></i></button>
               </td>
             </tr>
           </tbody>
@@ -628,127 +578,96 @@
     </div>
   </div>
 
-  <!-- ================= TAB 12: SYSTEM ARCHIVE & UPDATE ================= -->
-  <div class="tab-pane-content" *ngIf="activeTab === 'updates'">
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <div>
-          <h3 class="card-title"><i class="fas fa-arrows-rotate text-success me-2"></i> System Diagnostics & Version Updates</h3>
-          <p class="text-muted-sm">Verify runtime dependencies, check for security patches, and inspect system changelogs.</p>
-        </div>
-        <button class="btn-primary-glow" (click)="runDiagnosticCheck()">
-          <i class="fas fa-stethoscope me-2"></i> Run Diagnostic Check
-        </button>
-      </div>
-
-      <div class="update-info-panel mb-4">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label-sm">Installed Core Version</label>
-            <div class="fw-bold text-success">{{ systemUpdateInfo.currentVersion }}</div>
+  <!-- TAB 12: ARCHIVE & UPDATES (/Administration/Updates) -->
+  <div *ngIf="activeTab === 'updates'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white" style="max-width: 800px;">
+      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-arrows-rotate text-primary me-2"></i> EasyEdu System Updates & Patch Manager</h5>
+      <div class="p-3 bg-light rounded-16 border mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="fw-bold mb-1">EasyEdu Enterprise Core v4.2.0</h6>
+            <small class="text-muted">Current Installed Release &bull; Channel: Stable Production</small>
           </div>
-          <div class="col-md-6">
-            <label class="form-label-sm">Technology Stack</label>
-            <div class="text-light">{{ systemUpdateInfo.frameworks }}</div>
-          </div>
+          <span class="badge bg-success px-3 py-2">UP TO DATE</span>
         </div>
       </div>
-
-      <h5 class="fw-bold text-light mb-3"><i class="fas fa-list-check me-2 text-info"></i> Recent System Changelog</h5>
-      <div class="changelog-list">
-        <div class="changelog-item" *ngFor="let log of systemUpdateInfo.changelog">
-          <div class="d-flex justify-content-between mb-1">
-            <span class="fw-bold text-primary">{{ log.version }}</span>
-            <span class="text-muted-sm">{{ log.date }}</span>
-          </div>
-          <p class="text-light mb-0 small">{{ log.notes }}</p>
-        </div>
-      </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="checkForUpdates()">
+        <i class="fas fa-sync-alt me-1"></i> Check Cloud Repository for Updates
+      </button>
     </div>
   </div>
 
   <!-- MODAL: ADD ACADEMIC SESSION -->
-  <div class="modal-backdrop-custom" *ngIf="showAddSessionModal">
-    <div class="modal-dialog-custom">
+  <div class="modal-backdrop-custom" *ngIf="showNewSessionModal">
+    <div class="modal-content-custom">
       <div class="modal-header-custom">
-        <h5><i class="fas fa-calendar-plus me-2 text-success"></i> Add Academic Session</h5>
-        <button class="btn-close-custom" (click)="showAddSessionModal = false">&times;</button>
+        <h5 class="fw-bold mb-0">Create Academic Session</h5>
+        <button class="btn-close-custom" (click)="showNewSessionModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
-          <label class="form-label-sm">Academic Session Name</label>
-          <input type="text" [(ngModel)]="newSession.yearName" placeholder="e.g. 2027-2028" class="form-control-dark" />
+          <label class="form-label small fw-bold">Session Name (e.g. 2026-2027) *</label>
+          <input type="text" class="form-control" [(ngModel)]="newSession.yearName">
         </div>
         <div class="row g-3 mb-3">
           <div class="col-md-6">
-            <label class="form-label-sm">Session Start Date</label>
-            <input type="date" [(ngModel)]="newSession.startDate" class="form-control-dark" />
+            <label class="form-label small fw-bold">Start Date</label>
+            <input type="date" class="form-control" [(ngModel)]="newSession.startDate">
           </div>
           <div class="col-md-6">
-            <label class="form-label-sm">Session End Date</label>
-            <input type="date" [(ngModel)]="newSession.endDate" class="form-control-dark" />
+            <label class="form-label small fw-bold">End Date</label>
+            <input type="date" class="form-control" [(ngModel)]="newSession.endDate">
           </div>
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn-secondary-dark" (click)="showAddSessionModal = false">Cancel</button>
-        <button class="btn-primary-glow" (click)="addSession()"><i class="fas fa-check me-1"></i> Register Session</button>
+        <button class="btn btn-light" (click)="showNewSessionModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createSession()">Create Session</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: ADD HOLIDAY -->
-  <div class="modal-backdrop-custom" *ngIf="showAddHolidayModal">
-    <div class="modal-dialog-custom">
+  <!-- MODAL: REGISTER HOLIDAY -->
+  <div class="modal-backdrop-custom" *ngIf="showNewHolidayModal">
+    <div class="modal-content-custom">
       <div class="modal-header-custom">
-        <h5><i class="fas fa-calendar-plus me-2 text-danger"></i> Schedule Institutional Holiday</h5>
-        <button class="btn-close-custom" (click)="showAddHolidayModal = false">&times;</button>
+        <h5 class="fw-bold mb-0">Register Academic Holiday</h5>
+        <button class="btn-close-custom" (click)="showNewHolidayModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
-          <label class="form-label-sm">Holiday Name / Reason</label>
-          <input type="text" [(ngModel)]="newHoliday.name" placeholder="e.g. Spring Festival Recess" class="form-control-dark" />
+          <label class="form-label small fw-bold">Holiday Title *</label>
+          <input type="text" class="form-control" [(ngModel)]="newHoliday.name">
         </div>
         <div class="row g-3 mb-3">
           <div class="col-md-6">
-            <label class="form-label-sm">Category</label>
-            <select [(ngModel)]="newHoliday.type" class="form-select-dark">
+            <label class="form-label small fw-bold">Category</label>
+            <select class="form-select" [(ngModel)]="newHoliday.type">
               <option value="National">National Holiday</option>
-              <option value="Festival">Festive Recess</option>
-              <option value="Academic">Academic Vacation</option>
-              <option value="Gazetted">Gazetted Government Holiday</option>
+              <option value="Festival">Festival Holiday</option>
+              <option value="Academic">Academic Break</option>
             </select>
           </div>
           <div class="col-md-6">
-            <label class="form-label-sm">Applicable Scope</label>
-            <select [(ngModel)]="newHoliday.applicableTo" class="form-select-dark">
-              <option value="All">All (Students & Staff)</option>
-              <option value="Students Only">Students Only</option>
-              <option value="Staff Only">Staff Only</option>
-            </select>
+            <label class="form-label small fw-bold">Duration (Days)</label>
+            <input type="number" class="form-control" [(ngModel)]="newHoliday.durationDays">
           </div>
         </div>
         <div class="row g-3 mb-3">
           <div class="col-md-6">
-            <label class="form-label-sm">Start Date</label>
-            <input type="date" [(ngModel)]="newHoliday.startDate" class="form-control-dark" />
+            <label class="form-label small fw-bold">Start Date</label>
+            <input type="date" class="form-control" [(ngModel)]="newHoliday.startDate">
           </div>
           <div class="col-md-6">
-            <label class="form-label-sm">End Date</label>
-            <input type="date" [(ngModel)]="newHoliday.endDate" class="form-control-dark" />
+            <label class="form-label small fw-bold">End Date</label>
+            <input type="date" class="form-control" [(ngModel)]="newHoliday.endDate">
           </div>
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn-secondary-dark" (click)="showAddHolidayModal = false">Cancel</button>
-        <button class="btn-primary-glow" (click)="addHoliday()"><i class="fas fa-check me-1"></i> Publish Holiday</button>
+        <button class="btn btn-light" (click)="showNewHolidayModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createHoliday()">Save Holiday</button>
       </div>
     </div>
-  </div>
-
-  <!-- TOAST NOTIFICATION -->
-  <div class="toast-notification" *ngIf="showSuccessToast">
-    <i class="fas fa-circle-check text-success me-2"></i>
-    <span>{{ toastMessage }}</span>
   </div>
 </div>
