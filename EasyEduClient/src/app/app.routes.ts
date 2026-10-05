@@ -1,6 +1,11 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
+import { ProductsComponent } from './pages/products/products.component';
+import { ModulesComponent } from './pages/modules/modules.component';
+import { PresentationComponent } from './pages/presentation/presentation.component';
+import { PricingComponent } from './pages/pricing/pricing.component';
+import { ContactComponent } from './pages/contact/contact.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AdministrationComponent } from './pages/administration/administration.component';
@@ -34,9 +39,24 @@ import { RolePermissionComponent } from './pages/role-permission/role-permission
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
+  // Public Landing and Institutional Pages
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'Home', component: HomeComponent },
+  { path: 'products', component: ProductsComponent },
+  { path: 'Home/Products', component: ProductsComponent },
+  { path: 'modules', component: ModulesComponent },
+  { path: 'Home/Modules', component: ModulesComponent },
+  { path: 'presentation', component: PresentationComponent },
+  { path: 'Home/Presentation', component: PresentationComponent },
+  { path: 'pricing', component: PricingComponent },
+  { path: 'Home/Pricing', component: PricingComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'Home/Contact', component: ContactComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'Account/Login', component: LoginComponent },
+
+  // Secured Application Portal (Guard Protected with Local Fallback)
   {
     path: '',
     component: MainLayoutComponent,

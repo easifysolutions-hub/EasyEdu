@@ -1,4 +1,4 @@
-<!-- Header Top -->
+<!-- Header Top Bar -->
 <div class="header-top">
   <div class="container">
     <div class="header-flex">
@@ -8,9 +8,10 @@
         <span><i class="fas fa-map-marker-alt"></i> Bangalore, Karnataka</span>
       </div>
       <div class="social-icons">
-        <a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a>
-        <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
-        <a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a>
+        <a href="javascript:void(0)" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="javascript:void(0)" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="javascript:void(0)" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="javascript:void(0)" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </div>
@@ -24,10 +25,12 @@
         <img src="/images/easyedu_full_logo_white.png" alt="EasyEdu" style="height: 55px; width: auto; object-fit: contain;">
       </a>
       <div class="nav-items">
-        <a routerLink="/">Home</a>
-        <a routerLink="/dashboard">Live Demo</a>
-        <a routerLink="/students">Students</a>
-        <a routerLink="/fees">Finance</a>
+        <a routerLink="/" class="active">Home</a>
+        <a routerLink="/Home/Products">Products</a>
+        <a routerLink="/Home/Modules">Modules</a>
+        <a routerLink="/Home/Presentation">Presentation</a>
+        <a routerLink="/Home/Pricing">Pricing</a>
+        <a routerLink="/Home/Contact">Contact Us</a>
         <a routerLink="/login" class="btn-glow">CLIENT LOGIN</a>
       </div>
     </div>
@@ -44,7 +47,8 @@
         
         <div class="d-flex flex-wrap gap-3 mt-4">
           <a routerLink="/dashboard" class="btn-glow">TRY LIVE DEMO</a>
-          <a routerLink="/login" class="btn-glow" style="background: transparent; border: 1px solid var(--secondary);">PORTAL LOGIN</a>
+          <a routerLink="/Home/Pricing" class="btn-glow" style="background: transparent; border: 1px solid var(--secondary);">BUY NOW</a>
+          <a routerLink="/login" class="btn-glow" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);">PORTAL LOGIN</a>
         </div>
       </div>
       <div class="hero-img">
@@ -88,7 +92,7 @@
   </div>
 </section>
 
-<!-- Video / Platform Overview -->
+<!-- Video Overview / Complete Package -->
 <section class="section-padding bg-dark" style="background: linear-gradient(to right, rgba(15, 23, 42, 1), rgba(30, 41, 59, 0.5));">
   <div class="container">
     <div class="row align-items-center g-5">
@@ -96,7 +100,7 @@
         <div class="glass-card p-0 overflow-hidden position-relative" style="aspect-ratio: 16/9; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
           <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" class="w-100 h-100 object-fit-cover" alt="EasyEdu Platform Overview">
           <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(15, 23, 42, 0.3);">
-            <a routerLink="/dashboard" class="text-white" style="font-size: 4.5rem; text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);"><i class="fas fa-play-circle"></i></a>
+            <a routerLink="/Home/Presentation" class="text-white" style="font-size: 4.5rem; text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);"><i class="fas fa-play-circle"></i></a>
           </div>
         </div>
       </div>
@@ -105,24 +109,24 @@
           <h5 style="text-align: left;">Complete Package</h5>
           <h2 style="text-align: left; font-size: 2.8rem; line-height: 1.1;">Take A Look At Our <br><span style="color: var(--secondary);">EasyEdu Overview</span></h2>
         </div>
-        <p style="color:var(--text-muted); font-size: 1.05rem; margin-bottom: 25px;">Our platform provides a seamless experience for administrators, teachers, parents and students alike.</p>
+        <p style="color:var(--text-muted); font-size: 1.05rem; margin-bottom: 25px;">What’s query you have in mind? How it works? Have a look at our overview and you’ll be crystal clear about it. Our platform provides a seamless experience for administrators, teachers, parents, and students alike.</p>
         <ul class="list-unstyled" style="color: var(--text-main); font-weight: 500;">
-          <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Real-time Data Analytics & Reports</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Modern Glassmorphic Dashboard</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Role-Based Permissions & Security</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Real-time Data Analytics</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> User-friendly Dashboard</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> High-speed Performance</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- All Modules -->
+<!-- All Modules Grid -->
 <section class="section-padding">
   <div class="container">
     <div class="section-title">
       <h5>Complete Package</h5>
       <h2>Every Single Module You Want</h2>
-      <p style="color:var(--text-muted);">Explore all our modules built for modern school & college workflows.</p>
+      <p style="color:var(--text-muted);">Curiosity is future of new discover. Explore all our single modules that will blow your mind!</p>
     </div>
     
     <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px;">
@@ -138,39 +142,63 @@
       </div>
       <div class="module-card">
         <div class="module-icon-wrapper"><i class="fas fa-chalkboard-teacher"></i></div>
-        <h4>Teacher & Faculty</h4>
-        <p>Tools for timetable routines, attendance, and evaluation management.</p>
+        <h4>Teacher</h4>
+        <p>Tools for content sharing, attendance, and evaluation management.</p>
       </div>
       <div class="module-card">
         <div class="module-icon-wrapper"><i class="fas fa-file-invoice-dollar"></i></div>
         <h4>Fees Collection</h4>
-        <p>Smart invoicing, payment tracking, and automated receipts.</p>
+        <p>Smart invoicing, automated reminders, and online payment gateways.</p>
       </div>
       <div class="module-card">
         <div class="module-icon-wrapper"><i class="fas fa-wallet"></i></div>
-        <h4>Accounts & Finance</h4>
-        <p>Detailed financial tracking, income, expenses, and ledger reports.</p>
+        <h4>Accounts</h4>
+        <p>Detailed financial tracking, income, expenses, and audit-ready reports.</p>
       </div>
       <div class="module-card">
         <div class="module-icon-wrapper"><i class="fas fa-users"></i></div>
         <h4>Human Resource</h4>
-        <p>Staff records, payroll processing, and department rosters.</p>
+        <p>Staff records, payroll processing, and attendance tracking.</p>
       </div>
       <div class="module-card">
         <div class="module-icon-wrapper"><i class="fas fa-pencil-alt"></i></div>
-        <h4>Examinations</h4>
-        <p>Exam terms, marks entry, grades, and automated report cards.</p>
+        <h4>Examination</h4>
+        <p>Online/offline exams, marks entry, and automated report card generation.</p>
       </div>
       <div class="module-card">
         <div class="module-icon-wrapper"><i class="fas fa-book"></i></div>
         <h4>Academics</h4>
-        <p>Classes, section distribution, and subject curriculum planning.</p>
+        <p>Curriculum planning, class routines, and subject assignment.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Leadership Team -->
+<!-- More Features List -->
+<section class="section-padding" style="background: rgba(255,255,255,0.02);">
+  <div class="container">
+    <div class="section-title">
+      <h2>More Features Has EasyEdu</h2>
+      <p style="color:var(--text-muted);">It's vast! We have more additional features that you expect in a complete solution.</p>
+    </div>
+    <div class="row g-3">
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-bolt"></i><span>Optimized Performance</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-sync"></i><span>One Click Update</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-network-wired"></i><span>RESTful APIs Support</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-code"></i><span>Clean Code Quality</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-magic"></i><span>Installation Wizard</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-language"></i><span>Multi Lingual</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-mobile-alt"></i><span>Fully Responsive</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-align-right"></i><span>RTL Support</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-envelope-open-text"></i><span>Email Notifications</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-comment-alt"></i><span>SMS Support</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-print"></i><span>Printable Reports</span></div></div>
+      <div class="col-xl-3 col-md-6"><div class="mini-feature-card"><i class="fas fa-history"></i><span>Inbuilt Backup Tool</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Visionary Leadership Team -->
 <section class="section-padding" style="background: rgba(15, 23, 42, 0.3);">
   <div class="container">
     <div class="section-title">
@@ -180,18 +208,18 @@
     </div>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 380px)); gap: 30px; justify-content: center;">
       <div class="module-card" style="text-align: center;">
-        <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--primary); margin: 0 auto 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+        <div style="width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--primary); margin: 0 auto 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
           <img src="/images/sharief_abdull.jpg" alt="Mr. Sharief Abdull" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <h4 style="font-size: 1.4rem; margin-bottom: 6px;">Mr. Sharief Abdull M A</h4>
-        <p style="color:var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 0.82rem; letter-spacing: 1px;">Director (MBA, M.Com)</p>
+        <p style="color:var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Director (MBA, M.Com)</p>
       </div>
       <div class="module-card" style="text-align: center;">
-        <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--primary); margin: 0 auto 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+        <div style="width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--primary); margin: 0 auto 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
           <img src="/images/abdul_hakeem.jpg" alt="Mr. Abdul Hakeem" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <h4 style="font-size: 1.4rem; margin-bottom: 6px;">Mr. Abdul Hakeem</h4>
-        <p style="color:var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 0.82rem; letter-spacing: 1px;">Director (MSC)</p>
+        <p style="color:var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Director (MSC)</p>
       </div>
     </div>
   </div>
@@ -202,29 +230,28 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-widget">
-        <div class="mb-3">
-          <img src="/images/easyedu_full_logo_white.png" alt="EasyEdu" style="height: 48px; width: auto; object-fit: contain;">
-        </div>
-        <p style="line-height: 1.8; font-size: 0.92rem;">EasyEdu is a state-of-the-art education management platform designed to streamline administrative workflows and enhance the learning experience.</p>
+        <a routerLink="/" class="navbar-brand" style="margin-bottom:25px; display: inline-block;">
+          <img src="/images/easyedu_full_logo_white.png" alt="Logo" style="height: 50px;">
+        </a>
+        <p style="line-height: 1.8; font-size: 0.95rem; color: var(--text-muted);">EasyEdu is a state-of-the-art education management platform designed to streamline administrative workflows and enhance the learning experience for everyone.</p>
       </div>
 
       <div class="footer-widget footer-links">
-        <h4>Modules</h4>
+        <h4>Product</h4>
         <ul>
-          <li><a routerLink="/students">Students</a></li>
-          <li><a routerLink="/academic/classes">Academic</a></li>
-          <li><a routerLink="/fees">Finance & Fees</a></li>
-          <li><a routerLink="/attendance">Attendance</a></li>
-          <li><a routerLink="/examinations">Exams</a></li>
+          <li><a routerLink="/Home/Products">Products</a></li>
+          <li><a routerLink="/Home/Modules">Modules</a></li>
+          <li><a routerLink="/dashboard">Live Portal</a></li>
+          <li><a routerLink="/Home/Pricing">Pricing</a></li>
         </ul>
       </div>
 
       <div class="footer-widget footer-links">
-        <h4>Portal</h4>
+        <h4>Company</h4>
         <ul>
-          <li><a routerLink="/login">Client Login</a></li>
-          <li><a routerLink="/dashboard">Admin Dashboard</a></li>
-          <li><a routerLink="/settings">System Settings</a></li>
+          <li><a routerLink="/Home/Presentation">Executive Overview</a></li>
+          <li><a routerLink="/Home/Contact">Contact Us</a></li>
+          <li><a routerLink="/login">Portal Login</a></li>
         </ul>
       </div>
 
@@ -233,13 +260,13 @@
         <ul>
           <li><a href="javascript:void(0)">Help Center</a></li>
           <li><a href="javascript:void(0)">System Status</a></li>
-          <li><a href="javascript:void(0)">Privacy Policy</a></li>
+          <li><a href="javascript:void(0)">Privacy & Security</a></li>
         </ul>
       </div>
 
       <div class="footer-widget">
         <h4>Newsletter</h4>
-        <p style="font-size: 0.88rem;">Stay updated with our latest features.</p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Stay updated with our latest news and software updates.</p>
         <div class="newsletter-form">
           <input type="email" placeholder="Your Email">
           <button type="button"><i class="fas fa-paper-plane"></i></button>
@@ -247,12 +274,12 @@
       </div>
     </div>
     
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 pb-4" style="border-top: 1px solid rgba(255,255,255,0.08); gap: 15px;">
-      <p class="m-0" style="font-size: 0.85rem; opacity: 0.6;">&copy; {{ currentYear }} Easify Solutions. All Rights Reserved.</p>
-      <div class="social-icons d-flex gap-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 pb-4" style="border-top: 1px solid rgba(255,255,255,0.08); gap: 20px;">
+      <p class="m-0" style="font-size: 0.85rem; opacity: 0.6;">&copy; 2026 Easify Solutions. All Rights Reserved. Empowering Education Through Technology.</p>
+      <div class="social-icons d-flex gap-4">
         <a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a>
-        <a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a>
         <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+        <a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a>
       </div>
     </div>
   </div>

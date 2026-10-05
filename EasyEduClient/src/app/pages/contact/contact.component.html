@@ -1,0 +1,197 @@
+<!-- Top Header Bar -->
+<div class="header-top">
+  <div class="container">
+    <div class="header-flex">
+      <div class="header-contact">
+        <span><i class="fas fa-phone-alt"></i> +91 9731615949</span>
+        <span><i class="fas fa-envelope"></i> sales&#64;easifysolutions.com</span>
+        <span><i class="fas fa-map-marker-alt"></i> Bangalore, Karnataka</span>
+      </div>
+      <div class="social-icons">
+        <a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a>
+        <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+        <a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a>
+        <a href="javascript:void(0)"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Menu Navigation -->
+<nav class="main-menu">
+  <div class="container">
+    <div class="header-flex">
+      <a routerLink="/" class="navbar-brand">
+        <img src="/images/easyedu_full_logo_white.png" alt="EasyEdu" style="height: 55px; width: auto; object-fit: contain;">
+      </a>
+      <div class="nav-items">
+        <a routerLink="/">Home</a>
+        <a routerLink="/Home/Products">Products</a>
+        <a routerLink="/Home/Modules">Modules</a>
+        <a routerLink="/Home/Presentation">Presentation</a>
+        <a routerLink="/Home/Pricing">Pricing</a>
+        <a routerLink="/Home/Contact" class="active">Contact Us</a>
+        <a routerLink="/login" class="btn-glow">CLIENT LOGIN</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Contact Page Main Content -->
+<section class="section-padding contact-wrapper">
+  <div class="container">
+    <!-- Horizontal Info Belt -->
+    <div class="info-belt">
+      <div class="belt-item">
+        <div class="belt-icon"><i class="fas fa-phone-volume"></i></div>
+        <div class="belt-text">
+          <strong>Direct Line</strong>
+          <span>+91 9731615949 / +91 9845012345</span>
+        </div>
+      </div>
+      <div class="belt-item">
+        <div class="belt-icon"><i class="fas fa-envelope-open-text"></i></div>
+        <div class="belt-text">
+          <strong>Support & Sales</strong>
+          <span>sales&#64;easifysolutions.com</span>
+        </div>
+      </div>
+      <div class="belt-item">
+        <div class="belt-icon"><i class="fas fa-map-marked-alt"></i></div>
+        <div class="belt-text">
+          <strong>Headquarters</strong>
+          <span>Bangalore, Karnataka, India</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form & Map / Details -->
+    <div class="row g-5 align-items-stretch">
+      <div class="col-lg-7">
+        <div class="glass-card h-100 p-4 p-md-5">
+          <h3 class="mb-2">Get in Touch with our ERP Specialists</h3>
+          <p class="text-muted small mb-4">Fill in the details below and we will schedule an institution-specific walkthrough for your management team.</p>
+
+          <div *ngIf="submitted" class="alert alert-success p-4 rounded-4 text-center">
+            <i class="fas fa-check-circle" style="font-size: 2.5rem; color: #10b981; margin-bottom: 12px;"></i>
+            <h4 class="text-white">Thank You for Reaching Out!</h4>
+            <p class="text-muted mb-0">Our senior institutional consultant will contact you within 2 business hours.</p>
+          </div>
+
+          <form *ngIf="!submitted" (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-muted small">Your Name *</label>
+                <input type="text" [(ngModel)]="formData.fullName" name="fullName" required class="glass-input" placeholder="e.g. Dr. Rajesh Sharma">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small">Email Address *</label>
+                <input type="email" [(ngModel)]="formData.email" name="email" required class="glass-input" placeholder="name&#64;institution.edu">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small">Mobile Number *</label>
+                <input type="tel" [(ngModel)]="formData.phone" name="phone" required class="glass-input" placeholder="+91 9876543210">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small">Institution Name</label>
+                <input type="text" [(ngModel)]="formData.instituteName" name="instituteName" class="glass-input" placeholder="e.g. Apex Public School">
+              </div>
+              <div class="col-12">
+                <label class="form-label text-muted small">Message / Specific Requirements</label>
+                <textarea rows="4" [(ngModel)]="formData.message" name="message" class="glass-input" placeholder="Tell us about your campus size, current challenges, or features required..."></textarea>
+              </div>
+              <div class="col-12 mt-4">
+                <button type="submit" [disabled]="isSending" class="btn-glow w-100 text-center" style="border: none; cursor: pointer;">
+                  <i *ngIf="isSending" class="fas fa-spinner fa-spin me-2"></i>
+                  <span>{{ isSending ? 'TRANSMITTING REQUEST...' : 'SEND MESSAGE & REQUEST DEMO' }}</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="glass-card h-100 p-4 p-md-5 d-flex flex-column justify-content-between">
+          <div>
+            <h4 class="text-white mb-4"><i class="fas fa-building text-primary me-2"></i> Easify Solutions Pvt Ltd</h4>
+            <p class="text-muted leading-relaxed mb-4">Providing award-winning digital transformation ecosystems to schools, colleges, coaching institutes, and universities across India and internationally.</p>
+
+            <div class="mb-4">
+              <strong class="d-block text-white mb-1"><i class="fas fa-clock text-warning me-2"></i> Support Hours</strong>
+              <span class="text-muted">Monday - Saturday: 9:00 AM – 7:00 PM IST</span>
+            </div>
+
+            <div class="mb-4">
+              <strong class="d-block text-white mb-1"><i class="fas fa-shield-alt text-success me-2"></i> 24/7 Server Status</strong>
+              <span class="text-muted">All cloud clusters operating normally with 99.99% uptime.</span>
+            </div>
+          </div>
+
+          <div class="quick-links-box p-3 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+            <p class="small text-muted mb-2">Prefer instant portal access?</p>
+            <a routerLink="/dashboard" class="text-primary fw-bold text-decoration-none">
+              Explore Live Interactive System <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer style="background: #020617; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 80px;">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-widget">
+        <a routerLink="/" class="navbar-brand" style="margin-bottom:25px; display: inline-block;">
+          <img src="/images/easyedu_full_logo_white.png" alt="Logo" style="height: 50px;">
+        </a>
+        <p style="line-height: 1.8; font-size: 0.95rem; color: var(--text-muted);">EasyEdu is a state-of-the-art education management platform designed to streamline administrative workflows and enhance the learning experience for everyone.</p>
+      </div>
+      <div class="footer-widget footer-links">
+        <h4>Product</h4>
+        <ul>
+          <li><a routerLink="/Home/Products">Products</a></li>
+          <li><a routerLink="/Home/Modules">Modules</a></li>
+          <li><a routerLink="/dashboard">Live Portal</a></li>
+          <li><a routerLink="/Home/Pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-widget footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li><a routerLink="/Home/Presentation">Executive Overview</a></li>
+          <li><a routerLink="/Home/Contact">Contact Us</a></li>
+          <li><a routerLink="/login">Portal Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-widget footer-links">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="javascript:void(0)">Help Center</a></li>
+          <li><a href="javascript:void(0)">System Status</a></li>
+          <li><a href="javascript:void(0)">Privacy & Security</a></li>
+        </ul>
+      </div>
+      <div class="footer-widget">
+        <h4>Newsletter</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Stay updated with our latest news and software updates.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your Email">
+          <button type="button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 pb-4" style="border-top: 1px solid rgba(255,255,255,0.08); gap: 20px;">
+      <p class="m-0" style="font-size: 0.85rem; opacity: 0.6;">&copy; 2026 Easify Solutions. All Rights Reserved.</p>
+      <div class="social-icons d-flex gap-4">
+        <a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a>
+        <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+        <a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>

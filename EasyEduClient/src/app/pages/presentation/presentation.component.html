@@ -1,0 +1,178 @@
+<!-- Main Navbar -->
+<nav class="main-menu">
+  <div class="container">
+    <div class="header-flex">
+      <a routerLink="/" class="navbar-brand">
+        <img src="/images/easyedu_full_logo_white.png" alt="EasyEdu" style="height: 55px; width: auto; object-fit: contain;">
+      </a>
+      <div class="nav-items">
+        <a routerLink="/">Home</a>
+        <a routerLink="/Home/Products">Products</a>
+        <a routerLink="/Home/Modules">Modules</a>
+        <a routerLink="/Home/Presentation" class="active">Presentation</a>
+        <a routerLink="/Home/Pricing">Pricing</a>
+        <a routerLink="/Home/Contact">Contact Us</a>
+        <a routerLink="/login" class="btn-glow">CLIENT LOGIN</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Interactive Slide Stage -->
+<div class="presentation-wrapper">
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" [style.width.%]="(currentSlide / totalSlides) * 100"></div>
+  </div>
+
+  <!-- Navigation Arrows -->
+  <button class="pres-nav pres-prev" (click)="prevSlide()" aria-label="Previous Slide"><i class="fas fa-chevron-left"></i></button>
+  <button class="pres-nav pres-next" (click)="nextSlide()" aria-label="Next Slide"><i class="fas fa-chevron-right"></i></button>
+
+  <div class="pres-controls">
+    <span class="slide-badge">{{ currentSlide }} / {{ totalSlides }}</span>
+    <div class="dot-indicators">
+      <span *ngFor="let s of [1,2,3,4,5,6]" [class.active]="s === currentSlide" (click)="goToSlide(s)"></span>
+    </div>
+  </div>
+
+  <div class="container slide-content-box">
+    <!-- Slide 1: Cover -->
+    <div class="slide-item" *ngIf="currentSlide === 1">
+      <div class="text-center py-5">
+        <div class="badge-pill mb-4">EXECUTIVE PRESENTATION 2026-27</div>
+        <h1 class="display-3 fw-bold text-white mb-4">The Modern <span class="text-gradient">Institution</span></h1>
+        <p class="lead text-muted mx-auto mb-5" style="max-width: 650px;">Transforming educational operations through a unified, high-fidelity ERP ecosystem with 40+ intelligent modules.</p>
+        <div class="d-flex justify-content-center gap-3">
+          <button (click)="nextSlide()" class="btn-glow">START TOUR <i class="fas fa-arrow-right ms-2"></i></button>
+          <a routerLink="/dashboard" class="btn-glow" style="background: transparent; border: 1px solid var(--secondary);">TRY LIVE DEMO</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Challenges vs Solution -->
+    <div class="slide-item" *ngIf="currentSlide === 2">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <h2 class="display-5 fw-bold mb-4">Why Digital <br><span style="color: #3b82f6;">Transformation?</span></h2>
+          <ul class="challenge-list">
+            <li><i class="fas fa-times-circle text-danger me-2"></i> Fragmented data across multiple campuses & departments.</li>
+            <li><i class="fas fa-times-circle text-danger me-2"></i> Manual fee collection bottlenecks & reconciliation errors.</li>
+            <li><i class="fas fa-times-circle text-danger me-2"></i> Communication barriers between parents and faculty.</li>
+            <li><i class="fas fa-times-circle text-danger me-2"></i> Lack of real-time operational analytics for management.</li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <div class="glass-card text-center p-5">
+            <div class="solution-circle mb-4">
+              <i class="fas fa-check-double" style="font-size: 3rem; color: #10b981;"></i>
+            </div>
+            <h3 class="mb-3">The EasyEdu Solution</h3>
+            <p class="text-muted">A fully automated, end-to-end cloud platform providing unified control, mobile apps, and instant financial ledgers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Core Architecture -->
+    <div class="slide-item" *ngIf="currentSlide === 3">
+      <div class="text-center mb-5">
+        <div class="badge-pill mb-2">SYSTEM ARCHITECTURE</div>
+        <h2 class="display-5 fw-bold">Enterprise Cloud Infrastructure</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="glass-card">
+            <i class="fas fa-server text-primary mb-3" style="font-size: 2rem;"></i>
+            <h4>High-Availability Core</h4>
+            <p class="text-muted small">Built on ASP.NET Core 9 and SQL Server EF Core with 99.99% uptime and sub-second response times.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-card">
+            <i class="fas fa-shield-alt text-warning mb-3" style="font-size: 2rem;"></i>
+            <h4>Bank-Grade Security</h4>
+            <p class="text-muted small">End-to-end JWT encryption, Role-Based Access Control (RBAC), and full compliance audit trails.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-card">
+            <i class="fas fa-mobile-screen text-info mb-3" style="font-size: 2rem;"></i>
+            <h4>Multi-Device Native</h4>
+            <p class="text-muted small">PWA and native Android/iOS mobile application ready for staff, students, and parents.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Student & Academic Lifecycle -->
+    <div class="slide-item" *ngIf="currentSlide === 4">
+      <div class="text-center mb-4">
+        <div class="badge-pill mb-2">ACADEMIC EXCELLENCE</div>
+        <h2 class="display-5 fw-bold">Comprehensive Lifecycle Management</h2>
+      </div>
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+          <div class="glass-card">
+            <h4 class="mb-3 text-primary"><i class="fas fa-user-graduate me-2"></i> Admissions to Alumni</h4>
+            <p class="text-muted">Manage entrance evaluations, online applications, batch promotions, dynamic certificates, and alumni networking with 1-click reports.</p>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <h4 class="mb-3 text-warning"><i class="fas fa-calendar-alt me-2"></i> Dynamic Scheduling</h4>
+            <p class="text-muted">Automatic conflict detection for teacher workloads, smart room allocations, and elective course groupings.</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="glass-card">
+            <h4 class="mb-3 text-info"><i class="fas fa-file-signature me-2"></i> Online & Offline Exams</h4>
+            <p class="text-muted">Question banks, computerized MCQ tests, descriptive grading, automated marksheet formatting, and instant GPA/CGPA computation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Financial Intelligence -->
+    <div class="slide-item" *ngIf="currentSlide === 5">
+      <div class="text-center mb-4">
+        <div class="badge-pill mb-2">FINANCIAL ACCURACY</div>
+        <h2 class="display-5 fw-bold">Smart Invoicing & Double-Entry Ledgers</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="glass-card">
+            <i class="fas fa-file-invoice text-success mb-3" style="font-size: 2rem;"></i>
+            <h4>Automated Fee Cycles</h4>
+            <p class="text-muted small">Instalment plans, scholarships, fine waivers, and SMS/WhatsApp payment gateway payment links.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-card">
+            <i class="fas fa-book-open text-primary mb-3" style="font-size: 2rem;"></i>
+            <h4>Accounting Ledgers</h4>
+            <p class="text-muted small">Vouchers (Receipt, Payment, Journal, Contra, Sales, Purchase) with instant Trial Balance & Balance Sheets.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-card">
+            <i class="fas fa-chart-pie text-warning mb-3" style="font-size: 2rem;"></i>
+            <h4>Audit-Ready Reports</h4>
+            <p class="text-muted small">Export financial surveys and collections to Excel, PDF, or printable bank challans.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Next Steps -->
+    <div class="slide-item" *ngIf="currentSlide === 6">
+      <div class="text-center py-5">
+        <div class="badge-pill mb-4">GETTING STARTED</div>
+        <h2 class="display-4 fw-bold mb-3">Ready to Transform Your Campus?</h2>
+        <p class="text-muted lead mx-auto mb-5" style="max-width: 600px;">Join thousands of students and faculty experiencing seamless institutional operations with EasyEdu.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <a routerLink="/Home/Contact" class="btn-glow">CONTACT SALES</a>
+          <a routerLink="/Home/Pricing" class="btn-glow" style="background: transparent; border: 1px solid var(--secondary);">VIEW PRICING</a>
+          <a routerLink="/dashboard" class="btn-glow" style="background: #10b981; border: none;">ACCESS DEMO PORTAL</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
