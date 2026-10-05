@@ -294,15 +294,43 @@
     <!-- Accounts Master & Vouchers -->
     <div class="nav-item-wrapper" id="accountsMenu">
       <a class="nav-link-premium" [class.open]="openMenus['accounts']" (click)="toggleMenu('accounts')">
-        <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts Ledger</span></span>
+        <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['accounts']">
-        <li><a routerLink="/accounting" routerLinkActive="active" class="sub-nav-link text-info fw-bold">Accounting Dashboard</a></li>
-        <li><a routerLink="/accounting" class="sub-nav-link">Voucher Entry (PV/RV/JV)</a></li>
-        <li><a routerLink="/accounting" class="sub-nav-link">Chart of Accounts</a></li>
-        <li><a routerLink="/accounting" class="sub-nav-link">Trial Balance</a></li>
-        <li><a routerLink="/accounting" class="sub-nav-link">Balance Sheet & P&L</a></li>
+        <!-- Vouchers Section -->
+        <li class="pt-1">
+          <div class="text-uppercase fw-bold text-muted px-3 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Vouchers</div>
+        </li>
+        <li><a routerLink="/Accounting/PaymentVoucher" routerLinkActive="active" class="sub-nav-link ps-4 text-danger fw-bold">Payment Voucher</a></li>
+        <li><a routerLink="/Accounting/ReceiptVoucher" routerLinkActive="active" class="sub-nav-link ps-4 text-success fw-bold">Receipt Voucher</a></li>
+        <li><a routerLink="/Accounting/JournalVoucher" routerLinkActive="active" class="sub-nav-link ps-4">Journal Voucher</a></li>
+        <li><a routerLink="/Accounting/ContraVoucher" routerLinkActive="active" class="sub-nav-link ps-4 text-info">Contra Entry</a></li>
+
+        <!-- Stock Vouchers Section -->
+        <li class="mt-2 pt-1 border-top border-secondary border-opacity-25">
+          <div class="text-uppercase fw-bold text-muted px-3 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Stock Vouchers</div>
+        </li>
+        <li><a routerLink="/Accounting/SalesVoucher" routerLinkActive="active" class="sub-nav-link ps-4">Sales Voucher</a></li>
+        <li><a routerLink="/Accounting/PurchaseVoucher" routerLinkActive="active" class="sub-nav-link ps-4">Purchase Voucher</a></li>
+
+        <!-- Masters Section -->
+        <li class="mt-2 pt-1 border-top border-secondary border-opacity-25">
+          <div class="text-uppercase fw-bold text-muted px-3 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Masters</div>
+        </li>
+        <li><a routerLink="/Accounting/ChartOfAccounts" routerLinkActive="active" class="sub-nav-link ps-4">Account Master</a></li>
+        <li><a routerLink="/Accounting/ItemAccountMaster" routerLinkActive="active" class="sub-nav-link ps-4">Item Account Master</a></li>
+
+        <!-- Reports Section -->
+        <li class="mt-2 pt-1 border-top border-secondary border-opacity-25">
+          <div class="text-uppercase fw-bold text-muted px-3 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Reports</div>
+        </li>
+        <li><a routerLink="/Accounting/VoucherList" routerLinkActive="active" class="sub-nav-link ps-4">Voucher Register</a></li>
+        <li><a routerLink="/Accounting/AccountLedger" routerLinkActive="active" class="sub-nav-link ps-4">Account Ledger</a></li>
+        <li><a routerLink="/Accounting/TrialBalance" routerLinkActive="active" class="sub-nav-link ps-4">Trial Balance</a></li>
+        <li><a routerLink="/Accounting/ReceiptPayment" routerLinkActive="active" class="sub-nav-link ps-4">Receipt & Payment</a></li>
+        <li><a routerLink="/Accounting/IncomeExpenditure" routerLinkActive="active" class="sub-nav-link ps-4">Income & Expenditure</a></li>
+        <li><a routerLink="/Accounting/BalanceSheet" routerLinkActive="active" class="sub-nav-link ps-4">Balance Sheet</a></li>
       </ul>
     </div>
 

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 declare const Swal: any;
 
@@ -26,11 +27,14 @@ interface VoucherItem {
 @Component({
   selector: 'app-accounting',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './accounting.component.html',
   styleUrls: ['./accounting.component.css']
 })
-export class AccountingComponent {
+export class AccountingComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   activeTab: 'dashboard' | 'vouchers' | 'chart' | 'trial' | 'profit-loss' | 'balance-sheet' = 'dashboard';
   trendPeriod: 'yearly' | 'monthly' = 'yearly';
   searchTerm = '';
@@ -65,6 +69,53 @@ export class AccountingComponent {
     narration: '',
     date: new Date().toISOString().split('T')[0]
   };
+
+  ngOnInit(): void {
+    this.syncActiveTabFromUrl();
+
+    this.route.url.subscribe(() => {
+      this.syncActiveTabFromUrl();
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.activeTab = params['tab'];
+      }
+    });
+  }
+
+  private syncActiveTabFromUrl(): void {
+    const path = this.router.url.toLowerCase();
+    if (path.includes('paymentvoucher')) {
+      this.activeTab = 'vouchers';
+      this.openVoucher('Payment');
+    } else if (path.includes('receiptvoucher')) {
+      this.activeTab = 'vouchers';
+      this.openVoucher('Receipt');
+    } else if (path.includes('journalvoucher')) {
+      this.activeTab = 'vouchers';
+      this.openVoucher('Journal');
+    } else if (path.includes('contravoucher')) {
+      this.activeTab = 'vouchers';
+      this.openVoucher('Contra');
+    } else if (path.includes('salesvoucher')) {
+      this.activeTab = 'vouchers';
+      this.openVoucher('Sales');
+    } else if (path.includes('purchasevoucher')) {
+      this.activeTab = 'vouchers';
+      this.openVoucher('Purchase');
+    } else if (path.includes('chartofaccounts') || path.includes('itemaccountmaster') || path.includes('accountledger')) {
+      this.activeTab = 'chart';
+    } else if (path.includes('trialbalance')) {
+      this.activeTab = 'trial';
+    } else if (path.includes('incomeexpenditure')) {
+      this.activeTab = 'profit-loss';
+    } else if (path.includes('balancesheet')) {
+      this.activeTab = 'balance-sheet';
+    } else if (path.includes('receiptpayment') || path.includes('voucherlist') || path.includes('voucher')) {
+      this.activeTab = 'vouchers';
+    }
+  }
 
   get filteredVouchers(): VoucherItem[] {
     return this.vouchers.filter(v => {
