@@ -1086,7 +1086,7 @@
     <div class="modal-content-custom" style="max-width: 550px;">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0"><i class="fas fa-plus-circle text-primary me-2"></i> Create Student Invoice</h5>
-        <button class="btn-close-custom" (click)="showCreateInvoiceModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showCreateInvoiceModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1117,9 +1117,9 @@
           <input type="date" class="form-control" [(ngModel)]="newInvoiceForm.dueDate">
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showCreateInvoiceModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="saveNewInvoice()"><i class="fas fa-save me-1"></i> Save Invoice</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="showCreateInvoiceModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewInvoice()"><i class="fas fa-save me-1"></i> Save Invoice</button>
       </div>
     </div>
   </div>
@@ -1127,9 +1127,9 @@
   <!-- MODAL: COLLECT FEE -->
   <div class="modal-backdrop-custom" *ngIf="showCollectModal">
     <div class="modal-content-custom" style="max-width: 550px;">
-      <div class="modal-header-custom bg-success text-white">
-        <h5 class="fw-bold mb-0 text-white"><i class="fas fa-hand-holding-usd me-2"></i> Collect Student Fee</h5>
-        <button class="btn-close-custom text-white" (click)="closeCollectModal()">&times;</button>
+      <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-hand-holding-usd text-success me-2"></i> Collect Student Fee</h5>
+        <button class="btn-close-danger" (click)="closeCollectModal()">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="p-3 bg-light rounded-12 mb-3 border" *ngIf="selectedInvoice">
@@ -1169,9 +1169,9 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="closeCollectModal()">Cancel</button>
-        <button class="btn btn-success" (click)="submitCollectFee()"><i class="fas fa-check-circle me-1"></i> Confirm & Collect</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="closeCollectModal()">Cancel</button>
+        <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="submitCollectFee()"><i class="fas fa-check-circle me-1"></i> Confirm & Collect</button>
       </div>
     </div>
   </div>
@@ -1179,9 +1179,9 @@
   <!-- MODAL: ADD FEE HEAD -->
   <div class="modal-backdrop-custom" *ngIf="showAddHeadModal">
     <div class="modal-content-custom" style="max-width: 500px;">
-      <div class="modal-header-custom">
-        <h5 class="fw-bold mb-0">Add Fee Head</h5>
-        <button class="btn-close-custom" (click)="showAddHeadModal = false">&times;</button>
+      <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark">Add Fee Head</h5>
+        <button class="btn-close-danger" (click)="showAddHeadModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1199,9 +1199,9 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showAddHeadModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="saveNewHead()">Save Fee Head</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="showAddHeadModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewHead()"><i class="fas fa-check-circle me-1"></i> Save Fee Head</button>
       </div>
     </div>
   </div>
@@ -1209,9 +1209,9 @@
   <!-- MODAL: ADD FEE GROUP -->
   <div class="modal-backdrop-custom" *ngIf="showAddGroupModal">
     <div class="modal-content-custom" style="max-width: 500px;">
-      <div class="modal-header-custom">
-        <h5 class="fw-bold mb-0">Add Fee Group</h5>
-        <button class="btn-close-custom" (click)="showAddGroupModal = false">&times;</button>
+      <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark">Add Fee Group</h5>
+        <button class="btn-close-danger" (click)="showAddGroupModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1223,9 +1223,9 @@
           <textarea class="form-control" [(ngModel)]="newGroup.description" rows="3"></textarea>
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showAddGroupModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="saveNewGroup()">Save Group</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="showAddGroupModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewGroup()"><i class="fas fa-check-circle me-1"></i> Save Group</button>
       </div>
     </div>
   </div>
@@ -1233,9 +1233,9 @@
   <!-- MODAL: BULK INVOICING -->
   <div class="modal-backdrop-custom" *ngIf="showBulkInvoiceModal">
     <div class="modal-content-custom" style="max-width: 550px;">
-      <div class="modal-header-custom">
-        <h5 class="fw-bold mb-0"><i class="fas fa-layer-group text-primary me-2"></i> Bulk Invoicing Generator</h5>
-        <button class="btn-close-custom" (click)="showBulkInvoiceModal = false">&times;</button>
+      <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-layer-group text-primary me-2"></i> Bulk Invoicing Generator</h5>
+        <button class="btn-close-danger" (click)="showBulkInvoiceModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1266,9 +1266,9 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showBulkInvoiceModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="runBulkInvoicing()"><i class="fas fa-bolt me-1"></i> Generate Now</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="showBulkInvoiceModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="runBulkInvoicing()"><i class="fas fa-bolt me-1"></i> Generate Now</button>
       </div>
     </div>
   </div>
@@ -1276,9 +1276,9 @@
   <!-- MODAL: VOUCHER ENTRY -->
   <div class="modal-backdrop-custom" *ngIf="showVoucherModal">
     <div class="modal-content-custom" style="max-width: 550px;">
-      <div class="modal-header-custom">
-        <h5 class="fw-bold mb-0"><i class="fas fa-receipt text-primary me-2"></i> Post Accounting Voucher</h5>
-        <button class="btn-close-custom" (click)="showVoucherModal = false">&times;</button>
+      <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-receipt text-primary me-2"></i> Post Accounting Voucher</h5>
+        <button class="btn-close-danger" (click)="showVoucherModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="row g-3 mb-3">
@@ -1305,9 +1305,9 @@
           <textarea class="form-control" [(ngModel)]="newVoucherForm.narration" rows="3" placeholder="Enter transaction narration..."></textarea>
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showVoucherModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="saveVoucher()"><i class="fas fa-save me-1"></i> Post Voucher</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="showVoucherModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveVoucher()"><i class="fas fa-save me-1"></i> Post Voucher</button>
       </div>
     </div>
   </div>
@@ -1315,9 +1315,9 @@
   <!-- MODAL: PRINTABLE RECEIPT -->
   <div class="modal-backdrop-custom" *ngIf="showReceiptModal && receiptData">
     <div class="modal-content-custom" style="max-width: 650px;">
-      <div class="modal-header-custom border-0 pb-0">
-        <h5 class="fw-bold mb-0">Fee Payment Receipt</h5>
-        <button class="btn-close-custom" (click)="showReceiptModal = false">&times;</button>
+      <div class="modal-header-custom border-0 pb-0 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0 text-dark">Fee Payment Receipt</h5>
+        <button class="btn-close-danger" (click)="showReceiptModal = false">&times;</button>
       </div>
       <div class="modal-body-custom p-4">
         <div class="p-4 border rounded-16 bg-white shadow-sm" id="printable-receipt">
@@ -1378,9 +1378,9 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showReceiptModal = false">Close</button>
-        <button class="btn btn-primary" (click)="printReceipt()"><i class="fas fa-print me-1"></i> Print Receipt</button>
+      <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-danger rounded-pill px-4" (click)="showReceiptModal = false">Close</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printReceipt()"><i class="fas fa-print me-1"></i> Print Receipt</button>
       </div>
     </div>
   </div>

@@ -362,7 +362,7 @@
   <div class="modal-content-custom" style="max-width: 540px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
       <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-route text-primary me-2"></i> Create Bus Route</h5>
-      <button class="btn-close" (click)="showAddRouteModal = false"></button>
+      <button class="btn-close-danger" (click)="showAddRouteModal = false">&times;</button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
@@ -389,8 +389,8 @@
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAddRouteModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveRoute()">Save Route</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAddRouteModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveRoute()"><i class="fas fa-check-circle me-1"></i> Save Route</button>
     </div>
   </div>
 </div>
@@ -400,7 +400,7 @@
   <div class="modal-content-custom" style="max-width: 520px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
       <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-bus text-primary me-2"></i> Register Fleet Vehicle</h5>
-      <button class="btn-close" (click)="showAddVehicleModal = false"></button>
+      <button class="btn-close-danger" (click)="showAddVehicleModal = false">&times;</button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
@@ -427,8 +427,8 @@
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAddVehicleModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveVehicle()">Add Vehicle</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAddVehicleModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveVehicle()"><i class="fas fa-check-circle me-1"></i> Add Vehicle</button>
     </div>
   </div>
 </div>
@@ -438,7 +438,7 @@
   <div class="modal-content-custom" style="max-width: 500px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
       <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-shuffle text-primary me-2"></i> Assign Vehicle & Driver</h5>
-      <button class="btn-close" (click)="showAssignVehicleModal = false"></button>
+      <button class="btn-close-danger" (click)="showAssignVehicleModal = false">&times;</button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
@@ -467,8 +467,8 @@
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAssignVehicleModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAssignment()">Confirm Assignment</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAssignVehicleModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAssignment()"><i class="fas fa-check-circle me-1"></i> Confirm Assignment</button>
     </div>
   </div>
 </div>
@@ -478,7 +478,7 @@
   <div class="modal-content-custom" style="max-width: 520px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center">
       <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-id-card-clip text-primary me-2"></i> Allocate Student Seat</h5>
-      <button class="btn-close" (click)="showAllocateStudentModal = false"></button>
+      <button class="btn-close-danger" (click)="showAllocateStudentModal = false">&times;</button>
     </div>
     <div class="modal-body-custom mt-3">
       <div class="row g-3">
@@ -515,8 +515,8 @@
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-      <button class="btn btn-light rounded-pill px-4" (click)="showAllocateStudentModal = false">Cancel</button>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAllocation()">Issue Bus Pass</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAllocateStudentModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveAllocation()"><i class="fas fa-check-circle me-1"></i> Issue Bus Pass</button>
     </div>
   </div>
 </div>

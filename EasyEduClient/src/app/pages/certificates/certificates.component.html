@@ -190,7 +190,7 @@
             <input type="text" class="form-control modern-input" [(ngModel)]="generateForm.conduct">
           </div>
           <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-            <button class="btn btn-light rounded-pill px-4" (click)="activeTab = 'issued'">Cancel</button>
+            <button class="btn btn-danger rounded-pill px-4" (click)="activeTab = 'issued'">Cancel</button>
             <button class="btn btn-primary rounded-pill px-5 shadow-sm" (click)="generateNewCertificate()">
               <i class="fas fa-check-circle me-1"></i> Generate & Print Certificate
             </button>
@@ -325,7 +325,7 @@
   <div class="modal-content-custom" style="max-width: 720px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
       <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-certificate text-primary me-2"></i> Official Document Verification</h6>
-      <button class="btn-close" (click)="showCertificatePrintModal = false"></button>
+      <button class="btn-close-danger" (click)="showCertificatePrintModal = false">&times;</button>
     </div>
     <div class="modal-body-custom p-4" *ngIf="selectedCertificate">
       <div class="border border-3 rounded-16 p-5 bg-white shadow-sm position-relative" style="border-style: double !important; border-color: #002B49 !important;">
@@ -360,7 +360,7 @@
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
-      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showCertificatePrintModal = false">Close</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showCertificatePrintModal = false">Close</button>
       <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printDocument()">
         <i class="fas fa-print me-1"></i> Print Certificate
       </button>
@@ -373,7 +373,7 @@
   <div class="modal-content-custom" style="max-width: 440px;">
     <div class="modal-header-custom d-flex justify-content-between align-items-center border-bottom pb-2">
       <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-id-card text-primary me-2"></i> ID Badge Print Preview</h6>
-      <button class="btn-close" (click)="showIdCardPrintModal = false"></button>
+      <button class="btn-close-danger" (click)="showIdCardPrintModal = false">&times;</button>
     </div>
     <div class="modal-body-custom p-4 d-flex justify-content-center" *ngIf="selectedIdCard">
       <div class="card border rounded-16 shadow overflow-hidden bg-white text-center p-0" style="width: 280px;">
@@ -411,7 +411,7 @@
       </div>
     </div>
     <div class="modal-footer-custom d-flex justify-content-end gap-2 pt-3 border-top">
-      <button class="btn btn-outline-secondary rounded-pill px-3" (click)="showIdCardPrintModal = false">Close</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showIdCardPrintModal = false">Close</button>
       <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="printDocument()">
         <i class="fas fa-print me-1"></i> Print Badge
       </button>

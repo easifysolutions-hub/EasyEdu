@@ -429,8 +429,8 @@
           <label class="form-label small fw-bold">Designation Title <span class="text-danger">*</span></label>
           <input type="text" class="form-control form-control-premium" [(ngModel)]="newDesignation" placeholder="e.g. Senior Faculty">
         </div>
-        <button class="btn btn-primary w-100" (click)="addDesignation()">
-          <i class="fas fa-save me-1"></i> Save Designation
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm w-100" (click)="addDesignation()">
+          <i class="fas fa-check-circle me-1"></i> Save Designation
         </button>
       </div>
     </div>
@@ -476,8 +476,8 @@
           <label class="form-label small fw-bold">Head of Department (HOD)</label>
           <input type="text" class="form-control form-control-premium" [(ngModel)]="newDept.headOfDepartment" placeholder="e.g. Dr. Ramesh Sharma">
         </div>
-        <button class="btn btn-primary w-100" (click)="addDepartment()">
-          <i class="fas fa-save me-1"></i> Save Department
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm w-100" (click)="addDepartment()">
+          <i class="fas fa-check-circle me-1"></i> Save Department
         </button>
       </div>
     </div>
@@ -547,7 +547,7 @@
   <div *ngIf="activeTab === 'bulk-payroll'" class="premium-card">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h5 class="fw-bold mb-0"><i class="fas fa-print text-primary me-2"></i>Bulk Salary Slips Print Spooler</h5>
-      <button class="btn btn-primary btn-sm" (click)="exportPayrollLedger()"><i class="fas fa-print me-1"></i> Print Batch</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm btn-sm" (click)="exportPayrollLedger()"><i class="fas fa-print me-1"></i> Print Batch</button>
     </div>
     <p class="text-muted small">Prepare batch payslips for all active departments for {{ selectedPayrollMonth }}.</p>
   </div>
@@ -566,7 +566,7 @@
       </div>
     </div>
     <div class="mt-4">
-      <button class="btn btn-primary" (click)="saveSettings()"><i class="fas fa-save me-1"></i> Save HR Settings</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveSettings()"><i class="fas fa-check-circle me-1"></i> Save HR Settings</button>
     </div>
   </div>
 

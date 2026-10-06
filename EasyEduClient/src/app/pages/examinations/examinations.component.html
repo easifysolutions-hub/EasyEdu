@@ -810,7 +810,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-calendar-plus text-primary me-2"></i>Propose New Examination</h5>
-      <button class="btn-close" (click)="showAddExamModal = false"></button>
+      <button class="btn-close-danger" (click)="showAddExamModal = false">&times;</button>
     </div>
     <div class="mb-3">
       <label class="form-label fw-700 small text-uppercase">Exam Title *</label>
@@ -831,8 +831,8 @@
       <input type="text" class="form-control bg-light" [(ngModel)]="newExam.academicYear">
     </div>
     <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showAddExamModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveExam()"><i class="fas fa-check me-1"></i>Propose Assessment</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAddExamModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveExam()"><i class="fas fa-check-circle me-1"></i>Propose Assessment</button>
     </div>
   </div>
 </div>
@@ -842,7 +842,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-calendar-plus text-primary me-2"></i>Add Exam Schedule Slot</h5>
-      <button class="btn-close" (click)="showAddScheduleModal = false"></button>
+      <button class="btn-close-danger" (click)="showAddScheduleModal = false">&times;</button>
     </div>
     <div class="row g-3">
       <div class="col-12">
@@ -897,8 +897,8 @@
       </div>
     </div>
     <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showAddScheduleModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveSchedule()"><i class="fas fa-check me-1"></i>Save Schedule</button>
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAddScheduleModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveSchedule()"><i class="fas fa-check-circle me-1"></i>Save Schedule</button>
     </div>
   </div>
 </div>

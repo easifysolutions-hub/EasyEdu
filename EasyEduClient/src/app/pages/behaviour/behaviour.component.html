@@ -145,8 +145,8 @@
           <input type="file" class="form-control form-control-premium">
         </div>
 
-        <button class="btn btn-primary w-100" (click)="saveAssignedIncident()">
-          <i class="fas fa-save me-1"></i> Commit Disciplinary Record
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm w-100" (click)="saveAssignedIncident()">
+          <i class="fas fa-check-circle me-1"></i> Commit Disciplinary Record
         </button>
       </div>
     </div>
@@ -380,8 +380,8 @@
     </div>
 
     <div class="text-end mt-4">
-      <button class="btn btn-primary" (click)="saveSettings()">
-        <i class="fas fa-save me-1"></i> Save Disciplinary Configurations
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveSettings()">
+        <i class="fas fa-check-circle me-1"></i> Save Disciplinary Configurations
       </button>
     </div>
   </div>
@@ -390,11 +390,11 @@
   <div class="modal fade show d-block" *ngIf="showAddIncidentModal" style="background: rgba(0,0,0,0.6);" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
-        <div class="modal-header bg-primary text-white border-0 py-3">
-          <h5 class="modal-title fw-bold">
-            <i class="fas fa-award me-2"></i>Define Incident Rule
+        <div class="modal-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold text-dark mb-0">
+            <i class="fas fa-award text-primary me-2"></i>Define Incident Rule
           </h5>
-          <button type="button" class="btn-close btn-close-white" (click)="showAddIncidentModal = false"></button>
+          <button type="button" class="btn-close-danger" (click)="showAddIncidentModal = false">&times;</button>
         </div>
         <div class="modal-body p-4">
           <div class="mb-3">
@@ -418,9 +418,9 @@
           </div>
         </div>
         <div class="modal-footer border-0 bg-light">
-          <button type="button" class="btn btn-secondary" (click)="showAddIncidentModal = false">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="saveNewIncidentMaster()">
-            <i class="fas fa-save me-1"></i> Save Incident Rule
+          <button type="button" class="btn btn-danger rounded-pill px-4" (click)="showAddIncidentModal = false">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveNewIncidentMaster()">
+            <i class="fas fa-check-circle me-1"></i> Save Incident Rule
           </button>
         </div>
       </div>

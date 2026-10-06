@@ -642,7 +642,7 @@
           <h5 class="modal-title fw-bold">
             <i class="fas fa-id-card me-2"></i>Student Academic Profile
           </h5>
-          <button type="button" class="btn-close btn-close-white" (click)="showProfileModal = false"></button>
+          <button type="button" class="btn-close-danger" (click)="showProfileModal = false">&times;</button>
         </div>
         <div class="modal-body p-4">
           <div class="d-flex align-items-center gap-4 mb-4 pb-3 border-bottom">
@@ -685,7 +685,7 @@
           </div>
         </div>
         <div class="modal-footer border-0 bg-light">
-          <button type="button" class="btn btn-secondary" (click)="showProfileModal = false">Close</button>
+          <button type="button" class="btn btn-danger rounded-pill px-4" (click)="showProfileModal = false">Close Profile</button>
         </div>
       </div>
     </div>

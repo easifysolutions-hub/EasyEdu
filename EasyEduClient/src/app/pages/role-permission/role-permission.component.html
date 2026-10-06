@@ -227,7 +227,7 @@
       <div class="modal-content border-0 rounded-20 shadow-lg">
         <div class="modal-header border-0 pb-0">
           <h5 class="modal-title fw-bold text-dark"><i class="fas fa-user-plus text-primary me-2"></i>Create New System Role</h5>
-          <button type="button" class="btn-close" (click)="showCreateRoleModal = false"></button>
+          <button type="button" class="btn-close-danger" (click)="showCreateRoleModal = false">&times;</button>
         </div>
         <div class="modal-body p-4">
           <div class="mb-3">
@@ -247,9 +247,9 @@
           </div>
         </div>
         <div class="modal-footer border-0 pt-0">
-          <button type="button" class="btn btn-light rounded-12 px-3 fw-semibold" (click)="showCreateRoleModal = false">Cancel</button>
-          <button type="button" class="btn btn-primary rounded-12 px-4 fw-semibold shadow-sm" (click)="createRoleSubmit()">
-            <i class="fas fa-check me-1"></i> Create Role
+          <button type="button" class="btn btn-danger rounded-pill px-4 fw-semibold" (click)="showCreateRoleModal = false">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" (click)="createRoleSubmit()">
+            <i class="fas fa-check-circle me-1"></i> Create Role
           </button>
         </div>
       </div>
@@ -262,7 +262,7 @@
       <div class="modal-content border-0 rounded-20 shadow-lg">
         <div class="modal-header border-0 pb-0">
           <h5 class="modal-title fw-bold text-dark"><i class="fas fa-edit text-primary me-2"></i>Edit Role Details</h5>
-          <button type="button" class="btn-close" (click)="showEditRoleModal = false"></button>
+          <button type="button" class="btn-close-danger" (click)="showEditRoleModal = false">&times;</button>
         </div>
         <div class="modal-body p-4">
           <div class="mb-3">
@@ -275,9 +275,9 @@
           </div>
         </div>
         <div class="modal-footer border-0 pt-0">
-          <button type="button" class="btn btn-light rounded-12 px-3 fw-semibold" (click)="showEditRoleModal = false">Cancel</button>
-          <button type="button" class="btn btn-primary rounded-12 px-4 fw-semibold shadow-sm" (click)="editRoleSubmit()">
-            <i class="fas fa-save me-1"></i> Save Changes
+          <button type="button" class="btn btn-danger rounded-pill px-4 fw-semibold" (click)="showEditRoleModal = false">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" (click)="editRoleSubmit()">
+            <i class="fas fa-check-circle me-1"></i> Save Changes
           </button>
         </div>
       </div>

@@ -1053,7 +1053,7 @@
     <div class="modal-content-custom">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0">Create Academic Session</h5>
-        <button class="btn-close-custom" (click)="showNewSessionModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showNewSessionModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1072,8 +1072,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showNewSessionModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="createSession()">Create Session</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showNewSessionModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="createSession()"><i class="fas fa-check-circle me-1"></i> Create Session</button>
       </div>
     </div>
   </div>
@@ -1083,7 +1083,7 @@
     <div class="modal-content-custom">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0">Register Academic Holiday</h5>
-        <button class="btn-close-custom" (click)="showNewHolidayModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showNewHolidayModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1116,8 +1116,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showNewHolidayModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="createHoliday()">Save Holiday</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showNewHolidayModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="createHoliday()"><i class="fas fa-check-circle me-1"></i> Save Holiday</button>
       </div>
     </div>
   </div>
@@ -1127,7 +1127,7 @@
     <div class="modal-content-custom">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0"><i class="fas fa-user-plus text-primary me-2"></i>Provision New System User</h5>
-        <button class="btn-close-custom" (click)="showNewUserModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showNewUserModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1154,8 +1154,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showNewUserModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="createUser()">Provision User</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showNewUserModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="createUser()"><i class="fas fa-check-circle me-1"></i> Provision User</button>
       </div>
     </div>
   </div>
@@ -1165,7 +1165,7 @@
     <div class="modal-content-custom">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0"><i class="fas fa-user-pen text-primary me-2"></i>Edit System User Credentials</h5>
-        <button class="btn-close-custom" (click)="showEditUserModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showEditUserModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1207,8 +1207,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showEditUserModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="updateUserSubmit()"><i class="fas fa-save me-1"></i> Save Changes</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showEditUserModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="updateUserSubmit()"><i class="fas fa-check-circle me-1"></i> Save Changes</button>
       </div>
     </div>
   </div>
@@ -1218,7 +1218,7 @@
     <div class="modal-content-custom">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0"><i class="fas fa-key text-primary me-2"></i>Generate Integration API Token</h5>
-        <button class="btn-close-custom" (click)="showNewApiTokenModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showNewApiTokenModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1235,8 +1235,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showNewApiTokenModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="createApiToken()">Generate Token</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showNewApiTokenModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="createApiToken()"><i class="fas fa-check-circle me-1"></i> Generate Token</button>
       </div>
     </div>
   </div>
@@ -1246,7 +1246,7 @@
     <div class="modal-content-custom">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0"><i class="fas fa-sliders-simple text-primary me-2"></i>Create Custom Field</h5>
-        <button class="btn-close-custom" (click)="showNewFieldModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showNewFieldModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -1283,8 +1283,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showNewFieldModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="createCustomField()">Save Field</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showNewFieldModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="createCustomField()"><i class="fas fa-check-circle me-1"></i> Save Field</button>
       </div>
     </div>
   </div>

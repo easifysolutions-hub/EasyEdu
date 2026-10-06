@@ -516,7 +516,7 @@
     <div class="modal-content-custom" style="max-width: 550px;">
       <div class="modal-header-custom">
         <h5 class="fw-bold mb-0"><i class="fas fa-video-plus text-primary me-2"></i> Launch Virtual Classroom / Meeting</h5>
-        <button class="btn-close-custom" (click)="showCreateMeetingModal = false">&times;</button>
+        <button class="btn-close-danger" (click)="showCreateMeetingModal = false">&times;</button>
       </div>
       <div class="modal-body-custom">
         <div class="mb-3">
@@ -562,8 +562,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn btn-light" (click)="showCreateMeetingModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="saveMeeting()"><i class="fas fa-check-circle me-1"></i> Create Session</button>
+        <button class="btn btn-danger rounded-pill px-4" (click)="showCreateMeetingModal = false">Cancel</button>
+        <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveMeeting()"><i class="fas fa-check-circle me-1"></i> Create Session</button>
       </div>
     </div>
   </div>

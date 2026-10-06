@@ -794,7 +794,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Class</h5>
-      <button class="btn-close" (click)="showEditClassModal = false"></button>
+      <button class="btn-close-danger" (click)="showEditClassModal = false">&times;</button>
     </div>
     <div class="mb-3">
       <label class="form-label fw-600 small text-uppercase">Class Name</label>
@@ -809,9 +809,9 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showEditClassModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="updateClass()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-danger rounded-pill px-4" (click)="showEditClassModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="updateClass()"><i class="fas fa-check me-1"></i>Update Changes</button>
     </div>
   </div>
 </div>
@@ -821,7 +821,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Section</h5>
-      <button class="btn-close" (click)="showEditSectionModal = false"></button>
+      <button class="btn-close-danger" (click)="showEditSectionModal = false">&times;</button>
     </div>
     <div class="mb-3">
       <label class="form-label fw-600 small text-uppercase">Section Name</label>
@@ -831,9 +831,9 @@
       <input class="form-check-input" type="checkbox" id="editSecActive" [(ngModel)]="editingSection.isActive">
       <label class="form-check-label fw-600" for="editSecActive">Is Active?</label>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showEditSectionModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="updateSection()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-danger rounded-pill px-4" (click)="showEditSectionModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="updateSection()"><i class="fas fa-check me-1"></i>Update Changes</button>
     </div>
   </div>
 </div>
@@ -843,7 +843,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Subject</h5>
-      <button class="btn-close" (click)="showEditSubjectModal = false"></button>
+      <button class="btn-close-danger" (click)="showEditSubjectModal = false">&times;</button>
     </div>
     <div class="mb-3">
       <label class="form-label fw-600 small text-uppercase">Subject Name</label>
@@ -872,9 +872,9 @@
       <input class="form-check-input" type="checkbox" id="editSubOptional" [(ngModel)]="editingSubject.isOptional">
       <label class="form-check-label fw-600" for="editSubOptional">Is Optional?</label>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showEditSubjectModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="updateSubject()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-danger rounded-pill px-4" (click)="showEditSubjectModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="updateSubject()"><i class="fas fa-check me-1"></i>Update Changes</button>
     </div>
   </div>
 </div>
@@ -884,7 +884,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-pen text-primary me-2"></i>Edit Class Room</h5>
-      <button class="btn-close" (click)="showEditRoomModal = false"></button>
+      <button class="btn-close-danger" (click)="showEditRoomModal = false">&times;</button>
     </div>
     <div class="mb-3">
       <label class="form-label fw-600 small text-uppercase">Room No</label>
@@ -898,9 +898,9 @@
       <input class="form-check-input" type="checkbox" id="editRoomActive" [(ngModel)]="editingRoom.isActive">
       <label class="form-check-label fw-600" for="editRoomActive">Is Active?</label>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showEditRoomModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="updateRoom()"><i class="fas fa-check me-1"></i>Update Changes</button>
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-danger rounded-pill px-4" (click)="showEditRoomModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="updateRoom()"><i class="fas fa-check me-1"></i>Update Changes</button>
     </div>
   </div>
 </div>
@@ -910,7 +910,7 @@
   <div class="modal-content-custom">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold m-0"><i class="fas fa-calendar-plus text-primary me-2"></i>Add Class Routine Slot</h5>
-      <button class="btn-close" (click)="showAddRoutineModal = false"></button>
+      <button class="btn-close-danger" (click)="showAddRoutineModal = false">&times;</button>
     </div>
     <div class="row g-3">
       <div class="col-12">
@@ -946,9 +946,9 @@
         <input type="time" class="form-control bg-light" [(ngModel)]="newRoutine.endTime" required>
       </div>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button class="btn btn-sm btn-light" (click)="showAddRoutineModal = false">Cancel</button>
-      <button class="btn btn-sm btn-primary" (click)="saveRoutine()"><i class="fas fa-check me-1"></i>Save Routine</button>
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-danger rounded-pill px-4" (click)="showAddRoutineModal = false">Cancel</button>
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="saveRoutine()"><i class="fas fa-check me-1"></i>Save Routine</button>
     </div>
   </div>
 </div>
