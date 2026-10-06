@@ -148,8 +148,8 @@
               <th style="width: 140px;">TYPE</th>
               <th style="width: 320px;">ACCOUNT HEAD / LEDGER</th>
               <th style="width: 150px;">BALANCE</th>
-              <th style="width: 170px;">DEBIT (₹)</th>
-              <th style="width: 170px;">CREDIT (₹)</th>
+              <th style="width: 170px;">DEBIT ({{ currencyService.currentCurrency.symbol }})</th>
+              <th style="width: 170px;">CREDIT ({{ currencyService.currentCurrency.symbol }})</th>
               <th>REMARKS</th>
               <th style="width: 40px;"></th>
             </tr>
@@ -181,14 +181,14 @@
 
               <td>
                 <div class="currency-input-box">
-                  <span class="currency-symbol">₹</span>
+                  <span class="currency-symbol">{{ currencyService.currentCurrency.symbol }}</span>
                   <input type="number" min="0" step="any" [(ngModel)]="row.debit" placeholder="0">
                 </div>
               </td>
 
               <td>
                 <div class="currency-input-box">
-                  <span class="currency-symbol">₹</span>
+                  <span class="currency-symbol">{{ currencyService.currentCurrency.symbol }}</span>
                   <input type="number" min="0" step="any" [(ngModel)]="row.credit" placeholder="0">
                 </div>
               </td>
@@ -224,11 +224,11 @@
             <div class="d-flex gap-4">
               <div>
                 <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Total Debit</div>
-                <div class="fw-bold text-dark" style="font-size: 1.25rem;">{{ totalDebit | number:'1.2-2' }}</div>
+                <div class="fw-bold text-dark" style="font-size: 1.25rem;">{{ currencyService.format(totalDebit) }}</div>
               </div>
               <div>
                 <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Total Credit</div>
-                <div class="fw-bold text-dark" style="font-size: 1.25rem;">{{ totalCredit | number:'1.2-2' }}</div>
+                <div class="fw-bold text-dark" style="font-size: 1.25rem;">{{ currencyService.format(totalCredit) }}</div>
               </div>
             </div>
           </div>
@@ -331,8 +331,8 @@
                 <tr *ngFor="let itm of stockVoucherItems; let idx = index">
                   <td class="fw-bold">{{ itm.item }}</td>
                   <td>{{ itm.qty }}</td>
-                  <td>${{ itm.rate | number:'1.2-2' }}</td>
-                  <td class="text-end fw-bold text-dark">${{ itm.amount | number:'1.2-2' }}</td>
+                  <td>{{ currencyService.format(itm.rate) }}</td>
+                  <td class="text-end fw-bold text-dark">{{ currencyService.format(itm.amount) }}</td>
                 </tr>
                 <tr *ngIf="stockVoucherItems.length === 0">
                   <td colspan="4" class="text-center text-muted py-3">No items added to invoice yet</td>
@@ -343,7 +343,7 @@
 
           <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
             <span class="fw-bold text-dark">Total Item Amount:</span>
-            <h4 class="fw-bold text-primary mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+            <h4 class="fw-bold text-primary mb-0">{{ currencyService.format(totalStockAmount) }}</h4>
           </div>
         </div>
       </div>
@@ -376,13 +376,13 @@
             <div class="col-6">
               <div class="p-3 rounded-12 text-center" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
                 <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #16a34a;">TOTAL DEBIT</div>
-                <h4 class="fw-bold text-success mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+                <h4 class="fw-bold text-success mb-0">{{ currencyService.format(totalStockAmount) }}</h4>
               </div>
             </div>
             <div class="col-6">
               <div class="p-3 rounded-12 text-center" style="background: #fef2f2; border: 1px solid #fecaca;">
                 <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #dc2626;">TOTAL CREDIT</div>
-                <h4 class="fw-bold text-danger mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+                <h4 class="fw-bold text-danger mb-0">{{ currencyService.format(totalStockAmount) }}</h4>
               </div>
             </div>
           </div>
@@ -485,8 +485,8 @@
                 <tr *ngFor="let itm of stockVoucherItems; let idx = index">
                   <td class="fw-bold">{{ itm.item }}</td>
                   <td>{{ itm.qty }}</td>
-                  <td>${{ itm.rate | number:'1.2-2' }}</td>
-                  <td class="text-end fw-bold text-dark">${{ itm.amount | number:'1.2-2' }}</td>
+                  <td>{{ currencyService.format(itm.rate) }}</td>
+                  <td class="text-end fw-bold text-dark">{{ currencyService.format(itm.amount) }}</td>
                 </tr>
                 <tr *ngIf="stockVoucherItems.length === 0">
                   <td colspan="4" class="text-center text-muted py-3">No items added to invoice yet</td>
@@ -497,7 +497,7 @@
 
           <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
             <span class="fw-bold text-dark">Total Item Amount:</span>
-            <h4 class="fw-bold text-primary mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+            <h4 class="fw-bold text-primary mb-0">{{ currencyService.format(totalStockAmount) }}</h4>
           </div>
         </div>
       </div>
@@ -530,13 +530,13 @@
             <div class="col-6">
               <div class="p-3 rounded-12 text-center" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
                 <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #16a34a;">TOTAL DEBIT</div>
-                <h4 class="fw-bold text-success mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+                <h4 class="fw-bold text-success mb-0">{{ currencyService.format(totalStockAmount) }}</h4>
               </div>
             </div>
             <div class="col-6">
               <div class="p-3 rounded-12 text-center" style="background: #fef2f2; border: 1px solid #fecaca;">
                 <div class="field-label-sm mb-1" style="font-size: 0.65rem; color: #dc2626;">TOTAL CREDIT</div>
-                <h4 class="fw-bold text-danger mb-0">${{ totalStockAmount | number:'1.2-2' }}</h4>
+                <h4 class="fw-bold text-danger mb-0">{{ currencyService.format(totalStockAmount) }}</h4>
               </div>
             </div>
           </div>
@@ -559,11 +559,12 @@
         <h4 class="fw-bold mb-1 text-dark">Chart of Accounts (Account Master)</h4>
         <small class="text-muted"><i class="fas fa-sitemap me-1"></i> General Ledger Heads & Account Classification Hierarchy</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Chart
-        </button>
-        <button class="btn btn-primary btn-sm rounded-8" (click)="showAddAccountModal = true">
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportChartOfAccounts('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportChartOfAccounts('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportChartOfAccounts('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showAddAccountModal = true">
           <i class="fas fa-plus me-1"></i> Add Account Head
         </button>
       </div>
@@ -576,7 +577,7 @@
             <th>Account Code</th>
             <th>Account Title</th>
             <th>Category</th>
-            <th class="text-end">Current Balance (₹)</th>
+            <th class="text-end">Current Balance</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -594,7 +595,7 @@
               }">{{ a.category }}</span>
             </td>
             <td class="text-end fw-bold" [ngClass]="a.category === 'Expense' ? 'text-danger' : 'text-dark'">
-              ₹{{ a.balance | number:'1.2-2' }}
+              {{ currencyService.format(a.balance) }}
             </td>
             <td class="text-center">
               <button class="btn btn-sm btn-light rounded-8 px-2 py-1 me-1 text-primary" (click)="selectedLedgerHead = a.name; navigateToTab('ledger')" title="View Account Ledger">
@@ -616,11 +617,12 @@
         <h4 class="fw-bold mb-1 text-dark">Item Account Master</h4>
         <small class="text-muted"><i class="fas fa-boxes-stacked me-1"></i> Inventory & Supply Items Linked to General Ledger Accounts</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Catalog
-        </button>
-        <button class="btn btn-primary btn-sm rounded-8" (click)="showAddItemModal = true">
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportItemAccountMaster('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportItemAccountMaster('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportItemAccountMaster('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showAddItemModal = true">
           <i class="fas fa-plus me-1"></i> Add Item Master
         </button>
       </div>
@@ -636,8 +638,8 @@
             <th>Linked Ledger Head</th>
             <th>Tax Rate</th>
             <th>Stock Qty</th>
-            <th class="text-end">Unit Rate ($)</th>
-            <th class="text-end">Stock Value ($)</th>
+            <th class="text-end">Unit Rate</th>
+            <th class="text-end">Stock Value</th>
           </tr>
         </thead>
         <tbody>
@@ -648,8 +650,8 @@
             <td><small class="text-primary fw-bold">{{ itm.linkedAccount }}</small></td>
             <td><span class="badge bg-light text-dark border">{{ itm.taxRate }}% GST</span></td>
             <td><strong class="text-dark">{{ itm.stockQty }}</strong> <small class="text-muted">{{ itm.unit }}</small></td>
-            <td class="text-end fw-bold">${{ itm.rate | number:'1.2-2' }}</td>
-            <td class="text-end fw-bold text-success">${{ (itm.stockQty * itm.rate) | number:'1.2-2' }}</td>
+            <td class="text-end fw-bold">{{ currencyService.format(itm.rate) }}</td>
+            <td class="text-end fw-bold text-success">{{ currencyService.format(itm.stockQty * itm.rate) }}</td>
           </tr>
         </tbody>
       </table>
@@ -665,11 +667,12 @@
         <h4 class="fw-bold mb-1 text-dark">General Voucher Register</h4>
         <small class="text-muted"><i class="fas fa-receipt me-1"></i> Complete Journal & Cash Voucher Transactions Ledger</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Register
-        </button>
-        <button class="btn btn-primary btn-sm rounded-8" (click)="navigateToTab('entry')">
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportVoucherRegister('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportVoucherRegister('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportVoucherRegister('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
+        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="navigateToTab('entry')">
           <i class="fas fa-plus me-1"></i> Create Voucher
         </button>
       </div>
@@ -702,8 +705,8 @@
             <th>Fiscal Date</th>
             <th>Primary Account Head</th>
             <th>Narration</th>
-            <th class="text-end">Debit ($)</th>
-            <th class="text-end">Credit ($)</th>
+            <th class="text-end">Debit Amount</th>
+            <th class="text-end">Credit Amount</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -722,8 +725,8 @@
             <td><small class="text-muted">{{ v.date }}</small></td>
             <td class="fw-bold">{{ v.accountHead }}</td>
             <td><small class="text-secondary">{{ v.narration }}</small></td>
-            <td class="text-end fw-bold" [ngClass]="v.debit > 0 ? 'text-primary' : 'text-muted'">{{ v.debit ? '$' + (v.debit | number:'1.2-2') : '-' }}</td>
-            <td class="text-end fw-bold" [ngClass]="v.credit > 0 ? 'text-success' : 'text-muted'">{{ v.credit ? '$' + (v.credit | number:'1.2-2') : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="v.debit > 0 ? 'text-primary' : 'text-muted'">{{ v.debit ? currencyService.format(v.debit) : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="v.credit > 0 ? 'text-success' : 'text-muted'">{{ v.credit ? currencyService.format(v.credit) : '-' }}</td>
             <td><span class="badge bg-success bg-opacity-10 text-success fw-bold">{{ v.status }}</span></td>
           </tr>
         </tbody>
@@ -740,10 +743,11 @@
         <h4 class="fw-bold mb-1 text-dark">Account Ledger Statement</h4>
         <small class="text-muted"><i class="fas fa-book-open me-1"></i> Running General Ledger Extracts by Account Head</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Statement
-        </button>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportAccountLedger('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportAccountLedger('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportAccountLedger('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
       </div>
     </div>
 
@@ -776,7 +780,7 @@
         </div>
         <div class="text-end">
           <small class="text-muted fw-bold d-block">Current Balance</small>
-          <h4 class="fw-bold text-dark mb-0">${{ currentLedgerAccount.balance | number:'1.2-2' }}</h4>
+          <h4 class="fw-bold text-dark mb-0">{{ currencyService.format(currentLedgerAccount.balance) }}</h4>
         </div>
       </div>
     </div>
@@ -790,9 +794,9 @@
             <th>Voucher No</th>
             <th>Type</th>
             <th>Particulars / Narration</th>
-            <th class="text-end">Debit ($)</th>
-            <th class="text-end">Credit ($)</th>
-            <th class="text-end">Running Balance ($)</th>
+            <th class="text-end">Debit</th>
+            <th class="text-end">Credit</th>
+            <th class="text-end">Running Balance</th>
           </tr>
         </thead>
         <tbody>
@@ -801,9 +805,9 @@
             <td><strong class="text-primary">{{ row.voucherNo }}</strong></td>
             <td><span class="badge bg-light text-dark border">{{ row.type }}</span></td>
             <td>{{ row.narration }}</td>
-            <td class="text-end fw-bold" [ngClass]="row.debit > 0 ? 'text-primary' : 'text-muted'">{{ row.debit ? '$' + (row.debit | number:'1.2-2') : '-' }}</td>
-            <td class="text-end fw-bold" [ngClass]="row.credit > 0 ? 'text-success' : 'text-muted'">{{ row.credit ? '$' + (row.credit | number:'1.2-2') : '-' }}</td>
-            <td class="text-end fw-bold text-dark">${{ row.balance | number:'1.2-2' }}</td>
+            <td class="text-end fw-bold" [ngClass]="row.debit > 0 ? 'text-primary' : 'text-muted'">{{ row.debit ? currencyService.format(row.debit) : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="row.credit > 0 ? 'text-success' : 'text-muted'">{{ row.credit ? currencyService.format(row.credit) : '-' }}</td>
+            <td class="text-end fw-bold text-dark">{{ currencyService.format(row.balance) }}</td>
           </tr>
           <tr *ngIf="ledgerTransactions.length === 0">
             <td colspan="7" class="text-center py-4 text-muted">
@@ -815,9 +819,9 @@
         <tfoot *ngIf="ledgerTransactions.length > 0" class="border-top">
           <tr class="fw-bold bg-light">
             <td colspan="4" class="text-end">Total Activity:</td>
-            <td class="text-end text-primary">${{ ledgerTotalDebit | number:'1.2-2' }}</td>
-            <td class="text-end text-success">${{ ledgerTotalCredit | number:'1.2-2' }}</td>
-            <td class="text-end text-dark">${{ (currentLedgerAccount?.balance || 0) | number:'1.2-2' }}</td>
+            <td class="text-end text-primary">{{ currencyService.format(ledgerTotalDebit) }}</td>
+            <td class="text-end text-success">{{ currencyService.format(ledgerTotalCredit) }}</td>
+            <td class="text-end text-dark">{{ currencyService.format(currentLedgerAccount?.balance || 0) }}</td>
           </tr>
         </tfoot>
       </table>
@@ -833,10 +837,11 @@
         <h4 class="fw-bold mb-1 text-dark">Trial Balance Statement</h4>
         <small class="text-muted"><i class="fas fa-balance-scale me-1"></i> As of Fiscal Closing Date: {{ fiscalDate }}</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Statement
-        </button>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportTrialBalance('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportTrialBalance('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportTrialBalance('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
       </div>
     </div>
 
@@ -847,8 +852,8 @@
             <th>Account Code</th>
             <th>Account Head / Title</th>
             <th>Classification</th>
-            <th class="text-end">Debit Balance ($)</th>
-            <th class="text-end">Credit Balance ($)</th>
+            <th class="text-end">Debit Balance</th>
+            <th class="text-end">Credit Balance</th>
           </tr>
         </thead>
         <tbody>
@@ -857,18 +862,18 @@
             <td class="fw-bold">{{ a.name }}</td>
             <td><span class="badge bg-light text-dark border">{{ a.category }}</span></td>
             <td class="text-end fw-bold" [ngClass]="a.category === 'Asset' || a.category === 'Expense' ? 'text-primary' : 'text-muted'">
-              {{ a.category === 'Asset' || a.category === 'Expense' ? '$' + (a.balance | number:'1.2-2') : '-' }}
+              {{ a.category === 'Asset' || a.category === 'Expense' ? currencyService.format(a.balance) : '-' }}
             </td>
             <td class="text-end fw-bold" [ngClass]="a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? 'text-success' : 'text-muted'">
-              {{ a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? '$' + (a.balance | number:'1.2-2') : '-' }}
+              {{ a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity' ? currencyService.format(a.balance) : '-' }}
             </td>
           </tr>
         </tbody>
         <tfoot class="table-light fw-bold border-top">
           <tr>
             <td colspan="3" class="text-end fs-6">Grand Total:</td>
-            <td class="text-end text-primary fs-6">$2,066,000.00</td>
-            <td class="text-end text-success fs-6">$2,066,000.00</td>
+            <td class="text-end text-primary fs-6">{{ currencyService.format(2066000) }}</td>
+            <td class="text-end text-success fs-6">{{ currencyService.format(2066000) }}</td>
           </tr>
         </tfoot>
       </table>
@@ -888,10 +893,11 @@
         <h4 class="fw-bold mb-1 text-dark">Receipts & Payments Statement</h4>
         <small class="text-muted"><i class="fas fa-arrow-right-arrow-left me-1"></i> Cash & Bank Liquid Transactions Summary</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Statement
-        </button>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportReceiptPayment('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportReceiptPayment('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportReceiptPayment('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
       </div>
     </div>
 
@@ -906,24 +912,24 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span><strong>Opening Cash & Bank Balance</strong></span>
-              <strong class="text-dark">$1,200,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(1200000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Tuition Fees Receipts</span>
-              <strong class="text-success">$1,480,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(1480000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Transport Facility Bus Fees</span>
-              <strong class="text-success">$290,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(290000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Admission Application & Prospectus Fees</span>
-              <strong class="text-success">$65,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(65000) }}</strong>
             </li>
           </ul>
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <h6 class="fw-bold mb-0">Total Receipts:</h6>
-            <h5 class="fw-bold text-success mb-0">$3,035,000.00</h5>
+            <h5 class="fw-bold text-success mb-0">{{ currencyService.format(3035000) }}</h5>
           </div>
         </div>
       </div>
@@ -938,28 +944,28 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Staff Monthly Salaries & Faculty Payroll</span>
-              <strong class="text-danger">$485,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(485000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Campus Utilities, Electricity & Water</span>
-              <strong class="text-danger">$64,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(64000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Science Labs Consumables & Chemical Reagents</span>
-              <strong class="text-danger">$32,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(32000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span>Vendor Supplies & Library Book Purchases</span>
-              <strong class="text-danger">$75,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(75000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
               <span><strong>Closing Cash & Bank Balance</strong></span>
-              <strong class="text-dark">$2,379,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(2379000) }}</strong>
             </li>
           </ul>
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <h6 class="fw-bold mb-0">Total Payments:</h6>
-            <h5 class="fw-bold text-danger mb-0">$3,035,000.00</h5>
+            <h5 class="fw-bold text-danger mb-0">{{ currencyService.format(3035000) }}</h5>
           </div>
         </div>
       </div>
@@ -975,10 +981,11 @@
         <h4 class="fw-bold mb-1 text-dark">Income & Expenditure Statement</h4>
         <small class="text-muted"><i class="fas fa-file-invoice-dollar me-1"></i> For Fiscal Academic Year 2026-2027</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Statement
-        </button>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportIncomeExpenditure('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportIncomeExpenditure('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportIncomeExpenditure('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
       </div>
     </div>
     
@@ -989,20 +996,20 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Tuition Fees Collection</span>
-              <strong class="text-success">$1,480,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(1480000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Transport Bus Facility Fees</span>
-              <strong class="text-success">$290,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(290000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Admission Application & Exam Registration</span>
-              <strong class="text-success">$65,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(65000) }}</strong>
             </li>
           </ul>
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <span class="fw-bold">Total Operating Income:</span>
-            <h5 class="fw-bold text-success mb-0">$1,835,000.00</h5>
+            <h5 class="fw-bold text-success mb-0">{{ currencyService.format(1835000) }}</h5>
           </div>
         </div>
       </div>
@@ -1013,24 +1020,24 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Staff Monthly Payroll & Salaries</span>
-              <strong class="text-danger">$485,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(485000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Campus Utilities, Electricity & Water</span>
-              <strong class="text-danger">$64,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(64000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Science Labs Consumables & Reagents</span>
-              <strong class="text-danger">$32,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(32000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Depreciation on Science Labs & Equipment</span>
-              <strong class="text-danger">$15,000.00</strong>
+              <strong class="text-danger">{{ currencyService.format(15000) }}</strong>
             </li>
           </ul>
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <span class="fw-bold">Total Operating Expenses:</span>
-            <h5 class="fw-bold text-danger mb-0">$596,000.00</h5>
+            <h5 class="fw-bold text-danger mb-0">{{ currencyService.format(596000) }}</h5>
           </div>
         </div>
       </div>
@@ -1043,7 +1050,7 @@
           <span class="badge bg-white text-primary fw-bold px-3 py-1 rounded-pill mb-2">Fiscal Performance</span>
           <h4 class="fw-bold mb-0">Excess of Income over Expenditure (Operating Surplus)</h4>
         </div>
-        <h2 class="fw-bold mb-0 text-white">+$1,239,000.00</h2>
+        <h2 class="fw-bold mb-0 text-white">+{{ currencyService.format(1239000) }}</h2>
       </div>
     </div>
   </div>
@@ -1057,10 +1064,11 @@
         <h4 class="fw-bold mb-1 text-dark">Institutional Balance Sheet</h4>
         <small class="text-muted"><i class="fas fa-landmark me-1"></i> Capital Assets, Reserves & Liabilities Statement</small>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm rounded-8" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print Balance Sheet
-        </button>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportBalanceSheet('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportBalanceSheet('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+        <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportBalanceSheet('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF</button>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="printReport()"><i class="fas fa-print me-1"></i> Print</button>
       </div>
     </div>
     
@@ -1073,15 +1081,15 @@
           <ul class="list-group list-group-flush bg-transparent mb-3">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Cash in Hand (Cashier Desk)</span>
-              <strong class="text-dark">$185,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(185000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>HDFC Bank Campus Current A/c</span>
-              <strong class="text-dark">$840,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(84000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>State Bank of India Operations A/c</span>
-              <strong class="text-dark">$460,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(460000) }}</strong>
             </li>
           </ul>
 
@@ -1089,17 +1097,17 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Campus Buildings & Infrastructure</span>
-              <strong class="text-dark">$1,800,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(1800000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Science Laboratories & ICT Equipment</span>
-              <strong class="text-dark">$529,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(529000) }}</strong>
             </li>
           </ul>
 
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <h6 class="fw-bold mb-0">Total Assets:</h6>
-            <h5 class="fw-bold text-primary mb-0">₹3,814,000.00</h5>
+            <h5 class="fw-bold text-primary mb-0">{{ currencyService.format(3814000) }}</h5>
           </div>
         </div>
       </div>
@@ -1113,11 +1121,11 @@
           <ul class="list-group list-group-flush bg-transparent mb-3">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Institutional Capital Fund</span>
-              <strong class="text-dark">₹2,500,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(2500000) }}</strong>
             </li>
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Current Year Operating Surplus</span>
-              <strong class="text-success">₹1,239,000.00</strong>
+              <strong class="text-success">{{ currencyService.format(1239000) }}</strong>
             </li>
           </ul>
 
@@ -1125,13 +1133,13 @@
           <ul class="list-group list-group-flush bg-transparent">
             <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
               <span>Vendor & Supplier Payables</span>
-              <strong class="text-dark">₹75,000.00</strong>
+              <strong class="text-dark">{{ currencyService.format(75000) }}</strong>
             </li>
           </ul>
 
           <div class="d-flex justify-content-between align-items-center pt-3 mt-auto border-top">
             <h6 class="fw-bold mb-0">Total Liabilities & Equity:</h6>
-            <h5 class="fw-bold text-dark mb-0">₹3,814,000.00</h5>
+            <h5 class="fw-bold text-dark mb-0">{{ currencyService.format(3814000) }}</h5>
           </div>
         </div>
       </div>
@@ -1139,7 +1147,7 @@
 
     <div class="alert alert-primary d-flex align-items-center gap-2 rounded-12 mb-0">
       <i class="fas fa-circle-check fs-5"></i>
-      <span><strong>Balance Sheet Equilibrium:</strong> Assets (₹3,814,000.00) = Liabilities (₹75,000.00) + Capital Fund & Reserves (₹3,739,000.00).</span>
+      <span><strong>Balance Sheet Equilibrium:</strong> Assets ({{ currencyService.format(3814000) }}) = Liabilities ({{ currencyService.format(75000) }}) + Capital Fund & Reserves ({{ currencyService.format(3739000) }}).</span>
     </div>
   </div>
 

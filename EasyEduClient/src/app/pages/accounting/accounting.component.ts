@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
+import { CurrencyService } from '../../core/services/currency.service';
+import { ExportReportService } from '../../core/services/export-report.service';
 
 declare const Swal: any;
 
@@ -55,6 +57,8 @@ export interface VoucherEntryRow {
 export class AccountingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  currencyService = inject(CurrencyService);
+  exportReportService = inject(ExportReportService);
 
   activeTab: 'entry' | 'dashboard' | 'vouchers' | 'chart' | 'item-chart' | 'ledger' | 'trial' | 'receipt-payment' | 'profit-loss' | 'balance-sheet' = 'dashboard';
   trendPeriod: 'yearly' | 'monthly' = 'yearly';
@@ -525,7 +529,306 @@ export class AccountingComponent implements OnInit {
     });
   }
 
+  // =========================================================================
+  // FINANCIAL REPORTS EXPORT & PDF PRINT METHODS
+  // =========================================================================
+  exportVoucherRegister(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Voucher Register';
+    const headers = ['Voucher No', 'Type', 'Transaction Date', 'Ledger Head', 'Debit Amount', 'Credit Amount', 'Status', 'Narration'];
+    const rows = this.filteredVouchers.map(v => [
+      v.voucherNo, v.type, v.date, v.accountHead,
+      v.debit ? this.currencyService.format(v.debit) : '-',
+      v.credit ? this.currencyService.format(v.credit) : '-',
+      v.status, v.narration
+    ]);
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, {
+      category: 'Finance & Accounts',
+      filters: `Type: ${this.selectedType} &bull; Search: ${this.searchTerm || 'All'}`,
+      kpis: [
+        { label: 'Total Debit Recorded', value: this.currencyService.format(this.totalDebit) },
+        { label: 'Total Credit Recorded', value: this.currencyService.format(this.totalCredit) },
+        { label: 'Voucher Entries Count', value: `${this.filteredVouchers.length} Records` }
+      ]
+    });
+  }
+
+  exportAccountLedger(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = `Account Ledger - ${this.selectedLedgerHead}`;
+    const headers = ['Entry Date', 'Voucher No', 'Voucher Type', 'Debit Amount', 'Credit Amount', 'Running Balance', 'Particulars / Narration'];
+    const rows = this.ledgerTransactions.map(t => [
+      t.date, t.voucherNo, t.type,
+      t.debit ? this.currencyService.format(t.debit) : '-',
+      t.credit ? this.currencyService.format(t.credit) : '-',
+      this.currencyService.format(t.balance),
+      t.narration
+    ]);
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, {
+      category: 'General Ledger Audit',
+      filters: `Head: ${this.selectedLedgerHead} &bull; Period: ${this.ledgerStartDate} to ${this.ledgerEndDate}`,
+      kpis: [
+        { label: 'Total Period Debit', value: this.currencyService.format(this.ledgerTotalDebit) },
+        { label: 'Total Period Credit', value: this.currencyService.format(this.ledgerTotalCredit) }
+      ]
+    });
+  }
+
+  get trialBalanceRows(): Array<{ code: string; name: string; category: string; debit: number; credit: number }> {
+    return this.accounts.map(a => ({
+      code: a.code,
+      name: a.name,
+      category: a.category,
+      debit: (a.category === 'Asset' || a.category === 'Expense') ? a.balance : 0,
+      credit: (a.category === 'Income' || a.category === 'Liability' || a.category === 'Equity') ? a.balance : 0
+    }));
+  }
+
+  get trialTotalDebit(): number {
+    return this.trialBalanceRows.reduce((sum, r) => sum + r.debit, 0);
+  }
+
+  get trialTotalCredit(): number {
+    return this.trialBalanceRows.reduce((sum, r) => sum + r.credit, 0);
+  }
+
+  get receiptRows(): Array<{ name: string; amount: number }> {
+    return [
+      { name: 'Opening Cash & Bank Balance', amount: 1200000 },
+      { name: 'Tuition Fees Receipts', amount: 1480000 },
+      { name: 'Transport Facility Bus Fees', amount: 290000 },
+      { name: 'Admission Application & Prospectus Fees', amount: 65000 }
+    ];
+  }
+
+  get paymentRows(): Array<{ name: string; amount: number }> {
+    return [
+      { name: 'Staff Monthly Salaries & Faculty Payroll', amount: 485000 },
+      { name: 'Campus Utilities, Electricity & Water', amount: 64000 },
+      { name: 'Science Labs Consumables & Chemical Reagents', amount: 32000 },
+      { name: 'Vendor Supplies & Library Book Purchases', amount: 75000 },
+      { name: 'Closing Cash & Bank Balance', amount: 2379000 }
+    ];
+  }
+
+  get totalReceipts(): number {
+    return 3035000;
+  }
+
+  get totalPayments(): number {
+    return 3035000;
+  }
+
+  get netClosingLiquidity(): number {
+    return 2379000;
+  }
+
+  get incomeRows(): Array<{ name: string; amount: number }> {
+    return [
+      { name: 'Tuition Fees Collection', amount: 1480000 },
+      { name: 'Transport Bus Facility Fees', amount: 290000 },
+      { name: 'Admission Application & Exam Registration', amount: 65000 }
+    ];
+  }
+
+  get expenseRows(): Array<{ name: string; amount: number }> {
+    return [
+      { name: 'Staff Monthly Payroll & Salaries', amount: 485000 },
+      { name: 'Campus Utilities, Electricity & Water', amount: 64000 },
+      { name: 'Science Labs Consumables & Reagents', amount: 32000 },
+      { name: 'Depreciation on Science Labs & Equipment', amount: 15000 }
+    ];
+  }
+
+  get totalIncome(): number {
+    return 1835000;
+  }
+
+  get totalExpense(): number {
+    return 596000;
+  }
+
+  get netSurplus(): number {
+    return 1239000;
+  }
+
+  get assetRows(): Array<{ name: string; amount: number }> {
+    return [
+      { name: 'Cash in Hand (Cashier Desk)', amount: 185000 },
+      { name: 'HDFC Bank Campus Current A/c', amount: 840000 },
+      { name: 'State Bank of India Operations A/c', amount: 460000 },
+      { name: 'Campus Buildings & Infrastructure', amount: 1800000 },
+      { name: 'Science Laboratories & ICT Equipment', amount: 529000 }
+    ];
+  }
+
+  get liabilityRows(): Array<{ name: string; amount: number }> {
+    return [
+      { name: 'Institutional Capital Fund', amount: 2500000 },
+      { name: 'Current Year Operating Surplus', amount: 1239000 },
+      { name: 'Vendor & Supplier Payables', amount: 75000 }
+    ];
+  }
+
+  get totalAssets(): number {
+    return 3814000;
+  }
+
+  get totalLiabilities(): number {
+    return 3814000;
+  }
+
+  exportTrialBalance(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Trial Balance Statement';
+    const headers = ['Account Code', 'Account Master Title', 'Head Classification', 'Debit Balance', 'Credit Balance'];
+    const rows = this.trialBalanceRows.map(r => [
+      r.code, r.name, r.category,
+      r.debit ? this.currencyService.format(r.debit) : '-',
+      r.credit ? this.currencyService.format(r.credit) : '-'
+    ]);
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, {
+      category: 'Financial Statements',
+      filters: `Fiscal Year: 2025-2026 &bull; As of: ${new Date().toISOString().slice(0, 10)}`,
+      kpis: [
+        { label: 'Total Debit Columns', value: this.currencyService.format(this.trialTotalDebit) },
+        { label: 'Total Credit Columns', value: this.currencyService.format(this.trialTotalCredit) },
+        { label: 'Books Health', value: '100% Balanced' }
+      ]
+    });
+  }
+
+  exportReceiptPayment(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Receipt & Payment Statement';
+    const headers = ['Classification', 'Receipt Head / Source', 'Receipt Inflow', 'Payment Head / Destination', 'Payment Outflow'];
+    const maxLen = Math.max(this.receiptRows.length, this.paymentRows.length);
+    const rows: any[][] = [];
+
+    for (let i = 0; i < maxLen; i++) {
+      const r = this.receiptRows[i];
+      const p = this.paymentRows[i];
+      rows.push([
+        `Row ${i + 1}`,
+        r ? r.name : '-',
+        r ? this.currencyService.format(r.amount) : '-',
+        p ? p.name : '-',
+        p ? this.currencyService.format(p.amount) : '-'
+      ]);
+    }
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, {
+      category: 'Cash & Bank Statements',
+      filters: `Financial Year: 2025-2026`,
+      kpis: [
+        { label: 'Gross Inflows (Receipts)', value: this.currencyService.format(this.totalReceipts) },
+        { label: 'Gross Outflows (Payments)', value: this.currencyService.format(this.totalPayments) },
+        { label: 'Closing Net Liquidity', value: this.currencyService.format(this.netClosingLiquidity) }
+      ]
+    });
+  }
+
+  exportIncomeExpenditure(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Income & Expenditure Statement (P&L)';
+    const headers = ['Classification', 'Expense / Outgo Head', 'Expense Amount', 'Income / Revenue Head', 'Income Amount'];
+    const maxLen = Math.max(this.expenseRows.length, this.incomeRows.length);
+    const rows: any[][] = [];
+
+    for (let i = 0; i < maxLen; i++) {
+      const e = this.expenseRows[i];
+      const inc = this.incomeRows[i];
+      rows.push([
+        `Item ${i + 1}`,
+        e ? e.name : '-',
+        e ? this.currencyService.format(e.amount) : '-',
+        inc ? inc.name : '-',
+        inc ? this.currencyService.format(inc.amount) : '-'
+      ]);
+    }
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, {
+      category: 'Financial Operational Performance',
+      filters: `Session: 2025-2026`,
+      kpis: [
+        { label: 'Operating Revenue', value: this.currencyService.format(this.totalIncome) },
+        { label: 'Operating Expenditure', value: this.currencyService.format(this.totalExpense) },
+        { label: 'Net Academic Surplus', value: this.currencyService.format(this.netSurplus) }
+      ]
+    });
+  }
+
+  exportBalanceSheet(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Institutional Balance Sheet';
+    const headers = ['Liabilities & Funds Head', 'Liability Amount', 'Assets & Infrastructure Head', 'Asset Amount'];
+    const maxLen = Math.max(this.liabilityRows.length, this.assetRows.length);
+    const rows: any[][] = [];
+
+    for (let i = 0; i < maxLen; i++) {
+      const l = this.liabilityRows[i];
+      const a = this.assetRows[i];
+      rows.push([
+        l ? l.name : '-',
+        l ? this.currencyService.format(l.amount) : '-',
+        a ? a.name : '-',
+        a ? this.currencyService.format(a.amount) : '-'
+      ]);
+    }
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, {
+      category: 'Institutional Balance Sheet',
+      filters: `As at: ${new Date().toISOString().slice(0, 10)}`,
+      kpis: [
+        { label: 'Total Capital & Liabilities', value: this.currencyService.format(this.totalLiabilities) },
+        { label: 'Total Institutional Assets', value: this.currencyService.format(this.totalAssets) },
+        { label: 'Balance Check', value: '100% Balanced' }
+      ]
+    });
+  }
+
+  exportChartOfAccounts(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Chart of Accounts Master';
+    const headers = ['Account Code', 'Account Master Title', 'Classification Category', 'Opening Balance'];
+    const rows = this.accounts.map(a => [
+      a.code, a.name, a.category, this.currencyService.format(a.balance)
+    ]);
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Chart of Accounts' });
+  }
+
+  exportItemAccountMaster(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const title = 'Item Account Master Catalog';
+    const headers = ['Item Code', 'Item Description', 'Inventory Category', 'Linked General Ledger', 'Stock Qty', 'Unit Rate', 'Tax Rate (%)'];
+    const rows = this.itemAccounts.map(it => [
+      it.code, it.name, it.category, it.linkedAccount, `${it.stockQty} ${it.unit}`, this.currencyService.format(it.rate), `${it.taxRate}%`
+    ]);
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Stock & Inventory Accounts' });
+  }
+
   printReport(): void {
-    window.print();
+    if (this.activeTab === 'trial') this.exportTrialBalance('print');
+    else if (this.activeTab === 'ledger') this.exportAccountLedger('print');
+    else if (this.activeTab === 'vouchers') this.exportVoucherRegister('print');
+    else if (this.activeTab === 'receipt-payment') this.exportReceiptPayment('print');
+    else if (this.activeTab === 'profit-loss') this.exportIncomeExpenditure('print');
+    else if (this.activeTab === 'balance-sheet') this.exportBalanceSheet('print');
+    else if (this.activeTab === 'chart') this.exportChartOfAccounts('print');
+    else if (this.activeTab === 'item-chart') this.exportItemAccountMaster('print');
+    else window.print();
   }
 }

@@ -40,6 +40,10 @@ export class CurrencyService {
   symbol = computed(() => this.activeCurrency().symbol);
   code = computed(() => this.activeCurrency().code);
 
+  get currentCurrency(): CurrencyConfig {
+    return this.activeCurrency();
+  }
+
   constructor() {
     // Listen for storage events across tabs if needed
     window.addEventListener('storage', (e) => {
