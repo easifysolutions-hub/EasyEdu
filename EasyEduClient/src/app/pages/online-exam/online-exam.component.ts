@@ -8,7 +8,13 @@ declare const Swal: any;
 export interface QuestionGroupItem {
   id: number;
   title: string;
+  code: string;
+  subject: string;
+  className: string;
+  description: string;
   totalQuestions: number;
+  status: 'ACTIVE' | 'INACTIVE';
+  createdAt: string;
 }
 
 export interface QuestionBankItem {
@@ -60,13 +66,14 @@ export class OnlineExamComponent implements OnInit {
   private router = inject(Router);
 
   activeTab: 'exam' | 'add-exam' | 'group' | 'bank' | 'written' | 'settings' = 'exam';
+  groupSearchQuery = '';
 
-  // 1. Groups
+  // 1. Groups / Domain Nodes
   groups: QuestionGroupItem[] = [
-    { id: 1, title: 'Science Midterm Foundation', totalQuestions: 15 },
-    { id: 2, title: 'Mathematics Algebra & Geometry 2026', totalQuestions: 20 },
-    { id: 3, title: 'Computer Science Python Basics', totalQuestions: 12 },
-    { id: 4, title: 'General Knowledge & Aptitude', totalQuestions: 25 }
+    { id: 1, title: 'Science Midterm Foundation', code: 'SCI-101', subject: 'Physics & Chemistry', className: 'Class 10', description: 'Core principles of Newtonian mechanics and standard physical chemistry.', totalQuestions: 15, status: 'ACTIVE', createdAt: '2026-09-12' },
+    { id: 2, title: 'Mathematics Algebra & Geometry 2026', code: 'MTH-201', subject: 'Mathematics', className: 'Class 10', description: 'Quadratic equations, coordinate geometry, and Euclidean proofs.', totalQuestions: 20, status: 'ACTIVE', createdAt: '2026-09-15' },
+    { id: 3, title: 'Computer Science Python Basics', code: 'CS-301', subject: 'Computer Science', className: 'Class 12 - Science', description: 'Data structures, control flow, functions, and standard algorithms.', totalQuestions: 12, status: 'ACTIVE', createdAt: '2026-09-20' },
+    { id: 4, title: 'General Knowledge & Aptitude', code: 'GEN-401', subject: 'General Aptitude', className: 'All Classes', description: 'Logical reasoning, current affairs, spatial orientation, and quantitative tests.', totalQuestions: 25, status: 'ACTIVE', createdAt: '2026-09-22' }
   ];
 
   // 2. Question Bank
@@ -80,16 +87,16 @@ export class OnlineExamComponent implements OnInit {
 
   // 3. Online Exams
   exams: DigitalOnlineExam[] = [
-    { id: 1, title: 'Term 1 Science & Physics CBT Quiz', classId: 1, className: 'Class 10', subjectId: 2, subjectName: 'Physics', startDate: '2025-05-15', endDate: '2025-05-16', durationMinutes: 45, totalMarks: 50, isPublished: true },
-    { id: 2, title: 'Mathematics Algebra Online Assessment', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', startDate: '2025-05-18', endDate: '2025-05-19', durationMinutes: 60, totalMarks: 50, isPublished: true },
-    { id: 3, title: 'Python Programming Mock Exam', classId: 3, className: 'Class 12 - Science', subjectId: 4, subjectName: 'Computer Science', startDate: '2025-05-20', endDate: '2025-05-21', durationMinutes: 60, totalMarks: 40, isPublished: false }
+    { id: 1, title: 'Term 1 Science & Physics CBT Quiz', classId: 1, className: 'Class 10', subjectId: 2, subjectName: 'Physics', startDate: '2026-10-15', endDate: '2026-10-16', durationMinutes: 45, totalMarks: 50, isPublished: true },
+    { id: 2, title: 'Mathematics Algebra Online Assessment', classId: 1, className: 'Class 10', subjectId: 1, subjectName: 'Mathematics', startDate: '2026-10-18', endDate: '2026-10-19', durationMinutes: 60, totalMarks: 50, isPublished: true },
+    { id: 3, title: 'Python Programming Mock Exam', classId: 3, className: 'Class 12 - Science', subjectId: 4, subjectName: 'Computer Science', startDate: '2026-10-20', endDate: '2026-10-21', durationMinutes: 60, totalMarks: 40, isPublished: false }
   ];
 
   // 4. Written Exam Nodes
   writtenExams: WrittenExamNode[] = [
-    { id: 1, examTitle: 'English Essay & Creative Composition Midterm', className: 'Grade 10-A', subject: 'English', submissionDeadline: '2025-05-22 05:00 PM', totalSubmissions: 38, evaluatedCount: 26, maxScore: 50, status: 'Evaluating' },
-    { id: 2, examTitle: 'History & Civics Long Answer Descriptive Node', className: 'Grade 9-B', subject: 'Social Studies', submissionDeadline: '2025-05-24 11:59 PM', totalSubmissions: 42, evaluatedCount: 42, maxScore: 40, status: 'Completed' },
-    { id: 3, examTitle: 'Physics Circuit Diagram & Theory Proof Submission', className: 'Grade 11-Science', subject: 'Physics', submissionDeadline: '2025-05-28 06:00 PM', totalSubmissions: 15, evaluatedCount: 0, maxScore: 60, status: 'Open for Submissions' }
+    { id: 1, examTitle: 'English Essay & Creative Composition Midterm', className: 'Grade 10-A', subject: 'English', submissionDeadline: '2026-10-22 05:00 PM', totalSubmissions: 38, evaluatedCount: 26, maxScore: 50, status: 'Evaluating' },
+    { id: 2, examTitle: 'History & Civics Long Answer Descriptive Node', className: 'Grade 9-B', subject: 'Social Studies', submissionDeadline: '2026-10-24 11:59 PM', totalSubmissions: 42, evaluatedCount: 42, maxScore: 40, status: 'Completed' },
+    { id: 3, examTitle: 'Physics Circuit Diagram & Theory Proof Submission', className: 'Grade 11-Science', subject: 'Physics', submissionDeadline: '2026-10-28 06:00 PM', totalSubmissions: 15, evaluatedCount: 0, maxScore: 60, status: 'Open for Submissions' }
   ];
 
   // Settings
@@ -104,9 +111,25 @@ export class OnlineExamComponent implements OnInit {
     watermarkStudentIdOnScreen: true
   };
 
-  // Modals
+  // Domain Node Modal & Form State
   showGroupModal = false;
-  newGroupTitle = '';
+  isEditingGroup = false;
+  newGroup: {
+    id?: number;
+    title: string;
+    code: string;
+    subject: string;
+    className: string;
+    description: string;
+    status: 'ACTIVE' | 'INACTIVE';
+  } = {
+    title: '',
+    code: '',
+    subject: 'Physics & Chemistry',
+    className: 'Class 10',
+    description: '',
+    status: 'ACTIVE'
+  };
 
   showQuestionModal = false;
   newQuestion = {
@@ -159,26 +182,125 @@ export class OnlineExamComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  // --- QUESTION GROUP ---
+  get filteredGroups(): QuestionGroupItem[] {
+    if (!this.groupSearchQuery.trim()) return this.groups;
+    const q = this.groupSearchQuery.toLowerCase();
+    return this.groups.filter(g =>
+      g.title.toLowerCase().includes(q) ||
+      g.code.toLowerCase().includes(q) ||
+      g.subject.toLowerCase().includes(q) ||
+      g.className.toLowerCase().includes(q)
+    );
+  }
+
+  get totalQuestionCount(): number {
+    return this.groups.reduce((sum, g) => sum + g.totalQuestions, 0);
+  }
+
+  get activeDomainCount(): number {
+    return this.groups.filter(g => g.status === 'ACTIVE').length;
+  }
+
+  // --- DOMAIN NODE / QUESTION GROUP ---
+  openAddGroupModal(): void {
+    this.isEditingGroup = false;
+    this.newGroup = {
+      title: '',
+      code: `DOM-${Math.floor(100 + Math.random() * 900)}`,
+      subject: 'Physics & Chemistry',
+      className: 'Class 10',
+      description: '',
+      status: 'ACTIVE'
+    };
+    this.showGroupModal = true;
+  }
+
+  editGroup(g: QuestionGroupItem): void {
+    this.isEditingGroup = true;
+    this.newGroup = {
+      id: g.id,
+      title: g.title,
+      code: g.code,
+      subject: g.subject,
+      className: g.className,
+      description: g.description,
+      status: g.status
+    };
+    this.showGroupModal = true;
+  }
+
   saveGroup(): void {
-    if (!this.newGroupTitle.trim()) {
-      Swal.fire({ icon: 'warning', title: 'Domain Title Required' });
+    if (!this.newGroup.title.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Domain Title Required', text: 'Please provide a clear title for the domain node.' });
       return;
     }
-    const item: QuestionGroupItem = {
-      id: Date.now(),
-      title: this.newGroupTitle.trim(),
-      totalQuestions: 0
-    };
-    this.groups.push(item);
-    this.showGroupModal = false;
-    this.newGroupTitle = '';
-    Swal.fire({ icon: 'success', title: 'Domain Node Synchronized', text: `${item.title} created.`, timer: 1500, showConfirmButton: false });
+
+    if (this.isEditingGroup && this.newGroup.id) {
+      const idx = this.groups.findIndex(g => g.id === this.newGroup.id);
+      if (idx !== -1) {
+        this.groups[idx] = {
+          ...this.groups[idx],
+          title: this.newGroup.title.trim(),
+          code: this.newGroup.code.trim() || this.groups[idx].code,
+          subject: this.newGroup.subject,
+          className: this.newGroup.className,
+          description: this.newGroup.description.trim(),
+          status: this.newGroup.status
+        };
+
+        // Update corresponding question bank items
+        this.questions.forEach(q => {
+          if (q.groupId === this.newGroup.id) {
+            q.groupTitle = this.newGroup.title.trim();
+          }
+        });
+      }
+      this.showGroupModal = false;
+      Swal.fire({ icon: 'success', title: 'Domain Node Updated', text: `${this.newGroup.title} updated successfully.`, timer: 1500, showConfirmButton: false });
+    } else {
+      const item: QuestionGroupItem = {
+        id: Date.now(),
+        title: this.newGroup.title.trim(),
+        code: this.newGroup.code.trim() || `DOM-${Math.floor(100 + Math.random() * 900)}`,
+        subject: this.newGroup.subject || 'General',
+        className: this.newGroup.className || 'Class 10',
+        description: this.newGroup.description.trim() || 'Comprehensive question group domain repository.',
+        totalQuestions: 0,
+        status: this.newGroup.status || 'ACTIVE',
+        createdAt: new Date().toISOString().substring(0, 10)
+      };
+      this.groups.unshift(item);
+      this.showGroupModal = false;
+      Swal.fire({ icon: 'success', title: 'Domain Node Created', text: `${item.title} registered into domain vault.`, timer: 1500, showConfirmButton: false });
+    }
+  }
+
+  toggleGroupStatus(g: QuestionGroupItem): void {
+    g.status = g.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    Swal.fire({
+      icon: 'info',
+      title: `Domain ${g.status}`,
+      text: `${g.title} is now ${g.status.toLowerCase()}.`,
+      timer: 1200,
+      showConfirmButton: false
+    });
   }
 
   deleteGroup(g: QuestionGroupItem): void {
-    this.groups = this.groups.filter(item => item.id !== g.id);
-    Swal.fire({ icon: 'success', title: 'Domain Node Removed', timer: 1200, showConfirmButton: false });
+    Swal.fire({
+      title: `Delete Domain Node?`,
+      text: `Are you sure you want to delete "${g.title}"? This cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Delete'
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.groups = this.groups.filter(item => item.id !== g.id);
+        Swal.fire({ icon: 'success', title: 'Domain Node Removed', timer: 1200, showConfirmButton: false });
+      }
+    });
   }
 
   // --- QUESTION BANK ---
@@ -220,9 +342,9 @@ export class OnlineExamComponent implements OnInit {
       id: Date.now(),
       title: this.newExam.title.trim(),
       classId: this.newExam.classId,
-      className: this.newExam.classId === 1 ? 'Class 10' : 'Class 12',
+      className: this.newExam.classId === 1 ? 'Class 10' : (this.newExam.classId === 2 ? 'Class 9' : 'Class 12 - Science'),
       subjectId: this.newExam.subjectId,
-      subjectName: 'Mathematics',
+      subjectName: this.newExam.subjectName || 'Mathematics',
       startDate: this.newExam.startDate,
       endDate: this.newExam.endDate,
       durationMinutes: Number(this.newExam.durationMinutes) || 45,
