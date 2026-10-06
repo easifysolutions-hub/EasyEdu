@@ -45,6 +45,7 @@ import { ImportExportComponent } from './pages/import-export/import-export.compo
 import { FrontendCmsComponent } from './pages/frontend-cms/frontend-cms.component';
 import { ExamReportsComponent } from './pages/exam-reports/exam-reports.component';
 import { authGuard } from './core/guards/auth.guard';
+import { permissionGuard } from './core/guards/permission.guard';
 
 export const routes: Routes = [
   // Public Landing and Institutional Pages
@@ -64,11 +65,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'Account/Login', component: LoginComponent },
 
-  // Secured Application Portal (Guard Protected with Local Fallback)
+  // Secured Application Portal (Guarded with Authentication and Admin Permissions)
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard],
+    canActivateChild: [permissionGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'Dashboard', component: DashboardComponent },

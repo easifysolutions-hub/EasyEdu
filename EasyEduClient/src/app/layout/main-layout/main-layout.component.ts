@@ -4,6 +4,7 @@ import { Router, RouterModule, ActivatedRoute, NavigationEnd } from '@angular/ro
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { PermissionService } from '../../core/services/permission.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -15,8 +16,24 @@ import { ThemeService } from '../../core/services/theme.service';
 export class MainLayoutComponent implements OnInit {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
+  permissionService = inject(PermissionService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+
+  showRoleMenu = false;
+
+  toggleRoleMenu(): void {
+    this.showRoleMenu = !this.showRoleMenu;
+  }
+
+  changeActiveRole(roleName: string): void {
+    this.permissionService.setRole(roleName);
+    this.showRoleMenu = false;
+    // If current route is no longer allowed, safely redirect to dashboard
+    if (!this.permissionService.isRouteAllowed(this.router.url)) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   openMenus: { [key: string]: boolean } = {
     adminSection: false,

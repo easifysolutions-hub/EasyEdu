@@ -3,44 +3,54 @@
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
       <h3 class="fw-bold mb-1 text-dark">Role & Granular Security Permissions</h3>
-      <p class="text-muted small mb-0">Configure Role-Based Access Control (RBAC) across all campus modules</p>
+      <p class="text-muted small mb-0">Super Admin & Admin centralized access control matrix. Blocked modules are completely hidden from non-permitted accounts.</p>
     </div>
-    <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="savePermissions()">
-      <i class="fas fa-save me-1"></i> Save Changes
-    </button>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-outline-primary rounded-12 fw-semibold px-3 py-2" *ngIf="selectedRole" (click)="activateRoleForTesting(selectedRole.name)">
+        <i class="fas fa-user-check me-1"></i> Switch Role View
+      </button>
+      <button class="btn btn-primary rounded-12 fw-semibold px-4 py-2 shadow-sm" (click)="savePermissions()">
+        <i class="fas fa-save me-1"></i> Save Changes
+      </button>
+    </div>
   </div>
 
   <div class="row g-4">
     <!-- Left Column: Role Selector -->
     <div class="col-lg-4">
-      <div class="card border-0 rounded-16 shadow-sm p-4 bg-white h-100">
-        <h5 class="fw-bold text-dark mb-3">Roles & Groups</h5>
+      <div class="card border-0 rounded-20 shadow-sm p-4 bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0">System Roles</h5>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-8">
+            Active: {{ permissionService.activeRole() }}
+          </span>
+        </div>
         <div class="list-group list-group-flush">
           <div class="list-group-item list-group-item-action border rounded-12 mb-2 p-3 cursor-pointer transition-all"
                *ngFor="let r of roles"
-               [ngClass]="selectedRole.id === r.id ? 'bg-primary text-white border-primary shadow' : 'bg-light text-dark'"
+               [ngClass]="selectedRole?.id === r.id ? 'bg-primary text-white border-primary shadow-sm' : 'bg-light text-dark'"
                (click)="selectRole(r)">
             <div class="d-flex justify-content-between align-items-center mb-1">
-              <h6 class="fw-bold mb-0" [ngClass]="selectedRole.id === r.id ? 'text-white' : 'text-dark'">{{ r.name }}</h6>
-              <span class="badge" [ngClass]="selectedRole.id === r.id ? 'bg-white text-primary' : 'bg-light text-secondary border'">
-                {{ r.userCount }} Users
+              <h6 class="fw-bold mb-0" [ngClass]="selectedRole?.id === r.id ? 'text-white' : 'text-dark'">{{ r.name }}</h6>
+              <span class="badge" [ngClass]="selectedRole?.id === r.id ? 'bg-white text-primary' : 'bg-white text-secondary border'">
+                {{ r.isSystem ? 'System' : 'Custom' }}
               </span>
             </div>
-            <small [ngClass]="selectedRole.id === r.id ? 'text-white text-opacity-75' : 'text-muted'">{{ r.description }}</small>
+            <small [ngClass]="selectedRole?.id === r.id ? 'text-white text-opacity-75' : 'text-muted'">{{ r.description }}</small>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Right Column: Permission Matrix Table -->
-    <div class="col-lg-8">
-      <div class="card border-0 rounded-16 shadow-sm p-4 bg-white">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="col-lg-8" *ngIf="selectedRole">
+      <div class="card border-0 rounded-20 shadow-sm p-4 bg-white">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
           <div>
             <h5 class="fw-bold mb-0">Module Permissions: <span class="text-primary">{{ selectedRole.name }}</span></h5>
-            <small class="text-muted">Grant or revoke granular CRUD privileges</small>
+            <small class="text-muted">Unchecking "View" completely hides that menu, module, and page from this role.</small>
           </div>
-          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" (click)="savePermissions()">
+          <button class="btn btn-sm btn-primary rounded-10 px-3 shadow-sm" (click)="savePermissions()">
             <i class="fas fa-shield-alt me-1"></i> Apply Rules
           </button>
         </div>
@@ -51,27 +61,30 @@
               <tr>
                 <th>Module / Section</th>
                 <th>Category</th>
-                <th class="text-center">View</th>
+                <th class="text-center">
+                  <div>View / Access</div>
+                  <small class="text-muted" style="font-size: 0.7rem; font-weight: normal;">(Show/Hide)</small>
+                </th>
                 <th class="text-center">Add</th>
                 <th class="text-center">Edit</th>
                 <th class="text-center">Delete</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let p of permissions">
+              <tr *ngFor="let p of permissionRows">
                 <td><strong class="text-dark">{{ p.moduleName }}</strong></td>
                 <td><span class="badge bg-light text-secondary border">{{ p.category }}</span></td>
                 <td class="text-center">
-                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.view">
+                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.view" title="Toggle full module visibility">
                 </td>
                 <td class="text-center">
-                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.add">
+                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.add" [disabled]="!p.view">
                 </td>
                 <td class="text-center">
-                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.edit">
+                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.edit" [disabled]="!p.view">
                 </td>
                 <td class="text-center">
-                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.delete">
+                  <input type="checkbox" class="form-check-input p-2 cursor-pointer" [(ngModel)]="p.delete" [disabled]="!p.view">
                 </td>
               </tr>
             </tbody>

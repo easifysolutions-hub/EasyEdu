@@ -39,15 +39,15 @@
 
   <div class="sidebar-menu">
     <!-- 1. MAIN -->
-    <div class="menu-category">MAIN</div>
-    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link-premium">
+    <div class="menu-category" *ngIf="permissionService.canAccess('dashboard')">MAIN</div>
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link-premium" *ngIf="permissionService.canAccess('dashboard')">
       <i class="fas fa-th-large main-icon"></i>
       <span class="sidebar-label">Dashboard</span>
     </a>
 
     <!-- 2. ADMINISTRATION -->
-    <div class="menu-category">ADMINISTRATION</div>
-    <div class="nav-item-wrapper" id="adminSectionMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('admin')">ADMINISTRATION</div>
+    <div class="nav-item-wrapper" id="adminSectionMenu" *ngIf="permissionService.canAccess('adminSection')">
       <a class="nav-link-premium" [class.open]="openMenus['adminSection']" [class.active]="openMenus['adminSection']" (click)="toggleMenu('adminSection')">
         <span><i class="fas fa-shield-halved main-icon"></i> <span class="sidebar-label">Admin Section</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['adminSection']"></i>
@@ -68,7 +68,7 @@
     </div>
 
     <!-- Utilities -->
-    <div class="nav-item-wrapper" id="utilitiesModule">
+    <div class="nav-item-wrapper" id="utilitiesModule" *ngIf="permissionService.canAccess('utilities')">
       <a class="nav-link-premium" [class.open]="openMenus['utilities']" [class.active]="openMenus['utilities']" (click)="toggleMenu('utilities')">
         <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
@@ -84,7 +84,7 @@
     </div>
 
     <!-- Communicate -->
-    <div class="nav-item-wrapper" id="communicateModule">
+    <div class="nav-item-wrapper" id="communicateModule" *ngIf="permissionService.canAccess('communicate')">
       <a class="nav-link-premium" [class.open]="openMenus['communicate']" [class.active]="openMenus['communicate']" (click)="toggleMenu('communicate')">
         <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Communicate</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
@@ -101,8 +101,8 @@
     </div>
 
     <!-- 3. ACADEMICS -->
-    <div class="menu-category">ACADEMICS</div>
-    <div class="nav-item-wrapper" id="academicsMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('academics')">ACADEMICS</div>
+    <div class="nav-item-wrapper" id="academicsMenu" *ngIf="permissionService.canAccess('academic')">
       <a class="nav-link-premium" [class.open]="openMenus['academic']" [class.active]="openMenus['academic']" (click)="toggleMenu('academic')">
         <span><i class="fas fa-graduation-cap main-icon"></i> <span class="sidebar-label">Academics</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['academic']"></i>
@@ -120,7 +120,7 @@
     </div>
 
     <!-- Lesson Plan -->
-    <div class="nav-item-wrapper" id="lessonPlanMenu">
+    <div class="nav-item-wrapper" id="lessonPlanMenu" *ngIf="permissionService.canAccess('lessonPlan')">
       <a class="nav-link-premium" [class.open]="openMenus['lessonPlan']" [class.active]="openMenus['lessonPlan']" (click)="toggleMenu('lessonPlan')">
         <span><i class="fas fa-chalkboard-teacher main-icon"></i> <span class="sidebar-label">Lesson Plan</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['lessonPlan']"></i>
@@ -135,7 +135,7 @@
     </div>
 
     <!-- Homework -->
-    <div class="nav-item-wrapper" id="homeworkMenu">
+    <div class="nav-item-wrapper" id="homeworkMenu" *ngIf="permissionService.canAccess('homework')">
       <a class="nav-link-premium" [class.open]="openMenus['homework']" [class.active]="openMenus['homework']" (click)="toggleMenu('homework')">
         <span><i class="fas fa-pen-fancy main-icon"></i> <span class="sidebar-label">Homework</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
@@ -148,7 +148,7 @@
     </div>
 
     <!-- Examinations -->
-    <div class="nav-item-wrapper" id="examSuiteMenu">
+    <div class="nav-item-wrapper" id="examSuiteMenu" *ngIf="permissionService.canAccess('exams')">
       <a class="nav-link-premium" [class.open]="openMenus['exams']" [class.active]="openMenus['exams']" (click)="toggleMenu('exams')">
         <span><i class="fas fa-file-signature main-icon"></i> <span class="sidebar-label">Examination</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['exams']"></i>
@@ -171,7 +171,7 @@
     </div>
 
     <!-- Online Exam -->
-    <div class="nav-item-wrapper" id="onlineExamMenu">
+    <div class="nav-item-wrapper" id="onlineExamMenu" *ngIf="permissionService.canAccess('onlineExam')">
       <a class="nav-link-premium" [class.open]="openMenus['onlineExam']" [class.active]="openMenus['onlineExam']" (click)="toggleMenu('onlineExam')">
         <span><i class="fas fa-laptop-code main-icon"></i> <span class="sidebar-label">Online Exam</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
@@ -184,7 +184,7 @@
     </div>
 
     <!-- Teacher Evaluation -->
-    <div class="nav-item-wrapper" id="evaluationMenu">
+    <div class="nav-item-wrapper" id="evaluationMenu" *ngIf="permissionService.canAccess('teacherEvaluation')">
       <a class="nav-link-premium" [class.open]="openMenus['teacherEvaluation']" [class.active]="openMenus['teacherEvaluation']" (click)="toggleMenu('teacherEvaluation')">
         <span><i class="fas fa-star-half-stroke main-icon"></i> <span class="sidebar-label">Teacher Evaluation</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['teacherEvaluation']"></i>
@@ -198,8 +198,8 @@
     </div>
 
     <!-- 4. STUDENT MANAGEMENT -->
-    <div class="menu-category">STUDENT MANAGEMENT</div>
-    <div class="nav-item-wrapper" id="studentMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('student')">STUDENT MANAGEMENT</div>
+    <div class="nav-item-wrapper" id="studentMenu" *ngIf="permissionService.canAccess('students')">
       <a class="nav-link-premium" [class.open]="openMenus['students']" [class.active]="openMenus['students']" (click)="toggleMenu('students')">
         <span><i class="fas fa-user-graduate main-icon"></i> <span class="sidebar-label">Student Info</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['students']"></i>
@@ -223,7 +223,7 @@
     </div>
 
     <!-- Behaviour Records -->
-    <div class="nav-item-wrapper" id="behaviourMenu">
+    <div class="nav-item-wrapper" id="behaviourMenu" *ngIf="permissionService.canAccess('behaviour')">
       <a class="nav-link-premium" [class.open]="openMenus['behaviour']" [class.active]="openMenus['behaviour']" (click)="toggleMenu('behaviour')">
         <span><i class="fas fa-hand-sparkles main-icon"></i> <span class="sidebar-label">Behaviour Records</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['behaviour']"></i>
@@ -240,8 +240,8 @@
     </div>
 
     <!-- 5. HUMAN RESOURCE -->
-    <div class="menu-category">HUMAN RESOURCE</div>
-    <div class="nav-item-wrapper" id="hrSubMenu">
+    <div class="menu-category" *ngIf="permissionService.canAccess('hr')">HUMAN RESOURCE</div>
+    <div class="nav-item-wrapper" id="hrSubMenu" *ngIf="permissionService.canAccess('hr')">
       <a class="nav-link-premium" [class.open]="openMenus['hr']" [class.active]="openMenus['hr']" (click)="toggleMenu('hr')">
         <span><i class="fas fa-users-gear main-icon"></i> <span class="sidebar-label">Human Resource</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['hr']"></i>
@@ -273,8 +273,8 @@
     </div>
 
     <!-- 6. FINANCE & ACCOUNTS -->
-    <div class="menu-category">FINANCE & ACCOUNTS</div>
-    <div class="nav-item-wrapper" id="feesMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('finance')">FINANCE & ACCOUNTS</div>
+    <div class="nav-item-wrapper" id="feesMenu" *ngIf="permissionService.canAccess('fees')">
       <a class="nav-link-premium" [class.open]="openMenus['fees']" [class.active]="openMenus['fees']" (click)="toggleMenu('fees')">
         <span><i class="fas fa-file-invoice-dollar main-icon"></i> <span class="sidebar-label">Fees Received</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['fees']"></i>
@@ -292,7 +292,7 @@
     </div>
 
     <!-- Accounts Master & Vouchers -->
-    <div class="nav-item-wrapper" id="accountsMenu">
+    <div class="nav-item-wrapper" id="accountsMenu" *ngIf="permissionService.canAccess('accounts')">
       <a class="nav-link-premium" [class.open]="openMenus['accounts']" [class.active]="openMenus['accounts']" (click)="toggleMenu('accounts')">
         <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
@@ -338,8 +338,8 @@
     </div>
 
     <!-- 7. OPERATIONS, TRANSPORT, LIBRARY -->
-    <div class="menu-category">OPERATIONS & LOGISTICS</div>
-    <div class="nav-item-wrapper" id="transportMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('logistics')">OPERATIONS & LOGISTICS</div>
+    <div class="nav-item-wrapper" id="transportMenu" *ngIf="permissionService.canAccess('transport')">
       <a class="nav-link-premium" [class.open]="openMenus['transport']" [class.active]="openMenus['transport']" (click)="toggleMenu('transport')">
         <span><i class="fas fa-bus main-icon"></i> <span class="sidebar-label">Transport</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['transport']"></i>
@@ -353,7 +353,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="libraryMenu">
+    <div class="nav-item-wrapper" id="libraryMenu" *ngIf="permissionService.canAccess('library')">
       <a class="nav-link-premium" [class.open]="openMenus['library']" [class.active]="openMenus['library']" (click)="toggleMenu('library')">
         <span><i class="fas fa-book-reader main-icon"></i> <span class="sidebar-label">Library</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['library']"></i>
@@ -369,7 +369,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="inventoryMenu">
+    <div class="nav-item-wrapper" id="inventoryMenu" *ngIf="permissionService.canAccess('inventory')">
       <a class="nav-link-premium" [class.open]="openMenus['inventory']" [class.active]="openMenus['inventory']" (click)="toggleMenu('inventory')">
         <span><i class="fas fa-boxes-stacked main-icon"></i> <span class="sidebar-label">Inventory & Store</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['inventory']"></i>
@@ -385,7 +385,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="dormitoryMenu">
+    <div class="nav-item-wrapper" id="dormitoryMenu" *ngIf="permissionService.canAccess('dormitory')">
       <a class="nav-link-premium" [class.open]="openMenus['dormitory']" [class.active]="openMenus['dormitory']" (click)="toggleMenu('dormitory')">
         <span><i class="fas fa-hotel main-icon"></i> <span class="sidebar-label">Dormitory & Hostel</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dormitory']"></i>
@@ -398,7 +398,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="certificatesMenu">
+    <div class="nav-item-wrapper" id="certificatesMenu" *ngIf="permissionService.canAccess('certificates')">
       <a class="nav-link-premium" [class.open]="openMenus['certificates']" [class.active]="openMenus['certificates']" (click)="toggleMenu('certificates')">
         <span><i class="fas fa-certificate main-icon"></i> <span class="sidebar-label">Certificates & Badges</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['certificates']"></i>
@@ -412,10 +412,10 @@
     </div>
 
     <!-- 8. PLATFORM ADDONS -->
-    <div class="menu-category">PLATFORM ADDONS</div>
+    <div class="menu-category" *ngIf="permissionService.canAccess('virtualClass') || permissionService.canAccess('smartAttendanceMenu')">LIVE CLASS & SMART ATTENDANCE</div>
 
     <!-- Virtual Classrooms -->
-    <div class="nav-item-wrapper" id="virtualClassMenu">
+    <div class="nav-item-wrapper" id="virtualClassMenu" *ngIf="permissionService.canAccess('virtualClass')">
       <a class="nav-link-premium" [class.open]="openMenus['virtualClass']" [class.active]="openMenus['virtualClass']" (click)="toggleMenu('virtualClass')">
         <span><i class="fas fa-video main-icon"></i> <span class="sidebar-label">Virtual Classrooms</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['virtualClass']"></i>
@@ -463,7 +463,7 @@
     </div>
 
     <!-- Smart Attendance -->
-    <div class="nav-item-wrapper" id="smartAttendanceMenu">
+    <div class="nav-item-wrapper" id="smartAttendanceMenu" *ngIf="permissionService.canAccess('smartAttendanceMenu')">
       <a class="nav-link-premium" [class.open]="openMenus['smartAttendanceMenu']" [class.active]="openMenus['smartAttendanceMenu']" (click)="toggleMenu('smartAttendanceMenu')">
         <span><i class="fas fa-fingerprint main-icon"></i> <span class="sidebar-label">Smart Attendance</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['smartAttendanceMenu']"></i>
@@ -484,8 +484,9 @@
       </ul>
     </div>
 
-    <!-- Advanced Academics -->
-    <div class="nav-item-wrapper" id="advancedAcademicMenu">
+    <!-- Next-Gen Academics & LMS -->
+    <div class="menu-category" *ngIf="permissionService.canAccess('advancedAcademicMenu') || permissionService.canAccess('commSubMenu')">NEXT-GEN ACADEMICS & LMS</div>
+    <div class="nav-item-wrapper" id="advancedAcademicMenu" *ngIf="permissionService.canAccess('advancedAcademicMenu')">
       <a class="nav-link-premium" [class.open]="openMenus['advancedAcademicMenu']" [class.active]="openMenus['advancedAcademicMenu']" (click)="toggleMenu('advancedAcademicMenu')">
         <span><i class="fas fa-brain main-icon"></i> <span class="sidebar-label">Advanced Academics</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['advancedAcademicMenu']"></i>
@@ -530,15 +531,8 @@
       </ul>
     </div>
 
-    <!-- AI Content Addon -->
-    <div class="nav-item-wrapper">
-      <a routerLink="/AiContent" routerLinkActive="active" class="nav-link-premium">
-        <span><i class="fas fa-sparkles text-warning main-icon"></i> <span class="sidebar-label">AI Content Addon</span></span>
-      </a>
-    </div>
-
     <!-- Growth & Comms -->
-    <div class="nav-item-wrapper" id="commSubMenu">
+    <div class="nav-item-wrapper" id="commSubMenu" *ngIf="permissionService.canAccess('commSubMenu')">
       <a class="nav-link-premium" [class.open]="openMenus['commSubMenu']" [class.active]="openMenus['commSubMenu']" (click)="toggleMenu('commSubMenu')">
         <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Growth & Comms</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['commSubMenu']"></i>
@@ -563,8 +557,8 @@
     </div>
 
     <!-- 8. DATA & CMS -->
-    <div class="menu-category">DATA & CMS</div>
-    <div class="nav-item-wrapper" id="downloadCenterMenu">
+    <div class="menu-category" *ngIf="permissionService.canAccess('downloadCenter') || permissionService.canAccess('dataManagement') || permissionService.canAccess('frontendCms') || permissionService.canAccess('styleArchitect')">DATA & CMS</div>
+    <div class="nav-item-wrapper" id="downloadCenterMenu" *ngIf="permissionService.canAccess('downloadCenter')">
       <a class="nav-link-premium" [class.open]="openMenus['downloadCenter']" [class.active]="openMenus['downloadCenter']" (click)="toggleMenu('downloadCenter')">
         <span><i class="fas fa-download main-icon"></i> <span class="sidebar-label">Download Center</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['downloadCenter']"></i>
@@ -578,7 +572,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="dataManagementMenu">
+    <div class="nav-item-wrapper" id="dataManagementMenu" *ngIf="permissionService.canAccess('dataManagement')">
       <a class="nav-link-premium" [class.open]="openMenus['dataManagement']" [class.active]="openMenus['dataManagement']" (click)="toggleMenu('dataManagement')">
         <span><i class="fas fa-database main-icon"></i> <span class="sidebar-label">Data Management</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dataManagement']"></i>
@@ -592,7 +586,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="frontendCmsMenu">
+    <div class="nav-item-wrapper" id="frontendCmsMenu" *ngIf="permissionService.canAccess('frontendCms')">
       <a class="nav-link-premium" [class.open]="openMenus['frontendCms']" [class.active]="openMenus['frontendCms']" (click)="toggleMenu('frontendCms')">
         <span><i class="fas fa-desktop main-icon"></i> <span class="sidebar-label">Frontend CMS</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['frontendCms']"></i>
@@ -610,7 +604,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="styleArchitectMenu">
+    <div class="nav-item-wrapper" id="styleArchitectMenu" *ngIf="permissionService.canAccess('styleArchitect')">
       <a class="nav-link-premium" [class.open]="openMenus['styleArchitect']" [class.active]="openMenus['styleArchitect']" (click)="toggleMenu('styleArchitect')">
         <span><i class="fas fa-palette main-icon"></i> <span class="sidebar-label">Style Architect</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['styleArchitect']"></i>
@@ -622,8 +616,8 @@
     </div>
 
     <!-- 9. REPORTS -->
-    <div class="menu-category">REPORTS</div>
-    <div class="nav-item-wrapper" id="reportsMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('reports')">REPORTS</div>
+    <div class="nav-item-wrapper" id="reportsMenu" *ngIf="permissionService.canAccess('reports')">
       <a class="nav-link-premium" [class.open]="openMenus['reports']" [class.active]="openMenus['reports']" (click)="toggleMenu('reports')">
         <span><i class="fas fa-chart-pie main-icon"></i> <span class="sidebar-label">Reports</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['reports']"></i>
@@ -652,7 +646,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="examReportsMenu">
+    <div class="nav-item-wrapper" id="examReportsMenu" *ngIf="permissionService.canAccess('examReports')">
       <a class="nav-link-premium" [class.open]="openMenus['examReports']" [class.active]="openMenus['examReports']" (click)="toggleMenu('examReports')">
         <span><i class="fas fa-file-chart-column main-icon"></i> <span class="sidebar-label">Exam Reports</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['examReports']"></i>
@@ -671,8 +665,8 @@
     </div>
 
     <!-- 10. SYSTEM SETTINGS -->
-    <div class="menu-category">SYSTEM SETTINGS</div>
-    <div class="nav-item-wrapper" id="systemSettingsMenu">
+    <div class="menu-category" *ngIf="permissionService.isCategoryVisible('settings')">GLOBAL SETTINGS & SECURITY</div>
+    <div class="nav-item-wrapper" id="systemSettingsMenu" *ngIf="permissionService.canAccess('systemSettings')">
       <a class="nav-link-premium" [class.open]="openMenus['systemSettings']" [class.active]="openMenus['systemSettings']" (click)="toggleMenu('systemSettings')">
         <span><i class="fas fa-sliders main-icon"></i> <span class="sidebar-label">System Settings</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['systemSettings']"></i>
@@ -693,7 +687,7 @@
       </ul>
     </div>
 
-    <div class="nav-item-wrapper" id="moduleManagerMenu">
+    <div class="nav-item-wrapper" id="moduleManagerMenu" *ngIf="permissionService.canAccess('moduleManager')">
       <a class="nav-link-premium" [class.open]="openMenus['moduleManager']" [class.active]="openMenus['moduleManager']" (click)="toggleMenu('moduleManager')">
         <span><i class="fas fa-cubes main-icon"></i> <span class="sidebar-label">Module Manager</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['moduleManager']"></i>
@@ -737,14 +731,39 @@
       <a href="javascript:void(0)" class="social-circle-btn"><i class="fab fa-google-plus-g"></i></a>
     </div>
 
-    <!-- Quick Switcher Dashboard Pills -->
-    <a routerLink="/fees" routerLinkActive="active-pill" class="btn btn-sm btn-topbar-pill pill-purple d-none d-lg-inline-flex align-items-center gap-1">
+    <!-- Quick Switcher Dashboard Pills (Protected by Permission) -->
+    <a routerLink="/fees" routerLinkActive="active-pill" class="btn btn-sm btn-topbar-pill pill-purple d-none d-lg-inline-flex align-items-center gap-1" *ngIf="permissionService.canAccess('fees')">
       <i class="fas fa-file-invoice"></i> <span>Fees Dashboard</span>
     </a>
 
-    <a routerLink="/accounting" routerLinkActive="active-pill" class="btn btn-sm btn-topbar-pill pill-blue d-none d-lg-inline-flex align-items-center gap-1">
+    <a routerLink="/accounting" routerLinkActive="active-pill" class="btn btn-sm btn-topbar-pill pill-blue d-none d-lg-inline-flex align-items-center gap-1" *ngIf="permissionService.canAccess('accounts')">
       <i class="fas fa-chart-pie"></i> <span>Accounting Dashboard</span>
     </a>
+
+    <!-- Role Switcher Pill for Testing & Management -->
+    <div class="dropdown d-inline-block position-relative">
+      <button class="btn btn-sm btn-light border rounded-pill px-3 py-1 d-flex align-items-center gap-2 shadow-sm" (click)="toggleRoleMenu()" title="Switch User Role View">
+        <i class="fas fa-user-shield text-primary"></i>
+        <span class="fw-bold text-dark fs-7">{{ permissionService.activeRole() }}</span>
+        <i class="fas fa-chevron-down text-muted" style="font-size: 0.65rem;"></i>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown-menu shadow border-0 rounded-16 p-2 show position-absolute end-0 mt-2" *ngIf="showRoleMenu" style="min-width: 220px; z-index: 1060; background: #ffffff;">
+        <div class="px-3 py-2 border-bottom mb-1">
+          <div class="fw-bold text-dark small">Active Permission Role</div>
+          <small class="text-muted" style="font-size: 0.72rem;">Select a role to preview view & security</small>
+        </div>
+        <button class="dropdown-item rounded-8 py-2 px-3 d-flex justify-content-between align-items-center"
+                *ngFor="let r of permissionService.roles()"
+                [class.bg-primary]="permissionService.activeRole() === r.name"
+                [class.text-white]="permissionService.activeRole() === r.name"
+                (click)="changeActiveRole(r.name)">
+          <span>{{ r.name }}</span>
+          <i class="fas fa-check" *ngIf="permissionService.activeRole() === r.name"></i>
+        </button>
+      </div>
+    </div>
 
     <!-- Language Selector Dropdown -->
     <div class="language-selector-badge d-none d-sm-flex align-items-center gap-1 px-2 py-1">
@@ -759,7 +778,7 @@
     </a>
 
     <!-- Messages / Chat -->
-    <a routerLink="/chat" class="icon-wrapper" title="Campus Chat">
+    <a routerLink="/chat" class="icon-wrapper" title="Campus Chat" *ngIf="permissionService.canAccess('utilities')">
       <i class="far fa-envelope"></i>
       <span class="notification-badge badge-orange">3</span>
     </a>
@@ -773,11 +792,11 @@
     <!-- User Profile Badge -->
     <div class="user-profile-badge ms-1" (click)="logout()" title="Click to Logout">
       <div class="avatar-circle">
-        SA
+        {{ permissionService.activeRole().substring(0, 2).toUpperCase() }}
       </div>
       <div class="d-none d-md-block text-start lh-1">
-        <div class="fw-bold fs-7">{{ authService.currentUser()?.fullName || 'System Administrator' }}</div>
-        <small class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">SUPERADMIN</small>
+        <div class="fw-bold fs-7">{{ authService.currentUser()?.fullName || 'System User' }}</div>
+        <small class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">{{ permissionService.activeRole() }}</small>
       </div>
     </div>
   </div>

@@ -1,18 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PermissionService, SystemRoleDefinition, ALL_MODULE_KEYS, ModuleKey } from '../../core/services/permission.service';
 
 declare const Swal: any;
 
-interface Role {
-  id: number;
-  name: string;
-  userCount: number;
-  description: string;
-  isSystem: boolean;
-}
-
-interface ModulePermission {
+export interface ModulePermissionRow {
+  moduleKey: ModuleKey;
   moduleName: string;
   category: string;
   view: boolean;
@@ -21,6 +15,41 @@ interface ModulePermission {
   delete: boolean;
 }
 
+export const MODULE_METADATA: { [key in ModuleKey]: { name: string; category: string } } = {
+  dashboard: { name: 'Main Campus Dashboard', category: 'Core' },
+  adminSection: { name: 'Admin Section & Front Desk', category: 'Administration' },
+  utilities: { name: 'Utilities & Campus Chat', category: 'Administration' },
+  communicate: { name: 'Notice Board & SMS/Email', category: 'Communication' },
+  academic: { name: 'Academics & Classroom Routine', category: 'Academics' },
+  lessonPlan: { name: 'Lesson Planning & Syllabus', category: 'Academics' },
+  homework: { name: 'Homework & Assignments', category: 'Academics' },
+  exams: { name: 'Examinations & Marks Register', category: 'Examinations' },
+  onlineExam: { name: 'Online CBT Exam & Question Bank', category: 'Examinations' },
+  teacherEvaluation: { name: 'Teacher & Faculty Evaluation', category: 'Examinations' },
+  students: { name: 'Student Information & Admission', category: 'Students' },
+  attendance: { name: 'Student & Staff Attendance', category: 'Students' },
+  behaviour: { name: 'Behaviour & Incident Records', category: 'Students' },
+  hr: { name: 'Human Resource & Staff Payroll', category: 'Staff' },
+  fees: { name: 'Fees Invoicing & POS Collection', category: 'Finance' },
+  accounts: { name: 'Accounting, Ledgers & Vouchers', category: 'Finance' },
+  inventory: { name: 'Inventory & Store Requests', category: 'Logistics' },
+  transport: { name: 'Transport Fleet & Bus Routes', category: 'Logistics' },
+  dormitory: { name: 'Hostel & Bed Allocation', category: 'Logistics' },
+  certificates: { name: 'Certificates & ID Cards', category: 'Logistics' },
+  virtualClass: { name: 'Live Classes (Zoom/GMeet/Jitsi)', category: 'Live Learning' },
+  smartAttendanceMenu: { name: 'Smart Biometric & QR Attendance', category: 'Smart Systems' },
+  advancedAcademicMenu: { name: 'CBSE Exam Suite & LMS Courses', category: 'Advanced Academics' },
+  commSubMenu: { name: 'Registration & WhatsApp Addons', category: 'Addons' },
+  downloadCenter: { name: 'Download Center & Media Uploads', category: 'Media' },
+  dataManagement: { name: 'Import / Export System Data', category: 'Data' },
+  frontendCms: { name: 'Frontend CMS & Public Website', category: 'CMS' },
+  styleArchitect: { name: 'Design System & Style Architect', category: 'Design' },
+  reports: { name: 'Institutional Management Reports', category: 'Reports' },
+  examReports: { name: 'Examination & Assessment Reports', category: 'Reports' },
+  systemSettings: { name: 'Global Settings & Security Matrix', category: 'Settings' },
+  moduleManager: { name: 'System Module Manager', category: 'Settings' }
+};
+
 @Component({
   selector: 'app-role-permission',
   standalone: true,
@@ -28,53 +57,80 @@ interface ModulePermission {
   templateUrl: './role-permission.component.html',
   styleUrls: ['./role-permission.component.css']
 })
-export class RolePermissionComponent {
-  roles: Role[] = [
-    { id: 1, name: 'Super Admin', userCount: 2, description: 'Full unrestricted campus administrative access', isSystem: true },
-    { id: 2, name: 'Teacher / Faculty', userCount: 48, description: 'Academic timetable, grading, homework, and attendance', isSystem: false },
-    { id: 3, name: 'Accountant', userCount: 4, description: 'Fees invoicing, cashier pos, voucher entries, and ledgers', isSystem: false },
-    { id: 4, name: 'Librarian', userCount: 3, description: 'Book catalogs, rack inventory, issue & return circulation', isSystem: false },
-    { id: 5, name: 'Receptionist', userCount: 3, description: 'Visitor passes, phone logs, postal dispatches, inquiries', isSystem: false },
-    { id: 6, name: 'Student', userCount: 1250, description: 'View timetable, attendance, marksheet, and submit homework', isSystem: true },
-    { id: 7, name: 'Parent / Guardian', userCount: 980, description: 'Fee payment gateway, attendance alerts, exam marksheets', isSystem: true }
-  ];
+export class RolePermissionComponent implements OnInit {
+  permissionService = inject(PermissionService);
 
-  selectedRole: Role = this.roles[1];
+  roles: SystemRoleDefinition[] = [];
+  selectedRole: SystemRoleDefinition | null = null;
+  permissionRows: ModulePermissionRow[] = [];
 
-  permissions: ModulePermission[] = [
-    { moduleName: 'Student Directory & Profiles', category: 'Student Info', view: true, add: true, edit: true, delete: false },
-    { moduleName: 'Student Admission Desk', category: 'Student Info', view: true, add: true, edit: true, delete: false },
-    { moduleName: 'Student & Staff Attendance', category: 'Academics', view: true, add: true, edit: true, delete: false },
-    { moduleName: 'Homework & Assignments', category: 'Academics', view: true, add: true, edit: true, delete: true },
-    { moduleName: 'Lesson Plans & Syllabus', category: 'Academics', view: true, add: true, edit: true, delete: false },
-    { moduleName: 'Examinations & Marks Register', category: 'Examinations', view: true, add: true, edit: true, delete: false },
-    { moduleName: 'Online Exam & CBT Question Bank', category: 'Examinations', view: true, add: true, edit: true, delete: false },
-    { moduleName: 'Fees & Invoicing Management', category: 'Finance', view: false, add: false, edit: false, delete: false },
-    { moduleName: 'Voucher Entries & Ledgers', category: 'Finance', view: false, add: false, edit: false, delete: false },
-    { moduleName: 'Library Circulation & Books', category: 'Logistics', view: true, add: false, edit: false, delete: false },
-    { moduleName: 'Transport & GPS Fleet', category: 'Logistics', view: true, add: false, edit: false, delete: false },
-    { moduleName: 'Hostel & Bed Allocations', category: 'Logistics', view: false, add: false, edit: false, delete: false },
-    { moduleName: 'Inventory & Store Requests', category: 'Logistics', view: true, add: true, edit: false, delete: false },
-    { moduleName: 'Global Settings & System Config', category: 'Settings', view: false, add: false, edit: false, delete: false }
-  ];
+  ngOnInit(): void {
+    this.loadRoles();
+  }
 
-  selectRole(r: Role): void {
-    this.selectedRole = r;
-    if (r.name === 'Super Admin') {
-      this.permissions.forEach(p => { p.view = true; p.add = true; p.edit = true; p.delete = true; });
-    } else if (r.name === 'Accountant') {
-      this.permissions.forEach(p => {
-        const isFin = p.category === 'Finance';
-        p.view = isFin; p.add = isFin; p.edit = isFin; p.delete = false;
-      });
+  loadRoles(): void {
+    this.roles = this.permissionService.roles();
+    if (this.roles.length > 0) {
+      // Default to Teacher/Faculty or first role
+      const defaultRole = this.roles.find(r => r.name === 'Teacher / Faculty') || this.roles[0];
+      this.selectRole(defaultRole);
     }
   }
 
+  selectRole(role: SystemRoleDefinition): void {
+    this.selectedRole = role;
+    this.permissionRows = ALL_MODULE_KEYS.map(key => {
+      const meta = MODULE_METADATA[key] || { name: key, category: 'General' };
+      const current = role.permissions[key] || { view: false, add: false, edit: false, delete: false };
+      return {
+        moduleKey: key,
+        moduleName: meta.name,
+        category: meta.category,
+        view: !!current.view,
+        add: !!current.add,
+        edit: !!current.edit,
+        delete: !!current.delete
+      };
+    });
+  }
+
+  toggleAll(action: 'view' | 'add' | 'edit' | 'delete', event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.permissionRows.forEach(row => {
+      row[action] = isChecked;
+    });
+  }
+
   savePermissions(): void {
+    if (!this.selectedRole) return;
+
+    const updatedPermissionsMap: any = {};
+    this.permissionRows.forEach(row => {
+      updatedPermissionsMap[row.moduleKey] = {
+        view: row.view,
+        add: row.add,
+        edit: row.edit,
+        delete: row.delete
+      };
+    });
+
+    this.permissionService.saveRolePermissions(this.selectedRole.name, updatedPermissionsMap);
+    this.loadRoles();
+
     Swal.fire({
-      title: 'Permissions Saved!',
-      text: `Security permissions matrix updated for role "${this.selectedRole.name}".`,
+      title: 'Permissions Synchronized!',
+      text: `Security access rules updated for role "${this.selectedRole.name}". Changes take effect immediately.`,
       icon: 'success',
+      confirmButtonColor: '#002B49'
+    });
+  }
+
+  activateRoleForTesting(roleName: string): void {
+    this.permissionService.setRole(roleName);
+    Swal.fire({
+      title: `Switched Role to ${roleName}`,
+      text: `Your current view is now demonstrating the exact permissions permitted for ${roleName}.`,
+      icon: 'info',
       confirmButtonColor: '#002B49'
     });
   }
