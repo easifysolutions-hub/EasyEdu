@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ExportReportService } from '../../core/services/export-report.service';
 
 export interface ExamRoutineItem {
   id: number;
@@ -114,6 +115,7 @@ export interface PreviousResultItem {
 export class ExamReportsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private exportService = inject(ExportReportService);
 
   activeTab: 'routine' | 'merit' | 'online' | 'subject' | 'tabulation' | 'progress' | 'marksheet' | 'progress100' | 'previous' = 'routine';
 
@@ -250,11 +252,75 @@ export class ExamReportsComponent implements OnInit {
   }
 
   exportReport(format: string): void {
-    this.showToast(`Exporting ${this.activeTab.toUpperCase()} report as ${format}...`);
+    let title = 'Exam Report';
+    let headers: string[] = [];
+    let rows: (string | number)[][] = [];
+
+    switch (this.activeTab) {
+      case 'routine':
+        title = 'Master Examination Timetable';
+        headers = ['Date & Day', 'Time Slot', 'Subject', 'Class', 'Room / Hall', 'Invigilator', 'Max Marks'];
+        rows = this.examRoutines.map(i => [`${i.date} (${i.day})`, i.timeSlot, i.subject, i.class, i.roomNo, i.invigilator, i.maxMarks]);
+        break;
+      case 'merit':
+        title = 'Academic Merit List & Honor Roll';
+        headers = ['Rank', 'Roll #', 'Admission No', 'Student Name', 'Total Marks', 'Max Marks', 'Percentage', 'GPA', 'Grade'];
+        rows = this.meritList.map(s => [s.rank, s.rollNo, s.admissionNo, s.studentName, s.totalMarks, s.maxMarks, `${s.percentage}%`, s.gpa, s.grade]);
+        break;
+      case 'online':
+        title = 'Online Computer-Based Test (CBT) Logs';
+        headers = ['Test ID', 'Student Name', 'Exam Title', 'Time Slot', 'Total Qs', 'Correct', 'Wrong', 'Score %', 'Status'];
+        rows = this.onlineExamReports.map(i => [i.id, i.studentName, i.examTitle, `${i.startTime} - ${i.submitTime}`, i.totalQuestions, i.correctAnswers, i.wrongAnswers, `${i.scorePercentage}%`, i.status]);
+        break;
+      case 'subject':
+        title = 'Subject-Wise Marksheet Ledger';
+        headers = ['Roll #', 'Student Name', 'Theory (70)', 'Practical Lab (20)', 'Viva Voce (10)', 'Total (100)', 'Grade', 'Status'];
+        rows = this.subjectMarksheets.map(i => [i.rollNo, i.studentName, i.theoryMarks, i.practicalMarks, i.vivaMarks, i.totalObtained, i.grade, i.status]);
+        break;
+      case 'tabulation':
+        title = 'Master Tabulation Matrix';
+        headers = ['Roll #', 'Student Name', 'Physics', 'Mathematics', 'Chemistry', 'English', 'CS / AI', 'Total (500)', 'Percentage', 'GPA', 'Result'];
+        rows = this.tabulationRows.map(r => [r.rollNo, r.studentName, r.physics, r.mathematics, r.chemistry, r.english, r.computerScience, r.totalMarks, `${r.percentage}%`, r.gpa, r.result]);
+        break;
+      case 'marksheet':
+        title = 'Official Marksheet Transcript';
+        headers = ['Roll #', 'Student Name', 'Physics', 'Mathematics', 'Chemistry', 'English', 'CS / AI', 'Total', 'Division'];
+        rows = this.tabulationRows.map(s => [s.rollNo, s.studentName, s.physics, s.mathematics, s.chemistry, s.english, s.computerScience, `${s.totalMarks} / 500`, 'First Division']);
+        break;
+      case 'progress100':
+        title = '100-Point Normalized Continuous Evaluation';
+        headers = ['Evaluation Component', 'Weightage %', 'Score / Max', 'Performance Status'];
+        rows = this.continuousAppraisals.map(a => [a.component, a.weight, a.score, a.status]);
+        break;
+      case 'previous':
+        title = 'Historical Academic Exam Records';
+        headers = ['Admission No', 'Student Name', 'Prior Session', 'Qualifying Examination', 'Board Roll #', 'Marks Obtained', 'Percentage', 'Result Status'];
+        rows = this.previousResults.map(i => [i.admissionNo, i.studentName, i.priorSession, i.qualifyingExam, i.boardRollNo, `${i.marksObtained} / ${i.maxMarks}`, `${i.percentage}%`, i.resultStatus]);
+        break;
+      default:
+        title = 'Student Progress Card';
+        headers = ['Subject', 'Max Marks', 'Passing Marks', 'Marks Obtained', 'Grade'];
+        rows = this.sampleProgressCard.subjects.map(s => [s.name, s.maxMarks, s.passingMarks, s.marksObtained, s.grade]);
+        break;
+    }
+
+    if (format.toLowerCase() === 'csv') {
+      this.exportService.exportToCsv(`${title}_${this.filterClass}`, headers, rows);
+      this.showToast(`CSV data export generated for "${title}". Download started.`);
+    } else if (format.toLowerCase() === 'excel') {
+      this.exportService.exportToExcel(`${title}_${this.filterClass}`, headers, rows);
+      this.showToast(`Excel spreadsheet created for "${title}". Download started.`);
+    } else {
+      this.exportService.printOrPdf(title, headers, rows, {
+        category: 'Examination & Assessment Intelligence',
+        filters: `${this.filterClass} • ${this.filterExamTerm} • Session ${this.filterSession}`
+      });
+      this.showToast(`Document prepared for "${title}". Ready to Print or Save as PDF.`);
+    }
   }
 
   printReport(): void {
-    window.print();
+    this.exportReport('PDF');
   }
 
   showToast(msg: string): void {

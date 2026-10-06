@@ -1,7 +1,7 @@
-<div class="exam-reports-wrapper">
-  <!-- Top Glass Header -->
-  <div class="exam-header-card">
-    <div class="header-left">
+<div class="exam-reports-page-container">
+  <!-- Top Header Card -->
+  <div class="exam-header-card mb-4">
+    <div class="d-flex align-items-center gap-3">
       <div class="header-icon-pill">
         <i class="fas fa-file-chart-column"></i>
       </div>
@@ -10,61 +10,67 @@
         <p class="exam-subtitle">Generate official tabulation sheets, student progress report cards, merit lists, subject mark registers, and CBT online exam performance.</p>
       </div>
     </div>
-    <div class="header-right">
-      <button class="btn-export-outline" (click)="exportReport('Excel')">
-        <i class="fas fa-file-excel text-success me-1"></i> Export Excel
+    <div class="d-flex align-items-center gap-2 mt-3 mt-md-0">
+      <button class="btn btn-outline-success rounded-12 fw-semibold px-3 py-2 d-inline-flex align-items-center gap-2" (click)="exportReport('Excel')">
+        <i class="fas fa-file-excel text-success"></i>
+        <span>Export Excel</span>
       </button>
-      <button class="btn-primary-glow" (click)="printReport()">
-        <i class="fas fa-print me-1"></i> Print / PDF
+      <button class="btn btn-outline-primary rounded-12 fw-semibold px-3 py-2 d-inline-flex align-items-center gap-2" (click)="exportReport('CSV')">
+        <i class="fas fa-file-csv text-primary"></i>
+        <span>Export CSV</span>
+      </button>
+      <button class="btn btn-primary rounded-12 fw-semibold px-3 py-2 d-inline-flex align-items-center gap-2 shadow-sm" (click)="printReport()">
+        <i class="fas fa-print"></i>
+        <span>Print / PDF</span>
       </button>
     </div>
   </div>
 
   <!-- Tab Navigation Strip (All 9 Submodules) -->
-  <div class="exam-tabs-container">
-    <button class="exam-tab-btn" [class.active]="activeTab === 'routine'" (click)="setTab('routine')">
+  <div class="tab-pills-bar mb-4">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'routine'" (click)="setTab('routine')">
       <i class="fas fa-calendar-check"></i> <span>Exam Routine</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'merit'" (click)="setTab('merit')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'merit'" (click)="setTab('merit')">
       <i class="fas fa-trophy"></i> <span>Merit List</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'online'" (click)="setTab('online')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'online'" (click)="setTab('online')">
       <i class="fas fa-laptop-code"></i> <span>Online Exam Report</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'subject'" (click)="setTab('subject')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'subject'" (click)="setTab('subject')">
       <i class="fas fa-list-ol"></i> <span>Subject Wise Marksheet</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'tabulation'" (click)="setTab('tabulation')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'tabulation'" (click)="setTab('tabulation')">
       <i class="fas fa-table-cells"></i> <span>Tabulation Sheet</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'progress'" (click)="setTab('progress')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'progress'" (click)="setTab('progress')">
       <i class="fas fa-id-card-clip"></i> <span>Progress Card</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'marksheet'" (click)="setTab('marksheet')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'marksheet'" (click)="setTab('marksheet')">
       <i class="fas fa-stamp"></i> <span>Mark Sheet Report</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'progress100'" (click)="setTab('progress100')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'progress100'" (click)="setTab('progress100')">
       <i class="fas fa-chart-pie"></i> <span>Progress Card 100%</span>
     </button>
-    <button class="exam-tab-btn" [class.active]="activeTab === 'previous'" (click)="setTab('previous')">
+    <button class="btn-tab-pill" [class.active]="activeTab === 'previous'" (click)="setTab('previous')">
       <i class="fas fa-clock-rotate-left"></i> <span>Previous Result</span>
     </button>
   </div>
 
   <!-- Global Parameter Filter Toolbar -->
-  <div class="card-glass mb-4">
+  <div class="card border-0 rounded-20 shadow-sm bg-white p-4 mb-4">
     <div class="row g-3 align-items-end">
       <div class="col-lg-3 col-md-4">
-        <label class="form-label-sm">Academic Session</label>
-        <select class="form-select-dark" [(ngModel)]="filterSession">
+        <label class="form-label-modern">Academic Session</label>
+        <select class="form-select-modern" [(ngModel)]="filterSession">
           <option value="2025-2026">2025-2026 (Current Academic Term)</option>
           <option value="2024-2025">2024-2025 (Prior Session)</option>
         </select>
       </div>
 
       <div class="col-lg-3 col-md-4">
-        <label class="form-label-sm">Examination Term</label>
-        <select class="form-select-dark" [(ngModel)]="filterExamTerm">
+        <label class="form-label-modern">Examination Term</label>
+        <select class="form-select-modern" [(ngModel)]="filterExamTerm">
           <option value="Autumn Mid-Term Examination 2026">Autumn Mid-Term Examination 2026</option>
           <option value="Annual Board Summative 2026">Annual Board Summative 2026</option>
           <option value="Quarterly Formative Assessment Q1">Quarterly Formative Assessment Q1</option>
@@ -72,8 +78,8 @@
       </div>
 
       <div class="col-lg-2 col-md-4">
-        <label class="form-label-sm">Class & Section</label>
-        <select class="form-select-dark" [(ngModel)]="filterClass">
+        <label class="form-label-modern">Class & Section</label>
+        <select class="form-select-modern" [(ngModel)]="filterClass">
           <option value="Grade 10-A">Grade 10 - Section A</option>
           <option value="Grade 10-B">Grade 10 - Section B</option>
           <option value="Grade 9-A">Grade 9 - Section A</option>
@@ -82,13 +88,16 @@
       </div>
 
       <div class="col-lg-2 col-md-4">
-        <label class="form-label-sm">Quick Search</label>
-        <input type="text" class="form-control-dark" [(ngModel)]="filterSearchQuery" placeholder="Filter student / subject..." />
+        <label class="form-label-modern">Quick Search</label>
+        <div class="search-input-wrap">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="form-control-modern ps-5" [(ngModel)]="filterSearchQuery" placeholder="Student / Subject..." />
+        </div>
       </div>
 
       <div class="col-lg-2 col-md-4">
-        <button class="btn-primary-glow w-100" (click)="applyFilters()">
-          <i class="fas fa-filter me-1"></i> Filter
+        <button class="btn btn-primary w-100 rounded-12 fw-semibold py-2 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm" (click)="applyFilters()">
+          <i class="fas fa-filter"></i> Apply Filter
         </button>
       </div>
     </div>
@@ -96,16 +105,19 @@
 
   <!-- ================= TAB 1: EXAM ROUTINE ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'routine'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-calendar-check text-primary me-2"></i> Master Examination Timetable & Invigilation Roster</h3>
-          <p class="text-muted-sm">{{ filterExamTerm }} • Class: {{ filterClass }}</p>
+          <h3 class="section-title"><i class="fas fa-calendar-check text-primary me-2"></i> Master Examination Timetable & Invigilation Roster</h3>
+          <p class="section-subtitle">{{ filterExamTerm }} • Class: {{ filterClass }}</p>
         </div>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-10 fw-semibold">
+          <i class="fas fa-calendar-day me-1"></i> Active Routine
+        </span>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Date & Day</th>
@@ -119,12 +131,12 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of examRoutines">
-              <td class="fw-bold text-light"><i class="fas fa-calendar-day me-2 text-info"></i>{{ item.date }} ({{ item.day }})</td>
-              <td><span class="badge-mini bg-primary">{{ item.timeSlot }}</span></td>
-              <td class="fw-bold text-warning">{{ item.subject }}</td>
-              <td><span class="badge bg-dark border border-secondary">{{ item.class }}</span></td>
-              <td>{{ item.roomNo }}</td>
-              <td class="text-light">{{ item.invigilator }}</td>
+              <td class="fw-semibold text-dark"><i class="fas fa-calendar-day me-2 text-primary"></i>{{ item.date }} ({{ item.day }})</td>
+              <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-8">{{ item.timeSlot }}</span></td>
+              <td class="fw-bold text-dark">{{ item.subject }}</td>
+              <td><span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-8">{{ item.class }}</span></td>
+              <td><i class="fas fa-door-open me-1 text-muted"></i>{{ item.roomNo }}</td>
+              <td class="fw-medium text-dark">{{ item.invigilator }}</td>
               <td class="text-end fw-bold text-success">{{ item.maxMarks }}</td>
             </tr>
           </tbody>
@@ -135,16 +147,16 @@
 
   <!-- ================= TAB 2: MERIT LIST ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'merit'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-trophy text-warning me-2"></i> Institutional Academic Merit List & Honor Roll</h3>
-          <p class="text-muted-sm">Rankings ordered by total aggregate marks, percentage, and weighted GPA.</p>
+          <h3 class="section-title"><i class="fas fa-trophy text-warning me-2"></i> Institutional Academic Merit List & Honor Roll</h3>
+          <p class="section-subtitle">Rankings ordered by total aggregate marks, percentage, and weighted GPA.</p>
         </div>
       </div>
 
       <!-- Top 3 Podium Highlights -->
-      <div class="row g-4 mb-4 mt-1">
+      <div class="row g-4 mb-4">
         <div class="col-md-4" *ngFor="let s of meritList.slice(0, 3)">
           <div class="podium-card" [class.podium-gold]="s.rank === 1" [class.podium-silver]="s.rank === 2" [class.podium-bronze]="s.rank === 3">
             <div class="podium-rank-icon">
@@ -158,7 +170,7 @@
             <div class="podium-score-row mt-3">
               <div>
                 <div class="small-label">Total Marks</div>
-                <div class="score-val">{{ s.totalMarks }} / {{ s.maxMarks }}</div>
+                <div class="score-val text-dark">{{ s.totalMarks }} / {{ s.maxMarks }}</div>
               </div>
               <div>
                 <div class="small-label">Percentage</div>
@@ -166,7 +178,7 @@
               </div>
               <div>
                 <div class="small-label">GPA</div>
-                <div class="score-val text-info">{{ s.gpa }}</div>
+                <div class="score-val text-primary">{{ s.gpa }}</div>
               </div>
             </div>
           </div>
@@ -175,7 +187,7 @@
 
       <!-- Full Merit Roster Table -->
       <div class="table-responsive">
-        <table class="table-custom">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Rank</th>
@@ -196,12 +208,12 @@
                 </span>
               </td>
               <td>{{ s.rollNo }}</td>
-              <td><code>{{ s.admissionNo }}</code></td>
-              <td class="fw-bold text-light">{{ s.studentName }}</td>
+              <td><span class="badge bg-light text-dark border">{{ s.admissionNo }}</span></td>
+              <td class="fw-bold text-dark">{{ s.studentName }}</td>
               <td><strong>{{ s.totalMarks }}</strong> / {{ s.maxMarks }}</td>
               <td class="fw-bold text-success">{{ s.percentage }}%</td>
-              <td class="fw-bold text-info">{{ s.gpa }}</td>
-              <td><span class="badge bg-dark border border-warning text-warning">{{ s.grade }}</span></td>
+              <td class="fw-bold text-primary">{{ s.gpa }}</td>
+              <td><span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1 rounded-8">{{ s.grade }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -211,16 +223,16 @@
 
   <!-- ================= TAB 3: ONLINE EXAM REPORT ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'online'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-laptop-code text-info me-2"></i> Online Computer-Based Test (CBT) Logs</h3>
-          <p class="text-muted-sm">Automated scoring records, question answer accuracy, and completion timestamps.</p>
+          <h3 class="section-title"><i class="fas fa-laptop-code text-info me-2"></i> Online Computer-Based Test (CBT) Logs</h3>
+          <p class="section-subtitle">Automated scoring records, question answer accuracy, and completion timestamps.</p>
         </div>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Test ID</th>
@@ -236,15 +248,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of onlineExamReports">
-              <td><code>{{ item.id }}</code></td>
-              <td class="fw-bold text-light">{{ item.studentName }}</td>
+              <td><span class="badge bg-light text-dark border">{{ item.id }}</span></td>
+              <td class="fw-bold text-dark">{{ item.studentName }}</td>
               <td>{{ item.examTitle }}</td>
-              <td class="text-muted-sm">{{ item.startTime }} &rarr; {{ item.submitTime }}</td>
+              <td class="text-muted small"><i class="far fa-clock me-1"></i>{{ item.startTime }} &rarr; {{ item.submitTime }}</td>
               <td>{{ item.totalQuestions }} Qs</td>
               <td class="text-success fw-bold">{{ item.correctAnswers }}</td>
               <td class="text-danger fw-bold">{{ item.wrongAnswers }}</td>
               <td class="fw-bold text-primary">{{ item.scorePercentage }}%</td>
-              <td><span class="badge bg-success">{{ item.status }}</span></td>
+              <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-8">{{ item.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -254,16 +266,16 @@
 
   <!-- ================= TAB 4: SUBJECT WISE MARKSHEET ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'subject'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-list-ol text-purple me-2"></i> Subject-Wise Marksheet Ledger</h3>
-          <p class="text-muted-sm">Component breakdown (Theory, Practical Lab, Viva Voce, and Total Grade).</p>
+          <h3 class="section-title"><i class="fas fa-list-ol text-primary me-2"></i> Subject-Wise Marksheet Ledger</h3>
+          <p class="section-subtitle">Component breakdown (Theory, Practical Lab, Viva Voce, and Total Grade).</p>
         </div>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Roll #</th>
@@ -279,13 +291,13 @@
           <tbody>
             <tr *ngFor="let item of subjectMarksheets">
               <td>{{ item.rollNo }}</td>
-              <td class="fw-bold text-light">{{ item.studentName }}</td>
+              <td class="fw-bold text-dark">{{ item.studentName }}</td>
               <td>{{ item.theoryMarks }} / 70</td>
               <td>{{ item.practicalMarks }} / 20</td>
               <td>{{ item.vivaMarks }} / 10</td>
               <td class="fw-bold text-success">{{ item.totalObtained }} / {{ item.maxMarks }}</td>
-              <td><span class="badge bg-primary">{{ item.grade }}</span></td>
-              <td><span class="badge bg-success">{{ item.status }}</span></td>
+              <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-8">{{ item.grade }}</span></td>
+              <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-8">{{ item.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -295,16 +307,16 @@
 
   <!-- ================= TAB 5: TABULATION SHEET ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'tabulation'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-table-cells text-warning me-2"></i> Master Tabulation Matrix</h3>
-          <p class="text-muted-sm">Comprehensive multi-subject mark register with aggregate totals and division results.</p>
+          <h3 class="section-title"><i class="fas fa-table-cells text-warning me-2"></i> Master Tabulation Matrix</h3>
+          <p class="section-subtitle">Comprehensive multi-subject mark register with aggregate totals and division results.</p>
         </div>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Roll #</th>
@@ -323,16 +335,16 @@
           <tbody>
             <tr *ngFor="let row of tabulationRows">
               <td>{{ row.rollNo }}</td>
-              <td class="fw-bold text-light">{{ row.studentName }}</td>
-              <td class="fw-bold">{{ row.physics }}</td>
-              <td class="fw-bold">{{ row.mathematics }}</td>
-              <td class="fw-bold">{{ row.chemistry }}</td>
-              <td class="fw-bold">{{ row.english }}</td>
-              <td class="fw-bold">{{ row.computerScience }}</td>
+              <td class="fw-bold text-dark">{{ row.studentName }}</td>
+              <td class="fw-medium">{{ row.physics }}</td>
+              <td class="fw-medium">{{ row.mathematics }}</td>
+              <td class="fw-medium">{{ row.chemistry }}</td>
+              <td class="fw-medium">{{ row.english }}</td>
+              <td class="fw-medium">{{ row.computerScience }}</td>
               <td class="fw-bold text-success">{{ row.totalMarks }}</td>
-              <td class="fw-bold text-info">{{ row.percentage }}%</td>
-              <td class="fw-bold text-warning">{{ row.gpa }}</td>
-              <td><span class="badge bg-success">{{ row.result }}</span></td>
+              <td class="fw-bold text-primary">{{ row.percentage }}%</td>
+              <td class="fw-bold text-warning-emphasis">{{ row.gpa }}</td>
+              <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-8">{{ row.result }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -342,21 +354,21 @@
 
   <!-- ================= TAB 6: PROGRESS CARD ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'progress'">
-    <div class="progress-card-sheet">
+    <div class="progress-card-sheet shadow-sm border">
       <!-- Certificate / Progress Header -->
-      <div class="sheet-header">
+      <div class="sheet-header pb-4 mb-4 border-bottom">
         <div class="d-flex align-items-center gap-3">
-          <img src="/images/easyedu_full_logo.png" class="sheet-logo" alt="EasyEdu" style="height: 50px;" />
+          <img src="/images/easyedu_full_logo.png" class="sheet-logo" alt="EasyEdu" style="height: 48px;" />
           <div>
-            <h3 class="sheet-inst-name">EasyEdu International Academy</h3>
-            <div class="sheet-inst-sub">Affiliated to CBSE Board • Center Code: 830412</div>
+            <h3 class="sheet-inst-name mb-0">EasyEdu International Academy</h3>
+            <div class="sheet-inst-sub text-muted">Affiliated to CBSE Board • Center Code: 830412</div>
           </div>
         </div>
         <div class="sheet-title-badge">STUDENT PROGRESS REPORT CARD</div>
       </div>
 
       <!-- Student Credentials Box -->
-      <div class="sheet-student-info">
+      <div class="sheet-student-info mb-4">
         <div class="info-cell"><strong>Student Name:</strong> {{ sampleProgressCard.studentName }}</div>
         <div class="info-cell"><strong>Admission No:</strong> {{ sampleProgressCard.admissionNo }}</div>
         <div class="info-cell"><strong>Class & Sec:</strong> {{ sampleProgressCard.class }}</div>
@@ -368,7 +380,7 @@
       </div>
 
       <!-- Marks Breakdown Table -->
-      <table class="table-sheet mt-4">
+      <table class="table-sheet mb-4">
         <thead>
           <tr>
             <th>Subject / Learning Area</th>
@@ -380,11 +392,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let sub of sampleProgressCard.subjects">
-            <td class="fw-bold">{{ sub.name }}</td>
+            <td class="fw-semibold text-dark">{{ sub.name }}</td>
             <td>{{ sub.maxMarks }}</td>
             <td>{{ sub.passingMarks }}</td>
             <td class="fw-bold text-primary">{{ sub.marksObtained }}</td>
-            <td><span class="badge bg-dark border border-secondary">{{ sub.grade }}</span></td>
+            <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-8">{{ sub.grade }}</span></td>
           </tr>
           <tr class="total-row">
             <td class="fw-bold">Aggregate Cumulative Total</td>
@@ -397,28 +409,28 @@
       </table>
 
       <!-- Appraisal Summary & Remarks -->
-      <div class="sheet-summary-grid mt-4">
+      <div class="sheet-summary-grid mb-4">
         <div class="summary-box">
           <div class="sum-label">Overall Percentage</div>
           <div class="sum-val text-success">{{ sampleProgressCard.percentage }}%</div>
         </div>
         <div class="summary-box">
           <div class="sum-label">Weighted CGPA</div>
-          <div class="sum-val text-info">{{ sampleProgressCard.cgpa }}</div>
+          <div class="sum-val text-primary">{{ sampleProgressCard.cgpa }}</div>
         </div>
         <div class="summary-box">
           <div class="sum-label">Class Rank</div>
-          <div class="sum-val text-warning">Rank #{{ sampleProgressCard.rank }}</div>
+          <div class="sum-val text-warning-emphasis">Rank #{{ sampleProgressCard.rank }}</div>
         </div>
       </div>
 
-      <div class="remarks-box mt-4">
-        <div class="rem-title"><i class="fas fa-comment-dots me-2 text-info"></i> Class Teacher Remarks</div>
+      <div class="remarks-box mb-4">
+        <div class="rem-title"><i class="fas fa-comment-dots me-2 text-primary"></i> Class Teacher Remarks</div>
         <p class="rem-text">“{{ sampleProgressCard.teacherRemarks }}”</p>
       </div>
 
       <!-- Signatures -->
-      <div class="signatures-row mt-5">
+      <div class="signatures-row mt-4 pt-4 border-top">
         <div class="sig-block">
           <div class="sig-line"></div>
           <div class="sig-label">Class Teacher Signature</div>
@@ -436,16 +448,16 @@
 
   <!-- ================= TAB 7: MARK SHEET REPORT ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'marksheet'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-stamp text-danger me-2"></i> Official Marksheet Transcript</h3>
-          <p class="text-muted-sm">Official academic record transcript certified for secondary promotion and college admissions.</p>
+          <h3 class="section-title"><i class="fas fa-stamp text-danger me-2"></i> Official Marksheet Transcript</h3>
+          <p class="section-subtitle">Official academic record transcript certified for secondary promotion and college admissions.</p>
         </div>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Roll #</th>
@@ -462,14 +474,14 @@
           <tbody>
             <tr *ngFor="let s of tabulationRows">
               <td>{{ s.rollNo }}</td>
-              <td class="fw-bold text-light">{{ s.studentName }}</td>
+              <td class="fw-bold text-dark">{{ s.studentName }}</td>
               <td>{{ s.physics }}</td>
               <td>{{ s.mathematics }}</td>
               <td>{{ s.chemistry }}</td>
               <td>{{ s.english }}</td>
               <td>{{ s.computerScience }}</td>
               <td class="fw-bold text-success">{{ s.totalMarks }} / 500</td>
-              <td><span class="badge bg-success">First Division (Distinction)</span></td>
+              <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-8">First Division (Distinction)</span></td>
             </tr>
           </tbody>
         </table>
@@ -479,16 +491,16 @@
 
   <!-- ================= TAB 8: PROGRESS CARD 100% ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'progress100'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-chart-pie text-info me-2"></i> 100-Point Normalized Continuous Evaluation</h3>
-          <p class="text-muted-sm">Continuous and Comprehensive Evaluation (CCE) weighting Formative, Summative, and Co-Curricular scores.</p>
+          <h3 class="section-title"><i class="fas fa-chart-pie text-primary me-2"></i> 100-Point Normalized Continuous Evaluation</h3>
+          <p class="section-subtitle">Continuous and Comprehensive Evaluation (CCE) weighting Formative, Summative, and Co-Curricular scores.</p>
         </div>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Evaluation Component</th>
@@ -499,10 +511,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let app of continuousAppraisals">
-              <td class="fw-bold text-light">{{ app.component }}</td>
-              <td><span class="badge-mini bg-primary">{{ app.weight }}</span></td>
+              <td class="fw-bold text-dark">{{ app.component }}</td>
+              <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-8">{{ app.weight }}</span></td>
               <td class="fw-bold text-success">{{ app.score }}</td>
-              <td><span class="badge bg-dark border border-success text-success">{{ app.status }}</span></td>
+              <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-8">{{ app.status }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -512,16 +524,16 @@
 
   <!-- ================= TAB 9: PREVIOUS RESULT ================= -->
   <div class="tab-pane-content" *ngIf="activeTab === 'previous'">
-    <div class="card-glass">
-      <div class="card-header-clean">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
         <div>
-          <h3 class="card-title"><i class="fas fa-clock-rotate-left text-purple me-2"></i> Historical Academic Exam Records</h3>
-          <p class="text-muted-sm">Archive of previous academic session evaluations, qualifying marks, and board roll numbers.</p>
+          <h3 class="section-title"><i class="fas fa-clock-rotate-left text-primary me-2"></i> Historical Academic Exam Records</h3>
+          <p class="section-subtitle">Archive of previous academic session evaluations, qualifying marks, and board roll numbers.</p>
         </div>
       </div>
 
-      <div class="table-responsive mt-3">
-        <table class="table-custom">
+      <div class="table-responsive">
+        <table class="table-premium">
           <thead>
             <tr>
               <th>Admission No</th>
@@ -536,14 +548,14 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of previousResults">
-              <td><code>{{ item.admissionNo }}</code></td>
-              <td class="fw-bold text-light">{{ item.studentName }}</td>
-              <td><span class="badge-mini">{{ item.priorSession }}</span></td>
+              <td><span class="badge bg-light text-dark border">{{ item.admissionNo }}</span></td>
+              <td class="fw-bold text-dark">{{ item.studentName }}</td>
+              <td><span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-8">{{ item.priorSession }}</span></td>
               <td>{{ item.qualifyingExam }}</td>
               <td><code>{{ item.boardRollNo }}</code></td>
               <td class="fw-bold">{{ item.marksObtained }} / {{ item.maxMarks }}</td>
               <td class="fw-bold text-success">{{ item.percentage }}%</td>
-              <td><span class="badge bg-success">{{ item.resultStatus }}</span></td>
+              <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-8">{{ item.resultStatus }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -553,7 +565,7 @@
 
   <!-- TOAST NOTIFICATION -->
   <div class="toast-notification" *ngIf="showSuccessToast">
-    <i class="fas fa-circle-check text-success me-2"></i>
+    <i class="fas fa-circle-check text-success me-2 fs-5"></i>
     <span>{{ toastMessage }}</span>
   </div>
 </div>
