@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ExportReportService } from '../../core/services/export-report.service';
+import { CurrencyService } from '../../core/services/currency.service';
 
 export interface ReportDefinition {
   id: string;
@@ -28,6 +29,8 @@ export interface ReportDefinition {
 export class ReportsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  currencyService = inject(CurrencyService);
+  exportReportService = inject(ExportReportService);
 
   selectedCategory = 'All';
   searchTerm = '';
@@ -48,7 +51,31 @@ export class ReportsComponent implements OnInit {
   toastMessage = '';
 
   // Catalog of all 20 Institutional Reports
-  reports: ReportDefinition[] = [
+  reports: ReportDefinition[] = [];
+
+  ngOnInit(): void {
+    this.initReports();
+
+    // Route matching to auto-load specific report if URL matches slug
+    this.route.url.subscribe(() => {
+      const url = this.router.url.toLowerCase();
+      this.detectReportFromUrl(url);
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['report']) {
+        const query = params['report'].toLowerCase();
+        const rep = this.reports.find(r => r.slug === query || r.id.toLowerCase() === query);
+        if (rep) {
+          this.openReportDetail(rep);
+        }
+      }
+    });
+  }
+
+  initReports(): void {
+    const cs = this.currencyService;
+    this.reports = [
     {
       id: 'RPT-STU-01',
       slug: 'studentreport',
@@ -278,9 +305,9 @@ export class ReportsComponent implements OnInit {
         { label: 'On-Time Accuracy', value: '99.2%', isPositive: true }
       ],
       records: [
-        { c1: 'Aarav Sharma', c2: 'Grade 10-A', c3: 'Route #4 (North Corridor)', c4: 'DL-01-AB-1020', c5: 'Palm Avenue Gate', c6: 'Ramesh Singh (+91 98111 22334)', c7: '₹2,400', c8: 'Active Pass' },
-        { c1: 'Diya Patel', c2: 'Grade 10-A', c3: 'Route #1 (South Hub)', c4: 'DL-01-CD-3040', c5: 'Tech Park Circle', c6: 'Harpreet Singh (+91 98222 33445)', c7: '₹2,800', c8: 'Active Pass' },
-        { c1: 'Rohan Gupta', c2: 'Grade 10-B', c3: 'Route #4 (North Corridor)', c4: 'DL-01-AB-1020', c5: 'Central Metro Stn', c6: 'Ramesh Singh (+91 98111 22334)', c7: '₹2,400', c8: 'Active Pass' }
+        { c1: 'Aarav Sharma', c2: 'Grade 10-A', c3: 'Route #4 (North Corridor)', c4: 'DL-01-AB-1020', c5: 'Palm Avenue Gate', c6: 'Ramesh Singh (+91 98111 22334)', c7: cs.format(2400), c8: 'Active Pass' },
+        { c1: 'Diya Patel', c2: 'Grade 10-A', c3: 'Route #1 (South Hub)', c4: 'DL-01-CD-3040', c5: 'Tech Park Circle', c6: 'Harpreet Singh (+91 98222 33445)', c7: cs.format(2800), c8: 'Active Pass' },
+        { c1: 'Rohan Gupta', c2: 'Grade 10-B', c3: 'Route #4 (North Corridor)', c4: 'DL-01-AB-1020', c5: 'Central Metro Stn', c6: 'Ramesh Singh (+91 98111 22334)', c7: cs.format(2400), c8: 'Active Pass' }
       ]
     },
     {
@@ -313,15 +340,15 @@ export class ReportsComponent implements OnInit {
       badge: 'Finance',
       columns: ['Receipt No', 'Student Name', 'Fee Head', 'Payment Date', 'Payment Mode', 'Transaction Ref #', 'Amount Paid', 'Cashier'],
       kpis: [
-        { label: 'Total Collections (YTD)', value: '₹4,82,40,000', trend: '+12.4% vs Target', isPositive: true },
-        { label: 'Today’s Inflow', value: '₹3,45,000' },
+        { label: 'Total Collections (YTD)', value: cs.format(48240000), trend: '+12.4% vs Target', isPositive: true },
+        { label: 'Today’s Inflow', value: cs.format(345000) },
         { label: 'Online Gateway %', value: '78.5%' }
       ],
       records: [
-        { c1: 'REC-2026-8801', c2: 'Aarav Sharma', c3: 'Term 1 Tuition + STEM Lab', c4: '2026-10-04', c5: 'UPI (PhonePe)', c6: 'UPI-982347102938', c7: '₹35,000', c8: 'Online Portal' },
-        { c1: 'REC-2026-8802', c2: 'Diya Patel', c3: 'Annual Composite Fee', c4: '2026-10-04', c5: 'Net Banking (HDFC)', c6: 'HDFC-8839201948', c7: '₹75,000', c8: 'Online Portal' },
-        { c1: 'REC-2026-8803', c2: 'Rohan Gupta', c3: 'Quarterly Tuition Installment', c4: '2026-10-03', c5: 'Cash Counter', c6: 'CASH-REC-091', c7: '₹18,500', c8: 'Deepak S. (Counter 1)' },
-        { c1: 'REC-2026-8804', c2: 'Kabir Mehta', c3: 'Hostel & Mess Advance', c4: '2026-10-02', c5: 'Credit Card (Stripe)', c6: 'TXN-STRIPE-4421', c7: '₹45,000', c8: 'Online Portal' }
+        { c1: 'REC-2026-8801', c2: 'Aarav Sharma', c3: 'Term 1 Tuition + STEM Lab', c4: '2026-10-04', c5: 'UPI (PhonePe)', c6: 'UPI-982347102938', c7: cs.format(35000), c8: 'Online Portal' },
+        { c1: 'REC-2026-8802', c2: 'Diya Patel', c3: 'Annual Composite Fee', c4: '2026-10-04', c5: 'Net Banking (HDFC)', c6: 'HDFC-8839201948', c7: cs.format(75000), c8: 'Online Portal' },
+        { c1: 'REC-2026-8803', c2: 'Rohan Gupta', c3: 'Quarterly Tuition Installment', c4: '2026-10-03', c5: 'Cash Counter', c6: 'CASH-REC-091', c7: cs.format(18500), c8: 'Deepak S. (Counter 1)' },
+        { c1: 'REC-2026-8804', c2: 'Kabir Mehta', c3: 'Hostel & Mess Advance', c4: '2026-10-02', c5: 'Credit Card (Stripe)', c6: 'TXN-STRIPE-4421', c7: cs.format(45000), c8: 'Online Portal' }
       ]
     },
     {
@@ -335,14 +362,14 @@ export class ReportsComponent implements OnInit {
       badge: 'Finance',
       columns: ['Invoice No', 'Student Name', 'Class', 'Fee Head', 'Total Payable', 'Paid Amount', 'Due Balance', 'Due Date', 'Status'],
       kpis: [
-        { label: 'Total Dues Outstanding', value: '₹14,80,000', trend: '-8% MoM', isPositive: true },
+        { label: 'Total Dues Outstanding', value: cs.format(1480000), trend: '-8% MoM', isPositive: true },
         { label: 'Pending Invoices', value: '84 Records' },
         { label: 'Collection Efficiency', value: '96.9%' }
       ],
       records: [
-        { c1: 'INV-2026-104', c2: 'Rohan Gupta', c3: 'Grade 10-B', c4: 'Term 2 Tuition Fee', c5: '₹35,000', c6: '₹15,000', c7: '₹20,000', c8: '2026-10-15', c9: 'Partially Paid' },
-        { c1: 'INV-2026-218', c2: 'Vikram Choudhury', c3: 'Grade 8-A', c4: 'Transport Fee Q3', c5: '₹7,200', c6: '₹0', c7: '₹7,200', c8: '2026-10-10', c9: 'Unpaid (Due Soon)' },
-        { c1: 'INV-2026-312', c2: 'Meera Nambiar', c3: 'Grade 11-Com', c4: 'Lab & Computer Fee', c5: '₹12,000', c6: '₹0', c7: '₹12,000', c8: '2026-09-30', c9: 'Overdue' }
+        { c1: 'INV-2026-104', c2: 'Rohan Gupta', c3: 'Grade 10-B', c4: 'Term 2 Tuition Fee', c5: cs.format(35000), c6: cs.format(15000), c7: cs.format(20000), c8: '2026-10-15', c9: 'Partially Paid' },
+        { c1: 'INV-2026-218', c2: 'Vikram Choudhury', c3: 'Grade 8-A', c4: 'Transport Fee Q3', c5: cs.format(7200), c6: cs.format(0), c7: cs.format(7200), c8: '2026-10-10', c9: 'Unpaid (Due Soon)' },
+        { c1: 'INV-2026-312', c2: 'Meera Nambiar', c3: 'Grade 11-Com', c4: 'Lab & Computer Fee', c5: cs.format(12000), c6: cs.format(0), c7: cs.format(12000), c8: '2026-09-30', c9: 'Overdue' }
       ]
     },
     {
@@ -356,14 +383,14 @@ export class ReportsComponent implements OnInit {
       badge: 'Finance',
       columns: ['Fine ID', 'Student Name', 'Class', 'Category / Reason', 'Fine Amount', 'Waiver', 'Net Payable', 'Payment Status'],
       kpis: [
-        { label: 'Total Fines Levied', value: '₹68,500' },
-        { label: 'Collected Fines', value: '₹54,200' },
-        { label: 'Discretionary Waivers', value: '₹14,300' }
+        { label: 'Total Fines Levied', value: cs.format(68500) },
+        { label: 'Collected Fines', value: cs.format(54200) },
+        { label: 'Discretionary Waivers', value: cs.format(14300) }
       ],
       records: [
-        { c1: 'FIN-091', c2: 'Rohan Gupta', c3: 'Grade 10-B', c4: 'Late Fee Payment (>15 Days)', c5: '₹1,500', c6: '₹500', c7: '₹1,000', c8: 'Paid' },
-        { c1: 'FIN-092', c2: 'Meera Nambiar', c3: 'Grade 11-Com', c4: 'Overdue Library Book (Physics Vol 2)', c5: '₹350', c6: '₹0', c7: '₹350', c8: 'Unpaid' },
-        { c1: 'FIN-093', c2: 'Anil Deshmukh', c3: 'Grade 9-B', c4: 'Replacement Smart ID Card', c5: '₹500', c6: '₹0', c7: '₹500', c8: 'Paid' }
+        { c1: 'FIN-091', c2: 'Rohan Gupta', c3: 'Grade 10-B', c4: 'Late Fee Payment (>15 Days)', c5: cs.format(1500), c6: cs.format(500), c7: cs.format(1000), c8: 'Paid' },
+        { c1: 'FIN-092', c2: 'Meera Nambiar', c3: 'Grade 11-Com', c4: 'Overdue Library Book (Physics Vol 2)', c5: cs.format(350), c6: cs.format(0), c7: cs.format(350), c8: 'Unpaid' },
+        { c1: 'FIN-093', c2: 'Anil Deshmukh', c3: 'Grade 9-B', c4: 'Replacement Smart ID Card', c5: cs.format(500), c6: cs.format(0), c7: cs.format(500), c8: 'Paid' }
       ]
     },
     {
@@ -377,13 +404,13 @@ export class ReportsComponent implements OnInit {
       badge: 'Ledger',
       columns: ['Admission No', 'Student Name', 'Class', 'Total Annual Fees', 'Total Received', 'Concessions', 'Net Balance', 'Account Health'],
       kpis: [
-        { label: 'Net Receivables', value: '₹14,80,000' },
-        { label: 'Advance Deposits', value: '₹8,40,000' }
+        { label: 'Net Receivables', value: cs.format(1480000) },
+        { label: 'Advance Deposits', value: cs.format(840000) }
       ],
       records: [
-        { c1: 'ADM-2026-001', c2: 'Aarav Sharma', c3: 'Grade 10-A', c4: '₹85,000', c5: '₹85,000', c6: '₹0', c7: '₹0', c8: 'Clear / In Good Standing' },
-        { c1: 'ADM-2026-002', c2: 'Diya Patel', c3: 'Grade 10-A', c4: '₹85,000', c5: '₹85,000', c6: '₹0', c7: '₹0', c8: 'Clear / In Good Standing' },
-        { c1: 'ADM-2026-003', c2: 'Rohan Gupta', c3: 'Grade 10-B', c4: '₹85,000', c5: '₹65,000', c6: '₹0', c7: '₹20,000', c8: 'Pending Balance' }
+        { c1: 'ADM-2026-001', c2: 'Aarav Sharma', c3: 'Grade 10-A', c4: cs.format(85000), c5: cs.format(85000), c6: cs.format(0), c7: cs.format(0), c8: 'Clear / In Good Standing' },
+        { c1: 'ADM-2026-002', c2: 'Diya Patel', c3: 'Grade 10-A', c4: cs.format(85000), c5: cs.format(85000), c6: cs.format(0), c7: cs.format(0), c8: 'Clear / In Good Standing' },
+        { c1: 'ADM-2026-003', c2: 'Rohan Gupta', c3: 'Grade 10-B', c4: cs.format(85000), c5: cs.format(65000), c6: cs.format(0), c7: cs.format(20000), c8: 'Pending Balance' }
       ]
     },
     {
@@ -397,13 +424,13 @@ export class ReportsComponent implements OnInit {
       badge: 'Concessions',
       columns: ['Waiver ID', 'Student Name', 'Scheme / Category', 'Approved By', 'Discount %', 'Amount Waived', 'Approval Date', 'Status'],
       kpis: [
-        { label: 'Total Scholarships Awarded', value: '₹24,50,000', trend: '48 Beneficiaries' },
+        { label: 'Total Scholarships Awarded', value: cs.format(2450000), trend: '48 Beneficiaries' },
         { label: 'Merit Grants', value: '75%' }
       ],
       records: [
-        { c1: 'WVR-2026-01', c2: 'Diya Patel', c3: 'Merit Scholar Gold (Top 1% Rank)', c4: 'Principal Dr. Vance', c5: '50% Tuition', c6: '₹35,000', c7: '2026-08-10', c8: 'Active Grant' },
-        { c1: 'WVR-2026-02', c2: 'Ananya Verma', c3: 'Sibling Enrolled Concession', c4: 'Finance Committee', c5: '15% Tuition', c6: '₹10,500', c7: '2026-08-12', c8: 'Active Grant' },
-        { c1: 'WVR-2026-03', c2: 'Kabir Mehta', c3: 'National Athletic Representation', c4: 'Sports Director', c5: '100% Sports Fee', c6: '₹8,000', c7: '2026-08-15', c8: 'Active Grant' }
+        { c1: 'WVR-2026-01', c2: 'Diya Patel', c3: 'Merit Scholar Gold (Top 1% Rank)', c4: 'Principal Dr. Vance', c5: '50% Tuition', c6: cs.format(35000), c7: '2026-08-10', c8: 'Active Grant' },
+        { c1: 'WVR-2026-02', c2: 'Ananya Verma', c3: 'Sibling Enrolled Concession', c4: 'Finance Committee', c5: '15% Tuition', c6: cs.format(10500), c7: '2026-08-12', c8: 'Active Grant' },
+        { c1: 'WVR-2026-03', c2: 'Kabir Mehta', c3: 'National Athletic Representation', c4: 'Sports Director', c5: '100% Sports Fee', c6: cs.format(8000), c7: '2026-08-15', c8: 'Active Grant' }
       ]
     },
     {
@@ -417,13 +444,13 @@ export class ReportsComponent implements OnInit {
       badge: 'Prepaid',
       columns: ['Card / Account #', 'Student Name', 'Current Balance', 'Last Top-Up Amount', 'Top-Up Date', 'Monthly Spend', 'Card Status'],
       kpis: [
-        { label: 'Total Wallet Float', value: '₹6,40,000' },
+        { label: 'Total Wallet Float', value: cs.format(640000) },
         { label: 'Canteen POS Transactions', value: '18,400' }
       ],
       records: [
-        { c1: 'WLT-88401', c2: 'Aarav Sharma', c3: '₹1,450', c4: '₹2,000', c5: '2026-10-01', c6: '₹1,820', c7: 'Active NFC Card' },
-        { c1: 'WLT-88402', c2: 'Diya Patel', c3: '₹3,200', c4: '₹5,000', c5: '2026-09-28', c6: '₹2,450', c7: 'Active NFC Card' },
-        { c1: 'WLT-88403', c2: 'Rohan Gupta', c3: '₹420', c4: '₹1,000', c5: '2026-09-15', c6: '₹1,180', c7: 'Active NFC Card' }
+        { c1: 'WLT-88401', c2: 'Aarav Sharma', c3: cs.format(1450), c4: cs.format(2000), c5: '2026-10-01', c6: cs.format(1820), c7: 'Active NFC Card' },
+        { c1: 'WLT-88402', c2: 'Diya Patel', c3: cs.format(3200), c4: cs.format(5000), c5: '2026-09-28', c6: cs.format(2450), c7: 'Active NFC Card' },
+        { c1: 'WLT-88403', c2: 'Rohan Gupta', c3: cs.format(420), c4: cs.format(1000), c5: '2026-09-15', c6: cs.format(1180), c7: 'Active NFC Card' }
       ]
     },
     {
@@ -437,14 +464,14 @@ export class ReportsComponent implements OnInit {
       badge: 'Payroll',
       columns: ['Staff ID', 'Employee Name', 'Designation', 'Department', 'Basic Salary', 'Allowances', 'Deductions (PF/Tax)', 'Net Salary', 'Payout Mode'],
       kpis: [
-        { label: 'Monthly Payroll Outflow', value: '₹38,40,000', trend: '124 Staff Members' },
+        { label: 'Monthly Payroll Outflow', value: cs.format(3840000), trend: '124 Staff Members' },
         { label: 'Disbursement Status', value: '100% Cleared on Oct 1', isPositive: true }
       ],
       records: [
-        { c1: 'STF-001', c2: 'Dr. Eleanor Vance', c3: 'Dean & Principal', c4: 'Administration', c5: '₹1,20,000', c6: '₹30,000', c7: '₹18,000', c8: '₹1,32,000', c9: 'Direct Bank NEFT' },
-        { c1: 'STF-002', c2: 'Prof. Marcus Chen', c3: 'Head of Mathematics', c4: 'Computer Science', c5: '₹95,000', c6: '₹20,000', c7: '₹14,000', c8: '₹1,01,000', c9: 'Direct Bank NEFT' },
-        { c1: 'STF-003', c2: 'Dr. Sarah Al-Mansoor', c3: 'Senior Biotech Faculty', c4: 'Applied Sciences', c5: '₹90,000', c6: '₹18,000', c7: '₹13,000', c8: '₹95,000', c9: 'Direct Bank NEFT' },
-        { c1: 'STF-004', c2: 'Prof. Robert Sterling', c3: 'Chair of Humanities', c4: 'Literature', c5: '₹85,000', c6: '₹15,000', c7: '₹12,000', c8: '₹88,000', c9: 'Direct Bank NEFT' }
+        { c1: 'STF-001', c2: 'Dr. Eleanor Vance', c3: 'Dean & Principal', c4: 'Administration', c5: cs.format(120000), c6: cs.format(30000), c7: cs.format(18000), c8: cs.format(132000), c9: 'Direct Bank NEFT' },
+        { c1: 'STF-002', c2: 'Prof. Marcus Chen', c3: 'Head of Mathematics', c4: 'Computer Science', c5: cs.format(95000), c6: cs.format(20000), c7: cs.format(14000), c8: cs.format(101000), c9: 'Direct Bank NEFT' },
+        { c1: 'STF-003', c2: 'Dr. Sarah Al-Mansoor', c3: 'Senior Biotech Faculty', c4: 'Applied Sciences', c5: cs.format(90000), c6: cs.format(18000), c7: cs.format(13000), c8: cs.format(95000), c9: 'Direct Bank NEFT' },
+        { c1: 'STF-004', c2: 'Prof. Robert Sterling', c3: 'Chair of Humanities', c4: 'Literature', c5: cs.format(85000), c6: cs.format(15000), c7: cs.format(12000), c8: cs.format(88000), c9: 'Direct Bank NEFT' }
       ]
     },
     {
@@ -458,41 +485,32 @@ export class ReportsComponent implements OnInit {
       badge: 'Audit',
       columns: ['Txn ID', 'Date & Time', 'Ledger Head', 'Type', 'Amount', 'Payment Mode', 'Approved By', 'Narration'],
       kpis: [
-        { label: 'Total Monthly Volume', value: '₹1,12,00,000' },
+        { label: 'Total Monthly Volume', value: cs.format(11200000) },
         { label: 'Audit Trail Health', value: '100% Balanced', isPositive: true }
       ],
       records: [
-        { c1: 'TXN-99101', c2: '2026-10-04 11:20 AM', c3: 'Tuition Fee Collections', c4: 'CREDIT', c5: '₹35,000', c6: 'Online (UPI)', c7: 'System Auto', c8: 'Fee Receipt REC-8801' },
-        { c1: 'TXN-99102', c2: '2026-10-04 10:15 AM', c3: 'Science Lab Equipment Procurement', c4: 'DEBIT', c5: '₹42,500', c6: 'Bank Transfer', c7: 'Finance Officer', c8: 'Apex Instruments PO-882' },
-        { c1: 'TXN-99103', c2: '2026-10-03 04:30 PM', c3: 'Campus High-Speed Fiber Internet', c4: 'DEBIT', c5: '₹18,000', c6: 'Direct Debit', c7: 'Estate Manager', c8: 'Monthly ISP Bill Oct 2026' },
-        { c1: 'TXN-99104', c2: '2026-10-01 09:00 AM', c3: 'Monthly Staff Payroll Bulk Disbursement', c4: 'DEBIT', c5: '₹38,40,000', c6: 'HDFC Corporate Portal', c7: 'Treasurer', c8: 'Salaries for Month of Sept 2026' }
+        { c1: 'TXN-99101', c2: '2026-10-04 11:20 AM', c3: 'Tuition Fee Collections', c4: 'CREDIT', c5: cs.format(35000), c6: 'Online (UPI)', c7: 'System Auto', c8: 'Fee Receipt REC-8801' },
+        { c1: 'TXN-99102', c2: '2026-10-04 10:15 AM', c3: 'Science Lab Equipment Procurement', c4: 'DEBIT', c5: cs.format(42500), c6: 'Bank Transfer', c7: 'Finance Officer', c8: 'Apex Instruments PO-882' },
+        { c1: 'TXN-99103', c2: '2026-10-03 04:30 PM', c3: 'Campus High-Speed Fiber Internet', c4: 'DEBIT', c5: cs.format(18000), c6: 'Direct Debit', c7: 'Estate Manager', c8: 'Monthly ISP Bill Oct 2026' },
+        { c1: 'TXN-99104', c2: '2026-10-01 09:00 AM', c3: 'Monthly Staff Payroll Bulk Disbursement', c4: 'DEBIT', c5: cs.format(3840000), c6: 'HDFC Corporate Portal', c7: 'Treasurer', c8: 'Salaries for Month of Sept 2026' }
       ]
     }
-  ];
-
-  ngOnInit(): void {
-    // Route matching to auto-load specific report if URL matches slug
-    this.route.url.subscribe(() => {
-      const url = this.router.url.toLowerCase();
-      this.detectReportFromUrl(url);
-    });
-
-    this.route.queryParams.subscribe(params => {
-      if (params['report']) {
-        const rep = this.reports.find(r => r.slug === params['report'].toLowerCase() || r.id.toLowerCase() === params['report'].toLowerCase());
-        if (rep) {
-          this.openReportDetail(rep);
-        }
-      }
-    });
+    ];
   }
 
   detectReportFromUrl(url: string): void {
+    const cleanUrl = url.toLowerCase().replace(/[^a-z0-9]/g, '');
     for (const rep of this.reports) {
-      if (url.includes(rep.slug)) {
+      const cleanSlug = rep.slug.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (cleanUrl.includes(cleanSlug)) {
         this.openReportDetail(rep);
         return;
       }
+    }
+    // Handle aliases
+    if (cleanUrl.includes('paymentreport')) {
+      const rep = this.reports.find(r => r.slug === 'feesreport');
+      if (rep) this.openReportDetail(rep);
     }
   }
 
@@ -530,8 +548,6 @@ export class ReportsComponent implements OnInit {
     this.filterSearchQuery = '';
     this.showToast('Reset filters to default.');
   }
-
-  exportReportService = inject(ExportReportService);
 
   exportData(format: string): void {
     if (!this.activeReport) {
