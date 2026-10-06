@@ -561,18 +561,20 @@ export class ReportsComponent implements OnInit {
       this.activeReport!.columns.map((_, i) => rec['c' + (i + 1)] || '')
     );
 
+    const metadata = {
+      category: this.activeReport.category,
+      filters: `${this.filterClass} • ${this.filterAcademicYear}`,
+      kpis: this.activeReport.kpis
+    };
+
     if (format === 'csv') {
-      this.exportReportService.exportToCsv(title, headers, rows);
+      this.exportReportService.exportToCsv(title, headers, rows, metadata);
       this.showToast(`CSV data export generated for "${title}". Download starting...`);
     } else if (format === 'excel' || format === 'xls') {
-      this.exportReportService.exportToExcel(title, headers, rows);
+      this.exportReportService.exportToExcel(title, headers, rows, metadata);
       this.showToast(`Excel spreadsheet created for "${title}". Download starting...`);
     } else if (format === 'pdf') {
-      this.exportReportService.printOrPdf(title, headers, rows, {
-        category: this.activeReport.category,
-        filters: `${this.filterClass} &bull; ${this.filterAcademicYear}`,
-        kpis: this.activeReport.kpis
-      });
+      this.exportReportService.printOrPdf(title, headers, rows, metadata);
       this.showToast(`PDF Document generated for "${title}". Ready to print or Save as PDF.`);
     }
   }
@@ -587,7 +589,7 @@ export class ReportsComponent implements OnInit {
 
     this.exportReportService.printOrPdf(title, headers, rows, {
       category: this.activeReport.category,
-      filters: `${this.filterClass} &bull; ${this.filterAcademicYear}`,
+      filters: `${this.filterClass} • ${this.filterAcademicYear}`,
       kpis: this.activeReport.kpis
     });
     this.showToast(`Print layout loaded with official institutional header.`);

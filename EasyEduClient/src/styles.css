@@ -868,3 +868,145 @@ body {
   from { transform: translateY(20px) scale(0.97); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
+
+/* ==========================================================================
+   EasyEdu Global Print & PDF Isolation Rules
+   Ensures ONLY actual report/document content is printed, omitting all UI chrome
+   ========================================================================== */
+@media print {
+  /* Hide all application chrome, navigation, toolbars, buttons, and backgrounds */
+  .sidebar,
+  .sidebar-premium,
+  .topbar,
+  .fixed-global-bg,
+  .bg-overlay,
+  .edu-background,
+  .floating-tool,
+  .sidebar-overlay,
+  .sidebar-collapse-footer,
+  .tab-pills-bar,
+  .exam-tabs-container,
+  .category-pill-row,
+  .search-input-wrap,
+  .search-bar-modern,
+  .form-select-modern,
+  .form-control-modern,
+  .form-control-premium,
+  .toast-notification,
+  .modal-backdrop-custom,
+  .btn,
+  .btn-category-pill,
+  .btn-tab-pill,
+  .btn-export-outline,
+  .btn-primary-glow,
+  .no-print,
+  .action-btns,
+  .actions-cell,
+  .action-column,
+  button,
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    display: none !important;
+  }
+
+  /* Reset body and container geometry for crisp paper output */
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: static !important;
+    overflow: visible !important;
+  }
+
+  .reports-page-container,
+  .exam-reports-page-container,
+  .card,
+  .premium-card,
+  .card-glass,
+  .tab-pane-content,
+  .progress-card-sheet {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 0 10pt 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ensure tables render completely without scrollbars or clipped columns */
+  table,
+  .table-premium,
+  .table-custom,
+  .table-sheet {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto !important;
+    box-shadow: none !important;
+    table-layout: auto !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tfoot {
+    display: table-footer-group !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 6pt 8pt !important;
+    font-size: 9pt !important;
+    color: #0f172a !important;
+    background: #ffffff !important;
+  }
+
+  th {
+    background: #f1f5f9 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+  }
+
+  .badge,
+  .badge-mini,
+  .rank-badge {
+    border: 1px solid #cbd5e1 !important;
+    background: transparent !important;
+    color: #0f172a !important;
+    padding: 2pt 4pt !important;
+    font-size: 8pt !important;
+  }
+
+  /* Print Header & Footer */
+  .exam-header-card,
+  .reports-header-card {
+    border: none !important;
+    border-bottom: 2pt solid #002B49 !important;
+    border-radius: 0 !important;
+    padding: 0 0 8pt 0 !important;
+    margin-bottom: 12pt !important;
+    box-shadow: none !important;
+  }
+}
+

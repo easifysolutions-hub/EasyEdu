@@ -304,17 +304,19 @@ export class ExamReportsComponent implements OnInit {
         break;
     }
 
+    const metadata = {
+      category: 'Examination & Assessment Intelligence',
+      filters: `${this.filterClass} • ${this.filterExamTerm} • Session ${this.filterSession}`
+    };
+
     if (format.toLowerCase() === 'csv') {
-      this.exportService.exportToCsv(`${title}_${this.filterClass}`, headers, rows);
+      this.exportService.exportToCsv(`${title}_${this.filterClass}`, headers, rows, metadata);
       this.showToast(`CSV data export generated for "${title}". Download started.`);
     } else if (format.toLowerCase() === 'excel') {
-      this.exportService.exportToExcel(`${title}_${this.filterClass}`, headers, rows);
+      this.exportService.exportToExcel(`${title}_${this.filterClass}`, headers, rows, metadata);
       this.showToast(`Excel spreadsheet created for "${title}". Download started.`);
     } else {
-      this.exportService.printOrPdf(title, headers, rows, {
-        category: 'Examination & Assessment Intelligence',
-        filters: `${this.filterClass} • ${this.filterExamTerm} • Session ${this.filterSession}`
-      });
+      this.exportService.printOrPdf(title, headers, rows, metadata);
       this.showToast(`Document prepared for "${title}". Ready to Print or Save as PDF.`);
     }
   }
