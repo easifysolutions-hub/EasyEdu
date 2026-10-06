@@ -1,35 +1,37 @@
-<div class="reports-wrapper">
-  <!-- Top Glass Header -->
-  <div class="reports-header-card">
-    <div class="header-left">
-      <div class="header-icon-pill">
-        <i class="fas fa-chart-pie"></i>
+<div class="reports-page-container">
+  <!-- Top Header Banner -->
+  <div class="reports-header-card mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="header-icon-pill">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <div>
+          <h2 class="reports-title">Institutional Analytics & BI Reporting Hub</h2>
+          <p class="reports-subtitle">Generate, audit, filter, and export comprehensive academic, attendance, fee ledgers, transport, and payroll reports.</p>
+        </div>
       </div>
-      <div>
-        <h1 class="reports-title">Institutional Analytics & BI Reporting Hub</h1>
-        <p class="reports-subtitle">Generate, audit, schedule, and export comprehensive academic, attendance, fee ledgers, transport, and payroll reports.</p>
+      <div *ngIf="viewMode === 'detail'">
+        <button class="btn btn-outline-primary btn-sm rounded-12 fw-bold px-3 py-2" (click)="backToCatalog()">
+          <i class="fas fa-arrow-left me-2"></i> All 20 Reports Directory
+        </button>
       </div>
-    </div>
-    <div class="header-right" *ngIf="viewMode === 'detail'">
-      <button class="btn-back-catalog" (click)="backToCatalog()">
-        <i class="fas fa-arrow-left me-2"></i> All Reports Directory
-      </button>
     </div>
   </div>
 
   <!-- ================= VIEW MODE 1: CATALOG OF ALL 20 REPORTS ================= -->
   <div class="catalog-view" *ngIf="viewMode === 'catalog'">
     <!-- Filter & Search Strip -->
-    <div class="reports-filter-panel mb-4">
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-3 mb-4">
       <div class="row g-3 align-items-center">
         <div class="col-lg-5">
           <div class="search-input-wrap">
             <i class="fas fa-search search-icon"></i>
             <input 
               type="text" 
-              class="form-control-dark search-box" 
+              class="form-control form-control-modern" 
               [(ngModel)]="searchTerm" 
-              placeholder="Search by report name, ID, or keywords (e.g. attendance, fees due, transport, payroll)..."
+              placeholder="Search by report title, ID, or keywords (e.g. attendance, fees, transport)..."
             />
           </div>
         </div>
@@ -61,23 +63,23 @@
     <!-- 20 Reports Grid -->
     <div class="row g-4">
       <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let rep of filteredReports">
-        <div class="report-card-premium" (click)="openReportDetail(rep)">
-          <div class="card-top-row">
-            <div class="report-icon-box" [style.background-color]="rep.color">
+        <div class="report-card-clean hover-shadow h-100" (click)="openReportDetail(rep)">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="report-icon-box shadow-sm" [style.background-color]="rep.color">
               <i [class]="rep.icon"></i>
             </div>
-            <span class="report-category-badge">{{ rep.badge }}</span>
+            <span class="badge bg-light text-secondary border fw-bold px-2 py-1 rounded-pill" style="font-size: 0.72rem;">{{ rep.badge }}</span>
           </div>
 
-          <h5 class="report-card-title">{{ rep.title }}</h5>
-          <p class="report-card-desc">{{ rep.description }}</p>
+          <h5 class="fw-bold text-dark mb-2">{{ rep.title }}</h5>
+          <p class="text-muted small mb-4 report-desc-clamp">{{ rep.description }}</p>
 
-          <div class="report-card-footer">
-            <span class="report-code"><i class="fas fa-hashtag me-1"></i>{{ rep.id }}</span>
-            <button class="btn-generate-sm">
-              <span>View Data</span>
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 font-monospace">{{ rep.id }}</span>
+            <span class="text-primary fw-bold small">
+              <span>View Report</span>
               <i class="fas fa-arrow-right ms-1"></i>
-            </button>
+            </span>
           </div>
         </div>
       </div>
@@ -87,44 +89,46 @@
   <!-- ================= VIEW MODE 2: DEDICATED REPORT DETAIL VIEW ================= -->
   <div class="detail-view" *ngIf="viewMode === 'detail' && activeReport">
     <!-- Breadcrumb & Title Bar -->
-    <div class="report-detail-header mb-4">
-      <div class="d-flex align-items-center gap-3">
-        <div class="report-icon-large" [style.background-color]="activeReport.color">
-          <i [class]="activeReport.icon"></i>
-        </div>
-        <div>
-          <div class="d-flex align-items-center gap-2 mb-1">
-            <span class="badge-mini bg-primary">{{ activeReport.id }}</span>
-            <span class="badge-mini bg-secondary">{{ activeReport.category }}</span>
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="report-icon-large shadow-sm" [style.background-color]="activeReport.color">
+            <i [class]="activeReport.icon"></i>
           </div>
-          <h2 class="report-main-title">{{ activeReport.title }}</h2>
-          <p class="report-main-desc">{{ activeReport.description }}</p>
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 font-monospace fw-bold">{{ activeReport.id }}</span>
+              <span class="badge bg-light text-secondary border fw-semibold">{{ activeReport.category }}</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">{{ activeReport.title }}</h3>
+            <p class="text-muted small mb-0">{{ activeReport.description }}</p>
+          </div>
         </div>
-      </div>
 
-      <div class="d-flex gap-2">
-        <button class="btn-export-outline" (click)="exportData('csv')">
-          <i class="fas fa-file-csv text-success me-1"></i> CSV
-        </button>
-        <button class="btn-export-outline" (click)="exportData('excel')">
-          <i class="fas fa-file-excel text-success me-1"></i> Excel
-        </button>
-        <button class="btn-export-outline" (click)="exportData('pdf')">
-          <i class="fas fa-file-pdf text-danger me-1"></i> PDF
-        </button>
-        <button class="btn-primary-glow" (click)="printReport()">
-          <i class="fas fa-print me-1"></i> Print
-        </button>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-success btn-sm rounded-10 fw-bold px-3 py-2" (click)="exportData('csv')">
+            <i class="fas fa-file-csv me-1"></i> CSV
+          </button>
+          <button class="btn btn-outline-success btn-sm rounded-10 fw-bold px-3 py-2" (click)="exportData('excel')">
+            <i class="fas fa-file-excel me-1"></i> Excel
+          </button>
+          <button class="btn btn-outline-danger btn-sm rounded-10 fw-bold px-3 py-2" (click)="exportData('pdf')">
+            <i class="fas fa-file-pdf me-1"></i> PDF
+          </button>
+          <button class="btn btn-primary btn-sm rounded-10 fw-bold px-3 py-2 shadow-sm" (click)="printReport()">
+            <i class="fas fa-print me-1"></i> Print
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Metric KPI Tiles -->
     <div class="row g-3 mb-4" *ngIf="activeReport.kpis && activeReport.kpis.length > 0">
-      <div class="col-md" *ngFor="let kpi of activeReport.kpis">
-        <div class="kpi-card">
-          <div class="kpi-label">{{ kpi.label }}</div>
-          <div class="kpi-value">{{ kpi.value }}</div>
-          <div class="kpi-trend" *ngIf="kpi.trend" [class.trend-positive]="kpi.isPositive">
+      <div class="col-12 col-sm-6 col-xl" *ngFor="let kpi of activeReport.kpis">
+        <div class="card border-0 rounded-20 shadow-sm bg-white p-4 h-100">
+          <div class="small text-muted fw-bold text-uppercase mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">{{ kpi.label }}</div>
+          <div class="h3 fw-bold text-dark mb-1">{{ kpi.value }}</div>
+          <div class="small" *ngIf="kpi.trend" [ngClass]="kpi.isPositive ? 'text-success fw-bold' : 'text-muted'">
             <i class="fas fa-chart-line me-1" *ngIf="kpi.isPositive"></i> {{ kpi.trend }}
           </div>
         </div>
@@ -132,16 +136,18 @@
     </div>
 
     <!-- Parameter Filter Toolbar -->
-    <div class="card-glass mb-4">
-      <div class="card-header-clean">
-        <h4 class="card-title-sm"><i class="fas fa-sliders text-info me-2"></i> Query Parameters & Filters</h4>
-        <button class="btn-text-reset" (click)="resetFilters()"><i class="fas fa-rotate-left me-1"></i> Reset</button>
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h6 class="fw-bold text-dark mb-0"><i class="fas fa-sliders text-primary me-2"></i> Query Parameters & Data Filters</h6>
+        <button class="btn btn-sm btn-light rounded-8 fw-semibold text-muted" (click)="resetFilters()">
+          <i class="fas fa-rotate-left me-1"></i> Reset
+        </button>
       </div>
 
       <div class="row g-3 align-items-end">
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <label class="form-label-sm">Academic Session</label>
-          <select class="form-select-dark" [(ngModel)]="filterAcademicYear">
+          <label class="form-label small fw-bold text-muted">Academic Session</label>
+          <select class="form-select form-select-modern" [(ngModel)]="filterAcademicYear">
             <option value="2025-2026">2025-2026 (Current)</option>
             <option value="2024-2025">2024-2025 (Prior)</option>
             <option value="2023-2024">2023-2024 (Archive)</option>
@@ -149,8 +155,8 @@
         </div>
 
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <label class="form-label-sm">Class Filter</label>
-          <select class="form-select-dark" [(ngModel)]="filterClass">
+          <label class="form-label small fw-bold text-muted">Class Filter</label>
+          <select class="form-select form-select-modern" [(ngModel)]="filterClass">
             <option value="All Classes">All Classes</option>
             <option value="Grade 10-A">Grade 10-A</option>
             <option value="Grade 10-B">Grade 10-B</option>
@@ -160,22 +166,22 @@
         </div>
 
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <label class="form-label-sm">Date From</label>
-          <input type="date" class="form-control-dark" [(ngModel)]="filterDateFrom" />
+          <label class="form-label small fw-bold text-muted">Date From</label>
+          <input type="date" class="form-control form-control-modern" [(ngModel)]="filterDateFrom" />
         </div>
 
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <label class="form-label-sm">Date To</label>
-          <input type="date" class="form-control-dark" [(ngModel)]="filterDateTo" />
+          <label class="form-label small fw-bold text-muted">Date To</label>
+          <input type="date" class="form-control form-control-modern" [(ngModel)]="filterDateTo" />
         </div>
 
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <label class="form-label-sm">Quick Search</label>
-          <input type="text" class="form-control-dark" [(ngModel)]="filterSearchQuery" placeholder="Filter table rows..." />
+          <label class="form-label small fw-bold text-muted">Quick Search</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="filterSearchQuery" placeholder="Filter rows..." />
         </div>
 
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <button class="btn-primary-glow w-100" (click)="applyFilters()">
+          <button class="btn btn-primary w-100 rounded-12 py-2 fw-bold shadow-sm" (click)="applyFilters()">
             <i class="fas fa-filter me-1"></i> Apply Filter
           </button>
         </div>
@@ -183,14 +189,16 @@
     </div>
 
     <!-- Live Data Table -->
-    <div class="card-glass">
-      <div class="card-header-clean">
-        <h4 class="card-title-sm"><i class="fas fa-table-list text-primary me-2"></i> Verified Audit Ledger Records</h4>
-        <span class="badge-status-active">{{ activeReport.records.length }} Verified Records</span>
+    <div class="card border-0 rounded-20 shadow-sm bg-white p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h6 class="fw-bold text-dark mb-0"><i class="fas fa-table text-primary me-2"></i> Verified Audit Ledger Records</h6>
+        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded-pill fw-bold">
+          {{ activeReport.records.length }} Verified Records
+        </span>
       </div>
 
       <div class="table-responsive">
-        <table class="table-custom">
+        <table class="table-premium">
           <thead>
             <tr>
               <th *ngFor="let col of activeReport.columns">{{ col }}</th>
@@ -198,7 +206,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let r of activeReport.records">
-              <td class="fw-bold text-light" *ngIf="r.c1">{{ r.c1 }}</td>
+              <td class="fw-bold text-dark" *ngIf="r.c1">{{ r.c1 }}</td>
               <td *ngIf="r.c2">{{ r.c2 }}</td>
               <td *ngIf="r.c3">{{ r.c3 }}</td>
               <td *ngIf="r.c4">{{ r.c4 }}</td>
@@ -206,12 +214,12 @@
               <td *ngIf="r.c6">{{ r.c6 }}</td>
               <td *ngIf="r.c7">{{ r.c7 }}</td>
               <td *ngIf="r.c8">
-                <span class="badge" [ngClass]="r.c8 === 'Active' || r.c8 === 'Paid' || r.c8 === '100%' || r.c8 === 'Excellent' || r.c8 === 'Authenticated' || r.c8 === 'Active Pass' || r.c8 === 'Active Grant' ? 'bg-success' : (r.c8 === 'Unpaid' || r.c8 === 'Overdue' ? 'bg-danger' : 'bg-primary')">
+                <span class="badge" [ngClass]="r.c8 === 'Active' || r.c8 === 'Paid' || r.c8 === '100%' || r.c8 === 'Excellent' || r.c8 === 'Authenticated' || r.c8 === 'Active Pass' || r.c8 === 'Active Grant' ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' : (r.c8 === 'Unpaid' || r.c8 === 'Overdue' ? 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25' : 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25')">
                   {{ r.c8 }}
                 </span>
               </td>
               <td *ngIf="r.c9">
-                <span class="badge" [ngClass]="r.c9 === 'Partially Paid' ? 'bg-warning text-dark' : (r.c9.includes('Overdue') ? 'bg-danger' : 'bg-secondary')">
+                <span class="badge" [ngClass]="r.c9 === 'Partially Paid' ? 'bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25' : (r.c9.includes('Overdue') ? 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25' : 'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25')">
                   {{ r.c9 }}
                 </span>
               </td>
