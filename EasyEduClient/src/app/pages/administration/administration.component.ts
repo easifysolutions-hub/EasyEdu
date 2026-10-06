@@ -67,6 +67,25 @@ export interface PhoneRecord {
   date: string;
 }
 
+export interface AdmissionQuerySetting {
+  id?: number;
+  formTitle: string;
+  accentColor: string;
+  formDescription: string;
+  showPhone: boolean;
+  requirePhone: boolean;
+  showEmail: boolean;
+  requireEmail: boolean;
+  showAddress: boolean;
+  requireAddress: boolean;
+  showClass: boolean;
+  requireClass: boolean;
+  showNumberOfChildren: boolean;
+  requireNumberOfChildren: boolean;
+  showDescription: boolean;
+  requireDescription: boolean;
+}
+
 @Component({
   selector: 'app-administration',
   standalone: true,
@@ -81,7 +100,29 @@ export class AdministrationComponent implements OnInit {
   // Sliding Drawer / Card controls
   isFormOpen = true;
   showPublicModal = false;
-  publicAdmissionUrl = 'http://localhost:4200/home#admissions';
+  copiedLinkSuccess = false;
+
+  publicFormSettings: AdmissionQuerySetting = {
+    formTitle: 'EasyEdu Online Student Admission Application',
+    accentColor: '#6366f1',
+    formDescription: 'Welcome to our online application portal. Please provide prospective student and guardian information below to register an official enquiry.',
+    showPhone: true,
+    requirePhone: true,
+    showEmail: true,
+    requireEmail: false,
+    showAddress: true,
+    requireAddress: false,
+    showClass: true,
+    requireClass: true,
+    showNumberOfChildren: true,
+    requireNumberOfChildren: false,
+    showDescription: true,
+    requireDescription: false
+  };
+
+  get generatedPublicLink(): string {
+    return `${window.location.origin}/contact#admissions`;
+  }
 
   // Lead Funnel Data (Empty by default or populated dynamically)
   queries: AdmissionLead[] = [];
@@ -200,6 +241,8 @@ export class AdministrationComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
+    this.loadPublicFormSettings();
+
     this.route.queryParams.subscribe(params => {
       if (params['tab']) {
         const tab = params['tab'];
@@ -213,6 +256,42 @@ export class AdministrationComponent implements OnInit {
         }
       }
     });
+  }
+
+  copyPublicLink(): void {
+    navigator.clipboard.writeText(this.generatedPublicLink);
+    this.copiedLinkSuccess = true;
+    setTimeout(() => {
+      this.copiedLinkSuccess = false;
+    }, 3000);
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      timer: 2000,
+      showConfirmButton: false,
+      icon: 'success',
+      title: 'Copied public application form link!'
+    });
+  }
+
+  savePublicFormSettings(): void {
+    localStorage.setItem('easyedu_admission_query_settings', JSON.stringify(this.publicFormSettings));
+    this.showPublicModal = false;
+    Swal.fire({
+      title: 'Public Form Settings Saved',
+      text: 'Customizations for online admission application form updated successfully.',
+      icon: 'success',
+      confirmButtonColor: '#002B49'
+    });
+  }
+
+  loadPublicFormSettings(): void {
+    const saved = localStorage.getItem('easyedu_admission_query_settings');
+    if (saved) {
+      try {
+        this.publicFormSettings = { ...this.publicFormSettings, ...JSON.parse(saved) };
+      } catch (e) {}
+    }
   }
 
   setTab(tab: 'queries' | 'visitors' | 'complaints' | 'postal-receive' | 'postal-dispatch' | 'calls' | 'setup'): void {

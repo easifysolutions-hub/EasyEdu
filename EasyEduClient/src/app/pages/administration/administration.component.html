@@ -776,4 +776,160 @@
       </div>
     </div>
   </div>
+
+  <!-- MODAL: PUBLIC FORM SETTINGS (Admission Query Public Form Customizer) -->
+  <div class="modal fade show d-block" *ngIf="showPublicModal" style="background: rgba(0,0,0,0.5); z-index: 1055;" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="modal-header border-0 bg-primary text-white p-4" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
+          <h5 class="modal-title fw-bold text-white mb-0">
+            <i class="fas fa-sliders me-2"></i>Public Application Form Customizer
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="showPublicModal = false"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Public Link Generation Card -->
+          <div class="card border border-primary-subtle bg-light p-3 mb-4 rounded-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label fw-bold text-dark small text-uppercase m-0">
+                <i class="fas fa-link me-1 text-primary"></i> Generated Public Application Form Link
+              </label>
+              <span class="badge bg-success text-white px-2 py-1 rounded-pill">Active Live</span>
+            </div>
+            <p class="small text-muted mb-2">Distribute this URL publicly on newsletters, social channels, or your official website. Inquiries submitted through this link will immediately register in the Lead Center.</p>
+            <div class="input-group">
+              <input type="text" class="form-control bg-white font-monospace small" [value]="generatedPublicLink" readonly>
+              <button class="btn btn-primary px-4 fw-bold" type="button" (click)="copyPublicLink()">
+                <i class="fas fa-copy me-1"></i> COPY LINK
+              </button>
+            </div>
+            <div class="small text-success fw-bold mt-2" *ngIf="copiedLinkSuccess">
+              <i class="fas fa-check-circle me-1"></i> Copied to clipboard!
+            </div>
+          </div>
+
+          <!-- Customization Form Controls -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-8">
+              <label class="form-label fw-bold small text-dark">Form Title *</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="publicFormSettings.formTitle" placeholder="e.g. EasyEdu Online Admission Application">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-bold small text-dark">Theme Accent Color *</label>
+              <div class="d-flex gap-2 align-items-center">
+                <input type="color" class="form-control form-control-color border rounded-3" style="width: 54px; height: 38px; padding: 2px;" [(ngModel)]="publicFormSettings.accentColor">
+                <input type="text" class="form-control rounded-3 text-center font-monospace uppercase fw-bold" [(ngModel)]="publicFormSettings.accentColor">
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold small text-dark">Form Welcome / Instructions Description</label>
+            <textarea class="form-control rounded-3" rows="2" [(ngModel)]="publicFormSettings.formDescription" placeholder="Welcome prospective students and parents with guidelines..."></textarea>
+          </div>
+
+          <h6 class="fw-bold text-dark text-uppercase small mb-3">
+            <i class="fas fa-list-check text-primary me-2"></i> Form Field Visibility & Validation Rules
+          </h6>
+          <div class="table-responsive rounded-3 border mb-3">
+            <table class="table table-hover align-middle mb-0 text-center">
+              <thead class="table-light">
+                <tr>
+                  <th class="text-start ps-3 small fw-bold text-muted text-uppercase">Field Name</th>
+                  <th class="small fw-bold text-muted text-uppercase">Show Field</th>
+                  <th class="small fw-bold text-muted text-uppercase">Mandatory (Required)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-start ps-3 fw-semibold text-dark">Primary Phone Number</td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.showPhone">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.requirePhone" [disabled]="!publicFormSettings.showPhone">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-start ps-3 fw-semibold text-dark">Email Address</td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.showEmail">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.requireEmail" [disabled]="!publicFormSettings.showEmail">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-start ps-3 fw-semibold text-dark">Residential Address</td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.showAddress">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.requireAddress" [disabled]="!publicFormSettings.showAddress">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-start ps-3 fw-semibold text-dark">Target Grade / Class</td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.showClass">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.requireClass" [disabled]="!publicFormSettings.showClass">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-start ps-3 fw-semibold text-dark">Number of Children / Applicants</td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.showNumberOfChildren">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.requireNumberOfChildren" [disabled]="!publicFormSettings.showNumberOfChildren">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-start ps-3 fw-semibold text-dark">Description / Counselor Note</td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.showDescription">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="publicFormSettings.requireDescription" [disabled]="!publicFormSettings.showDescription">
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-light rounded-3 px-3 fw-semibold" (click)="showPublicModal = false">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-3 px-4 fw-semibold shadow-sm" (click)="savePublicFormSettings()">
+            <i class="fas fa-save me-1"></i> Save Customizations
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
