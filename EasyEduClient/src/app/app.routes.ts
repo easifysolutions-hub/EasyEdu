@@ -44,6 +44,7 @@ import { RolePermissionComponent } from './pages/role-permission/role-permission
 import { ImportExportComponent } from './pages/import-export/import-export.component';
 import { FrontendCmsComponent } from './pages/frontend-cms/frontend-cms.component';
 import { ExamReportsComponent } from './pages/exam-reports/exam-reports.component';
+import { ModuleManagerComponent } from './pages/module-manager/module-manager.component';
 import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
 
@@ -438,7 +439,9 @@ export const routes: Routes = [
       { path: 'CustomFields', component: SettingsComponent },
       { path: 'SystemSettings', component: SettingsComponent },
       { path: 'Style', component: SettingsComponent },
-      { path: 'System/ModuleManager', component: SettingsComponent }
+      { path: 'System/ModuleManager', component: ModuleManagerComponent },
+      { path: 'system/modulemanager', component: ModuleManagerComponent },
+      { path: 'ModuleManager', component: ModuleManagerComponent }
     ]
   },
   { path: '**', redirectTo: '' }

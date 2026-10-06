@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { PermissionService } from '../../core/services/permission.service';
+import { ModuleManagerService } from '../../core/services/module-manager.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -17,6 +18,7 @@ export class MainLayoutComponent implements OnInit {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
   permissionService = inject(PermissionService);
+  moduleService = inject(ModuleManagerService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 

@@ -636,7 +636,7 @@ export class PermissionService {
     }
 
     // System Module Manager
-    if (url.startsWith('/system/modulemanager')) {
+    if (url.startsWith('/system/modulemanager') || url.startsWith('/modulemanager')) {
       return this.canAccess('moduleManager');
     }
 
