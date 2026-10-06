@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 declare const Swal: any;
 
@@ -91,7 +92,18 @@ export class DormitoryComponent implements OnInit {
     guardianPhone: '+91 98...'
   };
 
-  ngOnInit(): void {}
+  private route = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        const t = params['tab'].toLowerCase();
+        if (t === 'blocks' || t === 'rooms' || t === 'allocations' || t === 'mess') {
+          this.activeTab = t as any;
+        }
+      }
+    });
+  }
 
   get totalBedsCapacity(): number {
     return this.blocks.reduce((acc, b) => acc + b.totalBeds, 0);

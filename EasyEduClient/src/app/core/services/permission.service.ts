@@ -687,7 +687,7 @@ export class PermissionService {
 
     // Certificates
     if (url.startsWith('/certificates')) {
-      return this.canAccess('certificates') || this.canAccess('adminSection');
+      return this.canAccess('certificates');
     }
 
     // Download Center
@@ -717,7 +717,7 @@ export class PermissionService {
 
     // Online Exam
     if (url.startsWith('/onlineexam') || url.startsWith('/online-exam')) {
-      return this.canAccess('onlineExam') || this.canAccess('advancedAcademicMenu');
+      return this.canAccess('onlineExam');
     }
 
     // CBSE & LMS Advanced Academics

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 declare const Swal: any;
 
@@ -43,6 +44,8 @@ interface CertificateTemplate {
   styleUrls: ['./certificates.component.css']
 })
 export class CertificatesComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+
   activeTab: 'issued' | 'generate' | 'idcards' | 'staffcards' | 'templates' = 'issued';
 
   records: CertificateRecord[] = [
@@ -91,6 +94,15 @@ export class CertificatesComponent implements OnInit {
   ngOnInit(): void {
     this.selectedCertificate = this.records[0];
     this.selectedIdCard = this.students[0];
+
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        const t = params['tab'].toLowerCase();
+        if (t === 'issued' || t === 'generate' || t === 'idcards' || t === 'staffcards' || t === 'templates') {
+          this.activeTab = t as any;
+        }
+      }
+    });
   }
 
   openCertificatePrint(rec: CertificateRecord): void {

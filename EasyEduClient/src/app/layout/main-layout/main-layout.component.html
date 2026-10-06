@@ -60,10 +60,6 @@
         <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'postal-dispatch'}" class="sub-nav-link">Postal Dispatch</a></li>
         <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'calls'}" class="sub-nav-link">Phone Call Log</a></li>
         <li><a [routerLink]="['/administration']" [queryParams]="{tab: 'setup'}" class="sub-nav-link">Admin Setup</a></li>
-        <li><a routerLink="/certificates" class="sub-nav-link">Student Certificate</a></li>
-        <li><a routerLink="/certificates" class="sub-nav-link">Generate Certificate</a></li>
-        <li><a routerLink="/certificates" class="sub-nav-link">Student ID Card</a></li>
-        <li><a routerLink="/certificates" class="sub-nav-link">Generate ID Card</a></li>
       </ul>
     </div>
 
@@ -177,9 +173,12 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['onlineExam']">
+        <li><a routerLink="/OnlineExam" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Online Exam</a></li>
+        <li><a routerLink="/OnlineExam/AddOnlineExam" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Online Exam</a></li>
         <li><a routerLink="/OnlineExam/QuestionGroup" routerLinkActive="active" class="sub-nav-link">Question Group</a></li>
         <li><a routerLink="/OnlineExam/QuestionBank" routerLinkActive="active" class="sub-nav-link">Question Bank</a></li>
-        <li><a routerLink="/OnlineExam" routerLinkActive="active" class="sub-nav-link">Online Exam</a></li>
+        <li><a routerLink="/OnlineExam/WrittenExam" routerLinkActive="active" class="sub-nav-link">Written Exam</a></li>
+        <li><a routerLink="/OnlineExam/Settings" routerLinkActive="active" class="sub-nav-link">Settings</a></li>
       </ul>
     </div>
 
@@ -209,7 +208,6 @@
         <li><a routerLink="/Students/Create" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Add Student</a></li>
         <li><a routerLink="/Students" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link">Student List</a></li>
         <li><a routerLink="/Students/MultiClassStudent" routerLinkActive="active" class="sub-nav-link">Multi Class Student</a></li>
-        <li><a routerLink="/Students" routerLinkActive="active" class="sub-nav-link">Delete Student Record</a></li>
         <li><a routerLink="/Students/UnassignedStudent" routerLinkActive="active" class="sub-nav-link">Unassigned Student</a></li>
         <li><a routerLink="/Attendance" routerLinkActive="active" class="sub-nav-link">Student Attendance</a></li>
         <li><a routerLink="/Students/StudentGroup" routerLinkActive="active" class="sub-nav-link">Student Group</a></li>
@@ -268,7 +266,6 @@
         <li><a routerLink="/Reports/StaffReport" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-file-lines me-2 text-primary"></i>Staff Report</a></li>
         <li><a routerLink="/Reports/StaffAttendanceReport" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-clipboard-user me-2 text-success"></i>Staff Attendance Report</a></li>
         <li><a routerLink="/Reports/PayrollReport" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-money-check-dollar me-2 text-warning"></i>Payroll Report</a></li>
-        <li><a routerLink="/HumanResource/StaffDirectory" routerLinkActive="active" class="sub-nav-link ps-4"><i class="fas fa-address-book me-2 text-info"></i>Staff Directory</a></li>
       </ul>
     </div>
 
@@ -287,7 +284,6 @@
         <li><a routerLink="/Finance/FeesInvoice" routerLinkActive="active" class="sub-nav-link">Fees Invoice</a></li>
         <li><a routerLink="/Finance/CollectFee" routerLinkActive="active" class="sub-nav-link text-success fw-bold">Collect Fees</a></li>
         <li><a routerLink="/Finance/BankPayment" routerLinkActive="active" class="sub-nav-link">Bank Payment</a></li>
-        <li><a routerLink="/Reports" routerLinkActive="active" class="sub-nav-link">Fees Due Report</a></li>
       </ul>
     </div>
 
@@ -391,10 +387,10 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dormitory']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['dormitory']">
-        <li><a routerLink="/dormitory" routerLinkActive="active" class="sub-nav-link text-info">Hostel Blocks</a></li>
-        <li><a routerLink="/dormitory" class="sub-nav-link">Rooms & Bed Inventory</a></li>
-        <li><a routerLink="/dormitory" class="sub-nav-link text-success">Student Allocations</a></li>
-        <li><a routerLink="/dormitory" class="sub-nav-link">Mess Meal Menu</a></li>
+        <li><a [routerLink]="['/dormitory']" [queryParams]="{tab: 'blocks'}" routerLinkActive="active" class="sub-nav-link text-info">Hostel Blocks</a></li>
+        <li><a [routerLink]="['/dormitory']" [queryParams]="{tab: 'rooms'}" routerLinkActive="active" class="sub-nav-link">Rooms & Bed Inventory</a></li>
+        <li><a [routerLink]="['/dormitory']" [queryParams]="{tab: 'allocations'}" routerLinkActive="active" class="sub-nav-link text-success">Student Allocations</a></li>
+        <li><a [routerLink]="['/dormitory']" [queryParams]="{tab: 'mess'}" routerLinkActive="active" class="sub-nav-link">Mess Meal Menu</a></li>
       </ul>
     </div>
 
@@ -404,10 +400,11 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['certificates']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['certificates']">
-        <li><a routerLink="/Certificates/Index" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-certificate me-1"></i> Certificate Addon</a></li>
-        <li><a routerLink="/certificates" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-file-contract me-1"></i> Issue Certificate (TC)</a></li>
-        <li><a routerLink="/certificates" class="sub-nav-link text-info"><i class="fas fa-id-card me-1"></i> Student ID Cards</a></li>
-        <li><a routerLink="/certificates" class="sub-nav-link"><i class="fas fa-user-tag me-1"></i> Staff Passes</a></li>
+        <li><a [routerLink]="['/certificates']" [queryParams]="{tab: 'issued'}" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-certificate me-1"></i> Certificate Addon</a></li>
+        <li><a [routerLink]="['/certificates']" [queryParams]="{tab: 'generate'}" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-file-contract me-1"></i> Issue Certificate (TC)</a></li>
+        <li><a [routerLink]="['/certificates']" [queryParams]="{tab: 'idcards'}" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-id-card me-1"></i> Student ID Cards</a></li>
+        <li><a [routerLink]="['/certificates']" [queryParams]="{tab: 'staffcards'}" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-user-tag me-1"></i> Staff Passes</a></li>
+        <li><a [routerLink]="['/certificates']" [queryParams]="{tab: 'templates'}" routerLinkActive="active" class="sub-nav-link text-primary"><i class="fas fa-file-lines me-1"></i> Certificate Templates</a></li>
       </ul>
     </div>
 
@@ -492,17 +489,8 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['advancedAcademicMenu']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['advancedAcademicMenu']">
-        <!-- Online Exam Suite -->
-        <li id="onlineExamSub" class="fw-bold text-primary mt-1 small px-3">ONLINE EXAM SUITE</li>
-        <li><a routerLink="/OnlineExam/OnlineExam" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-laptop-code me-1"></i> Evaluation Hub</a></li>
-        <li><a routerLink="/OnlineExam/AddOnlineExam" routerLinkActive="active" class="sub-nav-link text-success fw-bold"><i class="fas fa-plus-circle me-1"></i> Initialize Evaluation</a></li>
-        <li><a routerLink="/OnlineExam/QuestionGroup" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-layer-group me-1"></i> Question Domain</a></li>
-        <li><a routerLink="/OnlineExam/QuestionBank" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-database me-1"></i> Question Vault</a></li>
-        <li><a routerLink="/OnlineExam/WrittenExam" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-file-signature me-1"></i> Written Node</a></li>
-        <li><a routerLink="/OnlineExam/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cog me-1"></i> Infrastructure</a></li>
-
         <!-- CBSE Suite -->
-        <li id="cbseSub" class="fw-bold text-warning mt-2 small px-3">CBSE SUITE</li>
+        <li id="cbseSub" class="fw-bold text-warning mt-1 small px-3">CBSE SUITE</li>
         <li><a routerLink="/CbseExam" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-warning"><i class="fas fa-graduation-cap me-1"></i> Nexus Dashboard</a></li>
         <li><a routerLink="/CbseExam/Terms" routerLinkActive="active" class="sub-nav-link">Academic Terms</a></li>
         <li><a routerLink="/CbseExam/Exams" routerLinkActive="active" class="sub-nav-link">Exams</a></li>
@@ -550,9 +538,6 @@
         <li><a routerLink="/WhatsApp/Settings" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-network-wired me-1"></i> API Infrastructure</a></li>
         <li><a routerLink="/WhatsApp/Agents" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-headset me-1"></i> Support Agents</a></li>
         <li><a routerLink="/WhatsApp/Analytics" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-chart-line me-1"></i> Communication Intel</a></li>
-
-        <!-- Certificate Addon -->
-        <li class="mt-2"><a routerLink="/Certificates/Index" routerLinkActive="active" class="sub-nav-link text-warning fw-bold"><i class="fas fa-certificate me-1"></i> Certificate Addon</a></li>
       </ul>
     </div>
 
@@ -610,8 +595,8 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['styleArchitect']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['styleArchitect']">
-        <li><a routerLink="/settings" class="sub-nav-link">Color Palette</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">Typography & Fonts</a></li>
+        <li><a [routerLink]="['/Settings']" [queryParams]="{tab: 'reportPrint'}" class="sub-nav-link">Print & Report Styling</a></li>
+        <li><a [routerLink]="['/FrontSettings/ManageTheme']" class="sub-nav-link">Portal Theme & Palette</a></li>
       </ul>
     </div>
 
@@ -672,10 +657,9 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['systemSettings']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['systemSettings']">
-        <li><a routerLink="/Settings" routerLinkActive="active" class="sub-nav-link text-primary fw-bold"><i class="fas fa-gauge-high me-1"></i> Global Control Center</a></li>
+        <li><a routerLink="/Settings" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-nav-link text-primary fw-bold"><i class="fas fa-gauge-high me-1"></i> Global Control Center</a></li>
         <li><a routerLink="/GeneralSettings" routerLinkActive="active" class="sub-nav-link text-success"><i class="fas fa-landmark me-1"></i> Institutional Identity</a></li>
         <li><a routerLink="/GeneralSettings/AcademicYear" routerLinkActive="active" class="sub-nav-link text-info"><i class="fas fa-calendar-days me-1"></i> Academic Year Cycle</a></li>
-        <li><a routerLink="/OptionalSubject/Assign" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-book-bookmark me-1"></i> Optional Subject Assignment</a></li>
         <li><a routerLink="/Settings/Holiday" routerLinkActive="active" class="sub-nav-link text-warning"><i class="fas fa-calendar-xmark me-1"></i> Holiday Master</a></li>
         <li><a routerLink="/GeneralSettings/BaseSetup" routerLinkActive="active" class="sub-nav-link"><i class="fas fa-cubes-stacked me-1"></i> Environmental Setup</a></li>
         <li><a routerLink="/RolePermission/Role" routerLinkActive="active" class="sub-nav-link text-purple"><i class="fas fa-shield-halved me-1"></i> Role Jurisdiction</a></li>
@@ -693,8 +677,8 @@
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['moduleManager']"></i>
       </a>
       <ul class="sub-menu" *ngIf="openMenus['moduleManager']">
-        <li><a routerLink="/settings" class="sub-nav-link">Module Toggle Matrix</a></li>
-        <li><a routerLink="/settings" class="sub-nav-link">License Key Verification</a></li>
+        <li><a [routerLink]="['/Settings']" [queryParams]="{tab: 'overview'}" class="sub-nav-link">Module Toggle Matrix</a></li>
+        <li><a [routerLink]="['/Settings']" [queryParams]="{tab: 'overview'}" class="sub-nav-link">License Key Verification</a></li>
       </ul>
     </div>
   </div>

@@ -73,7 +73,6 @@ export class MainLayoutComponent implements OnInit {
     bioSub: true,
     qrSub: true,
     advancedAcademicMenu: false,
-    onlineExamSub: true,
     cbseSub: true,
     lmsSub: true,
     aiContent: false,
@@ -106,7 +105,7 @@ export class MainLayoutComponent implements OnInit {
   }
 
   private closeAllMainMenus(): void {
-    const subMenus = ['zoomSub', 'gmeetSub', 'jitsiSub', 'bbbSub', 'bioSub', 'qrSub', 'onlineExamSub', 'cbseSub', 'lmsSub', 'regSub', 'whatsAppSub'];
+    const subMenus = ['zoomSub', 'gmeetSub', 'jitsiSub', 'bbbSub', 'bioSub', 'qrSub', 'cbseSub', 'lmsSub', 'regSub', 'whatsAppSub'];
     for (const key of Object.keys(this.openMenus)) {
       if (!subMenus.includes(key)) {
         this.openMenus[key] = false;
@@ -135,7 +134,7 @@ export class MainLayoutComponent implements OnInit {
       case 'exams':
         return url.startsWith('/examinations') || url.startsWith('/examsettings');
       case 'onlineExam':
-        return url.startsWith('/onlineexam') && !this.isMenuParentActive('advancedAcademicMenu');
+        return url.startsWith('/onlineexam');
       case 'teacherEvaluation':
         return url.startsWith('/teacherevaluation');
       case 'students':
@@ -166,24 +165,23 @@ export class MainLayoutComponent implements OnInit {
       case 'smartAttendanceMenu':
         return url.startsWith('/biometrics') || url.startsWith('/qrattendance') || url.startsWith('/smartattendance');
       case 'advancedAcademicMenu':
-        return url.startsWith('/cbseexam') || url.startsWith('/cbse') || url.startsWith('/lms') ||
-               (url.startsWith('/onlineexam') && (url.includes('onlineexam') || url.includes('addonlineexam') || url.includes('question')));
+        return url.startsWith('/cbseexam') || url.startsWith('/cbse') || url.startsWith('/lms');
       case 'commSubMenu':
-        return url.startsWith('/registrationaddon') || url.startsWith('/whatsapp');
+        return url.startsWith('/registrationaddon') || url.startsWith('/whatsapp') || url.startsWith('/aicontent') || url.startsWith('/ai-content');
       case 'downloadCenter':
         return url.startsWith('/downloadcenter');
       case 'dataManagement':
         return url.startsWith('/importexport') || url.startsWith('/datamanagement');
       case 'frontendCms':
-        return url.startsWith('/frontsettings') || url.startsWith('/frontendcms') || url.startsWith('/frontend-cms');
+        return (url.startsWith('/frontsettings') && !url.includes('managetheme')) || url.startsWith('/frontendcms') || url.startsWith('/frontend-cms');
       case 'styleArchitect':
-        return url.startsWith('/style');
+        return (url.startsWith('/settings') && url.includes('tab=reportprint')) || (url.startsWith('/frontsettings') && url.includes('managetheme')) || url.startsWith('/style');
       case 'reports':
         return url.startsWith('/reports');
       case 'examReports':
         return url.startsWith('/examreports');
       case 'systemSettings':
-        return url.startsWith('/settings') || url.startsWith('/generalsettings') ||
+        return (url.startsWith('/settings') && !url.includes('tab=reportprint')) || url.startsWith('/generalsettings') ||
                url.startsWith('/rolepermission') || url.startsWith('/customfields') ||
                url.startsWith('/systemsettings') || url.startsWith('/system') ||
                url.startsWith('/administration/users') || url.startsWith('/administration/updates');
@@ -215,7 +213,7 @@ export class MainLayoutComponent implements OnInit {
     else if (f.includes('bio')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['bioSub'] = true; }
     else if (f.includes('qr')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['qrSub'] = true; }
     else if (f.includes('smartattendance')) this.openMenus['smartAttendanceMenu'] = true;
-    else if (f.includes('onlineexam')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['onlineExamSub'] = true; }
+    else if (f.includes('onlineexam')) { this.openMenus['onlineExam'] = true; }
     else if (f.includes('cbse')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['cbseSub'] = true; }
     else if (f.includes('lms')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['lmsSub'] = true; }
     else if (f.includes('advancedacademic')) this.openMenus['advancedAcademicMenu'] = true;
@@ -250,7 +248,7 @@ export class MainLayoutComponent implements OnInit {
     const isCurrentlyOpen = !!this.openMenus[menuKey];
     
     // Sub-menus toggle within their container
-    const isSubMenu = ['zoomSub', 'gmeetSub', 'jitsiSub', 'bbbSub', 'bioSub', 'qrSub', 'onlineExamSub', 'cbseSub', 'lmsSub', 'regSub', 'whatsAppSub'].includes(menuKey);
+    const isSubMenu = ['zoomSub', 'gmeetSub', 'jitsiSub', 'bbbSub', 'bioSub', 'qrSub', 'cbseSub', 'lmsSub', 'regSub', 'whatsAppSub'].includes(menuKey);
 
     if (isSubMenu) {
       this.openMenus[menuKey] = !isCurrentlyOpen;
