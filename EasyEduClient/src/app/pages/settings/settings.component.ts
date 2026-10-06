@@ -311,6 +311,7 @@ export class SettingsComponent implements OnInit {
   showNewSessionModal = false;
   showNewHolidayModal = false;
   showNewUserModal = false;
+  showEditUserModal = false;
   showNewApiTokenModal = false;
   showNewFieldModal = false;
 
@@ -320,6 +321,19 @@ export class SettingsComponent implements OnInit {
     email: '',
     role: 'Teacher / Faculty',
     isTwoFactorEnabled: false
+  };
+
+  editUserData: SystemUserItem = {
+    id: 0,
+    name: '',
+    username: '',
+    email: '',
+    role: 'Teacher / Faculty',
+    linkedEntity: '',
+    lastLogin: '',
+    isTwoFactorEnabled: false,
+    status: 'Active',
+    avatarUrl: ''
   };
 
   newApiToken = {
@@ -346,6 +360,8 @@ export class SettingsComponent implements OnInit {
         console.warn('Failed to parse saved profile', e);
       }
     }
+
+    this.loadUsersFromStorage();
 
     this.route.url.subscribe(segments => {
       const path = segments.map(s => s.path).join('/').toLowerCase();
@@ -524,9 +540,9 @@ export class SettingsComponent implements OnInit {
 
     const u: SystemUserItem = {
       id: Date.now(),
-      name: this.newUser.name,
-      username: this.newUser.username,
-      email: this.newUser.email || `${this.newUser.username}@easyedu.org`,
+      name: this.newUser.name.trim(),
+      username: this.newUser.username.trim(),
+      email: this.newUser.email?.trim() || `${this.newUser.username.trim()}@easyedu.org`,
       role: this.newUser.role,
       linkedEntity: 'Staff Direct Provision',
       lastLogin: 'Never (New)',
@@ -536,13 +552,54 @@ export class SettingsComponent implements OnInit {
     };
 
     this.users.unshift(u);
+    this.saveUsersToStorage();
     this.showNewUserModal = false;
     this.newUser = { name: '', username: '', email: '', role: 'Teacher / Faculty', isTwoFactorEnabled: false };
     Swal.fire('User Provisioned', `Account created for ${u.name} with role "${u.role}".`, 'success');
   }
 
+  openEditUserModal(user: SystemUserItem): void {
+    this.editUserData = { ...user };
+    this.showEditUserModal = true;
+  }
+
+  updateUserSubmit(): void {
+    if (!this.editUserData.name || !this.editUserData.username) {
+      Swal.fire('Missing Details', 'Please provide full name and username.', 'warning');
+      return;
+    }
+
+    const index = this.users.findIndex(u => u.id === this.editUserData.id);
+    if (index !== -1) {
+      this.users[index] = { ...this.editUserData };
+      this.saveUsersToStorage();
+    }
+
+    this.showEditUserModal = false;
+    Swal.fire('User Updated', `Account credentials and assigned role for "${this.editUserData.name}" updated successfully.`, 'success');
+  }
+
+  deleteUser(user: SystemUserItem): void {
+    Swal.fire({
+      title: `Delete User "${user.name}"?`,
+      text: `Are you sure you want to permanently delete user account "${user.username}"? This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, Delete User'
+    }).then((res: any) => {
+      if (res.isConfirmed) {
+        this.users = this.users.filter(u => u.id !== user.id);
+        this.saveUsersToStorage();
+        Swal.fire('User Deleted', `Account for "${user.name}" has been removed.`, 'success');
+      }
+    });
+  }
+
   changeUserRole(u: SystemUserItem, newRole: string): void {
     u.role = newRole;
+    this.saveUsersToStorage();
     Swal.fire({
       toast: true,
       position: 'top-end',
@@ -551,6 +608,28 @@ export class SettingsComponent implements OnInit {
       icon: 'success',
       title: `Assigned ${u.name} to role "${newRole}"`
     });
+  }
+
+  toggleUserStatus(u: SystemUserItem): void {
+    u.status = u.status === 'Active' ? 'Suspended' : 'Active';
+    this.saveUsersToStorage();
+    Swal.fire('User Status Updated', `Account for ${u.name} is now ${u.status}.`, 'info');
+  }
+
+  private loadUsersFromStorage(): void {
+    const saved = localStorage.getItem('easyedu_system_users');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this.users = parsed;
+        }
+      } catch (e) {}
+    }
+  }
+
+  private saveUsersToStorage(): void {
+    localStorage.setItem('easyedu_system_users', JSON.stringify(this.users));
   }
 
   createApiToken(): void {
@@ -596,11 +675,6 @@ export class SettingsComponent implements OnInit {
     this.showNewFieldModal = false;
     this.newCustomField = { moduleTarget: 'Student Admission', fieldLabel: '', fieldType: 'Text', isRequired: false, showOnPublicPortal: true };
     Swal.fire('Custom Field Added', `Field "${f.fieldLabel}" registered to ${f.moduleTarget}.`, 'success');
-  }
-
-  toggleUserStatus(u: SystemUserItem): void {
-    u.status = u.status === 'Active' ? 'Suspended' : 'Active';
-    Swal.fire('User Status Updated', `Account for ${u.name} is now ${u.status}.`, 'info');
   }
 
   revokeToken(tok: ApiTokenItem): void {
