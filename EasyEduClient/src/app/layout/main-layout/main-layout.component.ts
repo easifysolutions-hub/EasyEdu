@@ -22,22 +22,22 @@ export class MainLayoutComponent implements OnInit {
     adminSection: false,
     utilities: false,
     communicate: false,
-    academic: true,
+    academic: false,
     lessonPlan: false,
     homework: false,
     exams: false,
-    onlineExam: true,
+    onlineExam: false,
     teacherEvaluation: false,
-    students: true,
+    students: false,
     behaviour: false,
     hr: false,
     staffReports: false,
-    fees: true,
+    fees: false,
     accounts: false,
     inventory: false,
     transport: false,
     dormitory: false,
-    certificates: true,
+    certificates: false,
     library: false,
     downloadCenter: false,
     dataManagement: false,
@@ -47,23 +47,23 @@ export class MainLayoutComponent implements OnInit {
     examReports: false,
     systemSettings: false,
     moduleManager: false,
-    virtualClass: true,
+    virtualClass: false,
     zoomSub: true,
     gmeetSub: true,
     jitsiSub: true,
     bbbSub: true,
-    smartAttendanceMenu: true,
+    smartAttendanceMenu: false,
     bioSub: true,
     qrSub: true,
-    advancedAcademicMenu: true,
+    advancedAcademicMenu: false,
     onlineExamSub: true,
     cbseSub: true,
     lmsSub: true,
-    aiContent: true,
-    commSubMenu: true,
+    aiContent: false,
+    commSubMenu: false,
     regSub: true,
     whatsAppSub: true,
-    addons: true
+    addons: false
   };
 
   ngOnInit(): void {
@@ -88,46 +88,59 @@ export class MainLayoutComponent implements OnInit {
     });
   }
 
+  private closeAllMainMenus(): void {
+    const subMenus = ['zoomSub', 'gmeetSub', 'jitsiSub', 'bbbSub', 'bioSub', 'qrSub', 'onlineExamSub', 'cbseSub', 'lmsSub', 'regSub', 'whatsAppSub'];
+    for (const key of Object.keys(this.openMenus)) {
+      if (!subMenus.includes(key)) {
+        this.openMenus[key] = false;
+      }
+    }
+  }
+
   private syncActiveMenuByUrl(): void {
     const url = this.router.url.toLowerCase();
-    if (url.includes('transport')) this.openMenus['transport'] = true;
-    if (url.includes('library')) this.openMenus['library'] = true;
-    if (url.includes('inventory')) this.openMenus['inventory'] = true;
-    if (url.includes('accounting') || url.includes('accounts')) this.openMenus['accounts'] = true;
-    if (url.includes('finance') || url.includes('fees')) this.openMenus['fees'] = true;
-    if (url.includes('humanresource') || url.includes('staff') || url.includes('leave')) this.openMenus['hr'] = true;
-    if (url.includes('students') || url.includes('student') || url.includes('attendance')) this.openMenus['students'] = true;
-    if (url.includes('behaviour')) this.openMenus['behaviour'] = true;
-    if (url.includes('classes') || url.includes('section') || url.includes('subjects')) this.openMenus['academic'] = true;
-    if (url.includes('lessonplan')) this.openMenus['lessonPlan'] = true;
-    if (url.includes('homework')) this.openMenus['homework'] = true;
-    if (url.includes('examination') || url.includes('examsettings')) this.openMenus['exams'] = true;
-    if (url.includes('onlineexam')) this.openMenus['onlineExam'] = true;
-    if (url.includes('teacherevaluation')) this.openMenus['teacherEvaluation'] = true;
-    if (url.includes('dormitory')) this.openMenus['dormitory'] = true;
-    if (url.includes('certificates')) this.openMenus['certificates'] = true;
-    if (url.includes('virtual')) this.openMenus['virtualClass'] = true;
-    if (url.includes('download')) this.openMenus['downloadCenter'] = true;
-    if (url.includes('importexport') || url.includes('datamanagement')) this.openMenus['dataManagement'] = true;
-    if (url.includes('frontsettings') || url.includes('frontend-cms') || url.includes('frontendcms')) this.openMenus['frontendCms'] = true;
-    if (url.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
-    if (url.includes('examreport') || url.includes('examreports')) this.openMenus['examReports'] = true;
-    if (url.includes('report')) this.openMenus['reports'] = true;
+    this.closeAllMainMenus();
+
     if (url.includes('zoom')) { this.openMenus['virtualClass'] = true; this.openMenus['zoomSub'] = true; }
-    if (url.includes('gmeet')) { this.openMenus['virtualClass'] = true; this.openMenus['gmeetSub'] = true; }
-    if (url.includes('jitsi')) { this.openMenus['virtualClass'] = true; this.openMenus['jitsiSub'] = true; }
-    if (url.includes('bigbluebutton') || url.includes('bbb')) { this.openMenus['virtualClass'] = true; this.openMenus['bbbSub'] = true; }
-    if (url.includes('biometric')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['bioSub'] = true; }
-    if (url.includes('qrattendance')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['qrSub'] = true; }
-    if (url.includes('cbse')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['cbseSub'] = true; }
-    if (url.includes('lms')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['lmsSub'] = true; }
-    if (url.includes('registrationaddon')) { this.openMenus['commSubMenu'] = true; this.openMenus['regSub'] = true; }
-    if (url.includes('whatsapp')) { this.openMenus['commSubMenu'] = true; this.openMenus['whatsAppSub'] = true; }
-    if (url.includes('setting') || url.includes('role')) this.openMenus['systemSettings'] = true;
+    else if (url.includes('gmeet')) { this.openMenus['virtualClass'] = true; this.openMenus['gmeetSub'] = true; }
+    else if (url.includes('jitsi')) { this.openMenus['virtualClass'] = true; this.openMenus['jitsiSub'] = true; }
+    else if (url.includes('bigbluebutton') || url.includes('bbb')) { this.openMenus['virtualClass'] = true; this.openMenus['bbbSub'] = true; }
+    else if (url.includes('virtual') || url.includes('inapplive')) { this.openMenus['virtualClass'] = true; }
+    else if (url.includes('biometric')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['bioSub'] = true; }
+    else if (url.includes('qrattendance') || url.includes('qr')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['qrSub'] = true; }
+    else if (url.includes('smartattendance')) { this.openMenus['smartAttendanceMenu'] = true; }
+    else if (url.includes('cbse')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['cbseSub'] = true; }
+    else if (url.includes('lms')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['lmsSub'] = true; }
+    else if (url.includes('onlineexam')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['onlineExamSub'] = true; }
+    else if (url.includes('registrationaddon')) { this.openMenus['commSubMenu'] = true; this.openMenus['regSub'] = true; }
+    else if (url.includes('whatsapp')) { this.openMenus['commSubMenu'] = true; this.openMenus['whatsAppSub'] = true; }
+    else if (url.includes('transport')) this.openMenus['transport'] = true;
+    else if (url.includes('library')) this.openMenus['library'] = true;
+    else if (url.includes('inventory')) this.openMenus['inventory'] = true;
+    else if (url.includes('accounting') || url.includes('accounts')) this.openMenus['accounts'] = true;
+    else if (url.includes('finance') || url.includes('fees')) this.openMenus['fees'] = true;
+    else if (url.includes('humanresource') || url.includes('staff') || url.includes('leave')) this.openMenus['hr'] = true;
+    else if (url.includes('students') || url.includes('student') || url.includes('attendance')) this.openMenus['students'] = true;
+    else if (url.includes('behaviour')) this.openMenus['behaviour'] = true;
+    else if (url.includes('classes') || url.includes('section') || url.includes('subjects') || url.includes('academic')) this.openMenus['academic'] = true;
+    else if (url.includes('lessonplan')) this.openMenus['lessonPlan'] = true;
+    else if (url.includes('homework')) this.openMenus['homework'] = true;
+    else if (url.includes('examination') || url.includes('examsettings')) this.openMenus['exams'] = true;
+    else if (url.includes('teacherevaluation')) this.openMenus['teacherEvaluation'] = true;
+    else if (url.includes('dormitory')) this.openMenus['dormitory'] = true;
+    else if (url.includes('certificates')) this.openMenus['certificates'] = true;
+    else if (url.includes('download')) this.openMenus['downloadCenter'] = true;
+    else if (url.includes('importexport') || url.includes('datamanagement')) this.openMenus['dataManagement'] = true;
+    else if (url.includes('frontsettings') || url.includes('frontend-cms') || url.includes('frontendcms')) this.openMenus['frontendCms'] = true;
+    else if (url.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
+    else if (url.includes('examreport') || url.includes('examreports')) this.openMenus['examReports'] = true;
+    else if (url.includes('report') || url.includes('reports')) this.openMenus['reports'] = true;
+    else if (url.includes('setting') || url.includes('role') || url.includes('customfields') || url.includes('systemsettings') || url.includes('generalsettings')) this.openMenus['systemSettings'] = true;
   }
 
   expandMenuByFragment(fragment: string): void {
     const f = fragment.toLowerCase();
+    this.closeAllMainMenus();
     if (f.includes('zoom')) { this.openMenus['virtualClass'] = true; this.openMenus['zoomSub'] = true; }
     else if (f.includes('gmeet')) { this.openMenus['virtualClass'] = true; this.openMenus['gmeetSub'] = true; }
     else if (f.includes('jitsi')) { this.openMenus['virtualClass'] = true; this.openMenus['jitsiSub'] = true; }
@@ -162,12 +175,25 @@ export class MainLayoutComponent implements OnInit {
     else if (f.includes('datamanagement') || f.includes('importexport')) this.openMenus['dataManagement'] = true;
     else if (f.includes('frontendcms') || f.includes('frontsettings')) this.openMenus['frontendCms'] = true;
     else if (f.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
+    else if (f.includes('examreport')) this.openMenus['examReports'] = true;
     else if (f.includes('report')) this.openMenus['reports'] = true;
     else if (f.includes('system') || f.includes('setting')) this.openMenus['systemSettings'] = true;
   }
 
   toggleMenu(menuKey: string): void {
-    this.openMenus[menuKey] = !this.openMenus[menuKey];
+    const isCurrentlyOpen = !!this.openMenus[menuKey];
+    
+    // Sub-menus toggle within their container
+    const isSubMenu = ['zoomSub', 'gmeetSub', 'jitsiSub', 'bbbSub', 'bioSub', 'qrSub', 'onlineExamSub', 'cbseSub', 'lmsSub', 'regSub', 'whatsAppSub'].includes(menuKey);
+
+    if (isSubMenu) {
+      this.openMenus[menuKey] = !isCurrentlyOpen;
+      return;
+    }
+
+    // Main menus: Accordion mode - close all other main menus, toggle clicked one only
+    this.closeAllMainMenus();
+    this.openMenus[menuKey] = !isCurrentlyOpen;
   }
 
   goBack(): void {
