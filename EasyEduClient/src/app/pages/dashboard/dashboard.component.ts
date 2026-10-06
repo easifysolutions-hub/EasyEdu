@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
+import { CurrencyService } from '../../core/services/currency.service';
 import { DashboardStats } from '../../core/models';
 
 @Component({
@@ -14,6 +15,7 @@ import { DashboardStats } from '../../core/models';
 })
 export class DashboardComponent implements OnInit {
   private api = inject(ApiService);
+  currencyService = inject(CurrencyService);
   stats: DashboardStats | null = null;
   surveyFilter: 'year' | 'month' = 'year';
 

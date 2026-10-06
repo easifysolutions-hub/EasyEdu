@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CurrencyService } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -28,6 +29,7 @@ export interface OnlineApplicant {
 export class RegistrationAddonComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  currencyService = inject(CurrencyService);
 
   activeTab: 'dashboard' | 'student-list' | 'settings' = 'dashboard';
 

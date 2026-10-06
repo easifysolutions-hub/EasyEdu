@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
+import { CurrencyService } from '../../../core/services/currency.service';
 import { Staff } from '../../../core/models';
 
 declare const Swal: any;
@@ -46,6 +47,7 @@ export class StaffListComponent implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  currencyService = inject(CurrencyService);
 
   activeTab: 'directory' | 'add-staff' | 'designation' | 'department' | 'attendance' | 'payroll' | 'bulk-payroll' | 'settings' = 'directory';
 
@@ -240,7 +242,7 @@ export class StaffListComponent implements OnInit {
     pr.status = 'Paid';
     pr.paymentDate = new Date().toISOString().substring(0, 10);
     pr.paymentMode = 'Direct Bank Transfer';
-    Swal.fire('Disbursed!', `Net salary of ₹${pr.netSalary.toLocaleString()} paid to ${pr.staffName}.`, 'success');
+    Swal.fire('Disbursed!', `Net salary of ${this.currencyService.format(pr.netSalary)} paid to ${pr.staffName}.`, 'success');
   }
 
   generatePayslip(pr: PayrollRecord): void {
@@ -250,11 +252,11 @@ export class StaffListComponent implements OnInit {
         <div class="text-start p-3 bg-light rounded-3">
           <p class="mb-1"><strong>Staff ID:</strong> ${pr.staffNo}</p>
           <p class="mb-1"><strong>Department:</strong> ${pr.department}</p>
-          <p class="mb-1"><strong>Basic Pay:</strong> ₹${pr.basicSalary.toLocaleString()}</p>
-          <p class="mb-1 text-success"><strong>Allowances (HRA/DA):</strong> +₹${pr.allowances.toLocaleString()}</p>
-          <p class="mb-1 text-danger"><strong>Deductions (EPF/Tax):</strong> -₹${pr.deductions.toLocaleString()}</p>
+          <p class="mb-1"><strong>Basic Pay:</strong> ${this.currencyService.format(pr.basicSalary)}</p>
+          <p class="mb-1 text-success"><strong>Allowances (HRA/DA):</strong> +${this.currencyService.format(pr.allowances)}</p>
+          <p class="mb-1 text-danger"><strong>Deductions (EPF/Tax):</strong> -${this.currencyService.format(pr.deductions)}</p>
           <hr/>
-          <h5 class="fw-bold text-primary mb-0">Net Salary: ₹${pr.netSalary.toLocaleString()}</h5>
+          <h5 class="fw-bold text-primary mb-0">Net Salary: ${this.currencyService.format(pr.netSalary)}</h5>
         </div>
       `,
       icon: 'info',

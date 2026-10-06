@@ -181,9 +181,9 @@
             >
           </div>
           <div class="col-12 col-md-4">
-            <label class="metadata-label">Intellectual Value ($)</label>
+            <label class="metadata-label">Intellectual Value ({{ currencyService.symbol() }})</label>
             <div class="input-group-modern">
-              <span class="input-icon-prefix text-muted fw-bold">$</span>
+              <span class="input-icon-prefix text-muted fw-bold">{{ currencyService.symbol() }}</span>
               <input 
                 type="number" 
                 class="form-control form-control-modern" 
@@ -318,7 +318,7 @@
               <th>Rack / Shelf</th>
               <th>Copies</th>
               <th>Available</th>
-              <th>Price ($)</th>
+              <th>Price ({{ currencyService.symbol() }})</th>
               <th class="text-end pe-3">Actions</th>
             </tr>
           </thead>
@@ -338,7 +338,7 @@
                   {{ b.available }} Available
                 </span>
               </td>
-              <td>${{ b.price | number:'1.2-2' }}</td>
+              <td>{{ currencyService.format(b.price) }}</td>
               <td class="text-end pe-3">
                 <button 
                   class="btn btn-sm btn-outline-success rounded-pill px-3 py-1" 
@@ -542,8 +542,8 @@
                 }">{{ r.status }}</span>
               </td>
               <td>
-                <span *ngIf="r.fine > 0" class="text-danger fw-bold">${{ r.fine }}</span>
-                <span *ngIf="r.fine === 0" class="text-muted">$0.00</span>
+                <span *ngIf="r.fine > 0" class="text-danger fw-bold">{{ currencyService.format(r.fine) }}</span>
+                <span *ngIf="r.fine === 0" class="text-muted">{{ currencyService.format(0) }}</span>
               </td>
               <td class="text-end pe-3">
                 <button 
@@ -600,7 +600,7 @@
             <h6 class="fw-bold text-dark mb-3"><i class="fas fa-vault text-success me-2"></i> Collection Financial Valuation</h6>
             <div class="p-3 bg-white rounded-12 border mb-3">
               <div class="small text-muted">Total Intellectual Asset Valuation</div>
-              <h3 class="fw-bold text-dark mb-0">${{ totalLibraryValuation | number:'1.2-2' }}</h3>
+              <h3 class="fw-bold text-dark mb-0">{{ currencyService.format(totalLibraryValuation) }}</h3>
             </div>
             <div class="p-3 bg-white rounded-12 border">
               <div class="small text-muted">Circulation Rate</div>

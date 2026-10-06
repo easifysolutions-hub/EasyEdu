@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { CurrencyService } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -64,6 +65,7 @@ export interface BookCategory {
   styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit {
+  currencyService = inject(CurrencyService);
   activeTab: 'add-book' | 'catalog' | 'categories' | 'members' | 'issue-return' | 'circulation' | 'reports' = 'catalog';
   searchTerm = '';
   categoryFilter = 'All';
@@ -315,7 +317,7 @@ export class LibraryComponent implements OnInit {
   returnBook(record: IssuedRecord): void {
     Swal.fire({
       title: 'Confirm Book Return?',
-      text: `Mark "${record.bookTitle}" as returned from ${record.memberName}? ${record.fine > 0 ? 'Collect fine of ₹' + record.fine : ''}`,
+      text: `Mark "${record.bookTitle}" as returned from ${record.memberName}? ${record.fine > 0 ? 'Collect fine of ' + this.currencyService.format(record.fine) : ''}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',

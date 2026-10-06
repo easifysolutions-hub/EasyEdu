@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { CurrencyService } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -89,6 +90,7 @@ export interface AuditTransaction {
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent implements OnInit {
+  currencyService = inject(CurrencyService);
   activeTab: 'registry' | 'categories' | 'suppliers' | 'receive' | 'issue' | 'transactions' | 'reports' = 'registry';
   searchTerm = '';
   categoryFilter = 'All';

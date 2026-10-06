@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { CurrencyService } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -80,6 +81,7 @@ export interface VehicleAssignment {
   styleUrls: ['./transport.component.css']
 })
 export class TransportComponent implements OnInit {
+  currencyService = inject(CurrencyService);
   activeTab: 'routes' | 'vehicles' | 'assign-vehicle' | 'students' | 'reports' = 'routes';
   searchTerm = '';
 

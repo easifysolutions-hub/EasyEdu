@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CurrencyService } from '../../core/services/currency.service';
 
 @Component({
   selector: 'app-pricing',
@@ -9,4 +10,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.css']
 })
-export class PricingComponent {}
+export class PricingComponent {
+  currencyService = inject(CurrencyService);
+}
+

@@ -55,7 +55,7 @@
       <div class="col-md-3">
         <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
           <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">LMS Revenue</div>
-          <h2 class="fw-bold mb-1">₹4,82,500</h2>
+          <h2 class="fw-bold mb-1">{{ currencyService.format(482500) }}</h2>
           <small class="text-white text-opacity-75">Digital Subscriptions</small>
         </div>
       </div>
@@ -86,7 +86,7 @@
               <span><i class="fas fa-star text-warning me-1"></i> {{ c.rating }}</span>
             </div>
             <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
-              <span class="fw-bold text-success fs-5">₹{{ c.price }}</span>
+              <span class="fw-bold text-success fs-5">{{ currencyService.format(c.price) }}</span>
               <span class="small text-muted">{{ c.enrolledStudents }} Enrolled</span>
             </div>
           </div>
@@ -126,7 +126,7 @@
           <input type="text" class="form-control" [(ngModel)]="newCourse.instructor">
         </div>
         <div class="col-md-6">
-          <label class="form-label small fw-bold">Enrollment Price (₹)</label>
+          <label class="form-label small fw-bold">Enrollment Price ({{ currencyService.symbol() }})</label>
           <input type="number" class="form-control" [(ngModel)]="newCourse.price">
         </div>
       </div>

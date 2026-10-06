@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CurrencyService } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -38,6 +39,7 @@ export interface LmsEnrollmentLog {
 export class LmsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  currencyService = inject(CurrencyService);
 
   activeTab: 'hub' | 'all-courses' | 'add-course' | 'pending' | 'category' | 'level' | 'enrollments' | 'purchases' | 'invoices' | 'settings' = 'hub';
 

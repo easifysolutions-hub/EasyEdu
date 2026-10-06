@@ -54,7 +54,7 @@
       <div class="col-md-3">
         <div class="card border-0 rounded-16 text-white p-4 shadow-sm" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);">
           <div class="small text-white text-opacity-75 fw-bold text-uppercase mb-1">Application Fees</div>
-          <h2 class="fw-bold mb-1">₹1,500</h2>
+          <h2 class="fw-bold mb-1">{{ currencyService.format(1500) }}</h2>
           <small class="text-white text-opacity-75">Online Payment Gateway</small>
         </div>
       </div>
@@ -119,7 +119,7 @@
       </div>
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label small fw-bold">Application Fee Amount (₹)</label>
+          <label class="form-label small fw-bold">Application Fee Amount ({{ currencyService.symbol() }})</label>
           <input type="number" class="form-control" [(ngModel)]="portalSettings.applicationFeeAmount">
         </div>
         <div class="col-md-6">

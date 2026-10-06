@@ -141,7 +141,7 @@
             <div class="col-12 col-md-6">
               <label class="field-label-sm">BASE MINIMUM SALARY*</label>
               <div class="d-flex align-items-center bg-light border rounded-10 px-3">
-                <span class="text-muted fw-bold me-2">$</span>
+                <span class="text-muted fw-bold me-2">{{ currencyService.symbol() }}</span>
                 <input type="number" class="border-0 bg-transparent w-100 py-2 outline-none fw-bold" [(ngModel)]="newStaff.basicSalary" placeholder="0.00">
               </div>
             </div>
@@ -252,7 +252,7 @@
             </div>
             <span class="badge rounded-pill px-2 py-1" style="background: #e0f2fe; color: #0284c7; font-size: 0.7rem; font-weight: 700;">TOTAL DISBURSED</span>
           </div>
-          <h2 class="fw-bold text-dark my-2">₹0</h2>
+          <h2 class="fw-bold text-dark my-2">{{ currencyService.format(0) }}</h2>
           <div class="text-muted small" style="font-size: 0.75rem;">Aggregate salary disbursement across personnel</div>
         </div>
       </div>
@@ -322,8 +322,8 @@
                 <small class="text-muted">{{ pr.staffNo }} • {{ pr.department }}</small>
               </td>
               <td><span class="badge bg-light text-dark border">{{ selectedPayrollMonth }}</span></td>
-              <td class="fw-bold text-dark">₹{{ pr.basicSalary | number }}</td>
-              <td class="fw-bold text-success">₹{{ pr.netSalary | number }}</td>
+              <td class="fw-bold text-dark">{{ currencyService.format(pr.basicSalary) }}</td>
+              <td class="fw-bold text-success">{{ currencyService.format(pr.netSalary) }}</td>
               <td><span class="badge bg-light text-dark border">{{ pr.paymentMode || 'Direct Bank Transfer' }}</span></td>
               <td>
                 <span class="badge" [ngClass]="pr.status === 'Paid' ? 'bg-success' : 'bg-warning text-dark'">

@@ -46,7 +46,7 @@
           </div>
           <span class="badge border border-white text-white fw-bold px-2 py-1 rounded-pill">THIS MONTH</span>
         </div>
-        <h2 class="fw-bold mb-1">₹{{ totalInvoiced | number }}</h2>
+        <h2 class="fw-bold mb-1">{{ currencyService.format(totalInvoiced) }}</h2>
         <p class="small text-white text-opacity-75 mb-0 fw-semibold">Total Invoiced</p>
         <i class="fas fa-file-invoice position-absolute text-white opacity-10" style="font-size: 7rem; right: -15px; bottom: -15px; pointer-events: none;"></i>
       </div>
@@ -62,7 +62,7 @@
           </div>
           <span class="badge border border-white text-white fw-bold px-2 py-1 rounded-pill">REALIZED</span>
         </div>
-        <h2 class="fw-bold mb-1">₹{{ totalCollected | number }}</h2>
+        <h2 class="fw-bold mb-1">{{ currencyService.format(totalCollected) }}</h2>
         <p class="small text-white text-opacity-75 mb-0 fw-semibold">Fee Collected</p>
         <i class="fas fa-wallet position-absolute text-white opacity-10" style="font-size: 7rem; right: -15px; bottom: -15px; pointer-events: none;"></i>
       </div>
@@ -78,7 +78,7 @@
           </div>
           <span class="badge border border-white text-white fw-bold px-2 py-1 rounded-pill">PENDING</span>
         </div>
-        <h2 class="fw-bold mb-1">₹{{ totalPending | number }}</h2>
+        <h2 class="fw-bold mb-1">{{ currencyService.format(totalPending) }}</h2>
         <p class="small text-white text-opacity-75 mb-0 fw-semibold">Outstanding Dues</p>
         <i class="fas fa-history position-absolute text-white opacity-10" style="font-size: 7rem; right: -15px; bottom: -15px; pointer-events: none;"></i>
       </div>
@@ -259,7 +259,7 @@
                     </div>
                   </div>
                   <div class="text-end">
-                    <div class="fw-bold text-success">₹{{ txn.amount | number }}</div>
+                    <div class="fw-bold text-success">{{ currencyService.format(txn.amount) }}</div>
                     <span class="badge bg-light text-secondary border px-1" style="font-size: 0.65rem;">{{ txn.paymentMode }}</span>
                   </div>
                 </div>
@@ -311,9 +311,9 @@
             <th>Admission No</th>
             <th>Fee Group / Category</th>
             <th>Due Date</th>
-            <th>Total (₹)</th>
-            <th>Paid (₹)</th>
-            <th>Balance (₹)</th>
+            <th>Total ({{ currencyService.symbol() }})</th>
+            <th>Paid ({{ currencyService.symbol() }})</th>
+            <th>Balance ({{ currencyService.symbol() }})</th>
             <th>Status</th>
             <th class="text-end">Actions</th>
           </tr>
@@ -327,10 +327,10 @@
             <td><span class="badge bg-light text-dark border">{{ inv.admissionNo }}</span></td>
             <td><span class="text-secondary fw-semibold">{{ inv.feeGroup }}</span></td>
             <td><small class="text-muted">{{ inv.dueDate || '2025-05-15' }}</small></td>
-            <td class="fw-bold">₹{{ inv.amount | number }}</td>
-            <td class="text-success fw-bold">₹{{ inv.paidAmount | number }}</td>
+            <td class="fw-bold">{{ currencyService.format(inv.amount) }}</td>
+            <td class="text-success fw-bold">{{ currencyService.format(inv.paidAmount) }}</td>
             <td class="fw-bold" [ngClass]="inv.balanceAmount > 0 ? 'text-danger' : 'text-muted'">
-              ₹{{ inv.balanceAmount | number }}
+              {{ currencyService.format(inv.balanceAmount) }}
             </td>
             <td>
               <span class="badge-status" [ngClass]="{
@@ -415,12 +415,12 @@
             <label class="field-label-sm">2. SELECT FEE GROUP / PACKAGE</label>
             <select class="form-select modern-form-input w-100" [(ngModel)]="newInvFeeGroup" (change)="onNewInvFeeGroupChange()">
               <option value="" disabled>Select Fee Package</option>
-              <option value="Quarter 1 Tuition">Quarter 1 Tuition (₹25,000)</option>
-              <option value="Quarter 1 Tuition + Transport">Quarter 1 Tuition + Transport (₹32,000)</option>
-              <option value="Quarter 1 Tuition + Hostel">Quarter 1 Tuition + Hostel (₹48,000)</option>
-              <option value="Annual Computer Lab & Library">Annual Computer Lab & Library (₹12,000)</option>
-              <option value="Senior Science + Lab + Hostel">Senior Science + Lab + Hostel (₹72,000)</option>
-              <option value="Sports & Activity Fee">Sports & Activity Fee (₹5,000)</option>
+              <option value="Quarter 1 Tuition">Quarter 1 Tuition ({{ currencyService.format(25000) }})</option>
+              <option value="Quarter 1 Tuition + Transport">Quarter 1 Tuition + Transport ({{ currencyService.format(32000) }})</option>
+              <option value="Quarter 1 Tuition + Hostel">Quarter 1 Tuition + Hostel ({{ currencyService.format(48000) }})</option>
+              <option value="Annual Computer Lab & Library">Annual Computer Lab & Library ({{ currencyService.format(12000) }})</option>
+              <option value="Senior Science + Lab + Hostel">Senior Science + Lab + Hostel ({{ currencyService.format(72000) }})</option>
+              <option value="Sports & Activity Fee">Sports & Activity Fee ({{ currencyService.format(5000) }})</option>
             </select>
           </div>
         </div>
@@ -432,7 +432,7 @@
             <div class="stat-box-due h-100">
               <span class="badge mb-2" style="background: #e0f2fe; color: #0284c7; font-size: 0.7rem; font-weight: 700;">BASE INVOICE AMOUNT</span>
               <div class="d-flex align-items-center">
-                <span class="fs-4 fw-bold text-primary me-2">₹</span>
+                <span class="fs-4 fw-bold text-primary me-2">{{ currencyService.symbol() }}</span>
                 <input type="number" min="0" class="border-0 bg-transparent fs-4 fw-bold text-primary w-100 outline-none" [(ngModel)]="newInvBaseAmount">
               </div>
             </div>
@@ -443,7 +443,7 @@
             <div class="p-3 rounded-16 h-100" style="background: #fff7ed; border: 2px solid #fdba74;">
               <span class="badge mb-2" style="background: #ffedd5; color: #ea580c; font-size: 0.7rem; font-weight: 700;">SCHOLARSHIP / CONCESSION</span>
               <div class="d-flex align-items-center">
-                <span class="fs-4 fw-bold text-warning me-2">₹</span>
+                <span class="fs-4 fw-bold text-warning me-2">{{ currencyService.symbol() }}</span>
                 <input type="number" min="0" class="border-0 bg-transparent fs-4 fw-bold text-dark w-100 outline-none" [(ngModel)]="newInvConcession">
               </div>
             </div>
@@ -453,7 +453,7 @@
           <div class="col-12 col-md-4">
             <div class="stat-box-received h-100">
               <span class="badge mb-2" style="background: #dcfce7; color: #16a34a; font-size: 0.7rem; font-weight: 700;">NET INVOICE PAYABLE</span>
-              <h3 class="fw-bold text-success mb-0">₹ {{ newInvNetPayable | number:'1.2-2' }}</h3>
+              <h3 class="fw-bold text-success mb-0">{{ currencyService.format(newInvNetPayable) }}</h3>
             </div>
           </div>
         </div>
@@ -543,7 +543,7 @@
             <select class="form-select modern-form-input w-100" [(ngModel)]="selectedInvoiceId" (change)="onAdmissionChange()">
               <option value="" disabled>Select Invoice to Pay</option>
               <option *ngFor="let inv of invoices" [value]="inv.id">
-                INV-00{{ inv.id }} • {{ inv.feeGroup }} (Due: ₹{{ inv.balanceAmount | number }})
+                INV-00{{ inv.id }} • {{ inv.feeGroup }} (Due: {{ currencyService.format(inv.balanceAmount) }})
               </option>
             </select>
           </div>
@@ -555,7 +555,7 @@
           <div class="col-12 col-md-4">
             <div class="stat-box-due h-100">
               <span class="badge mb-2" style="background: #e0f2fe; color: #0284c7; font-size: 0.7rem; font-weight: 700;">TOTAL DUE</span>
-              <h3 class="fw-bold text-dark mb-0">₹ {{ feeTotalDue | number:'1.2-2' }}</h3>
+              <h3 class="fw-bold text-dark mb-0">{{ currencyService.format(feeTotalDue) }}</h3>
             </div>
           </div>
 
@@ -564,7 +564,7 @@
             <div class="stat-box-received h-100">
               <span class="badge mb-2" style="background: #dcfce7; color: #16a34a; font-size: 0.7rem; font-weight: 700;">CASH RECEIVED</span>
               <div class="d-flex align-items-center">
-                <span class="fs-4 fw-bold text-success me-2">₹</span>
+                <span class="fs-4 fw-bold text-success me-2">{{ currencyService.symbol() }}</span>
                 <input type="number" min="0" class="border-0 bg-transparent fs-4 fw-bold text-success w-100 outline-none" [(ngModel)]="cashReceived">
               </div>
             </div>
@@ -574,7 +574,7 @@
           <div class="col-12 col-md-4">
             <div class="stat-box-balance h-100">
               <span class="badge mb-2" style="background: #fee2e2; color: #dc2626; font-size: 0.7rem; font-weight: 700;">BALANCE UNPAID</span>
-              <h3 class="fw-bold text-danger mb-0">₹ {{ feeBalanceUnpaid | number:'1.2-2' }}</h3>
+              <h3 class="fw-bold text-danger mb-0">{{ currencyService.format(feeBalanceUnpaid) }}</h3>
             </div>
           </div>
         </div>
@@ -637,7 +637,7 @@
           <p class="small text-muted mb-3">{{ head.description }}</p>
           <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
             <span class="text-muted small">Standard Amount:</span>
-            <span class="fs-5 fw-bold text-success">₹{{ head.amount | number }}</span>
+            <span class="fs-5 fw-bold text-success">{{ currencyService.format(head.amount) }}</span>
           </div>
         </div>
       </div>
@@ -701,7 +701,7 @@
           <tr *ngFor="let s of feeStructures">
             <td><strong class="text-dark">{{ s.className }}</strong></td>
             <td><span class="badge bg-primary bg-opacity-10 text-primary fw-bold">{{ s.groupName }}</span></td>
-            <td class="fw-bold text-success">₹{{ s.totalFee | number }}</td>
+            <td class="fw-bold text-success">{{ currencyService.format(s.totalFee) }}</td>
             <td><span class="badge bg-light text-dark border">{{ s.installments }} Installments</span></td>
             <td><small class="text-muted">{{ s.dueDate }}</small></td>
             <td><span class="badge bg-info bg-opacity-10 text-info fw-bold">{{ s.assignedStudents }} Students</span></td>
@@ -732,13 +732,13 @@
       <div class="col-md-4">
         <div class="p-3 bg-light rounded-12 border">
           <small class="text-muted fw-bold">TOTAL DEBITS (DR)</small>
-          <h3 class="fw-bold text-primary mt-1 mb-0">₹14,85,000</h3>
+          <h3 class="fw-bold text-primary mt-1 mb-0">{{ currencyService.format(1485000) }}</h3>
         </div>
       </div>
       <div class="col-md-4">
         <div class="p-3 bg-light rounded-12 border">
           <small class="text-muted fw-bold">TOTAL CREDITS (CR)</small>
-          <h3 class="fw-bold text-success mt-1 mb-0">₹14,85,000</h3>
+          <h3 class="fw-bold text-success mt-1 mb-0">{{ currencyService.format(1485000) }}</h3>
         </div>
       </div>
       <div class="col-md-4">
@@ -756,8 +756,8 @@
             <th>Account Code</th>
             <th>Account Head Description</th>
             <th>Account Type</th>
-            <th class="text-end">Debit (₹)</th>
-            <th class="text-end">Credit (₹)</th>
+            <th class="text-end">Debit ({{ currencyService.symbol() }})</th>
+            <th class="text-end">Credit ({{ currencyService.symbol() }})</th>
           </tr>
         </thead>
         <tbody>
@@ -765,14 +765,14 @@
             <td><code>1010-CASH</code></td>
             <td class="fw-bold">Cash in Hand - Cashier POS Desk</td>
             <td><span class="badge bg-info bg-opacity-10 text-info">Current Asset</span></td>
-            <td class="text-end fw-bold">₹1,85,000</td>
+            <td class="text-end fw-bold">{{ currencyService.format(185000) }}</td>
             <td class="text-end text-muted">-</td>
           </tr>
           <tr>
             <td><code>1020-BANK</code></td>
             <td class="fw-bold">HDFC Bank Campus Current Account</td>
             <td><span class="badge bg-info bg-opacity-10 text-info">Bank Asset</span></td>
-            <td class="text-end fw-bold">₹8,40,000</td>
+            <td class="text-end fw-bold">{{ currencyService.format(840000) }}</td>
             <td class="text-end text-muted">-</td>
           </tr>
           <tr>
@@ -780,19 +780,19 @@
             <td class="fw-bold">Student Tuition Fees Realized</td>
             <td><span class="badge bg-success bg-opacity-10 text-success">Revenue</span></td>
             <td class="text-end text-muted">-</td>
-            <td class="text-end fw-bold text-success">₹10,25,000</td>
+            <td class="text-end fw-bold text-success">{{ currencyService.format(1025000) }}</td>
           </tr>
           <tr>
             <td><code>5010-SAL</code></td>
             <td class="fw-bold">Faculty & Administrative Payroll</td>
             <td><span class="badge bg-danger bg-opacity-10 text-danger">Operating Expense</span></td>
-            <td class="text-end fw-bold text-danger">₹4,60,000</td>
+            <td class="text-end fw-bold text-danger">{{ currencyService.format(460000) }}</td>
             <td class="text-end text-muted">-</td>
           </tr>
           <tr class="table-light fw-bold">
             <td colspan="3" class="text-end">TOTAL:</td>
-            <td class="text-end text-primary">₹14,85,000</td>
-            <td class="text-end text-success">₹14,85,000</td>
+            <td class="text-end text-primary">{{ currencyService.format(1485000) }}</td>
+            <td class="text-end text-success">{{ currencyService.format(1485000) }}</td>
           </tr>
         </tbody>
       </table>
@@ -820,8 +820,8 @@
             <th>Date</th>
             <th>Account Head</th>
             <th>Narration</th>
-            <th class="text-end">Debit (₹)</th>
-            <th class="text-end">Credit (₹)</th>
+            <th class="text-end">Debit ({{ currencyService.symbol() }})</th>
+            <th class="text-end">Credit ({{ currencyService.symbol() }})</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -832,8 +832,8 @@
             <td><small class="text-muted">{{ v.date }}</small></td>
             <td class="fw-bold">{{ v.accountHead }}</td>
             <td><small class="text-secondary">{{ v.narration }}</small></td>
-            <td class="text-end fw-bold" [ngClass]="v.debit > 0 ? 'text-primary' : 'text-muted'">{{ v.debit ? '₹' + (v.debit | number) : '-' }}</td>
-            <td class="text-end fw-bold" [ngClass]="v.credit > 0 ? 'text-success' : 'text-muted'">{{ v.credit ? '₹' + (v.credit | number) : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="v.debit > 0 ? 'text-primary' : 'text-muted'">{{ v.debit ? currencyService.format(v.debit) : '-' }}</td>
+            <td class="text-end fw-bold" [ngClass]="v.credit > 0 ? 'text-success' : 'text-muted'">{{ v.credit ? currencyService.format(v.credit) : '-' }}</td>
             <td><span class="badge bg-success bg-opacity-10 text-success fw-bold">{{ v.status }}</span></td>
           </tr>
         </tbody>
@@ -869,7 +869,7 @@
       </div>
       <div class="col-md-4">
         <div class="small text-muted fw-semibold">Total Spool Revenue Value</div>
-        <div class="fs-4 fw-bold text-success">₹{{ selectedInvoicesTotalValue | number }}</div>
+        <div class="fs-4 fw-bold text-success">{{ currencyService.format(selectedInvoicesTotalValue) }}</div>
       </div>
       <div class="col-md-4">
         <div class="small text-muted fw-semibold">Estimated Paper Consumption</div>
@@ -890,8 +890,8 @@
             <th>Fee Category</th>
             <th>Due Date</th>
             <th class="text-end">Invoice Amount</th>
-            <th class="text-end">Paid (₹)</th>
-            <th class="text-end">Balance (₹)</th>
+            <th class="text-end">Paid ({{ currencyService.symbol() }})</th>
+            <th class="text-end">Balance ({{ currencyService.symbol() }})</th>
             <th>Status</th>
             <th class="text-end">Action</th>
           </tr>
@@ -905,9 +905,9 @@
             <td class="fw-bold text-dark">{{ inv.studentName }}</td>
             <td><span class="badge bg-light text-dark border">{{ inv.feeGroup }}</span></td>
             <td><small class="text-muted">{{ inv.dueDate }}</small></td>
-            <td class="text-end fw-bold">₹{{ inv.amount | number }}</td>
-            <td class="text-end fw-bold text-success">₹{{ inv.paidAmount | number }}</td>
-            <td class="text-end fw-bold text-danger">₹{{ inv.balanceAmount | number }}</td>
+            <td class="text-end fw-bold">{{ currencyService.format(inv.amount) }}</td>
+            <td class="text-end fw-bold text-success">{{ currencyService.format(inv.paidAmount) }}</td>
+            <td class="text-end fw-bold text-danger">{{ currencyService.format(inv.balanceAmount) }}</td>
             <td>
               <span class="badge" [ngClass]="inv.status === 'Paid' ? 'bg-success' : (inv.status === 'Partial' ? 'bg-warning text-dark' : 'bg-danger')">
                 {{ inv.status }}
@@ -1047,21 +1047,21 @@
               <thead class="table-light">
                 <tr>
                   <th>Fee Head</th>
-                  <th class="text-end">Amount (₹)</th>
+                  <th class="text-end">Amount ({{ currencyService.symbol() }})</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>Quarter 1 Tuition Fee</td>
-                  <td class="text-end fw-bold">25,000.00</td>
+                  <td class="text-end fw-bold">{{ currencyService.format(25000) }}</td>
                 </tr>
                 <tr>
                   <td>STEM Robotics Lab Maintenance</td>
-                  <td class="text-end fw-bold">6,000.00</td>
+                  <td class="text-end fw-bold">{{ currencyService.format(6000) }}</td>
                 </tr>
                 <tr class="table-light fw-bold">
                   <td>TOTAL PAID:</td>
-                  <td class="text-end text-success">₹31,000.00</td>
+                  <td class="text-end text-success">{{ currencyService.format(31000) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -1108,7 +1108,7 @@
             </select>
           </div>
           <div class="col-md-6">
-            <label class="form-label small fw-bold">Total Amount (₹) *</label>
+            <label class="form-label small fw-bold">Total Amount ({{ currencyService.symbol() }}) *</label>
             <input type="number" class="form-control" [(ngModel)]="newInvoiceForm.amount">
           </div>
         </div>
@@ -1143,12 +1143,12 @@
           </div>
           <div class="d-flex justify-content-between mt-1">
             <span class="text-muted small">Outstanding Balance:</span>
-            <span class="text-danger fw-bold fs-6">₹{{ selectedInvoice.balanceAmount | number }}</span>
+            <span class="text-danger fw-bold fs-6">{{ currencyService.format(selectedInvoice.balanceAmount) }}</span>
           </div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label small fw-bold">Collection Amount (₹) *</label>
+          <label class="form-label small fw-bold">Collection Amount ({{ currencyService.symbol() }}) *</label>
           <input type="number" class="form-control form-control-lg fw-bold text-success" [(ngModel)]="collectForm.amount">
         </div>
 
@@ -1194,7 +1194,7 @@
             <input type="text" class="form-control" [(ngModel)]="newHead.code" placeholder="e.g. LAB-01">
           </div>
           <div class="col-md-6">
-            <label class="form-label small fw-bold">Amount (₹)</label>
+            <label class="form-label small fw-bold">Amount ({{ currencyService.symbol() }})</label>
             <input type="number" class="form-control" [(ngModel)]="newHead.amount">
           </div>
         </div>
@@ -1257,7 +1257,7 @@
         </div>
         <div class="row g-3 mb-3">
           <div class="col-md-6">
-            <label class="form-label small fw-bold">Amount Per Student (₹)</label>
+            <label class="form-label small fw-bold">Amount Per Student ({{ currencyService.symbol() }})</label>
             <input type="number" class="form-control" [(ngModel)]="bulkForm.amount">
           </div>
           <div class="col-md-6">
@@ -1292,7 +1292,7 @@
             </select>
           </div>
           <div class="col-md-6">
-            <label class="form-label small fw-bold">Amount (₹) *</label>
+            <label class="form-label small fw-bold">Amount ({{ currencyService.symbol() }}) *</label>
             <input type="number" class="form-control" [(ngModel)]="newVoucherForm.amount">
           </div>
         </div>
@@ -1361,7 +1361,7 @@
             <tbody>
               <tr>
                 <td>{{ receiptData.feeGroup }}</td>
-                <td class="text-end fw-bold text-success fs-5">₹{{ receiptData.amount | number }}</td>
+                <td class="text-end fw-bold text-success fs-5">{{ currencyService.format(receiptData.amount) }}</td>
               </tr>
             </tbody>
           </table>
@@ -1369,7 +1369,7 @@
           <div class="d-flex justify-content-between align-items-center pt-3 border-top">
             <div>
               <small class="text-muted">Ref No: {{ receiptData.referenceNo }}</small><br>
-              <small class="text-muted">Balance Due: ₹{{ receiptData.balanceRemaining | number }}</small>
+              <small class="text-muted">Balance Due: {{ currencyService.format(receiptData.balanceRemaining) }}</small>
             </div>
             <div class="text-center">
               <div style="width: 120px; border-bottom: 1px dashed #999; margin-bottom: 4px;"></div>

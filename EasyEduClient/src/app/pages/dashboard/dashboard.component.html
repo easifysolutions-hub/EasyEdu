@@ -151,7 +151,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div>
             <div class="stat-label">Total Revenue</div>
-            <div class="stat-value">₹{{ (stats?.totalEarnings !== undefined ? stats?.totalEarnings : 0) | number }}</div>
+            <div class="stat-value">{{ currencyService.format(stats?.totalEarnings !== undefined ? (stats?.totalEarnings || 0) : 0) }}</div>
           </div>
           <div class="stat-icon-bg"><i class="fas fa-money-bill-trend-up"></i></div>
         </div>
@@ -184,15 +184,15 @@
         <div class="row text-center mb-4 pt-2">
           <div class="col">
             <div class="text-muted small fw-bold">INCOME</div>
-            <div class="fw-bold text-success fs-5">₹{{ (stats?.totalEarnings || 845000) | number }}</div>
+            <div class="fw-bold text-success fs-5">{{ currencyService.format(stats?.totalEarnings || 845000) }}</div>
           </div>
           <div class="col">
             <div class="text-muted small fw-bold">EXPENSES</div>
-            <div class="fw-bold text-danger fs-5">₹{{ (stats?.totalExpenses || 320000) | number }}</div>
+            <div class="fw-bold text-danger fs-5">{{ currencyService.format(stats?.totalExpenses || 320000) }}</div>
           </div>
           <div class="col border-start">
             <div class="text-muted small fw-bold">PROFIT</div>
-            <div class="fw-bold text-primary fs-5">₹{{ ((stats?.totalEarnings || 845000) - (stats?.totalExpenses || 320000)) | number }}</div>
+            <div class="fw-bold text-primary fs-5">{{ currencyService.format((stats?.totalEarnings || 845000) - (stats?.totalExpenses || 320000)) }}</div>
           </div>
         </div>
 

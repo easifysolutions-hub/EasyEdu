@@ -1186,7 +1186,7 @@
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">TOTAL RECEIPTS / INCOME</div>
-            <h2 class="fw-bold my-1">₹1,770,000</h2>
+            <h2 class="fw-bold my-1">{{ currencyService.format(1770000) }}</h2>
             <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-regular fa-clock me-1"></i> Updated Current Quarter</div>
           </div>
           <div class="stat-icon-bg"><i class="fa-solid fa-file-invoice-dollar"></i></div>
@@ -1203,7 +1203,7 @@
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">TOTAL PAYMENTS / EXPENSES</div>
-            <h2 class="fw-bold my-1">₹581,000</h2>
+            <h2 class="fw-bold my-1">{{ currencyService.format(581000) }}</h2>
             <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-solid fa-rotate-left me-1"></i> Last 30 Days Outflow</div>
           </div>
           <div class="stat-icon-bg"><i class="fa-solid fa-money-bill-wave"></i></div>
@@ -1220,7 +1220,7 @@
           </div>
           <div class="mt-2">
             <div class="small text-white text-opacity-80 fw-bold">NET OPERATING SURPLUS</div>
-            <h2 class="fw-bold my-1">₹1,189,000</h2>
+            <h2 class="fw-bold my-1">{{ currencyService.format(1189000) }}</h2>
             <div class="text-white text-opacity-80" style="font-size: 0.75rem;"><i class="fa-solid fa-check-circle me-1"></i> 100% Balanced Ledger</div>
           </div>
           <div class="stat-icon-bg"><i class="fa-solid fa-wallet"></i></div>
@@ -1415,8 +1415,8 @@
               <th>Date</th>
               <th>Account Head / Ledger</th>
               <th>Narration</th>
-              <th class="text-end">Debit (₹)</th>
-              <th class="text-end">Credit (₹)</th>
+              <th class="text-end">Debit ({{ currencyService.symbol() }})</th>
+              <th class="text-end">Credit ({{ currencyService.symbol() }})</th>
               <th class="text-center">Status</th>
               <th class="text-center">Action</th>
             </tr>
@@ -1435,8 +1435,8 @@
               <td><small class="text-muted">{{ v.date }}</small></td>
               <td class="fw-bold text-dark">{{ v.accountHead }}</td>
               <td><small class="text-muted">{{ v.narration }}</small></td>
-              <td class="text-end fw-bold text-success">{{ v.debit > 0 ? ('₹' + (v.debit | number:'1.2-2')) : '-' }}</td>
-              <td class="text-end fw-bold text-danger">{{ v.credit > 0 ? ('₹' + (v.credit | number:'1.2-2')) : '-' }}</td>
+              <td class="text-end fw-bold text-success">{{ v.debit > 0 ? currencyService.format(v.debit) : '-' }}</td>
+              <td class="text-end fw-bold text-danger">{{ v.credit > 0 ? currencyService.format(v.credit) : '-' }}</td>
               <td class="text-center">
                 <span class="badge bg-success bg-opacity-10 text-success"><i class="fas fa-check-circle me-1"></i> {{ v.status }}</span>
               </td>
@@ -1484,7 +1484,7 @@
           <input type="text" class="form-control" [(ngModel)]="newAccount.name" placeholder="e.g. Sports & Fitness Equipment">
         </div>
         <div class="col-12">
-          <label class="form-label small fw-bold">Opening Balance (₹)</label>
+          <label class="form-label small fw-bold">Opening Balance ({{ currencyService.symbol() }})</label>
           <input type="number" class="form-control" [(ngModel)]="newAccount.balance" placeholder="0.00">
         </div>
       </div>
@@ -1529,7 +1529,7 @@
           <input type="text" class="form-control" [(ngModel)]="newItemAccount.unit" placeholder="Pcs / Box">
         </div>
         <div class="col-md-4">
-          <label class="form-label small fw-bold">Unit Rate (₹)</label>
+          <label class="form-label small fw-bold">Unit Rate ({{ currencyService.symbol() }})</label>
           <input type="number" class="form-control" [(ngModel)]="newItemAccount.rate" placeholder="0.00">
         </div>
       </div>

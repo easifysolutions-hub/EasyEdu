@@ -564,10 +564,10 @@ export class SettingsComponent implements OnInit {
   testPrintPdf(): void {
     const headers = ['Record Code', 'Entity Category', 'Jurisdiction Scope', 'Monetary Allocation', 'Verification Status', 'Audit Timestamp'];
     const rows = [
-      ['EE-ADM-101', 'Institutional Governance', 'Central Core Campus', '₹ 15,00,000.00', 'Verified & Sealed', '06 Oct 2026 10:45 AM'],
-      ['EE-ADM-102', 'Staff Academic Payroll', 'Faculty Operations', '₹ 42,80,000.00', 'Processed Bank ECS', '06 Oct 2026 09:30 AM'],
-      ['EE-ADM-103', 'Student Tuition Ledger', 'Primary & Secondary', '₹ 88,50,000.00', 'Active Settlement', '05 Oct 2026 04:15 PM'],
-      ['EE-ADM-104', 'Laboratory & AI Infrastructure', 'Campus Expansion', '₹ 22,00,000.00', 'Approved by Principal', '04 Oct 2026 02:00 PM']
+      ['EE-ADM-101', 'Institutional Governance', 'Central Core Campus', this.currencyService.format(1500000), 'Verified & Sealed', '06 Oct 2026 10:45 AM'],
+      ['EE-ADM-102', 'Staff Academic Payroll', 'Faculty Operations', this.currencyService.format(4280000), 'Processed Bank ECS', '06 Oct 2026 09:30 AM'],
+      ['EE-ADM-103', 'Student Tuition Ledger', 'Primary & Secondary', this.currencyService.format(8850000), 'Active Settlement', '05 Oct 2026 04:15 PM'],
+      ['EE-ADM-104', 'Laboratory & AI Infrastructure', 'Campus Expansion', this.currencyService.format(2200000), 'Approved by Principal', '04 Oct 2026 02:00 PM']
     ];
 
     this.exportReportService.printOrPdf('Test Institutional Print & PDF Verification Report', headers, rows, {

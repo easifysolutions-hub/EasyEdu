@@ -38,7 +38,7 @@
           </div>
           <span class="badge bg-white bg-opacity-25 text-white fw-bold px-2 py-1 rounded-pill">STOCK VALUATION</span>
         </div>
-        <h2 class="fw-bold mb-1">₹{{ totalValuation | number }}</h2>
+        <h2 class="fw-bold mb-1">{{ currencyService.format(totalValuation) }}</h2>
         <p class="small text-white text-opacity-75 mb-0 fw-semibold">Live Warehoused Assets</p>
       </div>
     </div>
@@ -164,8 +164,8 @@
                 {{ item.inStock }} {{ item.unit }}
               </span>
             </td>
-            <td>₹{{ item.unitPrice | number }}</td>
-            <td><strong>₹{{ (item.inStock * item.unitPrice) | number }}</strong></td>
+            <td>{{ currencyService.format(item.unitPrice) }}</td>
+            <td><strong>{{ currencyService.format(item.inStock * item.unitPrice) }}</strong></td>
             <td><small class="text-muted">{{ item.supplier }}</small></td>
             <td class="text-end pe-3">
               <button class="btn btn-sm btn-outline-success rounded-pill px-3 py-1" (click)="issueForm.itemName = item.name; showIssueModal = true">
@@ -201,7 +201,7 @@
           <p class="text-muted small mb-3">{{ cat.description }}</p>
           <div class="pt-3 border-top d-flex justify-content-between align-items-center">
             <span class="small text-muted">Category Asset Value:</span>
-            <strong class="text-success">₹{{ cat.totalValuation | number }}</strong>
+            <strong class="text-success">{{ currencyService.format(cat.totalValuation) }}</strong>
           </div>
         </div>
       </div>
@@ -289,8 +289,8 @@
             <td>{{ p.itemName }}</td>
             <td><span class="badge bg-light text-secondary border">{{ p.category }}</span></td>
             <td><strong class="text-success">+{{ p.quantity }}</strong></td>
-            <td>₹{{ p.unitPrice | number }}</td>
-            <td><strong>₹{{ p.totalCost | number }}</strong></td>
+            <td>{{ currencyService.format(p.unitPrice) }}</td>
+            <td><strong>{{ currencyService.format(p.totalCost) }}</strong></td>
             <td><small class="text-muted">{{ p.receivedDate }}</small></td>
             <td><span class="badge bg-light text-dark border">{{ p.invoiceNo }}</span></td>
             <td>
@@ -436,7 +436,7 @@
             <div *ngFor="let cat of categories">
               <div class="d-flex justify-content-between small fw-bold mb-1">
                 <span>{{ cat.name }}</span>
-                <span>₹{{ cat.totalValuation | number }}</span>
+                <span>{{ currencyService.format(cat.totalValuation) }}</span>
               </div>
               <div class="progress" style="height: 8px;">
                 <div class="progress-bar bg-primary" [style.width.%]="(cat.totalValuation / totalValuation) * 100"></div>
@@ -503,7 +503,7 @@
           <input type="number" class="form-control form-control-modern" [(ngModel)]="newItem.minimumStock" min="0">
         </div>
         <div class="col-6">
-          <label class="form-label small fw-bold">Unit Price (₹)</label>
+          <label class="form-label small fw-bold">Unit Price ({{ currencyService.symbol() }})</label>
           <input type="number" class="form-control form-control-modern" [(ngModel)]="newItem.unitPrice">
         </div>
         <div class="col-6">
@@ -603,7 +603,7 @@
           <input type="number" class="form-control form-control-modern" [(ngModel)]="procureForm.quantity" min="1">
         </div>
         <div class="col-6">
-          <label class="form-label small fw-bold">Unit Cost (₹)</label>
+          <label class="form-label small fw-bold">Unit Cost ({{ currencyService.symbol() }})</label>
           <input type="number" class="form-control form-control-modern" [(ngModel)]="procureForm.unitPrice">
         </div>
       </div>

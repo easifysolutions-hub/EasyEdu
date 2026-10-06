@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import { CurrencyService } from '../../core/services/currency.service';
 import { FeeInvoice } from '../../core/models';
 
 declare const Swal: any;
@@ -69,6 +70,7 @@ interface VoucherItem {
 })
 export class FeesComponent implements OnInit {
   private api = inject(ApiService);
+  currencyService = inject(CurrencyService);
 
   activeTab: 'dashboard' | 'invoices' | 'collect' | 'create-invoice' | 'heads' | 'groups' | 'structure' | 'ledger' | 'accounting' | 'bulk-print' | 'print-settings' = 'dashboard';
   searchTerm = '';
@@ -148,7 +150,7 @@ export class FeesComponent implements OnInit {
 
     Swal.fire({
       title: 'Invoice Generated Successfully!',
-      text: `Invoice INV-00${newInv.id} issued for ₹${newInv.amount.toLocaleString()} to ${newInv.studentName} (${newInv.admissionNo}). Debited to student ledger.`,
+      text: `Invoice INV-00${newInv.id} issued for ${this.currencyService.format(newInv.amount)} to ${newInv.studentName} (${newInv.admissionNo}). Debited to student ledger.`,
       icon: 'success',
       confirmButtonColor: '#4f46e5',
       showCancelButton: true,
@@ -182,7 +184,7 @@ export class FeesComponent implements OnInit {
     watermarkText: 'PAID & AUDITED',
     showFeeBreakdown: true,
     showPreviousDues: true,
-    termsConditions: '1. Fees once deposited are non-refundable.\n2. In case of delay, a late fee of ₹50 per day will be levied.\n3. Retain official physical receipt for statutory tax verification.',
+    termsConditions: `1. Fees once deposited are non-refundable.\n2. In case of delay, a late fee of ${this.currencyService.format(50)} per day will be levied.\n3. Retain official physical receipt for statutory tax verification.`,
     authorizedSignatory: 'Accounts Bursar / Finance Controller'
   };
 
@@ -214,7 +216,7 @@ export class FeesComponent implements OnInit {
     }
     Swal.fire({
       title: `Batch Spool Dispatched (${mode})`,
-      text: `Printing ${this.selectedInvoicesCount} invoices totaling ₹${this.selectedInvoicesTotalValue.toLocaleString()}...`,
+      text: `Printing ${this.selectedInvoicesCount} invoices totaling ${this.currencyService.format(this.selectedInvoicesTotalValue)}...`,
       icon: 'success',
       timer: 2000,
       showConfirmButton: false
@@ -334,7 +336,7 @@ export class FeesComponent implements OnInit {
 
     Swal.fire({
       title: 'Payment Posted Successfully!',
-      text: `Receipt recorded for ₹${amt.toLocaleString()} against ${inv?.studentName || 'Student'} (${inv?.admissionNo}). Posted to General Ledger.`,
+      text: `Receipt recorded for ${this.currencyService.format(amt)} against ${inv?.studentName || 'Student'} (${inv?.admissionNo}). Posted to General Ledger.`,
       icon: 'success',
       confirmButtonColor: '#2563eb'
     });
@@ -494,7 +496,7 @@ export class FeesComponent implements OnInit {
     if (amountPaid <= 0) {
       Swal.fire({
         title: 'Invalid Amount',
-        text: 'Please enter a valid collection amount greater than ₹0.',
+        text: `Please enter a valid collection amount greater than ${this.currencyService.format(0)}.`,
         icon: 'warning',
         confirmButtonColor: '#002B49'
       });
@@ -543,7 +545,7 @@ export class FeesComponent implements OnInit {
 
     Swal.fire({
       title: 'Payment Recorded!',
-      text: `Successfully collected ₹${amountPaid.toLocaleString()} for ${this.selectedInvoice.studentName}.`,
+      text: `Successfully collected ${this.currencyService.format(amountPaid)} for ${this.selectedInvoice.studentName}.`,
       icon: 'success',
       showCancelButton: true,
       confirmButtonColor: '#002B49',
@@ -605,7 +607,7 @@ export class FeesComponent implements OnInit {
 
     Swal.fire({
       title: 'Invoice Created!',
-      text: `Invoice INV-00${newInv.id} for ₹${newInv.amount.toLocaleString()} generated successfully.`,
+      text: `Invoice INV-00${newInv.id} for ${this.currencyService.format(newInv.amount)} generated successfully.`,
       icon: 'success',
       confirmButtonColor: '#002B49'
     });

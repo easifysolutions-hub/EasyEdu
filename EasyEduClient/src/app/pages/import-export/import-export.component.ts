@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { CurrencyService } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -40,6 +41,7 @@ export interface ImportLog {
   styleUrls: ['./import-export.component.css']
 })
 export class ImportExportComponent implements OnInit {
+  currencyService = inject(CurrencyService);
   activeTab: 'templates' | 'students-import' | 'staff-import' | 'fees-import' | 'vouchers-import' | 'export-hub' | 'history' = 'templates';
   selectedTemplateType: string = 'students';
 
@@ -102,23 +104,29 @@ export class ImportExportComponent implements OnInit {
     { admissionNo: 'ADM-2026-104', firstName: 'Ananya', lastName: 'Verma', class: 'Grade 9', section: 'A', rollNo: 8, phone: '+91 98450 11004', guardian: 'Sunil Verma', status: 'Valid' }
   ];
 
-  staffPreviewData = [
-    { staffNo: 'STF-501', name: 'Dr. Ramesh Sharma', department: 'Academics', designation: 'Senior Faculty Teacher', email: 'ramesh.sharma@easyedu.org', phone: '+91 98450 78123', salary: '₹65,000', status: 'Valid' },
-    { staffNo: 'STF-502', name: 'Sunita Nair', department: 'Science', designation: 'Head of Department', email: 'sunita.nair@easyedu.org', phone: '+91 98450 78124', salary: '₹55,000', status: 'Valid' },
-    { staffNo: 'STF-503', name: 'Vikram Joshi', department: 'Finance', designation: 'Chief Accountant', email: 'vikram.joshi@easyedu.org', phone: '+91 98450 78125', salary: '₹52,000', status: 'Valid' }
-  ];
+  get staffPreviewData() {
+    return [
+      { staffNo: 'STF-501', name: 'Dr. Ramesh Sharma', department: 'Academics', designation: 'Senior Faculty Teacher', email: 'ramesh.sharma@easyedu.org', phone: '+91 98450 78123', salary: this.currencyService.format(65000), status: 'Valid' },
+      { staffNo: 'STF-502', name: 'Sunita Nair', department: 'Science', designation: 'Head of Department', email: 'sunita.nair@easyedu.org', phone: '+91 98450 78124', salary: this.currencyService.format(55000), status: 'Valid' },
+      { staffNo: 'STF-503', name: 'Vikram Joshi', department: 'Finance', designation: 'Chief Accountant', email: 'vikram.joshi@easyedu.org', phone: '+91 98450 78125', salary: this.currencyService.format(52000), status: 'Valid' }
+    ];
+  }
 
-  feesPreviewData = [
-    { admissionNo: 'ADM-2026-101', studentName: 'Aarav Sharma', feeGroup: 'Senior Secondary Term 1', feeHead: 'Tuition Fee', amount: '₹18,500', dueDate: '2026-10-15', status: 'Valid' },
-    { admissionNo: 'ADM-2026-102', studentName: 'Diya Patel', feeGroup: 'Senior Secondary Term 1', feeHead: 'Laboratory Fee', amount: '₹4,500', dueDate: '2026-10-15', status: 'Valid' },
-    { admissionNo: 'ADM-2026-103', studentName: 'Rohan Gupta', feeGroup: 'Secondary Term 1', feeHead: 'Sports & Library', amount: '₹3,000', dueDate: '2026-10-15', status: 'Valid' }
-  ];
+  get feesPreviewData() {
+    return [
+      { admissionNo: 'ADM-2026-101', studentName: 'Aarav Sharma', feeGroup: 'Senior Secondary Term 1', feeHead: 'Tuition Fee', amount: this.currencyService.format(18500), dueDate: '2026-10-15', status: 'Valid' },
+      { admissionNo: 'ADM-2026-102', studentName: 'Diya Patel', feeGroup: 'Senior Secondary Term 1', feeHead: 'Laboratory Fee', amount: this.currencyService.format(4500), dueDate: '2026-10-15', status: 'Valid' },
+      { admissionNo: 'ADM-2026-103', studentName: 'Rohan Gupta', feeGroup: 'Secondary Term 1', feeHead: 'Sports & Library', amount: this.currencyService.format(3000), dueDate: '2026-10-15', status: 'Valid' }
+    ];
+  }
 
-  vouchersPreviewData = [
-    { date: '2026-10-05', type: 'Payment Voucher', debit: 'Faculty Salary Expense', credit: 'Bank Current Account', amount: '$72,500.00', memo: 'October salary disbursement', status: 'Valid' },
-    { date: '2026-10-04', type: 'Receipt Voucher', debit: 'Bank Current Account', credit: 'Student Fee Revenue', amount: '$18,500.00', memo: 'Term 1 fee collection', status: 'Valid' },
-    { date: '2026-10-03', type: 'Purchase Voucher', debit: 'Library Books Asset', credit: 'National Paper Mart', amount: '$12,400.00', memo: 'Acquisitions batch #4', status: 'Valid' }
-  ];
+  get vouchersPreviewData() {
+    return [
+      { date: '2026-10-05', type: 'Payment Voucher', debit: 'Faculty Salary Expense', credit: 'Bank Current Account', amount: this.currencyService.format(72500), memo: 'October salary disbursement', status: 'Valid' },
+      { date: '2026-10-04', type: 'Receipt Voucher', debit: 'Bank Current Account', credit: 'Student Fee Revenue', amount: this.currencyService.format(18500), memo: 'Term 1 fee collection', status: 'Valid' },
+      { date: '2026-10-03', type: 'Purchase Voucher', debit: 'Library Books Asset', credit: 'National Paper Mart', amount: this.currencyService.format(12400), memo: 'Acquisitions batch #4', status: 'Valid' }
+    ];
+  }
 
   importLogs: ImportLog[] = [
     { id: 901, jobName: 'Bulk Grade 10 Admission Ingestion', moduleType: 'Students', fileName: 'Grade10_Admissions_Batch1.xlsx', recordsCount: 140, successCount: 140, failedCount: 0, importedAt: '2026-10-04 11:20', importedBy: 'System Administrator', status: 'Completed' },
