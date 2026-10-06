@@ -650,27 +650,51 @@
   <div *ngIf="activeTab === 'role'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
       <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-shield-halved text-primary me-2"></i> Role Jurisdiction & Granular Permissions</h5>
+        <div>
+          <h5 class="fw-bold text-dark mb-1"><i class="fas fa-shield-halved text-primary me-2"></i> Role Jurisdiction & Granular Permissions</h5>
+          <small class="text-muted">Centralized role access governance. Blocked modules and pages are completely hidden from non-permitted roles.</small>
+        </div>
         <div class="d-flex flex-wrap gap-2">
           <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportRolesList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
           <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportRolesList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
           <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportRolesList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+          <a routerLink="/RolePermission/Role" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+            <i class="fas fa-sliders me-1"></i> Manage Permissions Matrix
+          </a>
         </div>
       </div>
       <div class="row g-4">
-        <div *ngFor="let r of roles" class="col-12 col-md-6 col-xl-4">
-          <div class="card border rounded-16 p-3 bg-light h-100">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="fw-bold text-dark mb-0">{{ r.roleName }}</h6>
-              <span class="badge bg-primary">{{ r.usersCount }} Users</span>
-            </div>
-            <p class="small text-muted mb-3">{{ r.description }}</p>
-            <div class="p-2 bg-white rounded-12 border small">
-              <div class="d-flex justify-content-between py-1 border-bottom" *ngFor="let mod of ['Students', 'Academics', 'Finance', 'System']">
-                <span class="text-muted">{{ mod }}:</span>
-                <span class="badge" [ngClass]="r.permissions[mod].view ? 'bg-success' : 'bg-secondary'">
-                  {{ r.permissions[mod].view ? 'Full Access' : 'Restricted' }}
+        <div *ngFor="let r of systemRoles" class="col-12 col-md-6 col-xl-4">
+          <div class="card border rounded-16 p-3 bg-light h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold text-dark mb-0">{{ r.name }}</h6>
+                <span class="badge" [ngClass]="r.isSystem ? 'bg-primary' : 'bg-info text-dark'">
+                  {{ r.isSystem ? 'System Role' : 'Custom Role' }}
                 </span>
+              </div>
+              <p class="small text-muted mb-3">{{ r.description }}</p>
+            </div>
+            <div>
+              <div class="p-2 bg-white rounded-12 border small mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="text-muted">Assigned Users:</span>
+                  <span class="fw-bold text-dark">{{ r.userCount || 0 }} User(s)</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-muted">Module Access:</span>
+                  <span class="badge bg-success bg-opacity-10 text-success fw-bold">
+                    {{ countEnabledModules(r) }} / 33 Modules Active
+                  </span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a routerLink="/RolePermission/Role" class="btn btn-outline-primary btn-sm rounded-10 w-100 fw-semibold">
+                  <i class="fas fa-edit me-1"></i> Configure Access
+                </a>
+                <button class="btn btn-light btn-sm rounded-10 px-2.5 text-primary border" (click)="permissionService.setRole(r.name)" title="Preview portal with this role">
+                  <i class="fas fa-eye"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -699,7 +723,7 @@
             <tr>
               <th>User Name</th>
               <th>Username / Email</th>
-              <th>Assigned Role</th>
+              <th style="min-width: 180px;">Assigned Role</th>
               <th>2FA Status</th>
               <th>Last Active</th>
               <th>Account Status</th>
@@ -713,7 +737,11 @@
                 <div>{{ u.username }}</div>
                 <small class="text-muted">{{ u.email }}</small>
               </td>
-              <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ u.role }}</span></td>
+              <td>
+                <select class="form-select form-select-sm rounded-10 border bg-white" [(ngModel)]="u.role" (change)="changeUserRole(u, u.role)">
+                  <option *ngFor="let r of systemRoles" [value]="r.name">{{ r.name }}</option>
+                </select>
+              </td>
               <td>
                 <span class="badge" [ngClass]="u.isTwoFactorEnabled ? 'bg-success' : 'bg-warning text-dark'">
                   {{ u.isTwoFactorEnabled ? '2FA Enabled' : 'Disabled' }}
@@ -1084,6 +1112,120 @@
       <div class="modal-footer-custom">
         <button class="btn btn-light" (click)="showNewHolidayModal = false">Cancel</button>
         <button class="btn btn-primary" (click)="createHoliday()">Save Holiday</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PROVISION NEW USER -->
+  <div class="modal-backdrop-custom" *ngIf="showNewUserModal">
+    <div class="modal-content-custom">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0"><i class="fas fa-user-plus text-primary me-2"></i>Provision New System User</h5>
+        <button class="btn-close-custom" (click)="showNewUserModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Full Name *</label>
+          <input type="text" class="form-control" [(ngModel)]="newUser.name" placeholder="e.g. Sarah Jenkins">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Username *</label>
+          <input type="text" class="form-control" [(ngModel)]="newUser.username" placeholder="e.g. sjenkins">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Official Email</label>
+          <input type="email" class="form-control" [(ngModel)]="newUser.email" placeholder="e.g. sjenkins@easyedu.org">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Assigned Security Role *</label>
+          <select class="form-select" [(ngModel)]="newUser.role">
+            <option *ngFor="let r of systemRoles" [value]="r.name">{{ r.name }}</option>
+          </select>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="user2fa" [(ngModel)]="newUser.isTwoFactorEnabled">
+          <label class="form-check-label small fw-bold" for="user2fa">Enforce Two-Factor Authentication (2FA)</label>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showNewUserModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createUser()">Provision User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GENERATE API TOKEN -->
+  <div class="modal-backdrop-custom" *ngIf="showNewApiTokenModal">
+    <div class="modal-content-custom">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0"><i class="fas fa-key text-primary me-2"></i>Generate Integration API Token</h5>
+        <button class="btn-close-custom" (click)="showNewApiTokenModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Client / Gateway Name *</label>
+          <input type="text" class="form-control" [(ngModel)]="newApiToken.name" placeholder="e.g. Mobile App Gateway, Biometric Service">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Authorized Permission Scopes</label>
+          <input type="text" class="form-control" [(ngModel)]="newApiToken.scopes" placeholder="e.g. students:read, attendance:write, fees:read">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Rate Limit</label>
+          <input type="text" class="form-control" [(ngModel)]="newApiToken.rateLimit" placeholder="e.g. 25,000 req/hr">
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showNewApiTokenModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createApiToken()">Generate Token</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE CUSTOM FIELD -->
+  <div class="modal-backdrop-custom" *ngIf="showNewFieldModal">
+    <div class="modal-content-custom">
+      <div class="modal-header-custom">
+        <h5 class="fw-bold mb-0"><i class="fas fa-sliders-simple text-primary me-2"></i>Create Custom Field</h5>
+        <button class="btn-close-custom" (click)="showNewFieldModal = false">&times;</button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Target Module</label>
+          <select class="form-select" [(ngModel)]="newCustomField.moduleTarget">
+            <option value="Student Admission">Student Admission</option>
+            <option value="Staff Onboarding">Staff Onboarding</option>
+            <option value="Fee Invoices">Fee Invoices</option>
+            <option value="Library Books">Library Books</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Field Label *</label>
+          <input type="text" class="form-control" [(ngModel)]="newCustomField.fieldLabel" placeholder="e.g. National ID Number">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Field Type</label>
+          <select class="form-select" [(ngModel)]="newCustomField.fieldType">
+            <option value="Text">Text</option>
+            <option value="Number">Number</option>
+            <option value="Dropdown">Dropdown Selection</option>
+            <option value="Date">Date</option>
+            <option value="Checkbox">Checkbox Toggle</option>
+            <option value="File Upload">File Upload</option>
+          </select>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="fieldReq" [(ngModel)]="newCustomField.isRequired">
+          <label class="form-check-label small fw-bold" for="fieldReq">Mandatory Field (Required)</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="fieldPublic" [(ngModel)]="newCustomField.showOnPublicPortal">
+          <label class="form-check-label small fw-bold" for="fieldPublic">Show on Public / Admission Portal</label>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="btn btn-light" (click)="showNewFieldModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createCustomField()">Save Field</button>
       </div>
     </div>
   </div>

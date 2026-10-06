@@ -14,6 +14,7 @@ export interface SystemRoleDefinition {
   name: string;
   description: string;
   isSystem: boolean;
+  userCount?: number;
   permissions: ModulePermissionsMap;
 }
 
@@ -38,6 +39,7 @@ export const ALL_MODULE_KEYS = [
   'transport',
   'dormitory',
   'certificates',
+  'library',
   'virtualClass',
   'smartAttendanceMenu',
   'advancedAcademicMenu',
@@ -54,9 +56,9 @@ export const ALL_MODULE_KEYS = [
 
 export type ModuleKey = typeof ALL_MODULE_KEYS[number];
 
-const fullAccess = (): ActionPermissions => ({ view: true, add: true, edit: true, delete: true });
-const readOnly = (): ActionPermissions => ({ view: true, add: false, edit: false, delete: false });
-const noAccess = (): ActionPermissions => ({ view: false, add: false, edit: false, delete: false });
+export const fullAccess = (): ActionPermissions => ({ view: true, add: true, edit: true, delete: true });
+export const readOnly = (): ActionPermissions => ({ view: true, add: false, edit: false, delete: false });
+export const noAccess = (): ActionPermissions => ({ view: false, add: false, edit: false, delete: false });
 
 export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
   {
@@ -64,6 +66,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Super Admin',
     description: 'Complete unrestricted governance over all academic, financial, operational, and system modules.',
     isSystem: true,
+    userCount: 2,
     permissions: ALL_MODULE_KEYS.reduce((acc, mod) => {
       acc[mod] = fullAccess();
       return acc;
@@ -74,6 +77,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Admin',
     description: 'Institutional management with operational permissions across academic, student, and staff records.',
     isSystem: true,
+    userCount: 5,
     permissions: ALL_MODULE_KEYS.reduce((acc, mod) => {
       if (mod === 'moduleManager' || mod === 'styleArchitect') {
         acc[mod] = noAccess();
@@ -88,6 +92,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Teacher / Faculty',
     description: 'Academic lesson planning, classroom routine, homework grading, examinations, and attendance.',
     isSystem: false,
+    userCount: 86,
     permissions: {
       dashboard: readOnly(),
       academic: fullAccess(),
@@ -115,6 +120,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
       transport: readOnly(),
       dormitory: noAccess(),
       certificates: noAccess(),
+      library: readOnly(),
       commSubMenu: noAccess(),
       dataManagement: noAccess(),
       frontendCms: noAccess(),
@@ -128,6 +134,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Accountant',
     description: 'Cashier collection, fee invoicing, bank settlements, financial vouchers, ledgers, and balance sheets.',
     isSystem: false,
+    userCount: 6,
     permissions: {
       dashboard: readOnly(),
       fees: fullAccess(),
@@ -149,6 +156,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
       transport: readOnly(),
       dormitory: readOnly(),
       certificates: noAccess(),
+      library: noAccess(),
       virtualClass: noAccess(),
       smartAttendanceMenu: noAccess(),
       advancedAcademicMenu: noAccess(),
@@ -168,8 +176,10 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Librarian',
     description: 'Circulation desk, catalog management, book issue/return registers, and library reports.',
     isSystem: false,
+    userCount: 3,
     permissions: {
       dashboard: readOnly(),
+      library: fullAccess(),
       inventory: fullAccess(),
       reports: readOnly(),
       students: readOnly(),
@@ -208,6 +218,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Receptionist',
     description: 'Front desk visitor records, admission inquiries, phone logs, and postal dispatches.',
     isSystem: false,
+    userCount: 4,
     permissions: {
       dashboard: readOnly(),
       adminSection: fullAccess(),
@@ -216,6 +227,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
       students: readOnly(),
       utilities: readOnly(),
       downloadCenter: readOnly(),
+      library: readOnly(),
       academic: noAccess(),
       lessonPlan: noAccess(),
       homework: noAccess(),
@@ -248,6 +260,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Student',
     description: 'Personalized portal for class routine, homework submissions, exam progress cards, and learning media.',
     isSystem: true,
+    userCount: 1240,
     permissions: {
       dashboard: readOnly(),
       academic: readOnly(),
@@ -257,6 +270,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
       downloadCenter: readOnly(),
       communicate: readOnly(),
       utilities: readOnly(),
+      library: readOnly(),
       adminSection: noAccess(),
       lessonPlan: noAccess(),
       exams: noAccess(),
@@ -288,6 +302,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
     name: 'Parent / Guardian',
     description: 'Ward academic overview, biometric attendance, report cards, and fee payment receipts.',
     isSystem: true,
+    userCount: 980,
     permissions: {
       dashboard: readOnly(),
       academic: readOnly(),
@@ -297,6 +312,7 @@ export const DEFAULT_ROLE_DEFINITIONS: SystemRoleDefinition[] = [
       fees: readOnly(),
       communicate: readOnly(),
       downloadCenter: readOnly(),
+      library: readOnly(),
       adminSection: noAccess(),
       utilities: readOnly(),
       lessonPlan: noAccess(),
@@ -334,11 +350,11 @@ export class PermissionService {
 
   activePermissions = computed<ModulePermissionsMap>(() => {
     const roleName = this.activeRole();
-    const current = this.roles().find(r => r.name === roleName);
+    const current = this.roles().find(r => r.name.toLowerCase() === roleName.toLowerCase());
     if (current) {
       return current.permissions;
     }
-    const superAdmin = this.roles().find(r => r.name === 'Super Admin');
+    const superAdmin = this.roles().find(r => r.name.toLowerCase().includes('super'));
     return superAdmin?.permissions || DEFAULT_ROLE_DEFINITIONS[0].permissions;
   });
 
@@ -348,7 +364,21 @@ export class PermissionService {
       try {
         const parsed: SystemRoleDefinition[] = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          // Merge and ensure all 33 module keys are present in all loaded roles
+          return parsed.map(role => {
+            const mergedPerms: ModulePermissionsMap = {};
+            ALL_MODULE_KEYS.forEach(k => {
+              if (role.permissions && role.permissions[k]) {
+                mergedPerms[k] = { ...role.permissions[k] };
+              } else {
+                mergedPerms[k] = role.name === 'Super Admin' ? fullAccess() : noAccess();
+              }
+            });
+            return {
+              ...role,
+              permissions: mergedPerms
+            };
+          });
         }
       } catch (e) {
         console.warn('Failed to parse saved permission matrix', e);
@@ -360,7 +390,7 @@ export class PermissionService {
   private loadActiveRoleFromStorage(): string {
     const savedRole = localStorage.getItem('easyedu_active_role');
     if (savedRole) {
-      return savedRole;
+      return this.normalizeRoleName(savedRole);
     }
     // Check if user object has roles
     const userStr = localStorage.getItem('easyedu_user');
@@ -368,16 +398,49 @@ export class PermissionService {
       try {
         const user = JSON.parse(userStr);
         if (user && user.roles && user.roles.length > 0) {
-          return user.roles[0];
+          return this.normalizeRoleName(user.roles[0]);
         }
       } catch (e) {}
     }
     return 'Super Admin';
   }
 
+  normalizeRoleName(roleName: string): string {
+    if (!roleName) return 'Super Admin';
+    const clean = roleName.trim().toLowerCase();
+    
+    if (clean === 'superadmin' || clean === 'super admin' || clean === 'super administrator') {
+      return 'Super Admin';
+    }
+    if (clean === 'admin' || clean === 'administrator') {
+      return 'Admin';
+    }
+    if (clean === 'teacher' || clean === 'faculty' || clean === 'teacher / faculty' || clean === 'senior teacher') {
+      return 'Teacher / Faculty';
+    }
+    if (clean === 'student' || clean === 'student portal') {
+      return 'Student';
+    }
+    if (clean === 'parent' || clean === 'guardian' || clean === 'parent / guardian') {
+      return 'Parent / Guardian';
+    }
+    if (clean === 'accountant' || clean === 'bursar' || clean === 'cashier') {
+      return 'Accountant';
+    }
+    if (clean === 'librarian') {
+      return 'Librarian';
+    }
+    if (clean === 'receptionist' || clean === 'frontdesk' || clean === 'front desk') {
+      return 'Receptionist';
+    }
+
+    // Match against any custom role created
+    const existing = this.roles().find(r => r.name.toLowerCase() === clean);
+    return existing ? existing.name : roleName;
+  }
+
   setRole(roleName: string): void {
-    const target = this.roles().find(r => r.name.toLowerCase() === roleName.toLowerCase());
-    const validName = target ? target.name : roleName;
+    const validName = this.normalizeRoleName(roleName);
     this.activeRole.set(validName);
     localStorage.setItem('easyedu_active_role', validName);
 
@@ -394,7 +457,7 @@ export class PermissionService {
 
   isSuperAdmin(): boolean {
     const r = this.activeRole().toLowerCase();
-    return r === 'super admin' || r === 'super administrator';
+    return r === 'super admin' || r === 'super administrator' || r === 'superadmin';
   }
 
   isAdmin(): boolean {
@@ -417,9 +480,84 @@ export class PermissionService {
     return !!mod[action];
   }
 
+  // --- CRUD Role Management ---
+
+  createRole(name: string, description: string, cloneFromRoleName?: string): SystemRoleDefinition {
+    const trimmedName = name.trim();
+    const existing = this.roles().find(r => r.name.toLowerCase() === trimmedName.toLowerCase());
+    if (existing) {
+      throw new Error(`Role "${trimmedName}" already exists.`);
+    }
+
+    let initialPermissions: ModulePermissionsMap = {};
+    if (cloneFromRoleName) {
+      const source = this.roles().find(r => r.name.toLowerCase() === cloneFromRoleName.toLowerCase());
+      if (source) {
+        initialPermissions = JSON.parse(JSON.stringify(source.permissions));
+      }
+    }
+
+    if (Object.keys(initialPermissions).length === 0) {
+      ALL_MODULE_KEYS.forEach(k => {
+        initialPermissions[k] = noAccess();
+      });
+    }
+
+    const newRole: SystemRoleDefinition = {
+      id: Date.now(),
+      name: trimmedName,
+      description: description.trim() || `Custom security role: ${trimmedName}`,
+      isSystem: false,
+      userCount: 0,
+      permissions: initialPermissions
+    };
+
+    const updated = [...this.roles(), newRole];
+    this.roles.set(updated);
+    this.saveRolesToStorage(updated);
+    return newRole;
+  }
+
+  updateRole(roleId: number, name: string, description: string): void {
+    const updated = this.roles().map(r => {
+      if (r.id === roleId) {
+        return {
+          ...r,
+          name: name.trim() || r.name,
+          description: description.trim() || r.description
+        };
+      }
+      return r;
+    });
+
+    this.roles.set(updated);
+    this.saveRolesToStorage(updated);
+  }
+
+  deleteRole(roleId: number): boolean {
+    const target = this.roles().find(r => r.id === roleId);
+    if (!target) return false;
+
+    if (target.isSystem || target.name.toLowerCase() === 'super admin' || target.name.toLowerCase() === 'admin') {
+      throw new Error(`System role "${target.name}" is protected and cannot be deleted.`);
+    }
+
+    const updated = this.roles().filter(r => r.id !== roleId);
+    this.roles.set(updated);
+    this.saveRolesToStorage(updated);
+
+    // If active role was deleted, fallback to Admin or Super Admin
+    if (this.activeRole().toLowerCase() === target.name.toLowerCase()) {
+      this.setRole('Super Admin');
+    }
+
+    return true;
+  }
+
   saveRolePermissions(roleName: string, updatedPermissions: ModulePermissionsMap): void {
     const currentRoles = [...this.roles()];
     const index = currentRoles.findIndex(r => r.name.toLowerCase() === roleName.toLowerCase());
+    
     if (index !== -1) {
       currentRoles[index] = {
         ...currentRoles[index],
@@ -431,17 +569,23 @@ export class PermissionService {
         name: roleName,
         description: `Custom security role: ${roleName}`,
         isSystem: false,
+        userCount: 0,
         permissions: { ...updatedPermissions }
       });
     }
 
     this.roles.set(currentRoles);
-    localStorage.setItem('easyedu_role_permissions_matrix', JSON.stringify(currentRoles));
+    this.saveRolesToStorage(currentRoles);
+  }
+
+  private saveRolesToStorage(roles: SystemRoleDefinition[]): void {
+    localStorage.setItem('easyedu_role_permissions_matrix', JSON.stringify(roles));
   }
 
   resetToDefaults(): void {
     this.roles.set(DEFAULT_ROLE_DEFINITIONS);
     localStorage.removeItem('easyedu_role_permissions_matrix');
+    this.setRole('Super Admin');
   }
 
   isCategoryVisible(category: 'main' | 'admin' | 'academics' | 'student' | 'finance' | 'logistics' | 'settings' | 'exam' | 'reports'): boolean {
@@ -479,14 +623,15 @@ export class PermissionService {
     // Public & General routes always allowed
     if (url === '' || url === '/' || url.startsWith('/home') || url.startsWith('/products') ||
         url.startsWith('/modules') || url.startsWith('/pricing') || url.startsWith('/presentation') ||
-        url.startsWith('/contact') || url.startsWith('/login') || url.startsWith('/dashboard')) {
+        url.startsWith('/contact') || url.startsWith('/login') || url.startsWith('/account/login') ||
+        url.startsWith('/dashboard')) {
       return true;
     }
 
     // System Settings & Configuration
     if (url.startsWith('/settings') || url.startsWith('/generalsettings') || url.startsWith('/rolepermission') ||
         url.startsWith('/customfields') || url.startsWith('/systemsettings') || url.startsWith('/administration/users') ||
-        url.startsWith('/administration/updates')) {
+        url.startsWith('/administration/updates') || url.startsWith('/role-permission')) {
       return this.canAccess('systemSettings');
     }
 
@@ -546,12 +691,12 @@ export class PermissionService {
     }
 
     // Download Center
-    if (url.startsWith('/downloadcenter')) {
+    if (url.startsWith('/downloadcenter') || url.startsWith('/download-center')) {
       return this.canAccess('downloadCenter');
     }
 
     // Data Management (Import / Export)
-    if (url.startsWith('/importexport') || url.startsWith('/datamanagement')) {
+    if (url.startsWith('/importexport') || url.startsWith('/datamanagement') || url.startsWith('/import-export')) {
       return this.canAccess('dataManagement');
     }
 
@@ -561,7 +706,7 @@ export class PermissionService {
     }
 
     // Exam Reports Suite
-    if (url.startsWith('/examreports')) {
+    if (url.startsWith('/examreports') || url.startsWith('/exam-reports')) {
       return this.canAccess('examReports');
     }
 
@@ -571,23 +716,26 @@ export class PermissionService {
     }
 
     // Online Exam
-    if (url.startsWith('/onlineexam') && !url.includes('cbse')) {
+    if (url.startsWith('/onlineexam') || url.startsWith('/online-exam')) {
       return this.canAccess('onlineExam') || this.canAccess('advancedAcademicMenu');
     }
 
     // CBSE & LMS Advanced Academics
-    if (url.startsWith('/cbseexam') || url.startsWith('/cbse') || url.startsWith('/lms')) {
+    if (url.startsWith('/cbseexam') || url.startsWith('/cbse') || url.startsWith('/cbse-exam') ||
+        url.startsWith('/lms') || url.startsWith('/advanced-academics') || url.startsWith('/advancedacademics')) {
       return this.canAccess('advancedAcademicMenu');
     }
 
     // Virtual Class (Zoom, GMeet, Jitsi, BBB)
     if (url.startsWith('/zoom') || url.startsWith('/gmeet') || url.startsWith('/jitsi') ||
-        url.startsWith('/bigbluebutton') || url.startsWith('/virtual') || url.startsWith('/inapplive')) {
+        url.startsWith('/bigbluebutton') || url.startsWith('/virtual') || url.startsWith('/inapplive') ||
+        url.startsWith('/virtual-class')) {
       return this.canAccess('virtualClass');
     }
 
     // Smart Biometric & QR Attendance
-    if (url.startsWith('/biometrics') || url.startsWith('/qrattendance') || url.startsWith('/smartattendance')) {
+    if (url.startsWith('/biometrics') || url.startsWith('/qrattendance') || url.startsWith('/smartattendance') ||
+        url.startsWith('/smart-attendance')) {
       return this.canAccess('smartAttendanceMenu');
     }
 
@@ -610,12 +758,12 @@ export class PermissionService {
     if (url.startsWith('/classes') || url.startsWith('/section') || url.startsWith('/subjects') ||
         url.startsWith('/assignclassteacher') || url.startsWith('/assignsubject') ||
         url.startsWith('/classroom') || url.startsWith('/classroutine') ||
-        url.startsWith('/optionalsubject') || url.startsWith('/academics')) {
+        url.startsWith('/optionalsubject') || url.startsWith('/academics') || url.startsWith('/academic')) {
       return this.canAccess('academic');
     }
 
     // Lesson Plan
-    if (url.startsWith('/lessonplan')) {
+    if (url.startsWith('/lessonplan') || url.startsWith('/lesson-plan')) {
       return this.canAccess('lessonPlan');
     }
 
@@ -625,7 +773,7 @@ export class PermissionService {
     }
 
     // Teacher Evaluation
-    if (url.startsWith('/teacherevaluation')) {
+    if (url.startsWith('/teacherevaluation') || url.startsWith('/teacher-evaluation')) {
       return this.canAccess('teacherEvaluation');
     }
 
@@ -635,7 +783,9 @@ export class PermissionService {
     }
 
     // Registration & WhatsApp Addons
-    if (url.startsWith('/registrationaddon') || url.startsWith('/whatsapp')) {
+    if (url.startsWith('/registrationaddon') || url.startsWith('/registration-addon') ||
+        url.startsWith('/whatsapp') || url.startsWith('/whatsapp-addon') ||
+        url.startsWith('/growth-comms') || url.startsWith('/growthcomms') || url.startsWith('/ai-content') || url.startsWith('/aicontent')) {
       return this.canAccess('commSubMenu');
     }
 

@@ -6,6 +6,8 @@ import { ThemeService } from '../../core/services/theme.service';
 import { CurrencyService, CurrencyConfig, AVAILABLE_CURRENCIES } from '../../core/services/currency.service';
 import { ExportReportService, ReportPrintConfig, DEFAULT_REPORT_PRINT_CONFIG } from '../../core/services/export-report.service';
 
+import { PermissionService, SystemRoleDefinition } from '../../core/services/permission.service';
+
 declare const Swal: any;
 
 export interface AcademicSession {
@@ -108,8 +110,13 @@ export class SettingsComponent implements OnInit {
   themeService = inject(ThemeService);
   currencyService = inject(CurrencyService);
   exportReportService = inject(ExportReportService);
+  permissionService = inject(PermissionService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  get systemRoles(): SystemRoleDefinition[] {
+    return this.permissionService.roles();
+  }
 
   activeTab: 'overview' | 'profile' | 'academicYear' | 'optionalSubject' | 'holiday' | 'baseSetup' | 'role' | 'users' | 'apiPermission' | 'customFields' | 'backup' | 'updates' | 'reportPrint' = 'overview';
 
@@ -307,6 +314,28 @@ export class SettingsComponent implements OnInit {
   showNewApiTokenModal = false;
   showNewFieldModal = false;
 
+  newUser = {
+    name: '',
+    username: '',
+    email: '',
+    role: 'Teacher / Faculty',
+    isTwoFactorEnabled: false
+  };
+
+  newApiToken = {
+    name: '',
+    scopes: 'students:read, attendance:read, fees:read',
+    rateLimit: '25,000 req/hr'
+  };
+
+  newCustomField: Partial<CustomFieldItem> = {
+    moduleTarget: 'Student Admission',
+    fieldLabel: '',
+    fieldType: 'Text',
+    isRequired: false,
+    showOnPublicPortal: true
+  };
+
   ngOnInit(): void {
     // Load persisted institutional profile from localStorage if present
     const savedProfile = localStorage.getItem('easyedu_settings_profile');
@@ -482,6 +511,93 @@ export class SettingsComponent implements OnInit {
     Swal.fire('Holiday Registered', `Holiday "${h.name}" added to master calendar.`, 'success');
   }
 
+  countEnabledModules(r: SystemRoleDefinition): number {
+    if (!r.permissions) return 0;
+    return Object.values(r.permissions).filter(p => p.view).length;
+  }
+
+  createUser(): void {
+    if (!this.newUser.name || !this.newUser.username) {
+      Swal.fire('Missing Details', 'Please provide user name and username.', 'warning');
+      return;
+    }
+
+    const u: SystemUserItem = {
+      id: Date.now(),
+      name: this.newUser.name,
+      username: this.newUser.username,
+      email: this.newUser.email || `${this.newUser.username}@easyedu.org`,
+      role: this.newUser.role,
+      linkedEntity: 'Staff Direct Provision',
+      lastLogin: 'Never (New)',
+      isTwoFactorEnabled: this.newUser.isTwoFactorEnabled,
+      status: 'Active',
+      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
+    };
+
+    this.users.unshift(u);
+    this.showNewUserModal = false;
+    this.newUser = { name: '', username: '', email: '', role: 'Teacher / Faculty', isTwoFactorEnabled: false };
+    Swal.fire('User Provisioned', `Account created for ${u.name} with role "${u.role}".`, 'success');
+  }
+
+  changeUserRole(u: SystemUserItem, newRole: string): void {
+    u.role = newRole;
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      timer: 2000,
+      showConfirmButton: false,
+      icon: 'success',
+      title: `Assigned ${u.name} to role "${newRole}"`
+    });
+  }
+
+  createApiToken(): void {
+    if (!this.newApiToken.name) {
+      Swal.fire('Name Required', 'Please enter token client/integration name.', 'warning');
+      return;
+    }
+
+    const tok: ApiTokenItem = {
+      id: `TOK-${Date.now().toString().slice(-4)}`,
+      name: this.newApiToken.name,
+      keyPrefix: `eea_live_${Math.random().toString(36).substring(2, 10)}...`,
+      scopes: this.newApiToken.scopes.split(',').map(s => s.trim()),
+      rateLimit: this.newApiToken.rateLimit || '25,000 req/hr',
+      createdDate: new Date().toISOString().split('T')[0],
+      expiryDate: '2027-10-06',
+      status: 'Active'
+    };
+
+    this.apiTokens.unshift(tok);
+    this.showNewApiTokenModal = false;
+    this.newApiToken = { name: '', scopes: 'students:read, attendance:read, fees:read', rateLimit: '25,000 req/hr' };
+    Swal.fire('API Key Created', `Client token "${tok.name}" is now active.`, 'success');
+  }
+
+  createCustomField(): void {
+    if (!this.newCustomField.fieldLabel) {
+      Swal.fire('Field Label Required', 'Please enter field name / label.', 'warning');
+      return;
+    }
+
+    const f: CustomFieldItem = {
+      id: Date.now(),
+      moduleTarget: this.newCustomField.moduleTarget || 'Student Admission',
+      fieldLabel: this.newCustomField.fieldLabel,
+      fieldType: this.newCustomField.fieldType || 'Text',
+      isRequired: !!this.newCustomField.isRequired,
+      showOnPublicPortal: !!this.newCustomField.showOnPublicPortal,
+      status: 'Active'
+    };
+
+    this.customFields.unshift(f);
+    this.showNewFieldModal = false;
+    this.newCustomField = { moduleTarget: 'Student Admission', fieldLabel: '', fieldType: 'Text', isRequired: false, showOnPublicPortal: true };
+    Swal.fire('Custom Field Added', `Field "${f.fieldLabel}" registered to ${f.moduleTarget}.`, 'success');
+  }
+
   toggleUserStatus(u: SystemUserItem): void {
     u.status = u.status === 'Active' ? 'Suspended' : 'Active';
     Swal.fire('User Status Updated', `Account for ${u.name} is now ${u.status}.`, 'info');
@@ -633,11 +749,16 @@ export class SettingsComponent implements OnInit {
   }
 
   exportRolesList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
-    const headers = ['Role ID', 'Role Name', 'User Count', 'Description', 'Module Permissions Summary'];
-    const rows = this.roles.map(r => [
-      r.id, r.roleName, r.usersCount, r.description, 'Students, Academics, Finance, System'
+    const headers = ['Role ID', 'Role Name', 'Role Type', 'User Count', 'Description', 'Enabled Modules'];
+    const rows = this.systemRoles.map(r => [
+      r.id,
+      r.name,
+      r.isSystem ? 'System Guarded' : 'Custom Configurable',
+      r.userCount || 0,
+      r.description,
+      `${this.countEnabledModules(r)} of ${Object.keys(r.permissions || {}).length} Enabled`
     ]);
-    const title = 'Role Jurisdiction & Security Matrix';
+    const title = 'Institutional Role Jurisdiction & Security Matrix';
 
     if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
     else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);

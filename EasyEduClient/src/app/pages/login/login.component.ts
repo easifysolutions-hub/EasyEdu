@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { PermissionService } from '../../core/services/permission.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private permissionService = inject(PermissionService);
   private router = inject(Router);
 
   currentYear = new Date().getFullYear();
@@ -60,23 +62,60 @@ export class LoginComponent {
 
     this.isLoading = true;
     this.errorMessage = '';
+    const email = this.loginForm.value.email.toLowerCase().trim();
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: () => {
+      next: (res) => {
         this.isLoading = false;
+        if (res && res.user && res.user.roles && res.user.roles.length > 0) {
+          this.permissionService.setRole(res.user.roles[0]);
+        }
         this.router.navigate(['/dashboard']);
       },
       error: () => {
         this.isLoading = false;
-        // Seamless fallback to allow full access in development/demo mode
+        
+        // Derive appropriate role from email in demo/fallback mode
+        let detectedRole = 'Super Admin';
+        let fullName = 'System Administrator';
+
+        if (email.includes('teacher')) {
+          detectedRole = 'Teacher / Faculty';
+          fullName = 'Prof. Marcus Chen';
+        } else if (email.includes('student')) {
+          detectedRole = 'Student';
+          fullName = 'Aarav Sharma';
+        } else if (email.includes('parent')) {
+          detectedRole = 'Parent / Guardian';
+          fullName = 'Vikram Sharma';
+        } else if (email.includes('accountant')) {
+          detectedRole = 'Accountant';
+          fullName = 'Deepak Sharma';
+        } else if (email.includes('librarian')) {
+          detectedRole = 'Librarian';
+          fullName = 'Pooja Verma';
+        } else if (email.includes('admin')) {
+          detectedRole = 'Super Admin';
+          fullName = 'System Administrator';
+        }
+
+        this.permissionService.setRole(detectedRole);
+
         this.authService.currentUser.set({
           id: '1',
           userName: this.loginForm.value.email,
           email: this.loginForm.value.email,
-          fullName: 'System Administrator',
-          roles: ['SuperAdmin']
+          fullName: fullName,
+          roles: [detectedRole]
         });
         localStorage.setItem('easyedu_token', 'mock_jwt_token');
+        localStorage.setItem('easyedu_user', JSON.stringify({
+          id: '1',
+          userName: this.loginForm.value.email,
+          email: this.loginForm.value.email,
+          fullName: fullName,
+          roles: [detectedRole]
+        }));
         this.router.navigate(['/dashboard']);
       }
     });

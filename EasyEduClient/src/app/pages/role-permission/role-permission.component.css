@@ -1,4 +1,51 @@
+.rounded-8 { border-radius: 8px; }
+.rounded-10 { border-radius: 10px; }
 .rounded-12 { border-radius: 12px; }
 .rounded-16 { border-radius: 16px; }
+.rounded-20 { border-radius: 20px; }
 .cursor-pointer { cursor: pointer; }
-.transition-all { transition: all 0.25s ease-in-out; }
+.transition-all { transition: all 0.2s ease-in-out; }
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.btn-xs {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.75rem;
+}
+
+.hover-white:hover {
+  color: #ffffff !important;
+}
+
+.table-premium th {
+  background: #f8fafc;
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table-premium td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.875rem;
+}
+
+.roles-scrollable::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.roles-scrollable::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
