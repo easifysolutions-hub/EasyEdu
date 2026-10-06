@@ -53,6 +53,9 @@
       <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'customFields' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('customFields')">
         <i class="fas fa-sliders-simple me-1"></i> Custom Fields
       </button>
+      <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'reportPrint' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('reportPrint')">
+        <i class="fas fa-file-pdf me-1"></i> Print & PDF Engine
+      </button>
       <button class="btn btn-sm rounded-pill px-3 fw-bold" [ngClass]="activeTab === 'backup' ? 'btn-primary text-white shadow-sm' : 'btn-light text-muted'" (click)="setTab('backup')">
         <i class="fas fa-cloud-arrow-up me-1"></i> Data Archive (Backup)
       </button>
@@ -489,11 +492,16 @@
   <!-- TAB 3: ACADEMIC YEAR CYCLE (/GeneralSettings/AcademicYear) -->
   <div *ngIf="activeTab === 'academicYear'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <h5 class="fw-bold text-dark mb-0"><i class="fas fa-calendar-days text-primary me-2"></i> Academic Year Sessions</h5>
-        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewSessionModal = true">
-          <i class="fas fa-plus me-1"></i> Add Academic Session
-        </button>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportAcademicSessionsList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportAcademicSessionsList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportAcademicSessionsList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+          <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewSessionModal = true">
+            <i class="fas fa-plus me-1"></i> Add Academic Session
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -566,11 +574,16 @@
   <!-- TAB 5: HOLIDAY MASTER (/Settings/Holiday) -->
   <div *ngIf="activeTab === 'holiday'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <h5 class="fw-bold text-dark mb-0"><i class="fas fa-calendar-xmark text-primary me-2"></i> Academic Holiday Master Calendar</h5>
-        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewHolidayModal = true">
-          <i class="fas fa-plus me-1"></i> Register Holiday
-        </button>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportHolidaysList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportHolidaysList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportHolidaysList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+          <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewHolidayModal = true">
+            <i class="fas fa-plus me-1"></i> Register Holiday
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -602,7 +615,14 @@
   <!-- TAB 6: ENVIRONMENTAL SETUP (/GeneralSettings/BaseSetup) -->
   <div *ngIf="activeTab === 'baseSetup'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-cubes-stacked text-primary me-2"></i> Environmental Lookups & Base Parameters</h5>
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-cubes-stacked text-primary me-2"></i> Environmental Lookups & Base Parameters</h5>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportBaseLookupsList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportBaseLookupsList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportBaseLookupsList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+        </div>
+      </div>
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
@@ -629,7 +649,14 @@
   <!-- TAB 7: ROLE JURISDICTION (/RolePermission/Role) -->
   <div *ngIf="activeTab === 'role'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <h5 class="fw-bold text-dark mb-3"><i class="fas fa-shield-halved text-primary me-2"></i> Role Jurisdiction & Granular Permissions</h5>
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-shield-halved text-primary me-2"></i> Role Jurisdiction & Granular Permissions</h5>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportRolesList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportRolesList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportRolesList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+        </div>
+      </div>
       <div class="row g-4">
         <div *ngFor="let r of roles" class="col-12 col-md-6 col-xl-4">
           <div class="card border rounded-16 p-3 bg-light h-100">
@@ -655,11 +682,16 @@
   <!-- TAB 8: USER MANAGEMENT MATRIX (/Administration/Users) -->
   <div *ngIf="activeTab === 'users'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <h5 class="fw-bold text-dark mb-0"><i class="fas fa-users-gear text-primary me-2"></i> System User Matrix & Credentials</h5>
-        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewUserModal = true">
-          <i class="fas fa-user-plus me-1"></i> Provision New User
-        </button>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportUsersList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportUsersList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportUsersList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+          <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewUserModal = true">
+            <i class="fas fa-user-plus me-1"></i> Provision New User
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -706,11 +738,16 @@
   <!-- TAB 9: API ACCESS NEXUS (/RolePermission/ApiPermission) -->
   <div *ngIf="activeTab === 'apiPermission'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <h5 class="fw-bold text-dark mb-0"><i class="fas fa-key text-primary me-2"></i> REST API Access Tokens & Webhook Gateway</h5>
-        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewApiTokenModal = true">
-          <i class="fas fa-plus me-1"></i> Generate API Key
-        </button>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportApiTokensList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportApiTokensList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportApiTokensList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+          <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewApiTokenModal = true">
+            <i class="fas fa-plus me-1"></i> Generate API Key
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -746,11 +783,16 @@
   <!-- TAB 10: CUSTOM FIELDS (/CustomFields) -->
   <div *ngIf="activeTab === 'customFields'" class="animate-fade-in">
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <h5 class="fw-bold text-dark mb-0"><i class="fas fa-sliders-simple text-primary me-2"></i> Dynamic Field Customization Engine</h5>
-        <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewFieldModal = true">
-          <i class="fas fa-plus me-1"></i> Add Custom Field
-        </button>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportCustomFieldsList('csv')"><i class="fas fa-file-csv text-success me-1"></i> CSV</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-2.5" (click)="exportCustomFieldsList('excel')"><i class="fas fa-file-excel text-success me-1"></i> Excel</button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-2.5" (click)="exportCustomFieldsList('pdf')"><i class="fas fa-file-pdf text-danger me-1"></i> PDF / Print</button>
+          <button class="btn btn-primary btn-sm rounded-pill px-3" (click)="showNewFieldModal = true">
+            <i class="fas fa-plus me-1"></i> Add Custom Field
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -814,6 +856,141 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PRINT & PDF ENGINE & BRANDING STANDARDS (/Settings/PrintEngine) -->
+  <div *ngIf="activeTab === 'reportPrint'" class="animate-fade-in">
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <div>
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-bold text-dark mb-0">
+              <i class="fas fa-file-pdf text-danger me-2"></i>Institutional Report, Print & PDF Branding Engine
+            </h5>
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1 rounded-pill fw-bold">
+              PDF/Print Engine Active
+            </span>
+          </div>
+          <p class="text-muted small mb-0 mt-1">
+            Configure institutional letterheads, watermark security, paper sizing, orientation, and official signatory blocks applied to all system-generated exports and printable PDF documents.
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="resetPrintSettings()">
+            <i class="fas fa-rotate-left me-1"></i> Restore Defaults
+          </button>
+          <button class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold" (click)="testPrintPdf()">
+            <i class="fas fa-eye me-1"></i> Test Live PDF / Print
+          </button>
+          <button class="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-sm" (click)="savePrintSettings()">
+            <i class="fas fa-save me-1"></i> Save PDF Standards
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Column 1: Letterhead & Branding -->
+        <div class="col-lg-6">
+          <div class="p-3 bg-light rounded-16 border h-100">
+            <h6 class="fw-bold text-dark mb-3"><i class="fas fa-landmark text-primary me-2"></i> Official Letterhead Header</h6>
+            
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Institution Legal Title</label>
+              <input type="text" class="form-control" [(ngModel)]="printConfig.institutionName">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Sub-Header / Department Banner</label>
+              <input type="text" class="form-control" [(ngModel)]="printConfig.subTitle">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Affiliation & Board Accreditation Line</label>
+              <input type="text" class="form-control" [(ngModel)]="printConfig.affiliationText">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Campus Physical Address</label>
+              <input type="text" class="form-control" [(ngModel)]="printConfig.campusAddress">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Contact, Phone & Email Line</label>
+              <input type="text" class="form-control" [(ngModel)]="printConfig.contactLine">
+            </div>
+
+            <div>
+              <label class="form-label small fw-bold">Legal Footer Disclaimer</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="printConfig.footerDisclaimer"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Page Geometry, Watermark & Signatories -->
+        <div class="col-lg-6">
+          <div class="p-3 bg-light rounded-16 border h-100">
+            <h6 class="fw-bold text-dark mb-3"><i class="fas fa-print text-primary me-2"></i> Page Geometry & Security Watermark</h6>
+
+            <!-- Paper Size & Orientation -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Standard Paper Size</label>
+                <select class="form-select" [(ngModel)]="printConfig.paperSize" style="border-radius: 10px;">
+                  <option value="A4">A4 (210 x 297 mm)</option>
+                  <option value="Letter">US Letter (8.5 x 11 in)</option>
+                  <option value="Legal">US Legal (8.5 x 14 in)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Default Page Orientation</label>
+                <select class="form-select" [(ngModel)]="printConfig.orientation" style="border-radius: 10px;">
+                  <option value="landscape">Landscape (Recommended for Data Tables)</option>
+                  <option value="portrait">Portrait (Standard Vertical)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Watermark Settings -->
+            <div class="mb-3 p-3 bg-white rounded-12 border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-label small fw-bold mb-0">Document Background Watermark</label>
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" [(ngModel)]="printConfig.watermarkEnabled">
+                </div>
+              </div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                [(ngModel)]="printConfig.watermarkText"
+                [disabled]="!printConfig.watermarkEnabled"
+                placeholder="e.g. OFFICIAL RECORD / CONFIDENTIAL"
+              >
+              <small class="text-muted d-block mt-1">Watermark is embedded at 30-degree opacity on printed & PDF pages.</small>
+            </div>
+
+            <!-- Signatory Hierarchy Configuration -->
+            <div>
+              <label class="form-label small fw-bold d-block mb-2">
+                <i class="fas fa-signature text-primary me-1"></i> Authorized Signature Blocks (Footer)
+              </label>
+              <div class="row g-2">
+                <div class="col-12" *ngFor="let sig of printConfig.signatories; let idx = index">
+                  <div class="p-2 bg-white rounded-10 border d-flex align-items-center gap-2">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="checkbox" [(ngModel)]="sig.enabled">
+                    </div>
+                    <div class="flex-grow-1">
+                      <input type="text" class="form-control form-control-sm mb-1 fw-bold" [(ngModel)]="sig.title" placeholder="Title (e.g. Prepared By)">
+                      <input type="text" class="form-control form-control-sm text-muted" [(ngModel)]="sig.designation" placeholder="Designation">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

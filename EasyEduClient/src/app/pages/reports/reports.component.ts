@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ExportReportService } from '../../core/services/export-report.service';
 
 export interface ReportDefinition {
   id: string;
@@ -530,12 +531,50 @@ export class ReportsComponent implements OnInit {
     this.showToast('Reset filters to default.');
   }
 
+  exportReportService = inject(ExportReportService);
+
   exportData(format: string): void {
-    this.showToast(`Exporting "${this.activeReport?.title}" as ${format}... File ready!`);
+    if (!this.activeReport) {
+      this.showToast('Please select a report first.');
+      return;
+    }
+
+    const title = this.activeReport.title;
+    const headers = this.activeReport.columns;
+    const rows = this.activeReport.records.map(rec => 
+      this.activeReport!.columns.map((_, i) => rec['c' + (i + 1)] || '')
+    );
+
+    if (format === 'csv') {
+      this.exportReportService.exportToCsv(title, headers, rows);
+      this.showToast(`CSV data export generated for "${title}". Download starting...`);
+    } else if (format === 'excel' || format === 'xls') {
+      this.exportReportService.exportToExcel(title, headers, rows);
+      this.showToast(`Excel spreadsheet created for "${title}". Download starting...`);
+    } else if (format === 'pdf') {
+      this.exportReportService.printOrPdf(title, headers, rows, {
+        category: this.activeReport.category,
+        filters: `${this.filterClass} &bull; ${this.filterAcademicYear}`,
+        kpis: this.activeReport.kpis
+      });
+      this.showToast(`PDF Document generated for "${title}". Ready to print or Save as PDF.`);
+    }
   }
 
   printReport(): void {
-    window.print();
+    if (!this.activeReport) return;
+    const title = this.activeReport.title;
+    const headers = this.activeReport.columns;
+    const rows = this.activeReport.records.map(rec => 
+      this.activeReport!.columns.map((_, i) => rec['c' + (i + 1)] || '')
+    );
+
+    this.exportReportService.printOrPdf(title, headers, rows, {
+      category: this.activeReport.category,
+      filters: `${this.filterClass} &bull; ${this.filterAcademicYear}`,
+      kpis: this.activeReport.kpis
+    });
+    this.showToast(`Print layout loaded with official institutional header.`);
   }
 
   showToast(msg: string): void {

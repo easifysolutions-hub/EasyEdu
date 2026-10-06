@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 import { CurrencyService, CurrencyConfig, AVAILABLE_CURRENCIES } from '../../core/services/currency.service';
+import { ExportReportService, ReportPrintConfig, DEFAULT_REPORT_PRINT_CONFIG } from '../../core/services/export-report.service';
 
 declare const Swal: any;
 
@@ -106,10 +107,11 @@ export interface RolePermissionItem {
 export class SettingsComponent implements OnInit {
   themeService = inject(ThemeService);
   currencyService = inject(CurrencyService);
+  exportReportService = inject(ExportReportService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  activeTab: 'overview' | 'profile' | 'academicYear' | 'optionalSubject' | 'holiday' | 'baseSetup' | 'role' | 'users' | 'apiPermission' | 'customFields' | 'backup' | 'updates' = 'overview';
+  activeTab: 'overview' | 'profile' | 'academicYear' | 'optionalSubject' | 'holiday' | 'baseSetup' | 'role' | 'users' | 'apiPermission' | 'customFields' | 'backup' | 'updates' | 'reportPrint' = 'overview';
 
   // 1. System Health & Control Center
   systemHealth = {
@@ -129,6 +131,9 @@ export class SettingsComponent implements OnInit {
   currencies: CurrencyConfig[] = AVAILABLE_CURRENCIES;
   selectedCurrency: CurrencyConfig = { ...this.currencyService.activeCurrency() };
   customPreviewAmount: number = 75000;
+
+  // Report, Print & PDF Branding Config
+  printConfig: ReportPrintConfig = { ...this.exportReportService.printConfig() };
 
   // 2. Institutional Identity (General Settings)
   profile = {
@@ -535,5 +540,131 @@ export class SettingsComponent implements OnInit {
     }).then(() => {
       Swal.fire('Platform Up to Date', 'EasyEdu Enterprise Core v4.2.0 is running the latest stable release.', 'success');
     });
+  }
+
+  // =========================================================================
+  // REPORT, PRINT & PDF BRANDING CONFIGURATION METHODS
+  // =========================================================================
+  savePrintSettings(): void {
+    this.exportReportService.saveConfig(this.printConfig);
+    Swal.fire({
+      title: 'Print & PDF Branding Saved',
+      text: 'Institutional letterheads, watermarks, paper sizes, and authorized signatures updated for all PDF reports.',
+      icon: 'success',
+      confirmButtonColor: '#002B49'
+    });
+  }
+
+  resetPrintSettings(): void {
+    this.printConfig = { ...DEFAULT_REPORT_PRINT_CONFIG };
+    this.exportReportService.saveConfig(this.printConfig);
+    Swal.fire('Defaults Restored', 'Standard institutional print & PDF branding restored.', 'info');
+  }
+
+  testPrintPdf(): void {
+    const headers = ['Record Code', 'Entity Category', 'Jurisdiction Scope', 'Monetary Allocation', 'Verification Status', 'Audit Timestamp'];
+    const rows = [
+      ['EE-ADM-101', 'Institutional Governance', 'Central Core Campus', '₹ 15,00,000.00', 'Verified & Sealed', '06 Oct 2026 10:45 AM'],
+      ['EE-ADM-102', 'Staff Academic Payroll', 'Faculty Operations', '₹ 42,80,000.00', 'Processed Bank ECS', '06 Oct 2026 09:30 AM'],
+      ['EE-ADM-103', 'Student Tuition Ledger', 'Primary & Secondary', '₹ 88,50,000.00', 'Active Settlement', '05 Oct 2026 04:15 PM'],
+      ['EE-ADM-104', 'Laboratory & AI Infrastructure', 'Campus Expansion', '₹ 22,00,000.00', 'Approved by Principal', '04 Oct 2026 02:00 PM']
+    ];
+
+    this.exportReportService.printOrPdf('Test Institutional Print & PDF Verification Report', headers, rows, {
+      category: 'System Governance & Document Integrity',
+      filters: 'Campus Bengaluru &bull; Session 2025-2026',
+      kpis: [
+        { label: 'Document Status', value: 'Digitally Validated' },
+        { label: 'Paper Standard', value: `${this.printConfig.paperSize} (${this.printConfig.orientation})` },
+        { label: 'Active Watermark', value: this.printConfig.watermarkEnabled ? this.printConfig.watermarkText : 'Disabled' }
+      ]
+    });
+  }
+
+  // =========================================================================
+  // SETTINGS ENTITY EXPORT & PRINT METHODS
+  // =========================================================================
+  exportUsersList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['ID', 'Full Name', 'Username', 'Official Email', 'Assigned Role', 'Linked Entity', '2FA Status', 'Account Status', 'Last Login'];
+    const rows = this.users.map(u => [
+      u.id, u.name, u.username, u.email, u.role, u.linkedEntity, u.isTwoFactorEnabled ? 'Enabled' : 'Disabled', u.status, u.lastLogin
+    ]);
+    const title = 'User Management Matrix Directory';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Administration Matrix' });
+  }
+
+  exportAcademicSessionsList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['Session ID', 'Academic Year', 'Start Date', 'End Date', 'Is Active', 'Status'];
+    const rows = this.sessions.map(s => [
+      s.id, s.yearName, s.startDate, s.endDate, s.isCurrent ? 'YES (Current)' : 'NO', s.status
+    ]);
+    const title = 'Academic Year Cycle Master Register';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Academic Operations' });
+  }
+
+  exportHolidaysList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['ID', 'Holiday Name', 'Category', 'Start Date', 'End Date', 'Duration (Days)', 'Applicable To', 'Publication Status'];
+    const rows = this.holidays.map(h => [
+      h.id, h.name, h.type, h.startDate, h.endDate, `${h.durationDays} Days`, h.applicableTo, h.status
+    ]);
+    const title = 'Institutional Master Holiday Calendar';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Academic Calendar' });
+  }
+
+  exportBaseLookupsList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['ID', 'Lookup Category', 'Code Name', 'Description', 'Status'];
+    const rows = this.baseLookups.map(b => [
+      b.id, b.category, b.codeName, b.description, b.status
+    ]);
+    const title = 'Environmental Setup & Master Lookups';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Base Setup' });
+  }
+
+  exportRolesList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['Role ID', 'Role Name', 'User Count', 'Description', 'Module Permissions Summary'];
+    const rows = this.roles.map(r => [
+      r.id, r.roleName, r.usersCount, r.description, 'Students, Academics, Finance, System'
+    ]);
+    const title = 'Role Jurisdiction & Security Matrix';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Security & Access Control' });
+  }
+
+  exportApiTokensList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['Token ID', 'Integration Name', 'Key Prefix', 'Scopes', 'Rate Limit', 'Created Date', 'Expiry Date', 'Status'];
+    const rows = this.apiTokens.map(t => [
+      t.id, t.name, t.keyPrefix, t.scopes.join(', '), t.rateLimit, t.createdDate, t.expiryDate, t.status
+    ]);
+    const title = 'API Access Nexus & Client Tokens Registry';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'API Security' });
+  }
+
+  exportCustomFieldsList(format: 'csv' | 'excel' | 'pdf' | 'print'): void {
+    const headers = ['Field ID', 'Module Target', 'Field Label', 'Field Type', 'Required', 'Public Portal', 'Status'];
+    const rows = this.customFields.map(f => [
+      f.id, f.moduleTarget, f.fieldLabel, f.fieldType, f.isRequired ? 'YES' : 'NO', f.showOnPublicPortal ? 'YES' : 'NO', f.status
+    ]);
+    const title = 'Custom Fields Schema Directory';
+
+    if (format === 'csv') this.exportReportService.exportToCsv(title, headers, rows);
+    else if (format === 'excel') this.exportReportService.exportToExcel(title, headers, rows);
+    else this.exportReportService.printOrPdf(title, headers, rows, { category: 'Custom Data Architecture' });
   }
 }
