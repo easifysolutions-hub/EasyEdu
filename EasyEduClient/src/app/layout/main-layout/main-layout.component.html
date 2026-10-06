@@ -48,7 +48,7 @@
     <!-- 2. ADMINISTRATION -->
     <div class="menu-category">ADMINISTRATION</div>
     <div class="nav-item-wrapper" id="adminSectionMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['adminSection']" (click)="toggleMenu('adminSection')">
+      <a class="nav-link-premium" [class.open]="openMenus['adminSection']" [class.active]="openMenus['adminSection'] || isMenuParentActive('adminSection')" (click)="toggleMenu('adminSection')">
         <span><i class="fas fa-shield-halved main-icon"></i> <span class="sidebar-label">Admin Section</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['adminSection']"></i>
       </a>
@@ -69,7 +69,7 @@
 
     <!-- Utilities -->
     <div class="nav-item-wrapper" id="utilitiesModule">
-      <a class="nav-link-premium" [class.open]="openMenus['utilities']" (click)="toggleMenu('utilities')">
+      <a class="nav-link-premium" [class.open]="openMenus['utilities']" [class.active]="openMenus['utilities'] || isMenuParentActive('utilities')" (click)="toggleMenu('utilities')">
         <span><i class="fas fa-tools main-icon"></i> <span class="sidebar-label">Utilities</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['utilities']"></i>
       </a>
@@ -85,7 +85,7 @@
 
     <!-- Communicate -->
     <div class="nav-item-wrapper" id="communicateModule">
-      <a class="nav-link-premium" [class.open]="openMenus['communicate']" (click)="toggleMenu('communicate')">
+      <a class="nav-link-premium" [class.open]="openMenus['communicate']" [class.active]="openMenus['communicate'] || isMenuParentActive('communicate')" (click)="toggleMenu('communicate')">
         <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Communicate</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['communicate']"></i>
       </a>
@@ -103,7 +103,7 @@
     <!-- 3. ACADEMICS -->
     <div class="menu-category">ACADEMICS</div>
     <div class="nav-item-wrapper" id="academicsMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['academic']" (click)="toggleMenu('academic')">
+      <a class="nav-link-premium" [class.open]="openMenus['academic']" [class.active]="openMenus['academic'] || isMenuParentActive('academic')" (click)="toggleMenu('academic')">
         <span><i class="fas fa-graduation-cap main-icon"></i> <span class="sidebar-label">Academics</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['academic']"></i>
       </a>
@@ -121,7 +121,7 @@
 
     <!-- Lesson Plan -->
     <div class="nav-item-wrapper" id="lessonPlanMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['lessonPlan']" (click)="toggleMenu('lessonPlan')">
+      <a class="nav-link-premium" [class.open]="openMenus['lessonPlan']" [class.active]="openMenus['lessonPlan'] || isMenuParentActive('lessonPlan')" (click)="toggleMenu('lessonPlan')">
         <span><i class="fas fa-chalkboard-teacher main-icon"></i> <span class="sidebar-label">Lesson Plan</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['lessonPlan']"></i>
       </a>
@@ -136,7 +136,7 @@
 
     <!-- Homework -->
     <div class="nav-item-wrapper" id="homeworkMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['homework']" (click)="toggleMenu('homework')">
+      <a class="nav-link-premium" [class.open]="openMenus['homework']" [class.active]="openMenus['homework'] || isMenuParentActive('homework')" (click)="toggleMenu('homework')">
         <span><i class="fas fa-pen-fancy main-icon"></i> <span class="sidebar-label">Homework</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['homework']"></i>
       </a>
@@ -149,7 +149,7 @@
 
     <!-- Examinations -->
     <div class="nav-item-wrapper" id="examSuiteMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['exams']" (click)="toggleMenu('exams')">
+      <a class="nav-link-premium" [class.open]="openMenus['exams']" [class.active]="openMenus['exams'] || isMenuParentActive('exams')" (click)="toggleMenu('exams')">
         <span><i class="fas fa-file-signature main-icon"></i> <span class="sidebar-label">Examination</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['exams']"></i>
       </a>
@@ -172,7 +172,7 @@
 
     <!-- Online Exam -->
     <div class="nav-item-wrapper" id="onlineExamMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['onlineExam']" (click)="toggleMenu('onlineExam')">
+      <a class="nav-link-premium" [class.open]="openMenus['onlineExam']" [class.active]="openMenus['onlineExam'] || isMenuParentActive('onlineExam')" (click)="toggleMenu('onlineExam')">
         <span><i class="fas fa-laptop-code main-icon"></i> <span class="sidebar-label">Online Exam</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['onlineExam']"></i>
       </a>
@@ -185,7 +185,7 @@
 
     <!-- Teacher Evaluation -->
     <div class="nav-item-wrapper" id="evaluationMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['teacherEvaluation']" (click)="toggleMenu('teacherEvaluation')">
+      <a class="nav-link-premium" [class.open]="openMenus['teacherEvaluation']" [class.active]="openMenus['teacherEvaluation'] || isMenuParentActive('teacherEvaluation')" (click)="toggleMenu('teacherEvaluation')">
         <span><i class="fas fa-star-half-stroke main-icon"></i> <span class="sidebar-label">Teacher Evaluation</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['teacherEvaluation']"></i>
       </a>
@@ -200,7 +200,7 @@
     <!-- 4. STUDENT MANAGEMENT -->
     <div class="menu-category">STUDENT MANAGEMENT</div>
     <div class="nav-item-wrapper" id="studentMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['students']" (click)="toggleMenu('students')">
+      <a class="nav-link-premium" [class.open]="openMenus['students']" [class.active]="openMenus['students'] || isMenuParentActive('students')" (click)="toggleMenu('students')">
         <span><i class="fas fa-user-graduate main-icon"></i> <span class="sidebar-label">Student Info</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['students']"></i>
       </a>
@@ -224,7 +224,7 @@
 
     <!-- Behaviour Records -->
     <div class="nav-item-wrapper" id="behaviourMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['behaviour']" (click)="toggleMenu('behaviour')">
+      <a class="nav-link-premium" [class.open]="openMenus['behaviour']" [class.active]="openMenus['behaviour'] || isMenuParentActive('behaviour')" (click)="toggleMenu('behaviour')">
         <span><i class="fas fa-hand-sparkles main-icon"></i> <span class="sidebar-label">Behaviour Records</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['behaviour']"></i>
       </a>
@@ -242,7 +242,7 @@
     <!-- 5. HUMAN RESOURCE -->
     <div class="menu-category">HUMAN RESOURCE</div>
     <div class="nav-item-wrapper" id="hrSubMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['hr']" (click)="toggleMenu('hr')">
+      <a class="nav-link-premium" [class.open]="openMenus['hr']" [class.active]="openMenus['hr'] || isMenuParentActive('hr')" (click)="toggleMenu('hr')">
         <span><i class="fas fa-users-gear main-icon"></i> <span class="sidebar-label">Human Resource</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['hr']"></i>
       </a>
@@ -275,7 +275,7 @@
     <!-- 6. FINANCE & ACCOUNTS -->
     <div class="menu-category">FINANCE & ACCOUNTS</div>
     <div class="nav-item-wrapper" id="feesMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['fees']" (click)="toggleMenu('fees')">
+      <a class="nav-link-premium" [class.open]="openMenus['fees']" [class.active]="openMenus['fees'] || isMenuParentActive('fees')" (click)="toggleMenu('fees')">
         <span><i class="fas fa-file-invoice-dollar main-icon"></i> <span class="sidebar-label">Fees Received</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['fees']"></i>
       </a>
@@ -293,7 +293,7 @@
 
     <!-- Accounts Master & Vouchers -->
     <div class="nav-item-wrapper" id="accountsMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['accounts']" (click)="toggleMenu('accounts')">
+      <a class="nav-link-premium" [class.open]="openMenus['accounts']" [class.active]="openMenus['accounts'] || isMenuParentActive('accounts')" (click)="toggleMenu('accounts')">
         <span><i class="fas fa-wallet main-icon"></i> <span class="sidebar-label">Accounts</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['accounts']"></i>
       </a>
@@ -340,7 +340,7 @@
     <!-- 7. OPERATIONS, TRANSPORT, LIBRARY -->
     <div class="menu-category">OPERATIONS & LOGISTICS</div>
     <div class="nav-item-wrapper" id="transportMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['transport']" (click)="toggleMenu('transport')">
+      <a class="nav-link-premium" [class.open]="openMenus['transport']" [class.active]="openMenus['transport'] || isMenuParentActive('transport')" (click)="toggleMenu('transport')">
         <span><i class="fas fa-bus main-icon"></i> <span class="sidebar-label">Transport</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['transport']"></i>
       </a>
@@ -354,7 +354,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="libraryMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['library']" (click)="toggleMenu('library')">
+      <a class="nav-link-premium" [class.open]="openMenus['library']" [class.active]="openMenus['library'] || isMenuParentActive('library')" (click)="toggleMenu('library')">
         <span><i class="fas fa-book-reader main-icon"></i> <span class="sidebar-label">Library</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['library']"></i>
       </a>
@@ -370,7 +370,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="inventoryMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['inventory']" (click)="toggleMenu('inventory')">
+      <a class="nav-link-premium" [class.open]="openMenus['inventory']" [class.active]="openMenus['inventory'] || isMenuParentActive('inventory')" (click)="toggleMenu('inventory')">
         <span><i class="fas fa-boxes-stacked main-icon"></i> <span class="sidebar-label">Inventory & Store</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['inventory']"></i>
       </a>
@@ -386,7 +386,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="dormitoryMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['dormitory']" (click)="toggleMenu('dormitory')">
+      <a class="nav-link-premium" [class.open]="openMenus['dormitory']" [class.active]="openMenus['dormitory'] || isMenuParentActive('dormitory')" (click)="toggleMenu('dormitory')">
         <span><i class="fas fa-hotel main-icon"></i> <span class="sidebar-label">Dormitory & Hostel</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dormitory']"></i>
       </a>
@@ -399,7 +399,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="certificatesMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['certificates']" (click)="toggleMenu('certificates')">
+      <a class="nav-link-premium" [class.open]="openMenus['certificates']" [class.active]="openMenus['certificates'] || isMenuParentActive('certificates')" (click)="toggleMenu('certificates')">
         <span><i class="fas fa-certificate main-icon"></i> <span class="sidebar-label">Certificates & Badges</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['certificates']"></i>
       </a>
@@ -416,7 +416,7 @@
 
     <!-- Virtual Classrooms -->
     <div class="nav-item-wrapper" id="virtualClassMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['virtualClass']" (click)="toggleMenu('virtualClass')">
+      <a class="nav-link-premium" [class.open]="openMenus['virtualClass']" [class.active]="openMenus['virtualClass'] || isMenuParentActive('virtualClass')" (click)="toggleMenu('virtualClass')">
         <span><i class="fas fa-video main-icon"></i> <span class="sidebar-label">Virtual Classrooms</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['virtualClass']"></i>
       </a>
@@ -464,7 +464,7 @@
 
     <!-- Smart Attendance -->
     <div class="nav-item-wrapper" id="smartAttendanceMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['smartAttendanceMenu']" (click)="toggleMenu('smartAttendanceMenu')">
+      <a class="nav-link-premium" [class.open]="openMenus['smartAttendanceMenu']" [class.active]="openMenus['smartAttendanceMenu'] || isMenuParentActive('smartAttendanceMenu')" (click)="toggleMenu('smartAttendanceMenu')">
         <span><i class="fas fa-fingerprint main-icon"></i> <span class="sidebar-label">Smart Attendance</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['smartAttendanceMenu']"></i>
       </a>
@@ -486,7 +486,7 @@
 
     <!-- Advanced Academics -->
     <div class="nav-item-wrapper" id="advancedAcademicMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['advancedAcademicMenu']" (click)="toggleMenu('advancedAcademicMenu')">
+      <a class="nav-link-premium" [class.open]="openMenus['advancedAcademicMenu']" [class.active]="openMenus['advancedAcademicMenu'] || isMenuParentActive('advancedAcademicMenu')" (click)="toggleMenu('advancedAcademicMenu')">
         <span><i class="fas fa-brain main-icon"></i> <span class="sidebar-label">Advanced Academics</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['advancedAcademicMenu']"></i>
       </a>
@@ -539,7 +539,7 @@
 
     <!-- Growth & Comms -->
     <div class="nav-item-wrapper" id="commSubMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['commSubMenu']" (click)="toggleMenu('commSubMenu')">
+      <a class="nav-link-premium" [class.open]="openMenus['commSubMenu']" [class.active]="openMenus['commSubMenu'] || isMenuParentActive('commSubMenu')" (click)="toggleMenu('commSubMenu')">
         <span><i class="fas fa-bullhorn main-icon"></i> <span class="sidebar-label">Growth & Comms</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['commSubMenu']"></i>
       </a>
@@ -565,7 +565,7 @@
     <!-- 8. DATA & CMS -->
     <div class="menu-category">DATA & CMS</div>
     <div class="nav-item-wrapper" id="downloadCenterMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['downloadCenter']" (click)="toggleMenu('downloadCenter')">
+      <a class="nav-link-premium" [class.open]="openMenus['downloadCenter']" [class.active]="openMenus['downloadCenter'] || isMenuParentActive('downloadCenter')" (click)="toggleMenu('downloadCenter')">
         <span><i class="fas fa-download main-icon"></i> <span class="sidebar-label">Download Center</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['downloadCenter']"></i>
       </a>
@@ -579,7 +579,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="dataManagementMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['dataManagement']" (click)="toggleMenu('dataManagement')">
+      <a class="nav-link-premium" [class.open]="openMenus['dataManagement']" [class.active]="openMenus['dataManagement'] || isMenuParentActive('dataManagement')" (click)="toggleMenu('dataManagement')">
         <span><i class="fas fa-database main-icon"></i> <span class="sidebar-label">Data Management</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['dataManagement']"></i>
       </a>
@@ -593,7 +593,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="frontendCmsMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['frontendCms']" (click)="toggleMenu('frontendCms')">
+      <a class="nav-link-premium" [class.open]="openMenus['frontendCms']" [class.active]="openMenus['frontendCms'] || isMenuParentActive('frontendCms')" (click)="toggleMenu('frontendCms')">
         <span><i class="fas fa-desktop main-icon"></i> <span class="sidebar-label">Frontend CMS</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['frontendCms']"></i>
       </a>
@@ -611,7 +611,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="styleArchitectMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['styleArchitect']" (click)="toggleMenu('styleArchitect')">
+      <a class="nav-link-premium" [class.open]="openMenus['styleArchitect']" [class.active]="openMenus['styleArchitect'] || isMenuParentActive('styleArchitect')" (click)="toggleMenu('styleArchitect')">
         <span><i class="fas fa-palette main-icon"></i> <span class="sidebar-label">Style Architect</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['styleArchitect']"></i>
       </a>
@@ -624,7 +624,7 @@
     <!-- 9. REPORTS -->
     <div class="menu-category">REPORTS</div>
     <div class="nav-item-wrapper" id="reportsMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['reports']" (click)="toggleMenu('reports')">
+      <a class="nav-link-premium" [class.open]="openMenus['reports']" [class.active]="openMenus['reports'] || isMenuParentActive('reports')" (click)="toggleMenu('reports')">
         <span><i class="fas fa-chart-pie main-icon"></i> <span class="sidebar-label">Reports</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['reports']"></i>
       </a>
@@ -653,7 +653,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="examReportsMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['examReports']" (click)="toggleMenu('examReports')">
+      <a class="nav-link-premium" [class.open]="openMenus['examReports']" [class.active]="openMenus['examReports'] || isMenuParentActive('examReports')" (click)="toggleMenu('examReports')">
         <span><i class="fas fa-file-chart-column main-icon"></i> <span class="sidebar-label">Exam Reports</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['examReports']"></i>
       </a>
@@ -673,7 +673,7 @@
     <!-- 10. SYSTEM SETTINGS -->
     <div class="menu-category">SYSTEM SETTINGS</div>
     <div class="nav-item-wrapper" id="systemSettingsMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['systemSettings']" (click)="toggleMenu('systemSettings')">
+      <a class="nav-link-premium" [class.open]="openMenus['systemSettings']" [class.active]="openMenus['systemSettings'] || isMenuParentActive('systemSettings')" (click)="toggleMenu('systemSettings')">
         <span><i class="fas fa-sliders main-icon"></i> <span class="sidebar-label">System Settings</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['systemSettings']"></i>
       </a>
@@ -694,7 +694,7 @@
     </div>
 
     <div class="nav-item-wrapper" id="moduleManagerMenu">
-      <a class="nav-link-premium" [class.open]="openMenus['moduleManager']" (click)="toggleMenu('moduleManager')">
+      <a class="nav-link-premium" [class.open]="openMenus['moduleManager']" [class.active]="openMenus['moduleManager'] || isMenuParentActive('moduleManager')" (click)="toggleMenu('moduleManager')">
         <span><i class="fas fa-cubes main-icon"></i> <span class="sidebar-label">Module Manager</span></span>
         <i class="fas fa-chevron-right arrow-icon" [class.rotated]="openMenus['moduleManager']"></i>
       </a>

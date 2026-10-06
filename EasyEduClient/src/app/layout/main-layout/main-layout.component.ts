@@ -97,45 +97,94 @@ export class MainLayoutComponent implements OnInit {
     }
   }
 
-  private syncActiveMenuByUrl(): void {
+  isMenuParentActive(menuKey: string): boolean {
     const url = this.router.url.toLowerCase();
-    this.closeAllMainMenus();
+    switch (menuKey) {
+      case 'adminSection':
+        return (url.startsWith('/administration') && !url.startsWith('/administration/users') && !url.startsWith('/administration/updates')) || url.startsWith('/adminsection');
+      case 'utilities':
+        return url.startsWith('/utilities') || url.startsWith('/chat');
+      case 'communicate':
+        return url.startsWith('/communicate');
+      case 'academic':
+        return url.startsWith('/classes') || url.startsWith('/section') || url.startsWith('/subjects') ||
+               url.startsWith('/assignclassteacher') || url.startsWith('/assignsubject') ||
+               url.startsWith('/classroom') || (url.startsWith('/classroutine') && !url.startsWith('/reports/classroutine')) ||
+               url.startsWith('/optionalsubject') || url.startsWith('/academics');
+      case 'lessonPlan':
+        return url.startsWith('/lessonplan');
+      case 'homework':
+        return url.startsWith('/homework') && !url.startsWith('/reports/homework');
+      case 'exams':
+        return url.startsWith('/examinations') || url.startsWith('/examsettings');
+      case 'onlineExam':
+        return url.startsWith('/onlineexam') && !this.isMenuParentActive('advancedAcademicMenu');
+      case 'teacherEvaluation':
+        return url.startsWith('/teacherevaluation');
+      case 'students':
+        return url.startsWith('/studentcategory') ||
+               (url.startsWith('/students') && !url.startsWith('/reports/student')) ||
+               (url.startsWith('/attendance') && !url.startsWith('/attendance/subjectwiseattendance'));
+      case 'behaviour':
+        return (url.startsWith('/behaviourrecords') || url.startsWith('/behaviour')) && !url.startsWith('/reports');
+      case 'hr':
+        return url.startsWith('/humanresource') || url.startsWith('/leave') || (url.startsWith('/staff') && !url.startsWith('/reports/staff'));
+      case 'fees':
+        return url.startsWith('/finance') || (url.startsWith('/fees') && !url.startsWith('/reports/fees'));
+      case 'accounts':
+        return url.startsWith('/accounting') || (url.startsWith('/accounts') && !url.startsWith('/reports'));
+      case 'transport':
+        return url.startsWith('/transport') && !url.startsWith('/reports/studenttransport');
+      case 'library':
+        return url.startsWith('/library');
+      case 'inventory':
+        return url.startsWith('/inventory');
+      case 'dormitory':
+        return url.startsWith('/dormitory') && !url.startsWith('/reports/studentdormitory');
+      case 'certificates':
+        return url.startsWith('/certificates');
+      case 'virtualClass':
+        return url.startsWith('/zoom') || url.startsWith('/gmeet') || url.startsWith('/jitsi') ||
+               url.startsWith('/bigbluebutton') || url.startsWith('/virtual') || url.startsWith('/inapplive');
+      case 'smartAttendanceMenu':
+        return url.startsWith('/biometrics') || url.startsWith('/qrattendance') || url.startsWith('/smartattendance');
+      case 'advancedAcademicMenu':
+        return url.startsWith('/cbseexam') || url.startsWith('/cbse') || url.startsWith('/lms') ||
+               (url.startsWith('/onlineexam') && (url.includes('onlineexam') || url.includes('addonlineexam') || url.includes('question')));
+      case 'commSubMenu':
+        return url.startsWith('/registrationaddon') || url.startsWith('/whatsapp');
+      case 'downloadCenter':
+        return url.startsWith('/downloadcenter');
+      case 'dataManagement':
+        return url.startsWith('/importexport') || url.startsWith('/datamanagement');
+      case 'frontendCms':
+        return url.startsWith('/frontsettings') || url.startsWith('/frontendcms') || url.startsWith('/frontend-cms');
+      case 'styleArchitect':
+        return url.startsWith('/style');
+      case 'reports':
+        return url.startsWith('/reports');
+      case 'examReports':
+        return url.startsWith('/examreports');
+      case 'systemSettings':
+        return url.startsWith('/settings') || url.startsWith('/generalsettings') ||
+               url.startsWith('/rolepermission') || url.startsWith('/customfields') ||
+               url.startsWith('/systemsettings') || url.startsWith('/system') ||
+               url.startsWith('/administration/users') || url.startsWith('/administration/updates');
+      case 'moduleManager':
+        return url.startsWith('/system/modulemanager');
+      default:
+        return false;
+    }
+  }
 
-    if (url.includes('zoom')) { this.openMenus['virtualClass'] = true; this.openMenus['zoomSub'] = true; }
-    else if (url.includes('gmeet')) { this.openMenus['virtualClass'] = true; this.openMenus['gmeetSub'] = true; }
-    else if (url.includes('jitsi')) { this.openMenus['virtualClass'] = true; this.openMenus['jitsiSub'] = true; }
-    else if (url.includes('bigbluebutton') || url.includes('bbb')) { this.openMenus['virtualClass'] = true; this.openMenus['bbbSub'] = true; }
-    else if (url.includes('virtual') || url.includes('inapplive')) { this.openMenus['virtualClass'] = true; }
-    else if (url.includes('biometric')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['bioSub'] = true; }
-    else if (url.includes('qrattendance') || url.includes('qr')) { this.openMenus['smartAttendanceMenu'] = true; this.openMenus['qrSub'] = true; }
-    else if (url.includes('smartattendance')) { this.openMenus['smartAttendanceMenu'] = true; }
-    else if (url.includes('cbse')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['cbseSub'] = true; }
-    else if (url.includes('lms')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['lmsSub'] = true; }
-    else if (url.includes('onlineexam')) { this.openMenus['advancedAcademicMenu'] = true; this.openMenus['onlineExamSub'] = true; }
-    else if (url.includes('registrationaddon')) { this.openMenus['commSubMenu'] = true; this.openMenus['regSub'] = true; }
-    else if (url.includes('whatsapp')) { this.openMenus['commSubMenu'] = true; this.openMenus['whatsAppSub'] = true; }
-    else if (url.includes('transport')) this.openMenus['transport'] = true;
-    else if (url.includes('library')) this.openMenus['library'] = true;
-    else if (url.includes('inventory')) this.openMenus['inventory'] = true;
-    else if (url.includes('accounting') || url.includes('accounts')) this.openMenus['accounts'] = true;
-    else if (url.includes('finance') || url.includes('fees')) this.openMenus['fees'] = true;
-    else if (url.includes('humanresource') || url.includes('staff') || url.includes('leave')) this.openMenus['hr'] = true;
-    else if (url.includes('students') || url.includes('student') || url.includes('attendance')) this.openMenus['students'] = true;
-    else if (url.includes('behaviour')) this.openMenus['behaviour'] = true;
-    else if (url.includes('classes') || url.includes('section') || url.includes('subjects') || url.includes('academic')) this.openMenus['academic'] = true;
-    else if (url.includes('lessonplan')) this.openMenus['lessonPlan'] = true;
-    else if (url.includes('homework')) this.openMenus['homework'] = true;
-    else if (url.includes('examination') || url.includes('examsettings')) this.openMenus['exams'] = true;
-    else if (url.includes('teacherevaluation')) this.openMenus['teacherEvaluation'] = true;
-    else if (url.includes('dormitory')) this.openMenus['dormitory'] = true;
-    else if (url.includes('certificates')) this.openMenus['certificates'] = true;
-    else if (url.includes('download')) this.openMenus['downloadCenter'] = true;
-    else if (url.includes('importexport') || url.includes('datamanagement')) this.openMenus['dataManagement'] = true;
-    else if (url.includes('frontsettings') || url.includes('frontend-cms') || url.includes('frontendcms')) this.openMenus['frontendCms'] = true;
-    else if (url.includes('stylearchitect')) this.openMenus['styleArchitect'] = true;
-    else if (url.includes('examreport') || url.includes('examreports')) this.openMenus['examReports'] = true;
-    else if (url.includes('report') || url.includes('reports')) this.openMenus['reports'] = true;
-    else if (url.includes('setting') || url.includes('role') || url.includes('customfields') || url.includes('systemsettings') || url.includes('generalsettings')) this.openMenus['systemSettings'] = true;
+  private syncActiveMenuByUrl(): void {
+    this.closeAllMainMenus();
+    for (const key of Object.keys(this.openMenus)) {
+      if (this.isMenuParentActive(key)) {
+        this.openMenus[key] = true;
+        break;
+      }
+    }
   }
 
   expandMenuByFragment(fragment: string): void {
