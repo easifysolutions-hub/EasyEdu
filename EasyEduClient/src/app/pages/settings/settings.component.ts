@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
+import { CurrencyService, CurrencyConfig, AVAILABLE_CURRENCIES } from '../../core/services/currency.service';
 
 declare const Swal: any;
 
@@ -104,6 +105,7 @@ export interface RolePermissionItem {
 })
 export class SettingsComponent implements OnInit {
   themeService = inject(ThemeService);
+  currencyService = inject(CurrencyService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -124,23 +126,9 @@ export class SettingsComponent implements OnInit {
   };
 
   // Currencies list with Indian Rupee (INR) as the default standard
-  currencies = [
-    { code: 'INR', symbol: '₹', name: 'Indian Rupee', label: 'INR (₹) - Indian Rupee (Default)' },
-    { code: 'USD', symbol: '$', name: 'US Dollar', label: 'USD ($) - United States Dollar' },
-    { code: 'EUR', symbol: '€', name: 'Euro', label: 'EUR (€) - European Union Euro' },
-    { code: 'GBP', symbol: '£', name: 'British Pound', label: 'GBP (£) - British Pound Sterling' },
-    { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', label: 'AED (د.إ) - UAE Dirham' },
-    { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal', label: 'SAR (﷼) - Saudi Arabian Riyal' },
-    { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', label: 'CAD (C$) - Canadian Dollar' },
-    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', label: 'AUD (A$) - Australian Dollar' },
-    { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', label: 'SGD (S$) - Singapore Dollar' },
-    { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', label: 'BDT (৳) - Bangladeshi Taka' },
-    { code: 'NPR', symbol: 'रू', name: 'Nepalese Rupee', label: 'NPR (रू) - Nepalese Rupee' },
-    { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', label: 'LKR (Rs) - Sri Lankan Rupee' },
-    { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit', label: 'MYR (RM) - Malaysian Ringgit' },
-    { code: 'QAR', symbol: 'QR', name: 'Qatari Riyal', label: 'QAR (QR) - Qatari Riyal' },
-    { code: 'KWD', symbol: 'KD', name: 'Kuwaiti Dinar', label: 'KWD (KD) - Kuwaiti Dinar' }
-  ];
+  currencies: CurrencyConfig[] = AVAILABLE_CURRENCIES;
+  selectedCurrency: CurrencyConfig = { ...this.currencyService.activeCurrency() };
+  customPreviewAmount: number = 75000;
 
   // 2. Institutional Identity (General Settings)
   profile = {
@@ -152,7 +140,7 @@ export class SettingsComponent implements OnInit {
     tollFree: '1800 200 4488',
     website: 'https://easyedu.easifysolutions.com',
     address: '#42, Campus Green Valley, Main Tech Park Road, Bengaluru, Karnataka - 560001',
-    currency: 'INR (₹)',
+    currency: 'INR (₹) - Indian Rupee (Default)',
     dateFormat: 'DD/MM/YYYY',
     timeZone: 'Asia/Kolkata (IST +5:30)',
     headerNote: 'Excellence in Education • Character • Scientific Inquiry',
@@ -356,11 +344,80 @@ export class SettingsComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  saveIdentity(): void {
+  // Currency Selection & Real-Time Formatting Methods
+  selectQuickCurrency(curr: CurrencyConfig): void {
+    this.selectedCurrency = { ...curr };
+    this.profile.currency = curr.label;
+    this.currencyService.setCurrency(this.selectedCurrency);
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+      icon: 'success',
+      title: `${curr.flag} Currency set to ${curr.name} (${curr.symbol})`
+    });
+  }
+
+  onCurrencySelectChange(): void {
+    const found = this.currencies.find(c => c.label === this.profile.currency || c.code === this.profile.currency);
+    if (found) {
+      this.selectedCurrency = {
+        ...found,
+        position: this.selectedCurrency.position,
+        decimals: this.selectedCurrency.decimals,
+        numberSystem: this.selectedCurrency.numberSystem
+      };
+      this.currencyService.setCurrency(this.selectedCurrency);
+    }
+  }
+
+  updateCurrencyPosition(pos: 'prefix' | 'suffix'): void {
+    this.selectedCurrency.position = pos;
+    this.currencyService.setCurrency(this.selectedCurrency);
+  }
+
+  updateNumberSystem(sys: 'indian' | 'international'): void {
+    this.selectedCurrency.numberSystem = sys;
+    this.currencyService.setCurrency(this.selectedCurrency);
+  }
+
+  updateDecimals(dec: number): void {
+    this.selectedCurrency.decimals = dec;
+    this.currencyService.setCurrency(this.selectedCurrency);
+  }
+
+  formatPreview(amount: number): string {
+    return this.currencyService.format(amount);
+  }
+
+  saveCurrencySettings(): void {
+    this.currencyService.setCurrency(this.selectedCurrency);
+    this.profile.currency = this.selectedCurrency.label;
     localStorage.setItem('easyedu_settings_profile', JSON.stringify(this.profile));
     Swal.fire({
+      title: 'Currency Standard Updated',
+      html: `
+        <div class="text-center p-2">
+          <h4 class="fw-bold text-success mb-2">${this.selectedCurrency.flag} ${this.selectedCurrency.name} (${this.selectedCurrency.symbol})</h4>
+          <p class="text-muted small mb-3">All fee invoices, receipts, payroll vouchers, and ledgers are now active in <strong>${this.selectedCurrency.code}</strong>.</p>
+          <div class="p-3 bg-light rounded-12 border d-inline-block">
+            <span class="small text-muted">Preview Sample:</span>
+            <div class="fw-bold text-dark fs-5">${this.formatPreview(125000)}</div>
+          </div>
+        </div>
+      `,
+      icon: 'success',
+      confirmButtonColor: '#002B49'
+    });
+  }
+
+  saveIdentity(): void {
+    localStorage.setItem('easyedu_settings_profile', JSON.stringify(this.profile));
+    this.currencyService.setCurrency(this.selectedCurrency);
+    Swal.fire({
       title: 'Institutional Profile Updated',
-      text: `Institutional settings saved. Primary currency set to: ${this.profile.currency}`,
+      text: `Institutional settings saved. Primary currency set to: ${this.selectedCurrency.label}`,
       icon: 'success',
       confirmButtonColor: '#002B49'
     });

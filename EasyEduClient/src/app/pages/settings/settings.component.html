@@ -124,6 +124,18 @@
               </div>
             </div>
             <div class="col-md-6">
+              <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('profile')">
+                <div class="p-3 bg-success bg-opacity-10 text-success rounded-12"><i class="fas fa-indian-rupee-sign fa-lg"></i></div>
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-1 text-dark">Currency Standards</h6>
+                    <span class="badge bg-success bg-opacity-10 text-success small">{{ selectedCurrency.flag }} {{ selectedCurrency.code }}</span>
+                  </div>
+                  <p class="small text-muted mb-0">Default: Indian Rupee (INR - ₹). Prefix/Suffix and Lakhs format.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
               <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('academicYear')">
                 <div class="p-3 bg-success bg-opacity-10 text-success rounded-12"><i class="fas fa-calendar-days fa-lg"></i></div>
                 <div>
@@ -150,6 +162,15 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="settings-shortcut-card rounded-16 p-3 d-flex align-items-start gap-3" (click)="setTab('users')">
+                <div class="p-3 bg-purple bg-opacity-10 text-primary rounded-12" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed !important;"><i class="fas fa-users-gear fa-lg"></i></div>
+                <div>
+                  <h6 class="fw-bold mb-1 text-dark">User Matrix</h6>
+                  <p class="small text-muted mb-0">Staff credentials, active sessions, and 2FA authentication.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -168,6 +189,10 @@
               <strong>v4.2.0 (Release)</strong>
             </li>
             <li class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted">Active Currency:</span>
+              <strong class="text-success">{{ currencyService.activeCurrency().flag }} {{ currencyService.activeCurrency().code }} ({{ currencyService.activeCurrency().symbol }})</strong>
+            </li>
+            <li class="d-flex justify-content-between py-2 border-bottom">
               <span class="text-muted">API Framework:</span>
               <strong>.NET 8.0 Minimal APIs</strong>
             </li>
@@ -181,8 +206,227 @@
     </div>
   </div>
 
-  <!-- TAB 2: INSTITUTIONAL IDENTITY (/GeneralSettings) -->
+  <!-- TAB 2: INSTITUTIONAL IDENTITY & CURRENCY STANDARDS (/GeneralSettings) -->
   <div *ngIf="activeTab === 'profile'" class="animate-fade-in">
+    <!-- SECTION 1: CURRENCY & MONETARY STANDARDS CONFIGURATOR -->
+    <div class="card border-0 shadow-sm rounded-16 p-4 bg-white mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <div>
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-bold text-dark mb-0">
+              <i class="fas fa-coins text-warning me-2"></i>System Currency & Monetary Standards
+            </h5>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-pill fw-bold">
+              Active: {{ selectedCurrency.flag }} {{ selectedCurrency.name }} ({{ selectedCurrency.symbol }})
+            </span>
+          </div>
+          <p class="text-muted small mb-0 mt-1">
+            Configure how fees, student invoices, payroll disbursement, ledger balances, and receipts are rendered across EasyEdu. Default standard is <strong>Indian Rupee (INR - ₹)</strong>.
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="selectQuickCurrency(currencies[0])">
+            <i class="fas fa-rotate-left me-1"></i> Reset to INR (₹) Default
+          </button>
+          <button class="btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm" (click)="saveCurrencySettings()">
+            <i class="fas fa-check-double me-1"></i> Save Currency Standard
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Select Country Chips Grid -->
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-muted text-uppercase mb-2">
+          <i class="fas fa-globe me-1 text-primary"></i> Quick Presets (Click to Select)
+        </label>
+        <div class="currency-preset-grid">
+          <div
+            *ngFor="let curr of currencies"
+            class="currency-chip"
+            [class.active]="selectedCurrency.code === curr.code"
+            (click)="selectQuickCurrency(curr)"
+          >
+            <span class="flag-emoji">{{ curr.flag }}</span>
+            <div class="overflow-hidden">
+              <div class="curr-code text-truncate">{{ curr.code }}</div>
+              <div class="curr-symbol">{{ curr.symbol }} &bull; {{ curr.name }}</div>
+            </div>
+            <div *ngIf="selectedCurrency.code === curr.code" class="active-check">
+              <i class="fas fa-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monetary Formatting Options & Live Interactive Preview Grid -->
+      <div class="row g-4">
+        <!-- Controls Column -->
+        <div class="col-lg-6">
+          <div class="p-3 bg-light rounded-16 border h-100">
+            <h6 class="fw-bold text-dark mb-3"><i class="fas fa-sliders text-primary me-2"></i> Formatting & Syntax Preferences</h6>
+            
+            <!-- Currency Dropdown Selector -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Primary Currency Standard</label>
+              <select
+                class="form-select modern-select"
+                [(ngModel)]="profile.currency"
+                (change)="onCurrencySelectChange()"
+                style="border-radius: 10px; font-weight: 600;"
+              >
+                <option *ngFor="let curr of currencies" [value]="curr.label">
+                  {{ curr.flag }} {{ curr.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Position Control -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold d-block mb-2">Symbol Placement</label>
+              <div class="btn-group w-100 modern-btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.position === 'prefix'"
+                  (click)="updateCurrencyPosition('prefix')"
+                >
+                  <i class="fas fa-arrow-left me-1"></i> Prefix ({{ selectedCurrency.symbol }} 1,500)
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.position === 'suffix'"
+                  (click)="updateCurrencyPosition('suffix')"
+                >
+                  Suffix (1,500 {{ selectedCurrency.symbol }}) <i class="fas fa-arrow-right ms-1"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Number System Control -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold d-block mb-2">Number Grouping System</label>
+              <div class="btn-group w-100 modern-btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.numberSystem === 'indian'"
+                  (click)="updateNumberSystem('indian')"
+                >
+                  🇮🇳 Indian (Lakhs: 1,00,000)
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.numberSystem === 'international'"
+                  (click)="updateNumberSystem('international')"
+                >
+                  🌐 International (Millions: 100,000)
+                </button>
+              </div>
+            </div>
+
+            <!-- Decimal Precision -->
+            <div>
+              <label class="form-label small fw-bold d-block mb-2">Decimal Precision</label>
+              <div class="btn-group w-100 modern-btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.decimals === 0"
+                  (click)="updateDecimals(0)"
+                >
+                  0 Decimals (1,500)
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.decimals === 2"
+                  (click)="updateDecimals(2)"
+                >
+                  2 Decimals (1,500.00)
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [class.active]="selectedCurrency.decimals === 3"
+                  (click)="updateDecimals(3)"
+                >
+                  3 Decimals (1,500.000)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Interactive Financial Preview Column -->
+        <div class="col-lg-6">
+          <div class="currency-preview-card h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fs-4">{{ selectedCurrency.flag }}</span>
+                  <div>
+                    <h6 class="fw-bold mb-0 text-white">{{ selectedCurrency.name }}</h6>
+                    <small class="text-white text-opacity-75">Code: {{ selectedCurrency.code }} &bull; Symbol: {{ selectedCurrency.symbol }}</small>
+                  </div>
+                </div>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2.5 py-1 rounded-pill">
+                  LIVE PREVIEW
+                </span>
+              </div>
+
+              <!-- Interactive Custom Amount Input -->
+              <div class="mb-3">
+                <label class="form-label text-white text-opacity-75 small fw-bold mb-1">
+                  <i class="fas fa-calculator me-1 text-warning"></i> Test Any Amount
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white bg-opacity-10 border-0 text-white fw-bold">Test Amount</span>
+                  <input
+                    type="number"
+                    class="form-control bg-white bg-opacity-10 border-0 text-white fw-bold"
+                    [(ngModel)]="customPreviewAmount"
+                    placeholder="Enter amount..."
+                  >
+                </div>
+                <div class="mt-2 text-center p-2 rounded-12" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3);">
+                  <small class="text-white text-opacity-75 d-block">Resulting Live Display:</small>
+                  <h3 class="fw-bold text-success mb-0">{{ formatPreview(customPreviewAmount) }}</h3>
+                </div>
+              </div>
+
+              <!-- Real-world Sample Badges -->
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <div class="preview-sub-box">
+                    <small class="text-white text-opacity-75 d-block">Student Term Fee</small>
+                    <div class="fw-bold text-white fs-6">{{ formatPreview(65000) }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="preview-sub-box">
+                    <small class="text-white text-opacity-75 d-block">Staff Monthly Payroll</small>
+                    <div class="fw-bold text-white fs-6">{{ formatPreview(420000) }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 pt-3 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center">
+              <small class="text-white text-opacity-75">
+                <i class="fas fa-shield-check text-success me-1"></i> Synchronized with All Modules
+              </small>
+              <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-dark" (click)="saveCurrencySettings()">
+                <i class="fas fa-save me-1 text-primary"></i> Apply Globally
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: INSTITUTIONAL PROFILE & LEGAL IDENTITY -->
     <div class="card border-0 shadow-sm rounded-16 p-4 bg-white">
       <h5 class="fw-bold text-dark mb-3"><i class="fas fa-landmark text-primary me-2"></i> Institutional Profile & Legal Identity</h5>
       <div class="row g-3 mb-3">
@@ -218,21 +462,7 @@
         <textarea class="form-control" [(ngModel)]="profile.address" rows="2"></textarea>
       </div>
       <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <label class="form-label small fw-bold d-flex align-items-center justify-content-between">
-            <span><i class="fas fa-indian-rupee-sign text-success me-1"></i> System Currency Standard *</span>
-            <span class="badge bg-success bg-opacity-10 text-success" style="font-size: 0.7rem;">Default: INR (₹)</span>
-          </label>
-          <select class="form-select modern-select" [(ngModel)]="profile.currency" style="border-radius: 10px; padding: 0.65rem 0.9rem; font-weight: 600;">
-            <option *ngFor="let curr of currencies" [value]="curr.label">
-              {{ curr.label }}
-            </option>
-          </select>
-          <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
-            <i class="fas fa-circle-info text-primary me-1"></i> Formats all fees, payroll, vouchers & ledger balances
-          </small>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label class="form-label small fw-bold">Date Format</label>
           <select class="form-select" [(ngModel)]="profile.dateFormat" style="border-radius: 10px; padding: 0.65rem 0.9rem;">
             <option value="DD/MM/YYYY">DD/MM/YYYY (e.g. 15/08/2026)</option>
@@ -240,7 +470,7 @@
             <option value="MM/DD/YYYY">MM/DD/YYYY</option>
           </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label class="form-label small fw-bold">System Timezone</label>
           <select class="form-select" [(ngModel)]="profile.timeZone" style="border-radius: 10px; padding: 0.65rem 0.9rem;">
             <option value="Asia/Kolkata (IST +5:30)">Asia/Kolkata (IST +5:30)</option>
